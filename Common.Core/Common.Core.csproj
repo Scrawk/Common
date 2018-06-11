@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{76D7C24E-78BF-4A30-AC40-2F07E2EEF18B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common.Core</RootNamespace>
+    <AssemblyName>Common.Core</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Colors\ColorHSV.cs" />
+    <Compile Include="Colors\ColorRGB.cs" />
+    <Compile Include="Colors\ColorRGBA.cs" />
+    <Compile Include="Directions\D8.cs" />
+    <Compile Include="LinearAlgebra\Matrix2x2d.cs" />
+    <Compile Include="LinearAlgebra\Matrix2x2f.cs" />
+    <Compile Include="LinearAlgebra\Matrix3x3d.cs" />
+    <Compile Include="LinearAlgebra\Matrix3x3f.cs" />
+    <Compile Include="LinearAlgebra\Matrix4x4d.cs" />
+    <Compile Include="LinearAlgebra\Matrix4x4f.cs" />
+    <Compile Include="LinearAlgebra\MatrixMxN.cs" />
+    <Compile Include="LinearAlgebra\Quaternion3d.cs" />
+    <Compile Include="LinearAlgebra\Quaternion3f.cs" />
+    <Compile Include="LinearAlgebra\Vector2d.cs" />
+    <Compile Include="LinearAlgebra\Vector2f.cs" />
+    <Compile Include="LinearAlgebra\Vector2i.cs" />
+    <Compile Include="LinearAlgebra\Vector3d.cs" />
+    <Compile Include="LinearAlgebra\Vector3f.cs" />
+    <Compile Include="LinearAlgebra\Vector3i.cs" />
+    <Compile Include="LinearAlgebra\Vector4d.cs" />
+    <Compile Include="LinearAlgebra\Vector4f.cs" />
+    <Compile Include="LinearAlgebra\Vector4i.cs" />
+    <Compile Include="Mathematics\DMath.cs" />
+    <Compile Include="Mathematics\FMath.cs" />
+    <Compile Include="Mathematics\IMath.cs" />
+    <Compile Include="ProceduralNoise\FractalNoise.cs" />
+    <Compile Include="ProceduralNoise\INoise.cs" />
+    <Compile Include="ProceduralNoise\Noise.cs" />
+    <Compile Include="ProceduralNoise\PerlinNoise.cs" />
+    <Compile Include="ProceduralNoise\PermutationTable.cs" />
+    <Compile Include="ProceduralNoise\SimplexNoise.cs" />
+    <Compile Include="ProceduralNoise\ValueNoise.cs" />
+    <Compile Include="ProceduralNoise\VoronoiNoise.cs" />
+    <Compile Include="ProceduralNoise\WorleyNoise.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Raw\RawFile.cs" />
+    <Compile Include="Raw\RawFileFormat.cs" />
+    <Compile Include="Time\Timer.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\CityBuilderUnity\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\GeoMorph\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
