@@ -93,6 +93,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\GeoMorph\Assets\Common\Plugins" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\Goblinz\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

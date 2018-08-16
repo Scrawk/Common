@@ -57,16 +57,13 @@ namespace Common.GraphTheory.Searches
 
         internal static void Search(GridGraph graph, GridSearch search, int x, int y, float[,] weights, IComparer<GridEdge> comparer)
         {
+            search.Clear();
             int width = graph.Width;
             int height = graph.Height;
             
-            bool[,] isVisited = new bool[width, height];
-            isVisited[x, y] = true;
-
+            search.IsVisited[x, y] = true;
             search.Order.Add(new Vector2i(x, y));
-
-            if(search.Parent != null)
-                search.Parent[x, y] = new Vector2i(x, y);
+            search.Parent[x, y] = new Vector2i(x, y);
 
             PriorityQueue<GridEdge> queue = new PriorityQueue<GridEdge>(comparer);
 
@@ -86,13 +83,11 @@ namespace Common.GraphTheory.Searches
                 GridEdge edge = queue.Pop();
 
                 Vector2i v = edge.To;
-                if (isVisited[v.x, v.y]) continue;
+                if (search.IsVisited[v.x, v.y]) continue;
 
                 search.Order.Add(v);
-                isVisited[v.x, v.y] = true;
-
-                if (search.Parent != null)
-                    search.Parent[v.x, v.y] = edge.From;
+                search.IsVisited[v.x, v.y] = true;
+                search.Parent[v.x, v.y] = edge.From;
 
                 if (graph.Edges[v.x, v.y] == 0) continue;
 
@@ -100,7 +95,7 @@ namespace Common.GraphTheory.Searches
 
                 foreach (GridEdge e in edges)
                 {
-                    if (isVisited[e.To.x, e.To.y]) continue;
+                    if (search.IsVisited[e.To.x, e.To.y]) continue;
                     queue.Push(e);
                 }
 

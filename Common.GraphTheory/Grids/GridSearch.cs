@@ -20,47 +20,38 @@ namespace Common.GraphTheory.Grids
 
         public Vector2i[,] Parent { get; private set; }
 
-        public GridSearch(int width, int height, bool needsParents = true)
+        public bool[,] IsVisited { get; private set; }
+
+        public GridSearch(int width, int height)
         {
             Width = width;
             Height = height;
 
             Order = new List<Vector2i>();
-
-            if (needsParents)
-                Parent = new Vector2i[width, height];
+            IsVisited = new bool[width, height];
+            Parent = new Vector2i[width, height];
 
             Clear();
-        }
-
-        public GridSearch(IList<Vector2i> order, Vector2i[,] parent)
-        {
-            Order = order;
-            Parent = parent;
         }
 
         public void Clear()
         {
             Order.Clear();
+            Array.Clear(IsVisited, 0, IsVisited.Length);
 
-            if (Parent != null)
+            for (int y = 0; y < Height; y++)
             {
-                for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
                 {
-                    for (int x = 0; x < Width; x++)
-                    {
-                        Parent[x, y].x = -1;
-                        Parent[x, y].y = -1;
-                    }
+                    Parent[x, y].x = -1;
+                    Parent[x, y].y = -1;
                 }
             }
+
         }
 
         public bool IsLeaf(int x, int y)
         {
-            if (Parent == null)
-                throw new InvalidOperationException("Parents was not requested when search created.");
-
             for (int i = 0; i < 8; i++)
             {
                 int xi = x + D8.OFFSETS[i, 0];
@@ -79,29 +70,42 @@ namespace Common.GraphTheory.Grids
 
         public bool IsRoot(int x, int y)
         {
-            if (Parent == null)
-                throw new InvalidOperationException("Parents was not requested when search created.");
-
             Vector2i p = Parent[x, y];
             return p.x == x && p.y == y;
         }
 
-        public List<Vector2i> GetPathEdges(int x, int y)
+        public void GetPath(Vector2i dest, List<Vector2i> path)
         {
-            if (Parent == null)
-                throw new InvalidOperationException("Parents was not requested when search created.");
+            path.Clear();
+            int x = dest.x;
+            int y = dest.y;
 
-            List<Vector2i> path = new List<Vector2i>();
-
-            while (x != Parent[x, y].x && y != Parent[x, y].y && Parent[x,y].x != -1)
+            while (Parent[x, y].x != -1)
             {
                 path.Add(new Vector2i(x, y));
+                if (IsRoot(x, y)) return;
+
                 Vector2i p = Parent[x, y];
                 x = p.x;
                 y = p.y;
             }
+        }
 
-            return path;
+        public void GetPath(Vector2i dest, List<Vector3f> path)
+        {
+            path.Clear();
+            int x = dest.x;
+            int y = dest.y;
+
+            while (Parent[x, y].x != -1)
+            {
+                path.Add(new Vector3f(x, y, 0));
+                if (IsRoot(x, y)) return;
+
+                Vector2i p = Parent[x, y];
+                x = p.x;
+                y = p.y;
+            }
         }
     }
 }

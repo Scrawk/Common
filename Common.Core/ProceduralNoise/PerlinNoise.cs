@@ -6,22 +6,9 @@ namespace Common.Core.ProceduralNoise
 	public class PerlinNoise : Noise
 	{
 
-        private double[] m_exponentTable;
-
-        public PerlinNoise(int seed, double frequency, double amplitude = 1.0, double exponent = 0.0) 
+        public PerlinNoise(int seed, double frequency, double amplitude = 1.0) 
             : base(seed, frequency, amplitude)
 		{
-
-            int count = Perm.Size;
-            m_exponentTable = new double[count];
-
-            double s = 1.0;
-            double e = 1.0 + Math.Max(0.0, exponent / 100.0);
-            for (int i = 0; i < count; i++)
-            {
-                m_exponentTable[i] = s;
-                s /= e;
-            }
 
         }
 		
@@ -69,13 +56,13 @@ namespace Common.Core.ProceduralNoise
             int b10 = Perm[ix0+1, iy0];
             int b11 = Perm[ix0+1, iy0+1];
 
-            nx0 = m_exponentTable[b00] * Grad(b00, fx0, fy0);
-            nx1 = m_exponentTable[b01] * Grad(b01, fx0, fy1);
+            nx0 = Grad(b00, fx0, fy0);
+            nx1 = Grad(b01, fx0, fy1);
 
 		    n0 = LERP( t, nx0, nx1 );
 
-		    nx0 = m_exponentTable[b10] * Grad(b10, fx1, fy0);
-		    nx1 = m_exponentTable[b11] * Grad(b11, fx1, fy1);
+		    nx0 = Grad(b10, fx1, fy0);
+		    nx1 = Grad(b11, fx1, fy1);
 
 		    n1 = LERP(t, nx0, nx1);
 

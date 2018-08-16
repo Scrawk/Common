@@ -19,6 +19,8 @@ namespace Common.GraphTheory.Grids
 
         public byte[,] Edges { get; private set; }
 
+        public float[,] Weights { get; private set; }
+
         public GridGraph(int width, int height)
         {
             Width = width;
@@ -229,7 +231,6 @@ namespace Common.GraphTheory.Grids
                     e.Weight = weights[x, y] + weights[xi, yi];
 
                 edges.Add(e);
-
                 edges.Add(new GridEdge(x, y, xi, yi));
             }
 
@@ -243,6 +244,11 @@ namespace Common.GraphTheory.Grids
         public void BreadthFirstSearch(GridSearch search, int x, int y)
         {
             Searches.BreadthFirstSearch.Search(this, search, x, y);
+        }
+
+        public void AStarSearch(GridSearch search, Vector2i start, Vector2i target)
+        {
+            Searches.AStarSearch.Search(this, search, start, target);
         }
 
         public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, float[,] weights, IComparer<GridEdge> comparer = null)

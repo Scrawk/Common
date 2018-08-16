@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Directions;
+using Common.Core.LinearAlgebra;
 using Common.GraphTheory.Grids;
 
 namespace Common.GraphTheory.Test.Grids
@@ -66,6 +68,36 @@ namespace Common.GraphTheory.Test.Grids
 
             Assert.AreEqual(23, minCut);
         }
+
+        
+        [TestMethod]
+        public void AStar()
+        {
+            var graph = new GridGraph(8, 8);
+
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    graph.Edges[x, y] = 255;
+                }
+            }
+
+            var A = new Vector2i(3, 0);
+            var B = new Vector2i(7, 7);
+
+            var search = new GridSearch(8, 8);
+
+            graph.AStarSearch(search, A, B);
+
+            var path = new List<Vector3f>();
+            search.GetPath(B, path);
+
+            foreach (var v in path)
+                Console.WriteLine(v);
+
+        }
+        
 
     }
 }

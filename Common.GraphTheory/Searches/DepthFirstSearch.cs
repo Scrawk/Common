@@ -48,17 +48,15 @@ namespace Common.GraphTheory.Searches
 
         internal static void Search(GridGraph graph, GridSearch search, int x, int y)
         {
+            search.Clear();
             int width = graph.Width;
             int height = graph.Height;
 
             Stack<Vector2i> queue = new Stack<Vector2i>();
             queue.Push(new Vector2i(x, y));
 
-            if (search.Parent != null)
-                search.Parent[x, y] = new Vector2i(x, y);
-
-            bool[,] isVisited = new bool[width, height];
-            isVisited[x, y] = true;
+            search.Parent[x, y] = new Vector2i(x, y);
+            search.IsVisited[x, y] = true;
 
             while (queue.Count != 0)
             {
@@ -76,13 +74,11 @@ namespace Common.GraphTheory.Searches
                     if (yi < 0 || yi > height - 1) continue;
 
                     if ((edge & 1 << i) == 0) continue;
-                    if (isVisited[xi, yi]) continue;
+                    if (search.IsVisited[xi, yi]) continue;
 
                     queue.Push(new Vector2i(xi, yi));
-                    isVisited[xi, yi] = true;
-
-                    if (search.Parent != null)
-                        search.Parent[xi, yi] = u;
+                    search.IsVisited[xi, yi] = true;
+                    search.Parent[xi, yi] = u;
                 }
             }
 
