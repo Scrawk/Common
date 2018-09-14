@@ -407,6 +407,11 @@ namespace Common.Core.LinearAlgebra
             y = Math.Max(Math.Min(y, max.y), min.y);
         }
 
+        public Vector2f ToVector2f()
+        {
+            return new Vector2f(x, y);
+        }
+
     }
 	
 }

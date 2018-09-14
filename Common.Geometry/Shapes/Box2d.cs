@@ -137,51 +137,6 @@ namespace Common.Geometry.Shapes
             return new Box2d(xmin, xmax, ymin, ymax);
         }
 
-        public static Box2d CalculateBoundsXZ(Box2d box, Matrix4x4d localToWorld)
-        {
-
-            Box2d bounds = new Box2d(float.PositiveInfinity, float.NegativeInfinity);
-
-            Vector3d corners0 = localToWorld * new Vector3d(box.Min.x, 0, box.Min.y);
-            Vector3d corners1 = localToWorld * new Vector3d(box.Min.x, 0, box.Max.y);
-            Vector3d corners2 = localToWorld * new Vector3d(box.Max.x, 0, box.Max.y);
-            Vector3d corners3 = localToWorld * new Vector3d(box.Max.x, 0, box.Min.y);
-
-            double x = corners0.x;
-            double y = corners0.z;
-
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
-
-            x = corners1.x;
-            y = corners1.z;
-
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
-
-            x = corners2.x;
-            y = corners2.z;
-
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
-
-            x = corners3.x;
-            y = corners3.z;
-
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
-
-            return bounds;
-        }
-
     }
 
 }

@@ -392,6 +392,10 @@ namespace Common.Core.LinearAlgebra
             z = Math.Max(Math.Min(z, max.z), min.z);
         }
 
+        public Vector3f ToVector3f()
+        {
+            return new Vector3f(x, y, z);
+        }
     }
 	
 }

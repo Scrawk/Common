@@ -404,6 +404,11 @@ namespace Common.Core.LinearAlgebra
             w = Math.Max(Math.Min(w, max.w), min.w);
         }
 
+        public Vector4f ToVector4f()
+        {
+            return new Vector4f(x, y, z, w);
+        }
+
     }
 	
 }

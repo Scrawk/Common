@@ -530,6 +530,18 @@ namespace Common.Core.LinearAlgebra
 
             return v;
         }
+
+        public void Round()
+        {
+            x = (float)Math.Round(x);
+            y = (float)Math.Round(y);
+            z = (float)Math.Round(z);
+        }
+
+        public Vector3i ToVector3i()
+        {
+            return new Vector3i((int)x, (int)y, (int)z);
+        }
     }
 
 

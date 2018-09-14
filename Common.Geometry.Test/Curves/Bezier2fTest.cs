@@ -7,7 +7,7 @@ using Common.Geometry.Curves;
 namespace Common.Geometry.Test.Curves
 {
     [TestClass]
-    public class Bezier2fTest
+    public class Geometry_Curves_Bezier2fTest
     {
         const int PRECISION = 4;
 

@@ -8,7 +8,7 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Test.Intersections
 {
     [TestClass]
-    public class SegmentIntersetions2fTest
+    public class Geometry_Intersections_SegmentIntersetions2fTest
     {
         [TestMethod]
         public void SegmentIntersectsSegment()

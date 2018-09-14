@@ -145,49 +145,34 @@ namespace Common.Geometry.Shapes
             return c;
         }
 
-        public static Box2i CalculateBoundsXZ(Box2f box, Matrix4x4f localToWorld)
+        public static Box2i CalculateBounds(IList<Vector2i> vertices)
         {
+            Vector2i min = Vector2i.MaxInt;
+            Vector2i max = Vector2i.MinInt;
 
-            Box2i bounds = new Box2i(int.MaxValue, int.MinValue);
+            int count = vertices.Count;
+            for (int i = 0; i < count; i++)
+            {
+                Vector2i v = vertices[i];
 
-            Vector3f corners0 = localToWorld * new Vector3f(box.Min.x, 0, box.Min.y);
-            Vector3f corners1 = localToWorld * new Vector3f(box.Min.x, 0, box.Max.y);
-            Vector3f corners2 = localToWorld * new Vector3f(box.Max.x, 0, box.Max.y);
-            Vector3f corners3 = localToWorld * new Vector3f(box.Max.x, 0, box.Min.y);
+                if (v.x < min.x) min.x = v.x;
+                if (v.y < min.y) min.y = v.y;
 
-            int x = (int)Math.Round(corners0.x);
-            int y = (int)Math.Round(corners0.z);
+                if (v.x > max.x) max.x = v.x;
+                if (v.y > max.y) max.y = v.y;
+            }
 
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
+            return new Box2i(min, max);
+        }
 
-            x = (int)Math.Round(corners1.x);
-            y = (int)Math.Round(corners1.z);
+        public static Box2i CalculateBounds(Vector2i a, Vector2i b)
+        {
+            int xmin = Math.Min(a.x, b.x);
+            int xmax = Math.Max(a.x, b.x);
+            int ymin = Math.Min(a.y, b.y);
+            int ymax = Math.Max(a.y, b.y);
 
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
-
-            x = (int)Math.Round(corners2.x);
-            y = (int)Math.Round(corners2.z);
-
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
-
-            x = (int)Math.Round(corners3.x);
-            y = (int)Math.Round(corners3.z);
-
-            if (x < bounds.Min.x) bounds.Min.x = x;
-            if (y < bounds.Min.y) bounds.Min.y = y;
-            if (x > bounds.Max.x) bounds.Max.x = x;
-            if (y > bounds.Max.y) bounds.Max.y = y;
-
-            return bounds;
+            return new Box2i(xmin, xmax, ymin, ymax);
         }
 
     }
