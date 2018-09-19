@@ -33,6 +33,11 @@ namespace Common.Core.LinearAlgebra
 	    public readonly static Vector2f One = new Vector2f(1);
 
         /// <summary>
+        /// A vector of 0.5.
+        /// </summary>
+        public readonly static Vector2f Half = new Vector2f(0.5f);
+
+        /// <summary>
         /// A vector of positive infinity.
         /// </summary>
         public readonly static Vector2f PositiveInfinity = new Vector2f(float.PositiveInfinity);

@@ -178,7 +178,7 @@ namespace Common.Core.LinearAlgebra
             else
             {
 				float s = (float)Math.Sqrt(0.5f * dotProdPlus1);
-                Vector3f tmp = (f.Cross(t)) / (2.0f * s);
+                Vector3f tmp = (Vector3f.Cross(f,t)) / (2.0f * s);
                 x = tmp.x;
                 y = tmp.y;
                 z = tmp.z;
@@ -201,6 +201,14 @@ namespace Common.Core.LinearAlgebra
         /// Multiply a quaternion and a vector together.
         /// </summary>
 		public static Vector3f operator *(Quaternion3f q, Vector3f v)
+        {
+            return q.ToMatrix3x3f() * v;
+        }
+
+        /// <summary>
+        /// Multiply a quaternion and a vector together.
+        /// </summary>
+        public static Vector3f operator *(Vector3f v, Quaternion3f q)
         {
             return q.ToMatrix3x3f() * v;
         }

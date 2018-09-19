@@ -45,6 +45,11 @@ namespace Common.Core.LinearAlgebra
 	    public readonly static Vector4d One = new Vector4d(1);
 
         /// <summary>
+        /// A vector of 0.5.
+        /// </summary>
+        public readonly static Vector4d Half = new Vector4d(0.5);
+
+        /// <summary>
         /// A vector of positive infinity.
         /// </summary>
         public readonly static Vector4d PositiveInfinity = new Vector4d(double.PositiveInfinity);
@@ -514,6 +519,19 @@ namespace Common.Core.LinearAlgebra
             v.z = from.z * t1 + to.z * t;
             v.w = from.w * t1 + to.w * t;
             return v;
+        }
+
+        public void Round()
+        {
+            x = Math.Round(x);
+            y = Math.Round(y);
+            z = Math.Round(z);
+            w = Math.Round(w);
+        }
+
+        public Vector4i ToVector4i()
+        {
+            return new Vector4i((int)x, (int)y, (int)z, (int)w);
         }
 
     }

@@ -40,6 +40,11 @@ namespace Common.Core.LinearAlgebra
         public readonly static Vector3f One = new Vector3f(1);
 
         /// <summary>
+        /// A vector of 0.5.
+        /// </summary>
+        public readonly static Vector3f Half = new Vector3f(0.5f);
+
+        /// <summary>
         /// A vector of positive infinity.
         /// </summary>
         public readonly static Vector3f PositiveInfinity = new Vector3f(float.PositiveInfinity);
@@ -374,6 +379,17 @@ namespace Common.Core.LinearAlgebra
             x *= invLength;
             y *= invLength;
             z *= invLength;
+        }
+
+        /// <summary>
+        /// Angle between two vectors.
+        /// </summary>
+        public static float Angle180(Vector3f a, Vector3f b)
+        {
+            float dp = Vector3f.Dot(a, b);
+            float m = a.Magnitude * b.Magnitude;
+
+            return (float)Math.Acos(FMath.SafeDiv(dp, m)) * FMath.Rad2Deg;
         }
 
         /// <summary>

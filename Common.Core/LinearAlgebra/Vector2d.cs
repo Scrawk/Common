@@ -33,6 +33,11 @@ namespace Common.Core.LinearAlgebra
 	    public readonly static Vector2d One = new Vector2d(1);
 
         /// <summary>
+        /// A vector of 0.5.
+        /// </summary>
+        public readonly static Vector2d Half = new Vector2d(0.5);
+
+        /// <summary>
         /// A vector of positive infinity.
         /// </summary>
         public readonly static Vector2d PositiveInfinity = new Vector2d(double.PositiveInfinity);
@@ -537,6 +542,17 @@ namespace Common.Core.LinearAlgebra
             v.y = from.y * st1 + to.y * st;
 
             return v;
+        }
+
+        public void Round()
+        {
+            x = Math.Round(x);
+            y = Math.Round(y);
+        }
+
+        public Vector2i ToVector2i()
+        {
+            return new Vector2i((int)x, (int)y);
         }
 
     }

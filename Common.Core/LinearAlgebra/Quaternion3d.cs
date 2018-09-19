@@ -178,7 +178,7 @@ namespace Common.Core.LinearAlgebra
 			else 
 			{
 		        double s = Math.Sqrt(0.5 * dotProdPlus1);
-		        Vector3d tmp = (f.Cross(t)) / (2.0 * s);
+		        Vector3d tmp = (Vector3d.Cross(f,t)) / (2.0 * s);
 		        x = tmp.x;
 		        y = tmp.y;
 		        z = tmp.z;
@@ -204,6 +204,14 @@ namespace Common.Core.LinearAlgebra
 		{
 		    return q.ToMatrix3x3d() * v;
 		}
+
+        /// <summary>
+        /// Multiply a quaternion and a vector together.
+        /// </summary>
+        public static Vector3d operator *(Vector3d v, Quaternion3d q)
+        {
+            return q.ToMatrix3x3d() * v;
+        }
 
         /// <summary>
         /// Convert to a double precision 3 dimension matrix.

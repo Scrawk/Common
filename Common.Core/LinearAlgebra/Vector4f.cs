@@ -45,6 +45,11 @@ namespace Common.Core.LinearAlgebra
 	    public readonly static Vector4f One = new Vector4f(1);
 
         /// <summary>
+        /// A vector of 0.5.
+        /// </summary>
+        public readonly static Vector4f Half = new Vector4f(0.5f);
+
+        /// <summary>
         /// A vector of positive infinity.
         /// </summary>
         public readonly static Vector4f PositiveInfinity = new Vector4f(float.PositiveInfinity);

@@ -854,8 +854,8 @@ namespace Common.Core.LinearAlgebra
 		{
 			
 			Vector3f zaxis = (position - target).Normalized;
-			Vector3f xaxis = Up.Cross(zaxis).Normalized;
-			Vector3f yaxis = zaxis.Cross(xaxis);
+			Vector3f xaxis = Vector3f.Cross(Up, zaxis).Normalized;
+			Vector3f yaxis = Vector3f.Cross(zaxis, xaxis);
 			
 			return new Matrix4x4f(	xaxis.x, xaxis.y, xaxis.z, -Vector3f.Dot(xaxis, position),
 			                      	yaxis.x, yaxis.y, yaxis.z, -Vector3f.Dot(yaxis, position),

@@ -40,6 +40,11 @@ namespace Common.Core.LinearAlgebra
         public readonly static Vector3d One = new Vector3d(1);
 
         /// <summary>
+        /// A vector of 0.5.
+        /// </summary>
+        public readonly static Vector3d Half = new Vector3d(0.5);
+
+        /// <summary>
         /// A vector of positive infinity.
         /// </summary>
         public readonly static Vector3d PositiveInfinity = new Vector3d(double.PositiveInfinity);
@@ -377,6 +382,17 @@ namespace Common.Core.LinearAlgebra
 		}
 
         /// <summary>
+        /// Angle between two vectors.
+        /// </summary>
+        public static double Angle180(Vector3d a, Vector3d b)
+        {
+            double dp = Vector3d.Dot(a, b);
+            double m = a.Magnitude * b.Magnitude;
+
+            return Math.Acos(DMath.SafeDiv(dp, m)) * DMath.Rad2Deg;
+        }
+
+        /// <summary>
         /// Cross two vectors.
         /// </summary>
 		public Vector3d Cross(Vector3d v)
@@ -529,6 +545,18 @@ namespace Common.Core.LinearAlgebra
             v.z = from.z * st1 + to.z * st;
 
             return v;
+        }
+
+        public void Round()
+        {
+            x = Math.Round(x);
+            y = Math.Round(y);
+            z = Math.Round(z);
+        }
+
+        public Vector3i ToVector3i()
+        {
+            return new Vector3i((int)x, (int)y, (int)z);
         }
 
     }
