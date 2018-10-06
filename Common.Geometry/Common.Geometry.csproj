@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bezier3f.cs" />
+    <Compile Include="Curves\Bezier3f.cs" />
     <Compile Include="Curves\Bezier.cs" />
     <Compile Include="Curves\Bezier2d.cs" />
     <Compile Include="Curves\Bezier2f.cs" />
@@ -95,6 +95,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\Mechanica\Assets\Common\Plugins" /y</PostBuildEvent>
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\Mechanica\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\Goblinz\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

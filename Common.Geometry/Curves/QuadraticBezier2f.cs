@@ -38,13 +38,13 @@ namespace Common.Geometry.Curves
             get
             {
                 float ax = C0.x - 2.0f * C1.x + C2.x;
-                float az = C0.y - 2.0f * C1.y + C2.y;
+                float ay = C0.y - 2.0f * C1.y + C2.y;
                 float bx = 2.0f * (C1.x - C0.x);
-                float bz = 2.0f * (C1.y - C0.y);
+                float by = 2.0f * (C1.y - C0.y);
 
-                float A = 4.0f * (ax * ax + az * az);
-                float B = 4.0f * (ax * bx + az * bz);
-                float C = bx * bx + bz * bz;
+                float A = 4.0f * (ax * ax + ay * ay);
+                float B = 4.0f * (ax * bx + ay * by);
+                float C = bx * bx + by * by;
 
                 float Sabc = 2.0f * (float)Math.Sqrt(A + B + C);
                 float A2 = (float)Math.Sqrt(A);
@@ -118,16 +118,16 @@ namespace Common.Geometry.Curves
         public Vector2f Closest(Vector2f p)
         {
             float px = C0.x - p.x;
-            float pz = C0.y - p.y;
+            float py = C0.y - p.y;
             float ax = C1.x - C0.x;
-            float az = C1.y - C0.y;
+            float ay = C1.y - C0.y;
             float bx = C0.x - 2.0f * C1.x + C2.x;
-            float bz = C0.y - 2.0f * C1.y + C2.y;
+            float by = C0.y - 2.0f * C1.y + C2.y;
 
-            float a = bx * bx + bz * bz;
-            float b = 3 * (ax * bx + az * bz);
-            float c = 2 * (ax * ax + az * az) + px * bx + pz * bz;
-            float d = px * ax + pz * az;
+            float a = bx * bx + by * by;
+            float b = 3 * (ax * bx + ay * by);
+            float c = 2 * (ax * ax + ay * ay) + px * bx + py * by;
+            float d = px * ax + py * ay;
 
             var roots = Polynomial3d.Solve(a, b, c, d);
 

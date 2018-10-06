@@ -48,7 +48,6 @@
     <Compile Include="Behavioural\SelectorNode.cs" />
     <Compile Include="Behavioural\SequenceNode.cs" />
     <Compile Include="Knowledge\Category.cs" />
-    <Compile Include="Knowledge\SubCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +59,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.AI.dll" "F:\Unity Projects\Personal\Goblinz\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>
