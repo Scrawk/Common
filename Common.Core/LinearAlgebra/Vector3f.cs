@@ -428,6 +428,14 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Project v on to normal n.
+        /// </summary>
+        public static Vector3f Project(Vector3f v, Vector3f n)
+        {
+            return Dot(v, n) * n;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         public void Min(float s)

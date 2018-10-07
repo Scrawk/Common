@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Arrays\SparseArray2Test.cs" />
     <Compile Include="Extensions\IListExtensionTest.cs" />
     <Compile Include="Lists\LALinkedListTest.cs" />
     <Compile Include="Lists\SortedListTest.cs" />

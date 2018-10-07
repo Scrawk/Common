@@ -428,6 +428,14 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Project v on to normal n.
+        /// </summary>
+        public static Vector3d Project(Vector3d v, Vector3d n)
+        {
+            return Dot(v, n) * n;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         public void Min(double s)
