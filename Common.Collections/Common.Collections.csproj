@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arrays\SparseArray2.cs" />
+    <Compile Include="Caching\ICacheable.cs" />
+    <Compile Include="Caching\ObjectCache.cs" />
     <Compile Include="Extensions\IListExtension.cs" />
     <Compile Include="Lists\LALinkedList.cs" />
     <Compile Include="Lists\LALinkedListEnumerator.cs" />

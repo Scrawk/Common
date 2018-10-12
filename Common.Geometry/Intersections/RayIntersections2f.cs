@@ -80,5 +80,90 @@ namespace Common.Geometry.Intersections
             return s > 0 && t > 0 && t < 1.0f;
         }
 
+        public static bool RayIntersectsCircle(Ray2f ray, Circle2f circle, out Vector2f point)
+        {
+            float t;
+            if (RayIntersectsCircle(ray, circle, out t))
+            {
+                point = ray.Position + ray.Direction * t;
+                return true;
+            }
+            else
+            {
+                point = Vector2f.Zero;
+                return false;
+            }
+        }
+
+        public static bool RayIntersectsCircle(Ray2f ray, Circle2f circle, out float t)
+        {
+            t = 0;
+            Vector2f m = ray.Position - circle.Center;
+            float b = Vector2f.Dot(m, ray.Direction);
+            float c = Vector2f.Dot(m, m) - circle.Radius2;
+
+            if (c > 0.0f && b > 0.0f) return false;
+
+            float discr = b * b - c;
+            if (discr < 0.0f) return false;
+
+            t = -b - (float)Math.Sqrt(discr);
+
+            if (t < 0.0f) t = 0;
+            return true;
+        }
+
+        public static bool RayIntersectsBox(Ray2f ray, Box2f box, out Vector2f point)
+        {
+            float t;
+            if (RayIntersectsBox(ray, box, out t))
+            {
+                point = ray.Position + ray.Direction * t;
+                return true;
+            }
+            else
+            {
+                point = Vector2f.Zero;
+                return false;
+            }
+        }
+
+        public static bool RayIntersectsBox(Ray2f ray, Box2f box, out float t)
+        {
+            t = 0;
+            float tmin = 0;
+            float tmax = float.PositiveInfinity;
+
+            for (int i = 0; i < 2; i++)
+            {
+                if(Math.Abs(ray.Direction[i]) < FMath.EPS)
+                {
+                    if (ray.Position[i] < box.Min[i] || ray.Position[i] > box.Max[i])
+                        return false;
+                }
+                else
+                {
+                    float ood = 1.0f / ray.Direction[i];
+                    float t1 = (box.Min[i] - ray.Position[i]) * ood;
+                    float t2 = (box.Max[i] - ray.Position[i]) * ood;
+
+                    if(t1 > t2)
+                    {
+                        float tmp = t1;
+                        t1 = t2;
+                        t2 = tmp;
+                    }
+
+                    tmin = Math.Max(tmin, t1);
+                    tmax = Math.Min(tmax, t1);
+
+                    if (tmin > tmax) return false;
+                }
+            }
+
+            t = tmin;
+            return true;
+        }
+
     }
 }

@@ -45,5 +45,33 @@ namespace Common.Core.Directions
             RIGHT_TOP
         };
 
+        public static readonly int[,] ADJACENT = new int[,]
+        {
+            { LEFT_BOTTOM, LEFT_TOP },
+            { LEFT, TOP },
+            { LEFT_TOP, RIGHT_TOP },
+            { TOP, RIGHT },
+            { RIGHT_TOP, RIGHT_BOTTOM },
+            { RIGHT, BOTTOM },
+            { RIGHT_BOTTOM, LEFT_BOTTOM },
+            { BOTTOM, LEFT }
+        };
+
+        public static readonly int[] DIAGONAL = new int[]
+        {
+            LEFT_TOP,
+            RIGHT_TOP,
+            RIGHT_BOTTOM,
+            LEFT_BOTTOM
+        };
+
+        public static readonly int[] ORTHOGONAL = new int[]
+        {
+            LEFT,
+            TOP,
+            RIGHT,
+            BOTTOM
+        };
+
     }
 }

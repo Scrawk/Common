@@ -8,7 +8,7 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Test.Intersections
 {
     [TestClass]
-    public class Geometry_Shapes_RayIntersetions2fTest
+    public class Geometry_Intersections_RayIntersetions2fTest
     {
         [TestMethod]
         public void RayIntersectsRay()
