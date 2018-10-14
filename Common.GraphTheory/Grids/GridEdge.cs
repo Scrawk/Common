@@ -36,6 +36,13 @@ namespace Common.GraphTheory.Grids
 
     public class GridEdgeComparer : IComparer<GridEdge>
     {
+        public static GridEdgeComparer Instance { get; private set; }
+
+        static GridEdgeComparer()
+        {
+            Instance = new GridEdgeComparer();
+        }
+
         public int Compare(GridEdge e0, GridEdge e1)
         {
             return e0.Weight.CompareTo(e1.Weight);

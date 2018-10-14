@@ -9,6 +9,7 @@ namespace Common.GraphTheory.Searches
     {
         internal static List<VERTEX> Sort<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph)
             where EDGE : class, IAdjacencyEdge, new()
+            where VERTEX : class, IAdjacencyVertex, new()
         {
 
             List<VERTEX> list = new List<VERTEX>();
@@ -37,7 +38,7 @@ namespace Common.GraphTheory.Searches
                 vertices.RemoveLast();
 
                 list.Add(v);
-                int i = graph.Vertices.IndexOf(v);
+                int i = v.Index;
 
                 if (edges[i] == null || edges[i].Count == 0) continue;
 

@@ -48,7 +48,12 @@ namespace Common.GraphTheory.Adjacency
 
     public class AdjacencyEdgeComparer : AdjacencyEdgeComparer<AdjacencyEdge>
     {
+        public static AdjacencyEdgeComparer Instance { get; private set; }
 
+        static AdjacencyEdgeComparer()
+        {
+            Instance = new AdjacencyEdgeComparer();
+        }
     }
 
     public class AdjacencyEdgeComparer<EDGE> : IComparer<EDGE>

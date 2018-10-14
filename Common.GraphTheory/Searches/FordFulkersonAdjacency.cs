@@ -11,6 +11,7 @@ namespace Common.GraphTheory.Searches
 
         internal static AdjacencyFlowGraph<VERTEX> MaxFlow<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, int source, int sink)
             where EDGE : class, IAdjacencyEdge, new()
+            where VERTEX : class, IAdjacencyVertex, new()
         {
             int count = graph.VertexCount;
             List<AdjacencyFlowEdge>[] edges = CreateFlowEdges(graph);
@@ -51,7 +52,7 @@ namespace Common.GraphTheory.Searches
                 }
             }
 
-            AdjacencyFlowGraph<VERTEX> flowGraph = new AdjacencyFlowGraph<VERTEX>(graph.Vertices, source, sink, maxFlow);
+            var flowGraph = new AdjacencyFlowGraph<VERTEX>(graph.Vertices, source, sink, maxFlow);
      
             for (int i = 0; i < count; i++)
             {
@@ -118,6 +119,7 @@ namespace Common.GraphTheory.Searches
 
         private static List<AdjacencyFlowEdge>[] CreateFlowEdges<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph)
             where EDGE : class, IAdjacencyEdge, new()
+            where VERTEX : class, IAdjacencyVertex, new()
         {
             int count = graph.VertexCount;
             var flow = new List<AdjacencyFlowEdge>[count];

@@ -69,7 +69,7 @@ namespace Common.GraphTheory.Test.Grids
             Assert.AreEqual(23, minCut);
         }
 
-        
+        /*
         [TestMethod]
         public void AStar()
         {
@@ -97,7 +97,7 @@ namespace Common.GraphTheory.Test.Grids
                 Console.WriteLine(v);
 
         }
-        
+        */
 
     }
 }

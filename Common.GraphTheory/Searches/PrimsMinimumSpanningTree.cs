@@ -13,13 +13,12 @@ namespace Common.GraphTheory.Searches
 
         internal static void Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, AdjacencySearch search, int root, IComparer<EDGE> comparer)
             where EDGE : class, IAdjacencyEdge, new()
+            where VERTEX : class, IAdjacencyVertex, new()
         {
-
+            search.Clear();
             int count = graph.VertexCount;
 
-            bool[] isVisited = new bool[count];
-            isVisited[root] = true;
-
+            search.IsVisited[root] = true;
             search.Parent[root] = root;
             search.Order.Add(root);
 
@@ -36,17 +35,17 @@ namespace Common.GraphTheory.Searches
                 EDGE edge = queue.Pop();
 
                 int v = edge.To;
-                if (isVisited[v]) continue;
+                if (search.IsVisited[v]) continue;
 
                 search.Order.Add(v);
-                isVisited[v] = true;
+                search.IsVisited[v] = true;
                 search.Parent[v] = edge.From;
 
                 if (graph.Edges[v] != null)
                 {
                     foreach (EDGE e in graph.Edges[v])
                     {
-                        if (isVisited[e.To]) continue;
+                        if (search.IsVisited[e.To]) continue;
                         queue.Push(e);
                     }
                 }

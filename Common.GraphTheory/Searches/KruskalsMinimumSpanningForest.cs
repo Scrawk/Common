@@ -12,6 +12,7 @@ namespace Common.GraphTheory.Searches
     {
         internal static Dictionary<int, List<EDGE>> Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, IComparer<EDGE> comparer)
             where EDGE : class, IAdjacencyEdge, new()
+            where VERTEX : class, IAdjacencyVertex, new()
         {
 
             DisjointSet set = new DisjointSet(graph.VertexCount);

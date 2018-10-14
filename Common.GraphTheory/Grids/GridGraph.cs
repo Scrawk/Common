@@ -19,8 +19,6 @@ namespace Common.GraphTheory.Grids
 
         public byte[,] Edges { get; private set; }
 
-        public float[,] Weights { get; private set; }
-
         public GridGraph(int width, int height)
         {
             Width = width;
@@ -173,6 +171,49 @@ namespace Common.GraphTheory.Grids
             EdgeCount += 2;
 
             return true;
+        }
+
+        public List<GridVertex> GetAllVertices()
+        {
+            List<GridVertex> vertices = new List<GridVertex>();
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                   
+                    int edge = Edges[x, y];
+                    if (edge == 0)
+                    {
+                        bool hasEdge = false;
+
+                        for (int i = 0; i < 8; i++)
+                        {
+                            int xi = x + D8.OFFSETS[i, 0];
+                            int yi = y + D8.OFFSETS[i, 1];
+
+                            if (xi < 0 || xi > Width - 1) continue;
+                            if (yi < 0 || yi > Height - 1) continue;
+
+                            var e = Edges[xi, yi];
+                            if ((e & 1 << D8.OPPOSITES[i]) == 0) continue;
+
+                            hasEdge = true;
+                            break;
+                        }
+
+                        if (hasEdge)
+                            vertices.Add(new GridVertex(new Vector2i(x, y)));
+                    }
+                    else
+                    {
+                        vertices.Add(new GridVertex(new Vector2i(x, y)));
+                    }
+
+                }
+            }
+
+            return vertices;
         }
 
         public List<GridEdge> GetAllEdges(float[,] weights = null)

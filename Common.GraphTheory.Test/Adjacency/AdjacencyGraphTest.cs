@@ -46,32 +46,33 @@ namespace Common.GraphTheory.Test.Adjacency
 
         }
 
-        /*
         [TestMethod]
         public void DijkstrasShortestPath()
         {
 
-            var graph = CreateGraph();
-            var search = graph.DijkstrasShortestPathTree(5);
+            var graph = CreateCitiesGraph();
+            var search = new AdjacencySearch(graph.VertexCount);
+            var comparer = AdjacencyVertexComparer<AdjacencyVertex<string>>.Instance;
+            graph.DijkstrasShortestPathTree(search, 5, comparer);
 
             int[] order = new int[] { 5, 4, 7, 6, 3, 10, 11, 8, 2, 9, 0, 1 };
 
             Assert.AreEqual(order.Length, search.Order.Count);
 
-            for (int i = 0; i < order.Length; i++)
+            for (int i = 0; i < search.Order.Count; i++)
             {
                 Assert.AreEqual(order[i], search.Order[i]);
             }
 
         }
-        */
+       
 
         [TestMethod]
         public void PrimsMinimumSpanningTree()
         {
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            graph.PrimsMinimumSpanningTree(search, 0, new AdjacencyEdgeComparer());
+            graph.PrimsMinimumSpanningTree(search, 0, AdjacencyEdgeComparer.Instance);
 
             int[] order = new int[] { 0, 1, 2, 3, 4, 10, 11, 5, 8, 9, 7, 6 };
 
@@ -84,32 +85,35 @@ namespace Common.GraphTheory.Test.Adjacency
 
         }
 
+       
         [TestMethod]
         public void KhansTopologicalSort()
         {
 
             AdjacencyGraph<int> graph = new AdjacencyGraph<int>(8);
 
-            graph.Vertices[0] = 7;
-            graph.Vertices[1] = 5;
-            graph.Vertices[2] = 3;
-            graph.Vertices[3] = 11;
-            graph.Vertices[4] = 8;
-            graph.Vertices[5] = 2;
-            graph.Vertices[6] = 9;
-            graph.Vertices[7] = 10;
+            graph.Vertices[0].Data = 7;
+            graph.Vertices[1].Data = 5;
+            graph.Vertices[2].Data = 3;
+            graph.Vertices[3].Data = 11;
+            graph.Vertices[4].Data = 8;
+            graph.Vertices[5].Data = 2;
+            graph.Vertices[6].Data = 9;
+            graph.Vertices[7].Data = 10;
 
-            graph.AddEdge(5, 11);
-            graph.AddEdge(7, 11);
-            graph.AddEdge(7, 8);
-            graph.AddEdge(3, 8);
-            graph.AddEdge(3, 10);
-            graph.AddEdge(8, 9);
-            graph.AddEdge(11, 2);
-            graph.AddEdge(11, 9);
-            graph.AddEdge(11, 10);
+            var v = graph.Vertices;
 
-            List<int> sorted = graph.KhansTopologicalSort();
+            graph.AddEdge(v[1], v[3]);
+            graph.AddEdge(v[0], v[3]);
+            graph.AddEdge(v[0], v[4]);
+            graph.AddEdge(v[2], v[4]);
+            graph.AddEdge(v[2], v[7]);
+            graph.AddEdge(v[4], v[6]);
+            graph.AddEdge(v[3], v[5]);
+            graph.AddEdge(v[3], v[6]);
+            graph.AddEdge(v[3], v[7]);
+
+            List<AdjacencyVertex<int>> sorted = graph.KhansTopologicalSort();
 
             Dictionary<int, IList<int>> dependacies = new Dictionary<int, IList<int>>();
 
@@ -127,7 +131,7 @@ namespace Common.GraphTheory.Test.Adjacency
             int count = sorted.Count;
             for (int i = 0; i < count; i++)
             {
-                int Id = sorted[i];
+                int Id = sorted[i].Data;
 
                 IList<int> depList = dependacies[Id];
                 foreach (int d in depList)
@@ -148,12 +152,12 @@ namespace Common.GraphTheory.Test.Adjacency
          
             AdjacencyGraph<int> graph = new AdjacencyGraph<int>(6);
 
-            graph.Vertices[0] = 0;
-            graph.Vertices[1] = 1;
-            graph.Vertices[2] = 2;
-            graph.Vertices[3] = 3;
-            graph.Vertices[4] = 4;
-            graph.Vertices[5] = 5;
+            graph.Vertices[0].Data = 0;
+            graph.Vertices[1].Data = 1;
+            graph.Vertices[2].Data = 2;
+            graph.Vertices[3].Data = 3;
+            graph.Vertices[4].Data = 4;
+            graph.Vertices[5].Data = 5;
 
             graph.AddEdge(0, 1, 16);
             graph.AddEdge(0, 2, 13);
@@ -196,23 +200,23 @@ namespace Common.GraphTheory.Test.Adjacency
             Assert.AreEqual(23, minCut);
 
         }
-
+   
         private AdjacencyGraph<string> CreateCitiesGraph()
         {
             AdjacencyGraph<string> graph = new AdjacencyGraph<string>(12);
 
-            graph.Vertices[0] = "Seattle";
-            graph.Vertices[1] = "San Fran";
-            graph.Vertices[2] = "Los Angeles";
-            graph.Vertices[3] = "Denver";
-            graph.Vertices[4] = "Kansas";
-            graph.Vertices[5] = "Chicago";
-            graph.Vertices[6] = "Boston";
-            graph.Vertices[7] = "New York";
-            graph.Vertices[8] = "Atlanta";
-            graph.Vertices[9] = "Miami";
-            graph.Vertices[10] = "Dallas";
-            graph.Vertices[11] = "Houston";
+            graph.Vertices[0].Data = "Seattle";
+            graph.Vertices[1].Data = "San Fran";
+            graph.Vertices[2].Data = "Los Angeles";
+            graph.Vertices[3].Data = "Denver";
+            graph.Vertices[4].Data = "Kansas";
+            graph.Vertices[5].Data = "Chicago";
+            graph.Vertices[6].Data = "Boston";
+            graph.Vertices[7].Data = "New York";
+            graph.Vertices[8].Data = "Atlanta";
+            graph.Vertices[9].Data = "Miami";
+            graph.Vertices[10].Data = "Dallas";
+            graph.Vertices[11].Data = "Houston";
 
             graph.AddEdge(new AdjacencyEdge(0, 1, 807));
             graph.AddEdge(new AdjacencyEdge(0, 3, 1331));

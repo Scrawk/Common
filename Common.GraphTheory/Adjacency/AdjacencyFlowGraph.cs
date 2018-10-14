@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace Common.GraphTheory.Adjacency
 {
     public class AdjacencyFlowGraph<VERTEX> : AdjacencyGraph<VERTEX, AdjacencyFlowEdge>
+        where VERTEX : class, IAdjacencyVertex, new()
     {
 
         public float MaxFlow { get; private set; }
