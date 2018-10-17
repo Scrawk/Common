@@ -67,9 +67,6 @@ namespace Common.GraphTheory.Searches
             int width = graph.Width;
             int height = graph.Height;
 
-            search.IsVisited[x, y] = true;
-            search.Parent[x, y] = new Vector2i(x, y);
-
             var queue = graph.GetAllVertices();
             var vertexGrid = new GridVertex[width, height];
 
@@ -78,15 +75,15 @@ namespace Common.GraphTheory.Searches
                 var v = queue[i];
                 int xi = v.Index.x;
                 int yi = v.Index.y;
-
-                if (xi == x && yi == y)
-                    v.Cost = 0;
-                else
-                    v.Cost = float.PositiveInfinity;
+                v.Cost = float.PositiveInfinity;
 
                 vertexGrid[xi, yi] = v;
             }
-                
+
+            search.IsVisited[x, y] = true;
+            search.Parent[x, y] = new Vector2i(x, y);
+            vertexGrid[x, y].Cost = 0;
+
             while (queue.Count != 0)
             {
                 queue.Sort(comparer);
@@ -99,15 +96,14 @@ namespace Common.GraphTheory.Searches
                 search.IsVisited[u.x,u.y] = true;
 
                 int edge = graph.Edges[u.x, u.y];
-
                 if (edge != 0)
                 {
                     float cost = vertexGrid[u.x, u.y].Cost;
 
                     for (int i = 0; i < 8; i++)
                     {
-                        int xi = x + D8.OFFSETS[i, 0];
-                        int yi = y + D8.OFFSETS[i, 1];
+                        int xi = u.x + D8.OFFSETS[i, 0];
+                        int yi = u.y + D8.OFFSETS[i, 1];
 
                         if (xi < 0 || xi > width - 1) continue;
                         if (yi < 0 || yi > height - 1) continue;
@@ -115,11 +111,12 @@ namespace Common.GraphTheory.Searches
                         if ((edge & 1 << i) == 0) continue;
                         if (search.IsVisited[xi, yi]) continue;
 
-                        float alt = cost + (float)Vector2i.Distance(u, new Vector2i(xi,yi));
+                        var v = vertexGrid[xi, yi];
+                        float alt = cost + (float)Vector2i.Distance(u, v.Index);
 
-                        if (alt < vertexGrid[xi, yi].Cost)
+                        if (alt < v.Cost)
                         {
-                            vertexGrid[xi, yi].Cost = alt;
+                            v.Cost = alt;
                             search.Parent[xi, yi] = u;
                         }
                     }

@@ -46,19 +46,16 @@ namespace Common.GraphTheory.Adjacency
 		}
 	}
 
-    public class AdjacencyEdgeComparer : AdjacencyEdgeComparer<AdjacencyEdge>
-    {
-        public static AdjacencyEdgeComparer Instance { get; private set; }
-
-        static AdjacencyEdgeComparer()
-        {
-            Instance = new AdjacencyEdgeComparer();
-        }
-    }
-
     public class AdjacencyEdgeComparer<EDGE> : IComparer<EDGE>
         where EDGE : class, IAdjacencyEdge, new()
     {
+        public static AdjacencyEdgeComparer<EDGE> Instance { get; private set; }
+
+        static AdjacencyEdgeComparer()
+        {
+            Instance = new AdjacencyEdgeComparer<EDGE>();
+        }
+
         public int Compare(EDGE e0, EDGE e1)
         {
             return e0.Weight.CompareTo(e1.Weight);

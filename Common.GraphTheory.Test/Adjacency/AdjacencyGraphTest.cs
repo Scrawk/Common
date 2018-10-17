@@ -52,8 +52,8 @@ namespace Common.GraphTheory.Test.Adjacency
 
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            var comparer = AdjacencyVertexComparer<AdjacencyVertex<string>>.Instance;
-            graph.DijkstrasShortestPathTree(search, 5, comparer);
+            //var comparer = AdjacencyVertexComparer<AdjacencyVertex<string>>.Instance;
+            graph.DijkstrasShortestPathTree(search, 5);
 
             int[] order = new int[] { 5, 4, 7, 6, 3, 10, 11, 8, 2, 9, 0, 1 };
 
@@ -72,7 +72,7 @@ namespace Common.GraphTheory.Test.Adjacency
         {
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            graph.PrimsMinimumSpanningTree(search, 0, AdjacencyEdgeComparer.Instance);
+            graph.PrimsMinimumSpanningTree(search, 0);
 
             int[] order = new int[] { 0, 1, 2, 3, 4, 10, 11, 5, 8, 9, 7, 6 };
 

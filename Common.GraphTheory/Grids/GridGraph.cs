@@ -295,15 +295,23 @@ namespace Common.GraphTheory.Grids
         public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, float[,] weights, IComparer<GridEdge> comparer = null)
         {
             if (comparer == null)
-                comparer = new GridEdgeComparer();
+                comparer = GridEdgeComparer.Instance;
 
             Searches.PrimsMinimumSpanningTree.Search(this, search, x, y, weights, comparer);
+        }
+
+        public void DijkstrasShortestPathTree(GridSearch search, int x, int y, IComparer<GridVertex> comparer = null)
+        {
+            if (comparer == null)
+                comparer = GridVertexComparer.Instance;
+
+            Searches.DijkstrasShortestPathTree.Search(this, search, x, y, comparer);
         }
 
         public Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(float[,] weights, IComparer<GridEdge> comparer = null)
         {
             if (comparer == null)
-                comparer = new GridEdgeComparer();
+                comparer = GridEdgeComparer.Instance;
 
             return Searches.KruskalsMinimumSpanningForest.Search(this, weights, comparer);
         }

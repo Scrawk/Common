@@ -126,18 +126,27 @@ namespace Common.GraphTheory.Adjacency
             return Searches.KhansTopologicalSort.Sort(this);
         }
 
-        public void PrimsMinimumSpanningTree(AdjacencySearch search, int root, IComparer<EDGE> comparer)
+        public void PrimsMinimumSpanningTree(AdjacencySearch search, int root, IComparer<EDGE> comparer = null)
         {
+            if (comparer == null)
+                comparer = AdjacencyEdgeComparer<EDGE>.Instance;
+
             Searches.PrimsMinimumSpanningTree.Search(this, search, root, comparer);
         }
 
-        public void DijkstrasShortestPathTree(AdjacencySearch search, int root, IComparer<VERTEX> comparer)
+        public void DijkstrasShortestPathTree(AdjacencySearch search, int root, IComparer<VERTEX> comparer = null)
         {
+            if (comparer == null)
+                comparer = AdjacencyVertexComparer<VERTEX>.Instance;
+
             Searches.DijkstrasShortestPathTree.Search(this, search, root, comparer);
         }
 
-        public Dictionary<int, List<EDGE>> KruskalsMinimumSpanningForest(IComparer<EDGE> comparer)
+        public Dictionary<int, List<EDGE>> KruskalsMinimumSpanningForest(IComparer<EDGE> comparer = null)
         {
+            if (comparer == null)
+                comparer = AdjacencyEdgeComparer<EDGE>.Instance;
+
             return Searches.KruskalsMinimumSpanningForest.Search(this, comparer);
         }
 
