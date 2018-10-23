@@ -52,7 +52,6 @@ namespace Common.GraphTheory.Test.Adjacency
 
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            //var comparer = AdjacencyVertexComparer<AdjacencyVertex<string>>.Instance;
             graph.DijkstrasShortestPathTree(search, 5);
 
             int[] order = new int[] { 5, 4, 7, 6, 3, 10, 11, 8, 2, 9, 0, 1 };
@@ -85,7 +84,23 @@ namespace Common.GraphTheory.Test.Adjacency
 
         }
 
-       
+        [TestMethod]
+        public void KruskalsMinimumSpanningForest()
+        {
+            var graph = CreateCitiesGraph();
+            var forest = graph.KruskalsMinimumSpanningForest();
+
+            foreach(var kvp in forest)
+            {
+                float sum = 0;
+                foreach (var edge in kvp.Value)
+                    sum += edge.Weight;
+
+                Assert.AreEqual(6513, sum);
+            }
+        }
+
+
         [TestMethod]
         public void KhansTopologicalSort()
         {

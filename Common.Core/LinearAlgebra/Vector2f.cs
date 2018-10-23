@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
@@ -8,7 +9,7 @@ namespace Common.Core.LinearAlgebra
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2f
+    public struct Vector2f : IEquatable<Vector2f>
     {
         public float x, y;
 
@@ -52,6 +53,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector3f x0y
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector3f(x, 0, y); }
         }
 
@@ -60,6 +62,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector3f xy0
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector3f(x, y, 0); }
         }
 
@@ -68,6 +71,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector4f xy01
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector4f(x, y, 0, 1); }
         }
 
@@ -76,12 +80,14 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector4f x0y1
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector4f(x, 0, y, 1); }
         }
 
         /// <summary>
         /// A vector all with the value v.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2f(float v)
         {
             this.x = v;
@@ -91,6 +97,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// A vector from the variables.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2f(float x, float y)
         {
             this.x = x;
@@ -124,6 +131,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public float Magnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return FMath.SafeSqrt(SqrMagnitude);
@@ -135,6 +143,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
 		public float SqrMagnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return (x * x + y * y);
@@ -146,6 +155,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector2f Normalized
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 float invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y);
@@ -158,6 +168,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector2f PerpendicularCCW
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return new Vector2f(-y, x);
@@ -169,6 +180,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector2f PerpendicularCW
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return new Vector2f(y, -x);
@@ -180,6 +192,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector2f Absolute
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return new Vector2f(Math.Abs(x), Math.Abs(y));
@@ -189,6 +202,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator +(Vector2f v1, Vector2f v2)
         {
             return new Vector2f(v1.x + v2.x, v1.y + v2.y);
@@ -197,6 +211,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator +(Vector2f v1, float s)
         {
             return new Vector2f(v1.x + s, v1.y + s);
@@ -205,6 +220,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator +(float s, Vector2f v1)
         {
             return new Vector2f(v1.x + s, v1.y + s);
@@ -213,6 +229,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator -(Vector2f v1, Vector2f v2)
         {
             return new Vector2f(v1.x - v2.x, v1.y - v2.y);
@@ -221,6 +238,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator -(Vector2f v1, float s)
         {
             return new Vector2f(v1.x - s, v1.y - s);
@@ -229,6 +247,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator -(float s, Vector2f v1)
         {
             return new Vector2f(v1.x - s, v1.y - s);
@@ -237,6 +256,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator *(Vector2f v1, Vector2f v2)
         {
             return new Vector2f(v1.x * v2.x, v1.y * v2.y);
@@ -245,6 +265,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator *(Vector2f v, float s)
         {
             return new Vector2f(v.x * s, v.y * s);
@@ -253,6 +274,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator *(float s, Vector2f v)
         {
             return new Vector2f(v.x * s, v.y * s);
@@ -261,6 +283,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Divide two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator /(Vector2f v1, Vector2f v2)
         {
             return new Vector2f(v1.x / v2.x, v1.y / v2.y);
@@ -269,31 +292,35 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Divide a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator /(Vector2f v, float s)
         {
             return new Vector2f(v.x / s, v.y / s);
         }
 
-		/// <summary>
-		/// Are these vectors equal.
-		/// </summary>
-		public static bool operator ==(Vector2f v1, Vector2f v2)
+        /// <summary>
+        /// Are these vectors equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(Vector2f v1, Vector2f v2)
 		{
 			return (v1.x == v2.x && v1.y == v2.y);
 		}
-		
-		/// <summary>
-		/// Are these vectors not equal.
-		/// </summary>
-		public static bool operator !=(Vector2f v1, Vector2f v2)
+
+        /// <summary>
+        /// Are these vectors not equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(Vector2f v1, Vector2f v2)
 		{
 			return (v1.x != v2.x || v1.y != v2.y);
 		}
-		
-		/// <summary>
-		/// Are these vectors equal.
-		/// </summary>
-		public override bool Equals (object obj)
+
+        /// <summary>
+        /// Are these vectors equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals (object obj)
 		{
 			if(!(obj is Vector2f)) return false;
 			
@@ -302,10 +329,11 @@ namespace Common.Core.LinearAlgebra
 			return this == v;
 		}
 
-		/// <summary>
-		/// Are these vectors equal given the error.
-		/// </summary>
-		public bool EqualsWithError(Vector2f v, float eps)
+        /// <summary>
+        /// Are these vectors equal given the error.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool EqualsWithError(Vector2f v, float eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
 			if(Math.Abs(y-v.y)> eps) return false;
@@ -315,6 +343,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Vector2f v)
         {
             return this == v;
@@ -323,6 +352,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             float hashcode = 23;
@@ -336,15 +366,17 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vector as a string.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return x + "," + y;
         }
 
-		/// <summary>
-		/// Vector from a string.
-		/// </summary>
-		static public Vector2f FromString(string s)
+        /// <summary>
+        /// Vector from a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2f FromString(string s)
 		{
             Vector2f v = new Vector2f();
 
@@ -361,10 +393,11 @@ namespace Common.Core.LinearAlgebra
 			return v;
 		}
 
-		/// <summary>
-		/// The dot product of two vectors.
-		/// </summary>
-		public static float Dot(Vector2f v0, Vector2f v1)
+        /// <summary>
+        /// The dot product of two vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Dot(Vector2f v0, Vector2f v1)
 		{
 			return v0.x * v1.x + v0.y * v1.y;
 		}
@@ -372,6 +405,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Normalize the vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
             float invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y);
@@ -382,6 +416,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Cross two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cross(Vector2f v0, Vector2f v1)
         {
             return v0.x * v1.y - v0.y * v1.x;
@@ -390,6 +425,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Distance between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Distance(Vector2f v0, Vector2f v1)
         {
             return FMath.SafeSqrt(SqrDistance(v0, v1));
@@ -398,6 +434,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Square distance between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SqrDistance(Vector2f v0, Vector2f v1)
         {
             float x = v0.x - v1.x;
@@ -409,6 +446,7 @@ namespace Common.Core.LinearAlgebra
         /// Angle between two vectors in degrees from 0 to 180.
         /// A and b origin treated as 0,0.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Angle180(Vector2f a, Vector2f b)
         {
             float m = a.Magnitude * b.Magnitude;
@@ -426,6 +464,7 @@ namespace Common.Core.LinearAlgebra
         /// Angle between two vectors in degrees from 0 to 360 ccw.
         /// A and b origin treated as 0,0.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Angle360(Vector2f a, Vector2f b)
         {
             float angle = (float)(Math.Atan2(a.y, a.x) - Math.Atan2(b.y, b.x));
@@ -439,6 +478,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(float s)
         {
             x = Math.Min(x, s);
@@ -448,6 +488,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(Vector2f v)
         {
             x = Math.Min(x, v.x);
@@ -457,6 +498,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(float s)
         {
             x = Math.Max(x, s);
@@ -466,6 +508,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(Vector2f v)
         {
             x = Math.Max(x, v.x);
@@ -475,6 +518,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The absolute vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Abs()
         {
             x = Math.Abs(x);
@@ -484,6 +528,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(float min, float max)
 		{
 			x = Math.Max(Math.Min(x, max), min);
@@ -493,6 +538,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(Vector2f min, Vector2f max)
         {
             x = Math.Max(Math.Min(x, max.x), min.x);
@@ -502,6 +548,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Lerp(Vector2f from, Vector2f to, float t)
         {
             if (t < 0.0f) t = 0.0f;
@@ -520,6 +567,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Slerp between two vectors arc.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Slerp(Vector2f from, Vector2f to, float t)
         {
             if (t < 0.0f) t = 0.0f;
@@ -547,12 +595,14 @@ namespace Common.Core.LinearAlgebra
             return v;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round()
         {
             x = (float)Math.Round(x);
             y = (float)Math.Round(y);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2i ToVector2i()
         {
             return new Vector2i((int)x, (int)y);

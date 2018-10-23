@@ -1,10 +1,11 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Common.Core.Mathematics
 {
 	public class IMath 
 	{
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Clamp(int v, int min, int max)
         {
             if (v < min) v = min;
@@ -12,6 +13,7 @@ namespace Common.Core.Mathematics
             return v;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPow2(int num)
         {
             int power = (int)(Math.Log(num) / Math.Log(2.0));
@@ -21,7 +23,8 @@ namespace Common.Core.Mathematics
             return (result == num);
         }
 
-		public static int NearestPow2(int num)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int NearestPow2(int num)
 		{
 			int n = num > 0 ? num - 1 : 0;
 			
@@ -35,7 +38,8 @@ namespace Common.Core.Mathematics
 			return n;
 		}
 
-		public static int LowerPow2(int num)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LowerPow2(int num)
 		{
 			int n = num > 0 ? num - 1 : 0;
 

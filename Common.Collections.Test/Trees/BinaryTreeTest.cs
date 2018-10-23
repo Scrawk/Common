@@ -13,7 +13,7 @@ namespace Common.Collections.Test.Trees
         public void Contains()
         {
 
-            BinaryTree<string> tree = new BinaryTree<string>(new StringComparer());
+            BinaryTree<string> tree = new BinaryTree<string>();
 
             IList<string> list = GetTestList();
 
@@ -30,7 +30,7 @@ namespace Common.Collections.Test.Trees
         public void Add()
         {
 
-            BinaryTree<string> tree = new BinaryTree<string>(new StringComparer());
+            BinaryTree<string> tree = new BinaryTree<string>();
 
             IList<string> list = GetTestList();
 
@@ -47,7 +47,7 @@ namespace Common.Collections.Test.Trees
         public void Order()
         {
 
-            BinaryTree<string> tree = new BinaryTree<string>(new StringComparer());
+            BinaryTree<string> tree = new BinaryTree<string>();
 
             IList<string> list = GetTestList();
 
@@ -66,7 +66,7 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void Path()
         {
-            BinaryTree<string> tree = new BinaryTree<string>(new StringComparer());
+            BinaryTree<string> tree = new BinaryTree<string>();
 
             IList<string> list = GetTestList();
             tree.Add(list);
@@ -114,7 +114,7 @@ namespace Common.Collections.Test.Trees
         public void Remove()
         {
 
-            BinaryTree<string> tree = new BinaryTree<string>(new StringComparer());
+            BinaryTree<string> tree = new BinaryTree<string>();
 
             IList<string> list = GetTestList();
 
@@ -158,14 +158,6 @@ namespace Common.Collections.Test.Trees
             };
 
             return list;
-        }
-
-        private class StringComparer : IComparer<string>
-        {
-            public int Compare(string s0, string s1)
-            {
-                return s0.CompareTo(s1);
-            }
         }
 
     }

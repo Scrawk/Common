@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Common.GraphTheory.Adjacency
 {
 
-    public interface IAdjacencyEdge
+    public interface IAdjacencyEdge : IComparable<IAdjacencyEdge>
     {
         int From { get; set; }
 
@@ -44,21 +44,10 @@ namespace Common.GraphTheory.Adjacency
 		{
 			return string.Format ("[AdjacencyEdge: From={0}, To={1}, Weight={2}]", From, To, Weight);
 		}
-	}
 
-    public class AdjacencyEdgeComparer<EDGE> : IComparer<EDGE>
-        where EDGE : class, IAdjacencyEdge, new()
-    {
-        public static AdjacencyEdgeComparer<EDGE> Instance { get; private set; }
-
-        static AdjacencyEdgeComparer()
+        public int CompareTo(IAdjacencyEdge other)
         {
-            Instance = new AdjacencyEdgeComparer<EDGE>();
-        }
-
-        public int Compare(EDGE e0, EDGE e1)
-        {
-            return e0.Weight.CompareTo(e1.Weight);
+            return Weight.CompareTo(other.Weight);
         }
     }
 

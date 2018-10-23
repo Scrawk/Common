@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
@@ -8,8 +9,8 @@ namespace Common.Core.LinearAlgebra
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector3i
-	{
+    public struct Vector3i : IEquatable<Vector3i>
+    {
 		public int x, y, z;
 
         /// <summary>
@@ -47,6 +48,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public readonly static Vector3i MaxInt = new Vector3i(int.MaxValue);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3i(int v)
         {
             this.x = v;
@@ -54,12 +56,21 @@ namespace Common.Core.LinearAlgebra
             this.z = v;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3i(int x, int y, int z)
 		{
 			this.x = x;
 			this.y = y;
 			this.z = z;
 		}
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3i(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+        }
 
         public int this[int i]
         {
@@ -90,6 +101,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public double Magnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return DMath.SafeSqrt(SqrMagnitude);
@@ -101,6 +113,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public int SqrMagnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return (x * x + y * y + z * z);
@@ -112,6 +125,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector3i Absolute
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return new Vector3i(Math.Abs(x), Math.Abs(y), Math.Abs(z));
@@ -121,6 +135,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator +(Vector3i v1, Vector3i v2)
         {
             return new Vector3i(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
@@ -129,6 +144,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator +(Vector3i v1, int s)
         {
             return new Vector3i(v1.x + s, v1.y + s, v1.z + s);
@@ -137,6 +153,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator +(int s, Vector3i v1)
         {
             return new Vector3i(v1.x + s, v1.y + s, v1.z + s);
@@ -145,6 +162,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator -(Vector3i v1, Vector3i v2)
         {
             return new Vector3i(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
@@ -153,6 +171,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator -(Vector3i v1, int s)
         {
             return new Vector3i(v1.x - s, v1.y - s, v1.z - s);
@@ -161,6 +180,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator -(int s, Vector3i v1)
         {
             return new Vector3i(v1.x - s, v1.y - s, v1.z - s);
@@ -169,6 +189,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator *(Vector3i v1, Vector3i v2)
         {
             return new Vector3i(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
@@ -177,6 +198,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator *(Vector3i v, int s)
         {
             return new Vector3i(v.x * s, v.y * s, v.z * s);
@@ -185,6 +207,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator *(int s, Vector3i v)
         {
             return new Vector3i(v.x * s, v.y * s, v.z * s);
@@ -193,6 +216,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Divide two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator /(Vector3i v1, Vector3i v2)
         {
             return new Vector3i(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
@@ -201,31 +225,35 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Divide a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i operator /(Vector3i v, int s)
         {
             return new Vector3i(v.x / s, v.y / s, v.z / s);
         }
 
-		/// <summary>
-		/// Are these vectors equal.
-		/// </summary>
-		public static bool operator ==(Vector3i v1, Vector3i v2)
+        /// <summary>
+        /// Are these vectors equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(Vector3i v1, Vector3i v2)
 		{
 			return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z);
 		}
-		
-		/// <summary>
-		/// Are these vectors not equal.
-		/// </summary>
-		public static bool operator !=(Vector3i v1, Vector3i v2)
+
+        /// <summary>
+        /// Are these vectors not equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(Vector3i v1, Vector3i v2)
 		{
 			return (v1.x != v2.x || v1.y != v2.y || v1.z != v2.z);
 		}
-		
-		/// <summary>
-		/// Are these vectors equal.
-		/// </summary>
-		public override bool Equals (object obj)
+
+        /// <summary>
+        /// Are these vectors equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals (object obj)
 		{
 			if(!(obj is Vector3i)) return false;
 			
@@ -237,15 +265,17 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Vector3i v)
         {
             return this == v;
         }
-		
-		/// <summary>
-		/// Vectors hash code. 
-		/// </summary>
-		public override int GetHashCode()
+
+        /// <summary>
+        /// Vectors hash code. 
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
 		{
 			int hashcode = 23;
 
@@ -258,19 +288,21 @@ namespace Common.Core.LinearAlgebra
 			
 			return hashcode;
 		}
-		
-		/// <summary>
-		/// Vector as a string.
-		/// </summary>
-		public override string ToString()
+
+        /// <summary>
+        /// Vector as a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override string ToString()
 		{
 			return x + "," + y + "," + z;
 		}
 
-		/// <summary>
-		/// Vector from a string.
-		/// </summary>
-		static public Vector3i FromString(string s)
+        /// <summary>
+        /// Vector from a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public Vector3i FromString(string s)
 		{
             Vector3i v = new Vector3i();
             try
@@ -286,10 +318,11 @@ namespace Common.Core.LinearAlgebra
 			
 			return v;
 		}
-        
+
         /// <summary>
         /// The dot product of two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Dot(Vector3i v0, Vector3i v1)
         {
             return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z);
@@ -298,6 +331,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Cross two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3i Cross(Vector3i v0, Vector3i v1)
         {
             return new Vector3i(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x);
@@ -306,6 +340,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Distance between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Distance(Vector3i v0, Vector3i v1)
         {
             return DMath.SafeSqrt(SqrDistance(v0, v1));
@@ -314,6 +349,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Square distance between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double SqrDistance(Vector3i v0, Vector3i v1)
         {
             double x = v0.x - v1.x;
@@ -325,6 +361,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(int s)
         {
             x = Math.Min(x, s);
@@ -335,6 +372,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(Vector3i v)
         {
             x = Math.Min(x, v.x);
@@ -345,6 +383,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(int s)
         {
             x = Math.Max(x, s);
@@ -355,6 +394,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(Vector3i v)
         {
             x = Math.Max(x, v.x);
@@ -365,6 +405,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The absolute vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Abs()
         {
             x = Math.Abs(x);
@@ -375,6 +416,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(int min, int max)
         {
             x = Math.Max(Math.Min(x, max), min);
@@ -385,6 +427,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(Vector3i min, Vector3i max)
         {
             x = Math.Max(Math.Min(x, max.x), min.x);
@@ -392,6 +435,7 @@ namespace Common.Core.LinearAlgebra
             z = Math.Max(Math.Min(z, max.z), min.z);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3f ToVector3f()
         {
             return new Vector3f(x, y, z);

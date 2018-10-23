@@ -173,9 +173,8 @@ namespace Common.GraphTheory.Grids
             return true;
         }
 
-        public List<GridVertex> GetAllVertices()
+        public void GetAllVertices(List<GridVertex> vertices)
         {
-            List<GridVertex> vertices = new List<GridVertex>();
 
             for (int y = 0; y < Height; y++)
             {
@@ -213,12 +212,10 @@ namespace Common.GraphTheory.Grids
                 }
             }
 
-            return vertices;
         }
 
-        public List<GridEdge> GetAllEdges(float[,] weights = null)
+        public void GetAllEdges(List<GridEdge> edges, float[,] weights = null)
         {
-            List<GridEdge> edges = new List<GridEdge>(EdgeCount);
 
             for (int y = 0; y < Height; y++)
             {
@@ -247,7 +244,6 @@ namespace Common.GraphTheory.Grids
                 }
             }
 
-            return edges;
         }
 
         public void GetEdges(int x, int y, List<GridEdge> edges, float[,] weights = null)
@@ -292,28 +288,19 @@ namespace Common.GraphTheory.Grids
             Searches.AStarSearch.Search(this, search, start, target);
         }
 
-        public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, float[,] weights, IComparer<GridEdge> comparer = null)
+        public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, float[,] weights)
         {
-            if (comparer == null)
-                comparer = GridEdgeComparer.Instance;
-
-            Searches.PrimsMinimumSpanningTree.Search(this, search, x, y, weights, comparer);
+            Searches.PrimsMinimumSpanningTree.Search(this, search, x, y, weights);
         }
 
-        public void DijkstrasShortestPathTree(GridSearch search, int x, int y, IComparer<GridVertex> comparer = null)
+        public void DijkstrasShortestPathTree(GridSearch search, int x, int y)
         {
-            if (comparer == null)
-                comparer = GridVertexComparer.Instance;
-
-            Searches.DijkstrasShortestPathTree.Search(this, search, x, y, comparer);
+            Searches.DijkstrasShortestPathTree.Search(this, search, x, y);
         }
 
-        public Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(float[,] weights, IComparer<GridEdge> comparer = null)
+        public Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(float[,] weights)
         {
-            if (comparer == null)
-                comparer = GridEdgeComparer.Instance;
-
-            return Searches.KruskalsMinimumSpanningForest.Search(this, weights, comparer);
+            return Searches.KruskalsMinimumSpanningForest.Search(this, weights);
         }
 
     }

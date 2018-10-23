@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
@@ -10,8 +11,8 @@ namespace Common.Core.LinearAlgebra
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector3d
-	{
+    public struct Vector3d : IEquatable<Vector3d>
+    {
 		public double x, y, z;
 
         /// <summary>
@@ -59,7 +60,8 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
 	    public Vector2d xy
 	    {
-	        get { return new Vector2d(x, y); }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2d(x, y); }
 	    }
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector2d xz
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector2d(x, z); }
         }
 
@@ -75,6 +78,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector4d xyz0
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector4d(x, y, z, 0); }
         }
 
@@ -83,13 +87,15 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector4d xyz1
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector4d(x, y, z, 1); }
         }
 
         /// <summary>
         /// A vector all with the value v.
         /// </summary>
-		public Vector3d(double v) 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3d(double v) 
 		{
 			this.x = v; 
 			this.y = v; 
@@ -99,17 +105,27 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// A vector from the varibles.
         /// </summary>
-		public Vector3d(double x, double y, double z) 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3d(double x, double y, double z) 
 		{
 			this.x = x; 
 			this.y = y;
 			this.z = z;
 		}
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3d(double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = 0;
+        }
+
         /// <summary>
         /// A vector from a 2d vector and the z varible.
         /// </summary>
-		public Vector3d(Vector2d v, double z) 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3d(Vector2d v, double z) 
 		{ 
 			x = v.x; 
 			y = v.y; 
@@ -145,6 +161,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public double Magnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return DMath.SafeSqrt(SqrMagnitude);
@@ -156,6 +173,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
 		public double SqrMagnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return (x * x + y * y + z * z);
@@ -167,6 +185,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector3d Normalized
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 double invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z);
@@ -179,6 +198,7 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public Vector3d Absolute
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return new Vector3d(Math.Abs(x), Math.Abs(y), Math.Abs(z));
@@ -188,6 +208,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator +(Vector3d v1, Vector3d v2)
         {
             return new Vector3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
@@ -196,6 +217,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator +(Vector3d v1, double s)
         {
             return new Vector3d(v1.x + s, v1.y + s, v1.z + s);
@@ -204,6 +226,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator +(double s, Vector3d v1)
         {
             return new Vector3d(v1.x + s, v1.y + s, v1.z + s);
@@ -212,6 +235,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator -(Vector3d v1, Vector3d v2)
         {
             return new Vector3d(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
@@ -220,6 +244,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator -(Vector3d v1, double s)
         {
             return new Vector3d(v1.x - s, v1.y - s, v1.z - s);
@@ -228,6 +253,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator -(double s, Vector3d v1)
         {
             return new Vector3d(v1.x - s, v1.y - s, v1.z - s);
@@ -236,6 +262,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator *(Vector3d v1, Vector3d v2)
         {
             return new Vector3d(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
@@ -244,6 +271,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator *(Vector3d v, double s)
         {
             return new Vector3d(v.x * s, v.y * s, v.z * s);
@@ -252,6 +280,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator *(double s, Vector3d v)
         {
             return new Vector3d(v.x * s, v.y * s, v.z * s);
@@ -260,6 +289,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Divide two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator /(Vector3d v1, Vector3d v2)
         {
             return new Vector3d(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
@@ -268,31 +298,35 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Divide a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator /(Vector3d v, double s)
         {
             return new Vector3d(v.x / s, v.y / s, v.z / s);
         }
 
-		/// <summary>
-		/// Are these vectors equal.
-		/// </summary>
-		public static bool operator ==(Vector3d v1, Vector3d v2)
+        /// <summary>
+        /// Are these vectors equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(Vector3d v1, Vector3d v2)
 		{
 			return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z);
 		}
-		
-		/// <summary>
-		/// Are these vectors not equal.
-		/// </summary>
-		public static bool operator !=(Vector3d v1, Vector3d v2)
+
+        /// <summary>
+        /// Are these vectors not equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(Vector3d v1, Vector3d v2)
 		{
 			return (v1.x != v2.x || v1.y != v2.y || v1.z != v2.z);
 		}
-		
-		/// <summary>
-		/// Are these vectors equal.
-		/// </summary>
-		public override bool Equals (object obj)
+
+        /// <summary>
+        /// Are these vectors equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals (object obj)
 		{
 			if(!(obj is Vector3d)) return false;
 			
@@ -301,10 +335,11 @@ namespace Common.Core.LinearAlgebra
 			return this == v;
 		}
 
-		/// <summary>
-		/// Are these vectors equal given the error.
-		/// </summary>
-		public bool EqualsWithError(Vector3d v, double eps)
+        /// <summary>
+        /// Are these vectors equal given the error.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool EqualsWithError(Vector3d v, double eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
 			if(Math.Abs(y-v.y)> eps) return false;
@@ -315,6 +350,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Vector3d v)
         {
             return this == v;
@@ -323,6 +359,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             double hashcode = 23;
@@ -336,15 +373,17 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vector as a string.
         /// </summary>
-		public override string ToString()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override string ToString()
 	   	{
 			return x + "," + y + "," + z;
 	   	}
 
-		/// <summary>
-		/// Vector from a string.
-		/// </summary>
-		static public Vector3d FromString(string s)
+        /// <summary>
+        /// Vector from a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public Vector3d FromString(string s)
 		{
             Vector3d v = new Vector3d();
 
@@ -362,10 +401,11 @@ namespace Common.Core.LinearAlgebra
 			return v;
 		}
 
-		/// <summary>
-		/// The dot product of two vectors.
-		/// </summary>
-		public static double Dot(Vector3d v0, Vector3d v1)
+        /// <summary>
+        /// The dot product of two vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Dot(Vector3d v0, Vector3d v1)
 		{
 			return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 		}
@@ -373,7 +413,8 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Normalize the vector.
         /// </summary>
-		public void Normalize()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Normalize()
 		{
             double invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z);
 	    	x *= invLength;
@@ -384,6 +425,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Angle between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Angle180(Vector3d a, Vector3d b)
         {
             double dp = Vector3d.Dot(a, b);
@@ -395,15 +437,17 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Cross two vectors.
         /// </summary>
-		public Vector3d Cross(Vector3d v)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3d Cross(Vector3d v)
 		{
 			return new Vector3d(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
 		}
 
-		/// <summary>
-		/// Cross two vectors.
-		/// </summary>
-		public static Vector3d Cross(Vector3d v0, Vector3d v1)
+        /// <summary>
+        /// Cross two vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3d Cross(Vector3d v0, Vector3d v1)
 		{
 			return new Vector3d(v0.y*v1.z - v0.z*v1.y, v0.z*v1.x - v0.x*v1.z, v0.x*v1.y - v0.y*v1.x);
 		}
@@ -411,6 +455,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Distance between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Distance(Vector3d v0, Vector3d v1)
         {
             return DMath.SafeSqrt(SqrDistance(v0, v1));
@@ -419,6 +464,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Square distance between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double SqrDistance(Vector3d v0, Vector3d v1)
         {
             double x = v0.x - v1.x;
@@ -430,6 +476,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Project v on to normal n.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Project(Vector3d v, Vector3d n)
         {
             return Dot(v, n) * n;
@@ -438,6 +485,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(double s)
         {
             x = Math.Min(x, s);
@@ -448,6 +496,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(Vector3d v)
         {
             x = Math.Min(x, v.x);
@@ -458,6 +507,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(double s)
         {
             x = Math.Max(x, s);
@@ -468,6 +518,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(Vector3d v)
         {
             x = Math.Max(x, v.x);
@@ -478,6 +529,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The absolute vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Abs()
         {
             x = Math.Abs(x);
@@ -488,6 +540,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(double min, double max)
 		{
 			x = Math.Max(Math.Min(x, max), min);
@@ -498,6 +551,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(Vector3d min, Vector3d max)
         {
             x = Math.Max(Math.Min(x, max.x), min.x);
@@ -508,6 +562,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Lerp(Vector3d from, Vector3d to, double t)
         {
             if (t < 0.0) t = 0.0;
@@ -527,6 +582,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Slerp between two vectors arc.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Slerp(Vector3d from, Vector3d to, double t)
         {
             if (t < 0.0f) t = 0.0f;
@@ -555,6 +611,7 @@ namespace Common.Core.LinearAlgebra
             return v;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round()
         {
             x = Math.Round(x);
@@ -562,6 +619,7 @@ namespace Common.Core.LinearAlgebra
             z = Math.Round(z);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3i ToVector3i()
         {
             return new Vector3i((int)x, (int)y, (int)z);

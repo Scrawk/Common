@@ -12,7 +12,7 @@ namespace Common.GraphTheory.Searches
     internal static class DijkstrasShortestPathTree
     {
 
-        internal static void Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, AdjacencySearch search, int root, IComparer<VERTEX> comparer)
+        internal static void Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, AdjacencySearch search, int root)
             where EDGE : class, IAdjacencyEdge, new()
             where VERTEX : class, IAdjacencyVertex, new()
         {
@@ -31,7 +31,7 @@ namespace Common.GraphTheory.Searches
             
             while (queue.Count != 0)
             {
-                queue.Sort(comparer);
+                queue.Sort();
 
                 var vertex = queue[0];
                 queue.RemoveAt(0);
@@ -42,7 +42,7 @@ namespace Common.GraphTheory.Searches
 
                 if (graph.Edges[u] != null)
                 {
-                    foreach (EDGE e in graph.Edges[u])
+                    foreach (var e in graph.Edges[u])
                     {
                         int v = e.To;
                         if (search.IsVisited[v]) continue;
@@ -61,13 +61,14 @@ namespace Common.GraphTheory.Searches
 
         }
 
-        internal static void Search(GridGraph graph, GridSearch search, int x, int y, IComparer<GridVertex> comparer)
+        internal static void Search(GridGraph graph, GridSearch search, int x, int y)
         {
             search.Clear();
             int width = graph.Width;
             int height = graph.Height;
 
-            var queue = graph.GetAllVertices();
+            var queue = new List<GridVertex>(width * height);
+            graph.GetAllVertices(queue);
             var vertexGrid = new GridVertex[width, height];
 
             for (int i = 0; i < queue.Count; i++)
@@ -86,7 +87,7 @@ namespace Common.GraphTheory.Searches
 
             while (queue.Count != 0)
             {
-                queue.Sort(comparer);
+                queue.Sort();
 
                 var vertex = queue[0];
                 queue.RemoveAt(0);

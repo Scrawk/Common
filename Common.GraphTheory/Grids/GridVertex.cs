@@ -6,7 +6,7 @@ using Common.Core.LinearAlgebra;
 namespace Common.GraphTheory.Grids
 {
 
-    public class GridVertex
+    public class GridVertex : IComparable<GridVertex>
     {
 
         public Vector2i Index { get; set; }
@@ -29,20 +29,11 @@ namespace Common.GraphTheory.Grids
             Cost = cost;
         }
 
-    }
-
-    public class GridVertexComparer : IComparer<GridVertex>
-    {
-        public static GridVertexComparer Instance { get; private set; }
-
-        static GridVertexComparer()
+        public int CompareTo(GridVertex other)
         {
-            Instance = new GridVertexComparer();
+            return Cost.CompareTo(other.Cost);
         }
 
-        public int Compare(GridVertex v0, GridVertex v1)
-        {
-            return v0.Cost.CompareTo(v1.Cost);
-        }
     }
+
 }

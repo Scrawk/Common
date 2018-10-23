@@ -11,7 +11,7 @@ namespace Common.GraphTheory.Searches
     internal static class PrimsMinimumSpanningTree
     {
 
-        internal static void Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, AdjacencySearch search, int root, IComparer<EDGE> comparer)
+        internal static void Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, AdjacencySearch search, int root)
             where EDGE : class, IAdjacencyEdge, new()
             where VERTEX : class, IAdjacencyVertex, new()
         {
@@ -22,17 +22,17 @@ namespace Common.GraphTheory.Searches
             search.Parent[root] = root;
             search.Order.Add(root);
 
-            PriorityQueue<EDGE> queue = new PriorityQueue<EDGE>(comparer);
+            var queue = new BinaryHeap<IAdjacencyEdge>();
 
             if(graph.Edges[root] != null)
             {
-                foreach (EDGE edge in graph.Edges[root])
-                    queue.Push(edge);
+                foreach (var edge in graph.Edges[root])
+                    queue.Add(edge);
             }
 
             while (queue.Count != 0)
             {
-                EDGE edge = queue.Pop();
+                var edge = queue.Remove();
 
                 int v = edge.To;
                 if (search.IsVisited[v]) continue;
@@ -43,10 +43,10 @@ namespace Common.GraphTheory.Searches
 
                 if (graph.Edges[v] != null)
                 {
-                    foreach (EDGE e in graph.Edges[v])
+                    foreach (var e in graph.Edges[v])
                     {
                         if (search.IsVisited[e.To]) continue;
-                        queue.Push(e);
+                        queue.Add(e);
                     }
                 }
 
@@ -54,7 +54,7 @@ namespace Common.GraphTheory.Searches
 
         }
 
-        internal static void Search(GridGraph graph, GridSearch search, int x, int y, float[,] weights, IComparer<GridEdge> comparer)
+        internal static void Search(GridGraph graph, GridSearch search, int x, int y, float[,] weights)
         {
             search.Clear();
             int width = graph.Width;
@@ -64,7 +64,7 @@ namespace Common.GraphTheory.Searches
             search.Order.Add(new Vector2i(x, y));
             search.Parent[x, y] = new Vector2i(x, y);
 
-            PriorityQueue<GridEdge> queue = new PriorityQueue<GridEdge>(comparer);
+            var queue = new BinaryHeap<GridEdge>(8);
 
             List<GridEdge> edges = new List<GridEdge>(8);
             graph.GetEdges(x, y, edges, weights);
@@ -72,14 +72,14 @@ namespace Common.GraphTheory.Searches
             if (edges.Count != 0)
             {
                 foreach (GridEdge edge in edges)
-                    queue.Push(edge);
+                    queue.Add(edge);
 
                 edges.Clear();
             }
 
             while (queue.Count != 0)
             {
-                GridEdge edge = queue.Pop();
+                GridEdge edge = queue.Remove();
 
                 Vector2i v = edge.To;
                 if (search.IsVisited[v.x, v.y]) continue;
@@ -95,7 +95,7 @@ namespace Common.GraphTheory.Searches
                 foreach (GridEdge e in edges)
                 {
                     if (search.IsVisited[e.To.x, e.To.y]) continue;
-                    queue.Push(e);
+                    queue.Add(e);
                 }
 
                 edges.Clear();

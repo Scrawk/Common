@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Common.GraphTheory.Adjacency
 {
 
-    public interface IAdjacencyVertex
+    public interface IAdjacencyVertex : IComparable<IAdjacencyVertex>
     {
         int Index { get; set; }
 
@@ -35,22 +35,10 @@ namespace Common.GraphTheory.Adjacency
         {
             return string.Format("[AdjacencyVertex: Index={0}, Cost={1}]", Index, Cost);
         }
-    }
 
-    public class AdjacencyVertexComparer<VERTEX> : IComparer<VERTEX>
-        where VERTEX : class, IAdjacencyVertex, new()
-    {
-
-        public static AdjacencyVertexComparer<VERTEX> Instance { get; private set; }
-
-        static AdjacencyVertexComparer()
+        public int CompareTo(IAdjacencyVertex other)
         {
-            Instance = new AdjacencyVertexComparer<VERTEX>();
-        }
-
-        public int Compare(VERTEX v0, VERTEX v1)
-        {
-            return v0.Cost.CompareTo(v1.Cost);
+            return Cost.CompareTo(other.Cost);
         }
     }
 

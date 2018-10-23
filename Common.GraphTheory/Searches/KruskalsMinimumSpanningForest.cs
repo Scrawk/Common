@@ -10,7 +10,7 @@ namespace Common.GraphTheory.Searches
 {
     internal static class KruskalsMinimumSpanningForest
     {
-        internal static Dictionary<int, List<EDGE>> Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, IComparer<EDGE> comparer)
+        internal static Dictionary<int, List<EDGE>> Search<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph)
             where EDGE : class, IAdjacencyEdge, new()
             where VERTEX : class, IAdjacencyVertex, new()
         {
@@ -20,8 +20,9 @@ namespace Common.GraphTheory.Searches
             for(int i = 0; i < graph.VertexCount; i++)
                 set.Add(i, i);
 
-            List<EDGE> sorted = graph.GetAllEdges();
-            sorted.Sort(comparer);
+            var sorted = new List<EDGE>();
+            graph.GetAllEdges(sorted);
+            sorted.Sort();
 
             int edgeCount = sorted.Count;
             List<EDGE> edges = new List<EDGE>(edgeCount);
@@ -51,7 +52,7 @@ namespace Common.GraphTheory.Searches
             return forest;
         }
 
-        internal static Dictionary<Vector2i, List<GridEdge>> Search(GridGraph graph, float[,] weights, IComparer<GridEdge> comparer)
+        internal static Dictionary<Vector2i, List<GridEdge>> Search(GridGraph graph, float[,] weights)
         {
             int width = graph.Width;
             int height = graph.Height;
@@ -66,8 +67,9 @@ namespace Common.GraphTheory.Searches
                 }
             }
 
-            List<GridEdge> sorted = graph.GetAllEdges(weights);
-            sorted.Sort(comparer);
+            var sorted = new List<GridEdge>(width * height);
+            graph.GetAllEdges(sorted, weights);
+            sorted.Sort();
 
             int edgeCount = sorted.Count;
             List<GridEdge> edges = new List<GridEdge>();

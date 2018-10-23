@@ -14,6 +14,11 @@ namespace Common.Core.Directions
         public const int BOTTOM = 6;
         public const int LEFT_BOTTOM = 7;
 
+        public static bool IsDiagonal(int i)
+        {
+            return i % 2 != 1;
+        }
+
         public static readonly int[,] OFFSETS = new int[,]
         {
                 {-1,0},

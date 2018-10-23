@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Common.Collections.Trees
 {
-    public class AVLTree<T> : BinaryTree<T>
+    public class AVLTree<T> : BinaryTree<T> where T : IComparable<T>
     {
 
-        public AVLTree(IComparer<T> comparer) : base(comparer)
+        public AVLTree()
         {
             
         }
@@ -31,12 +31,12 @@ namespace Common.Collections.Trees
 
             while (current != null)
             {
-                if (Comparer.Compare(item, current.Item) < 0)
+                if (item.CompareTo(current.Item) < 0)
                 {
                     parent = current;
                     current = current.Left;
                 }
-                else if (Comparer.Compare(item, current.Item) > 0)
+                else if (item.CompareTo(current.Item) > 0)
                 {
                     parent = current;
                     current = current.Right;
@@ -53,7 +53,7 @@ namespace Common.Collections.Trees
                     Root = current.Right;
                 else
                 {
-                    if (Comparer.Compare(item, parent.Item) < 0)
+                    if (item.CompareTo(parent.Item) < 0)
                         parent.Left = current.Right;
                     else
                         parent.Right = current.Right;

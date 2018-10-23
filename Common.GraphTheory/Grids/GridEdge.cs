@@ -6,7 +6,7 @@ using Common.Core.LinearAlgebra;
 namespace Common.GraphTheory.Grids
 { 
 
-    public class GridEdge
+    public class GridEdge : IComparable<GridEdge>
     {
 
         public Vector2i From { get; set; }
@@ -32,20 +32,10 @@ namespace Common.GraphTheory.Grids
             To = new Vector2i(tx, ty);
         }
 
-    }
-
-    public class GridEdgeComparer : IComparer<GridEdge>
-    {
-        public static GridEdgeComparer Instance { get; private set; }
-
-        static GridEdgeComparer()
+        public int CompareTo(GridEdge other)
         {
-            Instance = new GridEdgeComparer();
+            return Weight.CompareTo(other.Weight);
         }
 
-        public int Compare(GridEdge e0, GridEdge e1)
-        {
-            return e0.Weight.CompareTo(e1.Weight);
-        }
     }
 }

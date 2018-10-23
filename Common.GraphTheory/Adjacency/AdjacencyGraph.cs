@@ -40,9 +40,6 @@ namespace Common.GraphTheory.Adjacency
         {
             Vertices = new List<VERTEX>(vertices);
             Edges = new List<EDGE>[Vertices.Count];
-
-            //for (int i = 0; i < Vertices.Count; i++)
-            //    Vertices[i].Index = i;
         }
 
         public void AddEdge(EDGE edge)
@@ -98,17 +95,13 @@ namespace Common.GraphTheory.Adjacency
                 return Edges[i].Count;
         }
 
-        public List<EDGE> GetAllEdges()
+        public void GetAllEdges(List<EDGE> edges)
         {
-            List<EDGE> edges = new List<EDGE>(EdgeCount);
-
             for (int i = 0; i < VertexCount; i++)
             {
                 if (Edges[i] == null || Edges[i].Count == 0) continue;
                 edges.AddRange(Edges[i]);
             }
-
-            return edges;
         }
 
         public void DepthFirstSearch(AdjacencySearch search, int root)
@@ -126,28 +119,19 @@ namespace Common.GraphTheory.Adjacency
             return Searches.KhansTopologicalSort.Sort(this);
         }
 
-        public void PrimsMinimumSpanningTree(AdjacencySearch search, int root, IComparer<EDGE> comparer = null)
+        public void PrimsMinimumSpanningTree(AdjacencySearch search, int root)
         {
-            if (comparer == null)
-                comparer = AdjacencyEdgeComparer<EDGE>.Instance;
-
-            Searches.PrimsMinimumSpanningTree.Search(this, search, root, comparer);
+            Searches.PrimsMinimumSpanningTree.Search(this, search, root);
         }
 
-        public void DijkstrasShortestPathTree(AdjacencySearch search, int root, IComparer<VERTEX> comparer = null)
+        public void DijkstrasShortestPathTree(AdjacencySearch search, int root)
         {
-            if (comparer == null)
-                comparer = AdjacencyVertexComparer<VERTEX>.Instance;
-
-            Searches.DijkstrasShortestPathTree.Search(this, search, root, comparer);
+            Searches.DijkstrasShortestPathTree.Search(this, search, root);
         }
 
-        public Dictionary<int, List<EDGE>> KruskalsMinimumSpanningForest(IComparer<EDGE> comparer = null)
+        public Dictionary<int, List<EDGE>> KruskalsMinimumSpanningForest()
         {
-            if (comparer == null)
-                comparer = AdjacencyEdgeComparer<EDGE>.Instance;
-
-            return Searches.KruskalsMinimumSpanningForest.Search(this, comparer);
+            return Searches.KruskalsMinimumSpanningForest.Search(this);
         }
 
         public AdjacencyFlowGraph<VERTEX> FoldFulkersonMaxFlow(int source, int sink)

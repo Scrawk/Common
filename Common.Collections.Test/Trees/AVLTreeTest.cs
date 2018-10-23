@@ -13,7 +13,7 @@ namespace Common.Collections.Test.Trees
         public void Add()
         {
 
-            AVLTree<int> tree = new AVLTree<int>(new IntComparer());
+            AVLTree<int> tree = new AVLTree<int>();
 
             tree.Add(25);
             tree.Add(20);
@@ -74,7 +74,7 @@ namespace Common.Collections.Test.Trees
         public void Remove()
         {
 
-            AVLTree<int> tree = new AVLTree<int>(new IntComparer());
+            AVLTree<int> tree = new AVLTree<int>();
 
             tree.Add(25);
             tree.Add(20);
@@ -101,14 +101,6 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual(25, tree.Root.Right.Item);
             Assert.AreEqual(3, tree.Count);
 
-        }
-
-        private class IntComparer : IComparer<int>
-        {
-            public int Compare(int i0, int i1)
-            {
-                return i0.CompareTo(i1);
-            }
         }
     }
 

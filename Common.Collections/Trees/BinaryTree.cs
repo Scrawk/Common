@@ -4,18 +4,16 @@ using System.Collections.Generic;
 
 namespace Common.Collections.Trees
 {
-    public class BinaryTree<T>
+    public class BinaryTree<T> where T : IComparable<T>
     {
 
         public int Count { get; protected set; }
 
         public BinaryTreeNode<T> Root { get; protected set; }
 
-        protected IComparer<T> Comparer { get; set; }
-
-        public BinaryTree(IComparer<T> comparer)
+        public BinaryTree()
         {
-            Comparer = comparer;
+
         }
 
         public void Clear()
@@ -35,9 +33,9 @@ namespace Common.Collections.Trees
             {
                 path.Add(current.Item);
 
-                if (Comparer.Compare(item, current.Item) < 0)
+                if (item.CompareTo(current.Item) < 0)
                     current = current.Left;
-                else if (Comparer.Compare(item, current.Item) > 0)
+                else if (item.CompareTo(current.Item) > 0)
                     current = current.Right;
                 else
                     break;
@@ -57,9 +55,9 @@ namespace Common.Collections.Trees
             {
                 path.Add(current);
 
-                if (Comparer.Compare(item, current.Item) < 0)
+                if (item.CompareTo(current.Item) < 0)
                     current = current.Left;
-                else if (Comparer.Compare(item, current.Item) > 0)
+                else if (item.CompareTo(current.Item) > 0)
                     current = current.Right;
                 else
                     break;
@@ -74,9 +72,9 @@ namespace Common.Collections.Trees
 
             while(current != null)
             {
-                if (Comparer.Compare(item, current.Item) < 0)
+                if (item.CompareTo(current.Item) < 0)
                     current = current.Left;
-                else if (Comparer.Compare(item, current.Item) > 0)
+                else if (item.CompareTo(current.Item) > 0)
                     current = current.Right;
                 else
                     return true;
@@ -102,12 +100,12 @@ namespace Common.Collections.Trees
 
                 while (current != null)
                 {
-                    if (Comparer.Compare(item, current.Item) < 0)
+                    if (item.CompareTo(current.Item) < 0)
                     {
                         parent = current;
                         current = current.Left;
                     }
-                    else if (Comparer.Compare(item, current.Item) > 0)
+                    else if (item.CompareTo(current.Item) > 0)
                     {
                         parent = current;
                         current = current.Right;
@@ -116,9 +114,9 @@ namespace Common.Collections.Trees
                         return false;
                 }
 
-                if (Comparer.Compare(item, parent.Item) < 0)
+                if (item.CompareTo(parent.Item) < 0)
                     parent.Left = new BinaryTreeNode<T>(item);
-                else if (Comparer.Compare(item, parent.Item) > 0)
+                else if (item.CompareTo(parent.Item) > 0)
                     parent.Right = new BinaryTreeNode<T>(item);
             }
 
@@ -134,12 +132,12 @@ namespace Common.Collections.Trees
 
             while (current != null)
             {
-                if (Comparer.Compare(item, current.Item) < 0)
+                if (item.CompareTo(current.Item) < 0)
                 {
                     parent = current;
                     current = current.Left;
                 }
-                else if (Comparer.Compare(item, current.Item) > 0)
+                else if (item.CompareTo(current.Item) > 0)
                 {
                     parent = current;
                     current = current.Right;
@@ -156,7 +154,7 @@ namespace Common.Collections.Trees
                     Root = current.Right;
                 else
                 {
-                    if (Comparer.Compare(item, parent.Item) < 0)
+                    if (item.CompareTo(parent.Item) < 0)
                         parent.Left = current.Right;
                     else
                         parent.Right = current.Right;
