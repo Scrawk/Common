@@ -139,6 +139,21 @@ namespace Common.GraphTheory.Grids
             return true;
         }
 
+        public void RemoveDirectedEdge(int x, int y, int i)
+        {
+            if (i < 0 || i > 7)
+                throw new ArgumentException("To must represent a bit and have a range of 0-7.");
+
+            int xi = x + D8.OFFSETS[i, 0];
+            int yi = y + D8.OFFSETS[i, 1];
+
+            if (xi < 0 || xi > Width - 1) return;
+            if (yi < 0 || yi > Height - 1) return;
+
+            Edges[x, y] = (byte)(Edges[x, y] & ~(1 << i));
+            EdgeCount--;
+        }
+
         public void AddUndirectedEdge(int x, int y, int i)
         {
             if (i < 0 || i > 7)
@@ -171,6 +186,22 @@ namespace Common.GraphTheory.Grids
             EdgeCount += 2;
 
             return true;
+        }
+
+        public void RemoveUndirectedEdge(int x, int y, int i)
+        {
+            if (i < 0 || i > 7)
+                throw new ArgumentException("To must represent a bit and have a range of 0-7.");
+
+            int xi = x + D8.OFFSETS[i, 0];
+            int yi = y + D8.OFFSETS[i, 1];
+
+            if (xi < 0 || xi > Width - 1) return;
+            if (yi < 0 || yi > Height - 1) return;
+
+            Edges[x, y] = (byte)(Edges[x, y] & ~(1 << i));
+            Edges[xi, yi] = (byte)(Edges[xi, yi] & ~(1 << D8.OPPOSITES[i]));
+            EdgeCount -= 2;
         }
 
         public void GetAllVertices(List<GridVertex> vertices)

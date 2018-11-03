@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Common.Collections.Arrays
 {
-    public class SparseArray2<T>
+    public class SparseArray2<T> : IArray2<T>
     {
 
         private class Grid
@@ -146,6 +145,22 @@ namespace Common.Collections.Arrays
 
                 return count;
             }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach(var grid in m_grids)
+            {
+                if (grid == null) continue;
+
+                foreach (var t in grid.Array)
+                    yield return t;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public void Clear()

@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arrays\IArray2.cs" />
     <Compile Include="Arrays\SparseArray2.cs" />
+    <Compile Include="Arrays\SystemArray2.cs" />
     <Compile Include="Caching\ICacheable.cs" />
     <Compile Include="Caching\ObjectCache.cs" />
     <Compile Include="Extensions\IListExtension.cs" />

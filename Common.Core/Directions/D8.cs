@@ -16,7 +16,7 @@ namespace Common.Core.Directions
 
         public static bool IsDiagonal(int i)
         {
-            return i % 2 != 1;
+            return i % 2 != 0;
         }
 
         public static readonly int[,] OFFSETS = new int[,]
