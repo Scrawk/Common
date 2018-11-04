@@ -32,7 +32,16 @@ namespace Common.Core.LinearAlgebra
 			this.m00 = m00; this.m01 = m01; this.m02 = m02;
 			this.m10 = m10; this.m11 = m11; this.m12 = m12;
 			this.m20 = m20; this.m21 = m21; this.m22 = m22;
+        }
 
+        /// <summary>
+        /// A matrix from the following column vectors.
+        /// </summary>
+        public Matrix3x3f(Vector3f c0, Vector3f c1, Vector3f c2)
+        {
+            m00 = c0.x; m01 = c1.x; m02 = c2.x;
+            m10 = c0.y; m11 = c1.y; m12 = c2.y;
+            m20 = c0.z; m21 = c1.z; m22 = c2.z;
         }
 
         /// <summary>

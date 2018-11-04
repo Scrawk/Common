@@ -443,6 +443,28 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Given an incident vector i and a normal vector n.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2d Reflect(Vector2d i, Vector2d n)
+        {
+            return i - 2 * n * Dot(i, n);
+        }
+
+        /// <summary>
+        /// Returns the refraction vector given the incident vector i, 
+        /// the normal vector n and the refraction index eta.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2d Refract(Vector2d i, Vector2d n, float eta)
+        {
+            double ni = Dot(n, i);
+            double k = 1.0f - eta * eta * (1.0f - ni * ni);
+
+            return (k >= 0) ? eta * i - (eta * ni + DMath.SafeSqrt(k)) * n : Zero;
+        }
+
+        /// <summary>
         /// Angle between two vectors in degrees from 0 to 180.
         /// A and b origin treated as 0,0.
         /// </summary>

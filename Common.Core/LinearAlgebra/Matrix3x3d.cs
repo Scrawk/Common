@@ -36,6 +36,16 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// A matrix from the following column vectors.
+        /// </summary>
+        public Matrix3x3d(Vector3d c0, Vector3d c1, Vector3d c2)
+        {
+            m00 = c0.x; m01 = c1.x; m02 = c2.x;
+            m10 = c0.y; m11 = c1.y; m12 = c2.y;
+            m20 = c0.z; m21 = c1.z; m22 = c2.z;
+        }
+
+        /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
         public Matrix3x3d(double v)

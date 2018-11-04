@@ -483,6 +483,28 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Given an incident vector i and a normal vector n.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3d Reflect(Vector3d i, Vector3d n)
+        {
+            return i - 2 * n * Dot(i, n);
+        }
+
+        /// <summary>
+        /// Returns the refraction vector given the incident vector i, 
+        /// the normal vector n and the refraction index eta.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3d Refract(Vector3d i, Vector3d n, float eta)
+        {
+            double ni = Dot(n, i);
+            double k = 1.0f - eta * eta * (1.0f - ni * ni);
+
+            return (k >= 0) ? eta * i - (eta * ni + DMath.SafeSqrt(k)) * n : Zero;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

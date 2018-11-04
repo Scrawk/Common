@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
@@ -7,7 +8,7 @@ namespace Common.Core.LinearAlgebra
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Quaternion3f
+    public struct Quaternion3f : IEquatable<Quaternion3f>
     {
 
         public float x, y, z, w;
@@ -19,6 +20,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// A Quaternion from varibles.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Quaternion3f(float x, float y, float z, float w)
         {
             this.x = x;
@@ -30,6 +32,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// A Quaternion copied from a array.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Quaternion3f(float[] v)
         {
             this.x = v[0];
@@ -39,91 +42,6 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
-        /// The inverse of the quaternion.
-        /// </summary>
-        public Quaternion3f Inverse
-        {
-            get
-            {
-                return new Quaternion3f(-x, -y, -z, w);
-            }
-        }
-
-        /// <summary>
-        /// The length of the quaternion.
-        /// </summary>
-        float Length
-        {
-            get
-            {
-                float len = x * x + y * y + z * z + w * w;
-                return FMath.SafeSqrt(len);
-            }
-        }
-
-        /// <summary>
-        /// The a normalized quaternion.
-        /// </summary>
-        public Quaternion3f Normalized
-        {
-            get
-            {
-                float inv = FMath.SafeInv(Length);
-                return new Quaternion3f(x * inv, y * inv, z * inv, w * inv);
-            }
-        }
-
-        /// <summary>
-        /// Are these Quaternions equal.
-        /// </summary>
-        public static bool operator ==(Quaternion3f v1, Quaternion3f v2)
-		{
-			return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z && v1.w == v2.w);
-		}
-		
-		/// <summary>
-		/// Are these Quaternions not equal.
-		/// </summary>
-		public static bool operator !=(Quaternion3f v1, Quaternion3f v2)
-		{
-			return (v1.x != v2.x || v1.y != v2.y || v1.z != v2.z || v1.w != v2.w);
-		}
-		
-		/// <summary>
-		/// Are these Quaternions equal.
-		/// </summary>
-		public override bool Equals (object obj)
-		{
-			if(!(obj is Quaternion3f)) return false;
-			
-			Quaternion3f v = (Quaternion3f)obj;
-			
-			return this == v;
-		}
-		
-		/// <summary>
-		/// Quaternions hash code. 
-		/// </summary>
-		public override int GetHashCode()
-		{
-            float hashcode = 23;
-            hashcode = (hashcode * 37) + x;
-            hashcode = (hashcode * 37) + y;
-            hashcode = (hashcode * 37) + z;
-            hashcode = (hashcode * 37) + w;
-
-            return unchecked((int)hashcode);
-        }
-		
-		/// <summary>
-		/// Quaternion as a string.
-		/// </summary>
-		public override string ToString()
-		{
-			return "(" + x + "," + y + "," + z + "," + w + ")";
-		}
-
-        /// <summary>
         /// A Quaternion from a vector axis and angle.
         /// The axis is the up direction and the angle is the rotation.
         /// </summary>
@@ -131,8 +49,8 @@ namespace Common.Core.LinearAlgebra
         {
             Vector3f axisN = axis.Normalized;
             float a = angle * 0.5f;
-			float sina = (float)Math.Sin(a);
-			float cosa = (float)Math.Cos(a);
+            float sina = (float)Math.Sin(a);
+            float cosa = (float)Math.Cos(a);
             x = axisN.x * sina;
             y = axisN.y * sina;
             z = axisN.z * sina;
@@ -155,21 +73,21 @@ namespace Common.Core.LinearAlgebra
                 w = 0;
                 if (Math.Abs(f.x) < 0.6f)
                 {
-					float norm = (float)Math.Sqrt(1 - f.x * f.x);
+                    float norm = (float)Math.Sqrt(1 - f.x * f.x);
                     x = 0;
                     y = f.z / norm;
                     z = -f.y / norm;
                 }
                 else if (Math.Abs(f.y) < 0.6f)
                 {
-					float norm = (float)Math.Sqrt(1 - f.y * f.y);
+                    float norm = (float)Math.Sqrt(1 - f.y * f.y);
                     x = -f.z / norm;
                     y = 0;
                     z = f.x / norm;
                 }
                 else
                 {
-					float norm = (float)Math.Sqrt(1 - f.z * f.z);
+                    float norm = (float)Math.Sqrt(1 - f.z * f.z);
                     x = f.y / norm;
                     y = -f.x / norm;
                     z = 0;
@@ -177,8 +95,8 @@ namespace Common.Core.LinearAlgebra
             }
             else
             {
-				float s = (float)Math.Sqrt(0.5f * dotProdPlus1);
-                Vector3f tmp = (Vector3f.Cross(f,t)) / (2.0f * s);
+                float s = (float)Math.Sqrt(0.5f * dotProdPlus1);
+                Vector3f tmp = (Vector3f.Cross(f, t)) / (2.0f * s);
                 x = tmp.x;
                 y = tmp.y;
                 z = tmp.z;
@@ -187,31 +105,164 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Returns the conjugate of a quaternion value.
+        /// </summary>
+        public Quaternion3f Conjugate
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return new Quaternion3f(-x, -y, -z, w);
+            }
+        }
+
+        /// <summary>
+        /// The inverse of the quaternion.
+        /// </summary>
+        public Quaternion3f Inverse
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                float im = FMath.SafeInv(SqrMagnitude);
+                return new Quaternion3f(im * -x, im * -y, im * -z, im * w);
+            }
+        }
+
+        /// <summary>
+        /// The length of the quaternion.
+        /// </summary>
+        float Magnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return FMath.SafeSqrt(SqrMagnitude);
+            }
+        }
+
+        /// <summary>
+        /// The sqr length of the quaternion.
+        /// </summary>
+        float SqrMagnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * x + y * y + z * z + w * w;
+            }
+        }
+
+        /// <summary>
+        /// The a normalized quaternion.
+        /// </summary>
+        public Quaternion3f Normalized
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                float inv = FMath.SafeInv(Magnitude);
+                return new Quaternion3f(x * inv, y * inv, z * inv, w * inv);
+            }
+        }
+
+        /// <summary>
         /// Multiply two quternions together.
         /// </summary>
-		public static Quaternion3f operator *(Quaternion3f q1, Quaternion3f q2)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator *(Quaternion3f q1, Quaternion3f q2)
         {
-			return new Quaternion3f(q2.w * q1.x + q2.x * q1.w + q2.y * q1.z - q2.z * q1.y,
-                            		q2.w * q1.y - q2.x * q1.z + q2.y * q1.w + q2.z * q1.x,
-                            		q2.w * q1.z + q2.x * q1.y - q2.y * q1.x + q2.z * q1.w,
-                            		q2.w * q1.w - q2.x * q1.x - q2.y * q1.y - q2.z * q1.z);
+            return new Quaternion3f(q2.w * q1.x + q2.x * q1.w + q2.y * q1.z - q2.z * q1.y,
+                                    q2.w * q1.y - q2.x * q1.z + q2.y * q1.w + q2.z * q1.x,
+                                    q2.w * q1.z + q2.x * q1.y - q2.y * q1.x + q2.z * q1.w,
+                                    q2.w * q1.w - q2.x * q1.x - q2.y * q1.y - q2.z * q1.z);
         }
 
         /// <summary>
         /// Multiply a quaternion and a vector together.
         /// </summary>
-		public static Vector3f operator *(Quaternion3f q, Vector3f v)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3f operator *(Quaternion3f q, Vector3f v)
         {
-            return q.ToMatrix3x3f() * v;
+            Vector3f xyz = new Vector3f(q.x, q.y, q.z);
+            Vector3f t = 2 * Vector3f.Cross(xyz, v);
+            return v + q.w * t + Vector3f.Cross(xyz, t);
         }
 
         /// <summary>
         /// Multiply a quaternion and a vector together.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3f operator *(Vector3f v, Quaternion3f q)
         {
-            return q.ToMatrix3x3f() * v;
+            Vector3f xyz = new Vector3f(q.x, q.y, q.z);
+            Vector3f t = 2 * Vector3f.Cross(xyz, v);
+            return v + q.w * t + Vector3f.Cross(xyz, t);
         }
+
+        /// <summary>
+        /// Are these Quaternions equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(Quaternion3f v1, Quaternion3f v2)
+		{
+			return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z && v1.w == v2.w);
+		}
+
+        /// <summary>
+        /// Are these Quaternions not equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(Quaternion3f v1, Quaternion3f v2)
+		{
+			return (v1.x != v2.x || v1.y != v2.y || v1.z != v2.z || v1.w != v2.w);
+		}
+
+        /// <summary>
+        /// Are these Quaternions equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(Quaternion3f q)
+        {
+            return this == q;
+        }
+
+        /// <summary>
+        /// Are these Quaternions equal.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals (object obj)
+		{
+			if(!(obj is Quaternion3f)) return false;
+			
+			Quaternion3f v = (Quaternion3f)obj;
+			
+			return this == v;
+		}
+
+        /// <summary>
+        /// Quaternions hash code. 
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
+		{
+            float hashcode = 23;
+            hashcode = (hashcode * 37) + x;
+            hashcode = (hashcode * 37) + y;
+            hashcode = (hashcode * 37) + z;
+            hashcode = (hashcode * 37) + w;
+
+            return unchecked((int)hashcode);
+        }
+
+        /// <summary>
+        /// Quaternion as a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override string ToString()
+		{
+			return "(" + x + "," + y + "," + z + "," + w + ")";
+		}
 
         /// <summary>
         /// Convert to a single precision 3 dimension matrix.
@@ -263,13 +314,23 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The normalize the quaternion.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
-            float invLength = FMath.SafeInv(Length);
+            float invLength = FMath.SafeInv(Magnitude);
             x *= invLength;
             y *= invLength;
             z *= invLength;
             w *= invLength;
+        }
+
+        /// <summary>
+        /// The dot product of two quaternion..
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Dot(Quaternion3f q0, Quaternion3f q1)
+        {
+            return q0.x * q1.x + q0.y * q1.y + q0.z * q1.z + q0.w * q1.w;
         }
 
         /// <summary>
@@ -316,6 +377,7 @@ namespace Common.Core.LinearAlgebra
 
         /// <summary>
         /// Create a rotation out of a vector.
+        /// Uses Unity euler axis (+x right, +y up, +z forward)
         /// </summary>
         public static Quaternion3f FromEuler(Vector3f euler)
         {
@@ -341,6 +403,50 @@ namespace Common.Core.LinearAlgebra
             return q;
         }
 
+        /// <summary>
+        /// Returns a float4x4 matrix that rotates around the x-axis by a given number of degrees.
+        /// </summary>
+        /// <param name="angle">
+        /// The clockwise rotation angle when looking along the x-axis towards the origin in degrees.
+        /// </param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f RotateX(float angle)
+        {
+            float a = FMath.Deg2Rad * 0.5f;
+            float sina = (float)Math.Sin(a);
+            float cosa = (float)Math.Cos(a);
+            return new Quaternion3f(sina, 0.0f, 0.0f, cosa);
+        }
+
+        /// <summary>
+        /// Returns a float4x4 matrix that rotates around the y-axis by a given number of degrees.
+        /// </summary>
+        /// <param name="angle">
+        /// The clockwise rotation angle when looking along the y-axis towards the origin in degrees.
+        /// </param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f RotateY(float angle)
+        {
+            float a = FMath.Deg2Rad * 0.5f;
+            float sina = (float)Math.Sin(a);
+            float cosa = (float)Math.Cos(a);
+            return new Quaternion3f(0.0f, sina, 0.0f, cosa);
+        }
+
+        /// <summary>
+        /// Returns a float4x4 matrix that rotates around the z-axis by a given number of degrees.
+        /// </summary>
+        /// <param name="angle">
+        /// The clockwise rotation angle when looking along the z-axis towards the origin in degrees.
+        /// </param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f RotateZ(float angle)
+        {
+            float a = FMath.Deg2Rad * 0.5f;
+            float sina = (float)Math.Sin(a);
+            float cosa = (float)Math.Cos(a);
+            return new Quaternion3f(0.0f, 0.0f, sina, cosa);
+        }
 
     }
 

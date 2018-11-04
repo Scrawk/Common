@@ -30,6 +30,15 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// A matrix from the following column vectors.
+        /// </summary>
+        public Matrix2x2f(Vector2f c0, Vector2f c1)
+        {
+            m00 = c0.x; m01 = c1.x;
+            m10 = c0.y; m11 = c1.y;
+        }
+
+        /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
         public Matrix2x2f(float v)

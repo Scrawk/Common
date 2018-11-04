@@ -43,6 +43,17 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// A matrix from the following column vectors.
+        /// </summary>
+        public Matrix4x4d(Vector4d c0, Vector4d c1, Vector4d c2, Vector4d c3)
+        {
+            m00 = c0.x; m01 = c1.x; m02 = c2.x; m03 = c3.x;
+            m10 = c0.y; m11 = c1.y; m12 = c2.y; m13 = c3.y;
+            m20 = c0.z; m21 = c1.z; m22 = c2.z; m23 = c3.z;
+            m30 = c0.w; m31 = c1.w; m32 = c2.w; m33 = c3.w;
+        }
+
+        /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
         public Matrix4x4d(double v)
@@ -770,42 +781,45 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
-        /// Create a rotation out of a angle.
+        /// Create a rotation out of a angle in degrees.
         /// </summary>
         static public Matrix4x4d RotateX(double angle)
         {
-			double ca = Math.Cos(angle * Math.PI / 180.0);
-			double sa = Math.Sin(angle * Math.PI / 180.0);
+            double a = angle * DMath.Rad2Deg;
+            double ca = Math.Cos(a);
+            double sa = Math.Sin(a);
 
-            return new Matrix4x4d(	1, 0, 0, 0,
+            return new Matrix4x4d(1, 0, 0, 0,
                                     0, ca, -sa, 0,
                                     0, sa, ca, 0,
                                     0, 0, 0, 1);
         }
 
         /// <summary>
-        /// Create a rotation out of a angle.
+        /// Create a rotation out of a angle in degrees.
         /// </summary>
         static public Matrix4x4d RotateY(double angle)
         {
-			double ca = Math.Cos(angle * Math.PI / 180.0);
-			double sa = Math.Sin(angle * Math.PI / 180.0);
+            double a = angle * DMath.Rad2Deg;
+            double ca = Math.Cos(a);
+            double sa = Math.Sin(a);
 
-            return new Matrix4x4d(	ca, 0, sa, 0,
+            return new Matrix4x4d(ca, 0, sa, 0,
                                     0, 1, 0, 0,
                                     -sa, 0, ca, 0,
                                     0, 0, 0, 1);
         }
 
         /// <summary>
-        /// Create a rotation out of a angle.
+        /// Create a rotation out of a angle in degrees.
         /// </summary>
         static public Matrix4x4d RotateZ(double angle)
         {
-			double ca = Math.Cos(angle * Math.PI / 180.0);
-			double sa = Math.Sin(angle * Math.PI / 180.0);
+            double a = angle * DMath.Rad2Deg;
+            double ca = Math.Cos(a);
+            double sa = Math.Sin(a);
 
-            return new Matrix4x4d(	ca, -sa, 0, 0,
+            return new Matrix4x4d(ca, -sa, 0, 0,
                                     sa, ca, 0, 0,
                                     0, 0, 1, 0,
                                     0, 0, 0, 1);

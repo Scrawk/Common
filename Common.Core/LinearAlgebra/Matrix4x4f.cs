@@ -39,7 +39,17 @@ namespace Common.Core.LinearAlgebra
 			this.m10 = m10; this.m11 = m11; this.m12 = m12; this.m13 = m13;
 			this.m20 = m20; this.m21 = m21; this.m22 = m22; this.m23 = m23;
 			this.m30 = m30; this.m31 = m31; this.m32 = m32; this.m33 = m33;
+        }
 
+        /// <summary>
+        /// A matrix from the following column vectors.
+        /// </summary>
+        public Matrix4x4f(Vector4f c0, Vector4f c1, Vector4f c2, Vector4f c3)
+        {
+            m00 = c0.x; m01 = c1.x; m02 = c2.x; m03 = c3.x;
+            m10 = c0.y; m11 = c1.y; m12 = c2.y; m13 = c3.y;
+            m20 = c0.z; m21 = c1.z; m22 = c2.z; m23 = c3.z;
+            m30 = c0.w; m31 = c1.w; m32 = c2.w; m33 = c3.w;
         }
 
         /// <summary>
@@ -771,12 +781,13 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
-        /// Create a rotation out of a angle.
+        /// Create a rotation out of a angle in degrees.
         /// </summary>
         static public Matrix4x4f RotateX(float angle)
         {
-			float ca = (float)Math.Cos(angle * Math.PI / 180.0);
-			float sa = (float)Math.Sin(angle * Math.PI / 180.0);
+            float a = angle * FMath.Rad2Deg;
+			float ca = (float)Math.Cos(a);
+			float sa = (float)Math.Sin(a);
 
             return new Matrix4x4f(	1, 0, 0, 0,
                                     0, ca, -sa, 0,
@@ -785,12 +796,13 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
-        /// Create a rotation out of a angle.
+        /// Create a rotation out of a angle in degrees.
         /// </summary>
         static public Matrix4x4f RotateY(float angle)
         {
-			float ca = (float)Math.Cos(angle * Math.PI / 180.0);
-			float sa = (float)Math.Sin(angle * Math.PI / 180.0);
+            float a = angle * FMath.Rad2Deg;
+            float ca = (float)Math.Cos(a);
+            float sa = (float)Math.Sin(a);
 
             return new Matrix4x4f(	ca, 0, sa, 0,
                                     0, 1, 0, 0,
@@ -799,12 +811,13 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
-        /// Create a rotation out of a angle.
+        /// Create a rotation out of a angle in degrees.
         /// </summary>
         static public Matrix4x4f RotateZ(float angle)
         {
-			float ca = (float)Math.Cos(angle * Math.PI / 180.0);
-			float sa = (float)Math.Sin(angle * Math.PI / 180.0);
+            float a = angle * FMath.Rad2Deg;
+            float ca = (float)Math.Cos(a);
+            float sa = (float)Math.Sin(a);
 
             return new Matrix4x4f(	ca, -sa, 0, 0,
                                     sa, ca, 0, 0,
