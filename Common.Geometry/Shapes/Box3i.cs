@@ -183,16 +183,13 @@ namespace Common.Geometry.Shapes
             return c;
         }
 
-        public static Box3i CalculateBounds(IList<Vector3i> vertices)
+        public static Box3i CalculateBounds(IEnumerable<Vector3i> vertices)
         {
             Vector3i min = Vector3i.MaxInt;
             Vector3i max = Vector3i.MinInt;
 
-            int count = vertices.Count;
-            for (int i = 0; i < count; i++)
+            foreach (var v in vertices)
             {
-                Vector3i v = vertices[i];
-
                 if (v.x < min.x) min.x = v.x;
                 if (v.y < min.y) min.y = v.y;
                 if (v.z < min.z) min.z = v.z;

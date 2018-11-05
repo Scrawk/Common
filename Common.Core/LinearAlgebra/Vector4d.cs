@@ -67,6 +67,8 @@ namespace Common.Core.LinearAlgebra
 	    {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector2d(x, y); }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { x = value.x; y = value.y; }
 	    }
 
         /// <summary>
@@ -76,6 +78,8 @@ namespace Common.Core.LinearAlgebra
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector2d(x, z); }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { x = value.x; z = value.y; }
         }
 
         /// <summary>
@@ -85,7 +89,9 @@ namespace Common.Core.LinearAlgebra
 	    {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector3d(x, y, z); }
-	    }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { x = value.x; y = value.y; z = value.z; }
+        }
 
         /// <summary>
         /// A copy of the vector with w as 0.

@@ -138,16 +138,13 @@ namespace Common.Geometry.Shapes
             Max.z = Math.Max(Max.z, box.Max.z);
         }
 
-        public static Box3f CalculateBounds(IList<Vector3f> vertices)
+        public static Box3f CalculateBounds(IEnumerable<Vector3f> vertices)
         {
             Vector3f min = Vector3f.PositiveInfinity;
             Vector3f max = Vector3f.NegativeInfinity;
 
-            int count = vertices.Count;
-            for (int i = 0; i < count; i++)
+            foreach (var v in vertices)
             {
-                Vector3f v = vertices[i];
-
                 if (v.x < min.x) min.x = v.x;
                 if (v.y < min.y) min.y = v.y;
                 if (v.z < min.z) min.z = v.z;

@@ -107,16 +107,13 @@ namespace Common.Geometry.Shapes
             Max.y = Math.Max(Max.y, box.Max.y);
         }
 
-        public static Box2f CalculateBounds(IList<Vector2f> vertices)
+        public static Box2f CalculateBounds(IEnumerable<Vector2f> vertices)
         {
             Vector2f min = Vector2f.PositiveInfinity;
             Vector2f max = Vector2f.NegativeInfinity;
 
-            int count = vertices.Count;
-            for (int i = 0; i < count; i++)
+            foreach (var v in vertices)
             {
-                Vector2f v = vertices[i];
-
                 if (v.x < min.x) min.x = v.x;
                 if (v.y < min.y) min.y = v.y;
 

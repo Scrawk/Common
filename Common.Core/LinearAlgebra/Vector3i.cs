@@ -48,6 +48,46 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public readonly static Vector3i MaxInt = new Vector3i(int.MaxValue);
 
+        /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2i xy
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2i(x, y); }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { x = value.x; y = value.y; }
+        }
+
+        /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2i xz
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2i(x, z); }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { x = value.x; z = value.y; }
+        }
+
+        /// <summary>
+        /// Convert to a 4 dimension vector.
+        /// </summary>
+        public Vector4i xyz0
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector4i(x, y, z, 0); }
+        }
+
+        /// <summary>
+        /// Convert to a 4 dimension vector.
+        /// </summary>
+        public Vector4i xyz1
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector4i(x, y, z, 1); }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3i(int v)
         {
