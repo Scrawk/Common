@@ -107,6 +107,26 @@ namespace Common.Geometry.Shapes
             Max.y = Math.Max(Max.y, box.Max.y);
         }
 
+        /// <summary>
+        /// Returns true if this bounding box contains the given bounding box.
+        /// </summary>
+        public bool IntersectsBox(Box2d a)
+        {
+            if (Max.x < a.Min.x || Min.x > a.Max.x) return false;
+            if (Max.y < a.Min.y || Min.y > a.Max.y) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Does the box contain the point.
+        /// </summary>
+        public bool ContainsPoint(Vector2d p)
+        {
+            if (p.x > Max.x || p.x < Min.x) return false;
+            if (p.y > Max.y || p.y < Min.y) return false;
+            return true;
+        }
+
         public static Box2d CalculateBounds(IEnumerable<Vector2d> vertices)
         {
             Vector2d min = Vector2d.PositiveInfinity;

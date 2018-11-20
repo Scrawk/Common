@@ -25,10 +25,20 @@ namespace Common.Collections.Sets
             Array.Clear(m_rank, 0, m_rank.Length);
         }
 
+        public void Add(Vector2i i, Vector2i p)
+        {
+            Add(i.x, i.y, p.x, p.y);
+        }
+
         public void Add(int x, int y, int px, int py)
         {
             m_parent[x, y] = new Vector2i(px, py);
             m_rank[x, y] = 1;
+        }
+
+        public Vector2i FindParent(Vector2i i)
+        {
+            return FindParent(i.x, i.y);
         }
 
         public Vector2i FindParent(int x, int y)
@@ -39,6 +49,11 @@ namespace Common.Collections.Sets
                 m_parent[x, y] = FindParent(p.x, p.y);
 
             return m_parent[x, y];
+        }
+
+        public bool Union(Vector2i f, Vector2i t)
+        {
+            return Union(f.x, f.y, t.x, t.y);
         }
 
         public bool Union(int fx, int fy, int tx, int ty)
