@@ -83,8 +83,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y
 xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Core.dll" "F:\Unity Projects\Personal\Goblinz\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

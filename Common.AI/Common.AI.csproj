@@ -62,6 +62,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.AI.dll" "F:\Unity Projects\Personal\Goblinz\Assets\Common\Plugins" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.AI.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.AI.dll" "F:\Unity Projects\Personal\Goblinz\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

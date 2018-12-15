@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.AI", "Common.AI\Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.AI.Test", "Common.AI.Test\Common.AI.Test.csproj", "{8470902D-C8A3-412C-874A-DA5553646241}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Meshing", "Common.Meshing\Common.Meshing.csproj", "{2B93010B-F90A-4DDE-87C4-83A08BE28FC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Meshing.Test", "Common.Meshing.Test\Common.Meshing.Test.csproj", "{2AC9AFF2-28B7-4790-94B2-828098DF8D04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{8470902D-C8A3-412C-874A-DA5553646241}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8470902D-C8A3-412C-874A-DA5553646241}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8470902D-C8A3-412C-874A-DA5553646241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B93010B-F90A-4DDE-87C4-83A08BE28FC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B93010B-F90A-4DDE-87C4-83A08BE28FC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B93010B-F90A-4DDE-87C4-83A08BE28FC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B93010B-F90A-4DDE-87C4-83A08BE28FC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AC9AFF2-28B7-4790-94B2-828098DF8D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AC9AFF2-28B7-4790-94B2-828098DF8D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AC9AFF2-28B7-4790-94B2-828098DF8D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AC9AFF2-28B7-4790-94B2-828098DF8D04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
