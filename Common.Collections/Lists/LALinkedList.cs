@@ -5,40 +5,42 @@ using System.Collections.Generic;
 namespace Common.Collections.Lists
 {
 
-    public class LALinkedList<TYPE> : IEnumerable<TYPE> where TYPE : class
+    public class LALinkedList<TYPE> : ICollection<TYPE> where TYPE : class
     {
 
-        public int MaxCacheSize { get; set; }
+        private int m_count;
 
-        public int Count { get; private set; }
-
-        public LALinkedListNode<TYPE> First { get; private set; }
-
-        public LALinkedListNode<TYPE> Last { get; private set; }
-
-        internal int Version { get; private set; }
+        private int m_users;
 
         private List<LALinkedListNode<TYPE>> m_cache;
-
-        private LALinkedListEnumerator<TYPE> m_enumerator;
 
         public LALinkedList()
         {
             MaxCacheSize = 100;
             m_cache = new List<LALinkedListNode<TYPE>>();
-            m_enumerator = new LALinkedListEnumerator<TYPE>(this);
         }
+
+        public int MaxCacheSize { get; set; }
+
+        public int Count { get { return m_count; } }
+
+        public LALinkedListNode<TYPE> First { get; private set; }
+
+        public LALinkedListNode<TYPE> Last { get; private set; }
+
+        public bool IsReadOnly { get { return false; } }
 
         public IEnumerator<TYPE> GetEnumerator()
         {
-            if(m_enumerator.InUse)
-                return new LALinkedListEnumerator<TYPE>(this);
-            else
+            m_users++;
+            var current = First;
+            while (current != null)
             {
-                m_enumerator.Reset();
-                m_enumerator.InUse = true;
-                return m_enumerator;
+                yield return current.Value;
+                current = current.Next;
             }
+
+            m_users--;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -48,7 +50,8 @@ namespace Common.Collections.Lists
 
         public void AddFirst(TYPE item)
         {
-            Version++;
+            if (m_users != 0)
+                throw new InvalidOperationException("Collection was modified after the enumerator was instantiated");
 
             var node = NewNode();
             node.Value = item;
@@ -59,12 +62,18 @@ namespace Common.Collections.Lists
             if (Last == null)
                 Last = First;
 
-            Count++;
+            m_count++;
+        }
+
+        public void Add(TYPE item)
+        {
+            AddLast(item);
         }
 
         public void AddLast(TYPE item)
         {
-            Version++;
+            if (m_users != 0)
+                throw new InvalidOperationException("Collection was modified after the enumerator was instantiated");
 
             var node = NewNode();
             node.Value = item;
@@ -77,12 +86,13 @@ namespace Common.Collections.Lists
                 Last = Last.Next;
             }
 
-            Count++;
+            m_count++;
         }
 
         public void RemoveFirst()
         {
-            Version++;
+            if (m_users != 0)
+                throw new InvalidOperationException("Collection was modified after the enumerator was instantiated");
 
             if (Count == 0) return;
             else
@@ -92,13 +102,14 @@ namespace Common.Collections.Lists
                 if (First == null) Last = null;
 
                 CacheNode(tmp);
-                Count--;
+                m_count--;
             }
         }
 
         public void RemoveLast()
         {
-            Version++;
+            if (m_users != 0)
+                throw new InvalidOperationException("Collection was modified after the enumerator was instantiated");
 
             if (Count == 0) return;
             else if(Count == 1)
@@ -107,7 +118,7 @@ namespace Common.Collections.Lists
                 First = Last = null;
 
                 CacheNode(tmp);
-                Count = 0;
+                m_count = 0;
             }
             else
             {
@@ -121,20 +132,28 @@ namespace Common.Collections.Lists
                 Last.Next = null;
 
                 CacheNode(tmp);
-                Count--;
+                m_count--;
             }
         }
 
-        public void Remove(TYPE item)
+        public bool Remove(TYPE item)
         {
-            Version++;
+            if (m_users != 0)
+                throw new InvalidOperationException("Collection was modified after the enumerator was instantiated");
 
-            if (Count == 0) return;
+            if (Count == 0) return false;
 
-            if(item == First.Value)
+            if (item == First.Value)
+            {
                 RemoveFirst();
-            else if(item == Last.Value)
+                return true;
+            }
+            else if (item == Last.Value)
+            {
                 RemoveLast();
+                return true;
+            }
+            else
             {
                 LALinkedListNode<TYPE> previous = null;
                 LALinkedListNode<TYPE> current = First;
@@ -144,23 +163,22 @@ namespace Common.Collections.Lists
                     if (item == current.Value)
                     {
                         previous.Next = current.Next;
-                        Count--;
+                        m_count--;
 
                         CacheNode(current);
-                        return;
+                        return true;
                     }
 
                     previous = current;
                     current = current.Next;
                 }
-            }
 
+                return false;
+            }
         }
 
         public void Clear()
         {
-            Version++;
-
             var current = First;
             while (current != null)
             {
@@ -171,7 +189,7 @@ namespace Common.Collections.Lists
 
             First = null;
             Last = null;
-            Count = 0;
+            m_count = 0;
         }
 
         public bool Contains(TYPE item)
@@ -184,6 +202,16 @@ namespace Common.Collections.Lists
             }
 
             return false;
+        }
+
+        public void CopyTo(TYPE[] array, int arrayIndex)
+        {
+            var current = First;
+            while (current != null)
+            {
+                array[arrayIndex++] = current.Value;
+                current = current.Next;
+            }
         }
 
         private LALinkedListNode<TYPE> NewNode()

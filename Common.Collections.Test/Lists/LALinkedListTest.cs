@@ -169,7 +169,7 @@ namespace Common.Collections.Test.Lists
         }
 
         [TestMethod]
-        public void NestedEnumeration()
+        public void Nested_Enumeration()
         {
             var list = new LALinkedList<string>();
 
@@ -177,33 +177,16 @@ namespace Common.Collections.Test.Lists
             list.AddLast("Fred");
             list.AddLast("Sam");
 
-            string[] expected = new string[] { "John", "Fred", "Sam", "John", "Fred", "Sam", "John", "Fred", "Sam" };
-
             int count = 0;
-            var e = list.GetEnumerator();
-            while (e.MoveNext())
-            {
-                var e2 = list.GetEnumerator();
-                while (e2.MoveNext())
-                {
-                    Assert.AreEqual(expected[count], e2.Current);
-                    count++;
-                }
-            }
-
-            Assert.AreEqual(9, count);
-
-            count = 0;
-            foreach (string s in list)
+            foreach (string s1 in list)
             {
                 foreach (string s2 in list)
                 {
-                    Assert.AreEqual(expected[count], s2);
                     count++;
                 }
             }
 
-            Assert.AreEqual(9, count);
+            Assert.AreEqual(3*3, count);
         }
 
         [TestMethod]
@@ -222,37 +205,5 @@ namespace Common.Collections.Test.Lists
             }
         }
 
-        [TestMethod]
-        public void Enumeration_IsNeverNull()
-        {
-
-            var list = new LALinkedList<object>();
-
-            foreach (object o in list)
-                Assert.IsNotNull(o);
-
-            list.AddLast(new object());
-            list.AddLast(new object());
-            list.AddLast(new object());
-
-            foreach(object o in list)
-                Assert.IsNotNull(o);
-
-            list.RemoveLast();
-
-            foreach (object o in list)
-                Assert.IsNotNull(o);
-
-            list.RemoveFirst();
-
-            foreach (object o in list)
-                Assert.IsNotNull(o);
-
-            list.Clear();
-
-            foreach (object o in list)
-                Assert.IsNotNull(o);
-
-        }
      }
 }
