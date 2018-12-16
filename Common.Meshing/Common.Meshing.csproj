@@ -52,6 +52,7 @@
     <Compile Include="FaceBased\FBMeshConstructor.cs" />
     <Compile Include="FaceBased\FBVertex.cs" />
     <Compile Include="FaceBased\FBVertex2f.cs" />
+    <Compile Include="FaceBased\FBVertex3f.cs" />
     <Compile Include="HalfEdgeBased\HBEdge.cs" />
     <Compile Include="HalfEdgeBased\HBFace.cs" />
     <Compile Include="HalfEdgeBased\HBMesh.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="IndexBased\Mesh2f.cs" />
     <Compile Include="IndexBased\Mesh3f.cs" />
     <Compile Include="IndexBased\MeshConstructor2f.cs" />
+    <Compile Include="IndexBased\MeshConstructor3f.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

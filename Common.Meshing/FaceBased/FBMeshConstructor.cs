@@ -47,6 +47,13 @@ namespace Common.Meshing.FaceBased
             Mesh.Vertices.Add(v);
         }
 
+        public override void AddVertex(Vector3f pos)
+        {
+            VERTEX v = new VERTEX();
+            v.Initialize(pos);
+            Mesh.Vertices.Add(v);
+        }
+
         public override void AddFace(TriangleIndex triangle)
         {
             var v0 = Mesh.Vertices[triangle.i0];

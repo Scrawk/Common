@@ -21,6 +21,21 @@ namespace Common.Meshing.FaceBased
 
         }
 
+        public virtual void Initialize(Vector3f pos)
+        {
+
+        }
+
+        public virtual void Transform(Matrix2x2f m)
+        {
+
+        }
+
+        public virtual void Transform(Matrix3x3f m)
+        {
+
+        }
+
         public FACE GetFace<FACE>() where FACE : FBFace
         {
             if (Face == null) return null;

@@ -28,6 +28,11 @@ namespace Common.Meshing.Constructors
 
         }
 
+        public virtual void AddVertex(Vector3f pos)
+        {
+
+        }
+
         public virtual void AddFace(TriangleIndex triangle)
         {
 

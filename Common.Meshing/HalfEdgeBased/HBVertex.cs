@@ -26,12 +26,12 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
-        public virtual void Transform(Matrix3x3f m)
+        public virtual void Transform(Matrix2x2f m)
         {
 
         }
 
-        public virtual void Transform(Matrix2x2f m)
+        public virtual void Transform(Matrix3x3f m)
         {
 
         }

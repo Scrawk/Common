@@ -100,5 +100,12 @@ namespace Common.Meshing.IndexBased
             }
         }
 
+        public void Transform(Matrix3x3f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = m * Positions[i];
+        }
+
     }
 }

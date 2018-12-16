@@ -25,6 +25,8 @@ namespace Common.Meshing.Constructors
 
         void AddVertex(Vector2f pos);
 
+        void AddVertex(Vector3f pos);
+
         void AddFace(TriangleIndex triangle);
 
         void AddEdge(EdgeIndex edge);

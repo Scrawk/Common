@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.LinearAlgebra;
+
 namespace Common.Meshing.FaceBased
 {
     public class FBMesh<VERTEX, FACE>
@@ -71,6 +73,20 @@ namespace Common.Meshing.FaceBased
             }
 
             return indices;
+        }
+
+        public void Transform(Matrix3x3f m)
+        {
+            int numVerts = Vertices.Count;
+            for (int i = 0; i < numVerts; i++)
+                Vertices[i].Transform(m);
+        }
+
+        public void Transform(Matrix2x2f m)
+        {
+            int numVerts = Vertices.Count;
+            for (int i = 0; i < numVerts; i++)
+                Vertices[i].Transform(m);
         }
 
     }

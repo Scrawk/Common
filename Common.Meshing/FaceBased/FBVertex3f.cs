@@ -5,26 +5,26 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Meshing.FaceBased
 {
-    public class FBVertex2f : FBVertex
+    public class FBVertex3f : FBVertex
     {
-        public Vector2f Position { get; set; }
+        public Vector3f Position { get; set; }
 
-        public FBVertex2f()
+        public FBVertex3f()
         {
 
         }
 
-        public FBVertex2f(Vector2f position)
+        public FBVertex3f(Vector3f position)
         {
             Position = position;
         }
 
-        public override void Initialize(Vector2f pos)
+        public override void Initialize(Vector3f pos)
         {
             Position = pos;
         }
 
-        public override void Transform(Matrix2x2f m)
+        public override void Transform(Matrix3x3f m)
         {
             Position = m * Position;
         }
