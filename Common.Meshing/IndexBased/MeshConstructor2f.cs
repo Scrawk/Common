@@ -39,15 +39,14 @@ namespace Common.Meshing.IndexBased
         public override Mesh2f PopMesh()
         {
             Mesh2f tmp = m_mesh;
-            m_mesh = null;
-
-            ResetIndex();
+            Reset();
 
             return tmp;
         }
 
-        private void ResetIndex()
+        private void Reset()
         {
+            m_mesh = null;
             m_vertexIndex = 0;
             m_faceIndex = 0;
             m_edgeIndex = 0;

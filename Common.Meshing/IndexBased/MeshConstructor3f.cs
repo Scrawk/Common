@@ -39,19 +39,19 @@ namespace Common.Meshing.IndexBased
         public override Mesh3f PopMesh()
         {
             Mesh3f tmp = m_mesh;
-            m_mesh = null;
-
-            ResetIndex();
+            Reset();
 
             return tmp;
         }
 
-        private void ResetIndex()
+        private void Reset()
         {
+            m_mesh = null;
             m_vertexIndex = 0;
             m_faceIndex = 0;
             m_edgeIndex = 0;
         }
+
 
         public override void AddVertex(Vector3f pos)
         {

@@ -9,6 +9,38 @@ namespace Common.GraphTheory.Adjacency
         public AdjacencyGraph(int size) : base(size) { }
 
         public AdjacencyGraph(IEnumerable<AdjacencyVertex<T>> vertices) : base(vertices) { }
+
+        public AdjacencyGraph(IEnumerable<T> vertices)
+        {
+            Vertices = new List<AdjacencyVertex<T>>();
+            foreach(var data in vertices)
+            {
+                var v = new AdjacencyVertex<T>();
+                v.Index = Vertices.Count;
+                v.Data = data;
+                Vertices.Add(v);
+            }
+
+            Edges = new List<AdjacencyEdge>[Vertices.Count];
+        }
+
+        public int IndexOf(T data)
+        {
+            foreach(var v in Vertices)
+            {
+                if (ReferenceEquals(data, v.Data))
+                    return v.Index;
+            }
+
+            return -1;
+        }
+
+        public void AddEdge(T from, T to, float weight = 0.0f)
+        {
+            int i = IndexOf(from);
+            int j = IndexOf(to);
+            AddEdge(i, j, weight);
+        }
     }
 
     public class AdjacencyGraph<VERTEX, EDGE> 
@@ -20,9 +52,14 @@ namespace Common.GraphTheory.Adjacency
 
         public int EdgeCount { get; private set; }
 
-        public IList<VERTEX> Vertices { get; private set; }
+        public IList<VERTEX> Vertices { get; protected set; }
 
-        public IList<IList<EDGE>> Edges { get; private set; }
+        public IList<IList<EDGE>> Edges { get; protected set; }
+
+        public AdjacencyGraph()
+        {
+
+        }
 
         public AdjacencyGraph(int size)
         {
@@ -40,6 +77,12 @@ namespace Common.GraphTheory.Adjacency
         {
             Vertices = new List<VERTEX>(vertices);
             Edges = new List<EDGE>[Vertices.Count];
+        }
+
+        public void SetVertexIndices()
+        {
+            for (int i = 0; i < VertexCount; i++)
+                Vertices[i].Index = i;
         }
 
         public void AddEdge(EDGE edge)

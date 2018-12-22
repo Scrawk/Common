@@ -17,9 +17,15 @@ namespace Common.Meshing.Constructors
 
         public abstract bool SupportsFaceConnections { get; }
 
-        public abstract void PushTriangleMesh(int numVertices, int numFaces);
+        public virtual void PushTriangleMesh(int numVertices, int numFaces)
+        {
+            throw new NotSupportedException("Mesh does not support faces.");
+        }
 
-        public abstract void PushEdgeMesh(int numVertices, int numEdges);
+        public virtual void PushEdgeMesh(int numVertices, int numEdges)
+        {
+            throw new NotSupportedException("Mesh does not support edges.");
+        }
 
         public abstract MESH PopMesh();
 
