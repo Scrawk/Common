@@ -8,7 +8,7 @@ namespace Common.Collections.Textures.Data2D
 
         public float[,,] Raw;
 
-        internal TextureData2D32(int width, int height, int channels) : base(width, height, channels, 32)
+        public TextureData2D32(int width, int height, int channels) : base(width, height, channels, 32)
         {
             Raw = new float[width, height, channels];
         }

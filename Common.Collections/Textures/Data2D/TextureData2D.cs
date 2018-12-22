@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.Colors;
+
 namespace Common.Collections.Textures.Data2D
 {
     public abstract class TextureData2D : TextureData
@@ -14,7 +16,7 @@ namespace Common.Collections.Textures.Data2D
         protected int Height { get; private set; }
         public virtual int GetHeight(int mipmap = 0) { return Height; }
 
-        internal TextureData2D(int width, int height, int channels, int bitDepth) : base(channels, bitDepth)
+        public TextureData2D(int width, int height, int channels, int bitDepth) : base(channels, bitDepth)
         {
             Width = width;
             Height = height;
@@ -46,6 +48,65 @@ namespace Common.Collections.Textures.Data2D
             return data;
         }
 
+        public void SetPixels(float[] pixels, int mipmap = 0)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int c = 0; c < Channels; c++)
+                    {
+                        float p = pixels[(x + y * Width) * Channels + c];
+                        this[x, y, c, mipmap] = p;
+                    }
+                }
+            }
+        }
+
+        public void SetPixels(float[,,] pixels, int mipmap = 0)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int c = 0; c < Channels; c++)
+                    {
+                        float p = pixels[x,y,c];
+                        this[x, y, c, mipmap] = p;
+                    }
+                }
+            }
+        }
+
+        public void SetPixels(ColorRGBA[] pixels, int mipmap = 0)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    ColorRGBA p = pixels[x + y * Width];
+                    if (Channels > 0) this[x, y, 0, mipmap] = p.r;
+                    if (Channels > 1) this[x, y, 1, mipmap] = p.g;
+                    if (Channels > 2) this[x, y, 2, mipmap] = p.b;
+                    if (Channels > 3) this[x, y, 3, mipmap] = p.a;
+                }
+            }
+        }
+
+        public void SetPixels(ColorRGBA[,] pixels, int mipmap = 0)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    ColorRGBA p = pixels[x,y];
+                    if (Channels > 0) this[x, y, 0, mipmap] = p.r;
+                    if (Channels > 1) this[x, y, 1, mipmap] = p.g;
+                    if (Channels > 2) this[x, y, 2, mipmap] = p.b;
+                    if (Channels > 3) this[x, y, 3, mipmap] = p.a;
+                }
+            }
+        }
     }
 
 }

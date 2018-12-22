@@ -9,7 +9,7 @@ namespace Common.Collections.Textures.Data3D
 
         public short[,,,] Raw { get; private set; }
 
-        internal TextureData3D16(int width, int height, int depth, int channels) 
+        public TextureData3D16(int width, int height, int depth, int channels) 
             : base(width, height, depth, channels, 16)
         {
 

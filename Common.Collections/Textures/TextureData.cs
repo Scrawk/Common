@@ -10,17 +10,17 @@ namespace Common.Collections.Textures
 
         public TEXTURE_MIPMAP MipmapMode { get; set; }
 
-        internal int Channels { get; set; }
+        public int Channels { get; set; }
 
-        internal int BitDepth { get; set; }
+        public int BitDepth { get; set; }
 
-        internal TextureData()
+        public TextureData()
         {
             Levels = 1;
             MipmapMode = TEXTURE_MIPMAP.NONE;
         }
 
-        internal TextureData(int channels, int bitDepth)
+        public TextureData(int channels, int bitDepth)
         {
             Channels = channels;
             BitDepth = bitDepth;

@@ -8,7 +8,7 @@ namespace Common.Collections.Textures.Data3D
 
         public float[,,,] Raw { get; private set; }
 
-        internal TextureData3D32(int width, int height, int depth, int channels) 
+        public TextureData3D32(int width, int height, int depth, int channels) 
             : base(width, height, depth, channels, 32)
         {
 

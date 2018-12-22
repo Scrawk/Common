@@ -10,7 +10,7 @@ namespace Common.Collections.Textures.Data1D
 
         readonly static float FACTOR = 1.0f / short.MaxValue;
 
-        internal TextureData1D16(int width, int channels) : base(width, channels, 16)
+        public TextureData1D16(int width, int channels) : base(width, channels, 16)
         {
 
             Raw = new short[width, channels];

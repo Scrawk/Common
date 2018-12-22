@@ -10,7 +10,7 @@ namespace Common.Collections.Textures.Data2D
 
         public short[,,] Raw;
 
-        internal TextureData2D16(int width, int height, int channels) : base(width, height, channels, 16)
+        public TextureData2D16(int width, int height, int channels) : base(width, height, channels, 16)
         {
             Raw = new short[width, height, channels];
         }

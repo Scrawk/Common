@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.Colors;
+
 namespace Common.Collections.Textures.Data1D
 {
     public abstract class TextureData1D : TextureData
@@ -11,7 +13,7 @@ namespace Common.Collections.Textures.Data1D
         protected int Width { get; private set; }
         public virtual int GetWidth(int mipmap = 0) { return Width; }
 
-        internal TextureData1D(int width, int channels, int bitDepth) : base(channels, bitDepth)
+        public TextureData1D(int width, int channels, int bitDepth) : base(channels, bitDepth)
         {
             Width = width;
         }
@@ -40,6 +42,42 @@ namespace Common.Collections.Textures.Data1D
             }
 
             return data;
+        }
+
+        public void SetPixels(float[] pixels, int mipmap = 0)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                for (int c = 0; c < Channels; c++)
+                {
+                    float p = pixels[x * Channels + c];
+                    this[x, c, mipmap] = p;
+                }
+            }
+        }
+
+        public void SetPixels(float[,] pixels, int mipmap = 0)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                for (int c = 0; c < Channels; c++)
+                {
+                    float p = pixels[x, c];
+                    this[x, c, mipmap] = p;
+                }
+            }
+        }
+
+        public void SetPixels(ColorRGBA[] pixels, int mipmap = 0)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                ColorRGBA p = pixels[x];
+                if (Channels > 0) this[x, 0, mipmap] = p.r;
+                if (Channels > 1) this[x, 1, mipmap] = p.g;
+                if (Channels > 2) this[x, 2, mipmap] = p.b;
+                if (Channels > 3) this[x, 3, mipmap] = p.a;
+            }
         }
 
     }

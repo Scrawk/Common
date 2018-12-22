@@ -10,7 +10,7 @@ namespace Common.Collections.Textures.Data2D
 
         public byte[,,] Raw;
 
-        internal TextureData2D8(int width, int height, int channels) : base(width, height, channels, 8)
+        public TextureData2D8(int width, int height, int channels) : base(width, height, channels, 8)
         {
             Raw = new byte[width, height, channels];
         }
