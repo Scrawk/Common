@@ -303,7 +303,7 @@ namespace Common.Core.Raw
 		/// <summary>
 		/// Saves float data to 16 bit..
 		/// </summary>
-		public static void Save16Bit(string filename, float[] data)
+		public static void Save16Bit(string filename, float[] data, BYTE_ORDER byteOrder)
 		{
 			int size = data.Length * 2;
 
@@ -314,6 +314,19 @@ namespace Common.Core.Raw
 				tmp[i] = (ushort)FMath.Clamp(data[i] * ushort.MaxValue, 0, ushort.MaxValue);
 
 			Buffer.BlockCopy(tmp, 0, bytes, 0, size);
+
+            if(byteOrder == BYTE_ORDER.MAC)
+            {
+                for (int i = 0; i < size / 2; i++)
+                {
+                    byte b0 = bytes[i * 2 + 0];
+                    byte b1 = bytes[i * 2 + 1];
+
+                    bytes[i * 2 + 0] = b1;
+                    bytes[i * 2 + 1] = b0;
+                }
+            }
+
 			File.WriteAllBytes(filename, bytes);
 		}
 
