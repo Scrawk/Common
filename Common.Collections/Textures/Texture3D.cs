@@ -84,15 +84,6 @@ namespace Common.Collections.Textures
         }
 
         /// <summary>
-        /// Set all channels from array
-        /// </summary>
-        public void SetChannels(int x, int y, int z, float[] v, int m = 0)
-        {
-            for (int c = 0; c < Channels; c++)
-                Data[x, y, z, c, m] = v[c];
-        }
-
-        /// <summary>
         /// Set channels from a color.
         /// </summary>
         public void SetPixel(int x, int y, int z, ColorRGBA pixel, int m = 0)
@@ -143,47 +134,6 @@ namespace Common.Collections.Textures
             else
             {
                 return GetChannel((int)x, (int)y, (int)z, c, m);
-            }
-        }
-
-        /// <summary>
-        /// Get all channels into array
-        /// </summary>
-        public void GetChannels(int x, int y, int z, float[] v, int m = 0)
-        {
-            x = Index(x, GetWidth(m));
-            y = Index(y, GetHeight(m));
-            z = Index(z, GetDepth(m));
-
-            for (int c = 0; c < Channels; c++)
-                v[c] = Data[x, y, z, c, m];
-        }
-
-        /// <summary>
-        /// Get all channels into array
-        /// </summary>
-        public void GetChannels(float x, float y, float z, float[] v, int m = 0)
-        {
-            int W = GetWidth(m);
-            int H = GetHeight(m);
-            int D = GetDepth(m);
-
-            x *= (W - 1);
-            y *= (H - 1);
-            z *= (D - 1);
-
-            if (Interpolation == TEXTURE_INTERPOLATION.BILINEAR)
-            {
-                BilinearIndex ix = NewBilinearIndex(x, W);
-                BilinearIndex iy = NewBilinearIndex(y, H);
-                BilinearIndex iz = NewBilinearIndex(z, D);
-
-                for (int c = 0; c < Channels; c++)
-                    v[c] = GetBilinear(ix, iy, iz, c, m);
-            }
-            else
-            {
-                GetChannels((int)x, (int)y, (int)z, v, m);
             }
         }
 

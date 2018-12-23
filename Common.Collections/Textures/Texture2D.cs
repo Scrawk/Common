@@ -103,13 +103,6 @@ namespace Common.Collections.Textures
             Data[x, y, c, m] = v;
         }
 
-        public void SetChannels(int x, int y, float[] v, int m = 0)
-        {
-            int channels = Channels;
-            for (int c = 0; c < channels; c++)
-                Data[x, y, c, m] = v[c];
-        }
-
         public void SetPixel(int x, int y, ColorRGBA pixel, int m = 0)
         {
             int channels = Channels;
@@ -154,47 +147,6 @@ namespace Common.Collections.Textures
             else
             {
                 return GetChannel((int)x, (int)y, c, m);
-            }
-
-        }
-
-        public void GetChannels(int x, int y, float[] v, int m = 0)
-        {
-            x = Index(x, GetWidth(m));
-            y = Index(y, GetHeight(m));
-
-            int channels = Channels;
-            for (int c = 0; c < channels; c++)
-                v[c] = Data[x, y, c, m];
-        }
-
-        public void GetChannels(float x, float y, float[] v, int m = 0)
-        {
-            int W = GetWidth(m);
-            int H = GetHeight(m);
-
-            x *= (W - 1);
-            y *= (H - 1);
-
-            if (Interpolation == TEXTURE_INTERPOLATION.BILINEAR)
-            {
-                BilinearIndex ix = NewBilinearIndex(x, W);
-                BilinearIndex iy = NewBilinearIndex(y, H);
-
-                for (int c = 0; c < Channels; c++)
-                    v[c] = GetBilinear(ix, iy, c, m);
-            }
-            else if (Interpolation == TEXTURE_INTERPOLATION.BICUBIC)
-            {
-                BicubicIndex ix = NewBicubicIndex(x, W);
-                BicubicIndex iy = NewBicubicIndex(y, H);
-
-                for (int c = 0; c < Channels; c++)
-                    v[c] = GetBicubic(ix, iy, c, m);
-            }
-            else
-            {
-                GetChannels((int)x, (int)y, v, m);
             }
 
         }

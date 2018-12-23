@@ -62,12 +62,6 @@ namespace Common.Collections.Textures
             Data[x, c, m] = v;
         }
 
-        public void SetChannels(int x, float[] v, int m = 0)
-        {
-            for (int c = 0; c < Data.Channels; c++)
-                Data[x,  c, m] = v[c];
-        }
-
         public void SetPixel(int x, ColorRGBA pixel, int m = 0)
         {
             if (Data.Channels > 0) Data[x, 0, m] = pixel.r;
@@ -108,38 +102,6 @@ namespace Common.Collections.Textures
                 return GetChannel((int)x, c, m);
             }
 
-        }
-
-        public void GetChannels(int x, float[] v, int m = 0)
-        {
-            x = Index(x, Data.GetWidth(m));
-
-            for (int c = 0; c < Data.Channels; c++)
-                v[c] = Data[x, c, m];
-        }
-
-        public void GetChannels(float x, float[] v, int m = 0)
-        {
-            int W = Data.GetWidth(m);
-
-            x *= (W - 1);
-
-            if (Interpolation == TEXTURE_INTERPOLATION.BILINEAR)
-            {
-                BilinearIndex ix = NewBilinearIndex(x, W);
-                for (int c = 0; c < Data.Channels; c++)
-                    v[c] = GetBilinear(ix, c, m);
-            }
-            else if (Interpolation == TEXTURE_INTERPOLATION.BICUBIC)
-            {
-                BicubicIndex ix = NewBicubicIndex(x, W);
-                for (int c = 0; c < Data.Channels; c++)
-                    v[c] = GetBicubic(ix, c, m);
-            }
-            else
-            {
-                GetChannels((int)x, v, m);
-            }
         }
 
         public ColorRGBA GetPixel(int x, int m = 0)
