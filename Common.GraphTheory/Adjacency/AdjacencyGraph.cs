@@ -35,12 +35,6 @@ namespace Common.GraphTheory.Adjacency
             return -1;
         }
 
-        public void AddEdge(T from, T to, float weight = 0.0f)
-        {
-            int i = IndexOf(from);
-            int j = IndexOf(to);
-            AddEdge(i, j, weight);
-        }
     }
 
     public class AdjacencyGraph<VERTEX, EDGE> 

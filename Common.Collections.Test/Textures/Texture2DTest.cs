@@ -244,68 +244,6 @@ namespace Common.Collections.Test.Textures
         }
 
         [TestMethod]
-        public void  GetChannels_IsCorrect()
-        {
-
-            int width = 65;
-            int height = 65;
-            int channels = 3;
-            int bitDepth = 32;
-
-            Texture2D tex = CreateIndexFilledTexture(width, height, channels, bitDepth);
-
-            float[] tmp = new float[channels];
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    tex.GetChannels(x, y, tmp);
-
-                    for (int c = 0; c < channels; c++)
-                    {
-                        int idx = (x + y * width) * channels + c;
-                        Assert.AreEqual(idx, tmp[c]);
-                    }
-                }
-            }
-
-        }
-
-        [TestMethod]
-        public void  GetChannelsBilinear_IsCorrect()
-        {
-
-            int width = 65;
-            int height = 65;
-            int channels = 3;
-            int bitDepth = 32;
-
-            Texture2D tex = CreateIndexFilledTexture(width, height, channels, bitDepth);
-
-            float[] tmp = new float[channels];
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    float fx = x / (width - 1.0f);
-                    float fy = y / (height - 1.0f);
-
-                    tex.GetChannels(fx, fy, tmp);
-
-                    for (int c = 0; c < channels; c++)
-                    {
-                        int idx = (x + y * width) * channels + c;
-                        Assert.AreEqual(idx, tmp[c]);
-                    }
-                }
-            }
-
-        }
-
-
-        [TestMethod]
         public void  GetPixel_IsCorrect()
         {
 
@@ -440,56 +378,6 @@ namespace Common.Collections.Test.Textures
             Assert.AreEqual(3, tex.GetChannel(0, 3, 1));
             Assert.AreEqual(2, tex.GetChannel(0, 4, 1));
             Assert.AreEqual(1, tex.GetChannel(0, 5, 1));
-
-        }
-
-        [TestMethod]
-        public void  GetChannels_DoesWrap()
-        {
-            int width = 2;
-            int height = 2;
-            int bitDepth = 32;
-
-            Texture2D tex = CreateXYFilledTexture(width, height, bitDepth, TEXTURE_WRAP.WRAP);
-
-            float[] tmp = new float[2];
-
-            tex.GetChannels(-1, 0, tmp);
-            Assert.AreEqual(1, tmp[0]);
-
-            tex.GetChannels(2, 0, tmp);
-            Assert.AreEqual(0, tmp[0]);
-
-            tex.GetChannels(0, -1, tmp);
-            Assert.AreEqual(1, tmp[1]);
-
-            tex.GetChannels(-0, 2, tmp);
-            Assert.AreEqual(0, tmp[1]);
-
-        }
-
-        [TestMethod]
-        public void  GetChannels_DoesClamp()
-        {
-            int width = 2;
-            int height = 2;
-            int bitDepth = 32;
-
-            Texture2D tex = CreateXYFilledTexture(width, height, bitDepth, TEXTURE_WRAP.CLAMP);
-
-            float[] tmp = new float[2];
-
-            tex.GetChannels(-1, 0, tmp);
-            Assert.AreEqual(0, tmp[0]);
-
-            tex.GetChannels(2, 0, tmp);
-            Assert.AreEqual(1, tmp[0]);
-
-            tex.GetChannels(0, -1, tmp);
-            Assert.AreEqual(0, tmp[1]);
-
-            tex.GetChannels(0, 2, tmp);
-            Assert.AreEqual(1, tmp[1]);
 
         }
 

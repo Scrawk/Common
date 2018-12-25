@@ -76,9 +76,9 @@ namespace Common.Collections.Textures
             Data.SetPixels(pixels, mipmap);
         }
 
-        public void SetChannel(float[,,] channel, int c, int mipmap = 0)
+        public void SetChannels(float[,,] channel, int c, int mipmap = 0)
         {
-            Data.SetChannel(channel, c, mipmap);
+            Data.SetChannels(channel, c, mipmap);
         }
 
         public ColorRGBA[,,] GetPixels(int mipmap = 0)
@@ -86,9 +86,9 @@ namespace Common.Collections.Textures
             return Data.GetPixels(mipmap);
         }
 
-        public float[,,] GetChannel(int c, int mipmap = 0)
+        public float[,,] GetChannels(int c, int mipmap = 0)
         {
-            return Data.GetChannel(c, mipmap);
+            return Data.GetChannels(c, mipmap);
         }
 
         public void SetChannel(int x, int y, int z, int c, float v, int m = 0)

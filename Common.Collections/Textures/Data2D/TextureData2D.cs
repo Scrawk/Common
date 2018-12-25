@@ -108,7 +108,7 @@ namespace Common.Collections.Textures.Data2D
             }
         }
 
-        public void SetChannel(float[,] channel, int c, int mipmap = 0)
+        public void SetChannels(float[,] channel, int c, int mipmap = 0)
         {
             if (Channels < c) return;
 
@@ -143,7 +143,7 @@ namespace Common.Collections.Textures.Data2D
             return pixels;
         }
 
-        public float[,] GetChannel(int c, int mipmap = 0)
+        public float[,] GetChannels(int c, int mipmap = 0)
         {
             float[,] channel = new float[Width, Height];
             if (Channels < c) return channel;

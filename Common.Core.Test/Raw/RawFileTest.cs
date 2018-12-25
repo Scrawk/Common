@@ -80,7 +80,7 @@ namespace Common.Core.Test.Raw
 
             try
             {
-                RawFile.Save16Bit(fileName, data);
+                RawFile.Save16Bit(fileName, data, BYTE_ORDER.WINDOWS);
                 RawFile raw = new RawFile(fileName, 16, BYTE_ORDER.WINDOWS, stripSize);
 
                 Assert.AreEqual(fileName, raw.FileName);
@@ -110,7 +110,7 @@ namespace Common.Core.Test.Raw
 
             try
             {
-                RawFile.Save16Bit(fileName, data);
+                RawFile.Save16Bit(fileName, data, BYTE_ORDER.WINDOWS);
                 CollectionAssert.AreEqual(data, RawFile.Load16Bit(fileName, BYTE_ORDER.WINDOWS));
             }
             finally

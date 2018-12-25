@@ -44,6 +44,7 @@
     <Compile Include="Colors\ColorHSV.cs" />
     <Compile Include="Colors\ColorRGB.cs" />
     <Compile Include="Colors\ColorRGBA.cs" />
+    <Compile Include="Directions\D4.cs" />
     <Compile Include="Directions\D8.cs" />
     <Compile Include="LinearAlgebra\Matrix2x2d.cs" />
     <Compile Include="LinearAlgebra\Matrix2x2f.cs" />
