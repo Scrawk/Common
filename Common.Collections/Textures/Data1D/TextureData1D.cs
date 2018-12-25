@@ -80,6 +80,48 @@ namespace Common.Collections.Textures.Data1D
             }
         }
 
+
+        public void SetChannel(float[] channel, int c, int mipmap = 0)
+        {
+            if (Channels < c) return;
+
+            for (int x = 0; x < Width; x++)
+            {
+                this[x, c, mipmap] = channel[x];
+            }
+        }
+
+        public ColorRGBA[] GetPixels(int mipmap = 0)
+        {
+            ColorRGBA[] pixels = new ColorRGBA[Width];
+
+            for (int x = 0; x < Width; x++)
+            {
+                ColorRGBA p = new ColorRGBA();
+                if (Channels > 0) p.r = this[x, 0, mipmap];
+                if (Channels > 1) p.g = this[x, 1, mipmap];
+                if (Channels > 2) p.b = this[x, 2, mipmap];
+                if (Channels > 3) p.a = this[x, 3, mipmap];
+
+                pixels[x] = p;
+            }
+
+            return pixels;
+        }
+
+        public float[] GetChannel(int c, int mipmap = 0)
+        {
+            float[] channel = new float[Width];
+            if (Channels < c) return channel;
+
+            for (int x = 0; x < Width; x++)
+            {
+                channel[x] = this[x, c, mipmap];
+            }
+
+            return channel;
+        }
+
     }
 
 }

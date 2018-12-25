@@ -124,6 +124,64 @@ namespace Common.Collections.Textures.Data3D
             }
         }
 
+        public void SetChannel(float[,,] channel, int c, int mipmap = 0)
+        {
+            if (Channels < c) return;
+
+             for (int z = 0; z < Depth; z++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    for (int x = 0; x < Width; x++)
+                    {
+                        this[x, y, z, c, mipmap] = channel[x,y,z];
+                    }
+                }
+            }
+        }
+
+        public ColorRGBA[,,] GetPixels(int mipmap = 0)
+        {
+            ColorRGBA[,,] pixels = new ColorRGBA[Width, Height, Depth];
+            for (int z = 0; z < Depth; z++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    for (int x = 0; x < Width; x++)
+                    {
+                        ColorRGBA p = new ColorRGBA();
+                        if (Channels > 0) p.r = this[x, y, z, 0, mipmap];
+                        if (Channels > 1) p.g = this[x, y, z, 1, mipmap];
+                        if (Channels > 2) p.b = this[x, y, z, 2, mipmap];
+                        if (Channels > 3) p.a = this[x, y, z, 3, mipmap];
+
+                        pixels[x, y, z] = p;
+                    }
+                }
+            }
+
+            return pixels;
+        }
+
+        public float[,,] GetChannel(int c, int mipmap = 0)
+        {
+            float[,,] channel = new float[Width, Height, Depth];
+            if (Channels < c) return channel;
+
+            for (int z = 0; z < Depth; z++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    for (int x = 0; x < Width; x++)
+                    {
+                        channel[x,y,z] = this[x, y, z, c, mipmap];
+                    }
+                }
+            }
+
+            return channel;
+        }
+
     }
 
 }

@@ -71,7 +71,7 @@ namespace Common.Collections.Textures.Data2D
                 {
                     for (int c = 0; c < Channels; c++)
                     {
-                        float p = pixels[x,y,c];
+                        float p = pixels[x, y, c];
                         this[x, y, c, mipmap] = p;
                     }
                 }
@@ -99,7 +99,7 @@ namespace Common.Collections.Textures.Data2D
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    ColorRGBA p = pixels[x,y];
+                    ColorRGBA p = pixels[x, y];
                     if (Channels > 0) this[x, y, 0, mipmap] = p.r;
                     if (Channels > 1) this[x, y, 1, mipmap] = p.g;
                     if (Channels > 2) this[x, y, 2, mipmap] = p.b;
@@ -107,6 +107,58 @@ namespace Common.Collections.Textures.Data2D
                 }
             }
         }
+
+        public void SetChannel(float[,] channel, int c, int mipmap = 0)
+        {
+            if (Channels < c) return;
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    this[x, y, c, mipmap] = channel[x, y];
+                }
+            }
+
+        }
+
+        public ColorRGBA[,] GetPixels(int mipmap = 0)
+        {
+            ColorRGBA[,] pixels = new ColorRGBA[Width, Height];
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    ColorRGBA p = new ColorRGBA();
+                    if (Channels > 0) p.r = this[x, y, 0, mipmap];
+                    if (Channels > 1) p.g = this[x, y, 1, mipmap];
+                    if (Channels > 2) p.b = this[x, y, 2, mipmap];
+                    if (Channels > 3) p.a = this[x, y, 3, mipmap];
+
+                    pixels[x, y] = p;
+                }
+            }
+
+            return pixels;
+        }
+
+        public float[,] GetChannel(int c, int mipmap = 0)
+        {
+            float[,] channel = new float[Width, Height];
+            if (Channels < c) return channel;
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    channel[x, y] = this[x, y, c, mipmap];
+                }
+            }
+
+            return channel;
+        }
+
     }
 
 }
