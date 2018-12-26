@@ -374,35 +374,4 @@ namespace Common.Core.Colors
 
     }
 
-    public class ColorRGBIntensityComparer : IComparer<ColorRGB>
-    {
-
-        public static ColorRGBIntensityComparer Instance { get { return m_instance; } }
-
-        private static ColorRGBIntensityComparer m_instance = new ColorRGBIntensityComparer();
-
-        public int Compare(ColorRGB c0, ColorRGB c1)
-        {
-            float i0 = c0.Intensity;
-            float i1 = c1.Intensity;
-
-            return i0.CompareTo(i1);
-        }
-    }
-
-    public class ColorRGBLuminanceComparer : IComparer<ColorRGB>
-    {
-
-        public static ColorRGBLuminanceComparer Instance { get { return m_instance; } }
-
-        private static ColorRGBLuminanceComparer m_instance = new ColorRGBLuminanceComparer();
-
-        public int Compare(ColorRGB c0, ColorRGB c1)
-        {
-            float i0 = c0.Luminance;
-            float i1 = c1.Luminance;
-
-            return i0.CompareTo(i1);
-        }
-    }
 }
