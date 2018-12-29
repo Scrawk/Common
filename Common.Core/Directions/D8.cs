@@ -19,6 +19,18 @@ namespace Common.Core.Directions
             return i % 2 != 0;
         }
 
+        public static readonly string[] NAME = new string[]
+        {
+                "LEFT",
+                "LEFT_TOP",
+                "TOP",
+                "RIGHT_TOP",
+                "RIGHT",
+                "RIGHT_BOTTOM",
+                "BOTTOM",
+                "LEFT_BOTTOM"
+        };
+
         public static readonly int[,] OFFSETS = new int[,]
         {
                 {-1,0},
@@ -28,7 +40,7 @@ namespace Common.Core.Directions
                 {1,0},
                 {1,-1},
                 {0,-1},
-                {-1,-1},
+                {-1,-1}
         };
 
         public static readonly int[,] DIRECTION = new int[,]
@@ -48,6 +60,18 @@ namespace Common.Core.Directions
             LEFT_TOP,
             TOP,
             RIGHT_TOP
+        };
+
+        public static readonly int[] BITS = new int[]
+        {
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            64,
+            128
         };
 
         public static readonly int[,] ADJACENT = new int[,]
