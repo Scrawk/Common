@@ -317,17 +317,15 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
 		{
-			int hashcode = 23;
-
             unchecked
             {
-                hashcode = (hashcode * 37) + x;
-                hashcode = (hashcode * 37) + y;
-                hashcode = (hashcode * 37) + z;
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ x.GetHashCode();
+                hash = (hash * 16777619) ^ y.GetHashCode();
+                hash = (hash * 16777619) ^ z.GetHashCode();
+                return hash;
             }
-			
-			return hashcode;
-		}
+        }
 
         /// <summary>
         /// Vector as a string.

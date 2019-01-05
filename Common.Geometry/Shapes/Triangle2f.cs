@@ -7,7 +7,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Triangle2f
+    public struct Triangle2f : IEquatable<Triangle2f>
     {
 
         public Vector2f A;
@@ -55,6 +55,40 @@ namespace Common.Geometry.Shapes
                 float ymax = Math.Max(A.y, Math.Max(B.y, C.y));
 
                 return new Box2f(xmin, xmax, ymin, ymax);
+            }
+        }
+
+        public static bool operator ==(Triangle2f t1, Triangle2f t2)
+        {
+            return t1.A == t2.A && t1.B == t2.B && t1.C == t2.C;
+        }
+
+        public static bool operator !=(Triangle2f t1, Triangle2f t2)
+        {
+            return t1.A != t2.A || t1.B != t2.B || t1.C != t2.C;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Triangle2f)) return false;
+            Triangle2f tri = (Triangle2f)obj;
+            return this == tri;
+        }
+
+        public bool Equals(Triangle2f tri)
+        {
+            return this == tri;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ A.GetHashCode();
+                hash = (hash * 16777619) ^ B.GetHashCode();
+                hash = (hash * 16777619) ^ C.GetHashCode();
+                return hash;
             }
         }
 

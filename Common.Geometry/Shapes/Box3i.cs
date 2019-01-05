@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Box3i
+    public struct Box3i : IEquatable<Box3i>
     {
         public Vector3i Min;
 
@@ -70,6 +70,39 @@ namespace Common.Geometry.Shapes
             {
                 Vector3i d = Max - Min;
                 return 2 * (d.x * d.y + d.x * d.z + d.y * d.z);
+            }
+        }
+
+        public static bool operator ==(Box3i b1, Box3i b2)
+        {
+            return b1.Min == b2.Min && b1.Max == b2.Max;
+        }
+
+        public static bool operator !=(Box3i b1, Box3i b2)
+        {
+            return b1.Min != b2.Min || b1.Max != b2.Max;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Box3i)) return false;
+            Box3i box = (Box3i)obj;
+            return this == box;
+        }
+
+        public bool Equals(Box3i box)
+        {
+            return this == box;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ Min.GetHashCode();
+                hash = (hash * 16777619) ^ Max.GetHashCode();
+                return hash;
             }
         }
 

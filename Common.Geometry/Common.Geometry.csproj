@@ -78,6 +78,7 @@
     <Compile Include="Shapes\Plane3f.cs" />
     <Compile Include="Shapes\Ray2d.cs" />
     <Compile Include="Shapes\Ray2f.cs" />
+    <Compile Include="Shapes\Ray3d.cs" />
     <Compile Include="Shapes\Ray3f.cs" />
     <Compile Include="Shapes\Segment2d.cs" />
     <Compile Include="Shapes\Segment2f.cs" />

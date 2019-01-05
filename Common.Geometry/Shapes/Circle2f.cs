@@ -7,7 +7,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Circle2f
+    public struct Circle2f : IEquatable<Circle2f>
     {
         public Vector2f Center;
 
@@ -58,6 +58,39 @@ namespace Common.Geometry.Shapes
                 float ymax = Center.y + Radius;
 
                 return new Box2f(xmin, xmax, ymin, ymax);
+            }
+        }
+
+        public static bool operator ==(Circle2f c1, Circle2f c2)
+        {
+            return c1.Radius == c2.Radius && c1.Center == c2.Center;
+        }
+
+        public static bool operator !=(Circle2f c1, Circle2f c2)
+        {
+            return c1.Radius != c2.Radius || c1.Center != c2.Center;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Circle2f)) return false;
+            Circle2f cir = (Circle2f)obj;
+            return this == cir;
+        }
+
+        public bool Equals(Circle2f cir)
+        {
+            return this == cir;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ Radius.GetHashCode();
+                hash = (hash * 16777619) ^ Center.GetHashCode();
+                return hash;
             }
         }
 

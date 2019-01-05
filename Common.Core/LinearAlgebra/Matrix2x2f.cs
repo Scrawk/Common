@@ -322,13 +322,16 @@ namespace Common.Core.LinearAlgebra
 		/// </summary>
 		public override int GetHashCode()
 		{
-			int hash = 0;
-			
-			for(int i = 0; i < 4; i++)
-				hash ^= this[i].GetHashCode();
-			
-			return hash;
-		}
+            unchecked
+            {
+                int hash = (int)2166136261;
+
+                for (int i = 0; i < 4; i++)
+                    hash ^= this[i].GetHashCode();
+
+                return hash;
+            }
+        }
 
         /// <summary>
         /// A matrix as a string.

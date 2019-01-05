@@ -7,7 +7,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Capsule2f
+    public struct Capsule2f : IEquatable<Capsule2f>
     {
         public Vector2f A;
 
@@ -47,6 +47,40 @@ namespace Common.Geometry.Shapes
                 float ymax = Math.Max(A.y, B.y) + Radius;
 
                 return new Box2f(xmin, xmax, ymin, ymax);
+            }
+        }
+
+        public static bool operator ==(Capsule2f c1, Capsule2f c2)
+        {
+            return c1.Radius == c2.Radius && c1.A == c2.A && c1.B == c2.B;
+        }
+
+        public static bool operator !=(Capsule2f c1, Capsule2f c2)
+        {
+            return c1.Radius != c2.Radius || c1.A != c2.A || c1.A != c2.A;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Capsule2f)) return false;
+            Capsule2f cap = (Capsule2f)obj;
+            return this == cap;
+        }
+
+        public bool Equals(Capsule2f cap)
+        {
+            return this == cap;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ Radius.GetHashCode();
+                hash = (hash * 16777619) ^ A.GetHashCode();
+                hash = (hash * 16777619) ^ B.GetHashCode();
+                return hash;
             }
         }
 

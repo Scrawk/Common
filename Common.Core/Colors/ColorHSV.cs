@@ -8,7 +8,7 @@ namespace Common.Core.Colors
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct ColorHSV
+    public struct ColorHSV : IEquatable<ColorHSV>
     {
 
         public readonly static ColorHSV Red = new ColorHSV(0, 1, 1);
@@ -200,12 +200,14 @@ namespace Common.Core.Colors
         /// </summary>
         public override int GetHashCode()
         {
-            float hashcode = 23;
-            hashcode = (hashcode * 37) + h;
-            hashcode = (hashcode * 37) + s;
-            hashcode = (hashcode * 37) + v;
-
-            return unchecked((int)hashcode);
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ h.GetHashCode();
+                hash = (hash * 16777619) ^ s.GetHashCode();
+                hash = (hash * 16777619) ^ v.GetHashCode();
+                return hash;
+            }
         }
 
         /// <summary>

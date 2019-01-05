@@ -7,37 +7,37 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Ray2f : IEquatable<Ray2f>
+    public struct Ray3d : IEquatable<Ray3d>
     {
 
-        public Vector2f Position;
+        public Vector3f Position;
 
-        public Vector2f Direction;
+        public Vector3f Direction;
 
-        public Ray2f(Vector2f position, Vector2f direction)
+        public Ray3d(Vector3f position, Vector3f direction)
         {
             Position = position;
             Direction = direction;
         }
 
-        public static bool operator ==(Ray2f r1, Ray2f r2)
+        public static bool operator ==(Ray3d r1, Ray3d r2)
         {
             return r1.Position == r2.Position && r1.Direction == r2.Direction;
         }
 
-        public static bool operator !=(Ray2f r1, Ray2f r2)
+        public static bool operator !=(Ray3d r1, Ray3d r2)
         {
             return r1.Position != r2.Position || r1.Direction != r2.Direction;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Ray2f)) return false;
-            Ray2f ray = (Ray2f)obj;
+            if (!(obj is Ray3d)) return false;
+            Ray3d ray = (Ray3d)obj;
             return this == ray;
         }
 
-        public bool Equals(Ray2f ray)
+        public bool Equals(Ray3d ray)
         {
             return this == ray;
         }
@@ -55,7 +55,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Ray2f: Position={0}, Direction={1}]", Position, Direction);
+            return string.Format("[Ray3d: Position={0}, Direction={1}]", Position, Direction);
         }
 
     }

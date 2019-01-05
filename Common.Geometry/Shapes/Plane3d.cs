@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Plane3d
+    public struct Plane3d : IEquatable<Plane3d>
     {
 
         public Vector3d Normal;
@@ -35,6 +35,39 @@ namespace Common.Geometry.Shapes
             Normal = Vector3d.Cross(b - a, c - a);
             Normal.Normalize();
             Position = Normal * Vector3d.Dot(Normal, a);
+        }
+
+        public static bool operator ==(Plane3d p1, Plane3d p2)
+        {
+            return p1.Position == p2.Position && p1.Normal == p2.Normal;
+        }
+
+        public static bool operator !=(Plane3d p1, Plane3d p2)
+        {
+            return p1.Position != p2.Position || p1.Normal != p2.Normal;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Plane3d)) return false;
+            Plane3d plane = (Plane3d)obj;
+            return this == plane;
+        }
+
+        public bool Equals(Plane3d plane)
+        {
+            return this == plane;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ Position.GetHashCode();
+                hash = (hash * 16777619) ^ Normal.GetHashCode();
+                return hash;
+            }
         }
 
         public override string ToString()

@@ -7,7 +7,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Segment2d
+    public struct Segment2d : IEquatable<Segment2d>
     {
 
         public Vector2d A;
@@ -59,6 +59,39 @@ namespace Common.Geometry.Shapes
                 double ymax = Math.Max(A.y, B.y);
 
                 return new Box2d(xmin, xmax, ymin, ymax);
+            }
+        }
+
+        public static bool operator ==(Segment2d s1, Segment2d s2)
+        {
+            return s1.A == s2.A && s1.B == s2.B;
+        }
+
+        public static bool operator !=(Segment2d s1, Segment2d s2)
+        {
+            return s1.A != s2.A || s1.B != s2.B;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Segment2d)) return false;
+            Segment2d seg = (Segment2d)obj;
+            return this == seg;
+        }
+
+        public bool Equals(Segment2d seg)
+        {
+            return this == seg;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ A.GetHashCode();
+                hash = (hash * 16777619) ^ B.GetHashCode();
+                return hash;
             }
         }
 

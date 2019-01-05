@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Sphere3f
+    public struct Sphere3f : IEquatable<Sphere3f>
     {
 
         public Vector3f Center;
@@ -53,6 +53,39 @@ namespace Common.Geometry.Shapes
                 float zmax = Center.z + Radius;
 
                 return new Box3f(xmin, xmax, ymin, ymax, zmin, zmax);
+            }
+        }
+
+        public static bool operator ==(Sphere3f s1, Sphere3f s2)
+        {
+            return s1.Center == s2.Center && s1.Radius == s2.Radius;
+        }
+
+        public static bool operator !=(Sphere3f s1, Sphere3f s2)
+        {
+            return s1.Center != s2.Center || s1.Radius != s2.Radius;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Sphere3f)) return false;
+            Sphere3f sphere = (Sphere3f)obj;
+            return this == sphere;
+        }
+
+        public bool Equals(Sphere3f sphere)
+        {
+            return this == sphere;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ Center.GetHashCode();
+                hash = (hash * 16777619) ^ Radius.GetHashCode();
+                return hash;
             }
         }
 

@@ -8,7 +8,7 @@ namespace Common.Core.Colors
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct ColorRGBA
+    public struct ColorRGBA : IEquatable<ColorRGBA>
     {
 
         public readonly static ColorRGBA Red = new ColorRGBA(1, 0, 0, 1);
@@ -265,13 +265,15 @@ namespace Common.Core.Colors
         /// </summary>
         public override int GetHashCode()
         {
-            float hashcode = 23;
-            hashcode = (hashcode * 37) + r;
-            hashcode = (hashcode * 37) + g;
-            hashcode = (hashcode * 37) + b;
-            hashcode = (hashcode * 37) + a;
-
-            return unchecked((int)hashcode);
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ r.GetHashCode();
+                hash = (hash * 16777619) ^ g.GetHashCode();
+                hash = (hash * 16777619) ^ b.GetHashCode();
+                hash = (hash * 16777619) ^ a.GetHashCode();
+                return hash;
+            }
         }
 
         /// <summary>

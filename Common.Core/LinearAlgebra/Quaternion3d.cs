@@ -246,13 +246,14 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
-            double hashcode = 23;
-            hashcode = (hashcode * 37) + x;
-            hashcode = (hashcode * 37) + y;
-            hashcode = (hashcode * 37) + z;
-            hashcode = (hashcode * 37) + w;
-
-            return unchecked((int)hashcode);
+            unchecked
+            {
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ x.GetHashCode();
+                hash = (hash * 16777619) ^ y.GetHashCode();
+                hash = (hash * 16777619) ^ z.GetHashCode();
+                return hash;
+            }
         }
 
         /// <summary>

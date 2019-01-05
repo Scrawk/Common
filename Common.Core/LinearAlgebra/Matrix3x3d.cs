@@ -424,12 +424,15 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         public override int GetHashCode()
         {
-            int hash = 0;
+            unchecked
+            {
+                int hash = (int)2166136261;
 
-            for (int i = 0; i < 9; i++)
-                hash ^= this[i].GetHashCode();
+                for (int i = 0; i < 9; i++)
+                    hash ^= this[i].GetHashCode();
 
-            return hash;
+                return hash;
+            }
         }
 
         /// <summary>

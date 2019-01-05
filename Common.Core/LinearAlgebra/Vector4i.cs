@@ -299,9 +299,7 @@ namespace Common.Core.LinearAlgebra
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector4i)) return false;
-			
 			Vector4i v = (Vector4i)obj;
-			
 			return this == v;
 		}
 
@@ -320,18 +318,16 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
 		{
-			int hashcode = 23;
-
             unchecked
             {
-                hashcode = (hashcode * 37) + x;
-                hashcode = (hashcode * 37) + y;
-                hashcode = (hashcode * 37) + z;
-                hashcode = (hashcode * 37) + w;
+                int hash = (int)2166136261;
+                hash = (hash * 16777619) ^ x.GetHashCode();
+                hash = (hash * 16777619) ^ y.GetHashCode();
+                hash = (hash * 16777619) ^ z.GetHashCode();
+                hash = (hash * 16777619) ^ w.GetHashCode();
+                return hash;
             }
-			
-			return hashcode;
-		}
+        }
 
         /// <summary>
         /// Vector as a string.
