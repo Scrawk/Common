@@ -27,6 +27,16 @@ namespace Common.Geometry.Shapes
             Position = Normal * distance;
         }
 
+        public float Distance
+        {
+            get { return Position.Magnitude; }
+        }
+
+        public float SqrDistance
+        {
+            get { return Position.SqrMagnitude; }
+        }
+
         /// <summary>
         /// From three noncollinear points (ordered ccw).
         /// </summary>
@@ -73,6 +83,12 @@ namespace Common.Geometry.Shapes
         public override string ToString()
         {
             return string.Format("[Plane3f: Positions{0}, Normal={1}]", Position, Normal);
+        }
+
+        public Vector3f Closest(Vector3f p)
+        {
+            float t = Vector3f.Dot(Normal, p) - Distance;
+            return p - t * Normal;
         }
 
     }

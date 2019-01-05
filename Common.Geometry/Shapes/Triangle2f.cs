@@ -97,5 +97,117 @@ namespace Common.Geometry.Shapes
             return string.Format("[Triangle2f: A={0}, B={1}, C={1}]", A, B, C);
         }
 
+        /// <summary>
+        /// Closest point on triangle.
+        /// </summary>
+        /// <param name="p">point</param>
+        /// <returns>closest point</returns>
+        public Vector2f Closest(Vector2f p)
+        {
+            Vector2f ab = B - A;
+            Vector2f ac = C - A;
+            Vector2f ap = p - A;
+
+            // Check if P in vertex region outside A
+            float d1 = Vector2f.Dot(ab, ap);
+            float d2 = Vector2f.Dot(ac, ap);
+            if (d1 <= 0.0 && d2 <= 0.0)
+            {
+                // barycentric coordinates (1,0,0)
+                return A;
+            }
+
+            float v, w;
+
+            // Check if P in vertex region outside B
+            Vector2f bp = p - B;
+            float d3 = Vector2f.Dot(ab, bp);
+            float d4 = Vector2f.Dot(ac, bp);
+            if (d3 >= 0.0 && d4 <= d3)
+            {
+                // barycentric coordinates (0,1,0)
+                return B;
+            }
+
+            // Check if P in edge region of AB, if so return projection of P onto AB
+            float vc = d1 * d4 - d3 * d2;
+            if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
+            {
+                v = d1 / (d1 - d3);
+                // barycentric coordinates (1-v,v,0)
+                return A + v * ab;
+            }
+
+            // Check if P in vertex region outside C
+            Vector2f cp = p - C;
+            float d5 = Vector2f.Dot(ab, cp);
+            float d6 = Vector2f.Dot(ac, cp);
+            if (d6 >= 0.0f && d5 <= d6)
+            {
+                // barycentric coordinates (0,0,1)
+                return C;
+            }
+
+            // Check if P in edge region of AC, if so return projection of P onto AC
+            float vb = d5 * d2 - d1 * d6;
+            if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
+            {
+                w = d2 / (d2 - d6);
+                // barycentric coordinates (1-w,0,w)
+                return A + w * ac;
+            }
+
+            // Check if P in edge region of BC, if so return projection of P onto BC
+            float va = d3 * d6 - d5 * d4;
+            if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
+            {
+                w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+                // barycentric coordinates (0,1-w,w)
+                return B + w * (C - B);
+            }
+
+            // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
+            float denom = 1.0f / (va + vb + vc);
+            v = vb * denom;
+            w = vc * denom;
+
+            // = u*a + v*b + w*c, u = va * denom = 1.0f - v - w
+            return A + ab * v + ac * w;
+        }
+
+        /// <summary>
+        /// Does triangle contain point.
+        /// </summary>
+        /// <param name="p">point</param>
+        /// <returns>true if triangle contains point</returns>
+        public bool Contains(Vector2f p)
+        {
+            float pab = Vector2f.Cross(p - A, B - A);
+            float pbc = Vector2f.Cross(p - B, C - B);
+
+            if (Math.Sign(pab) != Math.Sign(pbc)) return false;
+
+            float pca = Vector2f.Cross(p - C, A - C);
+
+            if (Math.Sign(pab) != Math.Sign(pca)) return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Does triangle contain point.
+        /// Asumes triangle is CCW;
+        /// </summary>
+        /// <param name="p">point</param>
+        /// <returns>true if triangle contains point</returns>
+        public bool ContainsCCW(Vector2f p)
+        {
+            if (Vector2f.Cross(p - A, B - A) > 0.0) return false;
+            if (Vector2f.Cross(p - B, C - B) > 0.0) return false;
+            if (Vector2f.Cross(p - C, A - C) > 0.0) return false;
+
+            return true;
+        }
+
     }
 }

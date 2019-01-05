@@ -58,6 +58,31 @@ namespace Common.Geometry.Shapes
             return string.Format("[Ray3f: Position={0}, Direction={1}]", Position, Direction);
         }
 
+        /// <summary>
+        /// Intersection between ray and sphere.
+        /// </summary>
+        /// <param name="sphere">the sphere</param>
+        /// <param name="t">Intersection point = Position + t * Direction</param>
+        /// <returns>If rays intersect</returns>
+        public bool Intersects(Sphere3f sphere, out float t)
+        {
+            t = 0;
+            Vector3f m = Position - sphere.Center;
+
+            float b = Vector3f.Dot(m, Direction);
+            float c = Vector3f.Dot(m, m) - sphere.Radius2;
+
+            if (c > 0.0f && b > 0.0f) return false;
+
+            float discr = b * b - c;
+            if (discr < 0.0f) return false;
+
+            t = -b - (float)Math.Sqrt(discr);
+
+            if (t < 0) t = 0;
+            return true;
+        }
+
     }
 }
 

@@ -94,6 +94,40 @@ namespace Common.Geometry.Shapes
             return string.Format("[Sphere3d: Center={0}, Radius={1}]", Center, Radius);
         }
 
+        public void Enlarge(Vector3d p)
+        {
+            Vector3d d = p - Center;
+            double dist2 = d.SqrMagnitude;
+
+            if (dist2 > Radius2)
+            {
+                double dist = Math.Sqrt(dist2);
+                double radius = (Radius + dist) * 0.5;
+                double k = (radius - Radius) / dist;
+
+                Center += d * k;
+                Radius = radius;
+            }
+        }
+
+        public Vector3d Closest(Vector3d p)
+        {
+            double dist = Vector3d.Distance(p, Center);
+            return Center + Radius * dist;
+        }
+
+        public bool Contains(Vector3d p)
+        {
+            double r2 = Radius * Radius;
+            return Vector3d.SqrDistance(Center, p) <= r2;
+        }
+
+        public bool Intersects(Sphere3d sphere)
+        {
+            double r = Radius + sphere.Radius;
+            return Vector3d.SqrDistance(Center, sphere.Center) <= r * r;
+        }
+
     }
 
 }

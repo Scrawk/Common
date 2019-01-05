@@ -170,6 +170,30 @@ namespace Common.Geometry.Shapes
             return true;
         }
 
+        /// <summary>
+        /// Returns the closest point to a on the box.
+        /// </summary>
+        public Vector2d Closest(Vector2d p)
+        {
+            Vector2d c;
+
+            if (p.x < Min.x)
+                c.x = Min.x;
+            else if (p.x > Max.x)
+                c.x = Max.x;
+            else
+                c.x = p.x;
+
+            if (p.y < Min.y)
+                c.y = Min.y;
+            else if (p.y > Max.y)
+                c.y = Max.y;
+            else
+                c.y = p.y;
+
+            return c;
+        }
+
         public static Box2d CalculateBounds(IEnumerable<Vector2d> vertices)
         {
             Vector2d min = Vector2d.PositiveInfinity;

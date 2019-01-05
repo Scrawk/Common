@@ -89,7 +89,7 @@ namespace Common.Geometry.Shapes
             return Vector2d.SqrDistance(proj, p);
         }
 
-        public Vector2d ClosestPoint(Vector2d p)
+        public Vector2d Closest(Vector2d p)
         {
             double t = Project(p);
             return Origin + t * Direction;
@@ -115,7 +115,7 @@ namespace Common.Geometry.Shapes
         /// Calculate intersection point between this line and another one.
         /// Returns false if lines are parallel.
         /// </summary>
-        public bool IntersectionPoint(Line2d other, out Vector2d point)
+        public bool Intersects(Line2d other, out Vector2d point)
         {
             Vector2d diff = other.Origin - Origin;
             double D0DotPerpD1 = Vector2d.Dot(Direction, other.Direction.PerpendicularCW);

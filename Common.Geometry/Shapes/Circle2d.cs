@@ -103,7 +103,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the circle so it contains the point p.
         /// </summary>
-        public Circle2d Enlarge(Vector2d p)
+        public void Enlarge(Vector2d p)
         {
             Vector2d d = p - Center;
             double dist2 = d.SqrMagnitude;
@@ -111,14 +111,30 @@ namespace Common.Geometry.Shapes
             if (dist2 > Radius2)
             {
                 double dist = Math.Sqrt(dist2);
-                double radius = (Radius + dist) * 0.5f;
+                double radius = (Radius + dist) * 0.5;
                 double k = (radius - Radius) / dist;
-                return new Circle2d(Center + d * k, radius);
+
+                Center += d * k;
+                Radius = radius;
             }
-            else
-            {
-                return new Circle2d(Center, Radius);
-            }
+        }
+
+        public Vector2d Closest(Vector2d p)
+        {
+            double dist = Vector2d.Distance(Center, p);
+            return Center + Radius * dist;
+        }
+
+        public bool Contains(Vector2d p)
+        {
+            double r2 = Radius * Radius;
+            return Vector2d.SqrDistance(Center, p) <= r2;
+        }
+
+        public bool Intersects(Circle2d circle)
+        {
+            double r = Radius + circle.Radius;
+            return Vector2d.SqrDistance(Center, circle.Center) <= r * r;
         }
 
     }

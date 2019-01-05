@@ -89,5 +89,31 @@ namespace Common.Geometry.Shapes
             return string.Format("[Capsule2d: A={0}, B={1}, Radius={2}]", A, B, Radius);
         }
 
+        public bool Contains(Vector2d p)
+        {
+            double r2 = Radius * Radius;
+
+            Vector2d ap = p - A;
+
+            if (ap.x * ap.x + ap.y * ap.y <= r2) return true;
+
+            Vector2d bp = p - B.x;
+
+            if (bp.x * bp.x + bp.y * bp.y <= r2) return true;
+
+            Vector2d ab = B - A;
+
+            double t = (ab.x * A.x + ab.y * A.y) / (ab.x * ab.x + ab.y * ab.y);
+
+            if (t < 0.0) t = 0.0;
+            if (t > 1.0) t = 1.0;
+
+            p = p - (A + t * ab);
+
+            if (p.x * p.x + p.y * p.y <= r2) return true;
+
+            return false;
+        }
+
     }
 }

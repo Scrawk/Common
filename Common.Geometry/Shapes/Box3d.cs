@@ -203,6 +203,37 @@ namespace Common.Geometry.Shapes
             return true;
         }
 
+        /// <summary>
+        /// Returns the closest point to a on the box.
+        /// </summary>
+        public Vector3d Closest(Vector3d p)
+        {
+            Vector3d c;
+
+            if (p.x < Min.x)
+                c.x = Min.x;
+            else if (p.x > Max.x)
+                c.x = Max.x;
+            else
+                c.x = p.x;
+
+            if (p.y < Min.y)
+                c.y = Min.y;
+            else if (p.y > Max.y)
+                c.y = Max.y;
+            else
+                c.y = p.y;
+
+            if (p.z < Min.z)
+                c.z = Min.z;
+            else if (p.z > Max.z)
+                c.z = Max.z;
+            else
+                c.z = p.z;
+
+            return c;
+        }
+
         public static Box3d CalculateBounds(IEnumerable<Vector3d> vertices)
         {
             Vector3d min = Vector3d.PositiveInfinity;

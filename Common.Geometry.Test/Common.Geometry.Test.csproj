@@ -50,9 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Curves\Bezier2fTest.cs" />
-    <Compile Include="Intersections\LineIntersection2fTest.cs" />
-    <Compile Include="Intersections\RayIntersetions2fTest.cs" />
-    <Compile Include="Intersections\SegmentIntersections2fTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

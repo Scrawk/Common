@@ -49,19 +49,6 @@
     <Compile Include="Curves\Polynomial3d.cs" />
     <Compile Include="Curves\QuadraticBezier2d.cs" />
     <Compile Include="Curves\QuadraticBezier2f.cs" />
-    <Compile Include="Intersections\BoxIntersections2f.cs" />
-    <Compile Include="Intersections\BoxIntersections3f.cs" />
-    <Compile Include="Intersections\CapsuleIntersections2f.cs" />
-    <Compile Include="Intersections\CircleIntersections2f.cs" />
-    <Compile Include="Intersections\LineIntersections2f.cs" />
-    <Compile Include="Intersections\LineResult2f.cs" />
-    <Compile Include="Intersections\PointResult2f.cs" />
-    <Compile Include="Intersections\RayIntersections2f.cs" />
-    <Compile Include="Intersections\RayIntersections3f.cs" />
-    <Compile Include="Intersections\SegmentIntersections2f.cs" />
-    <Compile Include="Intersections\SphereIntersections3f.cs" />
-    <Compile Include="Intersections\TriangleIntersections2f.cs" />
-    <Compile Include="Intersections\TriangleResult2f.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Box2d.cs" />
     <Compile Include="Shapes\Box2f.cs" />
@@ -73,7 +60,6 @@
     <Compile Include="Shapes\Capsule2f.cs" />
     <Compile Include="Shapes\Circle2d.cs" />
     <Compile Include="Shapes\Circle2f.cs" />
-    <Compile Include="Shapes\Frustum3d.cs" />
     <Compile Include="Shapes\Interval1d.cs" />
     <Compile Include="Shapes\Interval1f.cs" />
     <Compile Include="Shapes\Interval1i.cs" />

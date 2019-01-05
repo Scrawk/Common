@@ -111,11 +111,6 @@ namespace Common.Geometry.Shapes
             return string.Format("[Interval1i: a={0}, b={1}]", Min, Max);
         }
 
-        public bool Contains(int d)
-        {
-            return d >= Min && d <= Max;
-        }
-
         public int Clamp(int f)
         {
             return (f < Min) ? Min : (f > Max) ? Max : f;
@@ -143,6 +138,11 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Interval1i i)
         {
             return !(i.Min > Max || i.Max < Min);
+        }
+
+        public bool Contains(int d)
+        {
+            return d >= Min && d <= Max;
         }
 
         public static bool Intersection(Interval1i i1, Interval1i i2, out Interval1i i)

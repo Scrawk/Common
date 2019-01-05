@@ -37,6 +37,16 @@ namespace Common.Geometry.Shapes
             Position = Normal * Vector3d.Dot(Normal, a);
         }
 
+        public double Distance
+        {
+            get { return Position.Magnitude; }
+        }
+
+        public double SqrDistance
+        {
+            get { return Position.SqrMagnitude; }
+        }
+
         public static bool operator ==(Plane3d p1, Plane3d p2)
         {
             return p1.Position == p2.Position && p1.Normal == p2.Normal;
@@ -73,6 +83,12 @@ namespace Common.Geometry.Shapes
         public override string ToString()
         {
             return string.Format("[Plane3d: Positions{0}, Normal={1}]", Position, Normal);
+        }
+
+        public Vector3d Closest(Vector3d p)
+        {
+            double t = Vector3d.Dot(Normal, p) - Distance;
+            return p - t * Normal;
         }
 
     }
