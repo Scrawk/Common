@@ -61,7 +61,6 @@
     <Compile Include="HalfEdgeBased\HBVertex.cs" />
     <Compile Include="HalfEdgeBased\HBVertex2f.cs" />
     <Compile Include="HalfEdgeBased\HBVertex3f.cs" />
-    <Compile Include="HalfEdgeBased\HBWeldVertices.cs" />
     <Compile Include="IndexBased\IndexableMesh.cs" />
     <Compile Include="IndexBased\Mesh2f.cs" />
     <Compile Include="IndexBased\Mesh3f.cs" />
@@ -77,7 +76,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

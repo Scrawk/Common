@@ -85,8 +85,6 @@
     <Compile Include="Shapes\Sphere3f.cs" />
     <Compile Include="Shapes\Triangle2d.cs" />
     <Compile Include="Shapes\Triangle2f.cs" />
-    <Compile Include="SpaceFilling\CircleFilling2f.cs" />
-    <Compile Include="SpaceFilling\PoissonDiskFilling2f.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Core\Common.Core.csproj">
@@ -97,8 +95,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\Goblinz\Assets\Common\Plugins" /y
 xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Geometry.dll" "F:\Unity Projects\Personal\GeoMorph\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

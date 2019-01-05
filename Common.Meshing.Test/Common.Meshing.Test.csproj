@@ -54,7 +54,6 @@
     <Compile Include="HalfEdgeBased\HBMeshTest.cs" />
     <Compile Include="HalfEdgeBased\HBVertex2fTest.cs" />
     <Compile Include="HalfEdgeBased\HBVertexTest.cs" />
-    <Compile Include="HalfEdgeBased\HBWeldVerticesTest.cs" />
     <Compile Include="HalfEdgeBased\TestEdge.cs" />
     <Compile Include="IndexBased\Mesh2fTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
