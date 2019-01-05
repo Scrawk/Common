@@ -147,7 +147,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns true if this bounding box contains the given bounding box.
         /// </summary>
-        public bool IntersectsBox(Box2i a)
+        public bool Intersects(Box2i a)
         {
             if (Max.x < a.Min.x || Min.x > a.Max.x) return false;
             if (Max.y < a.Min.y || Min.y > a.Max.y) return false;
@@ -157,7 +157,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Does the box contain the point.
         /// </summary>
-        public bool ContainsPoint(Vector2i p)
+        public bool Contains(Vector2i p)
         {
             if (p.x > Max.x || p.x < Min.x) return false;
             if (p.y > Max.y || p.y < Min.y) return false;

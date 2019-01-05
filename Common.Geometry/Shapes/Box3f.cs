@@ -181,6 +181,28 @@ namespace Common.Geometry.Shapes
             Max.z = Math.Max(Max.z, box.Max.z);
         }
 
+        /// <summary>
+        /// Returns true if this bounding box contains the given bounding box.
+        /// </summary>
+        public bool Intersects(Box3f a)
+        {
+            if (Max.x < a.Min.x || Min.x > a.Max.x) return false;
+            if (Max.y < a.Min.y || Min.y > a.Max.y) return false;
+            if (Max.z < a.Min.z || Min.z > a.Max.z) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Returns true if this bounding box contains the given point.
+        /// </summary>
+        public bool Contains(Vector3f p)
+        {
+            if (p.x > Max.x || p.x < Min.x) return false;
+            if (p.y > Max.y || p.y < Min.y) return false;
+            if (p.z > Max.z || p.z < Min.z) return false;
+            return true;
+        }
+
         public static Box3f CalculateBounds(IEnumerable<Vector3f> vertices)
         {
             Vector3f min = Vector3f.PositiveInfinity;

@@ -31,6 +31,7 @@ namespace Common.Geometry.Shapes
             Min = min;
             Max = max;
         }
+
         public Vector3f Center 
         { 
             get { return new Vector3f((Min + Max).x * 0.5f, (Min + Max).y * 0.5f, (Min + Max).z * 0.5f); } 
@@ -176,7 +177,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns true if this bounding box contains the given bounding box.
         /// </summary>
-        public bool IntersectsBox(Box3i a)
+        public bool Intersects(Box3i a)
         {
             if (Max.x < a.Min.x || Min.x > a.Max.x) return false;
             if (Max.y < a.Min.y || Min.y > a.Max.y) return false;
@@ -187,7 +188,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns true if this bounding box contains the given point.
         /// </summary>
-        public bool ContainsPoint(Vector3i p)
+        public bool Contains(Vector3i p)
         {
             if (p.x > Max.x || p.x < Min.x) return false;
             if (p.y > Max.y || p.y < Min.y) return false;
