@@ -73,6 +73,16 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        public static explicit operator Box3i(Box3f box)
+        {
+            return new Box3i((Vector3i)box.Min, (Vector3i)box.Max);
+        }
+
+        public static explicit operator Box3i(Box3d box)
+        {
+            return new Box3i((Vector3i)box.Min, (Vector3i)box.Max);
+        }
+
         public static bool operator ==(Box3i b1, Box3i b2)
         {
             return b1.Min == b2.Min && b1.Max == b2.Max;

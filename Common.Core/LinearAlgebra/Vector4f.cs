@@ -324,6 +324,18 @@ namespace Common.Core.LinearAlgebra
             return new Vector4f(v.x / s, v.y / s, v.z / s, v.w / s);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector4f(Vector4d v)
+        {
+            return new Vector4f((float)v.x, (float)v.y, (float)v.z, (float)v.w);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector4f(Vector4i v)
+        {
+            return new Vector4f(v.x, v.y, v.z, v.w);
+        }
+
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
@@ -581,12 +593,6 @@ namespace Common.Core.LinearAlgebra
             y = (float)Math.Round(y);
             z = (float)Math.Round(z);
             w = (float)Math.Round(w);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector4i ToVector4i()
-        {
-            return new Vector4i((int)x, (int)y, (int)z, (int)w);
         }
 
     }

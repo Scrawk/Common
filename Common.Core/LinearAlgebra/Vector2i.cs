@@ -250,6 +250,18 @@ namespace Common.Core.LinearAlgebra
             return new Vector2i(v.x / s, v.y / s);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector2i(Vector2f v)
+        {
+            return new Vector2i((int)v.x, (int)v.y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector2i(Vector2d v)
+        {
+            return new Vector2i((int)v.x, (int)v.y);
+        }
+
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
@@ -441,12 +453,6 @@ namespace Common.Core.LinearAlgebra
         {
             x = Math.Max(Math.Min(x, max.x), min.x);
             y = Math.Max(Math.Min(y, max.y), min.y);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2f ToVector2f()
-        {
-            return new Vector2f(x, y);
         }
 
     }

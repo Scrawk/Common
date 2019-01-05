@@ -30,18 +30,6 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
-        /// A Quaternion copied from a array.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Quaternion3f(float[] v)
-        {
-            this.x = v[0];
-            this.y = v[1];
-            this.z = v[2];
-            this.w = v[3];
-        }
-
-        /// <summary>
         /// A Quaternion from a vector axis and angle.
         /// The axis is the up direction and the angle is the rotation.
         /// </summary>
@@ -198,6 +186,12 @@ namespace Common.Core.LinearAlgebra
             Vector3f xyz = new Vector3f(q.x, q.y, q.z);
             Vector3f t = 2 * Vector3f.Cross(xyz, v);
             return v + q.w * t + Vector3f.Cross(xyz, t);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Quaternion3f(Quaternion3d q)
+        {
+            return new Quaternion3f((float)q.x, (float)q.y, (float)q.z, (float)q.w);
         }
 
         /// <summary>

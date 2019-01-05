@@ -58,6 +58,16 @@ namespace Common.Geometry.Shapes
             get { return (Max.x - Min.x) * (Max.y - Min.y); } 
         }
 
+        public static explicit operator Box2i(Box2f box)
+        {
+            return new Box2i((Vector2i)box.Min, (Vector2i)box.Max);
+        }
+
+        public static explicit operator Box2i(Box2d box)
+        {
+            return new Box2i((Vector2i)box.Min, (Vector2i)box.Max);
+        }
+
         public static bool operator ==(Box2i b1, Box2i b2)
         {
             return b1.Min == b2.Min && b1.Max == b2.Max;

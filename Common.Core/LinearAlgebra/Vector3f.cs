@@ -308,6 +308,18 @@ namespace Common.Core.LinearAlgebra
             return new Vector3f(v.x / s, v.y / s, v.z / s);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector3f(Vector3d v)
+        {
+            return new Vector3f((float)v.x, (float)v.y, (float)v.z);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector3f(Vector3i v)
+        {
+            return new Vector3f(v.x, v.y, v.z);
+        }
+
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
@@ -647,11 +659,6 @@ namespace Common.Core.LinearAlgebra
             z = (float)Math.Round(z);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3i ToVector3i()
-        {
-            return new Vector3i((int)x, (int)y, (int)z);
-        }
     }
 
 

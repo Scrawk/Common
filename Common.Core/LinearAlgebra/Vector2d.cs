@@ -298,6 +298,18 @@ namespace Common.Core.LinearAlgebra
             return new Vector2d(v.x / s, v.y / s);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector2d(Vector2f v)
+        {
+            return new Vector2d(v.x, v.y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector2d(Vector2i v)
+        {
+            return new Vector2d(v.x, v.y);
+        }
+
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
@@ -620,12 +632,6 @@ namespace Common.Core.LinearAlgebra
         {
             x = Math.Round(x);
             y = Math.Round(y);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2i ToVector2i()
-        {
-            return new Vector2i((int)x, (int)y);
         }
 
     }

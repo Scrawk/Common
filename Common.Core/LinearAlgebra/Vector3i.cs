@@ -271,6 +271,18 @@ namespace Common.Core.LinearAlgebra
             return new Vector3i(v.x / s, v.y / s, v.z / s);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector3i(Vector3f v)
+        {
+            return new Vector3i((int)v.x, (int)v.y, (int)v.z);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector3i(Vector3d v)
+        {
+            return new Vector3i((int)v.x, (int)v.y, (int)v.z);
+        }
+
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
@@ -473,11 +485,6 @@ namespace Common.Core.LinearAlgebra
             z = Math.Max(Math.Min(z, max.z), min.z);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3f ToVector3f()
-        {
-            return new Vector3f(x, y, z);
-        }
     }
 	
 }
