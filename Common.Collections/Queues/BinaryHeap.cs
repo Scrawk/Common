@@ -29,6 +29,14 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
+        /// Gets whether or not the binary heap is readonly.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Gets or sets the capacity of the heap.
         /// </summary>
         public int Capacity
@@ -55,17 +63,31 @@ namespace Common.Collections.Queues
 
         }
 
+        /// <summary>
+        /// Creates a new binary heap with capacity.
+        /// </summary>
         public BinaryHeap(int count)
         {
             Capacity = count;
         }
 
-        private BinaryHeap(T[] data)
+        /// <summary>
+        /// Creates a new binary heap from collection.
+        /// </summary>
+        public BinaryHeap(ICollection<T> data)
         {
-            int count = data.Length;
-            Capacity = count;
-            _count = count;
-            Array.Copy(data, _data, count);
+            Capacity = data.Count;
+            foreach (var item in data)
+                Add(item);
+        }
+
+        /// <summary>
+        /// Creates a new binary heap from enumerable.
+        /// </summary>
+        public BinaryHeap(IEnumerable<T> data)
+        {
+            foreach (var item in data)
+                Add(item);
         }
 
         /// <summary>
@@ -82,7 +104,7 @@ namespace Common.Collections.Queues
         /// </summary>
         public void Clear()
         {
-            this._count = 0;
+            _count = 0;
             _data = new T[_capacity];
         }
 
@@ -116,6 +138,22 @@ namespace Common.Collections.Queues
             _data[_count] = default(T); //Clears the Last Node
             DownHeap();
             return v;
+        }
+
+        /// <summary>
+        /// Removes an item from the binary heap. This utilizes the type T's Comparer and will not remove duplicates.
+        /// </summary>
+        /// <param name="item">The item to be removed.</param>
+        /// <returns>Boolean true if the item was removed.</returns>
+        public bool Remove(T item)
+        {
+            EnsureSort();
+            int i = Array.BinarySearch<T>(_data, 0, _count, item);
+            if (i < 0) return false;
+            Array.Copy(_data, i + 1, _data, i, _count - i);
+            _data[_count] = default(T);
+            _count--;
+            return true;
         }
 
         /// <summary>
@@ -203,29 +241,6 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Creates a new instance of an identical binary heap.
-        /// </summary>
-        /// <returns>A BinaryHeap.</returns>
-        public BinaryHeap<T> Copy()
-        {
-            return new BinaryHeap<T>(_data);
-        }
-
-        /// <summary>
-        /// Creates a new instance as a list.
-        /// </summary>
-        /// <returns>A BinaryHeap.</returns>
-        public List<T> ToList()
-        {
-            var list = new List<T>(_count);
-
-            while (_count > 0)
-                list.Add(Remove());
-
-            return list;
-        }
-
-        /// <summary>
         /// Gets an enumerator for the binary heap.
         /// </summary>
         /// <returns>An IEnumerator of type T.</returns>
@@ -266,27 +281,17 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Gets whether or not the binary heap is readonly.
+        /// Copy the heap to a list.
         /// </summary>
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Removes an item from the binary heap. This utilizes the type T's Comparer and will not remove duplicates.
-        /// </summary>
-        /// <param name="item">The item to be removed.</param>
-        /// <returns>Boolean true if the item was removed.</returns>
-        public bool Remove(T item)
+        /// <returns></returns>
+        public List<T> ToList()
         {
             EnsureSort();
-            int i = Array.BinarySearch<T>(_data, 0, _count, item);
-            if (i < 0) return false;
-            Array.Copy(_data, i + 1, _data, i, _count - i);
-            _data[_count] = default(T);
-            _count--;
-            return true;
+            var list = new List<T>(_count);
+            for (int i = 0; i < _count; i++)
+                list.Add(_data[i]);
+            
+            return list;
         }
     }
 }

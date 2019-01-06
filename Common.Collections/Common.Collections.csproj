@@ -83,6 +83,9 @@
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture3D.cs" />
     <Compile Include="Textures\TextureData.cs" />
+    <Compile Include="Trees\AVLTree.cs" />
+    <Compile Include="Trees\BinaryTree.cs" />
+    <Compile Include="Trees\BinaryTreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Core\Common.Core.csproj">
