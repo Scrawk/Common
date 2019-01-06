@@ -28,14 +28,34 @@ namespace Common.Collections.Test.Trees
         {
             BinaryTree<string> tree = new BinaryTree<string>();
 
-            IList<string> list = GetTestList();
+            tree.Add("George");
+            Assert.AreEqual("George", tree.Root.Item);
+            Assert.AreEqual(1, tree.Count);
 
-            foreach (string name in list)
-            {
-                Assert.IsTrue(tree.Add(name));
-            }
+            tree.Add("Micheal");
+            Assert.AreEqual("Micheal", tree.Root.Right.Item);
+            Assert.AreEqual(2, tree.Count);
 
-            Assert.AreEqual(tree.Count, list.Count);
+            tree.Add("Tom");
+            Assert.AreEqual("Tom", tree.Root.Right.Right.Item);
+            Assert.AreEqual(3, tree.Count);
+
+            tree.Add("Adam");
+            Assert.AreEqual("Adam", tree.Root.Left.Item);
+            Assert.AreEqual(4, tree.Count);
+
+            tree.Add("Jones");
+            Assert.AreEqual("Jones", tree.Root.Right.Left.Item);
+            Assert.AreEqual(5, tree.Count);
+
+            tree.Add("Peter");
+            Assert.AreEqual("Peter", tree.Root.Right.Right.Left.Item);
+            Assert.AreEqual(6, tree.Count);
+
+            tree.Add("Daniel");
+            Assert.AreEqual("Daniel", tree.Root.Left.Right.Item);
+            Assert.AreEqual(7, tree.Count);
+
         }
 
         [TestMethod]
@@ -115,7 +135,6 @@ namespace Common.Collections.Test.Trees
             tree.Add(GetTestList());
 
             tree.Remove("George");
-
             Assert.AreEqual("Daniel", tree.Root.Item);
             Assert.AreEqual("Adam", tree.Root.Left.Item);
             Assert.AreEqual("Michael", tree.Root.Right.Item);
@@ -125,7 +144,6 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual(6, tree.Count);
 
             tree.Remove("Adam");
-
             Assert.AreEqual("Daniel", tree.Root.Item);
             Assert.AreEqual("Michael", tree.Root.Right.Item);
             Assert.AreEqual("Jones", tree.Root.Right.Left.Item);
@@ -134,12 +152,36 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual(5, tree.Count);
 
             tree.Remove("Michael");
-
             Assert.AreEqual("Daniel", tree.Root.Item);
             Assert.AreEqual("Jones", tree.Root.Right.Item);
             Assert.AreEqual("Tom", tree.Root.Right.Right.Item);
             Assert.AreEqual("Peter", tree.Root.Right.Right.Left.Item);
             Assert.AreEqual(4, tree.Count);
+
+
+        }
+
+        [TestMethod]
+        public void ParentSet()
+        {
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
+            CheckParent(null, tree.Root);
+
+            tree.Remove("Adam");
+            CheckParent(null, tree.Root);
+
+            tree.Remove("Jones");
+            CheckParent(null, tree.Root);
+
+            tree.Remove("Michael");
+            CheckParent(null, tree.Root);
+
+            tree.Remove("Tom");
+            CheckParent(null, tree.Root);
+
+            tree.Remove("Peter");
+            CheckParent(null, tree.Root);
         }
 
         [TestMethod]
@@ -155,15 +197,103 @@ namespace Common.Collections.Test.Trees
             CollectionAssert.AreEqual(tree.ToList(), sorted);
         }
 
+        [TestMethod]
+        public void FindMinimum()
+        {
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
+
+            string min = "";
+            tree.FindMinimum(ref min);
+
+            Assert.AreEqual("Adam", min);
+        }
+
+        [TestMethod]
+        public void FindMaximum()
+        {
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
+
+            string max = "";
+            tree.FindMaximum(ref max);
+
+            Assert.AreEqual("Tom", max);
+        }
+
+        [TestMethod]
+        public void FindNode()
+        {
+            var list = GetTestList();
+            var tree = new BinaryTree<string>();
+            tree.Add(list);
+
+            foreach(var name in list)
+            {
+                var node = tree.FindNode(name);
+                Assert.AreEqual(name, node.Item);
+            }
+        }
+
+        [TestMethod]
+        public void FindSuccesor()
+        {
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
+
+            string succesor = "";
+            tree.FindSuccesor("George", ref succesor);
+            Assert.AreEqual("Jones", succesor);
+
+            succesor = "";
+            tree.FindSuccesor("Peter", ref succesor);
+            Assert.AreEqual("Tom", succesor);
+
+            succesor = "";
+            tree.FindSuccesor("Daniel", ref succesor);
+            Assert.AreEqual("George", succesor);
+
+            Assert.IsFalse(tree.FindSuccesor("Tom", ref succesor));
+        }
+
+        [TestMethod]
+        public void FindPredeccesor()
+        {
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
+
+            string predeccesor = "";
+            tree.FindPredecessor("George", ref predeccesor);
+            Assert.AreEqual("Daniel", predeccesor);
+
+            predeccesor = "";
+            tree.FindPredecessor("Peter", ref predeccesor);
+            Assert.AreEqual("Michael", predeccesor);
+
+            predeccesor = "";
+            tree.FindPredecessor("Daniel", ref predeccesor);
+            Assert.AreEqual("Adam", predeccesor);
+
+            Assert.IsFalse(tree.FindPredecessor("Adam", ref predeccesor));
+        }
+
         private string[] GetTestList()
         {
-
             string[] list = new string[]
             {
                 "George", "Michael", "Tom", "Adam", "Jones", "Peter", "Daniel"
             };
 
             return list;
+        }
+
+        private void CheckParent<T>(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
+        {
+            if (node == null) return;
+
+            Assert.AreEqual(parent, node.Parent);
+            CheckParent(node, node.Left);
+            CheckParent(node, node.Right);
         }
 
     }

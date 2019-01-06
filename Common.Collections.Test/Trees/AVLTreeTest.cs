@@ -67,6 +67,7 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual(50, tree.Root.Right.Right.Item);
             Assert.AreEqual(7, tree.Count);
 
+            CheckParent(null, tree.Root);
 
         }
 
@@ -101,6 +102,17 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual(25, tree.Root.Right.Item);
             Assert.AreEqual(3, tree.Count);
 
+            CheckParent(null, tree.Root);
+
+        }
+
+        private void CheckParent<T>(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
+        {
+            if (node == null) return;
+
+            Assert.AreEqual(parent, node.Parent);
+            CheckParent(node, node.Left);
+            CheckParent(node, node.Right);
         }
     }
 

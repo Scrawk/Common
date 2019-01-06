@@ -5,7 +5,7 @@ namespace Common.Collections.Trees
 {
     /// <summary>
     /// AVL is a balanced binary tree.
-    /// This optimizes search on the tree.
+    /// This optimizes searches on the tree.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class AVLTree<T> : BinaryTree<T> where T : IComparable<T>
@@ -24,6 +24,11 @@ namespace Common.Collections.Trees
             
         }
 
+        /// <summary>
+        /// Add a item to the tree.
+        /// Tree must be rebalanced.
+        /// </summary>
+        /// <param name="item"></param>
         public override bool Add(T item)
         {
             if (base.Add(item))
@@ -35,6 +40,11 @@ namespace Common.Collections.Trees
                 return false;
         }
 
+        /// <summary>
+        /// Remove a item to the tree.
+        /// Tree must be rebalanced.
+        /// </summary>
+        /// <param name="item"></param>
         public override bool Remove(T item)
         {
             if (Root == null) return false;
@@ -165,17 +175,30 @@ namespace Common.Collections.Trees
             BinaryTreeNode<T> B = A.Left;
 
             if (A == Root)
+            {
                 Root = B;
+                SetParent(null, Root);
+            }
             else
             {
                 if (parent.Left == A)
+                {
                     parent.Left = B;
+                    SetParent(parent, parent.Left);
+                }
                 else
+                {
                     parent.Right = B;
+                    SetParent(parent, parent.Right);
+                }
             }
 
             A.Left = B.Right;
             B.Right = A;
+
+            SetParent(A, A.Left);
+            SetParent(B, B.Right);
+
             UpdateHeight(A);
             UpdateHeight(B);
         }
@@ -186,19 +209,33 @@ namespace Common.Collections.Trees
             BinaryTreeNode<T> C = B.Right;
 
             if (A == Root)
+            {
                 Root = C;
+                SetParent(null, Root);
+            }
             else
             {
                 if (parent.Left == A)
+                {
                     parent.Left = C;
+                    SetParent(parent, parent.Left);
+                }
                 else
+                {
                     parent.Right = C;
+                    SetParent(parent, parent.Right);
+                }
             }
 
             A.Left = C.Right;
             B.Right = C.Left;
             C.Left = B;
             C.Right = A;
+
+            SetParent(A, A.Left);
+            SetParent(B, B.Right);
+            SetParent(C, C.Left);
+            SetParent(C, C.Right);
 
             UpdateHeight(A);
             UpdateHeight(B);
@@ -210,17 +247,30 @@ namespace Common.Collections.Trees
             BinaryTreeNode<T> B = A.Right;
 
             if (A == Root)
+            {
                 Root = B;
+                SetParent(null, Root);
+            }
             else
             {
                 if (parent.Left == A)
+                {
                     parent.Left = B;
+                    SetParent(parent, parent.Left);
+                }
                 else
+                {
                     parent.Right = B;
+                    SetParent(parent, parent.Right);
+                }
             }
 
             A.Right = B.Left;
             B.Left = A;
+
+            SetParent(A, A.Right);
+            SetParent(B, B.Left);
+
             UpdateHeight(A);
             UpdateHeight(B);
 
@@ -232,19 +282,33 @@ namespace Common.Collections.Trees
             BinaryTreeNode<T> C = B.Left;
 
             if (A == Root)
+            {
                 Root = C;
+                SetParent(null, Root);
+            }
             else
             {
                 if (parent.Left == A)
+                {
                     parent.Left = C;
+                    SetParent(parent, parent.Left);
+                }
                 else
+                {
                     parent.Right = C;
+                    SetParent(parent, parent.Right);
+                }
             }
 
             A.Right = C.Left;
             B.Left = C.Right;
             C.Left = A;
             C.Right = B;
+
+            SetParent(A, A.Right);
+            SetParent(B, B.Left);
+            SetParent(C, C.Left);
+            SetParent(C, C.Right);
 
             UpdateHeight(A);
             UpdateHeight(B);

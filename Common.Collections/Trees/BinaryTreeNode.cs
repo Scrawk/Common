@@ -31,13 +31,11 @@ namespace Common.Collections.Trees
         /// </summary>
         internal int Height { get; set; }
 
-        internal BinaryTreeNode()
-        {
+        public BinaryTreeNode<T> Parent { get; internal set; }
 
-        }
-
-        internal BinaryTreeNode(T item)
+        internal BinaryTreeNode(BinaryTreeNode<T> parent, T item)
         {
+            Parent = parent;
             Item = item;
         }
 
