@@ -24,14 +24,6 @@ namespace Common.Collections.Trees
             
         }
 
-        /// <summary>
-        /// Create new tree from a enumerable.
-        /// </summary>
-        public AVLTree(IEnumerable<T> items) : base(items)
-        {
-
-        }
-
         public override bool Add(T item)
         {
             if (base.Add(item))

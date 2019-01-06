@@ -9,7 +9,7 @@ namespace Common.Core.LinearAlgebra
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2i : IEquatable<Vector2i>, IEquatable<Vector2i>
+    public struct Vector2i : IEquatable<Vector2i>, IComparable<Vector2i>
     {
 		public int x, y;
 

@@ -15,7 +15,6 @@ namespace Common.Collections.Test.Trees
             BinaryTree<string> tree = new BinaryTree<string>();
 
             IList<string> list = GetTestList();
-
             tree.Add(list);
 
             foreach(string name in list)
@@ -42,7 +41,8 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void Order()
         {
-            var tree = new BinaryTree<string>(GetTestList());
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
 
             Assert.AreEqual("George", tree.Root.Item);
             Assert.AreEqual("Adam", tree.Root.Left.Item);
@@ -56,7 +56,8 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void Path()
         {
-            var tree = new BinaryTree<string>(GetTestList());
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
             var path = new List<string>();
 
             string[] expected;
@@ -110,7 +111,8 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void Remove()
         {
-            var tree = new BinaryTree<string>(GetTestList());
+            var tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
 
             tree.Remove("George");
 
@@ -144,7 +146,8 @@ namespace Common.Collections.Test.Trees
         public void ToList()
         {
             var list = GetTestList();
-            var tree = new BinaryTree<string>(list);
+            var tree = new BinaryTree<string>();
+            tree.Add(list);
 
             var sorted = new List<string>(list);
             sorted.Sort();

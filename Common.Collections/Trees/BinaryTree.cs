@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
 namespace Common.Collections.Trees
 {
 
@@ -22,14 +21,6 @@ namespace Common.Collections.Trees
         public BinaryTree()
         {
 
-        }
-
-        /// <summary>
-        /// Create new tree from a enumerable.
-        /// </summary>
-        public BinaryTree(IEnumerable<T> items)
-        {
-            Add(items);
         }
 
         /// <summary>
@@ -118,20 +109,25 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// Add a list of items to the tree.
+        /// Add a enumerable to the heap.
         /// </summary>
-        /// <param name="list"></param>
-        public void Add(IEnumerable<T> list)
+        /// <param name="data">a enumerable container</param>
+        /// <returns>If any of the items not added</returns>
+        public bool Add(IEnumerable<T> data)
         {
-            foreach (T item in list)
-                Add(item);
+            bool allAdded = true;
+            foreach (var item in data)
+            {
+                if (!Add(item)) allAdded = false;
+            }
+
+            return allAdded;
         }
 
         /// <summary>
         /// Add a item to the tree.
         /// </summary>
         /// <param name="item"></param>
-        /// <returns></returns>
         public virtual bool Add(T item)
         {
             if (Root == null)
@@ -165,7 +161,6 @@ namespace Common.Collections.Trees
 
             Count++;
             return true;
-
         }
 
         /// <summary>

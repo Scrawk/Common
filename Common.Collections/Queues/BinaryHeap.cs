@@ -77,8 +77,7 @@ namespace Common.Collections.Queues
         public BinaryHeap(ICollection<T> data)
         {
             Capacity = data.Count;
-            foreach (var item in data)
-                Add(item);
+            Add(data);
         }
 
         /// <summary>
@@ -86,8 +85,7 @@ namespace Common.Collections.Queues
         /// </summary>
         public BinaryHeap(IEnumerable<T> data)
         {
-            foreach (var item in data)
-                Add(item);
+            Add(data);
         }
 
         /// <summary>
@@ -109,7 +107,17 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Adds a key and value to the heap.
+        /// Add a enumerable to the heap.
+        /// </summary>
+        /// <param name="data">a enumerable container</param>
+        public void Add(IEnumerable<T> data)
+        {
+            foreach (var item in data)
+                Add(item);
+        }
+
+        /// <summary>
+        /// Adds a item to the heap.
         /// </summary>
         /// <param name="item">The item to add to the heap.</param>
         public void Add(T item)
