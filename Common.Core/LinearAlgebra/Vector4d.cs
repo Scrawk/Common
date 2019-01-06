@@ -10,7 +10,7 @@ namespace Common.Core.LinearAlgebra
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector4d : IEquatable<Vector4d>
+    public struct Vector4d : IEquatable<Vector4d>, IComparable<Vector4d>
     {
 	
 		public double x, y, z, w;
@@ -357,20 +357,16 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector4d)) return false;
-			
 			Vector4d v = (Vector4d)obj;
-			
 			return this == v;
 		}
 
         /// <summary>
         /// Are these vectors equal given the error.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool EqualsWithError(Vector4d v, double eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
@@ -392,7 +388,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -407,6 +402,22 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Compare two vectors by axis.
+        /// </summary>
+        public int CompareTo(Vector4d other)
+        {
+            if (x != other.x)
+                return x < other.x ? -1 : 1;
+            else if (y != other.y)
+                return y < other.y ? -1 : 1;
+            else if (z != other.z)
+                return z < other.z ? -1 : 1;
+            else if (w != other.w)
+                return w < other.w ? -1 : 1;
+            return 0;
+        }
+
+        /// <summary>
         /// Vector as a string.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -418,7 +429,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vector from a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public Vector4d FromString(string s)
 		{
             Vector4d v = new Vector4d();

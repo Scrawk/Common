@@ -9,7 +9,7 @@ namespace Common.Core.LinearAlgebra
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2i : IEquatable<Vector2i>
+    public struct Vector2i : IEquatable<Vector2i>, IEquatable<Vector2i>
     {
 		public int x, y;
 
@@ -283,13 +283,10 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector2i)) return false;
-			
 			Vector2i v = (Vector2i)obj;
-			
 			return this == v;
 		}
 
@@ -305,7 +302,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
 		{
             unchecked
@@ -315,6 +311,18 @@ namespace Common.Core.LinearAlgebra
                 hash = (hash * 16777619) ^ y.GetHashCode();
                 return hash;
             }
+        }
+
+        /// <summary>
+        /// Compare two vectors by axis.
+        /// </summary>
+        public int CompareTo(Vector2i other)
+        {
+            if (x != other.x)
+                return x < other.x ? -1 : 1;
+            else if (y != other.y)
+                return y < other.y ? -1 : 1;
+            return 0;
         }
 
         /// <summary>
@@ -329,10 +337,8 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vector from a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2i FromString(string s)
 		{
-
             Vector2i v = new Vector2i();
 
             try

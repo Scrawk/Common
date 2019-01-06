@@ -9,7 +9,7 @@ namespace Common.Core.LinearAlgebra
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2d : IEquatable<Vector2d>
+    public struct Vector2d : IEquatable<Vector2d>, IComparable<Vector2d>
     {
 		public double x, y;
 
@@ -331,20 +331,16 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector2d)) return false;
-			
 			Vector2d v = (Vector2d)obj;
-			
 			return this == v;
 		}
 
         /// <summary>
         /// Are these vectors equal given the error.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool EqualsWithError(Vector2d v, double eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
@@ -364,7 +360,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -374,6 +369,18 @@ namespace Common.Core.LinearAlgebra
                 hash = (hash * 16777619) ^ y.GetHashCode();
                 return hash;
             }
+        }
+
+        /// <summary>
+        /// Compare two vectors by axis.
+        /// </summary>
+        public int CompareTo(Vector2d other)
+        {
+            if (x != other.x)
+                return x < other.x ? -1 : 1;
+            else if (y != other.y)
+                return y < other.y ? -1 : 1;
+            return 0;
         }
 
         /// <summary>
@@ -388,7 +395,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vector from a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public Vector2d FromString(string s)
         {
             Vector2d v = new Vector2d();

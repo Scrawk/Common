@@ -224,20 +224,16 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these Quaternions equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
             if (!(obj is Quaternion3d)) return false;
-
             Quaternion3d v = (Quaternion3d)obj;
-
             return this == v;
         }
 
         /// <summary>
         /// Quaternions hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
