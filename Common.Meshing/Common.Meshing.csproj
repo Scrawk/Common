@@ -76,6 +76,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "F:\Unity Projects\Personal\CommonUnity\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "F:\Unity Projects\Personal\CGALUnity\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

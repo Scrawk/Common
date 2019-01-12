@@ -103,7 +103,6 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual(3, tree.Count);
 
             CheckParent(null, tree.Root);
-
         }
 
         private void CheckParent<T>(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)

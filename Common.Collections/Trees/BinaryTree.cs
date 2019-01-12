@@ -373,12 +373,52 @@ namespace Common.Collections.Trees
             return list;
         }
 
-        private void Inorder(List<T> list, BinaryTreeNode<T> node)
+        /// <summary>
+        /// Copy the tree into a list in order.
+        /// </summary>
+        /// <returns>ordered list</returns>
+        public void Inorder(List<T> list, BinaryTreeNode<T> node)
         {
             if (node == null) return;
             Inorder(list, node.Left);
             list.Add(node.Item);
             Inorder(list, node.Right);
+        }
+
+        /// <summary>
+        /// Copy the tree into a list in depth first order.
+        /// </summary>
+        /// <returns>ordered list</returns>
+        public void DepthFirst(List<T> list, BinaryTreeNode<T> node)
+        {
+            if (node == null) return;
+            list.Add(node.Item);
+            DepthFirst(list, node.Left);
+            DepthFirst(list, node.Right);
+        }
+
+        /// <summary>
+        /// Copy the tree into a list in breadth first order.
+        /// </summary>
+        /// <returns>ordered list</returns>
+        public void BreadthFirst(List<T> list, BinaryTreeNode<T> node)
+        {
+            if (node == null) return;
+
+            var queue = new Queue<BinaryTreeNode<T>>();
+            queue.Enqueue(node);
+
+            while (queue.Count > 0)
+            {
+                var n = queue.Dequeue();
+                list.Add(n.Item);
+
+                if (n.Left != null)
+                    queue.Enqueue(n.Left);
+
+                if (n.Right != null)
+                    queue.Enqueue(n.Right);
+            }
         }
 
         private BinaryTreeNode<T> FindMinimumNode(BinaryTreeNode<T> node)

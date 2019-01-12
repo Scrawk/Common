@@ -277,6 +277,30 @@ namespace Common.Collections.Test.Trees
             Assert.IsFalse(tree.FindPredecessor("Adam", ref predeccesor));
         }
 
+        [TestMethod]
+        public void DepthFirst()
+        {
+            BinaryTree<string> tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
+
+            var list = new List<string>();
+            tree.DepthFirst(list, tree.Root);
+
+            CollectionAssert.AreEqual(new string[] { "George", "Adam", "Daniel", "Michael", "Jones", "Tom", "Peter" }, list);
+        }
+
+        [TestMethod]
+        public void BreadthFirst()
+        {
+            BinaryTree<string> tree = new BinaryTree<string>();
+            tree.Add(GetTestList());
+
+            var list = new List<string>();
+            tree.BreadthFirst(list, tree.Root);
+
+            CollectionAssert.AreEqual(new string[] { "George", "Adam", "Michael", "Daniel", "Jones", "Tom", "Peter" }, list);
+        }
+
         private string[] GetTestList()
         {
             string[] list = new string[]
