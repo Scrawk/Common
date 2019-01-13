@@ -129,6 +129,43 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Does the two segments intersect.
+        /// </summary>
+        /// <param name="seg">other segment</param>
+        /// <param name="s">Intersection point = A + s * (B - A)</param>
+        /// <param name="t">Intersection point = seg.A + t * (seg.B - seg.A)</param>
+        /// <returns>If they intersect</returns>
+        public bool Intersects(Segment2f seg, out float s, out float t)
+        {
+
+            float area1 = SignedTriArea(A, B, seg.B);
+            float area2 = SignedTriArea(A, B, seg.A);
+            s = 0.0f;
+            t = 0.0f;
+
+            if (area1 * area2 < 0.0)
+            {
+                float area3 = SignedTriArea(seg.A, seg.B, A);
+                float area4 = area3 + area2 - area1;
+
+                if (area3 * area4 < 0.0)
+                {
+                    s = area3 / (area3 - area4);
+
+                    area1 = SignedTriArea(seg.A, seg.B, B);
+                    area2 = SignedTriArea(seg.A, seg.B, A);
+                    area3 = SignedTriArea(A, B, seg.A);
+                    area4 = area3 + area2 - area1;
+
+                    t = area3 / (area3 - area4);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// The closest point on segment to point.
         /// </summary>
         /// <param name="p">point</param>
