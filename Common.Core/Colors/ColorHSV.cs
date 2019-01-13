@@ -211,11 +211,19 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
-        /// Vector as a string.
+        /// color as a string.
         /// </summary>
 		public override string ToString()
         {
-            return h + "," + s + "," + v;
+            return string.Format("0},{1},{2}", h, s, v);
+        }
+
+        /// <summary>
+        /// color as a string.
+        /// </summary>
+        public string ToString(string f)
+        {
+            return string.Format("0},{1},{2}", h.ToString(f), s.ToString(f), v.ToString(f));
         }
 
         /// <summary>

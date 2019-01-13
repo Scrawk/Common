@@ -281,7 +281,15 @@ namespace Common.Core.Colors
         /// </summary>
 		public override string ToString()
         {
-            return r + "," + g + "," + b + "," + a;
+            return string.Format("0},{1},{2},{3}", r,g,b,a);
+        }
+
+        /// <summary>
+        /// color as a string.
+        /// </summary>
+        public string ToString(string f)
+        {
+            return string.Format("0},{1},{2},{3}", r.ToString(f), g.ToString(f), b.ToString(f), a.ToString(f));
         }
 
         /// <summary>

@@ -251,9 +251,39 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
-		{
-			return "(" + x + "," + y + "," + z + "," + w + ")";
-		}
+        {
+            return string.Format("{0},{1},{2},{3}", x, y, z, w);
+        }
+
+        /// <summary>
+        /// Quaternion as a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public string ToString(string f)
+        {
+            return string.Format("{0},{1},{2},{3}", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
+        }
+
+        /// <summary>
+        /// Quaternion from a string.
+        /// </summary>
+        public static Quaternion3f FromString(string s)
+        {
+            Quaternion3f q = new Quaternion3f();
+            try
+            {
+                string[] separators = new string[] { "," };
+                string[] result = s.Split(separators, StringSplitOptions.None);
+
+                q.x = float.Parse(result[0]);
+                q.y = float.Parse(result[1]);
+                q.z = float.Parse(result[2]);
+                q.w = float.Parse(result[3]);
+            }
+            catch { }
+
+            return q;
+        }
 
         /// <summary>
         /// Convert to a single precision 3 dimension matrix.

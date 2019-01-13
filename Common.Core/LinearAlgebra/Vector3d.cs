@@ -402,9 +402,18 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
-	   	{
-			return x + "," + y + "," + z;
-	   	}
+        {
+            return string.Format("{0},{1},{2}", x, y, z);
+        }
+
+        /// <summary>
+        /// Vector as a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public string ToString(string f)
+        {
+            return string.Format("{0},{1},{2}", x.ToString(f), y.ToString(f), z.ToString(f));
+        }
 
         /// <summary>
         /// Vector from a string.

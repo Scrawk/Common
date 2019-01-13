@@ -252,7 +252,37 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
-            return "(" + x + "," + y + "," + z + "," + w + ")";
+            return string.Format("{0},{1},{2},{3}", x, y, z, w);
+        }
+
+        /// <summary>
+        /// Quaternion as a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public string ToString(string f)
+        {
+            return string.Format("{0},{1},{2},{3}", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
+        }
+
+        /// <summary>
+        /// Quaternion from a string.
+        /// </summary>
+        public static Quaternion3d FromString(string s)
+        {
+            Quaternion3d q = new Quaternion3d();
+            try
+            {
+                string[] separators = new string[] { "," };
+                string[] result = s.Split(separators, StringSplitOptions.None);
+
+                q.x = double.Parse(result[0]);
+                q.y = double.Parse(result[1]);
+                q.z = double.Parse(result[2]);
+                q.w = double.Parse(result[3]);
+            }
+            catch { }
+
+            return q;
         }
 
         /// <summary>

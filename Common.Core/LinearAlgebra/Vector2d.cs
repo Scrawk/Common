@@ -388,9 +388,18 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
-	   	{
-			return x + "," + y;
-	   	}
+        {
+            return string.Format("{0},{1}", x, y);
+        }
+
+        /// <summary>
+        /// Vector as a string.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public string ToString(string f)
+        {
+            return string.Format("{0},{1}", x.ToString(f), y.ToString(f));
+        }
 
         /// <summary>
         /// Vector from a string.
