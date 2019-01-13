@@ -60,6 +60,8 @@
     <Compile Include="Shapes\Capsule2f.cs" />
     <Compile Include="Shapes\Circle2d.cs" />
     <Compile Include="Shapes\Circle2f.cs" />
+    <Compile Include="Shapes\HalfPlane2d.cs" />
+    <Compile Include="Shapes\HalfPlane2f.cs" />
     <Compile Include="Shapes\Interval1d.cs" />
     <Compile Include="Shapes\Interval1f.cs" />
     <Compile Include="Shapes\Interval1i.cs" />

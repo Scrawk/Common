@@ -7,33 +7,127 @@ using Common.Core.Mathematics;
 
 namespace Common.Geometry.Shapes
 {
+
+    /// <summary>
+    ///  Represents a line by means of three coefficients
+    ///  a, b and c, where ax + by + c = 0 holds.
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Line2f : IEquatable<Line2f>
     {
-        public Vector2f Origin;
 
-        public Vector2f Direction;
+        public float A, B, C;
 
-        public Line2f(Vector2f origin, Vector2f direction)
+        public Line2f(float a, float b, float c)
         {
-            Origin = origin;
-            Direction = direction;
+            A = a;
+            B = b;
+            C = c;
+        }
+
+        public Line2f(Vector2f p1, Vector2f p2)
+        {
+            A = p1.y - p2.y;
+            B = p2.x - p1.x;
+            C = p1.x * p2.y - p2.x * p1.y;
+        }
+
+        /// <summary>
+        /// Determines whether the line is ascending
+        /// (that is, makes an angle with the positive
+        /// direction of the X axis that lies in (0, pi/2).
+        /// </summary>
+        public bool IsAscending
+        {
+            get
+            {
+                return (B == 0 || (-A / B) >= 0);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the line is vertical
+        /// (that is, makes an angle with the positive
+        /// direction of the X axis that is equal to pi/2.
+        /// </summary>
+        public bool IsVertical
+        {
+            get
+            {
+                return B == 0 && A != 0;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the line is descending
+        /// (that is, makes an angle with the positive
+        /// direction of the X axis that lies in (pi/2, pi).
+        /// </summary>
+        public bool IsDescending
+        {
+            get
+            {
+                return (B == 0 || (-A / B) < 0);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the line is horizontal
+        /// (that is, makes an angle with the positive
+        /// direction of the X axis that is equal to pi.
+        /// </summary>
+        public bool IsHorizontal
+        {
+            get
+            {
+                return (A == 0 && B != 0);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the line is undefined
+        /// (e.g.two equal points were passed to the constructor).
+        /// </summary>
+        public bool IsUndefined
+        {
+            get
+            {
+                return (A == 0 && B == 0 && C == 0);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the angle that the line makes
+        /// with the positive direction of the X axis.
+        /// </summary>
+        /// <returns></returns>
+        public float Angle
+        {
+            get
+            {
+                if (IsVertical) return (float)(Math.PI / 2.0);
+
+                double atan = Math.Atan(-A / B);
+                if (atan < 0) atan += Math.PI;
+
+                return (float)atan;
+            }
         }
 
         public static explicit operator Line2f(Line2d line)
         {
-            return new Line2f((Vector2f)line.Origin, (Vector2f)line.Direction);
+            return new Line2f((float)line.A, (float)line.B, (float)line.C);
         }
 
         public static bool operator ==(Line2f i1, Line2f i2)
         {
-            return i1.Origin == i2.Origin && i1.Direction == i2.Direction;
+            return i1.A == i2.A && i1.B == i2.B && i1.C == i2.C;
         }
 
         public static bool operator !=(Line2f i1, Line2f i2)
         {
-            return i1.Origin != i2.Origin || i1.Direction != i2.Direction;
+            return i1.A != i2.A || i1.B != i2.B || i1.C != i2.C;
         }
 
         public override bool Equals(object obj)
@@ -53,93 +147,124 @@ namespace Common.Geometry.Shapes
             unchecked
             {
                 int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ Origin.GetHashCode();
-                hash = (hash * 16777619) ^ Direction.GetHashCode();
+                hash = (hash * 16777619) ^ A.GetHashCode();
+                hash = (hash * 16777619) ^ B.GetHashCode();
+                hash = (hash * 16777619) ^ C.GetHashCode();
                 return hash;
             }
         }
 
         public override string ToString()
         {
-            return string.Format("[Line2f: Origin={0}, Direction={1}]", Origin, Direction);
+            return string.Format("[Line2f: A={0}, B={1}, C={2}]", A, B, C);
         }
 
         /// <summary>
-        /// parameter is distance along Line
+        /// Calculates the X coordinate of a point on the line by its Y coordinate.
         /// </summary>
-        public Vector2f PointAt(float d)
+        public float XforY(float y)
         {
-            return Origin + d * Direction;
-        }
-
-        public float Project(Vector2f p)
-        {
-            return Vector2f.Dot(p - Origin, Direction);
-        }
-
-        public float Distance(Vector2f p)
-        {
-            return FMath.SafeSqrt(SqrDistance(p));
-        }
-
-        public float SqrDistance(Vector2f p)
-        {
-            float t = Project(p);
-            Vector2f proj = Origin + t * Direction;
-            return Vector2f.SqrDistance(proj, p);
-        }
-
-        public Vector2f Closest(Vector2f p)
-        {
-            float t = Project(p);
-            return Origin + t * Direction;
+            return (-C - B * y) / A;
         }
 
         /// <summary>
-        /// Returns:
-        ///   +1, on right of line
-        ///   -1, on left of line
-        ///    0, on the line
+        /// Calculates the Y coordinate of a point on the line by its X coordinate.
         /// </summary>
-        public int WhichSide(Vector2f test, float tol = 0)
+        public float YforX(float x)
         {
-            float x0 = test.x - Origin.x;
-            float y0 = test.y - Origin.y;
-            float x1 = Direction.x;
-            float y1 = Direction.y;
-            float det = x0 * y1 - x1 * y0;
-            return (det > tol ? +1 : (det < -tol ? -1 : 0));
+            return (-C - A * x) / B;
         }
 
         /// <summary>
-        /// Calculate intersection point between this line and another one.
-        /// Returns false if lines are parallel.
+        /// Determines whether the point lies on the line.
         /// </summary>
-        public bool Intersects(Line2f other, out Vector2f point)
+        /// <param name="p"></param>
+        /// <returns>if the point lies on the line</returns>
+        public bool PointOnLine(Vector2f p)
         {
-            Vector2f diff = other.Origin - Origin;
-            float D0DotPerpD1 = Vector2f.Dot(Direction, other.Direction.PerpendicularCW);
+            return A * p.x + B * p.y + C == 0;
+        }
 
-            if (Math.Abs(D0DotPerpD1) > FMath.EPS)
+        /// <summary>
+        /// Calculates the perpendicular line that
+        /// passes through the given point.
+        /// </summary>
+        public Line2f PerpendicularLine(Vector2f p)
+        {
+            return new Line2f(B, -A, -B * p.x + A * p.y);
+        }
+
+        /// <summary>
+        /// Determines whether the point lies
+        /// on the left side of the line.
+        /// </summary>
+        public bool IsLeftPoint(Vector2f p)
+        {
+            return p.x < XforY(p.y);
+        }
+
+        /// <summary>
+        /// Determines whether the point lies
+        /// on the right side of the line.
+        /// </summary>
+        public bool IsRightPoint(Vector2f p)
+        {
+            return p.x > XforY(p.y);
+        }
+
+        /// <summary>
+        /// Calculates the intersection of two lines.
+        /// </summary>
+        /// <param name="line">the other line</param>
+        /// <param name="p">intersection point</param>
+        /// <returns>if lines intersect</returns>
+        public bool Intersects(Line2f line, out Vector2f p)
+        {
+            
+            if (B != 0)
             {
-                float invD0DotPerpD1 = 1.0f / D0DotPerpD1;
-                float diffDotPerpD1 = Vector2f.Dot(diff, other.Direction.PerpendicularCW);
-                float s = diffDotPerpD1 * invD0DotPerpD1;
-                point = Origin + s * Direction;
-                return true;
+                float f = line.A - line.B * A / B;
+                if (f == 0)
+                {
+                    p = Vector2f.Zero;
+                    return false;
+                }
+                else
+                {
+                    float x = (-line.C + line.B * C / B) / f;
+                    float y = (-C - A * x) / B;
+
+                    p = new Vector2f(x, y);
+                    return true;
+                }
             }
             else
             {
-                // Lines are parallel.
-                point = Vector2f.Zero;
-                return false;
+                if (A == 0)
+                {
+                    p = Vector2f.Zero;
+                    return false;
+                }
+                else
+                {
+                    float f = line.B - line.A * B / A;
+                    if (f == 0)
+                    {
+                        p = Vector2f.Zero;
+                        return false;
+                    }
+                    else
+                    {
+                        float y = (-line.C + line.A * C / A) / f;
+                        float x = (-C - B * y) / A;
+
+                        p = new Vector2f(x, y);
+                        return true;
+                    }
+                }
             }
         }
 
-        public static Line2f FromPoints(Vector2f p0, Vector2f p1)
-        {
-            return new Line2f(p0, (p1 - p0).Normalized);
-        }
 
     }
 
