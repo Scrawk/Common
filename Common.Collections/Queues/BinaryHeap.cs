@@ -11,13 +11,13 @@ namespace Common.Collections.Queues
 
         private const int DEFAULT_SIZE = 4;
 
-        private T[] _data = new T[DEFAULT_SIZE];
+        private T[] m_data = new T[DEFAULT_SIZE];
 
-        private int _count = 0;
+        private int m_count = 0;
 
-        private int _capacity = DEFAULT_SIZE;
+        private int m_capacity = DEFAULT_SIZE;
 
-        private bool _sorted;
+        private bool m_sorted;
 
         // Properties
         /// <summary>
@@ -25,7 +25,7 @@ namespace Common.Collections.Queues
         /// </summary>
         public int Count
         {
-            get { return _count; }
+            get { return m_count; }
         }
 
         /// <summary>
@@ -41,16 +41,16 @@ namespace Common.Collections.Queues
         /// </summary>
         public int Capacity
         {
-            get { return _capacity; }
+            get { return m_capacity; }
             set
             {
-                int previousCapacity = _capacity;
-                _capacity = Math.Max(value, _count);
-                if (_capacity != previousCapacity)
+                int previousCapacity = m_capacity;
+                m_capacity = Math.Max(value, m_count);
+                if (m_capacity != previousCapacity)
                 {
-                    T[] temp = new T[_capacity];
-                    Array.Copy(_data, temp, _count);
-                    _data = temp;
+                    T[] temp = new T[m_capacity];
+                    Array.Copy(m_data, temp, m_count);
+                    m_data = temp;
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace Common.Collections.Queues
         /// <returns>The lowest value of type TValue.</returns>
         public T Peek()
         {
-            return _data[0];
+            return m_data[0];
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace Common.Collections.Queues
         /// </summary>
         public void Clear()
         {
-            _count = 0;
-            _data = new T[_capacity];
+            m_count = 0;
+            m_data = new T[m_capacity];
         }
 
         /// <summary>
@@ -122,13 +122,13 @@ namespace Common.Collections.Queues
         /// <param name="item">The item to add to the heap.</param>
         public void Add(T item)
         {
-            if (_count == _capacity)
+            if (m_count == m_capacity)
             {
                 Capacity *= 2;
             }
-            _data[_count] = item;
+            m_data[m_count] = item;
             UpHeap();
-            _count++;
+            m_count++;
         }
 
         /// <summary>
@@ -137,13 +137,13 @@ namespace Common.Collections.Queues
         /// <returns>The next value in the heap.</returns>
         public T Remove()
         {
-            if (this._count == 0)
+            if (this.m_count == 0)
                 throw new InvalidOperationException("Cannot remove item, heap is empty.");
             
-            T v = _data[0];
-            _count--;
-            _data[0] = _data[_count];
-            _data[_count] = default(T); //Clears the Last Node
+            T v = m_data[0];
+            m_count--;
+            m_data[0] = m_data[m_count];
+            m_data[m_count] = default(T); //Clears the Last Node
             DownHeap();
             return v;
         }
@@ -156,12 +156,81 @@ namespace Common.Collections.Queues
         public bool Remove(T item)
         {
             EnsureSort();
-            int i = Array.BinarySearch<T>(_data, 0, _count, item);
+            int i = Array.BinarySearch<T>(m_data, 0, m_count, item);
             if (i < 0) return false;
-            Array.Copy(_data, i + 1, _data, i, _count - i);
-            _data[_count] = default(T);
-            _count--;
+            Array.Copy(m_data, i + 1, m_data, i, m_count - i - 1);
+            m_count--;
+            m_data[m_count] = default(T);
             return true;
+        }
+
+        /// <summary>
+        /// Gets an enumerator for the binary heap.
+        /// </summary>
+        /// <returns>An IEnumerator of type T.</returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            EnsureSort();
+            for (int i = 0; i < m_count; i++)
+            {
+                yield return m_data[i];
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Checks to see if the binary heap contains the specified item.
+        /// </summary>
+        /// <param name="item">The item to search the binary heap for.</param>
+        /// <returns>A boolean, true if binary heap contains item.</returns>
+        public bool Contains(T item)
+        {
+            EnsureSort();
+            return Array.BinarySearch<T>(m_data, 0, m_count, item) >= 0;
+        }
+
+        /// <summary>
+        /// Find a item by its key, which is just another object with same value.
+        /// </summary>
+        /// <param name="item">The item to search the binary heap for.</param>
+        /// <returns>A boolean, true if binary heap contains item.</returns>
+        public bool Find(T key, ref T item)
+        {
+            EnsureSort();
+            int i = Array.BinarySearch<T>(m_data, 0, m_count, key);
+            if (i < 0) return false;
+
+            item = m_data[i];
+            return true;
+        }
+
+        /// <summary>
+        /// Copies the binary heap to an array at the specified index.
+        /// </summary>
+        /// <param name="array">One dimensional array that is the destination of the copied elements.</param>
+        /// <param name="arrayIndex">The zero-based index at which copying begins.</param>
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            EnsureSort();
+            Array.Copy(m_data, array, m_count);
+        }
+
+        /// <summary>
+        /// Copy the heap to a list.
+        /// </summary>
+        /// <returns></returns>
+        public List<T> ToList()
+        {
+            EnsureSort();
+            var list = new List<T>(m_count);
+            for (int i = 0; i < m_count; i++)
+                list.Add(m_data[i]);
+
+            return list;
         }
 
         /// <summary>
@@ -169,17 +238,17 @@ namespace Common.Collections.Queues
         /// </summary>
         private void UpHeap()
         {
-            _sorted = false;
-            int p = _count;
-            T item = _data[p];
+            m_sorted = false;
+            int p = m_count;
+            T item = m_data[p];
             int par = Parent(p);
-            while (par > -1 && item.CompareTo(_data[par]) < 0)
+            while (par > -1 && item.CompareTo(m_data[par]) < 0)
             {
-                _data[p] = _data[par]; //Swap nodes
+                m_data[p] = m_data[par]; //Swap nodes
                 p = par;
                 par = Parent(p);
             }
-            _data[p] = item;
+            m_data[p] = item;
         }
 
         /// <summary>
@@ -187,26 +256,26 @@ namespace Common.Collections.Queues
         /// </summary>
         private void DownHeap()
         {
-            _sorted = false;
+            m_sorted = false;
             int n;
             int p = 0;
-            T item = _data[p];
+            T item = m_data[p];
             while (true)
             {
                 int ch1 = Child1(p);
-                if (ch1 >= _count) break;
+                if (ch1 >= m_count) break;
                 int ch2 = Child2(p);
-                if (ch2 >= _count)
+                if (ch2 >= m_count)
                 {
                     n = ch1;
                 }
                 else
                 {
-                    n = _data[ch1].CompareTo(_data[ch2]) < 0 ? ch1 : ch2;
+                    n = m_data[ch1].CompareTo(m_data[ch2]) < 0 ? ch1 : ch2;
                 }
-                if (item.CompareTo(_data[n]) > 0)
+                if (item.CompareTo(m_data[n]) > 0)
                 {
-                    _data[p] = _data[n]; //Swap nodes
+                    m_data[p] = m_data[n]; //Swap nodes
                     p = n;
                 }
                 else
@@ -214,14 +283,14 @@ namespace Common.Collections.Queues
                     break;
                 }
             }
-            _data[p] = item;
+            m_data[p] = item;
         }
 
         private void EnsureSort()
         {
-            if (_sorted) return;
-            Array.Sort(_data, 0, _count);
-            _sorted = true;
+            if (m_sorted) return;
+            Array.Sort(m_data, 0, m_count);
+            m_sorted = true;
         }
 
         /// <summary>
@@ -248,58 +317,5 @@ namespace Common.Collections.Queues
             return (index << 1) + 2;
         }
 
-        /// <summary>
-        /// Gets an enumerator for the binary heap.
-        /// </summary>
-        /// <returns>An IEnumerator of type T.</returns>
-        public IEnumerator<T> GetEnumerator()
-        {
-            EnsureSort();
-            for (int i = 0; i < _count; i++)
-            {
-                yield return _data[i];
-            }
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        /// <summary>
-        /// Checks to see if the binary heap contains the specified item.
-        /// </summary>
-        /// <param name="item">The item to search the binary heap for.</param>
-        /// <returns>A boolean, true if binary heap contains item.</returns>
-        public bool Contains(T item)
-        {
-            EnsureSort();
-            return Array.BinarySearch<T>(_data, 0, _count, item) >= 0;
-        }
-
-        /// <summary>
-        /// Copies the binary heap to an array at the specified index.
-        /// </summary>
-        /// <param name="array">One dimensional array that is the destination of the copied elements.</param>
-        /// <param name="arrayIndex">The zero-based index at which copying begins.</param>
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            EnsureSort();
-            Array.Copy(_data, array, _count);
-        }
-
-        /// <summary>
-        /// Copy the heap to a list.
-        /// </summary>
-        /// <returns></returns>
-        public List<T> ToList()
-        {
-            EnsureSort();
-            var list = new List<T>(_count);
-            for (int i = 0; i < _count; i++)
-                list.Add(_data[i]);
-            
-            return list;
-        }
     }
 }

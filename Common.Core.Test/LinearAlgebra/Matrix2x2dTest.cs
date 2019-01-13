@@ -23,7 +23,7 @@ namespace Common.Core.Test.LinearAlgebra
         }
 
         [TestMethod]
-        public void MCreatedFromSingleValue()
+        public void CreatedFromSingleValue()
         {
             double v = 1;
             Matrix2x2d m = new Matrix2x2d(v);
