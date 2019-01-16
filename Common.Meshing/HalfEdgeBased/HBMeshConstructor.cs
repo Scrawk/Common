@@ -55,11 +55,11 @@ namespace Common.Meshing.HalfEdgeBased
             Mesh.Vertices.Add(v);
         }
 
-        public override void AddFace(TriangleIndex triangle)
+        public override void AddFace(int i0, int i1, int i2)
         {
-            var v0 = Mesh.Vertices[triangle.i0];
-            var v1 = Mesh.Vertices[triangle.i1];
-            var v2 = Mesh.Vertices[triangle.i2];
+            var v0 = Mesh.Vertices[i0];
+            var v1 = Mesh.Vertices[i1];
+            var v2 = Mesh.Vertices[i2];
 
             var e0 = new EDGE();
             var e1 = new EDGE();
@@ -82,10 +82,10 @@ namespace Common.Meshing.HalfEdgeBased
             Mesh.Edges.Add(e2);
         }
 
-        public override void AddEdge(EdgeIndex edge)
+        public override void AddEdge(int i0, int i1)
         {
-            var v0 = Mesh.Vertices[edge.i0];
-            var v1 = Mesh.Vertices[edge.i1];
+            var v0 = Mesh.Vertices[i0];
+            var v1 = Mesh.Vertices[i1];
 
             var e0 = new EDGE();
             var e1 = new EDGE();
@@ -103,12 +103,12 @@ namespace Common.Meshing.HalfEdgeBased
             Mesh.Edges.Add(e1);
         }
 
-        public override void AddFaceConnection(int faceIndex, TriangleIndex neighbors)
+        public override void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
             var face = Mesh.Faces[faceIndex];
-            var f0 = (neighbors.i0 != -1) ? Mesh.Faces[neighbors.i0] : null;
-            var f1 = (neighbors.i1 != -1) ? Mesh.Faces[neighbors.i1] : null;
-            var f2 = (neighbors.i2 != -1) ? Mesh.Faces[neighbors.i2] : null;
+            var f0 = (i0 != -1) ? Mesh.Faces[i0] : null;
+            var f1 = (i1 != -1) ? Mesh.Faces[i1] : null;
+            var f2 = (i2 != -1) ? Mesh.Faces[i2] : null;
 
             foreach (var edge in face.Edge.EnumerateEdges())
                 if (SetOppositeEdge(edge, f0)) break;
@@ -155,11 +155,11 @@ namespace Common.Meshing.HalfEdgeBased
             return false;
         }
 
-        public override void AddEdgeConnection(EdgeConnection con)
+        public override void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex)
         {
-            var edge = Mesh.Edges[con.Edge];
-            var previous = (con.Previous != -1) ? Mesh.Edges[con.Previous] : null;
-            var next = (con.Next != -1) ? Mesh.Edges[con.Next] : null;
+            var edge = Mesh.Edges[edgeIndex];
+            var previous = (previousIndex != -1) ? Mesh.Edges[previousIndex] : null;
+            var next = (nextIndex != -1) ? Mesh.Edges[nextIndex] : null;
 
             edge.Previous = previous;
             edge.Next = next;

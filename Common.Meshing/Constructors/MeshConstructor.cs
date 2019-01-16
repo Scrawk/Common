@@ -39,22 +39,42 @@ namespace Common.Meshing.Constructors
 
         }
 
-        public virtual void AddFace(TriangleIndex triangle)
+        public void AddFace(TriangleIndex triangle)
+        {
+            AddFace(triangle.i0, triangle.i1, triangle.i2);
+        }
+
+        public virtual void AddFace(int i0, int i1, int i2)
         {
 
         }
 
-        public virtual void AddEdge(EdgeIndex edge)
+        public void AddEdge(EdgeIndex edge)
+        {
+            AddEdge(edge.i0, edge.i1);
+        }
+
+        public virtual void AddEdge(int i0, int i1)
         {
 
         }
 
-        public virtual void AddFaceConnection(int faceIndex, TriangleIndex neighbors)
+        public void AddFaceConnection(int faceIndex, TriangleIndex neighbors)
         {
-
+            AddFaceConnection(faceIndex, neighbors.i0, neighbors.i1, neighbors.i2);
         }
 
-        public virtual void AddEdgeConnection(EdgeConnection connection)
+        public virtual void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
+        {
+            
+        }
+
+        public void AddEdgeConnection(EdgeConnection connection)
+        {
+            AddEdgeConnection(connection.Edge, connection.Previous, connection.Next, connection.Opposite);
+        }
+
+        public virtual void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex)
         {
 
         }

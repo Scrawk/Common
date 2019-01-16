@@ -29,11 +29,19 @@ namespace Common.Meshing.Constructors
 
         void AddFace(TriangleIndex triangle);
 
+        void AddFace(int i0, int i1, int i2);
+
         void AddEdge(EdgeIndex edge);
+
+        void AddEdge(int i0, int i1);
 
         void AddFaceConnection(int faceIndex, TriangleIndex neighbors);
 
+        void AddFaceConnection(int faceIndex, int i0, int i1, int i2);
+
         void AddEdgeConnection(EdgeConnection connection);
+
+        void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex);
 
     }
 }

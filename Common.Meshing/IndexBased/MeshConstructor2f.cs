@@ -18,6 +18,8 @@ namespace Common.Meshing.IndexBased
 
         public override bool SupportsFaceConnections { get { return false; } }
 
+        public bool SplitFaces { get; set; }
+
         private Mesh2f m_mesh;
 
         private int m_vertexIndex;
@@ -38,6 +40,28 @@ namespace Common.Meshing.IndexBased
 
         public override Mesh2f PopMesh()
         {
+            
+            if (SplitFaces)
+            {
+                var mesh = new Mesh2f(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
+
+                var indices = m_mesh.Indices;
+                var positions = m_mesh.Positions;
+
+                for (int i = 0; i < m_mesh.IndicesCount / 3; i++)
+                {
+                    mesh.Positions[i * 3 + 0] = positions[indices[i * 3 + 0]];
+                    mesh.Positions[i * 3 + 1] = positions[indices[i * 3 + 1]];
+                    mesh.Positions[i * 3 + 2] = positions[indices[i * 3 + 2]];
+
+                    mesh.Indices[i * 3 + 0] = i * 3 + 0;
+                    mesh.Indices[i * 3 + 1] = i * 3 + 1;
+                    mesh.Indices[i * 3 + 2] = i * 3 + 2;
+                }
+
+                m_mesh = mesh;
+            }
+
             Mesh2f tmp = m_mesh;
             Reset();
 
@@ -58,18 +82,18 @@ namespace Common.Meshing.IndexBased
             m_vertexIndex++;
         }
 
-        public override void AddFace(TriangleIndex triangle)
+        public override void AddFace(int i0, int i1, int i2)
         {
-            m_mesh.Indices[m_faceIndex * 3 + 0] = triangle.i0;
-            m_mesh.Indices[m_faceIndex * 3 + 1] = triangle.i1;
-            m_mesh.Indices[m_faceIndex * 3 + 2] = triangle.i2;
+            m_mesh.Indices[m_faceIndex * 3 + 0] = i0;
+            m_mesh.Indices[m_faceIndex * 3 + 1] = i1;
+            m_mesh.Indices[m_faceIndex * 3 + 2] = i2;
             m_faceIndex++;
         }
 
-        public override void AddEdge(EdgeIndex edge)
+        public override void AddEdge(int i0, int i1)
         {
-            m_mesh.Indices[m_edgeIndex * 2 + 0] = edge.i0;
-            m_mesh.Indices[m_edgeIndex * 2 + 1] = edge.i1;
+            m_mesh.Indices[m_edgeIndex * 2 + 0] = i0;
+            m_mesh.Indices[m_edgeIndex * 2 + 1] = i1;
             m_edgeIndex++;
         }
     }

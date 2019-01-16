@@ -54,11 +54,11 @@ namespace Common.Meshing.FaceBased
             Mesh.Vertices.Add(v);
         }
 
-        public override void AddFace(TriangleIndex triangle)
+        public override void AddFace(int i0, int i1, int i2)
         {
-            var v0 = Mesh.Vertices[triangle.i0];
-            var v1 = Mesh.Vertices[triangle.i1];
-            var v2 = Mesh.Vertices[triangle.i2];
+            var v0 = Mesh.Vertices[i0];
+            var v1 = Mesh.Vertices[i1];
+            var v2 = Mesh.Vertices[i2];
 
             FACE face = new FACE();
             face.SetSize(3);
@@ -74,12 +74,12 @@ namespace Common.Meshing.FaceBased
             Mesh.Faces.Add(face);
         }
 
-        public override void AddFaceConnection(int faceIndex, TriangleIndex triangle)
+        public override void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
             var face = Mesh.Faces[faceIndex];
-            var f0 = (triangle.i0 != -1) ? Mesh.Faces[triangle.i0] : null;
-            var f1 = (triangle.i1 != -1) ? Mesh.Faces[triangle.i1] : null;
-            var f2 = (triangle.i2 != -1) ? Mesh.Faces[triangle.i2] : null;
+            var f0 = (i0 != -1) ? Mesh.Faces[i0] : null;
+            var f1 = (i1 != -1) ? Mesh.Faces[i1] : null;
+            var f2 = (i2 != -1) ? Mesh.Faces[i2] : null;
 
             face.Neighbors[0] = f0;
             face.Neighbors[1] = f1;

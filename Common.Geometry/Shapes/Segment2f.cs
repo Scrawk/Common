@@ -102,7 +102,7 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Does the two segments intersect.
+        /// Do the two segments intersect.
         /// </summary>
         /// <param name="seg">other segment</param>
         /// <param name="t">Intersection point = A + t * (B - A)</param>
@@ -129,7 +129,7 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Does the two segments intersect.
+        /// Do the two segments intersect.
         /// </summary>
         /// <param name="seg">other segment</param>
         /// <param name="s">Intersection point = A + s * (B - A)</param>
