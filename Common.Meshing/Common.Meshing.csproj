@@ -41,12 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constructors\IMeshConstructor.cs" />
-    <Compile Include="Constructors\MeshConstructor.cs" />
-    <Compile Include="Descriptors\EdgeConnection.cs" />
-    <Compile Include="Descriptors\EdgeIndex.cs" />
-    <Compile Include="Descriptors\MeshDescriptor.cs" />
-    <Compile Include="Descriptors\TriangleIndex.cs" />
+    <Compile Include="Constructors\IEdgeMeshConstructor.cs" />
+    <Compile Include="Constructors\IGeneralMeshConstructor.cs" />
+    <Compile Include="Constructors\ITriangleMeshConstructor.cs" />
     <Compile Include="FaceBased\FBFace.cs" />
     <Compile Include="FaceBased\FBMesh.cs" />
     <Compile Include="FaceBased\FBMeshConstructor.cs" />
@@ -57,7 +54,6 @@
     <Compile Include="HalfEdgeBased\HBFace.cs" />
     <Compile Include="HalfEdgeBased\HBMesh.cs" />
     <Compile Include="HalfEdgeBased\HBMeshConstructor.cs" />
-    <Compile Include="HalfEdgeBased\HBMeshConversion.cs" />
     <Compile Include="HalfEdgeBased\HBVertex.cs" />
     <Compile Include="HalfEdgeBased\HBVertex2f.cs" />
     <Compile Include="HalfEdgeBased\HBVertex3f.cs" />

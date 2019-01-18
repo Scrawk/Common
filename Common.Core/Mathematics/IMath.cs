@@ -53,6 +53,13 @@ namespace Common.Core.Mathematics
 			return n - (n >> 1);
 		}
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Wrap(int x, int m)
+        {
+            int r = x % m;
+            return r < 0 ? r + m : r;
+        }
+
     }
 }
 

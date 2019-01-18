@@ -2,60 +2,64 @@
 using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
+using Common.Core.Mathematics;
 using Common.Meshing.Constructors;
-using Common.Meshing.Descriptors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
 
-    public class HBMeshConstructor<VERTEX, EDGE, FACE> : MeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
+    public class HBMeshConstructor<VERTEX, EDGE, FACE> : 
+            IEdgeMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
+            ITriangleMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
+            IGeneralMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
     {
 
-        public override bool SupportsEdges { get { return true; } }
+        public bool SupportsEdgeConnections { get { return true; } }
 
-        public override bool SupportsEdgeConnections { get { return true; } }
-
-        public override bool SupportsFaces { get { return true; } }
-
-        public override bool SupportsFaceConnections { get { return true; } }
+        public bool SupportsFaceConnections { get { return true; } }
 
         private HBMesh<VERTEX, EDGE, FACE> Mesh { get; set; }
 
-        public override void PushTriangleMesh(int numVertices, int numFaces)
+        public void PushTriangleMesh(int numVertices, int numFaces)
         {
             Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numFaces * 3 * 2, numFaces);
         }
 
-        public override void PushEdgeMesh(int numVertices, int numEdges)
+        public void PushEdgeMesh(int numVertices, int numEdges)
         {
             Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numEdges, 0);
         }
 
-        public override HBMesh<VERTEX, EDGE, FACE> PopMesh()
+        public void PushGeneralMesh(int numVertices, int numFaces)
+        {
+            Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, 0, numFaces);
+        }
+
+        public HBMesh<VERTEX, EDGE, FACE> PopMesh()
         {
             var tmp = Mesh;
             Mesh = null;
             return tmp;
         }
 
-        public override void AddVertex(Vector2f pos)
+        public void AddVertex(Vector2f pos)
         {
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
         }
 
-        public override void AddVertex(Vector3f pos)
+        public void AddVertex(Vector3f pos)
         {
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
         }
 
-        public override void AddFace(int i0, int i1, int i2)
+        public void AddFace(int i0, int i1, int i2)
         {
             var v0 = Mesh.Vertices[i0];
             var v1 = Mesh.Vertices[i1];
@@ -82,7 +86,37 @@ namespace Common.Meshing.HalfEdgeBased
             Mesh.Edges.Add(e2);
         }
 
-        public override void AddEdge(int i0, int i1)
+        public void AddFace(IList<int> vertList)
+        {
+            int count = vertList.Count;
+            var face = new FACE();
+            var edges = new List<EDGE>(vertList.Count);
+
+            for (int i = 0; i < count; i++)
+            {
+                var v = Mesh.Vertices[vertList[i]];
+                var e = new EDGE();
+                v.Edge = e;
+                edges.Add(e);
+            }
+
+            face.Edge = edges[0];
+            Mesh.Faces.Add(face);
+
+            foreach (var i in vertList)
+            {
+                var e = edges[i];
+                var v = Mesh.Vertices[vertList[i]];
+                var previous = edges[IMath.Wrap(i - 1, count)];
+                var next = edges[IMath.Wrap(i + 1, count)];
+
+                e.Set(v, face, previous, next, null);
+                Mesh.Edges.Add(e);
+            }
+
+        }
+
+        public void AddEdge(int i0, int i1)
         {
             var v0 = Mesh.Vertices[i0];
             var v1 = Mesh.Vertices[i1];
@@ -103,27 +137,44 @@ namespace Common.Meshing.HalfEdgeBased
             Mesh.Edges.Add(e1);
         }
 
-        public override void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
+        public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
             var face = Mesh.Faces[faceIndex];
-            var f0 = (i0 != -1) ? Mesh.Faces[i0] : null;
-            var f1 = (i1 != -1) ? Mesh.Faces[i1] : null;
-            var f2 = (i2 != -1) ? Mesh.Faces[i2] : null;
 
-            foreach (var edge in face.Edge.EnumerateEdges())
-                if (SetOppositeEdge(edge, f0)) break;
+            if (i0 != -1)
+            {
+                foreach (var edge in face.Edge.EnumerateEdges())
+                    if (SetOppositeEdge(edge, Mesh.Faces[i0])) break;
+            }
 
-            foreach (var edge in face.Edge.EnumerateEdges())
-                if (SetOppositeEdge(edge, f1)) break;
+            if (i1 != -1)
+            {
+                foreach (var edge in face.Edge.EnumerateEdges())
+                    if (SetOppositeEdge(edge, Mesh.Faces[i1])) break;
+            }
 
-            foreach (var edge in face.Edge.EnumerateEdges())
-                if (SetOppositeEdge(edge, f2)) break;
+            if (i2 != -1)
+            {
+                foreach (var edge in face.Edge.EnumerateEdges())
+                    if (SetOppositeEdge(edge, Mesh.Faces[i2])) break;
+            }
+        }
 
+        public void AddFaceConnection(int faceIndex, IList<int> neighbours)
+        {
+            var face = Mesh.Faces[faceIndex];
+
+            foreach(var n in neighbours)
+            {
+                if (n == -1) continue;
+
+                foreach (var edge in face.Edge.EnumerateEdges())
+                    if (SetOppositeEdge(edge, Mesh.Faces[n])) break;
+            }
         }
 
         private bool SetOppositeEdge(HBEdge edge, HBFace neighbor)
         {
-
             if (neighbor == null) return false;
 
             if (edge == null)
@@ -155,7 +206,7 @@ namespace Common.Meshing.HalfEdgeBased
             return false;
         }
 
-        public override void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex)
+        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex)
         {
             var edge = Mesh.Edges[edgeIndex];
             var previous = (previousIndex != -1) ? Mesh.Edges[previousIndex] : null;

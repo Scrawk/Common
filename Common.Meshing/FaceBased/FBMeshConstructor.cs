@@ -3,58 +3,55 @@ using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
 using Common.Meshing.Constructors;
-using Common.Meshing.Descriptors;
 
 namespace Common.Meshing.FaceBased
 {
 
-    public class FBMeshConstructor<VERTEX, FACE> : MeshConstructor<FBMesh<VERTEX, FACE>>
+    public class FBMeshConstructor<VERTEX, FACE> :
+           ITriangleMeshConstructor<FBMesh<VERTEX, FACE>>,
+           IGeneralMeshConstructor<FBMesh<VERTEX, FACE>>
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
 
-        public override bool SupportsEdges { get { return false; } }
+        public bool SupportsEdgeConnections { get { return false; } }
 
-        public override bool SupportsEdgeConnections { get { return false; } }
-
-        public override bool SupportsFaces { get { return true; } }
-
-        public override bool SupportsFaceConnections { get { return true; } }
+        public bool SupportsFaceConnections { get { return true; } }
 
         private FBMesh<VERTEX, FACE> Mesh { get; set; }
 
-        public override void PushTriangleMesh(int numVertices, int numFaces)
+        public void PushTriangleMesh(int numVertices, int numFaces)
         {
             Mesh = new FBMesh<VERTEX, FACE>(numVertices, numFaces);
         }
 
-        public override void PushEdgeMesh(int numVertices, int numEdges)
+        public void PushGeneralMesh(int numVertices, int numFaces)
         {
-            Mesh = new FBMesh<VERTEX, FACE>(numVertices, 0);
+            Mesh = new FBMesh<VERTEX, FACE>(numVertices, numFaces);
         }
 
-        public override FBMesh<VERTEX, FACE> PopMesh()
+        public FBMesh<VERTEX, FACE> PopMesh()
         {
             var tmp = Mesh;
             Mesh = null;
             return tmp;
         }
 
-        public override void AddVertex(Vector2f pos)
+        public void AddVertex(Vector2f pos)
         {
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
         }
 
-        public override void AddVertex(Vector3f pos)
+        public void AddVertex(Vector3f pos)
         {
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
         }
 
-        public override void AddFace(int i0, int i1, int i2)
+        public void AddFace(int i0, int i1, int i2)
         {
             var v0 = Mesh.Vertices[i0];
             var v1 = Mesh.Vertices[i1];
@@ -74,7 +71,23 @@ namespace Common.Meshing.FaceBased
             Mesh.Faces.Add(face);
         }
 
-        public override void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
+        public void AddFace(IList<int> vertList)
+        {
+            int count = vertList.Count;
+            FACE face = new FACE();
+            face.SetSize(count);
+
+            for(int i = 0; i < count; i++)
+            {
+                var v = Mesh.Vertices[vertList[i]];
+                v.Face = face;
+                face.Vertices[i] = v;
+            }
+
+            Mesh.Faces.Add(face);
+        }
+
+        public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
             var face = Mesh.Faces[faceIndex];
             var f0 = (i0 != -1) ? Mesh.Faces[i0] : null;
@@ -84,6 +97,20 @@ namespace Common.Meshing.FaceBased
             face.Neighbors[0] = f0;
             face.Neighbors[1] = f1;
             face.Neighbors[2] = f2;
+        }
+
+        public void AddFaceConnection(int faceIndex, IList<int> neighbours)
+        {
+            int count = neighbours.Count;
+            var face = Mesh.Faces[faceIndex];
+
+            for (int i = 0; i < count; i++)
+            {
+                int n = neighbours[i];
+                if (n == -1) continue;
+                face.Neighbors[i] = Mesh.Faces[n];
+            }
+
         }
 
     }

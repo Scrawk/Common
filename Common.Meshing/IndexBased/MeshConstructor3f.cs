@@ -3,20 +3,15 @@ using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
 using Common.Meshing.Constructors;
-using Common.Meshing.Descriptors;
 
 namespace Common.Meshing.IndexBased
 {
-    public class MeshConstructor3f : MeshConstructor<Mesh3f>
+    public class MeshConstructor3f : IEdgeMeshConstructor<Mesh3f>, ITriangleMeshConstructor<Mesh3f>
     {
 
-        public override bool SupportsEdges { get { return true; } }
+        public bool SupportsEdgeConnections { get { return false; } }
 
-        public override bool SupportsEdgeConnections { get { return false; } }
-
-        public override bool SupportsFaces { get { return true; } }
-
-        public override bool SupportsFaceConnections { get { return false; } }
+        public bool SupportsFaceConnections { get { return false; } }
 
         public bool SplitFaces { get; set; }
 
@@ -28,17 +23,17 @@ namespace Common.Meshing.IndexBased
 
         private int m_edgeIndex;
 
-        public override void PushTriangleMesh(int numVertices, int numFaces)
+        public void PushTriangleMesh(int numVertices, int numFaces)
         {
             m_mesh = new Mesh3f(numVertices, numFaces * 3);
         }
 
-        public override void PushEdgeMesh(int numVertices, int numEdges)
+        public void PushEdgeMesh(int numVertices, int numEdges)
         {
             m_mesh = new Mesh3f(numVertices, numEdges * 2);
         }
 
-        public override Mesh3f PopMesh()
+        public Mesh3f PopMesh()
         {
 
             if (SplitFaces)
@@ -76,14 +71,19 @@ namespace Common.Meshing.IndexBased
             m_edgeIndex = 0;
         }
 
+        public void AddVertex(Vector2f pos)
+        {
+            m_mesh.Positions[m_vertexIndex] = pos.xy0;
+            m_vertexIndex++;
+        }
 
-        public override void AddVertex(Vector3f pos)
+        public void AddVertex(Vector3f pos)
         {
             m_mesh.Positions[m_vertexIndex] = pos;
             m_vertexIndex++;
         }
 
-        public override void AddFace(int i0, int i1, int i2)
+        public void AddFace(int i0, int i1, int i2)
         {
             m_mesh.Indices[m_faceIndex * 3 + 0] = i0;
             m_mesh.Indices[m_faceIndex * 3 + 1] = i1;
@@ -91,11 +91,22 @@ namespace Common.Meshing.IndexBased
             m_faceIndex++;
         }
 
-        public override void AddEdge(int i0, int i1)
+        public void AddEdge(int i0, int i1)
         {
             m_mesh.Indices[m_edgeIndex * 2 + 0] = i0;
             m_mesh.Indices[m_edgeIndex * 2 + 1] = i1;
             m_edgeIndex++;
         }
+
+        public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex)
+        {
+            throw new NotSupportedException();
+        }
+
     }
 }
