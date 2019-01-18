@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.Mathematics;
+
 namespace Common.Collections.Textures
 {
 
@@ -43,29 +45,12 @@ namespace Common.Collections.Textures
 
         protected int Index(int i, int size)
         {
-            int size1 = size - 1;
-
             if (Wrap == TEXTURE_WRAP.WRAP)
-            {
-                i = i % size;
-                return (i < 0) ? i + size : i;
-            }
+                return IMath.Wrap(i, size);
             else if(Wrap == TEXTURE_WRAP.CLAMP)
-            {
-                if (i < 0) i = 0;
-                if (i >= size) i = size1;
-                return i;
-            }
+                return IMath.Clamp(i, 0, size-1);
             else //MIRROR
-            {
-                int j = Math.Abs(i);
-
-                i = j % (size1 * 2);
-                if (i >= size1) i = size1 - j % size1;
-
-                return i;
-            }
-
+                return IMath.Mirror(i, size);
         }
 
         protected BilinearIndex NewBilinearIndex(float i, int size)
@@ -78,35 +63,21 @@ namespace Common.Collections.Textures
             if (i < 0.0) i0--;
 
             int i1 = i0 + 1;
-            int size1 = size - 1;
 
             if (Wrap == TEXTURE_WRAP.WRAP)
             {
-                if (i0 >= size || i0 <= -size) i0 = i0 % size;
-                if (i0 < 0) i0 = size - -i0;
-
-                if (i1 >= size || i1 <= -size) i1 = i1 % size;
-                if (i1 < 0) i1 = size - -i1;
+                i0 = IMath.Wrap(i0, size);
+                i1 = IMath.Wrap(i1, size);
             }
             else if (Wrap == TEXTURE_WRAP.CLAMP)
             {
-                if (i0 < 0) i0 = 0;
-                else if (i0 >= size) i0 = size1;
-
-                if (i1 < 0) i1 = 0;
-                else if (i1 >= size) i1 = size1;
+                i0 = IMath.Clamp(i0, 0, size - 1);
+                i1 = IMath.Clamp(i1, 0, size - 1);
             }
             else //MIRROR
             {
-                int j0 = Math.Abs(i0);
-
-                i0 = j0 % (size1 * 2);
-                if (i0 >= size1) i0 = size1 - j0 % size1;
-
-                int j1 = Math.Abs(i1);
-
-                i1 = j1 % (size1 * 2);
-                if (i1 >= size1) i1 = size1 - j1 % size1;
+                i0 = IMath.Mirror(i0, size);
+                i1 = IMath.Mirror(i1, size);
             }
 
             BilinearIndex idx;
@@ -130,53 +101,24 @@ namespace Common.Collections.Textures
             int i0 = i1 - 1;
             int i2 = i1 + 1;
             int i3 = i1 + 2;
-            int size1 = size - 1;
 
             if (Wrap == TEXTURE_WRAP.WRAP)
             {
-                if (i0 >= size || i0 <= -size) i0 = i0 % size;
-                if (i0 < 0) i0 = size - -i0;
-
-                if (i1 >= size || i1 <= -size) i1 = i1 % size;
-                if (i1 < 0) i1 = size - -i1;
-
-                if (i2 >= size || i2 <= -size) i2 = i2 % size;
-                if (i2 < 0) i2 = size - -i2;
-
-                if (i3 >= size || i3 <= -size) i3 = i3 % size;
-                if (i3 < 0) i3 = size - -i3;
+                i0 = IMath.Wrap(i0, size);
+                i1 = IMath.Wrap(i1, size);
+                i2 = IMath.Wrap(i2, size);
             }
             else if (Wrap == TEXTURE_WRAP.CLAMP)
             {
-                if (i0 < 0) i0 = 0;
-                else if (i0 >= size) i0 = size1;
-
-                if (i1 < 0) i1 = 0;
-                else if (i1 >= size) i1 = size1;
-
-                if (i2 < 0) i2 = 0;
-                else if (i2 >= size) i2 = size1;
-
-                if (i3 < 0) i3 = 0;
-                else if (i3 >= size) i3 = size1;
+                i0 = IMath.Clamp(i0, 0, size - 1);
+                i1 = IMath.Clamp(i1, 0, size - 1);
+                i2 = IMath.Clamp(i2, 0, size - 1);
             }
             else //MIRROR
             {
-                int j0 = Math.Abs(i0);
-                i0 = j0 % (size1 * 2);
-                if (i0 >= size1) i0 = size1 - j0 % size1;
-
-                int j1 = Math.Abs(i1);
-                i1 = j1 % (size1 * 2);
-                if (i1 >= size1) i1 = size1 - j1 % size1;
-
-                int j2 = Math.Abs(i2);
-                i2 = j2 % (size1 * 2);
-                if (i2 >= size1) i2 = size1 - j2 % size1;
-
-                int j3 = Math.Abs(i3);
-                i3 = j3 % (size1 * 2);
-                if (i3 >= size1) i3 = size1 - j3 % size1;
+                i0 = IMath.Mirror(i0, size);
+                i1 = IMath.Mirror(i1, size);
+                i2 = IMath.Mirror(i2, size);
             }
 
             BicubicIndex idx;

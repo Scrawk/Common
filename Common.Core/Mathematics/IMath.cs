@@ -14,6 +14,25 @@ namespace Common.Core.Mathematics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Wrap(int x, int m)
+        {
+            int r = x % m;
+            return r < 0 ? r + m : r;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Mirror(int x, int m)
+        {
+            int m1 = m - 1;
+            int i = Math.Abs(x);
+
+            x = i % (m1 * 2);
+            if (x >= m1) x = m1 - i % m1;
+
+            return x;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPow2(int num)
         {
             int power = (int)(Math.Log(num) / Math.Log(2.0));
@@ -52,13 +71,6 @@ namespace Common.Core.Mathematics
 
 			return n - (n >> 1);
 		}
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Wrap(int x, int m)
-        {
-            int r = x % m;
-            return r < 0 ? r + m : r;
-        }
 
     }
 }
