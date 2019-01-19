@@ -5,17 +5,28 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-
+    /// <summary>
+    /// A half edge based mesh.
+    /// </summary>
     public class HBMesh<VERTEX, EDGE, FACE>
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
     {
 
+        /// <summary>
+        /// All the vertices in the mesh.
+        /// </summary>
         public List<VERTEX> Vertices { get; private set; }
 
+        /// <summary>
+        /// All the edges in the mesh.
+        /// </summary>
         public List<EDGE> Edges { get; private set; }
 
+        /// <summary>
+        /// All the faces in the mesh.
+        /// </summary>
         public List<FACE> Faces { get; private set; }
 
         public HBMesh()
@@ -38,13 +49,29 @@ namespace Common.Meshing.HalfEdgeBased
                 Vertices.Count, Edges.Count, Faces.Count);
         }
 
+        /// <summary>
+        /// Clear mesh.
+        /// </summary>
         public void Clear()
         {
+            foreach (var v in Vertices)
+                v.Clear();
+
+            foreach (var e in Edges)
+                e.Clear();
+
+            foreach (var f in Faces)
+                f.Clear();
+
             Vertices.Clear();
             Edges.Clear();
             Faces.Clear();
         }
 
+        /// <summary>
+        /// Find the index of this vertex.
+        /// </summary>
+        /// <returns>The vertex index or -1 if not found.</returns>
         public int IndexOf(HBVertex vertex)
         {
             VERTEX v = vertex as VERTEX;
@@ -52,6 +79,10 @@ namespace Common.Meshing.HalfEdgeBased
             return Vertices.IndexOf(v);
         }
 
+        /// <summary>
+        /// Find the index of this edge.
+        /// </summary>
+        /// <returns>The edge index or -1 if not found.</returns>
         public int IndexOf(HBEdge edge)
         {
             EDGE e = edge as EDGE;
@@ -59,6 +90,10 @@ namespace Common.Meshing.HalfEdgeBased
             return Edges.IndexOf(e);
         }
 
+        /// <summary>
+        /// Find the index of this face.
+        /// </summary>
+        /// <returns>The face index or -1 if not found.</returns>
         public int IndexOf(HBFace face)
         {
             FACE f = face as FACE;
@@ -66,6 +101,10 @@ namespace Common.Meshing.HalfEdgeBased
             return Faces.IndexOf(f);
         }
 
+        /// <summary>
+        /// Fill the mesh with vertices, faces and edges.
+        /// Connections will need to be set manually.
+        /// </summary>
         public void Fill(int numVertices, int numEdges, int numFaces) 
         {
             Clear();
@@ -84,6 +123,10 @@ namespace Common.Meshing.HalfEdgeBased
                 Faces.Add(new FACE());
         }
 
+        /// <summary>
+        /// Apply a transform to all vertices in mesh.
+        /// Its up to the vertex to decide how to implement transform.
+        /// </summary>
         public void Transform(Matrix3x3f m)
         {
             int numVerts = Vertices.Count;
@@ -91,6 +134,10 @@ namespace Common.Meshing.HalfEdgeBased
                 Vertices[i].Transform(m);
         }
 
+        /// <summary>
+        /// Apply a transform to all vertices in mesh.
+        /// Its up to the vertex to decide how to implement transform.
+        /// </summary>
         public void Transform(Matrix2x2f m)
         {
             int numVerts = Vertices.Count;
@@ -98,6 +145,10 @@ namespace Common.Meshing.HalfEdgeBased
                 Vertices[i].Transform(m);
         }
 
+        /// <summary>
+        /// Remove all faces.
+        /// Will clear faces from all edges.
+        /// </summary>
         public void RemoveFaces()
         {
             Faces.Clear();
@@ -107,6 +158,10 @@ namespace Common.Meshing.HalfEdgeBased
                 Edges[i].Face = null;
         }
 
+        /// <summary>
+        /// Remove a face.
+        /// Will clear face from all edges.
+        /// </summary>
         public void RemoveFace(FACE face)
         {
             Faces.Remove(face);

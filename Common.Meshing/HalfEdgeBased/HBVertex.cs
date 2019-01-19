@@ -6,9 +6,14 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Meshing.HalfEdgeBased
 {
+    /// <summary>
+    /// A half edge vertex. Presumes edges are connected in CCW order.
+    /// </summary>
     public class HBVertex
     {
-
+        /// <summary>
+        /// The vertex edge.
+        /// </summary>
         public HBEdge Edge { get; set; }
 
         public HBVertex()
@@ -36,26 +41,6 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
-        public HBVertex Previous
-        {
-            get
-            {
-                if (Edge == null) return null;
-                if (Edge.Previous == null) return null;
-                return Edge.Previous.Vertex;
-            }
-        }
-
-        public HBVertex Next
-        {
-            get
-            {
-                if (Edge == null) return null;
-                if (Edge.Next == null) return null;
-                return Edge.Next.Vertex;
-            }
-        }
-
         public EDGE GetEdge<EDGE>() where EDGE : HBEdge
         {
             if (Edge == null) return null;
@@ -67,6 +52,10 @@ namespace Common.Meshing.HalfEdgeBased
             return edge;
         }
 
+        /// <summary>
+        /// The number of edges connecting to this vertex.
+        /// Edges must have a opposite member.
+        /// </summary>
         public int EdgeCount
         {
             get
@@ -88,6 +77,12 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        /// <summary>
+        /// Enumerate all edges connected to this vertex.
+        /// Edges must have a opposite member.
+        /// </summary>
+        /// <param name="ccw"></param>
+        /// <returns></returns>
         public IEnumerable<HBEdge> EnumerateEdges(bool ccw = true)
         {
             HBEdge start = Edge;
@@ -100,52 +95,32 @@ namespace Common.Meshing.HalfEdgeBased
 
                 if(ccw)
                 {
-                    if (e.Next == null) yield break;
-                    e = e.Next.Opposite;
+                    if (e.Opposite == null) yield break;
+                    e = e.Opposite.Previous;
                 }
                 else
                 {
-                    if (e.Opposite == null) yield break;
-                    e = e.Opposite.Previous;
+                    if (e.Next == null) yield break;
+                    e = e.Next.Opposite;
                 }
             }
             while (!ReferenceEquals(start, e));
         }
 
+        /// <summary>
+        /// Clear vertex of all connections.
+        /// </summary>
         public virtual void Clear()
         {
             Edge = null;
         }
 
-        public void InsertEdge(HBEdge edge)
-        {
-            edge.Vertex = this;
-
-            if (Edge == null)
-            {
-                Edge = edge;
-            }
-            else if (EdgeCount == 1)
-            {
-                Edge.Next = edge.Opposite;
-                edge.Opposite.Previous = Edge;
-                edge.Next = Edge.Opposite;
-                Edge.Opposite.Previous = edge;
-            }
-            else
-            {
-                var last = Edge;
-                foreach (var e in EnumerateEdges())
-                    last = e;
-
-                edge.Next = Edge.Opposite;
-                Edge.Opposite.Previous = edge;
-
-                edge.Opposite.Previous = last;
-                last.Next = edge.Opposite;
-            }
-        }
-
+        /// <summary>
+        /// Will remove edge from vertex.
+        /// If edge is this vertexs edge the vertex will 
+        /// connect to any other edge connecting to vertex.
+        /// </summary>
+        /// <param name="edge"></param>
         public void RemoveEdge(HBEdge edge)
         {
             if (Edge == null) return;

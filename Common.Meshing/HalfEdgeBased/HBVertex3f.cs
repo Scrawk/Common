@@ -6,6 +6,10 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Meshing.HalfEdgeBased
 {
+    /// <summary>
+    /// A half edge vertex with 3D position.
+    /// Presumes edges are connected in CCW order.
+    /// </summary>
     public class HBVertex3f : HBVertex
     {
         public Vector3f Position;
