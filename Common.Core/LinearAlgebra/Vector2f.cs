@@ -227,6 +227,15 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Negate vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2f operator -(Vector2f v)
+        {
+            return new Vector2f(-v.x, -v.y);
+        }
+
+        /// <summary>
         /// Subtract two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

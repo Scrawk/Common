@@ -237,6 +237,15 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Negate vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3d operator -(Vector3d v)
+        {
+            return new Vector3d(-v.x, -v.y, -v.z);
+        }
+
+        /// <summary>
         /// Subtract two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
