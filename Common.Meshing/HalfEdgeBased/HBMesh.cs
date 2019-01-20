@@ -102,6 +102,28 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Find the edge that uses these two vertices.
+        /// </summary>
+        /// <param name="v0">The head vertex</param>
+        /// <param name="v1">The tail vertex</param>
+        /// <returns>The edge index or null if not found</returns>
+        public EDGE FindEdge(HBVertex v0, HBVertex v1)
+        {
+            for (int i = 0; i < Edges.Count; i++)
+            {
+                var edge = Edges[i];
+                if (edge.Vertex == null) continue;
+                if (edge.Previous.Vertex == null) continue;
+
+                if (ReferenceEquals(edge.Vertex, v0) &&
+                   ReferenceEquals(edge.Previous.Vertex, v1))
+                    return edge;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Fill the mesh with vertices, faces and edges.
         /// Connections will need to be set manually.
         /// </summary>
@@ -172,6 +194,61 @@ namespace Common.Meshing.HalfEdgeBased
                 if (ReferenceEquals(face, Edges[i].Face))
                     Edges[i].Face = null;
             }
+        }
+
+        public void AddBoundaryEdges()
+        {
+            List<EDGE> edges = null;
+            foreach(var edge in Edges)
+            {
+                if(edge.Opposite == null)
+                {
+                    var opp = new EDGE();
+                    opp.Vertex = edge.Previous.Vertex;
+                    opp.Opposite = edge;
+
+                    if (edges == null)
+                        edges = new List<EDGE>();
+
+                    edges.Add(opp);
+                }
+            }
+
+            if (edges == null) return;
+
+            foreach (var edge in edges)
+            {
+                var v0 = edge.Vertex;
+                var v1 = edge.Opposite.Vertex;
+
+                EDGE next = null;
+                EDGE previous = null;
+
+                foreach (var e in edges)
+                {
+                    if (ReferenceEquals(edge, e)) continue;
+
+                    if (next == null && ReferenceEquals(v0, e.Opposite.Vertex))
+                        next = e;
+
+                    if (previous == null && ReferenceEquals(v1, e.Vertex))
+                        previous = e;
+
+                    if (next != null && previous != null)
+                        break;
+                }
+
+                if (next == null)
+                    throw new NullReferenceException("Failed to find next edge.");
+
+                if (previous == null)
+                    throw new NullReferenceException("Failed to find previous edge.");
+
+                edge.Next = next;
+                edge.Previous = previous;
+            }
+
+            Edges.AddRange(edges);
         }
 
     }

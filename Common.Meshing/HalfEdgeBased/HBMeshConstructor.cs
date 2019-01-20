@@ -37,6 +37,11 @@ namespace Common.Meshing.HalfEdgeBased
         public bool SupportsFaceConnections { get { return true; } }
 
         /// <summary>
+        /// Add a boundary so all edges have a opposite member.
+        /// </summary>
+        public bool AddBoundary = true;
+
+        /// <summary>
         /// Create a triangle mesh. All faces are triangles.
         /// </summary>
         /// <param name="numVertices"></param>
@@ -72,6 +77,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// <returns></returns>
         public HBMesh<VERTEX, EDGE, FACE> PopMesh()
         {
+            if (AddBoundary)
+                Mesh.AddBoundaryEdges();
+
             var tmp = Mesh;
             Mesh = null;
             return tmp;

@@ -18,6 +18,11 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
+        public string ToString(HBMesh<HBVertex, HBEdge, HBFace> mesh)
+        {
+            return string.Format("[HBFace: Edge={0}]", mesh.IndexOf(Edge));
+        }
+
         /// <summary>
         /// The number of edges in face.
         /// </summary>

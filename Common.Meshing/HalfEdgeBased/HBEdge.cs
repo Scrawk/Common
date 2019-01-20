@@ -19,14 +19,14 @@ namespace Common.Meshing.HalfEdgeBased
         public HBFace Face { get; set; }
 
         /// <summary>
-        /// The next edge in CCW order.
-        /// </summary>
-        public HBEdge Next { get; set; }
-
-        /// <summary>
         /// The previous edge in CCW order.
         /// </summary>
         public HBEdge Previous { get; set; }
+
+        /// <summary>
+        /// The next edge in CCW order.
+        /// </summary>
+        public HBEdge Next { get; set; }
 
         /// <summary>
         /// This edges other half.
@@ -50,6 +50,12 @@ namespace Common.Meshing.HalfEdgeBased
             Previous = previous;
             Next = next;
             Opposite = opposite;
+        }
+
+        public string ToString(HBMesh<HBVertex, HBEdge, HBFace> mesh)
+        {
+            return string.Format("[HBEdge: Vertex={0}, Face={1}, Previous={2}, Next={3}, Opposite={4}]", 
+                mesh.IndexOf(Vertex), mesh.IndexOf(Face), mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
         }
 
         public VERTEX GetVertex<VERTEX>() where VERTEX : HBVertex

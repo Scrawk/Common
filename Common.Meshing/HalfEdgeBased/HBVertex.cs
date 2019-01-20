@@ -52,6 +52,11 @@ namespace Common.Meshing.HalfEdgeBased
             return edge;
         }
 
+        public string ToString(HBMesh<HBVertex, HBEdge, HBFace> mesh)
+        {
+            return string.Format("[HBVertex: Edge={0}]", mesh.IndexOf(Edge));
+        }
+
         /// <summary>
         /// The number of edges connecting to this vertex.
         /// Edges must have a opposite member.
@@ -68,8 +73,8 @@ namespace Common.Meshing.HalfEdgeBased
                 {
                     if (e == null) return count;
                     count++;
-                    if (e.Next == null) return count;
-                    e = e.Next.Opposite;
+                    if (e.Opposite == null) return count;
+                    e = e.Opposite.Previous;
                 }
                 while (!ReferenceEquals(start, e));
 
