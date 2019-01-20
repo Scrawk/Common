@@ -39,7 +39,6 @@ namespace Common.GraphTheory.Adjacency
 
         public void GetPath(int dest, List<int> path)
         {
-            path.Clear();
             while (dest != Parent[dest] && Parent[dest] != -1)
             {
                 path.Add(dest);

@@ -76,7 +76,6 @@ namespace Common.GraphTheory.Grids
 
         public void GetPath(Vector2i dest, List<Vector2i> path)
         {
-            path.Clear();
             int x = dest.x;
             int y = dest.y;
 
@@ -93,7 +92,6 @@ namespace Common.GraphTheory.Grids
 
         public void GetPath(Vector2i dest, List<Vector3f> path)
         {
-            path.Clear();
             int x = dest.x;
             int y = dest.y;
 
