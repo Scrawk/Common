@@ -9,9 +9,21 @@ namespace Common.Meshing.HalfEdgeBased
     public class HBEdge
     {
         /// <summary>
-        /// The vertex edge points to.
+        /// The vertex the edge starts from.
         /// </summary>
-        public HBVertex Vertex { get; set; }
+        public HBVertex From { get; set; }
+
+        /// <summary>
+        /// The vertex edge ends at.
+        /// </summary>
+        public HBVertex To
+        {
+            get
+            {
+                if (Opposite == null) return null;
+                return Opposite.From;
+            }
+        }
 
         /// <summary>
         /// The face the edge is part of.
@@ -38,14 +50,14 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
-        public HBEdge(HBVertex vertex, HBFace face, HBEdge previous, HBEdge next, HBEdge opposite)
+        public HBEdge(HBVertex from, HBFace face, HBEdge previous, HBEdge next, HBEdge opposite)
         {
-            Set(vertex, face, previous, next, opposite);
+            Set(from, face, previous, next, opposite);
         }
 
-        public void Set(HBVertex vertex, HBFace face, HBEdge previous, HBEdge next, HBEdge opposite)
+        public void Set(HBVertex from, HBFace face, HBEdge previous, HBEdge next, HBEdge opposite)
         {
-            Vertex = vertex;
+            From = from;
             Face = face;
             Previous = previous;
             Next = next;
@@ -63,16 +75,25 @@ namespace Common.Meshing.HalfEdgeBased
             where FACE : HBFace, new()
         {
             return string.Format("[HBEdge: Vertex={0}, Face={1}, Previous={2}, Next={3}, Opposite={4}]", 
-                mesh.IndexOf(Vertex), mesh.IndexOf(Face), mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
+                mesh.IndexOf(From), mesh.IndexOf(Face), mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
         }
 
-        public VERTEX GetVertex<VERTEX>() where VERTEX : HBVertex
+        public VERTEX GetFrom<VERTEX>() where VERTEX : HBVertex
         {
-            if (Vertex == null) return null;
-
-            VERTEX vert = Vertex as VERTEX;
+            if (From == null) return null;
+            VERTEX vert = From as VERTEX;
             if (vert == null)
                 throw new InvalidCastException("Vertex is not a " + typeof(VERTEX));
+
+            return vert;
+        }
+
+        public VERTEX GetTo<VERTEX>() where VERTEX : HBVertex
+        {
+            if (To == null) return null;
+            VERTEX vert = To as VERTEX;
+            if (vert == null)
+                throw new InvalidCastException("To is not a " + typeof(VERTEX));
 
             return vert;
         }
@@ -80,7 +101,6 @@ namespace Common.Meshing.HalfEdgeBased
         public FACE GetFace<FACE>() where FACE : HBFace
         {
             if (Face == null) return null;
-
             FACE face = Face as FACE;
             if (face == null)
                 throw new InvalidCastException("Face is not a " + typeof(FACE));
@@ -91,7 +111,6 @@ namespace Common.Meshing.HalfEdgeBased
         public EDGE GetNext<EDGE>() where EDGE : HBEdge
         {
             if (Next == null) return null;
-
             EDGE edge = Next as EDGE;
             if (edge == null)
                 throw new InvalidCastException("Edge is not a " + typeof(EDGE));
@@ -102,7 +121,6 @@ namespace Common.Meshing.HalfEdgeBased
         public EDGE GetPrevious<EDGE>() where EDGE : HBEdge
         {
             if (Previous == null) return null;
-
             EDGE edge = Previous as EDGE;
             if (edge == null)
                 throw new InvalidCastException("Edge is not a " + typeof(EDGE));
@@ -113,7 +131,6 @@ namespace Common.Meshing.HalfEdgeBased
         public EDGE GetOpposite<EDGE>() where EDGE : HBEdge
         {
             if (Opposite == null) return null;
-
             EDGE edge = Opposite as EDGE;
             if (edge == null)
                 throw new InvalidCastException("Edge is not a " + typeof(EDGE));
@@ -195,8 +212,8 @@ namespace Common.Meshing.HalfEdgeBased
             do
             {
                 if (e == null) yield break;
-                if (e.Vertex == null) yield break;
-                yield return e.Vertex;
+                if (e.From == null) yield break;
+                yield return e.From;
                 e = (ccw) ? e.Next : e.Previous;
             }
             while (!ReferenceEquals(start, e));
@@ -207,7 +224,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         public virtual void Clear()
         {
-            Vertex = null;
+            From = null;
             Face = null;
             Next = null;
             Previous = null;

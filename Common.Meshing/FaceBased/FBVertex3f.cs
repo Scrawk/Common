@@ -24,10 +24,5 @@ namespace Common.Meshing.FaceBased
             Position = pos;
         }
 
-        public override void Transform(Matrix3x3f m)
-        {
-            Position = m * Position;
-        }
-
     }
 }

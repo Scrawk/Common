@@ -52,10 +52,10 @@ namespace Common.Meshing.Test.HalfEdgeBased
                 edges.Add(edge);
 
             Assert.AreEqual(4, edges.Count);
-            Assert.AreEqual(mesh.Edges[1], edges[0]);
-            Assert.AreEqual(mesh.Edges[7], edges[1]);
-            Assert.AreEqual(mesh.Edges[5], edges[2]);
-            Assert.AreEqual(mesh.Edges[3], edges[3]);
+            Assert.AreEqual(mesh.Edges[0], edges[0]);
+            Assert.AreEqual(mesh.Edges[6], edges[1]);
+            Assert.AreEqual(mesh.Edges[4], edges[2]);
+            Assert.AreEqual(mesh.Edges[2], edges[3]);
 
             mesh = CreateTestMesh.CreateCross();
             vertex = mesh.Vertices[4];
@@ -65,10 +65,10 @@ namespace Common.Meshing.Test.HalfEdgeBased
                 edges.Add(edge);
 
             Assert.AreEqual(4, edges.Count);
-            Assert.AreEqual(mesh.Edges[1], edges[0]);
-            Assert.AreEqual(mesh.Edges[3], edges[1]);
-            Assert.AreEqual(mesh.Edges[5], edges[2]);
-            Assert.AreEqual(mesh.Edges[7], edges[3]);
+            Assert.AreEqual(mesh.Edges[0], edges[0]);
+            Assert.AreEqual(mesh.Edges[2], edges[1]);
+            Assert.AreEqual(mesh.Edges[4], edges[2]);
+            Assert.AreEqual(mesh.Edges[6], edges[3]);
         }
 
     }

@@ -29,10 +29,5 @@ namespace Common.Meshing.HalfEdgeBased
             Position = pos;
         }
 
-        public override void Transform(Matrix2x2f m)
-        {
-            Position = m * Position;
-        }
-
     }
 }

@@ -109,41 +109,5 @@ namespace Common.Meshing.FaceBased
             return indices;
         }
 
-        /// <summary>
-        /// Transform all vertices.
-        /// The vertex class must provide a implementation of how its to be transformed.
-        /// </summary>
-        /// <param name="m">The transform matrix</param>
-        public void Transform(Matrix2x2f m)
-        {
-            int numVerts = Vertices.Count;
-            for (int i = 0; i < numVerts; i++)
-                Vertices[i].Transform(m);
-        }
-
-        /// <summary>
-        /// Transform all vertices.
-        /// The vertex class must provide a implementation of how its to be transformed.
-        /// </summary>
-        /// <param name="m">The transform matrix</param>
-        public void Transform(Matrix3x3f m)
-        {
-            int numVerts = Vertices.Count;
-            for (int i = 0; i < numVerts; i++)
-                Vertices[i].Transform(m);
-        }
-
-        /// <summary>
-        /// Transform all vertices.
-        /// The vertex class must provide a implementation of how its to be transformed.
-        /// </summary>
-        /// <param name="m">The transform matrix</param>
-        public void Transform(Matrix4x4f m)
-        {
-            int numVerts = Vertices.Count;
-            for (int i = 0; i < numVerts; i++)
-                Vertices[i].Transform(m);
-        }
-
     }
 }

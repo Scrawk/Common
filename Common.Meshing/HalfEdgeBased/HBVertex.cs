@@ -31,16 +31,6 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
-        public virtual void Transform(Matrix2x2f m)
-        {
-
-        }
-
-        public virtual void Transform(Matrix3x3f m)
-        {
-
-        }
-
         public EDGE GetEdge<EDGE>() where EDGE : HBEdge
         {
             if (Edge == null) return null;
@@ -81,8 +71,8 @@ namespace Common.Meshing.HalfEdgeBased
                 {
                     if (e == null) return count;
                     count++;
-                    if (e.Opposite == null) return count;
-                    e = e.Opposite.Previous;
+                    if (e.Previous == null) return count;
+                    e = e.Previous.Opposite;
                 }
                 while (!ReferenceEquals(start, e));
 
@@ -108,13 +98,13 @@ namespace Common.Meshing.HalfEdgeBased
 
                 if(ccw)
                 {
-                    if (e.Opposite == null) yield break;
-                    e = e.Opposite.Previous;
+                    if (e.Previous == null) yield break;
+                    e = e.Previous.Opposite;
                 }
                 else
                 {
-                    if (e.Next == null) yield break;
-                    e = e.Next.Opposite;
+                    if (e.Opposite == null) yield break;
+                    e = e.Opposite.Next;
                 }
             }
             while (!ReferenceEquals(start, e));
@@ -126,30 +116,6 @@ namespace Common.Meshing.HalfEdgeBased
         public virtual void Clear()
         {
             Edge = null;
-        }
-
-        /// <summary>
-        /// Will remove edge from vertex.
-        /// If edge is this vertexs edge the vertex will 
-        /// connect to any other edge connecting to vertex.
-        /// </summary>
-        /// <param name="edge"></param>
-        public void RemoveEdge(HBEdge edge)
-        {
-            if (Edge == null) return;
-            if (!ReferenceEquals(edge, Edge)) return;
-
-            HBEdge tmp = null;
-            foreach (var e in EnumerateEdges())
-            {
-                if (!ReferenceEquals(edge, e))
-                {
-                    tmp = e;
-                    break;
-                }
-            }
-
-            Edge = tmp;
         }
 
     }

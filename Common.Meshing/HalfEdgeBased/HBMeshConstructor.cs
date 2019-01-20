@@ -191,10 +191,10 @@ namespace Common.Meshing.HalfEdgeBased
             e1.Opposite = e0;
 
             v0.Edge = e0;
-            e0.Vertex = v0;
+            e0.From = v0;
 
             v1.Edge = e1;
-            e1.Vertex = v1;
+            e1.From = v1;
 
             Mesh.Edges.Add(e0);
             Mesh.Edges.Add(e1);
@@ -263,22 +263,24 @@ namespace Common.Meshing.HalfEdgeBased
             if (edge == null)
                 throw new NullReferenceException("Edge is null.");
 
-            if (edge.Vertex == null)
+            if (edge.From == null)
                 throw new NullReferenceException("Edge has null vertex.");
 
             if (neighbour.Edge == null)
                 throw new NullReferenceException("Neighbor has null edge.");
 
-            var v0 = edge.Vertex;
-            var v1 = edge.Previous.Vertex;
+            var from = edge.From;
+            var to = edge.Next.From;
 
             foreach (var nedge in neighbour.Edge.EnumerateEdges())
             {
-                if (nedge.Vertex == null)
+                if (nedge.From == null)
                     throw new NullReferenceException("Neighbor edge has null vertex.");
 
-                if(ReferenceEquals(v0, nedge.Previous.Vertex) &&
-                   ReferenceEquals(v1, nedge.Vertex))
+                //if nedge and edge share the same vertices but 
+                //in opposite order then they must be opposite edges
+                if(ReferenceEquals(from, nedge.Next.From) &&
+                   ReferenceEquals(to, nedge.From))
                 {
                     edge.Opposite = nedge;
                     nedge.Opposite = edge;

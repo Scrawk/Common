@@ -5,6 +5,9 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Meshing.HalfEdgeBased
 {
+
+
+
     /// <summary>
     /// A half edge based mesh.
     /// </summary>
@@ -107,20 +110,21 @@ namespace Common.Meshing.HalfEdgeBased
 
         /// <summary>
         /// Find the edge that uses these two vertices.
+        /// Presumes all edges have opposites.
         /// </summary>
-        /// <param name="v0">The head vertex</param>
-        /// <param name="v1">The tail vertex</param>
+        /// <param name="v0">The from vertex</param>
+        /// <param name="v1">The to vertex</param>
         /// <returns>The edge index or null if not found</returns>
         public EDGE FindEdge(HBVertex v0, HBVertex v1)
         {
             for (int i = 0; i < Edges.Count; i++)
             {
                 var edge = Edges[i];
-                if (edge.Vertex == null) continue;
-                if (edge.Previous.Vertex == null) continue;
+                if (edge.From == null) continue;
+                if (edge.To == null) continue;
 
-                if (ReferenceEquals(edge.Vertex, v0) &&
-                   ReferenceEquals(edge.Previous.Vertex, v1))
+                if (ReferenceEquals(edge.From, v0) &&
+                   ReferenceEquals(edge.To, v1))
                     return edge;
             }
 
@@ -147,28 +151,6 @@ namespace Common.Meshing.HalfEdgeBased
 
             for (int i = 0; i < numFaces; i++)
                 Faces.Add(new FACE());
-        }
-
-        /// <summary>
-        /// Apply a transform to all vertices in mesh.
-        /// Its up to the vertex to decide how to implement transform.
-        /// </summary>
-        public void Transform(Matrix3x3f m)
-        {
-            int numVerts = Vertices.Count;
-            for (int i = 0; i < numVerts; i++)
-                Vertices[i].Transform(m);
-        }
-
-        /// <summary>
-        /// Apply a transform to all vertices in mesh.
-        /// Its up to the vertex to decide how to implement transform.
-        /// </summary>
-        public void Transform(Matrix2x2f m)
-        {
-            int numVerts = Vertices.Count;
-            for (int i = 0; i < numVerts; i++)
-                Vertices[i].Transform(m);
         }
 
         /// <summary>
@@ -203,6 +185,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Add opposite edges to all edges that dont have one.
         /// These edges would be considered to be the boundary edges.
+        /// Presumes all edges are closed.
         /// </summary>
         public void AddBoundaryEdges()
         {
@@ -211,15 +194,18 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 if(edge.Opposite == null)
                 {
+                    if (edge.Next == null)
+                        throw new InvalidOperationException("Edge not closed.");
+
                     var opp = new EDGE();
-                    opp.Vertex = edge.Previous.Vertex;
+                    opp.From = edge.Next.From;
                     opp.Opposite = edge;
+                    edge.Opposite = opp;
 
                     if (edges == null)
                         edges = new List<EDGE>();
 
                     edges.Add(opp);
-                    edge.Opposite = opp;
                 }
             }
 
@@ -227,8 +213,8 @@ namespace Common.Meshing.HalfEdgeBased
 
             foreach (var edge in edges)
             {
-                var v0 = edge.Vertex;
-                var v1 = edge.Opposite.Vertex;
+                var from = edge.From;
+                var to = edge.To;
 
                 EDGE next = null;
                 EDGE previous = null;
@@ -237,10 +223,14 @@ namespace Common.Meshing.HalfEdgeBased
                 {
                     if (ReferenceEquals(edge, e)) continue;
 
-                    if (next == null && ReferenceEquals(v0, e.Opposite.Vertex))
+                    //if edge e is going from this edges to vertex
+                    //it must be the next edge
+                    if (next == null && ReferenceEquals(to, e.From))
                         next = e;
 
-                    if (previous == null && ReferenceEquals(v1, e.Vertex))
+                    //if edge e is going to this edges vertex 
+                    //it must be the previous edge
+                    if (previous == null && ReferenceEquals(from, e.To))
                         previous = e;
 
                     if (next != null && previous != null)
