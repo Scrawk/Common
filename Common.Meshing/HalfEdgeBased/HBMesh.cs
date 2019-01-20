@@ -200,6 +200,10 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        /// <summary>
+        /// Add opposite edges to all edges that dont have one.
+        /// These edges would be considered to be the boundary edges.
+        /// </summary>
         public void AddBoundaryEdges()
         {
             List<EDGE> edges = null;

@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constructors\CreateGeneralMesh2.cs" />
+    <Compile Include="Constructors\CreateTriangleMesh2.cs" />
     <Compile Include="Constructors\IEdgeMeshConstructor.cs" />
     <Compile Include="Constructors\IGeneralMeshConstructor.cs" />
     <Compile Include="Constructors\ITriangleMeshConstructor.cs" />

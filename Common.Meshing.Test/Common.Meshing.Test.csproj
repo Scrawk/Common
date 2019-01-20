@@ -48,6 +48,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constructors\CreateGeneralMesh2Test.cs" />
+    <Compile Include="Constructors\CreateTriangleMesh2Test.cs" />
     <Compile Include="HalfEdgeBased\CreateTestMesh.cs" />
     <Compile Include="HalfEdgeBased\HBEdgeTest.cs" />
     <Compile Include="HalfEdgeBased\HBFaceTest.cs" />
@@ -75,8 +77,8 @@
     <Folder Include="FaceBased\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="HalfEdgeBased\Cross.png" />
-    <Content Include="HalfEdgeBased\SquareWithCenter.png" />
+    <Content Include="HalfEdgeBased\TestMesh_Cross.png" />
+    <Content Include="HalfEdgeBased\TestMesh_SquareWithCenter.png" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
