@@ -43,6 +43,10 @@ namespace Common.Meshing.HalfEdgeBased
             Faces = new List<FACE>(numFaces);
         }
 
+        /// <summary>
+        /// Convert mesh to string.
+        /// </summary>
+        /// <returns>Mesh as string</returns>
         public override string ToString()
         {
             return string.Format("[HBMesh: Vertices={0}, Edges={1}, Faces={2}]", 
@@ -211,6 +215,7 @@ namespace Common.Meshing.HalfEdgeBased
                         edges = new List<EDGE>();
 
                     edges.Add(opp);
+                    edge.Opposite = opp;
                 }
             }
 

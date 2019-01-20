@@ -18,7 +18,15 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
-        public string ToString(HBMesh<HBVertex, HBEdge, HBFace> mesh)
+        /// <summary>
+        /// Convert face to string.
+        /// </summary>
+        /// <param name="mesh">Parent mesh</param>
+        /// <returns>Face as string</returns>
+        public string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
         {
             return string.Format("[HBFace: Edge={0}]", mesh.IndexOf(Edge));
         }

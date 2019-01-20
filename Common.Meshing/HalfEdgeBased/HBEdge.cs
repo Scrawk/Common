@@ -52,7 +52,15 @@ namespace Common.Meshing.HalfEdgeBased
             Opposite = opposite;
         }
 
-        public string ToString(HBMesh<HBVertex, HBEdge, HBFace> mesh)
+        /// <summary>
+        /// Convert edge to string.
+        /// </summary>
+        /// <param name="mesh">Parent mesh</param>
+        /// <returns>Edge as string</returns>
+        public string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
         {
             return string.Format("[HBEdge: Vertex={0}, Face={1}, Previous={2}, Next={3}, Opposite={4}]", 
                 mesh.IndexOf(Vertex), mesh.IndexOf(Face), mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
