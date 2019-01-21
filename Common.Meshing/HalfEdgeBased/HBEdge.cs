@@ -69,13 +69,14 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Edge as string</returns>
-        public string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public virtual string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            return string.Format("[HBEdge: Vertex={0}, Face={1}, Previous={2}, Next={3}, Opposite={4}]", 
-                mesh.IndexOf(From), mesh.IndexOf(Face), mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
+            return string.Format("[HBEdge: Id={0}, Vertex={1}, Face={2}, Previous={3}, Next={4}, Opposite={5}]",
+                mesh.IndexOf(this), mesh.IndexOf(From), mesh.IndexOf(Face), 
+                mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
         }
 
         public VERTEX GetFrom<VERTEX>() where VERTEX : HBVertex

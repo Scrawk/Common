@@ -22,11 +22,17 @@ namespace Common.Meshing.FaceBased
 
         public void PushTriangleMesh(int numVertices, int numFaces)
         {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
             Mesh = new FBMesh<VERTEX, FACE>(numVertices, numFaces);
         }
 
         public void PushGeneralMesh(int numVertices, int numFaces)
         {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
             Mesh = new FBMesh<VERTEX, FACE>(numVertices, numFaces);
         }
 

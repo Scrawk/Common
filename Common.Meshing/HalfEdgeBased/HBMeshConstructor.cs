@@ -7,6 +7,7 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
+
     /// <summary>
     /// Half edge based mesh constructor.
     /// Supports edge, triangle or general meshes.
@@ -48,6 +49,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="numFaces"></param>
         public void PushTriangleMesh(int numVertices, int numFaces)
         {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
             Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numFaces * 3 * 2, numFaces);
         }
 
@@ -58,6 +62,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="numEdges"></param>
         public void PushEdgeMesh(int numVertices, int numEdges)
         {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
             Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numEdges, 0);
         }
 
@@ -68,6 +75,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="numFaces"></param>
         public void PushGeneralMesh(int numVertices, int numFaces)
         {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
             Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, 0, numFaces);
         }
 

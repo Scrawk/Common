@@ -47,12 +47,12 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Vertex as string</returns>
-        public string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public virtual string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            return string.Format("[HBVertex: Edge={0}]", mesh.IndexOf(Edge));
+            return string.Format("[HBVertex: Id={0}, Edge={1}]", mesh.IndexOf(this), mesh.IndexOf(Edge));
         }
 
         /// <summary>
@@ -116,6 +116,17 @@ namespace Common.Meshing.HalfEdgeBased
         public virtual void Clear()
         {
             Edge = null;
+        }
+
+        /// <summary>
+        /// Create a vertex that is a interpolation 
+        /// from this to the other vertex.
+        /// </summary>
+        /// <param name="to">other vertex</param>
+        /// <returns>interpolation< between the two/returns>
+        public virtual HBVertex Interpolate(HBVertex to, float t)
+        {
+            return new HBVertex();
         }
 
     }

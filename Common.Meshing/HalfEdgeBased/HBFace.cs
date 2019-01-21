@@ -23,12 +23,12 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Face as string</returns>
-        public string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public virtual string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            return string.Format("[HBFace: Edge={0}]", mesh.IndexOf(Edge));
+            return string.Format("[HBFace: Id={0}, Edge={1}]", mesh.IndexOf(this), mesh.IndexOf(Edge));
         }
 
         /// <summary>

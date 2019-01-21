@@ -29,5 +29,28 @@ namespace Common.Meshing.HalfEdgeBased
             Position = pos;
         }
 
+        /// <summary>
+        /// Convert vertex to string.
+        /// </summary>
+        /// <param name="mesh">Parent mesh</param>
+        /// <returns>Vertex as string</returns>
+        public override string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        {
+            return string.Format("[HBVertex2f: Id={0}, Edge={1}, Position={2}]", 
+                mesh.IndexOf(this), mesh.IndexOf(Edge), Position);
+        }
+
+        /// <summary>
+        /// Create a vertex that is a interpolation 
+        /// from this to the other vertex.
+        /// </summary>
+        /// <param name="to">other vertex</param>
+        /// <returns>interpolation< between the two/returns>
+        public override HBVertex Interpolate(HBVertex to, float t)
+        {
+            var pos = Vector2f.Lerp(Position, (to as HBVertex2f).Position, t);
+            return new HBVertex2f(pos);
+        }
+
     }
 }

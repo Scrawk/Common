@@ -25,11 +25,17 @@ namespace Common.Meshing.IndexBased
 
         public void PushTriangleMesh(int numVertices, int numFaces)
         {
+            if (m_mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
             m_mesh = new Mesh3f(numVertices, numFaces * 3);
         }
 
         public void PushEdgeMesh(int numVertices, int numEdges)
         {
+            if (m_mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
             m_mesh = new Mesh3f(numVertices, numEdges * 2);
         }
 

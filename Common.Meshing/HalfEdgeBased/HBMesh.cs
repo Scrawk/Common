@@ -6,8 +6,6 @@ using Common.Core.LinearAlgebra;
 namespace Common.Meshing.HalfEdgeBased
 {
 
-
-
     /// <summary>
     /// A half edge based mesh.
     /// </summary>
