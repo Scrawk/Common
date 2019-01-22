@@ -19,7 +19,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             var constructor = new HBMeshConstructor2f();
             CreateTriangleMesh2.FromTriangle(constructor, a, b, c);
-            var mesh = constructor.PopMesh();
+            HBMesh2f mesh = constructor.PopMesh();
 
             HBMeshOperations.SplitEdge(mesh, mesh.Edges[0]);
 

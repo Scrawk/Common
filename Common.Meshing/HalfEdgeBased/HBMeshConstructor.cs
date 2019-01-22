@@ -17,6 +17,16 @@ namespace Common.Meshing.HalfEdgeBased
         {
             Mesh = new HBMesh2f(numVertices, numEdges, numFaces);
         }
+
+        public new HBMesh2f PopMesh()
+        {
+            if (AddBoundary)
+                HBMeshOperations.AddBoundaryEdges(Mesh);
+
+            var tmp = Mesh;
+            Mesh = null;
+            return tmp as HBMesh2f;
+        }
     }
 
     /// <summary>
@@ -27,6 +37,16 @@ namespace Common.Meshing.HalfEdgeBased
         protected override void NewMesh(int numVertices, int numEdges, int numFaces)
         {
             Mesh = new HBMesh3f(numVertices, numEdges, numFaces);
+        }
+
+        public new HBMesh3f PopMesh()
+        {
+            if (AddBoundary)
+                HBMeshOperations.AddBoundaryEdges(Mesh);
+
+            var tmp = Mesh;
+            Mesh = null;
+            return tmp as HBMesh3f;
         }
     }
 
