@@ -12,7 +12,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void EdgeCount()
         {
-            var mesh = CreateTestMesh.CreateCross();
+            var mesh = HBMeshHelper.CreateCross();
             var vertex = mesh.Vertices[4];
 
             Assert.AreEqual(4, vertex.EdgeCount);
@@ -44,7 +44,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void EnumerateEdges()
         {
-            var mesh = CreateTestMesh.CreateCross();
+            var mesh = HBMeshHelper.CreateCross();
             var vertex = mesh.Vertices[4];
             var edges = new List<HBEdge>();
 
@@ -57,7 +57,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(mesh.Edges[4], edges[2]);
             Assert.AreEqual(mesh.Edges[2], edges[3]);
 
-            mesh = CreateTestMesh.CreateCross();
+            mesh = HBMeshHelper.CreateCross();
             vertex = mesh.Vertices[4];
             edges = new List<HBEdge>();
 

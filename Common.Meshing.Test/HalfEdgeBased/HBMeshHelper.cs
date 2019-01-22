@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.LinearAlgebra;
-
 using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Test.HalfEdgeBased
@@ -11,8 +11,58 @@ namespace Common.Meshing.Test.HalfEdgeBased
     /// Creates a mesh for testing.
     /// All faces CCW.
     /// </summary>
-    public static class CreateTestMesh
+    public static class HBMeshHelper
     {
+
+        public static void PrintMesh<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            Console.WriteLine(mesh);
+
+            foreach (var v in mesh.Vertices)
+                Console.WriteLine(v.ToString(mesh));
+
+            foreach (var e in mesh.Edges)
+                Console.WriteLine(e.ToString(mesh));
+
+            foreach (var f in mesh.Faces)
+                Console.WriteLine(f.ToString(mesh));
+        }
+
+        public static void CheckVertex<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, int vertex, int edge)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var v = mesh.Vertices[vertex];
+            Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
+        }
+
+
+        public static void CheckEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, 
+            int edge, int from, int face, int previous, int next, int opposite)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var e = mesh.Edges[edge];
+            Assert.AreEqual(mesh.IndexOf(e.From), from);
+            Assert.AreEqual(mesh.IndexOf(e.Face), face);
+            Assert.AreEqual(mesh.IndexOf(e.Previous), previous);
+            Assert.AreEqual(mesh.IndexOf(e.Next), next);
+            Assert.AreEqual(mesh.IndexOf(e.Opposite), opposite);
+        }
+
+        public static void CheckFace<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, int face, int edge)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var f = mesh.Faces[face];
+            Assert.AreEqual(mesh.IndexOf(f.Edge), edge);
+        }
 
         public static HBMesh<HBVertex, HBEdge, HBFace> CreateTriangle()
         {

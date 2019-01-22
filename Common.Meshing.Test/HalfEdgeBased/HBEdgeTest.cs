@@ -97,7 +97,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void EnumerateEdges()
         {
-            var mesh = CreateTestMesh.CreateTriangle();
+            var mesh = HBMeshHelper.CreateTriangle();
             var edge = mesh.Edges[0];
 
             var edges = new List<HBEdge>();
@@ -110,7 +110,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(mesh.Edges[1], edges[1]);
             Assert.AreEqual(mesh.Edges[2], edges[2]);
 
-            mesh = CreateTestMesh.CreateTriangle();
+            mesh = HBMeshHelper.CreateTriangle();
             edge = mesh.Edges[0];
             edges = new List<HBEdge>();
 
@@ -127,7 +127,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void EnumerateVertices()
         {
-            var mesh = CreateTestMesh.CreateTriangle();
+            var mesh = HBMeshHelper.CreateTriangle();
             var edge = mesh.Edges[0];
             var vertices = new List<HBVertex>();
 
@@ -139,7 +139,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(mesh.Vertices[1], vertices[1]);
             Assert.AreEqual(mesh.Vertices[2], vertices[2]);
 
-            mesh = CreateTestMesh.CreateTriangle();
+            mesh = HBMeshHelper.CreateTriangle();
             edge = mesh.Edges[0];
             vertices = new List<HBVertex>();
 

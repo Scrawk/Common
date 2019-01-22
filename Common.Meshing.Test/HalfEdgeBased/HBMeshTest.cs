@@ -12,7 +12,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         public void RemoveFaces()
         {
 
-            var mesh = CreateTestMesh.CreateSquareWithCenter();
+            var mesh = HBMeshHelper.CreateSquareWithCenter();
             mesh.RemoveFaces();
 
             Assert.AreEqual(0, mesh.Faces.Count);
@@ -26,7 +26,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         public void RemoveFace()
         {
 
-            var mesh = CreateTestMesh.CreateSquareWithCenter();
+            var mesh = HBMeshHelper.CreateSquareWithCenter();
 
             var face = mesh.Faces[0];
             mesh.RemoveFace(face);

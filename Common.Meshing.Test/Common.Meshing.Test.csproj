@@ -50,13 +50,12 @@
   <ItemGroup>
     <Compile Include="Constructors\CreateGeneralMesh2Test.cs" />
     <Compile Include="Constructors\CreateTriangleMesh2Test.cs" />
-    <Compile Include="HalfEdgeBased\CreateTestMesh.cs" />
+    <Compile Include="HalfEdgeBased\HBMeshHelper.cs" />
     <Compile Include="HalfEdgeBased\HBEdgeTest.cs" />
     <Compile Include="HalfEdgeBased\HBFaceTest.cs" />
     <Compile Include="HalfEdgeBased\HBMeshTest.cs" />
     <Compile Include="HalfEdgeBased\HBVertex2fTest.cs" />
     <Compile Include="HalfEdgeBased\HBVertexTest.cs" />
-    <Compile Include="HalfEdgeBased\TestEdge.cs" />
     <Compile Include="HalfEdgeBased\HBMeshOperationsTest.cs" />
     <Compile Include="IndexBased\Mesh2fTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

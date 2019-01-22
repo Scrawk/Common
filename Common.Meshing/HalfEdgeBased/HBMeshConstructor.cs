@@ -9,6 +9,28 @@ namespace Common.Meshing.HalfEdgeBased
 {
 
     /// <summary>
+    /// Constructor for HBMesh2f
+    /// </summary>
+    public class HBMeshConstructor2f : HBMeshConstructor<HBVertex2f, HBEdge, HBFace>
+    {
+        protected override void NewMesh(int numVertices, int numEdges, int numFaces)
+        {
+            Mesh = new HBMesh2f(numVertices, numEdges, numFaces);
+        }
+    }
+
+    /// <summary>
+    /// Constructor for HBMesh3f
+    /// </summary>
+    public class HBMeshConstructor3f : HBMeshConstructor<HBVertex3f, HBEdge, HBFace>
+    {
+        protected override void NewMesh(int numVertices, int numEdges, int numFaces)
+        {
+            Mesh = new HBMesh3f(numVertices, numEdges, numFaces);
+        }
+    }
+
+    /// <summary>
     /// Half edge based mesh constructor.
     /// Supports edge, triangle or general meshes.
     /// </summary>
@@ -21,10 +43,23 @@ namespace Common.Meshing.HalfEdgeBased
             where FACE : HBFace, new()
     {
 
+        private HBMesh<VERTEX, EDGE, FACE> m_mesh;
+
         /// <summary>
         /// The mesh object under construction.
+        /// A new mesh can not be created untill the 
+        /// previous one is finished;
         /// </summary>
-        private HBMesh<VERTEX, EDGE, FACE> Mesh { get; set; }
+        protected HBMesh<VERTEX, EDGE, FACE> Mesh
+        {
+            get { return m_mesh; }
+            set
+            {
+                if(value != null)
+                    CheckIfUnderConstruction();
+                m_mesh = value;
+            }
+        }
 
         /// <summary>
         /// Does a half edge mesh support edge connections.
@@ -45,40 +80,33 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Create a triangle mesh. All faces are triangles.
         /// </summary>
-        /// <param name="numVertices"></param>
-        /// <param name="numFaces"></param>
         public void PushTriangleMesh(int numVertices, int numFaces)
         {
-            if (Mesh != null)
-                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
-
-            Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numFaces * 3 * 2, numFaces);
+            NewMesh(numVertices, numFaces * 3 * 2, numFaces);
         }
 
         /// <summary>
         /// Create a edge mesh. Edge meshs have no faces.
         /// </summary>
-        /// <param name="numVertices"></param>
-        /// <param name="numEdges"></param>
         public void PushEdgeMesh(int numVertices, int numEdges)
         {
-            if (Mesh != null)
-                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
-
-            Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numEdges, 0);
+            NewMesh(numVertices, numEdges, 0);
         }
 
         /// <summary>
         /// Create a general mesh. Faces can have any number of edges.
         /// </summary>
-        /// <param name="numVertices"></param>
-        /// <param name="numFaces"></param>
         public void PushGeneralMesh(int numVertices, int numFaces)
         {
-            if (Mesh != null)
-                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+            NewMesh(numVertices, 0, numFaces);
+        }
 
-            Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, 0, numFaces);
+        /// <summary>
+        /// Create a new mesh. Allows parent class to make different mesh type.
+        /// </summary>
+        protected virtual void NewMesh(int numVertices, int numEdges, int numFaces)
+        {
+            Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numEdges, numFaces);
         }
 
         /// <summary>
@@ -88,7 +116,7 @@ namespace Common.Meshing.HalfEdgeBased
         public HBMesh<VERTEX, EDGE, FACE> PopMesh()
         {
             if (AddBoundary)
-                Mesh.AddBoundaryEdges();
+                HBMeshOperations.AddBoundaryEdges(Mesh);
 
             var tmp = Mesh;
             Mesh = null;
@@ -316,6 +344,15 @@ namespace Common.Meshing.HalfEdgeBased
 
             edge.Previous = previous;
             edge.Next = next;
+        }
+
+        /// <summary>
+        /// Helper to check if mesh under construction.
+        /// </summary>
+        protected void CheckIfUnderConstruction()
+        {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
         }
 
     }

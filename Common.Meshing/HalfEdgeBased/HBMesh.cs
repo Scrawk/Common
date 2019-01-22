@@ -7,6 +7,34 @@ namespace Common.Meshing.HalfEdgeBased
 {
 
     /// <summary>
+    /// HBMesh with Vector2f as vertices.
+    /// </summary>
+    public class HBMesh2f : HBMesh<HBVertex2f, HBEdge, HBFace>
+    {
+        public HBMesh2f() { }
+
+        public HBMesh2f(int numVertices, int numEdges, int numFaces)
+            : base(numVertices, numEdges, numFaces)
+        {
+
+        }
+    }
+
+    /// <summary>
+    /// HBMesh with Vector3f as vertices.
+    /// </summary>
+    public class HBMesh3f : HBMesh<HBVertex3f, HBEdge, HBFace>
+    {
+        public HBMesh3f() { }
+
+        public HBMesh3f(int numVertices, int numEdges, int numFaces)
+            : base(numVertices, numEdges, numFaces)
+        {
+
+        }
+    }
+
+    /// <summary>
     /// A half edge based mesh.
     /// </summary>
     public class HBMesh<VERTEX, EDGE, FACE>
@@ -178,74 +206,6 @@ namespace Common.Meshing.HalfEdgeBased
                 if (ReferenceEquals(face, Edges[i].Face))
                     Edges[i].Face = null;
             }
-        }
-
-        /// <summary>
-        /// Add opposite edges to all edges that dont have one.
-        /// These edges would be considered to be the boundary edges.
-        /// Presumes all edges are closed.
-        /// </summary>
-        public void AddBoundaryEdges()
-        {
-            List<EDGE> edges = null;
-            foreach(var edge in Edges)
-            {
-                if(edge.Opposite == null)
-                {
-                    if (edge.Next == null)
-                        throw new InvalidOperationException("Edge not closed.");
-
-                    var opp = new EDGE();
-                    opp.From = edge.Next.From;
-                    opp.Opposite = edge;
-                    edge.Opposite = opp;
-
-                    if (edges == null)
-                        edges = new List<EDGE>();
-
-                    edges.Add(opp);
-                }
-            }
-
-            if (edges == null) return;
-
-            foreach (var edge in edges)
-            {
-                var from = edge.From;
-                var to = edge.To;
-
-                EDGE next = null;
-                EDGE previous = null;
-
-                foreach (var e in edges)
-                {
-                    if (ReferenceEquals(edge, e)) continue;
-
-                    //if edge e is going from this edges to vertex
-                    //it must be the next edge
-                    if (next == null && ReferenceEquals(to, e.From))
-                        next = e;
-
-                    //if edge e is going to this edges vertex 
-                    //it must be the previous edge
-                    if (previous == null && ReferenceEquals(from, e.To))
-                        previous = e;
-
-                    if (next != null && previous != null)
-                        break;
-                }
-
-                if (next == null)
-                    throw new NullReferenceException("Failed to find next edge.");
-
-                if (previous == null)
-                    throw new NullReferenceException("Failed to find previous edge.");
-
-                edge.Next = next;
-                edge.Previous = previous;
-            }
-
-            Edges.AddRange(edges);
         }
 
     }
