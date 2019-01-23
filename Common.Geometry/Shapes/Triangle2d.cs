@@ -35,6 +35,21 @@ namespace Common.Geometry.Shapes
             get { return (A + B + C) / 3.0; }
         }
 
+        public bool IsCCW
+        {
+            get { return SignedArea > 0; }
+        }
+
+        public double Area
+        {
+            get { return Math.Abs(SignedArea); }
+        }
+
+        public double SignedArea
+        {
+            get { return (A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x); }
+        }
+
         /// <summary>
         /// Calculate the bounding box.
         /// </summary>
@@ -87,7 +102,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Triangle2d: A={0}, B={1}, C={1}]", A, B, C);
+            return string.Format("[Triangle2d: A={0}, B={1}, C={2}]", A, B, C);
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.LinearAlgebra;
+using Common.Geometry.Shapes;
 using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Test.HalfEdgeBased
@@ -62,6 +63,23 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var f = mesh.Faces[face];
             Assert.AreEqual(mesh.IndexOf(f.Edge), edge);
+        }
+
+        public static void CheckAllTrianglesCCW<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var list = new List<HBVertex2f>();
+            foreach (var f in mesh.Faces)
+            {
+                list.Clear();
+                f.GetVertices(list);
+
+                Assert.AreEqual(3, list.Count);
+                var tri = new Triangle2f(list[0].Position, list[1].Position, list[2].Position);
+                Assert.IsTrue(tri.IsCCW);
+            }
         }
 
         public static HBMesh<HBVertex, HBEdge, HBFace> CreateTriangle()

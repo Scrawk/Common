@@ -68,6 +68,10 @@
       <Project>{76d7c24e-78bf-4a30-ac40-2f07e2eef18b}</Project>
       <Name>Common.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common.Geometry\Common.Geometry.csproj">
+      <Project>{cec1c462-d7b0-4c37-b462-9f55950a1785}</Project>
+      <Name>Common.Geometry</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common.Meshing\Common.Meshing.csproj">
       <Project>{2b93010b-f90a-4dde-87c4-83a08be28fc0}</Project>
       <Name>Common.Meshing</Name>

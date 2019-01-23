@@ -47,8 +47,8 @@ namespace Common.Meshing.Constructors
             {
                 float theta = 2.0f * pi * i / fseg;
 
-                float x = radius * (float)Math.Cos(theta);
-                float y = radius * (float)Math.Sin(theta);
+                float x = -radius * (float)Math.Cos(theta);
+                float y = -radius * (float)Math.Sin(theta);
 
                 constructor.AddVertex(center + new Vector2f(x, y));
                 vertList.Add(i);

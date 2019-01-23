@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.LinearAlgebra;
+using Common.Geometry.Shapes;
 using Common.Meshing.HalfEdgeBased;
 using Common.Meshing.Constructors;
 using Common.Meshing.Test.HalfEdgeBased;
@@ -40,6 +42,8 @@ namespace Common.Meshing.Test.Constructors
             HBMeshHelper.CheckEdge(mesh, edge: 4, from: 2, face: -1, previous: 5, next: 3, opposite: 1);
             HBMeshHelper.CheckEdge(mesh, edge: 5, from: 0, face: -1, previous: 3, next: 4, opposite: 2);
             HBMeshHelper.CheckFace(mesh, face: 0, edge: 0);
+
+            HBMeshHelper.CheckAllTrianglesCCW(mesh);
         }
 
         [TestMethod]
@@ -77,12 +81,14 @@ namespace Common.Meshing.Test.Constructors
             HBMeshHelper.CheckEdge(mesh, edge: 9, from: 0, face: -1, previous: 6, next: 8, opposite: 4);
             HBMeshHelper.CheckFace(mesh, face: 0, edge: 0);
             HBMeshHelper.CheckFace(mesh, face: 1, edge: 3);
+
+            HBMeshHelper.CheckAllTrianglesCCW(mesh);
         }
 
         [TestMethod]
         public void FromCircle()
         {
-            var constructor = new HBMeshConstructor<HBVertex2f, HBEdge, HBFace>();
+            var constructor = new HBMeshConstructor2f();
 
             CreateTriangleMesh2.FromCircle(constructor, Vector2f.Zero, 1.0f, 4);
 
@@ -92,6 +98,9 @@ namespace Common.Meshing.Test.Constructors
             Assert.AreEqual(5, mesh.Vertices.Count);
             Assert.AreEqual(16, mesh.Edges.Count);
             Assert.AreEqual(4, mesh.Faces.Count);
+
+            HBMeshHelper.CheckAllTrianglesCCW(mesh);
+
         }
 
     }

@@ -55,6 +55,16 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// add all vertices in face to list.
+        /// </summary>
+        public void GetVertices<VERTEX>(List<VERTEX> vertices, bool ccw = true)
+            where VERTEX : HBVertex
+        {
+            foreach (var v in Edge.EnumerateVertices(ccw))
+                vertices.Add(v as VERTEX);
+        }
+
+        /// <summary>
         /// Clear face of all connections.
         /// </summary>
         public virtual void Clear()

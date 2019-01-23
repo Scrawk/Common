@@ -35,6 +35,11 @@ namespace Common.Geometry.Shapes
             get { return (A + B + C) / 3.0f; }
         }
 
+        public bool IsCCW
+        {
+            get { return SignedArea > 0; }
+        }
+
         public float Area
         {
             get { return Math.Abs(SignedArea); }
@@ -94,7 +99,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Triangle2f: A={0}, B={1}, C={1}]", A, B, C);
+            return string.Format("[Triangle2f: A={0}, B={1}, C={2}]", A, B, C);
         }
 
         /// <summary>

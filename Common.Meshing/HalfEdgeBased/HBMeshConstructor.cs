@@ -75,8 +75,8 @@ namespace Common.Meshing.HalfEdgeBased
             get { return m_mesh; }
             set
             {
-                if(value != null)
-                    CheckIfUnderConstruction();
+                if(value != null && Mesh != null)
+                    throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
                 m_mesh = value;
             }
         }
@@ -364,15 +364,6 @@ namespace Common.Meshing.HalfEdgeBased
 
             edge.Previous = previous;
             edge.Next = next;
-        }
-
-        /// <summary>
-        /// Helper to check if mesh under construction.
-        /// </summary>
-        protected void CheckIfUnderConstruction()
-        {
-            if (Mesh != null)
-                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
         }
 
     }

@@ -54,18 +54,16 @@ namespace Common.Meshing.Constructors
             {
                 float theta = 2.0f * pi * i / fseg;
 
-                float x = radius * (float)Math.Cos(theta);
-                float y = radius * (float)Math.Sin(theta);
-
+                float x = -radius * (float)Math.Cos(theta);
+                float y = -radius * (float)Math.Sin(theta);
                 constructor.AddVertex(center + new Vector2f(x, y));
             }
 
             for (int i = 0; i < segments; i++)
             {
                 int i0 = 0;
-                int i1 = (i + 1) % segments + 1;
-                int i2 = i + 1;
-
+                int i1 = i + 1;
+                int i2 = (i + 1) % segments + 1;
                 constructor.AddFace(i0, i1, i2);
             }
 
@@ -76,7 +74,6 @@ namespace Common.Meshing.Constructors
                     int i0 = mod(i - 1, segments);
                     int i1 = -1;
                     int i2 = (i + 1) % segments;
-
                     constructor.AddFaceConnection(i, i0, i1, i2);
                 }
             }
