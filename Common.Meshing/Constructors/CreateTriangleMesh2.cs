@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
+using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Constructors
 {
@@ -13,6 +14,13 @@ namespace Common.Meshing.Constructors
     public static class CreateTriangleMesh2
     {
 
+        public static HBMesh2f FromTriangle(Vector2f A, Vector2f B, Vector2f C)
+        {
+            var constructor = new HBMeshConstructor2f();
+            FromTriangle(constructor, A, B, C);
+            return constructor.PopMesh();
+        }
+
         public static void FromTriangle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f A, Vector2f B, Vector2f C)
         {
             constructor.PushTriangleMesh(3, 1);
@@ -21,6 +29,13 @@ namespace Common.Meshing.Constructors
             constructor.AddVertex(B);
             constructor.AddVertex(C);
             constructor.AddFace(0, 1, 2);
+        }
+
+        public static HBMesh2f FromBox(Vector2f min, Vector2f max)
+        {
+            var constructor = new HBMeshConstructor2f();
+            FromBox(constructor, min, max);
+            return constructor.PopMesh();
         }
 
         public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
@@ -40,6 +55,13 @@ namespace Common.Meshing.Constructors
                 constructor.AddFaceConnection(0, 1, -1, -1);
                 constructor.AddFaceConnection(1, 0, -1, -1);
             }
+        }
+
+        public static HBMesh2f FromCircle(Vector2f center, float radius, int segments)
+        {
+            var constructor = new HBMeshConstructor2f();
+            FromCircle(constructor, center, radius, segments);
+            return constructor.PopMesh();
         }
 
         public static void FromCircle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
