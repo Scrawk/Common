@@ -29,15 +29,10 @@ namespace Common.Collections.Trees
         /// Tree must be rebalanced.
         /// </summary>
         /// <param name="item"></param>
-        public override bool Add(T item)
+        public override void Add(T item)
         {
-            if (base.Add(item))
-            {
-                BalancePath(item);
-                return true;
-            }
-            else
-                return false;
+            base.Add(item);
+            BalancePath(item);
         }
 
         /// <summary>

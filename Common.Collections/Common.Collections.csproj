@@ -51,6 +51,8 @@
     <Compile Include="Lists\LALinkedList.cs" />
     <Compile Include="Lists\LALinkedListNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queues\PriorityList.cs" />
+    <Compile Include="Queues\IPriorityQueue.cs" />
     <Compile Include="Sets\DisjointGridSet2.cs" />
     <Compile Include="Sets\DisjointMappedSet.cs" />
     <Compile Include="Sets\DisjointSet.cs" />

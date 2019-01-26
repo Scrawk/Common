@@ -8,14 +8,40 @@ namespace Common.Collections.Test.Lists
     [TestClass]
     public class Collections_Queues_BinaryHeapTest
     {
+
         [TestMethod]
-        public void Add()
+        public void Count()
+        {
+            var list = new PriorityList<float>();
+            list.Add(0);
+            Assert.AreEqual(1, list.Count);
+            list.Remove(0);
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [TestMethod]
+        public void Capacity()
         {
             var list = new BinaryHeap<float>();
+            list.Capacity = 3;
+            Assert.AreEqual(3, list.Capacity);
 
             list.Add(1);
             list.Add(0.5f);
             list.Add(1.5f);
+            list.Remove(1);
+        }
+
+        [TestMethod]
+        public void Add()
+        {
+            var list = TestQueue();
+
+            Assert.AreEqual(3, list.Count);
+            CollectionAssert.AreEqual(new float[] { 0.5f, 1.0f, 1.5f }, list.ToList());
+
+            list.Clear();
+            list.Add(new float[] { 0.5f, 1.0f, 1.5f });
 
             Assert.AreEqual(3, list.Count);
             CollectionAssert.AreEqual(new float[] { 0.5f, 1.0f, 1.5f }, list.ToList());
@@ -24,11 +50,7 @@ namespace Common.Collections.Test.Lists
         [TestMethod]
         public void Contains()
         {
-            var list = new BinaryHeap<float>();
-
-            list.Add(1);
-            list.Add(0.5f);
-            list.Add(1.5f);
+            var list = TestQueue();
 
             Assert.IsTrue(list.Contains(1));
             Assert.IsTrue(list.Contains(0.5f));
@@ -41,11 +63,7 @@ namespace Common.Collections.Test.Lists
         [TestMethod]
         public void RemoveItem()
         {
-            var list = new BinaryHeap<float>();
-
-            list.Add(1);
-            list.Add(0.5f);
-            list.Add(1.5f);
+            var list = TestQueue();
 
             list.Remove(0.5f);
             Assert.IsFalse(list.Contains(0.5f));
@@ -63,11 +81,7 @@ namespace Common.Collections.Test.Lists
         [TestMethod]
         public void Remove()
         {
-            var list = new BinaryHeap<float>();
-
-            list.Add(1);
-            list.Add(0.5f);
-            list.Add(1.5f);
+            var list = TestQueue();
 
             list.Remove();
             Assert.IsFalse(list.Contains(0.5f));
@@ -99,28 +113,10 @@ namespace Common.Collections.Test.Lists
         [TestMethod]
         public void Clear()
         {
-            var list = new BinaryHeap<float>();
-
-            list.Add(1);
-            list.Add(0.5f);
-            list.Add(1.5f);
+            var list = TestQueue();
 
             list.Clear();
             Assert.AreEqual(0, list.Count);
-        }
-
-        [TestMethod]
-        public void Capacity()
-        {
-            var list = new BinaryHeap<float>();
-            list.Capacity = 3;
-            Assert.AreEqual(3, list.Capacity);
-
-            list.Add(1);
-            list.Add(0.5f);
-            list.Add(1.5f);
-
-            list.Remove(1);
         }
 
         [TestMethod]
@@ -160,6 +156,24 @@ namespace Common.Collections.Test.Lists
                 v = next;
             }
 
+        }
+
+        [TestMethod]
+        public void ToList()
+        {
+            var list = TestQueue();
+            CollectionAssert.AreEqual(new float[] { 0.5f, 1.0f, 1.5f }, list.ToList());
+        }
+
+        private BinaryHeap<float> TestQueue()
+        {
+            var list = new BinaryHeap<float>();
+
+            list.Add(1);
+            list.Add(0.5f);
+            list.Add(1.5f);
+
+            return list;
         }
     }
 }

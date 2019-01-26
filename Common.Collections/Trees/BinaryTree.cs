@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using Common.Collections.Queues;
+
 namespace Common.Collections.Trees
 {
 
@@ -12,7 +14,8 @@ namespace Common.Collections.Trees
     /// than the value of the node.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class BinaryTree<T> where T : IComparable<T>
+    public class BinaryTree<T> : ICollection<T>, IPriorityQueue<T>
+        where T : IComparable<T>
     {
 
         /// <summary>
@@ -27,6 +30,24 @@ namespace Common.Collections.Trees
         /// The number of elements in the tree,
         /// </summary>
         public int Count { get; protected set; }
+
+        /// <summary>
+        /// Do nothing. Tree has no set capacity.
+        /// Needed for IPriorityQueue<T>.
+        /// </summary>
+        public int Capacity
+        {
+            get { return 0; }
+            set { ; }
+        }
+
+        /// <summary>
+        /// Gets whether or not the tree is readonly.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
 
         /// <summary>
         /// The root element of the tree
@@ -87,6 +108,20 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
+        /// Return first item in tree.
+        /// </summary>
+        /// <returns>First item</returns>
+        public T Peek()
+        {
+            if (Count == 0)
+                throw new InvalidOperationException("Queue is empty.");
+
+            T item;
+            FindMinimum(out item);
+            return item;
+        }
+
+        /// <summary>
         /// Does the tree contain the item.
         /// </summary>
         /// <param name="item">the item</param>
@@ -113,22 +148,17 @@ namespace Common.Collections.Trees
         /// </summary>
         /// <param name="data">a enumerable container</param>
         /// <returns>If any of the items not added</returns>
-        public bool Add(IEnumerable<T> data)
+        public void Add(IEnumerable<T> data)
         {
-            bool allAdded = true;
             foreach (var item in data)
-            {
-                if (!Add(item)) allAdded = false;
-            }
-
-            return allAdded;
+                Add(item);
         }
 
         /// <summary>
         /// Add a item to the tree.
         /// </summary>
         /// <param name="item"></param>
-        public virtual bool Add(T item)
+        public virtual void Add(T item)
         {
             if (Root == null)
                 Root = new BinaryTreeNode<T>(null, item);
@@ -149,8 +179,6 @@ namespace Common.Collections.Trees
                         parent = current;
                         current = current.Right;
                     }
-                    else
-                        return false;
                 }
 
                 if (item.CompareTo(parent.Item) < 0)
@@ -160,7 +188,6 @@ namespace Common.Collections.Trees
             }
 
             Count++;
-            return true;
         }
 
         /// <summary>
@@ -273,8 +300,9 @@ namespace Common.Collections.Trees
         /// </summary>
         /// <param name="item">the minimum value</param>
         /// <returns>false if tree empty</returns>
-        public bool FindMinimum(ref T item)
+        public bool FindMinimum(out T item)
         {
+            item = default(T);
             var node = FindMinimumNode(Root);
             if (node == null) return false;
             item = node.Item;
@@ -286,8 +314,9 @@ namespace Common.Collections.Trees
         /// </summary>
         /// <param name="item">the maximum value</param>
         /// <returns>false if tree empty</returns>
-        public bool FindMaximum(ref T item)
+        public bool FindMaximum(out T item)
         {
+            item = default(T);
             var node = FindMaximumNode(Root);
             if (node == null) return false;
             item = node.Item;
@@ -300,13 +329,14 @@ namespace Common.Collections.Trees
         /// <param name="node">the node</param>
         /// <param name="succesor">the nodes succesors item</param>
         /// <returns>if the node has a succesor</returns>
-        public bool FindSuccesor(T item, ref T succesor)
+        public bool FindSuccesor(T item, out T succesor)
         {
-            return FindSuccesor(FindNode(item), ref succesor);
+            return FindSuccesor(FindNode(item), out succesor);
         }
 
-        public bool FindSuccesor(BinaryTreeNode<T> node, ref T succesor)
+        public bool FindSuccesor(BinaryTreeNode<T> node, out T succesor)
         {
+            succesor = default(T);
             if (node == null) return false;
 
             if (node.Right != null)
@@ -334,13 +364,14 @@ namespace Common.Collections.Trees
         /// <param name="node">the node</param>
         /// <param name="predecessor">the nodes predecessors item</param>
         /// <returns>if the node has a succesor</returns>
-        public bool FindPredecessor(T item, ref T predecessor)
+        public bool FindPredecessor(T item, out T predecessor)
         {
-            return FindPredecessor(FindNode(item), ref predecessor);
+            return FindPredecessor(FindNode(item), out predecessor);
         }
 
-        public bool FindPredecessor(BinaryTreeNode<T> node, ref T predecessor)
+        public bool FindPredecessor(BinaryTreeNode<T> node, out T predecessor)
         {
+            predecessor = default(T);
             if (node == null) return false;
 
             if (node.Left != null)
@@ -362,6 +393,18 @@ namespace Common.Collections.Trees
             return true;
         }
 
+
+        /// <summary>
+        /// Copies the tree to an array at the specified index.
+        /// </summary>
+        /// <param name="array">One dimensional array that is the destination of the copied elements.</param>
+        /// <param name="arrayIndex">The zero-based index at which copying begins.</param>
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            var list = ToList();
+            list.CopyTo(array, arrayIndex);
+        }
+
         /// <summary>
         /// Copy the tree into a list in order.
         /// </summary>
@@ -371,6 +414,24 @@ namespace Common.Collections.Trees
             var list = new List<T>(Count);
             Inorder(list, Root);
             return list;
+        }
+
+        /// <summary>
+        /// Gets an enumerator for the tree.
+        /// </summary>
+        /// <returns>An IEnumerator of type T.</returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            var list = ToList();
+            for (int i = 0; i < list.Count; i++)
+            {
+                yield return list[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         /// <summary>

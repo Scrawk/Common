@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Common.Collections.Queues
@@ -6,27 +7,22 @@ namespace Common.Collections.Queues
     /// <summary>
     /// A binary heap, useful for sorting data and priority queues.
     /// </summary>
-    public class BinaryHeap<T> : ICollection<T> where T : IComparable<T>
+    public class BinaryHeap<T> : ICollection<T> , IPriorityQueue<T>
+        where T : IComparable<T>
     {
 
         private const int DEFAULT_SIZE = 4;
 
         private T[] m_data = new T[DEFAULT_SIZE];
 
-        private int m_count = 0;
-
         private int m_capacity = DEFAULT_SIZE;
 
         private bool m_sorted;
 
-        // Properties
         /// <summary>
         /// Gets the number of values in the heap. 
         /// </summary>
-        public int Count
-        {
-            get { return m_count; }
-        }
+        public int Count { get; private set; }
 
         /// <summary>
         /// Gets whether or not the binary heap is readonly.
@@ -45,11 +41,11 @@ namespace Common.Collections.Queues
             set
             {
                 int previousCapacity = m_capacity;
-                m_capacity = Math.Max(value, m_count);
+                m_capacity = Math.Max(value, Count);
                 if (m_capacity != previousCapacity)
                 {
                     T[] temp = new T[m_capacity];
-                    Array.Copy(m_data, temp, m_count);
+                    Array.Copy(m_data, temp, Count);
                     m_data = temp;
                 }
             }
@@ -91,7 +87,7 @@ namespace Common.Collections.Queues
         /// <summary>
         /// Gets the first value in the heap without removing it.
         /// </summary>
-        /// <returns>The lowest value of type TValue.</returns>
+        /// <returns>The lowest value of type T.</returns>
         public T Peek()
         {
             return m_data[0];
@@ -102,7 +98,7 @@ namespace Common.Collections.Queues
         /// </summary>
         public void Clear()
         {
-            m_count = 0;
+            Count = 0;
             m_data = new T[m_capacity];
         }
 
@@ -122,13 +118,12 @@ namespace Common.Collections.Queues
         /// <param name="item">The item to add to the heap.</param>
         public void Add(T item)
         {
-            if (m_count == m_capacity)
-            {
+            if (Count == m_capacity)
                 Capacity *= 2;
-            }
-            m_data[m_count] = item;
+            
+            m_data[Count] = item;
             UpHeap();
-            m_count++;
+            Count++;
         }
 
         /// <summary>
@@ -137,13 +132,13 @@ namespace Common.Collections.Queues
         /// <returns>The next value in the heap.</returns>
         public T Remove()
         {
-            if (this.m_count == 0)
+            if (Count == 0)
                 throw new InvalidOperationException("Cannot remove item, heap is empty.");
             
             T v = m_data[0];
-            m_count--;
-            m_data[0] = m_data[m_count];
-            m_data[m_count] = default(T); //Clears the Last Node
+            Count--;
+            m_data[0] = m_data[Count];
+            m_data[Count] = default(T); //Clears the Last Node
             DownHeap();
             return v;
         }
@@ -156,11 +151,11 @@ namespace Common.Collections.Queues
         public bool Remove(T item)
         {
             EnsureSort();
-            int i = Array.BinarySearch<T>(m_data, 0, m_count, item);
+            int i = Array.BinarySearch<T>(m_data, 0, Count, item);
             if (i < 0) return false;
-            Array.Copy(m_data, i + 1, m_data, i, m_count - i - 1);
-            m_count--;
-            m_data[m_count] = default(T);
+            Array.Copy(m_data, i + 1, m_data, i, Count - i - 1);
+            Count--;
+            m_data[Count] = default(T);
             return true;
         }
 
@@ -171,13 +166,13 @@ namespace Common.Collections.Queues
         public IEnumerator<T> GetEnumerator()
         {
             EnsureSort();
-            for (int i = 0; i < m_count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 yield return m_data[i];
             }
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
@@ -190,7 +185,7 @@ namespace Common.Collections.Queues
         public bool Contains(T item)
         {
             EnsureSort();
-            return Array.BinarySearch<T>(m_data, 0, m_count, item) >= 0;
+            return Array.BinarySearch<T>(m_data, 0, Count, item) >= 0;
         }
 
         /// <summary>
@@ -201,7 +196,7 @@ namespace Common.Collections.Queues
         public bool Find(T key, ref T item)
         {
             EnsureSort();
-            int i = Array.BinarySearch<T>(m_data, 0, m_count, key);
+            int i = Array.BinarySearch<T>(m_data, 0, Count, key);
             if (i < 0) return false;
 
             item = m_data[i];
@@ -216,7 +211,7 @@ namespace Common.Collections.Queues
         public void CopyTo(T[] array, int arrayIndex)
         {
             EnsureSort();
-            Array.Copy(m_data, array, m_count);
+            Array.Copy(m_data, arrayIndex, array, 0, Count - arrayIndex);
         }
 
         /// <summary>
@@ -226,8 +221,8 @@ namespace Common.Collections.Queues
         public List<T> ToList()
         {
             EnsureSort();
-            var list = new List<T>(m_count);
-            for (int i = 0; i < m_count; i++)
+            var list = new List<T>(Count);
+            for (int i = 0; i < Count; i++)
                 list.Add(m_data[i]);
 
             return list;
@@ -239,7 +234,7 @@ namespace Common.Collections.Queues
         private void UpHeap()
         {
             m_sorted = false;
-            int p = m_count;
+            int p = Count;
             T item = m_data[p];
             int par = Parent(p);
             while (par > -1 && item.CompareTo(m_data[par]) < 0)
@@ -263,9 +258,9 @@ namespace Common.Collections.Queues
             while (true)
             {
                 int ch1 = Child1(p);
-                if (ch1 >= m_count) break;
+                if (ch1 >= Count) break;
                 int ch2 = Child2(p);
-                if (ch2 >= m_count)
+                if (ch2 >= Count)
                 {
                     n = ch1;
                 }
@@ -289,7 +284,7 @@ namespace Common.Collections.Queues
         private void EnsureSort()
         {
             if (m_sorted) return;
-            Array.Sort(m_data, 0, m_count);
+            Array.Sort(m_data, 0, Count);
             m_sorted = true;
         }
 
@@ -317,5 +312,14 @@ namespace Common.Collections.Queues
             return (index << 1) + 2;
         }
 
+        public bool FindSuccesor(T item, out T succesor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool FindPredecessor(T item, out T predecessor)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

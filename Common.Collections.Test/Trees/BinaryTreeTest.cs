@@ -10,14 +10,24 @@ namespace Common.Collections.Test.Trees
     public class Collections_Trees_BinaryTreeTest
     {
         [TestMethod]
-        public void Contains()
+        public void Count()
         {
             BinaryTree<string> tree = new BinaryTree<string>();
 
-            IList<string> list = GetTestList();
-            tree.Add(list);
+            tree.Add("Joe");
+            Assert.AreEqual(1, tree.Count);
 
-            foreach(string name in list)
+            tree.Remove("Joe");
+            Assert.AreEqual(0, tree.Count);
+        }
+
+        [TestMethod]
+        public void Contains()
+        {
+            var tree = TestTree();
+            var list = TestList();
+
+            foreach (string name in list)
             {
                 Assert.IsTrue(tree.Contains(name));
             }
@@ -59,10 +69,17 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
+        public void Peek()
+        {
+            var tree = TestTree();
+
+            Assert.AreEqual("Adam", tree.Peek());
+        }
+
+        [TestMethod]
         public void Order()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             Assert.AreEqual("George", tree.Root.Item);
             Assert.AreEqual("Adam", tree.Root.Left.Item);
@@ -76,8 +93,7 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void Path()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
             var path = new List<string>();
 
             string[] expected;
@@ -131,8 +147,7 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void Remove()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             tree.Remove("George");
             Assert.AreEqual("Daniel", tree.Root.Item);
@@ -164,8 +179,7 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void ParentSet()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
             CheckParent(null, tree.Root);
 
             tree.Remove("Adam");
@@ -187,11 +201,9 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void ToList()
         {
-            var list = GetTestList();
-            var tree = new BinaryTree<string>();
-            tree.Add(list);
+            var tree = TestTree();
 
-            var sorted = new List<string>(list);
+            var sorted = new List<string>(TestList());
             sorted.Sort();
 
             CollectionAssert.AreEqual(tree.ToList(), sorted);
@@ -200,11 +212,10 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void FindMinimum()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             string min = "";
-            tree.FindMinimum(ref min);
+            tree.FindMinimum(out min);
 
             Assert.AreEqual("Adam", min);
         }
@@ -212,11 +223,10 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void FindMaximum()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             string max = "";
-            tree.FindMaximum(ref max);
+            tree.FindMaximum(out max);
 
             Assert.AreEqual("Tom", max);
         }
@@ -224,11 +234,10 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void FindNode()
         {
-            var list = GetTestList();
-            var tree = new BinaryTree<string>();
-            tree.Add(list);
+            var list = TestTree();
+            var tree = TestTree();
 
-            foreach(var name in list)
+            foreach (var name in list)
             {
                 var node = tree.FindNode(name);
                 Assert.AreEqual(name, node.Item);
@@ -238,50 +247,47 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void FindSuccesor()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             string succesor = "";
-            tree.FindSuccesor("George", ref succesor);
+            tree.FindSuccesor("George", out succesor);
             Assert.AreEqual("Jones", succesor);
 
             succesor = "";
-            tree.FindSuccesor("Peter", ref succesor);
+            tree.FindSuccesor("Peter", out succesor);
             Assert.AreEqual("Tom", succesor);
 
             succesor = "";
-            tree.FindSuccesor("Daniel", ref succesor);
+            tree.FindSuccesor("Daniel", out succesor);
             Assert.AreEqual("George", succesor);
 
-            Assert.IsFalse(tree.FindSuccesor("Tom", ref succesor));
+            Assert.IsFalse(tree.FindSuccesor("Tom", out succesor));
         }
 
         [TestMethod]
         public void FindPredeccesor()
         {
-            var tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             string predeccesor = "";
-            tree.FindPredecessor("George", ref predeccesor);
+            tree.FindPredecessor("George", out predeccesor);
             Assert.AreEqual("Daniel", predeccesor);
 
             predeccesor = "";
-            tree.FindPredecessor("Peter", ref predeccesor);
+            tree.FindPredecessor("Peter", out predeccesor);
             Assert.AreEqual("Michael", predeccesor);
 
             predeccesor = "";
-            tree.FindPredecessor("Daniel", ref predeccesor);
+            tree.FindPredecessor("Daniel", out predeccesor);
             Assert.AreEqual("Adam", predeccesor);
 
-            Assert.IsFalse(tree.FindPredecessor("Adam", ref predeccesor));
+            Assert.IsFalse(tree.FindPredecessor("Adam", out predeccesor));
         }
 
         [TestMethod]
         public void DepthFirst()
         {
-            BinaryTree<string> tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             var list = new List<string>();
             tree.DepthFirst(list, tree.Root);
@@ -292,8 +298,7 @@ namespace Common.Collections.Test.Trees
         [TestMethod]
         public void BreadthFirst()
         {
-            BinaryTree<string> tree = new BinaryTree<string>();
-            tree.Add(GetTestList());
+            var tree = TestTree();
 
             var list = new List<string>();
             tree.BreadthFirst(list, tree.Root);
@@ -301,7 +306,15 @@ namespace Common.Collections.Test.Trees
             CollectionAssert.AreEqual(new string[] { "George", "Adam", "Michael", "Daniel", "Jones", "Tom", "Peter" }, list);
         }
 
-        private string[] GetTestList()
+        private BinaryTree<string> TestTree()
+        {
+            var tree = new BinaryTree<string>();
+            tree.Add(TestList());
+
+            return tree;
+        }
+
+        private string[] TestList()
         {
             string[] list = new string[]
             {
