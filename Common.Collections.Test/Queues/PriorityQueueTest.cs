@@ -72,6 +72,35 @@ namespace Common.Collections.Test.Queues
         }
 
         [TestMethod]
+        public void RemoveFirst()
+        {
+            var list = TestQueue();
+
+            list.RemoveFirst();
+            Assert.IsFalse(list.Contains(0.5f));
+
+            list.RemoveFirst();
+            Assert.IsFalse(list.Contains(1.0f));
+
+            list.RemoveFirst();
+            Assert.IsFalse(list.Contains(1.5f));
+
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [TestMethod]
+        public void Find()
+        {
+            var list = TestQueue();
+
+            float v = 0;
+            Assert.IsTrue(list.Find(1, out v));
+            Assert.AreEqual(1, v);
+
+            Assert.IsFalse(list.Find(0, out v));
+        }
+
+        [TestMethod]
         public void Contains()
         {
             var list = TestQueue();

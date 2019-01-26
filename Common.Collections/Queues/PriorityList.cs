@@ -102,6 +102,23 @@ namespace Common.Collections.Queues
             return true;
         }
 
+        public T RemoveFirst()
+        {
+            T item = m_list[0];
+            m_list.RemoveAt(0);
+            return item;
+        }
+
+        public bool Find(T key, out T item)
+        {
+            item = default(T);
+            int i = IndexOf(key);
+            if (i < 0) return false;
+
+            item = m_list[i];
+            return true;
+        }
+
         public List<T> ToList()
         {
             return new List<T>(m_list);

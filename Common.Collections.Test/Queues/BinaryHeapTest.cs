@@ -61,7 +61,7 @@ namespace Common.Collections.Test.Lists
         }
 
         [TestMethod]
-        public void RemoveItem()
+        public void Remove()
         {
             var list = TestQueue();
 
@@ -79,17 +79,17 @@ namespace Common.Collections.Test.Lists
         }
 
         [TestMethod]
-        public void Remove()
+        public void RemoveFirst()
         {
             var list = TestQueue();
 
-            list.Remove();
+            list.RemoveFirst();
             Assert.IsFalse(list.Contains(0.5f));
 
-            list.Remove();
+            list.RemoveFirst();
             Assert.IsFalse(list.Contains(1.0f));
 
-            list.Remove();
+            list.RemoveFirst();
             Assert.IsFalse(list.Contains(1.5f));
 
             Assert.AreEqual(0, list.Count);
@@ -122,16 +122,13 @@ namespace Common.Collections.Test.Lists
         [TestMethod]
         public void Find()
         {
-            var list = new BinaryHeap<float>();
-            list.Add(1);
-            list.Add(0.5f);
-            list.Add(1.5f);
+            var list = TestQueue();
 
             float v = 0;
-            Assert.IsTrue(list.Find(1, ref v));
+            Assert.IsTrue(list.Find(1, out v));
             Assert.AreEqual(1, v);
 
-            Assert.IsFalse(list.Find(0, ref v));
+            Assert.IsFalse(list.Find(0, out v));
         }
 
         [TestMethod]

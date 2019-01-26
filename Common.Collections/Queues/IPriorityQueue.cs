@@ -18,7 +18,11 @@ namespace Common.Collections.Queues
 
         bool Remove(T item);
 
+        T RemoveFirst();
+
         bool Contains(T item);
+
+        bool Find(T key, out T item);
 
         bool FindSuccesor(T item, out T succesor);
 

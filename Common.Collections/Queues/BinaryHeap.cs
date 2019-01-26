@@ -90,6 +90,9 @@ namespace Common.Collections.Queues
         /// <returns>The lowest value of type T.</returns>
         public T Peek()
         {
+            if (Count == 0)
+                throw new InvalidOperationException("Cannot peek item, heap is empty.");
+
             return m_data[0];
         }
 
@@ -130,7 +133,7 @@ namespace Common.Collections.Queues
         /// Removes and returns the first item in the heap.
         /// </summary>
         /// <returns>The next value in the heap.</returns>
-        public T Remove()
+        public T RemoveFirst()
         {
             if (Count == 0)
                 throw new InvalidOperationException("Cannot remove item, heap is empty.");
@@ -193,8 +196,9 @@ namespace Common.Collections.Queues
         /// </summary>
         /// <param name="item">The item to search the binary heap for.</param>
         /// <returns>A boolean, true if binary heap contains item.</returns>
-        public bool Find(T key, ref T item)
+        public bool Find(T key, out T item)
         {
+            item = default(T);
             EnsureSort();
             int i = Array.BinarySearch<T>(m_data, 0, Count, key);
             if (i < 0) return false;

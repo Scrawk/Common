@@ -264,6 +264,21 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
+        /// Remove first item in tree.
+        /// </summary>
+        /// <returns>First item</returns>
+        public T RemoveFirst()
+        {
+            if (Count == 0)
+                throw new InvalidOperationException("Queue is empty.");
+
+            T item;
+            FindMinimum(out item);
+            Remove(item);
+            return item;
+        }
+
+        /// <summary>
         /// Resets all parent nodes starting from this node.
         /// </summary>
         /// <param name="node">node to start repair from</param>
@@ -271,6 +286,32 @@ namespace Common.Collections.Trees
         {
             if (node == null) return;
             RepairParent(node.Parent, node);
+        }
+
+        /// <summary>
+        /// FInds the item by a key which is just another item
+        /// that compares to the same value.
+        /// </summary>
+        /// <returns>True if item found</returns>
+        public bool Find(T key, out T item)
+        {
+            BinaryTreeNode<T> current = Root;
+
+            while (current != null)
+            {
+                if (key.CompareTo(current.Item) < 0)
+                    current = current.Left;
+                else if (key.CompareTo(current.Item) > 0)
+                    current = current.Right;
+                else
+                {
+                    item = current.Item;
+                    return true;
+                }
+            }
+
+            item = default(T);
+            return false;
         }
 
         /// <summary>

@@ -172,8 +172,30 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual("Tom", tree.Root.Right.Right.Item);
             Assert.AreEqual("Peter", tree.Root.Right.Right.Left.Item);
             Assert.AreEqual(4, tree.Count);
+        }
 
+        [TestMethod]
+        public void RemoveFirst()
+        {
+            var tree = TestTree();
 
+            Assert.AreEqual("Adam", tree.RemoveFirst());
+            Assert.AreEqual("Daniel", tree.RemoveFirst());
+            Assert.AreEqual("George", tree.RemoveFirst());
+        }
+
+        [TestMethod]
+        public void Find()
+        {
+            var tree = TestTree();
+
+            string key = "Daniel";
+            string item;
+            Assert.IsTrue(tree.Find(key, out item));
+            Assert.AreEqual("Daniel", item);
+
+            key = "Dave";
+            Assert.IsFalse(tree.Find(key, out item));
         }
 
         [TestMethod]

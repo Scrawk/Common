@@ -32,7 +32,7 @@ namespace Common.GraphTheory.Searches
 
             while (queue.Count != 0)
             {
-                var edge = queue.Remove();
+                var edge = queue.RemoveFirst();
 
                 int v = edge.To;
                 if (search.IsVisited[v]) continue;
@@ -79,7 +79,7 @@ namespace Common.GraphTheory.Searches
 
             while (queue.Count != 0)
             {
-                GridEdge edge = queue.Remove();
+                GridEdge edge = queue.RemoveFirst();
 
                 Vector2i v = edge.To;
                 if (search.IsVisited[v.x, v.y]) continue;
