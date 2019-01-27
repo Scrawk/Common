@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Common.Collections.Queues
@@ -9,7 +10,7 @@ namespace Common.Collections.Queues
     /// using a list. Used for Debuging and performance tests.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PriorityList<T> : IPriorityQueue<T>
+    public class PriorityList<T> : ICollection<T>, IPriorityQueue<T>
         where T : IComparable<T>
     {
 
@@ -34,6 +35,11 @@ namespace Common.Collections.Queues
         {
             get { return m_list.Capacity;  }
             set { m_list.Capacity = value; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
         }
 
         public void Add(IEnumerable<T> items)
@@ -127,6 +133,21 @@ namespace Common.Collections.Queues
         public void Clear()
         {
             m_list.Clear();
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            m_list.CopyTo(array, arrayIndex);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return m_list.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

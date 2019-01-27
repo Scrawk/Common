@@ -3,10 +3,15 @@ using System.Collections.Generic;
 
 namespace Common.Collections.Queues
 {
-    public interface IPriorityQueue<T>
-    {
 
-        int Count { get; }
+    /// <summary>
+    /// Interface for a list of items sorted by their comparable.
+    /// See PriorityList, BinaryHeap or BinaryTree.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IPriorityQueue<T> : ICollection<T>
+        where T : IComparable<T>
+    {
 
         int Capacity { get; set; }
 
@@ -14,13 +19,7 @@ namespace Common.Collections.Queues
 
         void Add(IEnumerable<T> items);
 
-        void Add(T item);
-
-        bool Remove(T item);
-
         T RemoveFirst();
-
-        bool Contains(T item);
 
         bool Find(T key, out T item);
 
@@ -29,8 +28,6 @@ namespace Common.Collections.Queues
         bool FindPredecessor(T item, out T predecessor);
 
         List<T> ToList();
-
-        void Clear();
 
     }
 }

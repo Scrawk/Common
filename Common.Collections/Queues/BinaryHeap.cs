@@ -7,7 +7,7 @@ namespace Common.Collections.Queues
     /// <summary>
     /// A binary heap, useful for sorting data and priority queues.
     /// </summary>
-    public class BinaryHeap<T> : ICollection<T> , IPriorityQueue<T>
+    public class BinaryHeap<T> : ICollection<T>, IPriorityQueue<T>
         where T : IComparable<T>
     {
 
