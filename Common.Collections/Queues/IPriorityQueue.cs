@@ -23,6 +23,8 @@ namespace Common.Collections.Queues
 
         bool Add(T item);
 
+        bool Remove(T item);
+
         T RemoveFirst();
 
         bool Find(T key, out T item);

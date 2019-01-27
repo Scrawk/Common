@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 using Common.Collections.Trees;
+using Common.Collections.Queues;
+using Common.Core.Time;
 
 namespace Common.Collections.Test.Trees
 {
@@ -104,6 +107,69 @@ namespace Common.Collections.Test.Trees
 
             CheckParent(null, tree.Root);
         }
+
+        /*
+        [TestMethod]
+        public void Performance()
+        {
+            var set = new HashSet<string>();
+            for (int i = 0; i < 100000; i++)
+            {
+                set.Add(RandomString(10));
+            }
+
+            Console.WriteLine("Count = " + set.Count);
+
+            var avl = new AVLTree<string>();
+            avl.Add(set);
+
+            var timer = new Timer();
+            timer.Start();
+
+            foreach(var str in set)
+            {
+                avl.Contains(str);
+            }
+
+            Console.WriteLine("AVLTree Time = " + timer.Stop());
+
+            var tree = new BinaryTree<string>();
+            tree.Add(set);
+
+            timer = new Timer();
+            timer.Start();
+
+            foreach (var str in set)
+            {
+                tree.Contains(str);
+            }
+
+            Console.WriteLine("BinaryTree Time = " + timer.Stop());
+
+            var queue = new BinaryHeap<string>();
+            queue.Add(set);
+
+            timer = new Timer();
+            timer.Start();
+
+            foreach (var str in set)
+            {
+                queue.Contains(str);
+            }
+
+            Console.WriteLine("BinaryHeap Time = " + timer.Stop());
+
+        }
+
+        private static Random random = new Random();
+        private const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+        public static string RandomString(int length)
+        {
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        */
 
         private void CheckParent<T>(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
         {

@@ -83,7 +83,7 @@ namespace Common.Collections.Trees
         /// </summary>
         /// <param name="item">The item the path terminates at</param>
         /// <param name="path">The list of nodes. The list is not cleared</param>
-        protected void GetPathNodes(T item, List<BinaryTreeNode<T>> path)
+        public void GetPathNodes(T item, List<BinaryTreeNode<T>> path)
         {
             BinaryTreeNode<T> current = Root;
 
@@ -150,11 +150,22 @@ namespace Common.Collections.Trees
         /// <summary>
         /// Add a item to the tree.
         /// </summary>
-        /// <param name="item"></param>
         public virtual bool Add(T item)
         {
+            return AddNode(item) != null;
+        }
+
+        /// <summary>
+        /// Add a item to the tree and returns the added node.
+        /// </summary>
+        protected BinaryTreeNode<T> AddNode(T item)
+        {
+            BinaryTreeNode<T> node = null;
             if (Root == null)
+            {
                 Root = new BinaryTreeNode<T>(null, item);
+                node = Root;
+            }
             else
             {
                 BinaryTreeNode<T> parent = null;
@@ -175,15 +186,21 @@ namespace Common.Collections.Trees
                 }
 
                 if (item.CompareTo(parent.Item) < 0)
+                {
                     parent.Left = new BinaryTreeNode<T>(parent, item);
+                    node = parent.Left;
+                }
                 else if (item.CompareTo(parent.Item) > 0)
+                {
                     parent.Right = new BinaryTreeNode<T>(parent, item);
+                    node = parent.Right;
+                }
                 else
-                    return false;
+                    return null;
             }
 
             Count++;
-            return true;
+            return node;
         }
 
         /// <summary>
@@ -447,10 +464,10 @@ namespace Common.Collections.Trees
         /// <returns>An IEnumerator of type T.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            var list = ToList();
-            for (int i = 0; i < list.Count; i++)
+            if (Root != null)
             {
-                yield return list[i];
+                foreach (var item in Root)
+                    yield return item;
             }
         }
 

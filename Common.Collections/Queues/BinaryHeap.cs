@@ -113,7 +113,7 @@ namespace Common.Collections.Queues
         /// <param name="item">The item to add to the heap.</param>
         public bool Add(T item)
         {
-            if (Count == m_capacity)
+            if (Count == Capacity)
                 Capacity *= 2;
             
             m_data[Count] = item;

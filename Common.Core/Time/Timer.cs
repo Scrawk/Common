@@ -39,6 +39,14 @@ namespace Common.Core.Time
             return ElapsedMilliseconds;
         }
 
+        public float Tick()
+        {
+            ElapsedMilliseconds = (ElapsedTicks * NanoSecondsPerTick) / 1000000.0f;
+            ElapsedSeconds = ElapsedMilliseconds / 1000.0f;
+
+            return ElapsedMilliseconds;
+        }
+
         public void Reset()
         {
             ElapsedMilliseconds = 0.0f;

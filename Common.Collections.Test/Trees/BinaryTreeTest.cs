@@ -232,6 +232,20 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
+        public void Enumerate()
+        {
+            var tree = TestTree();
+            var list = new List<string>();
+            foreach (var str in tree)
+                list.Add(str);
+
+            var sorted = new List<string>(TestList());
+            sorted.Sort();
+
+            CollectionAssert.AreEqual(list, sorted);
+        }
+
+        [TestMethod]
         public void FindMinimum()
         {
             var tree = TestTree();

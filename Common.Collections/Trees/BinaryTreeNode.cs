@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Common.Collections.Trees
@@ -8,7 +9,7 @@ namespace Common.Collections.Trees
     /// Node for a binary tree
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class BinaryTreeNode<T>
+    public class BinaryTreeNode<T> : IEnumerable<T>
     {
 
         /// <summary>
@@ -17,12 +18,12 @@ namespace Common.Collections.Trees
         public T Item { get; internal set; }
 
         /// <summary>
-        /// Th left node. Maybe null.
+        /// The left node. Maybe null.
         /// </summary>
         public BinaryTreeNode<T> Left { get; internal set; }
 
         /// <summary>
-        /// Th right node. Maybe null.
+        /// The right node. Maybe null.
         /// </summary>
         public BinaryTreeNode<T> Right { get; internal set; }
 
@@ -37,6 +38,32 @@ namespace Common.Collections.Trees
         {
             Parent = parent;
             Item = item;
+        }
+
+        /// <summary>
+        /// Enumerate all items from this node.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            if(Left != null)
+            {
+                foreach (var item in Left)
+                    yield return item;
+            }
+
+            yield return Item;
+
+            if (Right != null)
+            {
+                foreach (var item in Right)
+                    yield return item;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
     }
