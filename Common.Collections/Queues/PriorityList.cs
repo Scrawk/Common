@@ -10,7 +10,7 @@ namespace Common.Collections.Queues
     /// using a list. Used for Debuging and performance tests.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PriorityList<T> : ICollection<T>, IPriorityQueue<T>
+    public class PriorityList<T> : IPriorityQueue<T>
         where T : IComparable<T>
     {
 
@@ -48,10 +48,11 @@ namespace Common.Collections.Queues
             m_list.Sort();
         }
 
-        public void Add(T item)
+        public bool Add(T item)
         {
             m_list.Add(item);
             m_list.Sort();
+            return true;
         }
 
         public bool Contains(T item)
@@ -133,11 +134,6 @@ namespace Common.Collections.Queues
         public void Clear()
         {
             m_list.Clear();
-        }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            m_list.CopyTo(array, arrayIndex);
         }
 
         public IEnumerator<T> GetEnumerator()

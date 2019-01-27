@@ -6,6 +6,7 @@ namespace Common.Collections.Trees
     /// <summary>
     /// AVL is a balanced binary tree.
     /// This optimizes searches on the tree.
+    /// Does not support duplicates.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class AVLTree<T> : BinaryTree<T> where T : IComparable<T>
@@ -29,10 +30,17 @@ namespace Common.Collections.Trees
         /// Tree must be rebalanced.
         /// </summary>
         /// <param name="item"></param>
-        public override void Add(T item)
+        public override bool Add(T item)
         {
-            base.Add(item);
-            BalancePath(item);
+            if (base.Add(item))
+            {
+                BalancePath(item);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

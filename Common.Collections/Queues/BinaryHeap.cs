@@ -7,7 +7,7 @@ namespace Common.Collections.Queues
     /// <summary>
     /// A binary heap, useful for sorting data and priority queues.
     /// </summary>
-    public class BinaryHeap<T> : ICollection<T>, IPriorityQueue<T>
+    public class BinaryHeap<T> : IPriorityQueue<T>
         where T : IComparable<T>
     {
 
@@ -23,14 +23,6 @@ namespace Common.Collections.Queues
         /// Gets the number of values in the heap. 
         /// </summary>
         public int Count { get; private set; }
-
-        /// <summary>
-        /// Gets whether or not the binary heap is readonly.
-        /// </summary>
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
 
         /// <summary>
         /// Gets or sets the capacity of the heap.
@@ -119,7 +111,7 @@ namespace Common.Collections.Queues
         /// Adds a item to the heap.
         /// </summary>
         /// <param name="item">The item to add to the heap.</param>
-        public void Add(T item)
+        public bool Add(T item)
         {
             if (Count == m_capacity)
                 Capacity *= 2;
@@ -127,6 +119,7 @@ namespace Common.Collections.Queues
             m_data[Count] = item;
             UpHeap();
             Count++;
+            return true;
         }
 
         /// <summary>
@@ -205,17 +198,6 @@ namespace Common.Collections.Queues
 
             item = m_data[i];
             return true;
-        }
-
-        /// <summary>
-        /// Copies the binary heap to an array at the specified index.
-        /// </summary>
-        /// <param name="array">One dimensional array that is the destination of the copied elements.</param>
-        /// <param name="arrayIndex">The zero-based index at which copying begins.</param>
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            EnsureSort();
-            Array.Copy(m_data, arrayIndex, array, 0, Count - arrayIndex);
         }
 
         /// <summary>

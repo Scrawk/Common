@@ -9,15 +9,19 @@ namespace Common.Collections.Queues
     /// See PriorityList, BinaryHeap or BinaryTree.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IPriorityQueue<T> : ICollection<T>
+    public interface IPriorityQueue<T> : IEnumerable<T>
         where T : IComparable<T>
     {
+
+        int Count { get; }
 
         int Capacity { get; set; }
 
         T Peek();
 
         void Add(IEnumerable<T> items);
+
+        bool Add(T item);
 
         T RemoveFirst();
 
@@ -28,6 +32,8 @@ namespace Common.Collections.Queues
         bool FindPredecessor(T item, out T predecessor);
 
         List<T> ToList();
+
+        void Clear();
 
     }
 }

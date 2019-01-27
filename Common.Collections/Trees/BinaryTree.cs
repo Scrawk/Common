@@ -12,9 +12,10 @@ namespace Common.Collections.Trees
     /// in the tree, the value of any node in its left subtree is less than
     /// the value of the node, and any node in its right subtree is greater
     /// than the value of the node.
+    /// Does not support duplicates.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class BinaryTree<T> : ICollection<T>, IPriorityQueue<T>
+    public class BinaryTree<T> : IPriorityQueue<T>
         where T : IComparable<T>
     {
 
@@ -39,14 +40,6 @@ namespace Common.Collections.Trees
         {
             get { return 0; }
             set { ; }
-        }
-
-        /// <summary>
-        /// Gets whether or not the tree is readonly.
-        /// </summary>
-        public bool IsReadOnly
-        {
-            get { return false; }
         }
 
         /// <summary>
@@ -158,7 +151,7 @@ namespace Common.Collections.Trees
         /// Add a item to the tree.
         /// </summary>
         /// <param name="item"></param>
-        public virtual void Add(T item)
+        public virtual bool Add(T item)
         {
             if (Root == null)
                 Root = new BinaryTreeNode<T>(null, item);
@@ -185,9 +178,12 @@ namespace Common.Collections.Trees
                     parent.Left = new BinaryTreeNode<T>(parent, item);
                 else if (item.CompareTo(parent.Item) > 0)
                     parent.Right = new BinaryTreeNode<T>(parent, item);
+                else
+                    return false;
             }
 
             Count++;
+            return true;
         }
 
         /// <summary>
@@ -432,18 +428,6 @@ namespace Common.Collections.Trees
             if (y == null) return false;
             predecessor = y.Item;
             return true;
-        }
-
-
-        /// <summary>
-        /// Copies the tree to an array at the specified index.
-        /// </summary>
-        /// <param name="array">One dimensional array that is the destination of the copied elements.</param>
-        /// <param name="arrayIndex">The zero-based index at which copying begins.</param>
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            var list = ToList();
-            list.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
