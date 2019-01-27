@@ -88,6 +88,7 @@
     <Compile Include="Trees\AVLTree.cs" />
     <Compile Include="Trees\BinaryTree.cs" />
     <Compile Include="Trees\BinaryTreeNode.cs" />
+    <Compile Include="Trees\NewAVLTree.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Core\Common.Core.csproj">

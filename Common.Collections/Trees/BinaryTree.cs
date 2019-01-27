@@ -28,6 +28,14 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
+        /// Create new empty tree.
+        /// </summary>
+        public BinaryTree(IEnumerable<T> items)
+        {
+            Add(items);
+        }
+
+        /// <summary>
         /// The number of elements in the tree,
         /// </summary>
         public int Count { get; protected set; }
@@ -69,9 +77,10 @@ namespace Common.Collections.Trees
             {
                 path.Add(current.Item);
 
-                if (item.CompareTo(current.Item) < 0)
+                int c = item.CompareTo(current.Item);
+                if (c < 0)
                     current = current.Left;
-                else if (item.CompareTo(current.Item) > 0)
+                else if (c > 0)
                     current = current.Right;
                 else
                     break;
@@ -91,9 +100,10 @@ namespace Common.Collections.Trees
             {
                 path.Add(current);
 
-                if (item.CompareTo(current.Item) < 0)
+                int c = item.CompareTo(current.Item);
+                if (c < 0)
                     current = current.Left;
-                else if (item.CompareTo(current.Item) > 0)
+                else if (c > 0)
                     current = current.Right;
                 else
                     break;
@@ -125,9 +135,10 @@ namespace Common.Collections.Trees
 
             while(current != null)
             {
-                if (item.CompareTo(current.Item) < 0)
+                int c = item.CompareTo(current.Item);
+                if (c < 0)
                     current = current.Left;
-                else if (item.CompareTo(current.Item) > 0)
+                else if (c > 0)
                     current = current.Right;
                 else
                     return true;
@@ -152,55 +163,40 @@ namespace Common.Collections.Trees
         /// </summary>
         public virtual bool Add(T item)
         {
-            return AddNode(item) != null;
-        }
-
-        /// <summary>
-        /// Add a item to the tree and returns the added node.
-        /// </summary>
-        protected BinaryTreeNode<T> AddNode(T item)
-        {
-            BinaryTreeNode<T> node = null;
             if (Root == null)
-            {
                 Root = new BinaryTreeNode<T>(null, item);
-                node = Root;
-            }
             else
             {
+                int c;
                 BinaryTreeNode<T> parent = null;
                 BinaryTreeNode<T> current = Root;
 
                 while (current != null)
                 {
-                    if (item.CompareTo(current.Item) < 0)
+                    c = item.CompareTo(current.Item);
+                    if (c < 0)
                     {
                         parent = current;
                         current = current.Left;
                     }
-                    else if (item.CompareTo(current.Item) > 0)
+                    else if (c > 0)
                     {
                         parent = current;
                         current = current.Right;
                     }
                 }
 
-                if (item.CompareTo(parent.Item) < 0)
-                {
+                c = item.CompareTo(parent.Item);
+                if (c < 0)
                     parent.Left = new BinaryTreeNode<T>(parent, item);
-                    node = parent.Left;
-                }
-                else if (item.CompareTo(parent.Item) > 0)
-                {
+                else if (c > 0)
                     parent.Right = new BinaryTreeNode<T>(parent, item);
-                    node = parent.Right;
-                }
                 else
-                    return null;
+                    return false;
             }
 
             Count++;
-            return node;
+            return true;
         }
 
         /// <summary>
@@ -215,12 +211,13 @@ namespace Common.Collections.Trees
 
             while (current != null)
             {
-                if (item.CompareTo(current.Item) < 0)
+                int c = item.CompareTo(current.Item);
+                if (c < 0)
                 {
                     parent = current;
                     current = current.Left;
                 }
-                else if (item.CompareTo(current.Item) > 0)
+                else if (c > 0)
                 {
                     parent = current;
                     current = current.Right;
@@ -312,9 +309,10 @@ namespace Common.Collections.Trees
 
             while (current != null)
             {
-                if (key.CompareTo(current.Item) < 0)
+                int c = key.CompareTo(current.Item);
+                if (c < 0)
                     current = current.Left;
-                else if (key.CompareTo(current.Item) > 0)
+                else if (c > 0)
                     current = current.Right;
                 else
                 {
@@ -335,12 +333,12 @@ namespace Common.Collections.Trees
         public BinaryTreeNode<T> FindNode(T item)
         {
             BinaryTreeNode<T> current = Root;
-
             while (current != null)
             {
-                if (item.CompareTo(current.Item) < 0)
+                int c = item.CompareTo(current.Item);
+                if (c < 0)
                     current = current.Left;
-                else if (item.CompareTo(current.Item) > 0)
+                else if (c > 0)
                     current = current.Right;
                 else
                     return current;

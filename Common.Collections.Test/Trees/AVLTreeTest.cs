@@ -16,7 +16,7 @@ namespace Common.Collections.Test.Trees
         public void Add()
         {
 
-            AVLTree<int> tree = new AVLTree<int>();
+            var tree = new NewAVLTree<int>();
 
             tree.Add(25);
             tree.Add(20);
@@ -75,10 +75,26 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
+        public void AddRandom()
+        {
+            var rnd = new Random(0);
+            var set = new HashSet<int>();
+
+            for (int i = 0; i < 1000; i++)
+                set.Add(rnd.Next());
+
+            var tree = new NewAVLTree<int>(set);
+            var list = new List<int>(set);
+            list.Sort();
+
+            CollectionAssert.AreEqual(list, tree.ToList());
+        }
+
+        [TestMethod]
         public void Remove()
         {
 
-            AVLTree<int> tree = new AVLTree<int>();
+            var tree = new NewAVLTree<int>();
 
             tree.Add(25);
             tree.Add(20);
@@ -108,7 +124,29 @@ namespace Common.Collections.Test.Trees
             CheckParent(null, tree.Root);
         }
 
-        /*
+        [TestMethod]
+        public void RemoveRandom()
+        {
+            var rnd = new Random(0);
+            var set = new HashSet<int>();
+
+            for (int i = 0; i < 1000; i++)
+                set.Add(rnd.Next());
+
+            var tree = new NewAVLTree<int>(set);
+            var list = new List<int>(set);
+
+            for (int i = 0; i < 500; i++)
+            {
+                int j = list[i];
+                list.Remove(j);
+                tree.Remove(j);
+            }
+
+            list.Sort();
+            CollectionAssert.AreEqual(list, tree.ToList());
+        }
+
         [TestMethod]
         public void Performance()
         {
@@ -120,7 +158,7 @@ namespace Common.Collections.Test.Trees
 
             Console.WriteLine("Count = " + set.Count);
 
-            var avl = new AVLTree<string>();
+            var avl = new NewAVLTree<string>();
             avl.Add(set);
 
             var timer = new Timer();
@@ -158,7 +196,6 @@ namespace Common.Collections.Test.Trees
             }
 
             Console.WriteLine("BinaryHeap Time = " + timer.Stop());
-
         }
 
         private static Random random = new Random();
@@ -169,7 +206,6 @@ namespace Common.Collections.Test.Trees
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        */
 
         private void CheckParent<T>(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
         {

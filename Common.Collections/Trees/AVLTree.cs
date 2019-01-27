@@ -12,12 +12,19 @@ namespace Common.Collections.Trees
     public class AVLTree<T> : BinaryTree<T> where T : IComparable<T>
     {
 
+        List<BinaryTreeNode<T>> m_path;
+
         /// <summary>
         /// Create a new tree.
         /// </summary>
         public AVLTree()
         {
             
+        }
+
+        public AVLTree(IEnumerable<T> items) : base(items)
+        {
+
         }
 
         /// <summary>
@@ -27,10 +34,9 @@ namespace Common.Collections.Trees
         /// <param name="item"></param>
         public override bool Add(T item)
         {
-            var node = AddNode(item);
-            if (node != null)
+            if (base.Add(item))
             {
-                BalancePath(node);
+                BalancePath(item);
                 return true;
             }
             else
@@ -80,7 +86,7 @@ namespace Common.Collections.Trees
                     else
                         parent.Right = current.Right;
 
-                    BalancePath(parent);
+                    BalancePath(parent.Item);
                 }
             }
             else
@@ -101,45 +107,13 @@ namespace Common.Collections.Trees
                 else
                     parentOfRightMost.Left = rightMost.Left;
 
-                BalancePath(parentOfRightMost);
+                BalancePath(parentOfRightMost.Item);
             }
 
             Count--;
             return true;
         }
-
-        private void BalancePath(BinaryTreeNode<T> node)
-        {
-            BinaryTreeNode<T> current = node;
-            BinaryTreeNode<T> parent = current.Parent;
-            while(true)
-            {
-                UpdateHeight(current);
-
-                switch (BalanceFactor(current))
-                {
-                    case -2:
-                        if (BalanceFactor(current.Left) <= 0)
-                            BalanceLL(current, parent);
-                        else
-                            BalanceLR(current, parent);
-                        break;
-
-                    case 2:
-                        if (BalanceFactor(current.Right) >= 0)
-                            BalanceRR(current, parent);
-                        else
-                            BalanceRL(current, parent);
-                        break;
-                }
-
-                current = parent;
-                if (current == null) return;
-                parent = current.Parent;
-            }
-        }
-   
-        /*
+       
         private void BalancePath(T item)
         {
 
@@ -178,7 +152,6 @@ namespace Common.Collections.Trees
 
             m_path.Clear();
         }
-        */
 
         private void UpdateHeight(BinaryTreeNode<T> node)
         {
