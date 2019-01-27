@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Common.Collections.Trees
@@ -7,19 +8,15 @@ namespace Common.Collections.Trees
     /// AVL is a balanced binary tree.
     /// This optimizes searches on the tree.
     /// Does not support duplicates.
+    /// Shamelessly stolen from https://github.com/bitlush/avl-tree-c-sharp
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class AVLTree<T> : BinaryTree<T> where T : IComparable<T>
     {
 
-        List<BinaryTreeNode<T>> m_path;
-
-        /// <summary>
-        /// Create a new tree.
-        /// </summary>
         public AVLTree()
         {
-            
+
         }
 
         public AVLTree(IEnumerable<T> items) : base(items)
@@ -34,15 +31,46 @@ namespace Common.Collections.Trees
         /// <param name="item"></param>
         public override bool Add(T item)
         {
-            if (base.Add(item))
+            var node = Root;
+            while (node != null)
             {
-                BalancePath(item);
-                return true;
+                int compare = item.CompareTo( node.Item);
+                if (compare < 0)
+                {
+                    var left = node.Left;
+                    if (left == null)
+                    {
+                        node.Left = new BinaryTreeNode<T>(node, item);
+                        InsertBalance(node, 1);
+                        Count++;
+                        return true;
+                    }
+                    else
+                        node = left;
+                }
+                else if (compare > 0)
+                {
+                   var right = node.Right;
+                    if (right == null)
+                    {
+                        node.Right = new BinaryTreeNode<T>(node, item);
+                        InsertBalance(node, -1);
+                        Count++;
+                        return true;
+                    }
+                    else
+                        node = right;
+                }
+                else
+                {
+                    node.Item = item;
+                    return false;
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            Root = new BinaryTreeNode<T>(null, item);
+            Count++;
+            return true;
         }
 
         /// <summary>
@@ -50,275 +78,364 @@ namespace Common.Collections.Trees
         /// Tree must be rebalanced.
         /// </summary>
         /// <param name="item"></param>
-        public override bool Remove(T item)
+        public override bool Remove(T key)
         {
-            if (Root == null) return false;
-
-            BinaryTreeNode<T> parent = null;
-            BinaryTreeNode<T> current = Root;
-
-            while (current != null)
+            var node = Root;
+            while (node != null)
             {
-                if (item.CompareTo(current.Item) < 0)
-                {
-                    parent = current;
-                    current = current.Left;
-                }
-                else if (item.CompareTo(current.Item) > 0)
-                {
-                    parent = current;
-                    current = current.Right;
-                }
-                else
-                    break;
-            }
-
-            if (current == null) return false;
-
-            if (current.Left == null)
-            {
-                if (parent == null)
-                    Root = current.Right;
+                int c = key.CompareTo(node.Item);
+                if (c < 0)
+                    node = node.Left;
+                else if (c > 0)
+                    node = node.Right;
                 else
                 {
-                    if (item.CompareTo(parent.Item) < 0)
-                        parent.Left = current.Right;
+                    var left = node.Left;
+                    var right = node.Right;
+
+                    if (left == null)
+                    {
+                        if (right == null)
+                        {
+                            if (node == Root)
+                                Root = null;
+                            else
+                            {
+                                var parent = node.Parent;
+                                if (parent.Left == node)
+                                {
+                                    parent.Left = null;
+                                    DeleteBalance(parent, -1);
+                                }
+                                else
+                                {
+                                    parent.Right = null;
+                                    DeleteBalance(parent, 1);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Replace(node, right);
+                            DeleteBalance(node, 0);
+                        }
+                    }
+                    else if (right == null)
+                    {
+                        Replace(node, left);
+                        DeleteBalance(node, 0);
+                    }
                     else
-                        parent.Right = current.Right;
+                    {
+                        var successor = right;
+                        if (successor.Left == null)
+                        {
+                            var parent = node.Parent;
+                            successor.Parent = parent;
+                            successor.Left = left;
+                            successor.Balance = node.Balance;
+                            left.Parent = successor;
 
-                    BalancePath(parent.Item);
-                }
-            }
-            else
-            {
-                BinaryTreeNode<T> parentOfRightMost = current;
-                BinaryTreeNode<T> rightMost = current.Left;
+                            if (node == Root)
+                                Root = successor;
+                            else
+                            {
+                                if (parent.Left == node)
+                                    parent.Left = successor;
+                                else
+                                    parent.Right = successor;
+                            }
 
-                while (rightMost.Right != null)
-                {
-                    parentOfRightMost = rightMost;
-                    rightMost = rightMost.Right;
-                }
-
-                current.Item = rightMost.Item;
-
-                if (parentOfRightMost.Right == rightMost)
-                    parentOfRightMost.Right = rightMost.Left;
-                else
-                    parentOfRightMost.Left = rightMost.Left;
-
-                BalancePath(parentOfRightMost.Item);
-            }
-
-            Count--;
-            return true;
-        }
-       
-        private void BalancePath(T item)
-        {
-
-            if (m_path == null)
-                m_path = new List<BinaryTreeNode<T>>();
-
-            m_path.Clear();
-            GetPathNodes(item, m_path);
-            int count = m_path.Count;
-
-            for(int i = count-1; i >= 0; i--)
-            {
-                BinaryTreeNode<T> node = m_path[i];
-                UpdateHeight(node);
-
-                BinaryTreeNode<T> parent = (node == Root) ? null : m_path[i - 1];
-
-                switch(BalanceFactor(node))
-                {
-                    case -2:
-                        if (BalanceFactor(node.Left) <= 0)
-                            BalanceLL(node, parent);
+                            DeleteBalance(successor, 1);
+                        }
                         else
-                            BalanceLR(node, parent);
-                        break;
+                        {
+                            while (successor.Left != null)
+                                successor = successor.Left;
 
-                    case 2:
-                        if (BalanceFactor(node.Right) >= 0)
-                            BalanceRR(node, parent);
-                        else
-                            BalanceRL(node, parent);
-                        break;
+                            var parent = node.Parent;
+                            var successorParent = successor.Parent;
+                            var successorRight = successor.Right;
+
+                            if (successorParent.Left == successor)
+                                successorParent.Left = successorRight;
+                            else
+                                successorParent.Right = successorRight;
+
+                            if (successorRight != null)
+                                successorRight.Parent = successorParent;
+
+                            successor.Parent = parent;
+                            successor.Left = left;
+                            successor.Balance = node.Balance;
+                            successor.Right = right;
+                            right.Parent = successor;
+                            left.Parent = successor;
+
+                            if (node == Root)
+                                Root = successor;
+                            else
+                            {
+                                if (parent.Left == node)
+                                    parent.Left = successor;
+                                else
+                                    parent.Right = successor;
+                            }
+
+                            DeleteBalance(successorParent, -1);
+                        }
+                    }
+
+                    Count--;
+                    return true;
                 }
-
             }
 
-            m_path.Clear();
+            return false;
         }
 
-        private void UpdateHeight(BinaryTreeNode<T> node)
+        private void InsertBalance(BinaryTreeNode<T> node, int balance)
         {
-            if (node.Left == null && node.Right == null)
-                node.Height = 0;
-            else if (node.Left == null)
-                node.Height = 1 + node.Right.Height;
-            else if (node.Right == null)
-                node.Height = 1 + node.Left.Height;
-            else
-                node.Height = 1 + Math.Max(node.Right.Height, node.Left.Height);
+            while (node != null)
+            {
+                balance = (node.Balance += balance);
+
+                if (balance == 0)
+                    return;
+                else if (balance == 2)
+                {
+                    if (node.Left.Balance == 1)
+                        RotateRight(node);
+                    else
+                        RotateLeftRight(node);
+
+                    return;
+                }
+                else if (balance == -2)
+                {
+                    if (node.Right.Balance == -1)
+                        RotateLeft(node);
+                    else
+                        RotateRightLeft(node);
+
+                    return;
+                }
+
+                var parent = node.Parent;
+                if (parent != null)
+                    balance = parent.Left == node ? 1 : -1;
+
+                node = parent;
+            }
         }
 
-        private int BalanceFactor(BinaryTreeNode<T> node)
+        private BinaryTreeNode<T> RotateLeft(BinaryTreeNode<T> node)
         {
-            if (node.Right == null)
-                return -node.Height;
-            else if (node.Left == null)
-                return node.Height;
+            var right = node.Right;
+            var rightLeft = right.Left;
+            var parent = node.Parent;
+
+            right.Parent = parent;
+            right.Left = node;
+            node.Right = rightLeft;
+            node.Parent = right;
+
+            if (rightLeft != null)
+                rightLeft.Parent = node;
+
+            if (node == Root)
+                Root = right;
+            else if (parent.Right == node)
+                parent.Right = right;
             else
-                return node.Right.Height - node.Left.Height;
+                parent.Left = right;
+
+            right.Balance++;
+            node.Balance = -right.Balance;
+
+            return right;
         }
 
-        private void BalanceLL(BinaryTreeNode<T> A, BinaryTreeNode<T> parent)
+        private BinaryTreeNode<T> RotateRight(BinaryTreeNode<T> node)
         {
-            BinaryTreeNode<T> B = A.Left;
+            var left = node.Left;
+            var leftRight = left.Right;
+            var parent = node.Parent;
 
-            if (A == Root)
-            {
-                Root = B;
-                SetParent(null, Root);
-            }
+            left.Parent = parent;
+            left.Right = node;
+            node.Left = leftRight;
+            node.Parent = left;
+
+            if (leftRight != null)
+                leftRight.Parent = node;
+
+            if (node == Root)
+                Root = left;
+            else if (parent.Left == node)
+                parent.Left = left;
             else
-            {
-                if (parent.Left == A)
-                {
-                    parent.Left = B;
-                    SetParent(parent, parent.Left);
-                }
-                else
-                {
-                    parent.Right = B;
-                    SetParent(parent, parent.Right);
-                }
-            }
+                parent.Right = left;
 
-            A.Left = B.Right;
-            B.Right = A;
+            left.Balance--;
+            node.Balance = -left.Balance;
 
-            SetParent(A, A.Left);
-            SetParent(B, B.Right);
-
-            UpdateHeight(A);
-            UpdateHeight(B);
+            return left;
         }
 
-        private void BalanceLR(BinaryTreeNode<T> A, BinaryTreeNode<T> parent)
+        private BinaryTreeNode<T> RotateLeftRight(BinaryTreeNode<T> node)
         {
-            BinaryTreeNode<T> B = A.Left;
-            BinaryTreeNode<T> C = B.Right;
+            var left = node.Left;
+            var leftRight = left.Right;
+            var parent = node.Parent;
+            var leftRightRight = leftRight.Right;
+            var leftRightLeft = leftRight.Left;
 
-            if (A == Root)
+            leftRight.Parent = parent;
+            node.Left = leftRightRight;
+            left.Right = leftRightLeft;
+            leftRight.Left = left;
+            leftRight.Right = node;
+            left.Parent = leftRight;
+            node.Parent = leftRight;
+
+            if (leftRightRight != null)
+                leftRightRight.Parent = node;
+
+            if (leftRightLeft != null)
+                leftRightLeft.Parent = left;
+
+            if (node == Root)
+                Root = leftRight;
+            else if (parent.Left == node)
+                parent.Left = leftRight;
+            else
+                parent.Right = leftRight;
+
+            if (leftRight.Balance == -1)
             {
-                Root = C;
-                SetParent(null, Root);
+                node.Balance = 0;
+                left.Balance = 1;
+            }
+            else if (leftRight.Balance == 0)
+            {
+                node.Balance = 0;
+                left.Balance = 0;
             }
             else
             {
-                if (parent.Left == A)
-                {
-                    parent.Left = C;
-                    SetParent(parent, parent.Left);
-                }
-                else
-                {
-                    parent.Right = C;
-                    SetParent(parent, parent.Right);
-                }
+                node.Balance = -1;
+                left.Balance = 0;
             }
 
-            A.Left = C.Right;
-            B.Right = C.Left;
-            C.Left = B;
-            C.Right = A;
+            leftRight.Balance = 0;
 
-            SetParent(A, A.Left);
-            SetParent(B, B.Right);
-            SetParent(C, C.Left);
-            SetParent(C, C.Right);
-
-            UpdateHeight(A);
-            UpdateHeight(B);
-            UpdateHeight(C);
+            return leftRight;
         }
 
-        private void BalanceRR(BinaryTreeNode<T> A, BinaryTreeNode<T> parent)
+        private BinaryTreeNode<T> RotateRightLeft(BinaryTreeNode<T> node)
         {
-            BinaryTreeNode<T> B = A.Right;
+            var right = node.Right;
+            var rightLeft = right.Left;
+            var parent = node.Parent;
+            var rightLeftLeft = rightLeft.Left;
+            var rightLeftRight = rightLeft.Right;
 
-            if (A == Root)
+            rightLeft.Parent = parent;
+            node.Right = rightLeftLeft;
+            right.Left = rightLeftRight;
+            rightLeft.Right = right;
+            rightLeft.Left = node;
+            right.Parent = rightLeft;
+            node.Parent = rightLeft;
+
+            if (rightLeftLeft != null)
+                rightLeftLeft.Parent = node;
+
+            if (rightLeftRight != null)
+                rightLeftRight.Parent = right;
+
+            if (node == Root)
+                Root = rightLeft;
+            else if (parent.Right == node)
+                parent.Right = rightLeft;
+            else
+                parent.Left = rightLeft;
+
+            if (rightLeft.Balance == 1)
             {
-                Root = B;
-                SetParent(null, Root);
+                node.Balance = 0;
+                right.Balance = -1;
+            }
+            else if (rightLeft.Balance == 0)
+            {
+                node.Balance = 0;
+                right.Balance = 0;
             }
             else
             {
-                if (parent.Left == A)
-                {
-                    parent.Left = B;
-                    SetParent(parent, parent.Left);
-                }
-                else
-                {
-                    parent.Right = B;
-                    SetParent(parent, parent.Right);
-                }
+                node.Balance = 1;
+                right.Balance = 0;
             }
 
-            A.Right = B.Left;
-            B.Left = A;
+            rightLeft.Balance = 0;
 
-            SetParent(A, A.Right);
-            SetParent(B, B.Left);
-
-            UpdateHeight(A);
-            UpdateHeight(B);
-
+            return rightLeft;
         }
 
-        private void BalanceRL(BinaryTreeNode<T> A, BinaryTreeNode<T> parent)
+        private void DeleteBalance(BinaryTreeNode<T> node, int balance)
         {
-            BinaryTreeNode<T> B = A.Right;
-            BinaryTreeNode<T> C = B.Left;
-
-            if (A == Root)
+            while (node != null)
             {
-                Root = C;
-                SetParent(null, Root);
-            }
-            else
-            {
-                if (parent.Left == A)
+                balance = (node.Balance += balance);
+                if (balance == 2)
                 {
-                    parent.Left = C;
-                    SetParent(parent, parent.Left);
+                    if (node.Left.Balance >= 0)
+                    {
+                        node = RotateRight(node);
+                        if (node.Balance == -1)
+                            return;
+                    }
+                    else
+                        node = RotateLeftRight(node);
                 }
-                else
+                else if (balance == -2)
                 {
-                    parent.Right = C;
-                    SetParent(parent, parent.Right);
+                    if (node.Right.Balance <= 0)
+                    {
+                        node = RotateLeft(node);
+                        if (node.Balance == 1)
+                            return;
+                    }
+                    else
+                        node = RotateRightLeft(node);
                 }
+                else if (balance != 0)
+                    return;
+
+                var parent = node.Parent;
+                if (parent != null)
+                    balance = parent.Left == node ? -1 : 1;
+
+                node = parent;
             }
-
-            A.Right = C.Left;
-            B.Left = C.Right;
-            C.Left = A;
-            C.Right = B;
-
-            SetParent(A, A.Right);
-            SetParent(B, B.Left);
-            SetParent(C, C.Left);
-            SetParent(C, C.Right);
-
-            UpdateHeight(A);
-            UpdateHeight(B);
-            UpdateHeight(C);
         }
 
+        private static void Replace(BinaryTreeNode<T> target, BinaryTreeNode<T> source)
+        {
+            var left = source.Left;
+            var right = source.Right;
+
+            target.Balance = source.Balance;
+            target.Item = source.Item;
+            target.Left = left;
+            target.Right = right;
+
+            if (left != null)
+                left.Parent = target;
+
+            if (right != null)
+                right.Parent = target;
+        }
     }
 }

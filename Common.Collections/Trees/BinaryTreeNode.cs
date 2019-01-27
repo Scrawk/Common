@@ -30,7 +30,7 @@ namespace Common.Collections.Trees
         /// <summary>
         /// Used internally to balance AVLTrees.
         /// </summary>
-        internal int Height { get; set; }
+        internal int Balance { get; set; }
 
         public BinaryTreeNode<T> Parent { get; internal set; }
 

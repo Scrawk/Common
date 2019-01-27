@@ -16,7 +16,7 @@ namespace Common.Collections.Test.Trees
         public void Add()
         {
 
-            var tree = new NewAVLTree<int>();
+            var tree = new AVLTree<int>();
 
             tree.Add(25);
             tree.Add(20);
@@ -83,7 +83,7 @@ namespace Common.Collections.Test.Trees
             for (int i = 0; i < 1000; i++)
                 set.Add(rnd.Next());
 
-            var tree = new NewAVLTree<int>(set);
+            var tree = new AVLTree<int>(set);
             var list = new List<int>(set);
             list.Sort();
 
@@ -94,7 +94,7 @@ namespace Common.Collections.Test.Trees
         public void Remove()
         {
 
-            var tree = new NewAVLTree<int>();
+            var tree = new AVLTree<int>();
 
             tree.Add(25);
             tree.Add(20);
@@ -133,7 +133,7 @@ namespace Common.Collections.Test.Trees
             for (int i = 0; i < 1000; i++)
                 set.Add(rnd.Next());
 
-            var tree = new NewAVLTree<int>(set);
+            var tree = new AVLTree<int>(set);
             var list = new List<int>(set);
 
             for (int i = 0; i < 500; i++)
@@ -158,7 +158,7 @@ namespace Common.Collections.Test.Trees
 
             Console.WriteLine("Count = " + set.Count);
 
-            var avl = new NewAVLTree<string>();
+            var avl = new AVLTree<string>();
             avl.Add(set);
 
             var timer = new Timer();
