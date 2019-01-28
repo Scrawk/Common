@@ -615,12 +615,12 @@ namespace Common.Core.LinearAlgebra
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round()
+        public void Round(int digits = 0)
         {
-            x = Math.Round(x);
-            y = Math.Round(y);
-            z = Math.Round(z);
-            w = Math.Round(w);
+            x = Math.Round(x, digits);
+            y = Math.Round(y, digits);
+            z = Math.Round(z, digits);
+            w = Math.Round(w, digits);
         }
 
     }
