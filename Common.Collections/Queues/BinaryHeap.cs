@@ -130,7 +130,7 @@ namespace Common.Collections.Queues
         {
             if (Count == 0)
                 throw new InvalidOperationException("Cannot remove item, heap is empty.");
-            
+
             T v = m_data[0];
             Count--;
             m_data[0] = m_data[Count];
