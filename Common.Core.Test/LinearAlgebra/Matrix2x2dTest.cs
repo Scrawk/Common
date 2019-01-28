@@ -143,7 +143,7 @@ namespace Common.Core.Test.LinearAlgebra
         [TestMethod]
         public void Inverse()
         {
-            Assert.IsTrue((Random2x2(0).Inverse * Random2x2(0)).EqualsWithError(Matrix2x2d.Identity, 1e-6f));
+            Assert.IsTrue((Random2x2(0).Inverse * Random2x2(0)).EqualsWithError(Matrix2x2d.Identity, 1e-6));
         }
 
         [TestMethod]
@@ -153,7 +153,7 @@ namespace Common.Core.Test.LinearAlgebra
             Matrix2x2d inverse = Matrix2x2d.Identity;
             m.TryInverse(ref inverse);
 
-            Assert.IsTrue((inverse * Random2x2(0)).EqualsWithError(Matrix2x2d.Identity, 1e-6f));
+            Assert.IsTrue((inverse * Random2x2(0)).EqualsWithError(Matrix2x2d.Identity, 1e-6));
         }
 
         [TestMethod]

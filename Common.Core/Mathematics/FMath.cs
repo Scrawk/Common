@@ -5,13 +5,13 @@ namespace Common.Core.Mathematics
 {
     public class FMath
     {
-        public static readonly float EPS = 1e-9f;
+        public const float EPS = 1e-9f;
 
-        public static readonly float PI = (float)Math.PI;
+        public const float PI = (float)Math.PI;
 
-        public static readonly float Rad2Deg = 180.0f / PI;
+        public const float Rad2Deg = 180.0f / PI;
 
-        public static readonly float Deg2Rad = PI / 180.0f;
+        public const float Deg2Rad = PI / 180.0f;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeAcos(float r)
@@ -33,32 +33,32 @@ namespace Common.Core.Mathematics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float SafeInvSqrt(float n, float d)
+        public static float SafeInvSqrt(float n, float d, float eps = EPS)
         {
             if (d <= 0.0f) return 0.0f;
             d = (float)Math.Sqrt(d);
-            if (d < EPS) return 0.0f;
+            if (d < eps) return 0.0f;
             return n / d;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float SafeInv(float v)
+        public static float SafeInv(float v, float eps = EPS)
         {
-            if (Math.Abs(v) < EPS) return 0.0f;
+            if (Math.Abs(v) < eps) return 0.0f;
             return 1.0f / v;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float SafeDiv(float n, float d)
+        public static float SafeDiv(float n, float d, float eps = EPS)
         {
-            if (Math.Abs(d) < EPS) return 0.0f;
+            if (Math.Abs(d) < eps) return 0.0f;
             return n / d;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsZero(float v)
+        public static bool IsZero(float v, float eps = EPS)
         {
-            return Math.Abs(v) < EPS;
+            return Math.Abs(v) < eps;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
