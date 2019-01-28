@@ -152,11 +152,13 @@ namespace Common.Geometry.Shapes
                 {
                     s = area3 / (area3 - area4);
 
-                    area1 = SignedTriArea(seg.A, seg.B, B);
-                    area2 = SignedTriArea(seg.A, seg.B, A);
-                    area3 = SignedTriArea(A, B, seg.A);
-                    area4 = area3 + area2 - area1;
+                    float a2 = area2;
+                    float a3 = area3;
 
+                    area1 = SignedTriArea(seg.A, seg.B, B);
+                    area2 = a3;
+                    area3 = a2;
+                    area4 = area3 + area2 - area1;
                     t = area3 / (area3 - area4);
                     return true;
                 }

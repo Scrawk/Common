@@ -147,6 +147,7 @@ namespace Common.Collections.Test.Trees
             CollectionAssert.AreEqual(list, tree.ToList());
         }
 
+        /*
         [TestMethod]
         public void Performance()
         {
@@ -206,6 +207,7 @@ namespace Common.Collections.Test.Trees
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+        */
 
         private void CheckParent<T>(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
         {
