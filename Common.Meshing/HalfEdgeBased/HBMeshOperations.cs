@@ -7,12 +7,13 @@ namespace Common.Meshing.HalfEdgeBased
     {
 
         /// <summary>
-        /// Splits a edge.
+        /// Splits a edge. Creates a new vertex at split 
+        /// position os edge and connects newly created edges.
         /// </summary>
         /// <param name="mesh">parent mesh</param>
         /// <param name="edge">the edge to split</param>
         /// <param name="t">the point to split at</param>
-        public static void SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, float t = 0.5f)
+        public static VERTEX SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, float t = 0.5f)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -39,9 +40,13 @@ namespace Common.Meshing.HalfEdgeBased
 
             left0.From = mid;
 
+            VERTEX v = mid as VERTEX;
+
             mesh.Edges.Add(right1);
             mesh.Edges.Add(left1);
-            mesh.Vertices.Add(mid as VERTEX);
+            mesh.Vertices.Add(v);
+
+            return v;
         }
 
         /// <summary>
