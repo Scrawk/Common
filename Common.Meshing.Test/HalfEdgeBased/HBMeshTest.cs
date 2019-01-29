@@ -22,20 +22,5 @@ namespace Common.Meshing.Test.HalfEdgeBased
                 Assert.IsNull(edge.Face);
         }
 
-        [TestMethod]
-        public void RemoveFace()
-        {
-
-            var mesh = HBMeshHelper.CreateSquareWithCenter();
-
-            var face = mesh.Faces[0];
-            mesh.RemoveFace(face);
-
-            Assert.IsFalse(mesh.Faces.Contains(face));
-            Assert.AreEqual(3, mesh.Faces.Count);
-
-            foreach (var edge in mesh.Edges)
-                Assert.AreNotEqual(edge.Face, face);
-        }
     }
 }

@@ -193,19 +193,71 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Remove a face.
-        /// Will clear face from all edges.
+        /// Add opposite edges to all edges that dont have one.
+        /// These edges would be considered to be the boundary edges.
+        /// Presumes all edges are closed.
         /// </summary>
-        public void RemoveFace(FACE face)
+        public void AddBoundaryEdges()
         {
-            Faces.Remove(face);
-
-            int numEdges = Edges.Count;
-            for (int i = 0; i < numEdges; i++)
+            List<EDGE> edges = null;
+            foreach (var edge in Edges)
             {
-                if (ReferenceEquals(face, Edges[i].Face))
-                    Edges[i].Face = null;
+                if (edge.Opposite == null)
+                {
+                    if (edge.Next == null)
+                        throw new InvalidOperationException("Edge not closed.");
+
+                    var opp = new EDGE();
+                    opp.Opposite = edge;
+                    edge.Opposite = opp;
+                    opp.From = edge.Next.From;
+
+                    if (edges == null)
+                        edges = new List<EDGE>();
+
+                    edges.Add(opp);
+                }
             }
+
+            if (edges == null) return;
+
+            foreach (var edge in edges)
+            {
+                var from = edge.From;
+                var to = edge.To;
+
+                EDGE next = null;
+                EDGE previous = null;
+
+                foreach (var e in edges)
+                {
+                    if (ReferenceEquals(edge, e)) continue;
+
+                    //if edge e is going from this edges to vertex
+                    //it must be the next edge
+                    if (next == null && ReferenceEquals(to, e.From))
+                        next = e;
+
+                    //if edge e is going to this edges vertex 
+                    //it must be the previous edge
+                    if (previous == null && ReferenceEquals(from, e.To))
+                        previous = e;
+
+                    if (next != null && previous != null)
+                        break;
+                }
+
+                if (next == null)
+                    throw new NullReferenceException("Failed to find next edge.");
+
+                if (previous == null)
+                    throw new NullReferenceException("Failed to find previous edge.");
+
+                edge.Next = next;
+                edge.Previous = previous;
+            }
+
+            Edges.AddRange(edges);
         }
 
     }

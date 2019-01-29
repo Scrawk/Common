@@ -55,8 +55,36 @@ namespace Common.Meshing.FaceBased
         /// </summary>
         public void Clear()
         {
+            foreach (var v in Vertices)
+                v.Clear();
+
+            foreach (var f in Faces)
+                f.Clear();
+
             Vertices.Clear();
             Faces.Clear();
+        }
+
+        /// <summary>
+        /// Find the index of this vertex.
+        /// </summary>
+        /// <returns>The vertex index or -1 if not found.</returns>
+        public int IndexOf(FBVertex vertex)
+        {
+            VERTEX v = vertex as VERTEX;
+            if (v == null) return -1;
+            return Vertices.IndexOf(v);
+        }
+
+        /// <summary>
+        /// Find the index of this face.
+        /// </summary>
+        /// <returns>The face index or -1 if not found.</returns>
+        public int IndexOf(FBFace face)
+        {
+            FACE f = face as FACE;
+            if (f == null) return -1;
+            return Faces.IndexOf(f);
         }
 
         /// <summary>

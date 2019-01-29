@@ -21,7 +21,7 @@ namespace Common.Meshing.HalfEdgeBased
         public new HBMesh2f PopMesh()
         {
             if (AddBoundary)
-                HBMeshOperations.AddBoundaryEdges(Mesh);
+                Mesh.AddBoundaryEdges();
 
             var tmp = Mesh;
             Mesh = null;
@@ -42,7 +42,7 @@ namespace Common.Meshing.HalfEdgeBased
         public new HBMesh3f PopMesh()
         {
             if (AddBoundary)
-                HBMeshOperations.AddBoundaryEdges(Mesh);
+                Mesh.AddBoundaryEdges();
 
             var tmp = Mesh;
             Mesh = null;
@@ -136,7 +136,7 @@ namespace Common.Meshing.HalfEdgeBased
         public HBMesh<VERTEX, EDGE, FACE> PopMesh()
         {
             if (AddBoundary)
-                HBMeshOperations.AddBoundaryEdges(Mesh);
+                Mesh.AddBoundaryEdges();
 
             var tmp = Mesh;
             Mesh = null;

@@ -74,8 +74,8 @@ namespace Common.Meshing.HalfEdgeBased
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            return string.Format("[HBEdge: Id={0}, From={1}, Face={2}, Previous={3}, Next={4}, Opposite={5}]",
-                mesh.IndexOf(this), mesh.IndexOf(From), mesh.IndexOf(Face), 
+            return string.Format("[HBEdge: Id={0}, From={1}, To={2}, Face={3}, Previous={4}, Next={5}, Opposite={6}]",
+                mesh.IndexOf(this), mesh.IndexOf(From), mesh.IndexOf(To), mesh.IndexOf(Face), 
                 mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
         }
 
