@@ -260,5 +260,74 @@ namespace Common.Meshing.HalfEdgeBased
             Edges.AddRange(edges);
         }
 
+        /// <summary>
+        /// Append the contents of another mesh
+        /// on to this mesh as a deep copy.
+        /// </summary>
+        /// <param name="mesh"></param>
+        public void Append(HBMesh<VERTEX, EDGE, FACE> mesh, bool incudeFaces = true)
+        {
+            int vStart = Vertices.Count;
+            int eStart = Edges.Count;
+            int fStart = Faces.Count;
+
+            foreach (var other in mesh.Vertices)
+            {
+                var v = new VERTEX();
+                v.Initialize(other);
+                Vertices.Add(v);
+            }
+
+            foreach (var other in mesh.Edges)
+            {
+                var e = new EDGE();
+                Edges.Add(e);
+            }
+
+            if (incudeFaces)
+            {
+                foreach (var other in mesh.Faces)
+                {
+                    var f = new FACE();
+                    Faces.Add(f);
+                }
+            }
+
+            for (int i = 0; i < mesh.Vertices.Count; i++)
+            {
+                var v0 = mesh.Vertices[i];
+                var v1 = Vertices[vStart + i];
+
+                var edge = Edges[eStart + mesh.IndexOf(v0.Edge)];
+                v1.Edge = edge;
+            }
+
+            for (int i = 0; i < mesh.Edges.Count; i++)
+            {
+                var e0 = mesh.Edges[i];
+                var e1 = Edges[eStart + i];
+
+                var from = Vertices[vStart + mesh.IndexOf(e0.From)];
+                var face = (incudeFaces) ? Faces[fStart + mesh.IndexOf(e0.Face)] : null;
+                var previous = Edges[eStart + mesh.IndexOf(e0.Previous)];
+                var next = Edges[eStart + mesh.IndexOf(e0.Next)];
+                var opposite = Edges[eStart + mesh.IndexOf(e0.Opposite)];
+
+                e1.Set(from, face, previous, next, opposite);
+            }
+
+            if (incudeFaces)
+            {
+                for (int i = 0; i < mesh.Faces.Count; i++)
+                {
+                    var f0 = mesh.Faces[i];
+                    var f1 = Faces[fStart + i];
+
+                    var edge = Edges[eStart + mesh.IndexOf(f0.Edge)];
+                    f1.Edge = edge;
+                }
+            }
+        }
+
     }
 }

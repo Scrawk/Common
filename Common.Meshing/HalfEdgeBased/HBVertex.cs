@@ -21,6 +21,11 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
+        public virtual void Initialize(HBVertex vertex)
+        {
+
+        }
+
         public virtual void Initialize(Vector2f pos)
         {
     
