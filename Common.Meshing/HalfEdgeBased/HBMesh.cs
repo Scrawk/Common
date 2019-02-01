@@ -135,13 +135,49 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Creates a new vertex, adds it to 
+        /// vertex list add returns.
+        /// </summary>
+        /// <returns>The new vertex</returns>
+        public VERTEX NewVertex()
+        {
+            var v = new VERTEX();
+            Vertices.Add(v);
+            return v;
+        }
+
+        /// <summary>
+        /// Creates a new edge, adds it to 
+        /// edge list add returns.
+        /// </summary>
+        /// <returns>The new edge</returns>
+        public EDGE NewEdge()
+        {
+            var e = new EDGE();
+            Edges.Add(e);
+            return e;
+        }
+
+        /// <summary>
+        /// Creates a new face, adds it to 
+        /// face list add returns.
+        /// </summary>
+        /// <returns>The new face</returns>
+        public FACE NewFace()
+        {
+            var f = new FACE();
+            Faces.Add(f);
+            return f;
+        }
+
+        /// <summary>
         /// Find the edge that uses these two vertices.
         /// Presumes all edges have opposites.
         /// </summary>
-        /// <param name="v0">The from vertex</param>
-        /// <param name="v1">The to vertex</param>
+        /// <param name="from">The from vertex</param>
+        /// <param name="to">The to vertex</param>
         /// <returns>The edge index or null if not found</returns>
-        public EDGE FindEdge(HBVertex v0, HBVertex v1)
+        public EDGE FindEdge(HBVertex from, HBVertex to)
         {
             for (int i = 0; i < Edges.Count; i++)
             {
@@ -149,8 +185,8 @@ namespace Common.Meshing.HalfEdgeBased
                 if (edge.From == null) continue;
                 if (edge.To == null) continue;
 
-                if (ReferenceEquals(edge.From, v0) &&
-                   ReferenceEquals(edge.To, v1))
+                if (ReferenceEquals(edge.From, from) &&
+                   ReferenceEquals(edge.To, to))
                     return edge;
             }
 
@@ -298,7 +334,9 @@ namespace Common.Meshing.HalfEdgeBased
                 var v0 = mesh.Vertices[i];
                 var v1 = Vertices[vStart + i];
 
-                var edge = Edges[eStart + mesh.IndexOf(v0.Edge)];
+                int edgeIndex = mesh.IndexOf(v0.Edge);
+
+                var edge = (edgeIndex != -1) ? Edges[eStart + edgeIndex] : null;
                 v1.Edge = edge;
             }
 
@@ -307,11 +345,17 @@ namespace Common.Meshing.HalfEdgeBased
                 var e0 = mesh.Edges[i];
                 var e1 = Edges[eStart + i];
 
-                var from = Vertices[vStart + mesh.IndexOf(e0.From)];
-                var face = (incudeFaces) ? Faces[fStart + mesh.IndexOf(e0.Face)] : null;
-                var previous = Edges[eStart + mesh.IndexOf(e0.Previous)];
-                var next = Edges[eStart + mesh.IndexOf(e0.Next)];
-                var opposite = Edges[eStart + mesh.IndexOf(e0.Opposite)];
+                int faceIndex = (incudeFaces) ? mesh.IndexOf(e0.Face) : -1;
+                int oppIndex = mesh.IndexOf(e0.Opposite);
+                int fromIndex = mesh.IndexOf(e0.From);
+                int previousIndex = mesh.IndexOf(e0.Previous);
+                int nextIndex = mesh.IndexOf(e0.Next);
+
+                var from = (fromIndex != -1) ? Vertices[vStart + fromIndex] : null;
+                var face = (faceIndex != -1) ? Faces[fStart + faceIndex] : null;
+                var previous = (previousIndex != -1) ? Edges[eStart + previousIndex] : null;
+                var next = (nextIndex != -1) ? Edges[eStart + nextIndex] : null;
+                var opposite = (oppIndex != -1) ? Edges[eStart + oppIndex]  : null;
 
                 e1.Set(from, face, previous, next, opposite);
             }
@@ -323,7 +367,9 @@ namespace Common.Meshing.HalfEdgeBased
                     var f0 = mesh.Faces[i];
                     var f1 = Faces[fStart + i];
 
-                    var edge = Edges[eStart + mesh.IndexOf(f0.Edge)];
+                    int edgeIndex = mesh.IndexOf(f0.Edge);
+
+                    var edge = (edgeIndex != -1) ? Edges[eStart + edgeIndex] : null;
                     f1.Edge = edge;
                 }
             }

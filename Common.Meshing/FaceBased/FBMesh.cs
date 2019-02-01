@@ -88,6 +88,30 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Creates a new vertex, adds it to 
+        /// vertex list add returns.
+        /// </summary>
+        /// <returns>The new vertex</returns>
+        public VERTEX NewVertex()
+        {
+            var v = new VERTEX();
+            Vertices.Add(v);
+            return v;
+        }
+
+        /// <summary>
+        /// Creates a new face, adds it to 
+        /// face list add returns.
+        /// </summary>
+        /// <returns>The new face</returns>
+        public FACE NewFace()
+        {
+            var f = new FACE();
+            Faces.Add(f);
+            return f;
+        }
+
+        /// <summary>
         /// Fills the mesh by creating the require number of vertices and faces.
         /// </summary>
         /// <param name="numVertices">Number of vertices to create</param>
