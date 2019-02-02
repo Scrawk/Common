@@ -20,6 +20,8 @@ namespace Common.Meshing.Constructors
 
         void AddFace(IList<int> vertList);
 
+        void AddFace(int vertStart, int numVertices);
+
         void AddFaceConnection(int faceIndex, IList<int> neigbours);
 
     }

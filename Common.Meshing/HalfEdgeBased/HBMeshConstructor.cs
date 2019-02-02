@@ -219,10 +219,46 @@ namespace Common.Meshing.HalfEdgeBased
             face.Edge = edges[0];
             Mesh.Faces.Add(face);
 
-            foreach (var i in vertList)
+            for (int i = 0; i < count; i++)
             {
                 var e = edges[i];
                 var v = Mesh.Vertices[vertList[i]];
+                var previous = edges[IMath.Wrap(i - 1, count)];
+                var next = edges[IMath.Wrap(i + 1, count)];
+
+                e.Set(v, face, previous, next, null);
+                Mesh.Edges.Add(e);
+            }
+
+        }
+
+        /// <summary>
+        /// Add a CCW general face. Presumes that 
+        /// vertices are orders from start index to start + num index.
+        /// </summary>
+        /// <param name="vertStart">The index of the start vert</param>
+        /// <param name="numVertices">The number of vertices in face</param>
+        public void AddFace(int vertStart, int numVertices)
+        {
+            int count = numVertices;
+            var face = new FACE();
+            var edges = new List<EDGE>(numVertices);
+
+            for (int i = 0; i < count; i++)
+            {
+                var v = Mesh.Vertices[vertStart + i];
+                var e = new EDGE();
+                v.Edge = e;
+                edges.Add(e);
+            }
+
+            face.Edge = edges[0];
+            Mesh.Faces.Add(face);
+
+            for (int i = 0; i < count; i++)
+            {
+                var e = edges[i];
+                var v = Mesh.Vertices[vertStart + i];
                 var previous = edges[IMath.Wrap(i - 1, count)];
                 var next = edges[IMath.Wrap(i + 1, count)];
 

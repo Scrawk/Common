@@ -93,6 +93,22 @@ namespace Common.Meshing.FaceBased
             Mesh.Faces.Add(face);
         }
 
+        public void AddFace(int vertStart, int numVertices)
+        {
+            int count = numVertices;
+            FACE face = new FACE();
+            face.SetSize(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                var v = Mesh.Vertices[vertStart + i];
+                v.Face = face;
+                face.Vertices[i] = v;
+            }
+
+            Mesh.Faces.Add(face);
+        }
+
         public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
             var face = Mesh.Faces[faceIndex];

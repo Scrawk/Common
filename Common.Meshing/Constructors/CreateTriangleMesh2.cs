@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
+using Common.Core.Mathematics;
 using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Constructors
@@ -85,7 +86,7 @@ namespace Common.Meshing.Constructors
             {
                 int i0 = 0;
                 int i1 = i + 1;
-                int i2 = (i + 1) % segments + 1;
+                int i2 = IMath.Wrap(i + 1, segments) + 1;
                 constructor.AddFace(i0, i1, i2);
             }
 
@@ -93,19 +94,14 @@ namespace Common.Meshing.Constructors
             {
                 for (int i = 0; i < segments; i++)
                 {
-                    int i0 = mod(i - 1, segments);
+                    int i0 = IMath.Wrap(i - 1, segments);
                     int i1 = -1;
-                    int i2 = (i + 1) % segments;
+                    int i2 = IMath.Wrap(i + 1, segments);
                     constructor.AddFaceConnection(i, i0, i1, i2);
                 }
             }
 
         }
 
-        private static int mod(int x, int m)
-        {
-            int r = x % m;
-            return r < 0 ? r + m : r;
-        }
     }
 }
