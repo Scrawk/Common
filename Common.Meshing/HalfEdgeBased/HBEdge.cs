@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Common.Meshing.HalfEdgeBased
 {
     /// <summary>
-    /// Half edge. Presumes edges connect CCW.
+    /// Half edge. Presumes edges are connected in CCW order.
     /// </summary>
     public class HBEdge
     {
@@ -31,12 +31,12 @@ namespace Common.Meshing.HalfEdgeBased
         public HBFace Face { get; set; }
 
         /// <summary>
-        /// The previous edge in CCW order.
+        /// The previous edge.
         /// </summary>
         public HBEdge Previous { get; set; }
 
         /// <summary>
-        /// The next edge in CCW order.
+        /// The next edge.
         /// </summary>
         public HBEdge Next { get; set; }
 
@@ -183,9 +183,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// Enumerate all edges starting from this edge.
         /// If edge is closed this will enumerate all edges in the face.
         /// </summary>
-        /// <param name="ccw">enumerate counter clockwise or clockwise</param>
+        /// <param name="forwards">enumerate forward or backwards</param>
         /// <returns></returns>
-        public IEnumerable<HBEdge> EnumerateEdges(bool ccw = true)
+        public IEnumerable<HBEdge> EnumerateEdges(bool forwards = true)
         {
             var start = this;
             var e = start;
@@ -194,7 +194,7 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 if (e == null) yield break;
                 yield return e;
-                e = (ccw) ? e.Next : e.Previous;
+                e = (forwards) ? e.Next : e.Previous;
             }
             while (!ReferenceEquals(start, e));
         }
@@ -203,9 +203,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// Enumerate all vertices starting from this edges vertex.
         /// If edge is closed this will enumerate all vertices in the face.
         /// </summary>
-        /// <param name="ccw">enumerate counter clockwise or clockwise</param>
+        /// <param name="forward">enumerate forward or backwards</param>
         /// <returns></returns>
-        public IEnumerable<HBVertex> EnumerateVertices(bool ccw = true)
+        public IEnumerable<HBVertex> EnumerateVertices(bool forward = true)
         {
             var start = this;
             var e = start;
@@ -215,7 +215,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (e == null) yield break;
                 if (e.From == null) yield break;
                 yield return e.From;
-                e = (ccw) ? e.Next : e.Previous;
+                e = (forward) ? e.Next : e.Previous;
             }
             while (!ReferenceEquals(start, e));
         }
