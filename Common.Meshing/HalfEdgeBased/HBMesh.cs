@@ -404,66 +404,6 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Append a polygon into mesh.
-        /// </summary>
-        public void AppendPolygon(IList<Vector2f> polygon, bool incudeFaces = true)
-        {
-            int vStart = Vertices.Count;
-            int eStart = Edges.Count;
-            int fStart = Faces.Count;
-            int vertices = polygon.Count;
-            int edges = vertices;
-
-            for (int i = 0; i < polygon.Count; i++)
-            {
-                var v = new VERTEX();
-                v.Initialize(polygon[i]);
-                Vertices.Add(v);
-            }
-
-            for (int i = 0; i < edges; i++)
-            {
-                var e0 = new EDGE();
-                var e1 = new EDGE();
-                e0.Opposite = e1;
-                e1.Opposite = e0;
-                Edges.Add(e0);
-                Edges.Add(e1);
-            }
-
-            FACE face = null;
-            if (incudeFaces)
-            {
-                face = new FACE();
-                face.Edge = Edges[eStart];
-                Faces.Add(face);
-            }
-
-            for (int i = 0; i < edges; i++)
-            {
-                int i2 = i * 2;
-                int p2 = IMath.Wrap(i - 1, edges) * 2;
-                int n2 = IMath.Wrap(i + 1, edges) * 2;
-
-                var v0 = Vertices[vStart + i];
-                var v1 = Vertices[vStart + IMath.Wrap(i+1, vertices)];
-
-                var e0 = Edges[eStart + i2 + 0];
-                var e1 = Edges[eStart + i2 + 1];
-                var p0 = Edges[eStart + p2 + 0];
-                var p1 = Edges[eStart + n2 + 1];
-                var n0 = Edges[eStart + n2 + 0];
-                var n1 = Edges[eStart + p2 + 1];
-
-                e0.Set(v0, face, p0, n0, e1);
-                e1.Set(v1, face, p1, n1, e0);
-
-                v0.Edge = e0;
-                v1.Edge = e1;
-            }
-        }
-
-        /// <summary>
         /// Creates a index list representing the vertices of each face.
         /// </summary>
         /// <param name="faceVertices">The number of vertices each face has</param>

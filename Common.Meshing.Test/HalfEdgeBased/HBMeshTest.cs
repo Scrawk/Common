@@ -158,39 +158,5 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
         }
 
-        [TestMethod]
-        public void AppendPolygon()
-        {
-            var min = new Vector2f(-1, -1);
-            var max = new Vector2f(1, 1);
-            var polygon = new Vector2f[]
-            {
-                new Vector2f(-1, -1),
-                new Vector2f(1, -1),
-                new Vector2f(1, 1),
-                new Vector2f(-1, 1)
-            };
-
-            var mesh = new HBMesh2f();
-            mesh.AppendPolygon(polygon);
-
-            Assert.AreEqual(4, mesh.Vertices.Count);
-            Assert.AreEqual(8, mesh.Edges.Count);
-            Assert.AreEqual(1, mesh.Faces.Count);
-            HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 7, pos: new Vector2f(-1, -1));
-            HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 2, pos: new Vector2f(1, -1));
-            HBMeshHelper.CheckVertex(mesh, vertex: 2, edge: 4, pos: new Vector2f(1, 1));
-            HBMeshHelper.CheckVertex(mesh, vertex: 3, edge: 6, pos: new Vector2f(-1, 1));
-            HBMeshHelper.CheckEdge(mesh, edge: 0, from: 0, face: 0, previous: 6, next: 2, opposite: 1);
-            HBMeshHelper.CheckEdge(mesh, edge: 1, from: 1, face: 0, previous: 3, next: 7, opposite: 0);
-            HBMeshHelper.CheckEdge(mesh, edge: 2, from: 1, face: 0, previous: 0, next: 4, opposite: 3);
-            HBMeshHelper.CheckEdge(mesh, edge: 3, from: 2, face: 0, previous: 5, next: 1, opposite: 2);
-            HBMeshHelper.CheckEdge(mesh, edge: 4, from: 2, face: 0, previous: 2, next: 6, opposite: 5);
-            HBMeshHelper.CheckEdge(mesh, edge: 5, from: 3, face: 0, previous: 7, next: 3, opposite: 4);
-            HBMeshHelper.CheckEdge(mesh, edge: 6, from: 3, face: 0, previous: 4, next: 0, opposite: 7);
-            HBMeshHelper.CheckEdge(mesh, edge: 7, from: 0, face: 0, previous: 1, next: 5, opposite: 6);
-            HBMeshHelper.CheckFace(mesh, face: 0, edge: 0);
-        }
-
     }
 }
