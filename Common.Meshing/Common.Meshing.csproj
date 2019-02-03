@@ -55,6 +55,8 @@
     <Compile Include="HalfEdgeBased\HBEdge.cs" />
     <Compile Include="HalfEdgeBased\HBFace.cs" />
     <Compile Include="HalfEdgeBased\HBMesh.cs" />
+    <Compile Include="HalfEdgeBased\HBMesh2f.cs" />
+    <Compile Include="HalfEdgeBased\HBMesh3f.cs" />
     <Compile Include="HalfEdgeBased\HBMeshConstructor.cs" />
     <Compile Include="HalfEdgeBased\HBEdgeOperations.cs" />
     <Compile Include="HalfEdgeBased\HBVertex.cs" />

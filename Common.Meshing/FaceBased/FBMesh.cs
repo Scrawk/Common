@@ -111,7 +111,6 @@ namespace Common.Meshing.FaceBased
             return f;
         }
 
-
         /// <summary>
         /// Applies the vertex index as a tag.
         /// </summary>
@@ -122,12 +121,30 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Sets all vertex tags.
+        /// </summary>
+        public void TagVertices(int tag)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                Vertices[i].Tag = tag;
+        }
+
+        /// <summary>
         /// Applies the face index as a tag.
         /// </summary>
         public void TagFaces()
         {
             for (int i = 0; i < Faces.Count; i++)
                 Faces[i].Tag = i;
+        }
+
+        /// <summary>
+        /// Sets all face tags.
+        /// </summary>
+        public void TagFaces(int tag)
+        {
+            for (int i = 0; i < Faces.Count; i++)
+                Faces[i].Tag = tag;
         }
 
         public void TagAll()
@@ -159,16 +176,16 @@ namespace Common.Meshing.FaceBased
         /// Creates a index list representing the vertices of each face.
         /// </summary>
         /// <param name="faceVertices">The number of vertices each face has</param>
-        /// <returns>list representing the vertices of each face</returns>
-        public List<int> CreateFaceIndices(int faceVertices = 3)
+        /// <param name="indices">list representing the vertices of each face</param>
+        public void GetFaceIndices(List<int> indices, int faceVertices = 3)
         {
-            int count = Faces.Count;
-            int size = Faces.Count * faceVertices;
-
+            if (faceVertices < 2)
+                throw new ArgumentException("faceVertices can not be less than 2.");
+            
             TagVertices();
-            List<int> indices = new List<int>(size);
 
-            for(int i = 0; i < count; i++)
+            int count = Faces.Count;
+            for (int i = 0; i < count; i++)
             {
                 var face = Faces[i];
                 if (face.Vertices.Length != faceVertices)
@@ -180,8 +197,6 @@ namespace Common.Meshing.FaceBased
                     indices.Add(v.Tag);
                 }
             }
-
-            return indices;
         }
 
     }

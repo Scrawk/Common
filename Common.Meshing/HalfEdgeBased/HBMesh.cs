@@ -6,47 +6,6 @@ using Common.Core.Mathematics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-
-    /// <summary>
-    /// HBMesh with Vector2f as vertices.
-    /// </summary>
-    public class HBMesh2f : HBMesh<HBVertex2f, HBEdge, HBFace>
-    {
-        public HBMesh2f() { }
-
-        public HBMesh2f(int numVertices, int numEdges, int numFaces)
-            : base(numVertices, numEdges, numFaces)
-        {
-
-        }
-
-        public void GetPositions(List<Vector2f> positions)
-        {
-            for (int i = 0; i < Vertices.Count; i++)
-                positions.Add(Vertices[i].Position);
-        }
-    }
-
-    /// <summary>
-    /// HBMesh with Vector3f as vertices.
-    /// </summary>
-    public class HBMesh3f : HBMesh<HBVertex3f, HBEdge, HBFace>
-    {
-        public HBMesh3f() { }
-
-        public HBMesh3f(int numVertices, int numEdges, int numFaces)
-            : base(numVertices, numEdges, numFaces)
-        {
-
-        }
-
-        public void GetPositions(List<Vector3f> positions)
-        {
-            for (int i = 0; i < Vertices.Count; i++)
-                positions.Add(Vertices[i].Position);
-        }
-    }
-
     /// <summary>
     /// A half edge based mesh.
     /// </summary>
@@ -193,6 +152,15 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Sets all vertex tags.
+        /// </summary>
+        public void TagVertices(int tag)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                Vertices[i].Tag = tag;
+        }
+
+        /// <summary>
         /// Applies the edge index as a tag.
         /// </summary>
         public void TagEdges()
@@ -202,12 +170,30 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Sets all edge tags.
+        /// </summary>
+        public void TagEdges(int tag)
+        {
+            for (int i = 0; i < Edges.Count; i++)
+                Edges[i].Tag = tag;
+        }
+
+        /// <summary>
         /// Applies the face index as a tag.
         /// </summary>
         public void TagFaces()
         {
             for (int i = 0; i < Faces.Count; i++)
                 Faces[i].Tag = i;
+        }
+
+        /// <summary>
+        /// Sets all face tags.
+        /// </summary>
+        public void TagFaces(int tag)
+        {
+            for (int i = 0; i < Faces.Count; i++)
+                Faces[i].Tag = tag;
         }
 
         public void TagAll()
@@ -481,16 +467,16 @@ namespace Common.Meshing.HalfEdgeBased
         /// Creates a index list representing the vertices of each face.
         /// </summary>
         /// <param name="faceVertices">The number of vertices each face has</param>
-        /// <returns>list representing the vertices of each face</returns>
-        public List<int> CreateFaceIndices(int faceVertices = 3)
+        /// <param name="indices">list representing the vertices of each face</param>
+        public void GetFaceIndices(List<int> indices, int faceVertices = 3)
         {
-            int count = Faces.Count;
-            int size = Faces.Count * faceVertices;
+            if (faceVertices < 3)
+                throw new ArgumentException("faceVertices can not be less than 3.");
 
             TagVertices();
-            List<int> indices = new List<int>(size);
             List<VERTEX> vertices = new List<VERTEX>(faceVertices);
 
+            int count = Faces.Count;
             for (int i = 0; i < count; i++)
             {
                 var face = Faces[i];
@@ -504,8 +490,30 @@ namespace Common.Meshing.HalfEdgeBased
                 for (int j = 0; j < faceVertices; j++)
                     indices.Add(vertices[j].Tag);
             }
+        }
 
-            return indices;
+        /// <summary>
+        /// Creates a index list representing the vertices of each edge.
+        /// </summary>
+        /// <param name="indices">list representing the vertices of each edge</param>
+        public void GetEdgeIndices(List<int> indices)
+        {
+            TagVertices();
+            TagEdges(0);
+
+            int count = Edges.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var edge = Edges[i];
+                if (edge.Tag == 1) continue;
+                if (edge.Opposite == null) continue;
+
+                indices.Add(edge.From.Tag);
+                indices.Add(edge.To.Tag);
+
+                edge.Tag = 1;
+                edge.Opposite.Tag = 1;
+            }
         }
 
     }
