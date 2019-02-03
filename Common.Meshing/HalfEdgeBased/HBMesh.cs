@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
+using Common.Core.Mathematics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
@@ -87,14 +88,14 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         public void Clear()
         {
-            foreach (var v in Vertices)
-                v.Clear();
+            for (int i = 0; i < Vertices.Count; i++)
+                Vertices[i].Clear();
 
-            foreach (var e in Edges)
-                e.Clear();
+            for (int i = 0; i < Edges.Count; i++)
+                Edges[i].Clear();
 
-            foreach (var f in Faces)
-                f.Clear();
+            for (int i = 0; i < Faces.Count; i++)
+                Faces[i].Clear();
 
             Vertices.Clear();
             Edges.Clear();
@@ -171,6 +172,40 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Applies the vertex index as a tag.
+        /// </summary>
+        public void TagVertices()
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                Vertices[i].Tag = i;
+        }
+
+        /// <summary>
+        /// Applies the edge index as a tag.
+        /// </summary>
+        public void TagEdges()
+        {
+            for (int i = 0; i < Edges.Count; i++)
+                Edges[i].Tag = i;
+        }
+
+        /// <summary>
+        /// Applies the face index as a tag.
+        /// </summary>
+        public void TagFaces()
+        {
+            for (int i = 0; i < Faces.Count; i++)
+                Faces[i].Tag = i;
+        }
+
+        public void TagAll()
+        {
+            TagVertices();
+            TagEdges();
+            TagFaces();
+        }
+
+        /// <summary>
         /// Find the edge that uses these two vertices.
         /// Presumes all edges have opposites.
         /// </summary>
@@ -236,8 +271,10 @@ namespace Common.Meshing.HalfEdgeBased
         public void AddBoundaryEdges()
         {
             List<EDGE> edges = null;
-            foreach (var edge in Edges)
+            for (int i = 0; i < Edges.Count; i++)
             {
+                var edge = Edges[i];
+
                 if (edge.Opposite == null)
                 {
                     if (edge.Next == null)
@@ -257,8 +294,9 @@ namespace Common.Meshing.HalfEdgeBased
 
             if (edges == null) return;
 
-            foreach (var edge in edges)
+            for (int i = 0; i < edges.Count; i++)
             {
+                var edge = edges[i];
                 var from = edge.From;
                 var to = edge.To;
 
@@ -301,20 +339,22 @@ namespace Common.Meshing.HalfEdgeBased
         /// on to this mesh as a deep copy.
         /// </summary>
         /// <param name="mesh"></param>
-        public void Append(HBMesh<VERTEX, EDGE, FACE> mesh, bool incudeFaces = true)
+        public void AppendMesh(HBMesh<VERTEX, EDGE, FACE> mesh, bool incudeFaces = true)
         {
             int vStart = Vertices.Count;
             int eStart = Edges.Count;
             int fStart = Faces.Count;
 
-            foreach (var other in mesh.Vertices)
+            mesh.TagAll();
+
+            for (int i = 0; i < mesh.Vertices.Count; i++)
             {
                 var v = new VERTEX();
-                v.Initialize(other);
+                v.Initialize(mesh.Vertices[i]);
                 Vertices.Add(v);
             }
 
-            foreach (var other in mesh.Edges)
+            for (int i = 0; i < mesh.Edges.Count; i++)
             {
                 var e = new EDGE();
                 Edges.Add(e);
@@ -322,7 +362,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             if (incudeFaces)
             {
-                foreach (var other in mesh.Faces)
+                for (int i = 0; i < mesh.Faces.Count; i++)
                 {
                     var f = new FACE();
                     Faces.Add(f);
@@ -334,9 +374,7 @@ namespace Common.Meshing.HalfEdgeBased
                 var v0 = mesh.Vertices[i];
                 var v1 = Vertices[vStart + i];
 
-                int edgeIndex = mesh.IndexOf(v0.Edge);
-
-                var edge = (edgeIndex != -1) ? Edges[eStart + edgeIndex] : null;
+                var edge = (v0.Edge != null) ? Edges[eStart + v0.Edge.Tag] : null;
                 v1.Edge = edge;
             }
 
@@ -345,17 +383,11 @@ namespace Common.Meshing.HalfEdgeBased
                 var e0 = mesh.Edges[i];
                 var e1 = Edges[eStart + i];
 
-                int faceIndex = (incudeFaces) ? mesh.IndexOf(e0.Face) : -1;
-                int oppIndex = mesh.IndexOf(e0.Opposite);
-                int fromIndex = mesh.IndexOf(e0.From);
-                int previousIndex = mesh.IndexOf(e0.Previous);
-                int nextIndex = mesh.IndexOf(e0.Next);
-
-                var from = (fromIndex != -1) ? Vertices[vStart + fromIndex] : null;
-                var face = (faceIndex != -1) ? Faces[fStart + faceIndex] : null;
-                var previous = (previousIndex != -1) ? Edges[eStart + previousIndex] : null;
-                var next = (nextIndex != -1) ? Edges[eStart + nextIndex] : null;
-                var opposite = (oppIndex != -1) ? Edges[eStart + oppIndex]  : null;
+                var from = (e0.From != null) ? Vertices[vStart + e0.From.Tag] : null;
+                var face = (incudeFaces && e0.Face != null) ? Faces[fStart + e0.Face.Tag] : null;
+                var previous = (e0.Previous != null) ? Edges[eStart + e0.Previous.Tag] : null;
+                var next = (e0.Next != null) ? Edges[eStart + e0.Next.Tag] : null;
+                var opposite = (e0.Opposite != null) ? Edges[eStart + e0.Opposite.Tag]  : null;
 
                 e1.Set(from, face, previous, next, opposite);
             }
@@ -367,11 +399,69 @@ namespace Common.Meshing.HalfEdgeBased
                     var f0 = mesh.Faces[i];
                     var f1 = Faces[fStart + i];
 
-                    int edgeIndex = mesh.IndexOf(f0.Edge);
-
-                    var edge = (edgeIndex != -1) ? Edges[eStart + edgeIndex] : null;
+                    var edge = (f0.Edge != null) ? Edges[eStart + f0.Edge.Tag] : null;
                     f1.Edge = edge;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Append a polygon into mesh.
+        /// </summary>
+        public void AppendPolygon(IList<Vector2f> polygon, bool incudeFaces = true)
+        {
+            int vStart = Vertices.Count;
+            int eStart = Edges.Count;
+            int fStart = Faces.Count;
+            int vertices = polygon.Count;
+            int edges = vertices;
+
+            for (int i = 0; i < polygon.Count; i++)
+            {
+                var v = new VERTEX();
+                v.Initialize(polygon[i]);
+                Vertices.Add(v);
+            }
+
+            for (int i = 0; i < edges; i++)
+            {
+                var e0 = new EDGE();
+                var e1 = new EDGE();
+                e0.Opposite = e1;
+                e1.Opposite = e0;
+                Edges.Add(e0);
+                Edges.Add(e1);
+            }
+
+            FACE face = null;
+            if (incudeFaces)
+            {
+                face = new FACE();
+                face.Edge = Edges[eStart];
+                Faces.Add(face);
+            }
+
+            for (int i = 0; i < edges; i++)
+            {
+                int i2 = i * 2;
+                int p2 = IMath.Wrap(i - 1, edges) * 2;
+                int n2 = IMath.Wrap(i + 1, edges) * 2;
+
+                var v0 = Vertices[vStart + i];
+                var v1 = Vertices[vStart + IMath.Wrap(i+1, vertices)];
+
+                var e0 = Edges[eStart + i2 + 0];
+                var e1 = Edges[eStart + i2 + 1];
+                var p0 = Edges[eStart + p2 + 0];
+                var p1 = Edges[eStart + n2 + 1];
+                var n0 = Edges[eStart + n2 + 0];
+                var n1 = Edges[eStart + p2 + 1];
+
+                e0.Set(v0, face, p0, n0, e1);
+                e1.Set(v1, face, p1, n1, e0);
+
+                v0.Edge = e0;
+                v1.Edge = e1;
             }
         }
 

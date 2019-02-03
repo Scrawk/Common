@@ -8,6 +8,7 @@ namespace Common.Meshing.FaceBased
 
     public class FBVertex
     {
+        public int Tag;
 
         public FBFace Face { get; set; }
 
@@ -27,21 +28,6 @@ namespace Common.Meshing.FaceBased
         }
 
         public virtual void Initialize(Vector4f pos)
-        {
-
-        }
-
-        public virtual void Transform(Matrix2x2f m)
-        {
-
-        }
-
-        public virtual void Transform(Matrix3x3f m)
-        {
-
-        }
-
-        public virtual void Transform(Matrix4x4f m)
         {
 
         }

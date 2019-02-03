@@ -8,6 +8,8 @@ namespace Common.Meshing.HalfEdgeBased
     /// </summary>
     public class HBFace
     {
+        public int Tag;
+
         /// <summary>
         /// The edge this face connects to. 
         /// </summary>

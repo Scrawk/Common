@@ -11,10 +11,12 @@ namespace Common.Meshing.HalfEdgeBased
     /// </summary>
     public class HBVertex
     {
+        public int Tag;
+
         /// <summary>
         /// The vertex edge.
         /// </summary>
-        public HBEdge Edge { get; set; }
+        public HBEdge Edge;
 
         public HBVertex()
         {

@@ -6,6 +6,8 @@ namespace Common.Meshing.FaceBased
     public class FBFace
     {
 
+        public int Tag;
+
         public FBVertex[] Vertices { get; set; }
 
         public FBFace[] Neighbors { get; set; }

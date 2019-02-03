@@ -55,11 +55,11 @@ namespace Common.Meshing.FaceBased
         /// </summary>
         public void Clear()
         {
-            foreach (var v in Vertices)
-                v.Clear();
+            for (int i = 0; i < Vertices.Count; i++)
+                Vertices[i].Clear();
 
-            foreach (var f in Faces)
-                f.Clear();
+            for (int i = 0; i < Faces.Count; i++)
+                Faces[i].Clear();
 
             Vertices.Clear();
             Faces.Clear();
@@ -109,6 +109,31 @@ namespace Common.Meshing.FaceBased
             var f = new FACE();
             Faces.Add(f);
             return f;
+        }
+
+
+        /// <summary>
+        /// Applies the vertex index as a tag.
+        /// </summary>
+        public void TagVertices()
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                Vertices[i].Tag = i;
+        }
+
+        /// <summary>
+        /// Applies the face index as a tag.
+        /// </summary>
+        public void TagFaces()
+        {
+            for (int i = 0; i < Faces.Count; i++)
+                Faces[i].Tag = i;
+        }
+
+        public void TagAll()
+        {
+            TagVertices();
+            TagFaces();
         }
 
         /// <summary>

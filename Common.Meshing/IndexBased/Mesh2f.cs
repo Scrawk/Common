@@ -8,7 +8,7 @@ namespace Common.Meshing.IndexBased
 {
     public class Mesh2f : IndexableMesh
     {
-        public int VerticesCount { get { return (Positions != null) ? Positions.Length : 0; } }
+        public override int VerticesCount { get { return (Positions != null) ? Positions.Length : 0; } }
 
         public Vector2f[] Positions { get; private set; }
 

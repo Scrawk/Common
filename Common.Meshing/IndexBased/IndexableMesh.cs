@@ -9,6 +9,8 @@ namespace Common.Meshing.IndexBased
     public abstract class IndexableMesh
     {
 
+        public abstract int VerticesCount { get; }
+
         public bool HasIndice { get { return Indices != null; } }
 
         public int IndicesCount { get { return (Indices != null) ? Indices.Length : 0; } }
@@ -41,6 +43,21 @@ namespace Common.Meshing.IndexBased
         {
             SetColors(colors.Count);
             colors.CopyTo(Colors, 0);
+        }
+
+        public void BuildPolygonIndices()
+        {
+            int numPoints = VerticesCount;
+            if (numPoints == 0) return;
+
+            int size = numPoints * 2;
+            SetIndices(size);
+
+            for (int i = 0; i < numPoints; i++)
+            {
+                Indices[i * 2 + 0] = i;
+                Indices[i * 2 + 1] = (i + 1) % numPoints;
+            }
         }
 
     }

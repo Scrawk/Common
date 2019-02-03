@@ -41,6 +41,15 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
         }
 
+        public static void CheckVertex<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, int vertex, int edge, Vector2f pos)
+            where VERTEX : HBVertex2f, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var v = mesh.Vertices[vertex];
+            Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
+            Assert.AreEqual(v.Position, pos);
+        }
 
         public static void CheckEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, 
             int edge, int from, int face, int previous, int next, int opposite)

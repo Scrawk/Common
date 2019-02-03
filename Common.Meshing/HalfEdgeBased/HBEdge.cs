@@ -8,6 +8,8 @@ namespace Common.Meshing.HalfEdgeBased
     /// </summary>
     public class HBEdge
     {
+        public int Tag;
+
         /// <summary>
         /// The vertex the edge starts from.
         /// </summary>
