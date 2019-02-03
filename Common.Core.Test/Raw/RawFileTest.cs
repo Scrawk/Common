@@ -11,7 +11,7 @@ namespace Common.Core.Test.Raw
     public class Core_Raw_RawFileTest
     {
 
-        const string fileName = "E:/VisualStudio Projects/Common/Common.Core.Test/Raw/TestRawFile.raw";
+        const string fileName = "D:/Projects/Visual Studio Projects/Common/Common.Core.Test/Raw/TestRawFile.raw";
 
         [TestMethod]
         public void SaveLoad_32Bit()
