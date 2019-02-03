@@ -8,7 +8,7 @@ using Common.Meshing.Constructors;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBMeshOperationsTest
+    public class Meshing_HalfEdgeBased_HBEdgeOperationsTest
     {
         [TestMethod]
         public void SplitEdge()
@@ -21,7 +21,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             CreateTriangleMesh2.FromTriangle(constructor, a, b, c);
             HBMesh2f mesh = constructor.PopMesh();
 
-            HBMeshOperations.SplitEdge(mesh, mesh.Edges[0]);
+            HBEdgeOperations.SplitEdge(mesh, mesh.Edges[0]);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 7);

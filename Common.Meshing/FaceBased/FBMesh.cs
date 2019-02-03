@@ -165,6 +165,7 @@ namespace Common.Meshing.FaceBased
             int count = Faces.Count;
             int size = Faces.Count * faceVertices;
 
+            TagVertices();
             List<int> indices = new List<int>(size);
 
             for(int i = 0; i < count; i++)
@@ -178,8 +179,7 @@ namespace Common.Meshing.FaceBased
                     if (v == null)
                         throw new InvalidOperationException("Face vertex is null.");
 
-                    int index = Vertices.IndexOf(v);
-                    indices.Add(index);
+                    indices.Add(v.Tag);
                 }
             }
 
