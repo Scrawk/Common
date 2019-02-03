@@ -19,6 +19,12 @@ namespace Common.Meshing.HalfEdgeBased
         {
 
         }
+
+        public void GetPositions(List<Vector2f> positions)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                positions.Add(Vertices[i].Position);
+        }
     }
 
     /// <summary>
@@ -32,6 +38,12 @@ namespace Common.Meshing.HalfEdgeBased
             : base(numVertices, numEdges, numFaces)
         {
 
+        }
+
+        public void GetPositions(List<Vector3f> positions)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                positions.Add(Vertices[i].Position);
         }
     }
 
@@ -463,6 +475,37 @@ namespace Common.Meshing.HalfEdgeBased
                 v0.Edge = e0;
                 v1.Edge = e1;
             }
+        }
+
+        /// <summary>
+        /// Creates a index list representing the vertices of each face.
+        /// </summary>
+        /// <param name="faceVertices">The number of vertices each face has</param>
+        /// <returns>list representing the vertices of each face</returns>
+        public List<int> CreateFaceIndices(int faceVertices = 3)
+        {
+            int count = Faces.Count;
+            int size = Faces.Count * faceVertices;
+
+            TagVertices();
+            List<int> indices = new List<int>(size);
+            List<VERTEX> vertices = new List<VERTEX>(faceVertices);
+
+            for (int i = 0; i < count; i++)
+            {
+                var face = Faces[i];
+
+                vertices.Clear();
+                face.GetVertices(vertices);
+
+                if (vertices.Count != faceVertices)
+                    throw new InvalidOperationException("Face does not contain the required number of vertices.");
+
+                for (int j = 0; j < faceVertices; j++)
+                    indices.Add(vertices[j].Tag);
+            }
+
+            return indices;
         }
 
     }

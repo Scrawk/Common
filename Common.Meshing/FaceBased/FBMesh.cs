@@ -160,7 +160,7 @@ namespace Common.Meshing.FaceBased
         /// </summary>
         /// <param name="faceVertices">The number of vertices each face has</param>
         /// <returns>list representing the vertices of each face</returns>
-        public List<int> CreateFaceIndices(int faceVertices)
+        public List<int> CreateFaceIndices(int faceVertices = 3)
         {
             int count = Faces.Count;
             int size = Faces.Count * faceVertices;
@@ -170,15 +170,13 @@ namespace Common.Meshing.FaceBased
 
             for(int i = 0; i < count; i++)
             {
-                for(int j = 0; j < faceVertices; j++)
+                var face = Faces[i];
+                if (face.Vertices.Length != faceVertices)
+                    throw new InvalidOperationException("Face does not contain the required number of vertices.");
+
+                for (int j = 0; j < faceVertices; j++)
                 {
-                    if (Faces[i].Vertices.Length != faceVertices)
-                        throw new InvalidOperationException("Face does not contain the required number of vertices.");
-
-                    VERTEX v = Faces[i].Vertices[j] as VERTEX;
-                    if (v == null)
-                        throw new InvalidOperationException("Face vertex is null.");
-
+                    var v = face.Vertices[j];
                     indices.Add(v.Tag);
                 }
             }

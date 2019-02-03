@@ -17,9 +17,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var b = new Vector2f(-1, -1);
             var c = new Vector2f(1, -1);
 
-            var constructor = new HBMeshConstructor2f();
-            CreateTriangleMesh2.FromTriangle(constructor, a, b, c);
-            HBMesh2f mesh = constructor.PopMesh();
+            HBMesh2f mesh = CreateTriangleMesh2.FromTriangle(a, b, c);
 
             HBEdgeOperations.SplitEdge(mesh, mesh.Edges[0]);
 
