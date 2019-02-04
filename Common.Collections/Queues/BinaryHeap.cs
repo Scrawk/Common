@@ -114,7 +114,7 @@ namespace Common.Collections.Queues
         public bool Add(T item)
         {
             if (Count == Capacity)
-                Capacity *= 2;
+                Capacity = Math.Max(Capacity * 2, DEFAULT_SIZE);
             
             m_data[Count] = item;
             UpHeap();

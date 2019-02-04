@@ -30,6 +30,9 @@ namespace Common.Collections.Test.Lists
             list.Add(0.5f);
             list.Add(1.5f);
             list.Remove(1);
+
+            list.Capacity = 0;
+            list.Add(1);
         }
 
         [TestMethod]
