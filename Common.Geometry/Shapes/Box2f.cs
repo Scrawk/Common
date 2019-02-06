@@ -194,13 +194,15 @@ namespace Common.Geometry.Shapes
             return c;
         }
 
-        public static Box2f CalculateBounds(IEnumerable<Vector2f> vertices)
+        public static Box2f CalculateBounds(IList<Vector2f> vertices)
         {
             Vector2f min = Vector2f.PositiveInfinity;
             Vector2f max = Vector2f.NegativeInfinity;
 
-            foreach (var v in vertices)
+            int count = vertices.Count;
+            for (int i = 0; i < count; i++)
             {
+                var v = vertices[i];
                 if (v.x < min.x) min.x = v.x;
                 if (v.y < min.y) min.y = v.y;
 

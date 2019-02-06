@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using Common.Core.LinearAlgebra;
@@ -25,21 +26,33 @@ namespace Common.Geometry.Shapes
             Radius = radius;
         }
 
+        /// <summary>
+        /// The squared radius.
+        /// </summary>
         public float Radius2
         {
             get { return Radius * Radius; }
         }
 
+        /// <summary>
+        /// The circles diameter.
+        /// </summary>
         public float Diameter
         {
             get { return Radius * 2.0f; }
         }
 
+        /// <summary>
+        /// The circles area.
+        /// </summary>
         public float Area
         {
             get { return (float)Math.PI * Radius * Radius; }
         }
 
+        /// <summary>
+        /// the circles circumference.
+        /// </summary>
         public float Circumference
         {
             get { return (float)Math.PI * Radius * 2.0f; }
@@ -118,23 +131,138 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        /// <summary>
+        /// Find the closest point on the circles 
+        /// circumference to the point.
+        /// </summary>
+        /// <param name="p">a point that is not equal to the circles center</param>
+        /// <returns>The closest point on the circumference</returns>
         public Vector2f Closest(Vector2f p)
         {
-            float dist = Vector2f.Distance(Center, p);
-            return Center + Radius * dist;
+            Vector2f n = (Center - p).Normalized;
+            return Center + Radius * n;
         }
 
+        /// <summary>
+        /// Does the circle contain the point.
+        /// </summary>
+        /// <param name="p">The point</param>
+        /// <returns>true if circle contains point</returns>
         public bool Contains(Vector2f p)
         {
-            float r2 = Radius * Radius;
-            return Vector2f.SqrDistance(Center, p) <= r2;
+            return Vector2f.SqrDistance(Center, p) <= Radius2;
         }
 
+        /// <summary>
+        /// Does this circle intersect with the other circle.
+        /// </summary>
+        /// <param name="circle">The other circle</param>
+        /// <returns>True if the circles intersect</returns>
         public bool Intersects(Circle2f circle)
         {
             float r = Radius + circle.Radius;
             return Vector2f.SqrDistance(Center, circle.Center) <= r * r;
         }
 
+        /// <summary>
+        /// Creates a circle that has both points on its circumference.
+        /// </summary>
+        public static Circle2f CircumCircle(Vector2f p0, Vector2f p1)
+        {
+            var centre = (p0 + p1) * 0.5f;
+            var radius = Vector2f.Distance(p0, p1) * 0.5f;
+            var bounds = new Circle2f(centre, radius);
+            return bounds;
+        }
+
+        /// <summary>
+        /// Creates a circle that has all 3 points on its circumference.
+        /// From MathWorld: http://mathworld.wolfram.com/Circumcircle.html.
+        /// Fails if the points are colinear.
+        /// </summary>
+        public static Circle2f CircumCircle(Vector2f p0, Vector2f p1, Vector2f p2)
+        {
+            var m = new Matrix3x3f();
+
+            // x, y, 1
+            m.SetRow(0, new Vector3f(p0, 1));
+            m.SetRow(1, new Vector3f(p1, 1));
+            m.SetRow(2, new Vector3f(p2, 1));
+            float a = m.Determinant;
+
+            // size, y, 1
+            m.SetColumn(0, new Vector3f(p0.SqrMagnitude, p1.SqrMagnitude, p2.SqrMagnitude));
+            float dx = -m.Determinant;
+
+            // size, x, 1
+            m.SetColumn(1, new Vector3f(p0.x, p1.x, p2.x));
+            float dy = m.Determinant;
+
+            // size, x, y
+            m.SetColumn(2, new Vector3f(p0.y, p1.y, p2.y));
+            float c = -m.Determinant;
+
+            float s = -1.0f / (2.0f * a);
+
+            var circumCenter = new Vector2f(s * dx, s * dy);
+            float radius = Math.Abs(s) * (float)Math.Sqrt(dx * dx + dy * dy - 4.0 * a * c);
+
+            return new Circle2f(circumCenter, radius);
+        }
+
+        /// <summary>
+        /// Creates a circle that contains all three point.
+        /// </summary>
+        public static Circle2f CalculateBounds(Vector2f p0, Vector2f p1, Vector2f p2)
+        {
+            var bounds = CircumCircle(p0, p1);
+            bounds.Enlarge(p2);
+            return bounds;
+        }
+
+        /// <summary>
+        /// Calculate the minimum bounding circle that contains 
+        /// all the points in the list.
+        /// </summary>
+        public static Circle2f CalculateBounds(IList<Vector2f> points)
+        {
+            var idx = ExtremePoints(points);
+
+            var bounds = CircumCircle(points[idx.x], points[idx.y]);
+
+            int count = points.Count;
+            for (int i = 2; i < count; i++)
+                bounds.Enlarge(points[i]);
+
+            return bounds;
+        }
+
+        /// <summary>
+        /// Finds which axis contains the two most extreme points
+        /// </summary>
+        private static Vector2i ExtremePoints(IList<Vector2f> points)
+        {
+            Vector2i min = new Vector2i();
+            Vector2i max = new Vector2i();
+
+            int count = points.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var v = points[i];
+                if (v.x < points[min.x].x) min.x = i;
+                if (v.y < points[min.y].y) min.y = i;
+
+                if (v.x > points[max.x].x) max.x = i;
+                if (v.y > points[max.y].y) max.y = i;
+            }
+
+            var d2x = Vector2f.SqrDistance(points[max.x], points[min.x]);
+            var d2y = Vector2f.SqrDistance(points[max.y], points[min.y]);
+
+            if(d2x > d2y)
+                return new Vector2i(min.x, max.x);
+            else
+                return new Vector2i(min.y, max.y);
+        }
     }
 }
