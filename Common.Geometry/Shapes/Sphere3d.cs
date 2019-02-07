@@ -213,7 +213,7 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Creates a circle that contains all three points.
+        /// Creates a sphere that contains all three points.
         /// </summary>
         public static Sphere3d CalculateBounds(Vector3d p0, Vector3d p1, Vector3d p2)
         {
