@@ -201,7 +201,7 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Returns the closest point to a on the box.
+        /// Returns the closest point on the box.
         /// </summary>
         public Vector2f Closest(Vector2f p)
         {
