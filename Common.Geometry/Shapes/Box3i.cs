@@ -175,13 +175,24 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Returns true if this bounding box contains the given bounding box.
+        /// Returns true if this box intersects the other box.
         /// </summary>
         public bool Intersects(Box3i a)
         {
             if (Max.x < a.Min.x || Min.x > a.Max.x) return false;
             if (Max.y < a.Min.y || Min.y > a.Max.y) return false;
             if (Max.z < a.Min.z || Min.z > a.Max.z) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Does the box contain the other box.
+        /// </summary>
+        public bool Contains(Box3i a)
+        {
+            if (a.Max.x > Max.x || a.Min.x < Min.x) return false;
+            if (a.Max.y > Max.y || a.Min.y < Min.y) return false;
+            if (a.Max.z > Max.z || a.Min.z < Min.z) return false;
             return true;
         }
 
