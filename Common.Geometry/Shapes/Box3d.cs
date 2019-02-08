@@ -132,27 +132,27 @@ namespace Common.Geometry.Shapes
         public void GetCorners(IList<Vector3d> corners)
         {
             corners[0] = new Vector3d(Min.x, Min.y, Min.z);
-            corners[1] = new Vector3d(Min.x, Min.y, Max.z);
+            corners[1] = new Vector3d(Max.x, Min.y, Min.z);
             corners[2] = new Vector3d(Max.x, Min.y, Max.z);
-            corners[3] = new Vector3d(Max.x, Min.y, Min.z);
+            corners[3] = new Vector3d(Min.x, Min.y, Max.z);
 
             corners[4] = new Vector3d(Min.x, Max.y, Min.z);
-            corners[5] = new Vector3d(Min.x, Max.y, Max.z);
+            corners[5] = new Vector3d(Max.x, Max.y, Min.z);
             corners[6] = new Vector3d(Max.x, Max.y, Max.z);
-            corners[7] = new Vector3d(Max.x, Max.y, Min.z);
+            corners[7] = new Vector3d(Min.x, Max.y, Max.z);
         }
 
         public void GetCorners(IList<Vector4d> corners)
         {
             corners[0] = new Vector4d(Min.x, Min.y, Min.z, 1);
-            corners[1] = new Vector4d(Min.x, Min.y, Max.z, 1);
+            corners[1] = new Vector4d(Max.x, Min.y, Min.z, 1);
             corners[2] = new Vector4d(Max.x, Min.y, Max.z, 1);
-            corners[3] = new Vector4d(Max.x, Min.y, Min.z, 1);
+            corners[3] = new Vector4d(Min.x, Min.y, Max.z, 1);
 
             corners[4] = new Vector4d(Min.x, Max.y, Min.z, 1);
-            corners[5] = new Vector4d(Min.x, Max.y, Max.z, 1);
+            corners[5] = new Vector4d(Max.x, Max.y, Min.z, 1);
             corners[6] = new Vector4d(Max.x, Max.y, Max.z, 1);
-            corners[7] = new Vector4d(Max.x, Max.y, Min.z, 1);
+            corners[7] = new Vector4d(Min.x, Max.y, Max.z, 1);
         }
 
         /// <summary>

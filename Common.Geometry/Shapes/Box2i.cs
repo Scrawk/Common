@@ -33,6 +33,26 @@ namespace Common.Geometry.Shapes
             Max = max;
         }
 
+        public Vector2i Corner00
+        {
+            get { return Min; }
+        }
+
+        public Vector2i Corner10
+        {
+            get { return new Vector2i(Max.x, Min.y); }
+        }
+
+        public Vector2i Corner11
+        {
+            get { return Max; }
+        }
+
+        public Vector2i Corner01
+        {
+            get { return new Vector2i(Min.x, Max.y); }
+        }
+
         public Vector2f Center 
         { 
             get { return new Vector2f((Min.x + Max.x) * 0.5f, (Min.y + Max.y) * 0.5f); } 
@@ -109,17 +129,17 @@ namespace Common.Geometry.Shapes
         public void GetCorners(IList<Vector2i> corners)
         {
             corners[0] = new Vector2i(Min.x, Min.y);
-            corners[1] = new Vector2i(Min.x, Max.y);
+            corners[1] = new Vector2i(Max.x, Min.y);
             corners[2] = new Vector2i(Max.x, Max.y);
-            corners[3] = new Vector2i(Max.x, Min.y);
+            corners[3] = new Vector2i(Min.x, Max.y);
         }
 
         public void GetCornersXZ(IList<Vector3i> corners, int y = 0)
         {
             corners[0] = new Vector3i(Min.x, y, Min.y);
-            corners[1] = new Vector3i(Min.x, y, Max.y);
+            corners[1] = new Vector3i(Max.x, y, Min.y);
             corners[2] = new Vector3i(Max.x, y, Max.y);
-            corners[3] = new Vector3i(Max.x, y, Min.y);
+            corners[3] = new Vector3i(Min.x, y, Max.y);
         }
 
         /// <summary>
