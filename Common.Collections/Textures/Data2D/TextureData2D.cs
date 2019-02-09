@@ -48,51 +48,6 @@ namespace Common.Collections.Textures.Data2D
             return data;
         }
 
-        public void SetPixels(float[] pixels, int mipmap = 0)
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    for (int c = 0; c < Channels; c++)
-                    {
-                        float p = pixels[(x + y * Width) * Channels + c];
-                        this[x, y, c, mipmap] = p;
-                    }
-                }
-            }
-        }
-
-        public void SetPixels(float[,,] pixels, int mipmap = 0)
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    for (int c = 0; c < Channels; c++)
-                    {
-                        float p = pixels[x, y, c];
-                        this[x, y, c, mipmap] = p;
-                    }
-                }
-            }
-        }
-
-        public void SetPixels(ColorRGBA[] pixels, int mipmap = 0)
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    ColorRGBA p = pixels[x + y * Width];
-                    if (Channels > 0) this[x, y, 0, mipmap] = p.r;
-                    if (Channels > 1) this[x, y, 1, mipmap] = p.g;
-                    if (Channels > 2) this[x, y, 2, mipmap] = p.b;
-                    if (Channels > 3) this[x, y, 3, mipmap] = p.a;
-                }
-            }
-        }
-
         public void SetPixels(ColorRGBA[,] pixels, int mipmap = 0)
         {
             for (int y = 0; y < Height; y++)
@@ -119,7 +74,6 @@ namespace Common.Collections.Textures.Data2D
                     this[x, y, c, mipmap] = channel[x, y];
                 }
             }
-
         }
 
         public ColorRGBA[,] GetPixels(int mipmap = 0)

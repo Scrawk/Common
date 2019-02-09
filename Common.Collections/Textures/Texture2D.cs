@@ -77,21 +77,6 @@ namespace Common.Collections.Textures
             Data.GenerateMipmaps();
         }
 
-        public void SetPixels(float[] pixels, int mipmap = 0)
-        {
-            Data.SetPixels(pixels, mipmap);
-        }
-
-        public void SetPixels(float[,,] pixels, int mipmap = 0)
-        {
-            Data.SetPixels(pixels, mipmap);
-        }
-
-        public void SetPixels(ColorRGBA[] pixels, int mipmap = 0)
-        {
-            Data.SetPixels(pixels, mipmap);
-        }
-
         public void SetPixels(ColorRGBA[,] pixels, int mipmap = 0)
         {
             Data.SetPixels(pixels, mipmap);

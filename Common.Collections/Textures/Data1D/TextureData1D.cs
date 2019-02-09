@@ -44,30 +44,6 @@ namespace Common.Collections.Textures.Data1D
             return data;
         }
 
-        public void SetPixels(float[] pixels, int mipmap = 0)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                for (int c = 0; c < Channels; c++)
-                {
-                    float p = pixels[x * Channels + c];
-                    this[x, c, mipmap] = p;
-                }
-            }
-        }
-
-        public void SetPixels(float[,] pixels, int mipmap = 0)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                for (int c = 0; c < Channels; c++)
-                {
-                    float p = pixels[x, c];
-                    this[x, c, mipmap] = p;
-                }
-            }
-        }
-
         public void SetPixels(ColorRGBA[] pixels, int mipmap = 0)
         {
             for (int x = 0; x < Width; x++)
