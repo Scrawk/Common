@@ -182,6 +182,16 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Returns the bounding box containing this box and the given box.
+        /// </summary>
+        public Box3d Enlarge(Box3d box0, Box3d box1)
+        {
+            var box = box0;
+            box.Enlarge(box1);
+            return box;
+        }
+
+        /// <summary>
         /// Returns true if this box intersects the other box.
         /// </summary>
         public bool Intersects(Box3d a)
