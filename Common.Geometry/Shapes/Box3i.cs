@@ -177,7 +177,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the bounding box containing this box and the given box.
         /// </summary>
-        public Box3i Enlarge(Box3i box0, Box3i box1)
+        public static Box3i Enlarge(Box3i box0, Box3i box1)
         {
             var box = box0;
             box.Enlarge(box1);
