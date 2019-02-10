@@ -402,8 +402,8 @@ namespace Common.Collections.Trees
         {
             if (Root != null)
             {
-                foreach (var item in Root)
-                    yield return item;
+                foreach (var n in Root)
+                    yield return n.Item;
             }
         }
 

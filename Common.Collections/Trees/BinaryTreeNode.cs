@@ -9,7 +9,7 @@ namespace Common.Collections.Trees
     /// Node for a binary tree
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class BinaryTreeNode<T> : IEnumerable<T>
+    public class BinaryTreeNode<T> : IEnumerable<BinaryTreeNode<T>>
     {
 
         /// <summary>
@@ -40,6 +40,9 @@ namespace Common.Collections.Trees
         /// </summary>
         internal int Balance { get; set; }
 
+        /// <summary>
+        /// The nodes parent. Null if node is the root.
+        /// </summary>
         public BinaryTreeNode<T> Parent { get; internal set; }
 
         internal BinaryTreeNode(BinaryTreeNode<T> parent, T item)
@@ -52,20 +55,20 @@ namespace Common.Collections.Trees
         /// Enumerate all items from this node.
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<BinaryTreeNode<T>> GetEnumerator()
         {
             if(Left != null)
             {
-                foreach (var item in Left)
-                    yield return item;
+                foreach (var n in Left)
+                    yield return n;
             }
 
-            yield return Item;
+            yield return this;
 
             if (Right != null)
             {
-                foreach (var item in Right)
-                    yield return item;
+                foreach (var n in Right)
+                    yield return n;
             }
         }
 
