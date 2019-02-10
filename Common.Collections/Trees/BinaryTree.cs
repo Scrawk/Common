@@ -41,6 +41,14 @@ namespace Common.Collections.Trees
         public int Count { get; protected set; }
 
         /// <summary>
+        /// The max depth of the tree.
+        /// </summary>
+        public int Depth
+        {
+            get { return MaxDepth(Root, 0); }
+        }
+
+        /// <summary>
         /// Do nothing. Tree has no set capacity.
         /// Needed for IPriorityQueue<T>.
         /// </summary>
@@ -65,63 +73,12 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// Returns the path from the root to the item.
-        /// </summary>
-        /// <param name="item">The item the path terminates at</param>
-        /// <param name="path">The list of items. The list is not cleared</param>
-        public void GetPath(T item, List<T> path)
-        {
-            BinaryTreeNode<T> current = Root;
-
-            while (current != null)
-            {
-                path.Add(current.Item);
-
-                int c = item.CompareTo(current.Item);
-                if (c < 0)
-                    current = current.Left;
-                else if (c > 0)
-                    current = current.Right;
-                else
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Returns the path from the root to the item.
-        /// </summary>
-        /// <param name="item">The item the path terminates at</param>
-        /// <param name="path">The list of nodes. The list is not cleared</param>
-        public void GetPathNodes(T item, List<BinaryTreeNode<T>> path)
-        {
-            BinaryTreeNode<T> current = Root;
-
-            while (current != null)
-            {
-                path.Add(current);
-
-                int c = item.CompareTo(current.Item);
-                if (c < 0)
-                    current = current.Left;
-                else if (c > 0)
-                    current = current.Right;
-                else
-                    break;
-            }
-        }
-
-        /// <summary>
         /// Return first item in tree.
         /// </summary>
         /// <returns>First item</returns>
         public T Peek()
         {
-            if (Count == 0)
-                throw new InvalidOperationException("Queue is empty.");
-
-            T item;
-            FindMinimum(out item);
-            return item;
+            return FindMinimum();
         }
 
         /// <summary>
@@ -282,20 +239,9 @@ namespace Common.Collections.Trees
             if (Count == 0)
                 throw new InvalidOperationException("Queue is empty.");
 
-            T item;
-            FindMinimum(out item);
+            T item = FindMinimum();
             Remove(item);
             return item;
-        }
-
-        /// <summary>
-        /// Resets all parent nodes starting from this node.
-        /// </summary>
-        /// <param name="node">node to start repair from</param>
-        public void RepairParents(BinaryTreeNode<T> node)
-        {
-            if (node == null) return;
-            RepairParent(node.Parent, node);
         }
 
         /// <summary>
@@ -350,29 +296,21 @@ namespace Common.Collections.Trees
         /// <summary>
         /// Finds the minimum value in the tree.
         /// </summary>
-        /// <param name="item">the minimum value</param>
-        /// <returns>false if tree empty</returns>
-        public bool FindMinimum(out T item)
+        public T FindMinimum()
         {
-            item = default(T);
-            var node = FindMinimumNode(Root);
-            if (node == null) return false;
-            item = node.Item;
-            return true;
+            if (Root == null)
+                throw new InvalidOperationException("Can not find minimum if tree is empty.");
+            return FindMinimumNode(Root).Item;
         }
 
         /// <summary>
         /// Finds the maximum value in the tree.
         /// </summary>
-        /// <param name="item">the maximum value</param>
-        /// <returns>false if tree empty</returns>
-        public bool FindMaximum(out T item)
+        public T FindMaximum()
         {
-            item = default(T);
-            var node = FindMaximumNode(Root);
-            if (node == null) return false;
-            item = node.Item;
-            return true;
+            if (Root == null)
+                throw new InvalidOperationException("Can not find maximum if tree is empty.");
+            return FindMaximumNode(Root).Item;
         }
 
         /// <summary>
@@ -452,7 +390,7 @@ namespace Common.Collections.Trees
         public List<T> ToList()
         {
             var list = new List<T>(Count);
-            Inorder(list, Root);
+            Inorder(Root, list);
             return list;
         }
 
@@ -478,31 +416,31 @@ namespace Common.Collections.Trees
         /// Copy the tree into a list in order.
         /// </summary>
         /// <returns>ordered list</returns>
-        public void Inorder(List<T> list, BinaryTreeNode<T> node)
+        public void Inorder(BinaryTreeNode<T> node, List<T> list)
         {
             if (node == null) return;
-            Inorder(list, node.Left);
+            Inorder(node.Left, list);
             list.Add(node.Item);
-            Inorder(list, node.Right);
+            Inorder(node.Right, list);
         }
 
         /// <summary>
         /// Copy the tree into a list in depth first order.
         /// </summary>
         /// <returns>ordered list</returns>
-        public void DepthFirst(List<T> list, BinaryTreeNode<T> node)
+        public void DepthFirst(BinaryTreeNode<T> node, List<T> list)
         {
             if (node == null) return;
             list.Add(node.Item);
-            DepthFirst(list, node.Left);
-            DepthFirst(list, node.Right);
+            DepthFirst(node.Left, list);
+            DepthFirst(node.Right, list);
         }
 
         /// <summary>
         /// Copy the tree into a list in breadth first order.
         /// </summary>
         /// <returns>ordered list</returns>
-        public void BreadthFirst(List<T> list, BinaryTreeNode<T> node)
+        public void BreadthFirst(BinaryTreeNode<T> node, List<T> list)
         {
             if (node == null) return;
 
@@ -520,6 +458,12 @@ namespace Common.Collections.Trees
                 if (n.Right != null)
                     queue.Enqueue(n.Right);
             }
+        }
+
+        protected void SetParent(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
+        {
+            if (node == null) return;
+            node.Parent = parent;
         }
 
         private BinaryTreeNode<T> FindMinimumNode(BinaryTreeNode<T> node)
@@ -540,19 +484,12 @@ namespace Common.Collections.Trees
                 return node;
         }
 
-        protected void RepairParent(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
+        private int MaxDepth(BinaryTreeNode<T> node, int depth)
         {
-            if (node == null) return;
-            node.Parent = parent;
-            RepairParent(node, node.Left);
-            RepairParent(node, node.Right);
+            if (node == null || node.IsLeaf) return depth;
+            return Math.Max(MaxDepth(node.Left, depth + 1), MaxDepth(node.Right, depth + 1));
         }
 
-        protected void SetParent(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
-        {
-            if (node == null) return;
-            node.Parent = parent;
-        }
     }
 
 }

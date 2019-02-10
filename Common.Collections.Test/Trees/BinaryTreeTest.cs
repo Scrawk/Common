@@ -91,60 +91,6 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
-        public void Path()
-        {
-            var tree = TestTree();
-            var path = new List<string>();
-
-            string[] expected;
-
-            expected = new string[]
-            {
-                "George", "Michael", "Tom", "Peter"
-            };
-
-            path.Clear();
-            tree.GetPath("Peter", path);
-            CollectionAssert.AreEqual(expected, path);
-
-            expected = new string[]
-            {
-                "George", "Michael", "Tom"
-            };
-
-            path.Clear();
-            tree.GetPath("Tom", path);
-            CollectionAssert.AreEqual(expected, path);
-
-            expected = new string[]
-            {
-                "George", "Michael", "Jones"
-            };
-
-            path.Clear();
-            tree.GetPath("Jones", path);
-            CollectionAssert.AreEqual(expected, path);
-
-            expected = new string[]
-            {
-                "George", "Adam"
-            };
-
-            path.Clear();
-            tree.GetPath("Adam", path);
-            CollectionAssert.AreEqual(expected, path);
-
-            expected = new string[]
-            {
-                "George"
-            };
-
-            path.Clear();
-            tree.GetPath("George", path);
-            CollectionAssert.AreEqual(expected, path);
-        }
-
-        [TestMethod]
         public void Remove()
         {
             var tree = TestTree();
@@ -250,10 +196,7 @@ namespace Common.Collections.Test.Trees
         {
             var tree = TestTree();
 
-            string min = "";
-            tree.FindMinimum(out min);
-
-            Assert.AreEqual("Adam", min);
+            Assert.AreEqual("Adam", tree.FindMinimum());
         }
 
         [TestMethod]
@@ -261,10 +204,7 @@ namespace Common.Collections.Test.Trees
         {
             var tree = TestTree();
 
-            string max = "";
-            tree.FindMaximum(out max);
-
-            Assert.AreEqual("Tom", max);
+            Assert.AreEqual("Tom", tree.FindMaximum());
         }
 
         [TestMethod]
@@ -326,7 +266,7 @@ namespace Common.Collections.Test.Trees
             var tree = TestTree();
 
             var list = new List<string>();
-            tree.DepthFirst(list, tree.Root);
+            tree.DepthFirst(tree.Root, list);
 
             CollectionAssert.AreEqual(new string[] { "George", "Adam", "Daniel", "Michael", "Jones", "Tom", "Peter" }, list);
         }
@@ -337,7 +277,7 @@ namespace Common.Collections.Test.Trees
             var tree = TestTree();
 
             var list = new List<string>();
-            tree.BreadthFirst(list, tree.Root);
+            tree.BreadthFirst(tree.Root, list);
 
             CollectionAssert.AreEqual(new string[] { "George", "Adam", "Michael", "Daniel", "Jones", "Tom", "Peter" }, list);
         }

@@ -28,6 +28,14 @@ namespace Common.Collections.Trees
         public BinaryTreeNode<T> Right { get; internal set; }
 
         /// <summary>
+        /// Is this node a leaf.
+        /// </summary>
+        public bool IsLeaf
+        {
+            get { return Left == null && Right == null; }
+        }
+
+        /// <summary>
         /// Used internally to balance AVLTrees.
         /// </summary>
         internal int Balance { get; set; }
