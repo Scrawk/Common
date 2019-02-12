@@ -171,6 +171,17 @@ namespace Common.Geometry.Shapes
         /// The closest point on segment to point.
         /// </summary>
         /// <param name="p">point</param>
+        public Vector2f Closest(Vector2f p)
+        {
+            float t;
+            Closest(p, out t);
+            return A + (B - A) * t;
+        }
+
+        /// <summary>
+        /// The closest point on segment to point.
+        /// </summary>
+        /// <param name="p">point</param>
         /// <param name="t">closest point = A + t * (B - A)</param>
         public void Closest(Vector2f p, out float t)
         {
@@ -185,6 +196,17 @@ namespace Common.Geometry.Shapes
 
             if (t < 0.0f) t = 0.0f;
             if (t > 1.0f) t = 1.0f;
+        }
+
+        /// <summary>
+        /// The closest segment spanning two other segments.
+        /// </summary>
+        /// <param name="seg">the other segment</param>
+        public Segment2f Closest(Segment2f seg)
+        {
+            float s, t;
+            Closest(seg, out s, out t);
+            return new Segment2f(A + (B - A) * s, seg.A + (seg.B - seg.A) * t);
         }
 
         /// <summary>
