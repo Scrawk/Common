@@ -372,15 +372,7 @@ namespace Common.Core.Colors
             return new ColorHSV(h / 360.0f, s, v / 255.0f);
         }
 
-        public static ColorRGB Random(Random rnd)
-        {
-            ColorRGB c = new ColorRGB();
-            c.r = (float)rnd.NextDouble();
-            c.g = (float)rnd.NextDouble();
-            c.b = (float)rnd.NextDouble();
 
-            return c;
-        }
 
     }
 

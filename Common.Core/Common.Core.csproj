@@ -46,6 +46,9 @@
     <Compile Include="Colors\ColorRGBA.cs" />
     <Compile Include="Directions\D4.cs" />
     <Compile Include="Directions\D8.cs" />
+    <Compile Include="Extensions\IListExtension.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="LinearAlgebra\Matrix2x2d.cs" />
     <Compile Include="LinearAlgebra\Matrix2x2f.cs" />
     <Compile Include="LinearAlgebra\Matrix3x3d.cs" />

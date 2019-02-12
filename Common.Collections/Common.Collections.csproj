@@ -46,8 +46,6 @@
     <Compile Include="Arrays\SystemArray2.cs" />
     <Compile Include="Caching\ICacheable.cs" />
     <Compile Include="Caching\ObjectCache.cs" />
-    <Compile Include="Extensions\IListExtension.cs" />
-    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Queues\BinaryHeap.cs" />
     <Compile Include="Lists\LALinkedList.cs" />
     <Compile Include="Lists\LALinkedListNode.cs" />

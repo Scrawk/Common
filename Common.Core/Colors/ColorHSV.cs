@@ -326,16 +326,6 @@ namespace Common.Core.Colors
             return new ColorRGB(r, g, b);
         }
 
-        public static ColorHSV Random(Random rnd)
-        {
-            ColorHSV c = new ColorHSV();
-            c.h = (float)rnd.NextDouble();
-            c.s = (float)rnd.NextDouble();
-            c.v = (float)rnd.NextDouble();
-
-            return c;
-        }
-
         /// <summary>
         /// Generates a list of colors with hues ranging from 0 360
         /// and a saturation and value of 1. 

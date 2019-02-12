@@ -400,16 +400,6 @@ namespace Common.Core.Colors
             return new ColorHSV(h / 360.0f, s, v / 255.0f);
         }
 
-        public static ColorRGBA Random(Random rnd)
-        {
-            ColorRGBA c = new ColorRGBA();
-            c.r = (float)rnd.NextDouble();
-            c.g = (float)rnd.NextDouble();
-            c.b = (float)rnd.NextDouble();
-            c.a = 1.0f;
-
-            return c;
-        }
     }
 
 }
