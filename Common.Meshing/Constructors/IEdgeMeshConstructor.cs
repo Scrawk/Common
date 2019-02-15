@@ -19,6 +19,6 @@ namespace Common.Meshing.Constructors
 
         void AddEdge(int i0, int i1);
 
-        void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex);
+        void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex);
     }
 }

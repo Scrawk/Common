@@ -109,7 +109,7 @@ namespace Common.Meshing.IndexBased
             throw new NotSupportedException();
         }
 
-        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex)
+        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex)
         {
             throw new NotSupportedException();
         }

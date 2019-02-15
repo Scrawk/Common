@@ -392,7 +392,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="previousIndex">The index of this edges previous member</param>
         /// <param name="nextIndex">The index of this edges next member</param>
         /// <param name="oppositeIndex">The index of this edges opposite member</param>
-        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex, int oppositeIndex)
+        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex)
         {
             var edge = Mesh.Edges[edgeIndex];
             var previous = (previousIndex != -1) ? Mesh.Edges[previousIndex] : null;
