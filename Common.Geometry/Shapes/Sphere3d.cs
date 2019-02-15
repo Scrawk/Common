@@ -137,6 +137,7 @@ namespace Common.Geometry.Shapes
         public Vector3d Closest(Vector3d p)
         {
             Vector3d n = (Center - p).Normalized;
+            if (n == Vector3d.Zero) n = Vector3d.UnitX;
             return Center + Radius * n;
         }
 

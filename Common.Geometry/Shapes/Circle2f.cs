@@ -140,6 +140,7 @@ namespace Common.Geometry.Shapes
         public Vector2f Closest(Vector2f p)
         {
             Vector2f n = (Center - p).Normalized;
+            if (n == Vector2f.Zero) n = Vector2f.UnitX;
             return Center + Radius * n;
         }
 
