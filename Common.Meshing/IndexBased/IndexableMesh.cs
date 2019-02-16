@@ -45,6 +45,18 @@ namespace Common.Meshing.IndexBased
             colors.CopyTo(Colors, 0);
         }
 
+        public void FlipTriangles()
+        {
+            if (Indices == null) return;
+            int count = IndicesCount;
+            for (int i = 0; i < count / 3; i++)
+            {
+                int tmp = Indices[i * 3 + 0];
+                Indices[i * 3 + 0] = Indices[i * 3 + 2];
+                Indices[i * 3 + 2] = tmp;
+            }
+        }
+
         public void BuildPolygonIndices()
         {
             int numPoints = VerticesCount;

@@ -48,6 +48,8 @@
     <Compile Include="Constructors\ITriangleMeshConstructor.cs" />
     <Compile Include="FaceBased\FBFace.cs" />
     <Compile Include="FaceBased\FBMesh.cs" />
+    <Compile Include="FaceBased\FBMesh2f.cs" />
+    <Compile Include="FaceBased\FBMesh3f.cs" />
     <Compile Include="FaceBased\FBMeshConstructor.cs" />
     <Compile Include="FaceBased\FBVertex.cs" />
     <Compile Include="FaceBased\FBVertex2f.cs" />

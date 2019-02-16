@@ -179,8 +179,8 @@ namespace Common.Meshing.FaceBased
         /// <param name="indices">list representing the vertices of each face</param>
         public void GetFaceIndices(List<int> indices, int faceVertices = 3)
         {
-            if (faceVertices < 2)
-                throw new ArgumentException("faceVertices can not be less than 2.");
+            if (faceVertices < 3)
+                throw new ArgumentException("faceVertices can not be less than 3.");
             
             TagVertices();
 

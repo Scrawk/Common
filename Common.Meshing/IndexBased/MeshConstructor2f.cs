@@ -6,12 +6,12 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.IndexBased
 {
+    /// <summary>
+    /// Indexed based mesh constructor.
+    /// Supports triangle or edge meshes.
+    /// </summary>
     public class MeshConstructor2f : IEdgeMeshConstructor<Mesh2f>, ITriangleMeshConstructor<Mesh2f>
     {
-
-        public bool SupportsFaceConnections { get { return false; } }
-
-        public bool SplitFaces { get; set; }
 
         private Mesh2f m_mesh;
 
@@ -21,6 +21,19 @@ namespace Common.Meshing.IndexBased
 
         private int m_edgeIndex;
 
+        /// <summary>
+        /// Index based meshes do not support face connections.
+        /// </summary>
+        public bool SupportsFaceConnections { get { return false; } }
+
+        /// <summary>
+        /// If true mesh will have unique vertices for each face.
+        /// </summary>
+        public bool SplitFaces { get; set; }
+
+        /// <summary>
+        /// Push a new triangle mesh.
+        /// </summary>
         public void PushTriangleMesh(int numVertices, int numFaces)
         {
             if (m_mesh != null)
@@ -29,6 +42,9 @@ namespace Common.Meshing.IndexBased
             m_mesh = new Mesh2f(numVertices, numFaces * 3);
         }
 
+        /// <summary>
+        /// Push a new edge mesh.
+        /// </summary>
         public void PushEdgeMesh(int numVertices, int numEdges)
         {
             if (m_mesh != null)
@@ -37,9 +53,12 @@ namespace Common.Meshing.IndexBased
             m_mesh = new Mesh2f(numVertices, numEdges * 2);
         }
 
+        /// <summary>
+        /// Return the created mesh and reset constructor.
+        /// </summary>
         public Mesh2f PopMesh()
         {
-            
+
             if (SplitFaces)
             {
                 var mesh = new Mesh2f(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
@@ -67,6 +86,9 @@ namespace Common.Meshing.IndexBased
             return tmp;
         }
 
+        /// <summary>
+        /// Reset constructor after mesh created.
+        /// </summary>
         private void Reset()
         {
             m_mesh = null;
@@ -75,36 +97,72 @@ namespace Common.Meshing.IndexBased
             m_edgeIndex = 0;
         }
 
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector2f pos)
         {
+            CheckMeshIsPushed();
             m_mesh.Positions[m_vertexIndex] = pos;
             m_vertexIndex++;
         }
 
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector3f pos)
         {
+            CheckMeshIsPushed();
             m_mesh.Positions[m_vertexIndex] = pos.xy;
             m_vertexIndex++;
         }
 
+        /// <summary>
+        /// Add a CCW triangle face.
+        /// </summary>
+        /// <param name="i0">index of vertex 0</param>
+        /// <param name="i1">index of vertex 1</param>
+        /// <param name="i2">index of vertex 2</param>
         public void AddFace(int i0, int i1, int i2)
         {
+            CheckMeshIsPushed();
             m_mesh.Indices[m_faceIndex * 3 + 0] = i0;
             m_mesh.Indices[m_faceIndex * 3 + 1] = i1;
             m_mesh.Indices[m_faceIndex * 3 + 2] = i2;
             m_faceIndex++;
         }
 
+        /// <summary>
+        /// Add a edge.
+        /// </summary>
+        /// <param name="i0">index of vertex 0</param>
+        /// <param name="i1">index of vertex 1</param>
         public void AddEdge(int i0, int i1)
         {
+            CheckMeshIsPushed();
             m_mesh.Indices[m_edgeIndex * 2 + 0] = i0;
             m_mesh.Indices[m_edgeIndex * 2 + 1] = i1;
             m_edgeIndex++;
         }
 
+        /// <summary>
+        /// Face connections not supported for indexable meshes.
+        /// </summary>
         public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
             throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Helper to throw exception if tring to create mesh
+        /// with out pushing a mesh first.
+        /// </summary>
+        private void CheckMeshIsPushed()
+        {
+            if (m_mesh == null)
+                throw new InvalidOperationException("Mesh has not been pushed.");
         }
 
     }

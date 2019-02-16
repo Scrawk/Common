@@ -52,7 +52,7 @@ namespace Common.Meshing.HalfEdgeBased
 
     /// <summary>
     /// Half edge based mesh constructor.
-    /// Supports edge, triangle or general meshes.
+    /// Supports triangle or general meshes.
     /// </summary>
     public class HBMeshConstructor<VERTEX, EDGE, FACE> : 
             ITriangleMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
@@ -62,28 +62,7 @@ namespace Common.Meshing.HalfEdgeBased
             where FACE : HBFace, new()
     {
 
-        private HBMesh<VERTEX, EDGE, FACE> m_mesh;
-
-        /// <summary>
-        /// The mesh object under construction.
-        /// A new mesh can not be created untill the 
-        /// previous one is finished;
-        /// </summary>
-        protected HBMesh<VERTEX, EDGE, FACE> Mesh
-        {
-            get { return m_mesh; }
-            set
-            {
-                if(value != null && Mesh != null)
-                    throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
-                m_mesh = value;
-            }
-        }
-
-        /// <summary>
-        /// Does a half edge mesh support edge connections.
-        /// </summary>
-        public bool SupportsEdgeConnections { get { return true; } }
+        protected HBMesh<VERTEX, EDGE, FACE> Mesh;
 
         /// <summary>
         /// Does a half edge mesh support face connections.
@@ -105,14 +84,6 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Create a edge mesh. Edge meshs have no faces.
-        /// </summary>
-        public void PushEdgeMesh(int numVertices, int numEdges)
-        {
-            NewMesh(numVertices, numEdges * 2, 0);
-        }
-
-        /// <summary>
         /// Create a general mesh. Faces can have any number of edges.
         /// </summary>
         public void PushGeneralMesh(int numVertices, int numFaces)
@@ -125,13 +96,15 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         protected virtual void NewMesh(int numVertices, int numEdges, int numFaces)
         {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push a new mesh.");
+
             Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numEdges, numFaces);
         }
 
         /// <summary>
         /// Remove and return finished mesh.
         /// </summary>
-        /// <returns></returns>
         public HBMesh<VERTEX, EDGE, FACE> PopMesh()
         {
             if (AddBoundary)
@@ -148,6 +121,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector2f pos)
         {
+            CheckMeshIsPushed();
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
@@ -159,6 +133,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector3f pos)
         {
+            CheckMeshIsPushed();
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
@@ -172,6 +147,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="i2">index of vertex 2</param>
         public void AddFace(int i0, int i1, int i2)
         {
+            CheckMeshIsPushed();
             var v0 = Mesh.Vertices[i0];
             var v1 = Mesh.Vertices[i1];
             var v2 = Mesh.Vertices[i2];
@@ -203,6 +179,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="vertList">A list of vertices in the face</param>
         public void AddFace(IList<int> vertList)
         {
+            CheckMeshIsPushed();
             int count = vertList.Count;
             var face = new FACE();
             var edges = new List<EDGE>(vertList.Count);
@@ -239,6 +216,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="numVertices">The number of vertices in face</param>
         public void AddFace(int vertStart, int numVertices)
         {
+            CheckMeshIsPushed();
             int count = numVertices;
             var face = new FACE();
             var edges = new List<EDGE>(numVertices);
@@ -278,6 +256,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="i2">index of faces neighbour 2</param>
         public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
+            CheckMeshIsPushed();
             var face = Mesh.Faces[faceIndex];
 
             if (i0 != -1)
@@ -334,7 +313,7 @@ namespace Common.Meshing.HalfEdgeBased
                 throw new NullReferenceException("Edge has null vertex.");
 
             if (neighbour.Edge == null)
-                throw new NullReferenceException("Neighbor has null edge.");
+                throw new NullReferenceException("Neighbour has null edge.");
 
             var from = edge.From;
             var to = edge.Next.From;
@@ -342,7 +321,7 @@ namespace Common.Meshing.HalfEdgeBased
             foreach (var nedge in neighbour.Edge.EnumerateEdges())
             {
                 if (nedge.From == null)
-                    throw new NullReferenceException("Neighbor edge has null vertex.");
+                    throw new NullReferenceException("Neighbour edge has null vertex.");
 
                 //if nedge and edge share the same vertices but 
                 //in opposite order then they must be opposite edges
@@ -356,6 +335,16 @@ namespace Common.Meshing.HalfEdgeBased
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Helper to throw exception if tring to create mesh
+        /// with out pushing a mesh first.
+        /// </summary>
+        private void CheckMeshIsPushed()
+        {
+            if (Mesh == null)
+                throw new InvalidOperationException("Mesh has not been pushed.");
         }
 
     }

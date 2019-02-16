@@ -88,18 +88,6 @@ namespace Common.Meshing.IndexBased
             texCoords.CopyTo(TexCoords0, 0);
         }
 
-        public void FlipTriangles()
-        {
-            if (Indices == null) return;
-            int count = IndicesCount;
-            for (int i = 0; i < count / 3; i++)
-            {
-                int tmp = Indices[i * 3 + 0];
-                Indices[i * 3 + 0] = Indices[i * 3 + 2];
-                Indices[i * 3 + 2] = tmp;
-            }
-        }
-
         public void Transform(Matrix3x3f m)
         {
             int numVerts = Positions.Length;

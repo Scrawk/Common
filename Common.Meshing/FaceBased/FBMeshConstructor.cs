@@ -7,6 +7,46 @@ using Common.Meshing.Constructors;
 namespace Common.Meshing.FaceBased
 {
 
+    /// <summary>
+    /// Constructor for HBMesh2f
+    /// </summary>
+    public class FBMeshConstructor2f : FBMeshConstructor<FBVertex2f, FBFace>
+    {
+        protected override void NewMesh(int numVertices, int numFaces)
+        {
+            Mesh = new FBMesh2f(numVertices, numFaces);
+        }
+
+        public new FBMesh2f PopMesh()
+        {
+            var tmp = Mesh;
+            Mesh = null;
+            return tmp as FBMesh2f;
+        }
+    }
+
+    /// <summary>
+    /// Constructor for HBMesh3f
+    /// </summary>
+    public class FBMeshConstructor3f : FBMeshConstructor<FBVertex3f, FBFace>
+    {
+        protected override void NewMesh(int numVertices, int numFaces)
+        {
+            Mesh = new FBMesh3f(numVertices, numFaces);
+        }
+
+        public new FBMesh3f PopMesh()
+        {
+            var tmp = Mesh;
+            Mesh = null;
+            return tmp as FBMesh3f;
+        }
+    }
+
+    /// <summary>
+    /// Face based mesh constructor.
+    /// Supports triangle or general meshes.
+    /// </summary>
     public class FBMeshConstructor<VERTEX, FACE> :
            ITriangleMeshConstructor<FBMesh<VERTEX, FACE>>,
            IGeneralMeshConstructor<FBMesh<VERTEX, FACE>>
@@ -14,28 +54,49 @@ namespace Common.Meshing.FaceBased
            where FACE : FBFace, new()
     {
 
-        public bool SupportsEdgeConnections { get { return false; } }
+        protected FBMesh<VERTEX, FACE> Mesh { get; set; }
 
+        /// <summary>
+        /// Does a face mesh support face connections.
+        /// </summary>
         public bool SupportsFaceConnections { get { return true; } }
 
-        private FBMesh<VERTEX, FACE> Mesh { get; set; }
-
+        /// <summary>
+        /// Create a triangle mesh. All faces are triangles.
+        /// </summary>
         public void PushTriangleMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
-            Mesh = new FBMesh<VERTEX, FACE>(numVertices, numFaces);
+            NewMesh(numVertices, numFaces);
         }
 
+        /// <summary>
+        /// Create a general mesh. Faces can have any number of edges.
+        /// </summary>
         public void PushGeneralMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
+            NewMesh(numVertices, numFaces);
+        }
+
+        /// <summary>
+        /// Create a new mesh. Allows parent class to make different mesh type.
+        /// </summary>
+        protected virtual void NewMesh(int numVertices, int numFaces)
+        {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push a new mesh.");
+
             Mesh = new FBMesh<VERTEX, FACE>(numVertices, numFaces);
         }
 
+        /// <summary>
+        /// Remove and return finished mesh.
+        /// </summary>
         public FBMesh<VERTEX, FACE> PopMesh()
         {
             var tmp = Mesh;
@@ -43,22 +104,39 @@ namespace Common.Meshing.FaceBased
             return tmp;
         }
 
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector2f pos)
         {
+            CheckMeshIsPushed();
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
         }
 
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector3f pos)
         {
+            CheckMeshIsPushed();
             VERTEX v = new VERTEX();
             v.Initialize(pos);
             Mesh.Vertices.Add(v);
         }
 
+        /// <summary>
+        /// Add a CCW triangle face.
+        /// </summary>
+        /// <param name="i0">index of vertex 0</param>
+        /// <param name="i1">index of vertex 1</param>
+        /// <param name="i2">index of vertex 2</param>
         public void AddFace(int i0, int i1, int i2)
         {
+            CheckMeshIsPushed();
             var v0 = Mesh.Vertices[i0];
             var v1 = Mesh.Vertices[i1];
             var v2 = Mesh.Vertices[i2];
@@ -77,8 +155,13 @@ namespace Common.Meshing.FaceBased
             Mesh.Faces.Add(face);
         }
 
+        /// <summary>
+        /// Add a CCW general face.
+        /// </summary>
+        /// <param name="vertList">A list of vertices in the face</param>
         public void AddFace(IList<int> vertList)
         {
+            CheckMeshIsPushed();
             int count = vertList.Count;
             FACE face = new FACE();
             face.SetSize(count);
@@ -93,8 +176,15 @@ namespace Common.Meshing.FaceBased
             Mesh.Faces.Add(face);
         }
 
+        /// <summary>
+        /// Add a CCW general face. Presumes that 
+        /// vertices are orders from start index to start + num index.
+        /// </summary>
+        /// <param name="vertStart">The index of the start vert</param>
+        /// <param name="numVertices">The number of vertices in face</param>
         public void AddFace(int vertStart, int numVertices)
         {
+            CheckMeshIsPushed();
             int count = numVertices;
             FACE face = new FACE();
             face.SetSize(count);
@@ -109,8 +199,18 @@ namespace Common.Meshing.FaceBased
             Mesh.Faces.Add(face);
         }
 
+        /// <summary>
+        /// Add a triangle face connection.
+        /// Will find and connect faces by set the neighbours.
+        /// A index of -1 means face has no neighbour.
+        /// </summary>
+        /// <param name="faceIndex">The index of the face</param>
+        /// <param name="i0">index of faces neighbour 0</param>
+        /// <param name="i1">index of faces neighbour 1</param>
+        /// <param name="i2">index of faces neighbour 2</param>
         public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
         {
+            CheckMeshIsPushed();
             var face = Mesh.Faces[faceIndex];
             var f0 = (i0 != -1) ? Mesh.Faces[i0] : null;
             var f1 = (i1 != -1) ? Mesh.Faces[i1] : null;
@@ -121,8 +221,16 @@ namespace Common.Meshing.FaceBased
             face.Neighbors[2] = f2;
         }
 
+        /// <summary>
+        /// Add a general face connection.
+        /// Will find and connect faces by set the neighbours.
+        /// A index of -1 means face has no neighbour.
+        /// </summary>
+        /// <param name="faceIndex">The index of the face</param>
+        /// <param name="neighbours">index of faces neighbours</param>
         public void AddFaceConnection(int faceIndex, IList<int> neighbours)
         {
+            CheckMeshIsPushed();
             int count = neighbours.Count;
             var face = Mesh.Faces[faceIndex];
 
@@ -133,6 +241,16 @@ namespace Common.Meshing.FaceBased
                 face.Neighbors[i] = Mesh.Faces[n];
             }
 
+        }
+
+        /// <summary>
+        /// Helper to throw exception if tring to create mesh
+        /// with out pushing a mesh first.
+        /// </summary>
+        private void CheckMeshIsPushed()
+        {
+            if (Mesh == null)
+                throw new InvalidOperationException("Mesh has not been pushed.");
         }
 
     }
