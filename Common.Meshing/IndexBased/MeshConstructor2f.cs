@@ -9,8 +9,6 @@ namespace Common.Meshing.IndexBased
     public class MeshConstructor2f : IEdgeMeshConstructor<Mesh2f>, ITriangleMeshConstructor<Mesh2f>
     {
 
-        public bool SupportsEdgeConnections { get { return false; } }
-
         public bool SupportsFaceConnections { get { return false; } }
 
         public bool SplitFaces { get; set; }
@@ -105,11 +103,6 @@ namespace Common.Meshing.IndexBased
         }
 
         public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
-        {
-            throw new NotSupportedException();
-        }
-
-        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex)
         {
             throw new NotSupportedException();
         }

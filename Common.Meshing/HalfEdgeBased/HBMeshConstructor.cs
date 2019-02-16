@@ -55,7 +55,6 @@ namespace Common.Meshing.HalfEdgeBased
     /// Supports edge, triangle or general meshes.
     /// </summary>
     public class HBMeshConstructor<VERTEX, EDGE, FACE> : 
-            IEdgeMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
             ITriangleMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
             IGeneralMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
             where VERTEX : HBVertex, new()
@@ -110,7 +109,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         public void PushEdgeMesh(int numVertices, int numEdges)
         {
-            NewMesh(numVertices, numEdges, 0);
+            NewMesh(numVertices, numEdges * 2, 0);
         }
 
         /// <summary>
@@ -269,32 +268,6 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Add a edge to mesh.
-        /// </summary>
-        /// <param name="i0">index of vertex 0</param>
-        /// <param name="i1">index of vertex 1</param>
-        public void AddEdge(int i0, int i1)
-        {
-            var v0 = Mesh.Vertices[i0];
-            var v1 = Mesh.Vertices[i1];
-
-            var e0 = new EDGE();
-            var e1 = new EDGE();
-
-            e0.Opposite = e1;
-            e1.Opposite = e0;
-
-            v0.Edge = e0;
-            e0.From = v0;
-
-            v1.Edge = e1;
-            e1.From = v1;
-
-            Mesh.Edges.Add(e0);
-            Mesh.Edges.Add(e1);
-        }
-
-        /// <summary>
         /// Add a triangle face connection.
         /// Will find and connect faces by joining the face edges opposite member.
         /// A index of -1 means face has no neighbour.
@@ -383,23 +356,6 @@ namespace Common.Meshing.HalfEdgeBased
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Connect a edge to its other edge members.
-        /// </summary>
-        /// <param name="edgeIndex">The index of the edge to connect</param>
-        /// <param name="previousIndex">The index of this edges previous member</param>
-        /// <param name="nextIndex">The index of this edges next member</param>
-        /// <param name="oppositeIndex">The index of this edges opposite member</param>
-        public void AddEdgeConnection(int edgeIndex, int previousIndex, int nextIndex)
-        {
-            var edge = Mesh.Edges[edgeIndex];
-            var previous = (previousIndex != -1) ? Mesh.Edges[previousIndex] : null;
-            var next = (nextIndex != -1) ? Mesh.Edges[nextIndex] : null;
-
-            edge.Previous = previous;
-            edge.Next = next;
         }
 
     }
