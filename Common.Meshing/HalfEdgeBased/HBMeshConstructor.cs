@@ -56,7 +56,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// </summary>
     public class HBMeshConstructor<VERTEX, EDGE, FACE> : 
             ITriangleMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
-            IPolgonMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
+            IPolygonMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()

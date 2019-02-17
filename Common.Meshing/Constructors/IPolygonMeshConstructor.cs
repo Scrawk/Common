@@ -5,7 +5,7 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Meshing.Constructors
 {
-    public interface IPolgonMeshConstructor<MESH>
+    public interface IPolygonMeshConstructor<MESH>
     {
 
         bool SupportsFaceConnections { get; }

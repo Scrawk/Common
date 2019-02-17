@@ -20,7 +20,7 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromTriangle<MESH>(IPolgonMeshConstructor<MESH> constructor, Vector2f A, Vector2f B, Vector2f C)
+        public static void FromTriangle<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2f A, Vector2f B, Vector2f C)
         {
             constructor.PushPolygonMesh(3, 1);
 
@@ -37,7 +37,7 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromBox<MESH>(IPolgonMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
+        public static void FromBox<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
         {
             constructor.PushPolygonMesh(4, 1);
 
@@ -56,7 +56,7 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromCircle<MESH>(IPolgonMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
+        public static void FromCircle<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
         {
             constructor.PushPolygonMesh(segments, 1);
 

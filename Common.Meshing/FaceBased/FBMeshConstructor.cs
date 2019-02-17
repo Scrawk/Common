@@ -49,7 +49,7 @@ namespace Common.Meshing.FaceBased
     /// </summary>
     public class FBMeshConstructor<VERTEX, FACE> :
            ITriangleMeshConstructor<FBMesh<VERTEX, FACE>>,
-           IPolgonMeshConstructor<FBMesh<VERTEX, FACE>>
+           IPolygonMeshConstructor<FBMesh<VERTEX, FACE>>
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
