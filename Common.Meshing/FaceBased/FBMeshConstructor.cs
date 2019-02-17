@@ -45,11 +45,11 @@ namespace Common.Meshing.FaceBased
 
     /// <summary>
     /// Face based mesh constructor.
-    /// Supports triangle or general meshes.
+    /// Supports triangle or polygon meshes.
     /// </summary>
     public class FBMeshConstructor<VERTEX, FACE> :
            ITriangleMeshConstructor<FBMesh<VERTEX, FACE>>,
-           IGeneralMeshConstructor<FBMesh<VERTEX, FACE>>
+           IPolgonMeshConstructor<FBMesh<VERTEX, FACE>>
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
@@ -73,9 +73,9 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
-        /// Create a general mesh. Faces can have any number of edges.
+        /// Create a polygon mesh. Faces can have any number of edges.
         /// </summary>
-        public void PushGeneralMesh(int numVertices, int numFaces)
+        public void PushPolygonMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
@@ -156,7 +156,7 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
-        /// Add a CCW general face.
+        /// Add a CCW polygon face.
         /// </summary>
         /// <param name="vertList">A list of vertices in the face</param>
         public void AddFace(IList<int> vertList)
@@ -177,7 +177,7 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
-        /// Add a CCW general face. Presumes that 
+        /// Add a CCW polygon face. Presumes that 
         /// vertices are orders from start index to start + num index.
         /// </summary>
         /// <param name="vertStart">The index of the start vert</param>

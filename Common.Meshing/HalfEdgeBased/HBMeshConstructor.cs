@@ -52,11 +52,11 @@ namespace Common.Meshing.HalfEdgeBased
 
     /// <summary>
     /// Half edge based mesh constructor.
-    /// Supports triangle or general meshes.
+    /// Supports triangle or polygon meshes.
     /// </summary>
     public class HBMeshConstructor<VERTEX, EDGE, FACE> : 
             ITriangleMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
-            IGeneralMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
+            IPolgonMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -84,9 +84,9 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Create a general mesh. Faces can have any number of edges.
+        /// Create a polygon mesh. Faces can have any number of edges.
         /// </summary>
-        public void PushGeneralMesh(int numVertices, int numFaces)
+        public void PushPolygonMesh(int numVertices, int numFaces)
         {
             NewMesh(numVertices, 0, numFaces);
         }
@@ -174,7 +174,7 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Add a CCW general face.
+        /// Add a CCW polygon face.
         /// </summary>
         /// <param name="vertList">A list of vertices in the face</param>
         public void AddFace(IList<int> vertList)
@@ -209,7 +209,7 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Add a CCW general face. Presumes that 
+        /// Add a CCW polygon face. Presumes that 
         /// vertices are orders from start index to start + num index.
         /// </summary>
         /// <param name="vertStart">The index of the start vert</param>
@@ -279,7 +279,7 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Add a general face connection.
+        /// Add a polygon face connection.
         /// Will find and connect faces by joining the face edges opposite member.
         /// A index of -1 means face has no neighbour.
         /// </summary>
