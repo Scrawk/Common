@@ -223,6 +223,16 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Add all vertices in face to list.
+        /// </summary>
+        public void GetVertices<VERTEX>(List<VERTEX> vertices, bool forwards = true)
+            where VERTEX : HBVertex
+        {
+            foreach (var v in EnumerateVertices(forwards))
+                vertices.Add(v as VERTEX);
+        }
+
+        /// <summary>
         /// Clear edge of all connections.
         /// </summary>
         public virtual void Clear()

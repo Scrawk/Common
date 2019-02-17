@@ -32,7 +32,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Convert mesh to indexable mesh.
         /// </summary>
-        public Mesh2f ToMesh2f(int faceVertices = 3)
+        public Mesh3f ToMesh3f(int faceVertices = 3)
         {
             var positions = new List<Vector3f>(Vertices.Count);
 

@@ -63,6 +63,30 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// A vertex is closed if all its edges have a face
+        /// </summary>
+        public bool IsClosed
+        {
+            get
+            {
+                HBEdge start = Edge;
+                HBEdge e = start;
+
+                do
+                {
+                    if (e == null) return false;
+                    if (e.Previous == null) return false;
+                    if (e.Previous.Opposite == null) return false;
+                    if (e.Previous.Opposite.Face == null) return false;
+                    e = e.Previous.Opposite;
+                }
+                while (!ReferenceEquals(start, e));
+
+                return true;
+            }
+        }
+
+        /// <summary>
         /// The number of edges connecting to this vertex.
         /// Edges must have a opposite member.
         /// </summary>
@@ -91,9 +115,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Enumerate all edges connected to this vertex.
         /// Edges must have a opposite member.
         /// </summary>
-        /// <param name="ccw"></param>
-        /// <returns></returns>
-        public IEnumerable<HBEdge> EnumerateEdges(bool ccw = true)
+        public IEnumerable<HBEdge> EnumerateEdges(bool forwards = true)
         {
             HBEdge start = Edge;
             HBEdge e = start;
@@ -103,7 +125,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (e == null) yield break;
                 yield return e;
 
-                if(ccw)
+                if(forwards)
                 {
                     if (e.Previous == null) yield break;
                     e = e.Previous.Opposite;
