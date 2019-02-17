@@ -62,7 +62,7 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Create a new edge from two half edges.
+        /// Create edges opposite.
         /// </summary>
         private static EDGE NewEdge<EDGE>(EDGE edge)
             where EDGE : HBEdge, new()

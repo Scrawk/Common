@@ -29,7 +29,7 @@ namespace Common.Geometry.Shapes
 
         public Vector2f Center
         {
-            get { return (A + B) / 2.0f; }
+            get { return (A + B) * 0.5f; }
         }
 
         public float Length

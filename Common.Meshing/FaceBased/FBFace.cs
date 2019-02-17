@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Meshing.FaceBased
 {
@@ -49,6 +49,12 @@ namespace Common.Meshing.FaceBased
 
             if (Neighbors == null || Neighbors.Length != size)
                 Neighbors = new FBFace[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                Vertices[i] = null;
+                Neighbors[i] = null;
+            }
         }
 
         public VERTEX GetVertex<VERTEX>(int i) where VERTEX : FBVertex

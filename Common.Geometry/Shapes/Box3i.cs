@@ -122,6 +122,21 @@ namespace Common.Geometry.Shapes
             return string.Format("[Box3i: Min={0}, Max={1}, Width={2}, Height={3}, Depth={4}]", Min, Max, Width, Height, Depth);
         }
 
+        public IList<Vector3i> GetCorners()
+        {
+            Vector3i[] corners = new Vector3i[8];
+            corners[0] = new Vector3i(Min.x, Min.y, Min.z);
+            corners[1] = new Vector3i(Max.x, Min.y, Min.z);
+            corners[2] = new Vector3i(Max.x, Min.y, Max.z);
+            corners[3] = new Vector3i(Min.x, Min.y, Max.z);
+
+            corners[4] = new Vector3i(Min.x, Max.y, Min.z);
+            corners[5] = new Vector3i(Max.x, Max.y, Min.z);
+            corners[6] = new Vector3i(Max.x, Max.y, Max.z);
+            corners[7] = new Vector3i(Min.x, Max.y, Max.z);
+            return corners;
+        }
+
         public void GetCorners(IList<Vector3i> corners)
         {
             corners[0] = new Vector3i(Min.x, Min.y, Min.z);

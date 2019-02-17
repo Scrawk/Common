@@ -132,6 +132,16 @@ namespace Common.Geometry.Shapes
             return string.Format("[Box2f: Min={0}, Max={1}, Width={2}, Height={3}]", Min, Max, Width, Height);
         }
 
+        public IList<Vector2f> GetCorners()
+        {
+            var corners = new Vector2f[4];
+            corners[0] = new Vector2f(Min.x, Min.y);
+            corners[1] = new Vector2f(Max.x, Min.y);
+            corners[2] = new Vector2f(Max.x, Max.y);
+            corners[3] = new Vector2f(Min.x, Max.y);
+            return corners;
+        }
+
         public void GetCorners(IList<Vector2f> corners)
         {
             corners[0] = new Vector2f(Min.x, Min.y);
