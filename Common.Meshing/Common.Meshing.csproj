@@ -44,8 +44,9 @@
     <Compile Include="Constructors\CreateGeneralMesh2.cs" />
     <Compile Include="Constructors\CreateTriangleMesh2.cs" />
     <Compile Include="Constructors\IEdgeMeshConstructor.cs" />
-    <Compile Include="Constructors\IPolygonMeshConstructor.cs" />
-    <Compile Include="Constructors\ITriangleMeshConstructor.cs" />
+    <Compile Include="Constructors\IPolygonalMeshConstructor.cs" />
+    <Compile Include="Constructors\ITetrahedralMeshConstructor.cs" />
+    <Compile Include="Constructors\ITriangularMeshConstructor.cs" />
     <Compile Include="FaceBased\FBFace.cs" />
     <Compile Include="FaceBased\FBMesh.cs" />
     <Compile Include="FaceBased\FBMesh2f.cs" />

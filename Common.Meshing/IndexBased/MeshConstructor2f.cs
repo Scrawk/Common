@@ -10,7 +10,7 @@ namespace Common.Meshing.IndexBased
     /// Indexed based mesh constructor.
     /// Supports triangle or edge meshes.
     /// </summary>
-    public class MeshConstructor2f : IEdgeMeshConstructor<Mesh2f>, ITriangleMeshConstructor<Mesh2f>
+    public class MeshConstructor2f : IEdgeMeshConstructor<Mesh2f>, ITriangularMeshConstructor<Mesh2f>
     {
 
         private Mesh2f m_mesh;
@@ -20,6 +20,8 @@ namespace Common.Meshing.IndexBased
         private int m_faceIndex;
 
         private int m_edgeIndex;
+
+        private int m_faceVerts;
 
         /// <summary>
         /// Index based meshes do not support face connections.
@@ -32,17 +34,6 @@ namespace Common.Meshing.IndexBased
         public bool SplitFaces { get; set; }
 
         /// <summary>
-        /// Push a new triangle mesh.
-        /// </summary>
-        public void PushTriangleMesh(int numVertices, int numFaces)
-        {
-            if (m_mesh != null)
-                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
-
-            m_mesh = new Mesh2f(numVertices, numFaces * 3);
-        }
-
-        /// <summary>
         /// Push a new edge mesh.
         /// </summary>
         public void PushEdgeMesh(int numVertices, int numEdges)
@@ -50,7 +41,20 @@ namespace Common.Meshing.IndexBased
             if (m_mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
-            m_mesh = new Mesh2f(numVertices, numEdges * 2);
+            m_faceVerts = 2;
+            m_mesh = new Mesh2f(numVertices, numEdges * m_faceVerts);
+        }
+
+        /// <summary>
+        /// Push a new triangle mesh.
+        /// </summary>
+        public void PushTriangularMesh(int numVertices, int numFaces)
+        {
+            if (m_mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
+            m_faceVerts = 3;
+            m_mesh = new Mesh2f(numVertices, numFaces * m_faceVerts);
         }
 
         /// <summary>
@@ -59,8 +63,9 @@ namespace Common.Meshing.IndexBased
         public Mesh2f PopMesh()
         {
 
-            if (SplitFaces)
+            if (SplitFaces && m_faceVerts == 0)
             {
+                //Presumes its a triangle mesh.
                 var mesh = new Mesh2f(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
 
                 var indices = m_mesh.Indices;
@@ -95,6 +100,7 @@ namespace Common.Meshing.IndexBased
             m_vertexIndex = 0;
             m_faceIndex = 0;
             m_edgeIndex = 0;
+            m_faceVerts = 0;
         }
 
         /// <summary>

@@ -5,12 +5,12 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Meshing.Constructors
 {
-    public interface ITriangleMeshConstructor<MESH>
+    public interface ITriangularMeshConstructor<MESH>
     {
 
         bool SupportsFaceConnections { get; }
 
-        void PushTriangleMesh(int numVertices, int numFaces);
+        void PushTriangularMesh(int numVertices, int numFaces);
 
         MESH PopMesh();
 

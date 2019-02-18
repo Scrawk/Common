@@ -22,9 +22,9 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromTriangle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f A, Vector2f B, Vector2f C)
+        public static void FromTriangle<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2f A, Vector2f B, Vector2f C)
         {
-            constructor.PushTriangleMesh(3, 1);
+            constructor.PushTriangularMesh(3, 1);
 
             constructor.AddVertex(A);
             constructor.AddVertex(B);
@@ -39,9 +39,9 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
+        public static void FromBox<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
         {
-            constructor.PushTriangleMesh(4, 2);
+            constructor.PushTriangularMesh(4, 2);
 
             constructor.AddVertex(min);
             constructor.AddVertex(new Vector2f(max.x, min.y));
@@ -65,9 +65,9 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromCircle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
+        public static void FromCircle<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
         {
-            constructor.PushTriangleMesh(segments + 1, segments * 3);
+            constructor.PushTriangularMesh(segments + 1, segments * 3);
             constructor.AddVertex(center);
 
             float pi = (float)Math.PI;

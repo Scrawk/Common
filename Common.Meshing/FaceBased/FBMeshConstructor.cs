@@ -48,8 +48,8 @@ namespace Common.Meshing.FaceBased
     /// Supports triangle or polygon meshes.
     /// </summary>
     public class FBMeshConstructor<VERTEX, FACE> :
-           ITriangleMeshConstructor<FBMesh<VERTEX, FACE>>,
-           IPolygonMeshConstructor<FBMesh<VERTEX, FACE>>
+           ITriangularMeshConstructor<FBMesh<VERTEX, FACE>>,
+           IPolygonalMeshConstructor<FBMesh<VERTEX, FACE>>
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
@@ -64,7 +64,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Create a triangle mesh. All faces are triangles.
         /// </summary>
-        public void PushTriangleMesh(int numVertices, int numFaces)
+        public void PushTriangularMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
@@ -75,7 +75,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Create a polygon mesh. Faces can have any number of edges.
         /// </summary>
-        public void PushPolygonMesh(int numVertices, int numFaces)
+        public void PushPolygonalMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
