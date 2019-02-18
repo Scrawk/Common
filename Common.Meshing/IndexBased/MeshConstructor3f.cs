@@ -178,9 +178,9 @@ namespace Common.Meshing.IndexBased
         public void AddFace(int i0, int i1, int i2, int i3)
         {
             CheckMeshIsPushed();
-            m_mesh.Indices[m_faceIndex * 3 + 0] = i0;
-            m_mesh.Indices[m_faceIndex * 3 + 1] = i1;
-            m_mesh.Indices[m_faceIndex * 3 + 2] = i2;
+            m_mesh.Indices[m_faceIndex * 4 + 0] = i0;
+            m_mesh.Indices[m_faceIndex * 4 + 1] = i1;
+            m_mesh.Indices[m_faceIndex * 4 + 2] = i2;
             m_mesh.Indices[m_faceIndex * 4 + 3] = i3;
             m_faceIndex++;
         }
