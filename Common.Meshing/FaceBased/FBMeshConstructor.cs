@@ -10,51 +10,32 @@ namespace Common.Meshing.FaceBased
     /// <summary>
     /// Constructor for HBMesh2f
     /// </summary>
-    public class FBMeshConstructor2f : FBMeshConstructor<FBVertex2f, FBFace>
+    public class FBMeshConstructor2f : FBMeshConstructor<FBMesh2f, FBVertex2f, FBFace>
     {
-        protected override void NewMesh(int numVertices, int numFaces)
-        {
-            Mesh = new FBMesh2f(numVertices, numFaces);
-        }
 
-        public new FBMesh2f PopMesh()
-        {
-            var tmp = Mesh;
-            Mesh = null;
-            return tmp as FBMesh2f;
-        }
     }
 
     /// <summary>
     /// Constructor for HBMesh3f
     /// </summary>
-    public class FBMeshConstructor3f : FBMeshConstructor<FBVertex3f, FBFace>
+    public class FBMeshConstructor3f : FBMeshConstructor<FBMesh3f, FBVertex3f, FBFace>
     {
-        protected override void NewMesh(int numVertices, int numFaces)
-        {
-            Mesh = new FBMesh3f(numVertices, numFaces);
-        }
 
-        public new FBMesh3f PopMesh()
-        {
-            var tmp = Mesh;
-            Mesh = null;
-            return tmp as FBMesh3f;
-        }
     }
 
     /// <summary>
     /// Face based mesh constructor.
     /// Supports triangle or polygon meshes.
     /// </summary>
-    public class FBMeshConstructor<VERTEX, FACE> :
-           ITriangularMeshConstructor<FBMesh<VERTEX, FACE>>,
-           IPolygonalMeshConstructor<FBMesh<VERTEX, FACE>>
+    public class FBMeshConstructor<MESH, VERTEX, FACE> :
+           ITriangularMeshConstructor<MESH>,
+           IPolygonalMeshConstructor<MESH>
+            where MESH : FBMesh<VERTEX, FACE>, new()
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
 
-        protected FBMesh<VERTEX, FACE> Mesh { get; set; }
+        protected MESH Mesh { get; set; }
 
         /// <summary>
         /// Does a face mesh support face connections.
@@ -84,20 +65,22 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
-        /// Create a new mesh. Allows parent class to make different mesh type.
+        /// Create a new mesh.
         /// </summary>
-        protected virtual void NewMesh(int numVertices, int numFaces)
+        private void NewMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push a new mesh.");
 
-            Mesh = new FBMesh<VERTEX, FACE>(numVertices, numFaces);
+            Mesh = new MESH();
+            Mesh.Vertices.Capacity = numVertices;
+            Mesh.Faces.Capacity = numFaces;
         }
 
         /// <summary>
         /// Remove and return finished mesh.
         /// </summary>
-        public FBMesh<VERTEX, FACE> PopMesh()
+        public MESH PopMesh()
         {
             var tmp = Mesh;
             Mesh = null;

@@ -11,58 +11,33 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// Constructor for HBMesh2f
     /// </summary>
-    public class HBMeshConstructor2f : HBMeshConstructor<HBVertex2f, HBEdge, HBFace>
+    public class HBMeshConstructor2f : HBMeshConstructor<HBMesh2f, HBVertex2f, HBEdge, HBFace>
     {
-        protected override void NewMesh(int numVertices, int numEdges, int numFaces)
-        {
-            Mesh = new HBMesh2f(numVertices, numEdges, numFaces);
-        }
 
-        public new HBMesh2f PopMesh()
-        {
-            if (AddBoundary)
-                Mesh.AddBoundaryEdges();
-
-            var tmp = Mesh;
-            Mesh = null;
-            return tmp as HBMesh2f;
-        }
     }
 
     /// <summary>
     /// Constructor for HBMesh3f
     /// </summary>
-    public class HBMeshConstructor3f : HBMeshConstructor<HBVertex3f, HBEdge, HBFace>
+    public class HBMeshConstructor3f : HBMeshConstructor<HBMesh3f, HBVertex3f, HBEdge, HBFace>
     {
-        protected override void NewMesh(int numVertices, int numEdges, int numFaces)
-        {
-            Mesh = new HBMesh3f(numVertices, numEdges, numFaces);
-        }
 
-        public new HBMesh3f PopMesh()
-        {
-            if (AddBoundary)
-                Mesh.AddBoundaryEdges();
-
-            var tmp = Mesh;
-            Mesh = null;
-            return tmp as HBMesh3f;
-        }
     }
 
     /// <summary>
     /// Half edge based mesh constructor.
     /// Supports triangle or polygon meshes.
     /// </summary>
-    public class HBMeshConstructor<VERTEX, EDGE, FACE> : 
-            ITriangularMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>,
-            IPolygonalMeshConstructor<HBMesh<VERTEX, EDGE, FACE>>
+    public class HBMeshConstructor<MESH, VERTEX, EDGE, FACE> : 
+            ITriangularMeshConstructor<MESH>,
+            IPolygonalMeshConstructor<MESH>
+            where MESH : HBMesh<VERTEX, EDGE, FACE>, new()
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
     {
 
-        protected HBMesh<VERTEX, EDGE, FACE> Mesh;
+        protected MESH Mesh;
 
         /// <summary>
         /// Does a half edge mesh support face connections.
@@ -92,20 +67,23 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Create a new mesh. Allows parent class to make different mesh type.
+        /// Create a new mesh. 
         /// </summary>
-        protected virtual void NewMesh(int numVertices, int numEdges, int numFaces)
+        private void NewMesh(int numVertices, int numEdges, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push a new mesh.");
 
-            Mesh = new HBMesh<VERTEX, EDGE, FACE>(numVertices, numEdges, numFaces);
+            Mesh = new MESH();
+            Mesh.Vertices.Capacity = numVertices;
+            Mesh.Edges.Capacity = numEdges;
+            Mesh.Faces.Capacity = numFaces;
         }
 
         /// <summary>
         /// Remove and return finished mesh.
         /// </summary>
-        public HBMesh<VERTEX, EDGE, FACE> PopMesh()
+        public MESH PopMesh()
         {
             if (AddBoundary)
                 Mesh.AddBoundaryEdges();

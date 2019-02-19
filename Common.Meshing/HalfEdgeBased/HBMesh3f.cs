@@ -19,6 +19,12 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
+        public override string ToString()
+        {
+            return string.Format("[HBMesh3f: Vertices={0}, Edges={1}, Faces={2}]",
+                Vertices.Count, Edges.Count, Faces.Count);
+        }
+
         /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>

@@ -20,6 +20,12 @@ namespace Common.Meshing.FaceBased
 
         }
 
+        public override string ToString()
+        {
+            return string.Format("[FBMesh2f: Vertices={0}, Faces={1}]",
+                Vertices.Count, Faces.Count);
+        }
+
         /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>
