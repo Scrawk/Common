@@ -57,6 +57,18 @@ namespace Common.Meshing.FaceBased
             }
         }
 
+        public int IndexOf<VERTEX>(VERTEX v)
+        {
+            if (Vertices == null) return -1;
+            for (int i = 0; i < NumVertices; i++)
+            {
+                if (ReferenceEquals(v, Vertices[i]))
+                    return i;
+            }
+
+            return -1;
+        }
+
         public VERTEX GetVertex<VERTEX>(int i) where VERTEX : FBVertex
         {
             if (Vertices == null) return null;

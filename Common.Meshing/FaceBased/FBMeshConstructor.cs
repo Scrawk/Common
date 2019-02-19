@@ -29,8 +29,9 @@ namespace Common.Meshing.FaceBased
     /// </summary>
     public class FBMeshConstructor<MESH, VERTEX, FACE> :
            ITriangularMeshConstructor<MESH>,
-           IPolygonalMeshConstructor<MESH>
-            where MESH : FBMesh<VERTEX, FACE>, new()
+           IPolygonalMeshConstructor<MESH>,
+           ITetrahedralMeshConstructor<MESH>
+           where MESH : FBMesh<VERTEX, FACE>, new()
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
@@ -57,6 +58,17 @@ namespace Common.Meshing.FaceBased
         /// Create a polygon mesh. Faces can have any number of edges.
         /// </summary>
         public void PushPolygonalMesh(int numVertices, int numFaces)
+        {
+            if (Mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
+            NewMesh(numVertices, numFaces);
+        }
+
+        /// <summary>
+        /// Create a tetrahedral mesh. All faces are tetrahedron.
+        /// </summary>
+        public void PushTetrahedralMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
@@ -139,6 +151,37 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Add a tetrahedron face.
+        /// </summary>
+        /// <param name="i0">index of vertex 0</param>
+        /// <param name="i1">index of vertex 1</param>
+        /// <param name="i2">index of vertex 2</param>
+        /// <param name="i3">index of vertex 3</param>
+        public void AddFace(int i0, int i1, int i2, int i3)
+        {
+            CheckMeshIsPushed();
+            var v0 = Mesh.Vertices[i0];
+            var v1 = Mesh.Vertices[i1];
+            var v2 = Mesh.Vertices[i2];
+            var v3 = Mesh.Vertices[i3];
+
+            FACE face = new FACE();
+            face.SetSize(4);
+
+            v0.Face = face;
+            v1.Face = face;
+            v2.Face = face;
+            v3.Face = face;
+
+            face.Vertices[0] = v0;
+            face.Vertices[1] = v1;
+            face.Vertices[2] = v2;
+            face.Vertices[3] = v3;
+
+            Mesh.Faces.Add(face);
+        }
+
+        /// <summary>
         /// Add a CCW polygon face.
         /// </summary>
         /// <param name="vertList">A list of vertices in the face</param>
@@ -202,6 +245,31 @@ namespace Common.Meshing.FaceBased
             face.Neighbors[0] = f0;
             face.Neighbors[1] = f1;
             face.Neighbors[2] = f2;
+        }
+
+        /// <summary>
+        /// Add a tetrahedral face connection.
+        /// Will find and connect faces by set the neighbours.
+        /// A index of -1 means face has no neighbour.
+        /// </summary>
+        /// <param name="faceIndex">The index of the face</param>
+        /// <param name="i0">index of faces neighbour 0</param>
+        /// <param name="i1">index of faces neighbour 1</param>
+        /// <param name="i2">index of faces neighbour 2</param>
+        /// <param name="i3">index of faces neighbour 3</param>
+        public void AddFaceConnection(int faceIndex, int i0, int i1, int i2, int i3)
+        {
+            CheckMeshIsPushed();
+            var face = Mesh.Faces[faceIndex];
+            var f0 = (i0 != -1) ? Mesh.Faces[i0] : null;
+            var f1 = (i1 != -1) ? Mesh.Faces[i1] : null;
+            var f2 = (i2 != -1) ? Mesh.Faces[i2] : null;
+            var f3 = (i3 != -1) ? Mesh.Faces[i3] : null;
+
+            face.Neighbors[0] = f0;
+            face.Neighbors[1] = f1;
+            face.Neighbors[2] = f2;
+            face.Neighbors[3] = f3;
         }
 
         /// <summary>
