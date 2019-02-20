@@ -32,6 +32,18 @@ namespace Common.Meshing.FaceBased
 
         }
 
+        /// <summary>
+        /// Convert vertex to string.
+        /// </summary>
+        /// <param name="mesh">Parent mesh</param>
+        /// <returns>Vertex as string</returns>
+        public virtual string ToString<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
+            where VERTEX : FBVertex, new()
+            where FACE : FBFace, new()
+        {
+            return string.Format("[FBVertex: Id={0}, Face={1}]", mesh.IndexOf(this), mesh.IndexOf(Face));
+        }
+
         public FACE GetFace<FACE>() where FACE : FBFace
         {
             if (Face == null) return null;

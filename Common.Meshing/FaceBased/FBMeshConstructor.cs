@@ -242,9 +242,9 @@ namespace Common.Meshing.FaceBased
             var f1 = (i1 != -1) ? Mesh.Faces[i1] : null;
             var f2 = (i2 != -1) ? Mesh.Faces[i2] : null;
 
-            face.Neighbors[0] = f0;
-            face.Neighbors[1] = f1;
-            face.Neighbors[2] = f2;
+            face.Neighbours[0] = f0;
+            face.Neighbours[1] = f1;
+            face.Neighbours[2] = f2;
         }
 
         /// <summary>
@@ -266,10 +266,10 @@ namespace Common.Meshing.FaceBased
             var f2 = (i2 != -1) ? Mesh.Faces[i2] : null;
             var f3 = (i3 != -1) ? Mesh.Faces[i3] : null;
 
-            face.Neighbors[0] = f0;
-            face.Neighbors[1] = f1;
-            face.Neighbors[2] = f2;
-            face.Neighbors[3] = f3;
+            face.Neighbours[0] = f0;
+            face.Neighbours[1] = f1;
+            face.Neighbours[2] = f2;
+            face.Neighbours[3] = f3;
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace Common.Meshing.FaceBased
             {
                 int n = neighbours[i];
                 if (n == -1) continue;
-                face.Neighbors[i] = Mesh.Faces[n];
+                face.Neighbours[i] = Mesh.Faces[n];
             }
 
         }

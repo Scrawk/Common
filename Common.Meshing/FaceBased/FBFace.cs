@@ -10,7 +10,7 @@ namespace Common.Meshing.FaceBased
 
         public FBVertex[] Vertices { get; set; }
 
-        public FBFace[] Neighbors { get; set; }
+        public FBFace[] Neighbours { get; set; }
 
         public FBFace()
         {
@@ -20,7 +20,7 @@ namespace Common.Meshing.FaceBased
         public FBFace(int size)
         {
             Vertices = new FBVertex[size];
-            Neighbors = new FBFace[size];
+            Neighbours = new FBFace[size];
         }
 
         public int NumVertices
@@ -28,18 +28,31 @@ namespace Common.Meshing.FaceBased
             get { return (Vertices != null) ? Vertices.Length : 0; }
         }
 
-        public int NumNeighbors
+        public int NumNeighbours
         {
             get
             {
-                if (Neighbors == null) return 0;
+                if (Neighbours == null) return 0;
 
                 int count = 0;
-                foreach (var n in Neighbors)
+                foreach (var n in Neighbours)
                     if (n != null) count++;
 
                 return count;
             }
+        }
+
+        /// <summary>
+        /// Convert face to string.
+        /// </summary>
+        /// <param name="mesh">Parent mesh</param>
+        /// <returns>Face as string</returns>
+        public virtual string ToString<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
+            where VERTEX : FBVertex, new()
+            where FACE : FBFace, new()
+        {
+            return string.Format("[FBFace: Id={0}, NumVertices={1}, NumNeighbours={2}]", 
+                mesh.IndexOf(this), NumVertices, NumNeighbours);
         }
 
         public void SetSize(int size)
@@ -47,13 +60,13 @@ namespace Common.Meshing.FaceBased
             if(Vertices == null || Vertices.Length != size)
                 Vertices = new FBVertex[size];
 
-            if (Neighbors == null || Neighbors.Length != size)
-                Neighbors = new FBFace[size];
+            if (Neighbours == null || Neighbours.Length != size)
+                Neighbours = new FBFace[size];
 
             for (int i = 0; i < size; i++)
             {
                 Vertices[i] = null;
-                Neighbors[i] = null;
+                Neighbours[i] = null;
             }
         }
 
@@ -81,12 +94,12 @@ namespace Common.Meshing.FaceBased
             return vert;
         }
 
-        public FACE GetNeighbor<FACE>(int i) where FACE : FBFace
+        public FACE GetNeighbour<FACE>(int i) where FACE : FBFace
         {
-            if (Neighbors == null) return null;
-            if (Neighbors[i] == null) return null;
+            if (Neighbours == null) return null;
+            if (Neighbours[i] == null) return null;
 
-            FACE face = Neighbors[i] as FACE;
+            FACE face = Neighbours[i] as FACE;
             if (face == null)
                 throw new InvalidCastException("Neighbor is not a " + typeof(FACE));
 
@@ -96,7 +109,7 @@ namespace Common.Meshing.FaceBased
         public virtual void Clear()
         {
             Vertices = null;
-            Neighbors = null;
+            Neighbours = null;
         }
 
     }

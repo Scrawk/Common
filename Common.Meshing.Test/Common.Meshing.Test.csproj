@@ -51,6 +51,10 @@
   <ItemGroup>
     <Compile Include="Constructors\CreateGeneralMesh2Test.cs" />
     <Compile Include="Constructors\CreateTriangleMesh2Test.cs" />
+    <Compile Include="FaceBased\FBMeshHelper.cs" />
+    <Compile Include="FaceBased\FBMeshTest.cs" />
+    <Compile Include="FaceBased\FBVertexTest.cs" />
+    <Compile Include="FaceBased\FBFaceTest.cs" />
     <Compile Include="HalfEdgeBased\HBMeshHelper.cs" />
     <Compile Include="HalfEdgeBased\HBEdgeTest.cs" />
     <Compile Include="HalfEdgeBased\HBFaceTest.cs" />
@@ -78,9 +82,7 @@
       <Name>Common.Meshing</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FaceBased\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="HalfEdgeBased\TestMesh_Cross.png" />
     <Content Include="HalfEdgeBased\TestMesh_SquareWithCenter.png" />
