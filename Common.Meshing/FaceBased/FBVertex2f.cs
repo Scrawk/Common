@@ -31,8 +31,8 @@ namespace Common.Meshing.FaceBased
         /// <returns>Vertex as string</returns>
         public override string ToString<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
         {
-            return string.Format("[FBVertex2f: Id={0}, Face={1}, Position={2}]", 
-                mesh.IndexOf(this), mesh.IndexOf(Face), Position);
+            return string.Format("[FBVertex2f: Id={0}, Faces={1}, Position={2}]", 
+                mesh.IndexOf(this), NumFaces, Position);
         }
 
     }

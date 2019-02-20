@@ -199,5 +199,43 @@ namespace Common.Meshing.FaceBased
             }
         }
 
+        /// <summary>
+        /// Finds each face that a vertex is attached to
+        /// and stores it in the vertices face list.
+        /// </summary>
+        public void SetVerticeFaces()
+        {
+            int count = Vertices.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var vert = Vertices[i];
+                if (vert.Faces == null)
+                    vert.Faces = new List<FBFace>();
+                else
+                    vert.Faces.Clear();
+            }
+
+            count = Faces.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var face = Faces[i];
+                for (int j = 0; j < face.NumVertices; j++)
+                {
+                    var v = face.Vertices[j];
+                    v.Faces.Add(face);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes each vertices face list.
+        /// </summary>
+        public void RemoveVerticeFaces()
+        {
+            int count = Vertices.Count;
+            for (int i = 0; i < count; i++)
+                Vertices[i].Faces = null;
+        }
+
     }
 }

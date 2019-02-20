@@ -16,10 +16,10 @@ namespace Common.Meshing.Test.FaceBased
 
             Assert.AreEqual(0, face.NumVertices);
 
-            face.SetSize(2);
+            face.SetVerticesSize(2);
             Assert.AreEqual(2, face.NumVertices);
 
-            face.SetSize(3);
+            face.SetVerticesSize(3);
             Assert.AreEqual(3, face.NumVertices);
         }
 
@@ -30,7 +30,7 @@ namespace Common.Meshing.Test.FaceBased
 
             Assert.AreEqual(0, face.NumNeighbours);
 
-            face.SetSize(2);
+            face.SetVerticesSize(2);
             Assert.AreEqual(0, face.NumNeighbours);
 
             face.Neighbours[0] = new FBFace();
@@ -45,10 +45,10 @@ namespace Common.Meshing.Test.FaceBased
         {
             var face = new FBFace();
 
-            face.SetSize(2);
+            face.SetVerticesSize(2);
             Assert.AreEqual(2, face.Vertices.Length);
 
-            face.SetSize(1);
+            face.SetVerticesSize(1);
             Assert.AreEqual(1, face.Vertices.Length);
         }
 
@@ -57,7 +57,7 @@ namespace Common.Meshing.Test.FaceBased
         {
             var face = new FBFace();
 
-            face.SetSize(2);
+            face.SetVerticesSize(2);
             var v0 = new FBVertex();
             var v1 = new FBVertex();
             var v2 = new FBVertex();
@@ -75,7 +75,7 @@ namespace Common.Meshing.Test.FaceBased
         {
             var face = new FBFace();
 
-            face.SetSize(2);
+            face.SetVerticesSize(2);
             var v0 = new FBVertex2f();
             var v1 = new FBVertex2f();
 
@@ -91,7 +91,7 @@ namespace Common.Meshing.Test.FaceBased
         {
             var face = new FBFace();
 
-            face.SetSize(2);
+            face.SetVerticesSize(2);
             var f0 = new FBFace();
             var f1 = new FBFace();
 

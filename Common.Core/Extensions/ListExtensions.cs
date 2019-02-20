@@ -20,5 +20,13 @@ namespace System.Collections.Generic
             list.Add(item2);
             list.Add(item3);
         }
+
+        public static void Add<T>(this List<T> list, T item1, T item2, T item3, T item4)
+        {
+            list.Add(item1);
+            list.Add(item2);
+            list.Add(item3);
+            list.Add(item4);
+        }
     }
 }

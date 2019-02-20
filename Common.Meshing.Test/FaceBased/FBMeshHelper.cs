@@ -27,31 +27,14 @@ namespace Common.Meshing.Test.FaceBased
                 Console.WriteLine(f.ToString(mesh));
         }
 
-        public static void CheckVertex<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh, int vertex, int face)
-            where VERTEX : FBVertex, new()
-            where FACE : FBFace, new()
-        {
-            var v = mesh.Vertices[vertex];
-            Assert.AreEqual(mesh.IndexOf(v.Face), face);
-        }
-
-        public static void CheckVertex<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh, int vertex, int face, Vector2f pos)
-            where VERTEX : FBVertex2f, new()
-            where FACE : FBFace, new()
-        {
-            var v = mesh.Vertices[vertex];
-            Assert.AreEqual(mesh.IndexOf(v.Face), face);
-            Assert.AreEqual(v.Position, pos);
-        }
-
-        public static void CheckFace<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh, int face, int e0, int e1, int e2)
+        public static void CheckFace<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh, int face, int v0, int v1, int v2)
             where VERTEX : FBVertex, new()
             where FACE : FBFace, new()
         {
             var f = mesh.Faces[face];
-            Assert.AreEqual(mesh.IndexOf(f.Vertices[0]), e0);
-            Assert.AreEqual(mesh.IndexOf(f.Vertices[1]), e1);
-            Assert.AreEqual(mesh.IndexOf(f.Vertices[2]), e2);
+            Assert.AreEqual(mesh.IndexOf(f.Vertices[0]), v0);
+            Assert.AreEqual(mesh.IndexOf(f.Vertices[1]), v1);
+            Assert.AreEqual(mesh.IndexOf(f.Vertices[2]), v2);
         }
 
         public static void CheckAllTrianglesCCW<VERTEX, EDGE, FACE>(FBMesh<VERTEX, FACE> mesh)
@@ -82,11 +65,11 @@ namespace Common.Meshing.Test.FaceBased
 
             var f = mesh.NewFace();
 
-            v0.Face = f;
-            v1.Face = f;
-            v2.Face = f;
+            v0.AddFace(f);
+            v1.AddFace(f);
+            v2.AddFace(f);
 
-            f.SetSize(3);
+            f.SetVerticesSize(3);
             f.Vertices[0] = v0;
             f.Vertices[1] = v1;
             f.Vertices[2] = v2;
@@ -104,14 +87,14 @@ namespace Common.Meshing.Test.FaceBased
 
             var f = mesh.NewFace();
 
-            v0.Face = f;
+            v0.AddFace(f);
             v0.Position = A;
-            v1.Face = f;
+            v1.AddFace(f);
             v1.Position = B;
-            v2.Face = f;
+            v2.AddFace(f);
             v2.Position = C;
 
-            f.SetSize(3);
+            f.SetVerticesSize(3);
             f.Vertices[0] = v0;
             f.Vertices[1] = v1;
             f.Vertices[2] = v2;
@@ -134,31 +117,23 @@ namespace Common.Meshing.Test.FaceBased
             var f2 = mesh.NewFace();
             var f3 = mesh.NewFace();
 
-            v0.Face = f0;
-            v1.Face = f0;
-            v2.Face = f1;
-            v3.Face = f2;
-            v4.Face = f3;
+            v0.AddFace(f0, f1, f2, f3);
+            v1.AddFace(f0, f3);
+            v2.AddFace(f0, f1);
+            v3.AddFace(f1, f2);
+            v4.AddFace(f2, f3);
 
-            f0.SetSize(3);
-            f0.Vertices[0] = v0;
-            f0.Vertices[1] = v1;
-            f0.Vertices[2] = v2;
+            f0.SetVerticesSize(3);
+            f0.SetVertex(v0, v1, v2);
 
-            f1.SetSize(3);
-            f1.Vertices[0] = v0;
-            f1.Vertices[1] = v2;
-            f1.Vertices[2] = v3;
+            f1.SetVerticesSize(3);
+            f1.SetVertex(v0, v2, v3);
 
-            f2.SetSize(3);
-            f2.Vertices[0] = v0;
-            f2.Vertices[1] = v3;
-            f2.Vertices[2] = v4;
+            f2.SetVerticesSize(3);
+            f2.SetVertex(v0, v3, v4);
 
-            f3.SetSize(3);
-            f3.Vertices[0] = v0;
-            f3.Vertices[1] = v1;
-            f3.Vertices[2] = v4;
+            f3.SetVerticesSize(3);
+            f3.SetVertex(v0, v1, v4);
 
             return mesh;
         }

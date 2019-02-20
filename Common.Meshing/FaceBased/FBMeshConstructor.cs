@@ -137,11 +137,11 @@ namespace Common.Meshing.FaceBased
             var v2 = Mesh.Vertices[i2];
 
             FACE face = new FACE();
-            face.SetSize(3);
+            face.SetVerticesSize(3);
 
-            v0.Face = face;
-            v1.Face = face;
-            v2.Face = face;
+            v0.AddFace(face);
+            v1.AddFace(face);
+            v2.AddFace(face);
 
             face.Vertices[0] = v0;
             face.Vertices[1] = v1;
@@ -166,12 +166,12 @@ namespace Common.Meshing.FaceBased
             var v3 = Mesh.Vertices[i3];
 
             FACE face = new FACE();
-            face.SetSize(4);
+            face.SetVerticesSize(4);
 
-            v0.Face = face;
-            v1.Face = face;
-            v2.Face = face;
-            v3.Face = face;
+            v0.AddFace(face);
+            v1.AddFace(face);
+            v2.AddFace(face);
+            v3.AddFace(face);
 
             face.Vertices[0] = v0;
             face.Vertices[1] = v1;
@@ -190,12 +190,12 @@ namespace Common.Meshing.FaceBased
             CheckMeshIsPushed();
             int count = vertList.Count;
             FACE face = new FACE();
-            face.SetSize(count);
+            face.SetVerticesSize(count);
 
             for(int i = 0; i < count; i++)
             {
                 var v = Mesh.Vertices[vertList[i]];
-                v.Face = face;
+                v.AddFace(face);
                 face.Vertices[i] = v;
             }
 
@@ -213,12 +213,12 @@ namespace Common.Meshing.FaceBased
             CheckMeshIsPushed();
             int count = numVertices;
             FACE face = new FACE();
-            face.SetSize(count);
+            face.SetVerticesSize(count);
 
             for (int i = 0; i < count; i++)
             {
                 var v = Mesh.Vertices[vertStart + i];
-                v.Face = face;
+                v.AddFace(face);
                 face.Vertices[i] = v;
             }
 
