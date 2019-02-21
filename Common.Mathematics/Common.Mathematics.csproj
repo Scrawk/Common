@@ -50,8 +50,6 @@
     <Compile Include="Probability\ContinuousDistribution1.cs" />
     <Compile Include="Probability\ContinuousDistribution2.cs" />
     <Compile Include="Probability\ContinuousDistributionN.cs" />
-    <Compile Include="Probability\DiscreteDistribution1.cs" />
-    <Compile Include="Probability\DiscreteDistribution2.cs" />
     <Compile Include="Probability\NormalDistribution1.cs" />
     <Compile Include="Probability\NormalDistribution2.cs" />
     <Compile Include="Probability\NormalDistributionN.cs" />
@@ -71,7 +69,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Mathematics.dll" "D:\Projects\Unity Projects\Common\Assets\Common\Plugins" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Mathematics.dll" "D:\Projects\Unity Projects\Common\Assets\Common\Plugins" /y
+xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Mathematics.dll" "D:\Projects\Unity Projects\CGALUnity\Assets\Common\Plugins" /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

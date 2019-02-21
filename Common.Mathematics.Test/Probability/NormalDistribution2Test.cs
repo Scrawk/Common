@@ -5,10 +5,11 @@ using Common.Mathematics.Probability;
 
 namespace Common.Mathematics.Test.Probability
 {
-    /*
+ 
     [TestClass]
     public class Mathematics_Probability_NormalDistribution2Test
     {
+        /*
         [TestMethod]
         public void MahalanobisDistance()
         {
@@ -31,9 +32,9 @@ namespace Common.Mathematics.Test.Probability
             Assert.AreEqual(1.82, Math.Round(d, 2));
 
         }
+        */
 
     }
-    */
 
 }
 

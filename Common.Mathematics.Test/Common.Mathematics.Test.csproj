@@ -53,7 +53,6 @@
   <ItemGroup>
     <Compile Include="Polynomials\Polynomial2dTest.cs" />
     <Compile Include="Polynomials\Polynomial3dTest.cs" />
-    <Compile Include="Probability\DiscreteDistribution1Test.cs" />
     <Compile Include="Probability\NormalDistribution1Test.cs" />
     <Compile Include="Probability\NormalDistribution2Test.cs" />
     <Compile Include="Probability\NormalDistributionNTest.cs" />

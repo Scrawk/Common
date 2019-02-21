@@ -26,7 +26,7 @@ namespace Common.Mathematics.Test.Probability
             NormalDistribution2 distribution2 = new NormalDistribution2(mean, covariance);
             NormalDistributionN distributionN = new NormalDistributionN(mean, covariance);
 
-            for (float y = -4; y <= 4; y +=1.0f)
+            for (float y = -4; y <= 4; y += 1.0f)
             {
                 for (float x = -4; x <= 4; x += 1.0f)
                 {

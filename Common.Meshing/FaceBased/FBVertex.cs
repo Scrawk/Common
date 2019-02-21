@@ -68,9 +68,6 @@ namespace Common.Meshing.FaceBased
             if (Faces == null)
                 Faces = new List<FBFace>();
 
-            if (Faces.Contains(face))
-                throw new Exception("Face already added");
-
             Faces.Add(face);
         }
         public void AddFace(FBFace f0, FBFace f1)
