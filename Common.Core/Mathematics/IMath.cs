@@ -1,10 +1,17 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Numerics;
 
 namespace Common.Core.Mathematics
 {
+    /// <summary>
+    /// Integer math functions.
+    /// </summary>
 	public class IMath 
 	{
+        /// <summary>
+        /// Clamp a value between min and max (inclusive).
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Clamp(int v, int min, int max)
         {
@@ -13,35 +20,45 @@ namespace Common.Core.Mathematics
             return v;
         }
 
+        /// <summary>
+        /// Wrap a value between 0 and count-1 (inclusive).
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Wrap(int x, int m)
+        public static int Wrap(int v, int count)
         {
-            int r = x % m;
-            return r < 0 ? r + m : r;
+            int r = v % count;
+            return r < 0 ? r + count : r;
         }
 
+        /// <summary>
+        /// Mirror a value between 0 and count-1 (inclusive).
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Mirror(int x, int m)
+        public static int Mirror(int v, int count)
         {
-            int m1 = m - 1;
-            int i = Math.Abs(x);
+            int m1 = count - 1;
+            int i = Math.Abs(v);
 
-            x = i % (m1 * 2);
-            if (x >= m1) x = m1 - i % m1;
+            v = i % (m1 * 2);
+            if (v >= m1) v = m1 - i % m1;
 
-            return x;
+            return v;
         }
 
+        /// <summary>
+        /// Is number a power of 2.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPow2(int num)
         {
             int power = (int)(Math.Log(num) / Math.Log(2.0));
-
             double result = Math.Pow(2.0, power);
-
-            return (result == num);
+            return result == num;
         }
 
+        /// <summary>
+        /// Return the closest pow2 number to num.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int NearestPow2(int num)
 		{
@@ -57,6 +74,9 @@ namespace Common.Core.Mathematics
 			return n;
 		}
 
+        /// <summary>
+        /// Return the closest pow2 number thats less than num.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LowerPow2(int num)
 		{
@@ -72,6 +92,130 @@ namespace Common.Core.Mathematics
 			return n - (n >> 1);
 		}
 
+        /// <summary>
+        /// Simple int pow function.
+        /// System Math.Pow may produce rounding errors.
+        /// </summary>
+        /// <param name="a">A number >= 0</param>
+        /// <param name="b">A exponent >= 0</param>
+        /// <returns>a^b</returns>
+        public static ulong Pow(int a, int b)
+        {
+            if (a < 0) throw new ArgumentException("Integer must be >= 0.");
+            if (b < 0) throw new ArgumentException("Exponent must be >= 0.");
+            return Pow((ulong)a, (ulong)b);
+        }
+
+        public static ulong Pow(ulong a, ulong b)
+        {
+            checked
+            {
+                ulong p = 1;
+                for (ulong i = 0; i < b; i++)
+                    p *= a;
+                return p;
+            }
+        }
+
+        /// <summary>
+        /// Returns the factorial of number.
+        /// </summary>
+        public static ulong Factorial(int num)
+        {
+            checked
+            {
+                if (num <= 1) return 1;
+
+                ulong count = (ulong)num;
+                ulong f = 1;
+                for (ulong i = 1; i <= count; i++)
+                    f = f * i;
+
+                return f;
+            }
+        }
+
+        /// <summary>
+        /// Returns the factorial of number using a BigInteger.
+        /// Required for any number > 20.
+        /// </summary>
+        public static BigInteger FactorialBI(int num)
+        {
+            if (num <= 1) return 1;
+
+            BigInteger f = 1;
+            for (int i = 1; i <= num; i++)
+                f = f * i;
+
+            return f;
+        }
+
+        /// <summary>
+        /// Given N objects, how many unique sets exist.
+        /// </summary>
+        public static BigInteger Permutations(int N)
+        {
+            return FactorialBI(N);
+        }
+
+        /// <summary>
+        /// Given N objects, how many unique sets exist of size n 
+        /// where the order matters and objects may repeat.
+        /// </summary>
+        /// <param name="n">The size of the sets</param>
+        /// <param name="N">The total number of objects</param>
+        /// <returns>The number of sets possible</returns>
+        public static BigInteger PermutationsOrderedWithRepeats(int n, int N)
+        {
+            return BigInteger.Pow(N, n);
+        }
+
+        /// <summary>
+        /// Given N objects, how many unique sets exist of size n 
+        /// where the order does not matters and objects may repeat.
+        /// </summary>
+        /// <param name="n">The size of the sets</param>
+        /// <param name="N">The total number of objects</param>
+        /// <returns>The number of sets possible</returns>
+        public static BigInteger PermutationsUnorderedWithRepeats(int n, int N)
+        {
+            var a = FactorialBI(n + N - 1);
+            var b = FactorialBI(n);
+            var c = FactorialBI(N - 1);
+
+            return a / (b * c);
+        }
+
+        /// <summary>
+        /// Given N objects, how many unique sets exist of size n 
+        /// where the order matters and objects may not repeat.
+        /// </summary>
+        /// <param name="n">The size of the sets</param>
+        /// <param name="N">The total number of objects</param>
+        /// <returns>The number of sets possible</returns>
+        public static BigInteger PermutationsOrderedWithoutRepeats(int n, int N)
+        {
+            var a = FactorialBI(N);
+            var b = FactorialBI(N - n);
+
+            return a / b;
+        }
+
+        /// <summary>
+        /// Given N objects, how many unique sets exist of size n 
+        /// where the order does not matters and objects may not repeat.
+        /// </summary>
+        /// <param name="n">The size of the sets</param>
+        /// <param name="N">The total number of objects</param>
+        /// <returns>The number of sets possible</returns>
+        public static BigInteger PermutationsUnorderedWithoutRepeats(int n, int N)
+        {
+            var a = FactorialBI(N);
+            var b = FactorialBI(n);
+            var c = FactorialBI(N - n);
+
+            return a / (b * c);
+        }
     }
 }
 
