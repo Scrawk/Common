@@ -9,6 +9,7 @@ namespace Common.Core.Mathematics
     /// </summary>
 	public class IMath 
 	{
+
         /// <summary>
         /// Clamp a value between min and max (inclusive).
         /// </summary>
@@ -94,50 +95,54 @@ namespace Common.Core.Mathematics
 
         /// <summary>
         /// Simple int pow function.
-        /// System Math.Pow may produce rounding errors.
+        /// System Math.Pow may produce precision errors.
         /// </summary>
-        /// <param name="a">A number >= 0</param>
-        /// <param name="b">A exponent >= 0</param>
-        /// <returns>a^b</returns>
-        public static ulong Pow(int a, int b)
+        public static long Pow(int a, int b)
         {
-            if (a < 0) throw new ArgumentException("Integer must be >= 0.");
-            if (b < 0) throw new ArgumentException("Exponent must be >= 0.");
-            return Pow((ulong)a, (ulong)b);
-        }
-
-        public static ulong Pow(ulong a, ulong b)
-        {
+            if (b < 0) throw new ArgumentException("Exponent must be > 0");
             checked
             {
-                ulong p = 1;
-                for (ulong i = 0; i < b; i++)
+                long p = 1;
+                for (int i = 0; i < b; i++)
                     p *= a;
                 return p;
             }
         }
 
-        /// <summary>
-        /// Returns the factorial of number.
-        /// </summary>
-        public static ulong Factorial(int num)
+        public static ulong Pow(uint a, uint b)
         {
             checked
             {
-                if (num <= 1) return 1;
-
-                ulong count = (ulong)num;
-                ulong f = 1;
-                for (ulong i = 1; i <= count; i++)
-                    f = f * i;
-
-                return f;
+                ulong p = 1;
+                for (uint i = 0; i < b; i++)
+                    p *= a;
+                return p;
             }
+        }
+
+        public const int MAX_FACTORIAL = 20;
+
+        /// <summary>
+        /// Returns the factorial of number.
+        /// Must be less than or equal MAX_FACTORIAL or overflow will occur.
+        /// </summary>
+        public static ulong Factorial(int num)
+        {
+            if (num <= 1) return 1;
+            if (num > MAX_FACTORIAL)
+                throw new ArgumentException("num > MAX_FACTORIAL");
+
+            ulong count = (ulong)num;
+            ulong f = 1;
+            for (ulong i = 1; i <= count; i++)
+                f = f * i;
+
+            return f;
+
         }
 
         /// <summary>
         /// Returns the factorial of number using a BigInteger.
-        /// Required for any number > 20.
         /// </summary>
         public static BigInteger FactorialBI(int num)
         {
@@ -215,6 +220,26 @@ namespace Common.Core.Mathematics
             var c = FactorialBI(N - n);
 
             return a / (b * c);
+        }
+
+        public const int MAX_FIBONACCI = 61;
+
+        /// <summary>
+        /// Returns the fibonacci number at index n in series.
+        /// Must be less than or equal MAX_FIBONACCI or precision errors
+        /// produce incorrect result.
+        /// </summary>
+        /// <param name="n">The index in series to return</param>
+        public static ulong Fibonacci(int n)
+        {
+            if (n <= 0) return 0;
+            if (n > MAX_FIBONACCI)
+                throw new ArgumentException("n > MAX_FIBONACCI");
+
+            const double sqrt5 = 2.23606797749979; //Math.Sqrt(5);
+            const double tau = 1.61803398874989; // (1.0 + sqrt5) / 2;
+
+            return (ulong)Math.Round(Math.Pow(tau, n) / sqrt5);
         }
     }
 }

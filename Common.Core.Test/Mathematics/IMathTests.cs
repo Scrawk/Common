@@ -9,6 +9,13 @@ namespace Common.Core.Test.Mathematics
     public class Core_Mathematics_IMathTests
     {
         [TestMethod]
+        public void Pow()
+        {
+            Assert.AreEqual(11398895185373143, IMath.Pow(7, 19));
+            Assert.AreEqual(29192926025390625, IMath.Pow(15, 14));            
+        }
+
+        [TestMethod]
         public void Permutations()
         {
             Assert.AreEqual(1, IMath.Permutations(1));
@@ -53,5 +60,18 @@ namespace Common.Core.Test.Mathematics
             Assert.AreEqual(2598960, IMath.PermutationsUnorderedWithoutRepeats(5, 52));
         }
 
+        [TestMethod]
+        public void Fibonacci()
+        {
+            ulong a = 0, b = 1, c = 0;
+            for (int i = 2; i <= IMath.MAX_FIBONACCI; i++)
+            {
+                c = a + b;
+                a = b;
+                b = c;
+
+                Assert.AreEqual(c, IMath.Fibonacci(i));
+            }
+        }
     }
 }
