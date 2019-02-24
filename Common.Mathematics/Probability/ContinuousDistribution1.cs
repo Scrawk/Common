@@ -19,31 +19,38 @@ namespace Common.Mathematics.Probability
             Variance = sigma * sigma;
         }
 
+        public override string ToString()
+        {
+            return string.Format("[ContinuousDistribution1: Mean={0}, Sigma={1}]", Mean, Sigma);
+        }
+
+        /// <summary>
+        /// The probability density function.
+        /// Used to specify the probability of the random 
+        /// variable falling within a particular range of values
+        /// </summary>
+        /// <param name="x">A random varible from the distribution</param>
+        /// <returns>The probablity of the function at x.</returns>
         public abstract double PDF(double x);
 
+        /// <summary>
+        /// The cumulative distribution function.
+        /// It gives the area under the probability density 
+        /// function from minus infinity to x. 
+        /// </summary>
+        /// <param name="x">A random varible from the distribution</param>
+        /// <returns>The area of the PDF function from -infiniy to x</returns>
         public abstract double CDF(double x);
 
-        protected double ErrorFunction(double x)
+        /// <summary>
+        /// Sample a value from distribution for a given random varible.
+        /// </summary>
+        /// <param name="x">A random varible between 0-1 (inculsive)</param>
+        /// <param name="deviations">The number of standard deviations to sample between</param>
+        /// <returns>A value from the distribution</returns>
+        public virtual double Sample(double x, double deviations = 4)
         {
-            // constants
-            const double a1 = 0.254829592;
-            const double a2 = -0.284496736;
-            const double a3 = 1.421413741;
-            const double a4 = -1.453152027;
-            const double a5 = 1.061405429;
-            const double p = 0.3275911;
-
-            // Save the sign of x
-            int sign = 1;
-            if (x < 0) sign = -1;
-
-            x = Math.Abs(x);
-
-            // A&S formula 7.1.26
-            double t = 1.0 / (1.0 + p * x);
-            double y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.Exp(-x * x);
-
-            return sign * y;
+            return 0;
         }
 
     }

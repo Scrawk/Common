@@ -50,6 +50,7 @@
     <Compile Include="Probability\ContinuousDistribution1.cs" />
     <Compile Include="Probability\ContinuousDistribution2.cs" />
     <Compile Include="Probability\ContinuousDistributionN.cs" />
+    <Compile Include="Probability\Histogram1.cs" />
     <Compile Include="Probability\NormalDistribution1.cs" />
     <Compile Include="Probability\NormalDistribution2.cs" />
     <Compile Include="Probability\NormalDistributionN.cs" />
