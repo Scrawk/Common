@@ -11,8 +11,16 @@ namespace Common.Mathematics.Probability
 
         private double m_factor;
 
-        public NormalDistribution2(double[] mean, double[,] covariance) : base(mean, covariance)
+        public NormalDistribution2(double[] mean, double[,] covariance)
         {
+            Mean = mean;
+            Covariance = covariance;
+
+            SigmaX = Math.Sqrt(covariance[0, 0]);
+            SigmaY = Math.Sqrt(covariance[1, 1]);
+
+            Correlation = Covariance[0, 1] / (SigmaX * SigmaY);
+
             double ox = SigmaX;
             double oy = SigmaY;
             double p = Correlation;
@@ -20,6 +28,16 @@ namespace Common.Mathematics.Probability
 
             m_factor = 1.0 / (Math.PI * 2.0 * ox * oy * Math.Sqrt(p1));
         }
+
+        public double[] Mean { get; private set; }
+
+        public double[,] Covariance { get; private set; }
+
+        public double Correlation { get; private set; }
+
+        public double SigmaX { get; private set; }
+
+        public double SigmaY { get; private set; }
 
         public override double PDF(double x, double y)
         {

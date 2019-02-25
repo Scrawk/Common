@@ -3,16 +3,29 @@ using System.Collections.Generic;
 
 namespace Common.Mathematics.Probability
 {
-
+    /// <summary>
+    /// A gaussian or normal distribution.
+    /// Given enough samples many other distributions
+    /// reduce to guassian.
+    /// </summary>
     public class NormalDistribution1 : ContinuousDistribution1
     {
 
         private double m_factor;
 
-        public NormalDistribution1(double mean, double sigma) : base(mean, sigma)
+        public NormalDistribution1(double mean, double sigma)
         {
+            Mean = mean;
+            Sigma = sigma;
+            Variance = sigma * sigma;
             m_factor = 1.0 / (sigma * Math.Sqrt(Math.PI * 2.0));
         }
+
+        public double Mean { get; private set; }
+
+        public double Variance { get; private set; }
+
+        public double Sigma { get; private set; }
 
         public override string ToString()
         {
@@ -79,7 +92,7 @@ namespace Common.Mathematics.Probability
 
             return Mean + y1 * Sigma;
         }
-
+        
         private double ErrorFunction(double x)
         {
             // constants

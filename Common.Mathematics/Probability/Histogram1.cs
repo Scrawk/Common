@@ -57,7 +57,7 @@ namespace Common.Mathematics.Probability
             get
             {
                 if (Count == 0) return 0;
-                return m_table[i] / (double)Count;
+                return m_table[i] / (Count * Step);
             }
         }
 

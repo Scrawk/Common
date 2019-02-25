@@ -6,22 +6,9 @@ namespace Common.Mathematics.Probability
     public abstract class ContinuousDistribution1
     {
 
-        public double Mean { get; private set; }
-
-        public double Variance { get; private set; }
-
-        public double Sigma { get; private set; }
-
-        public ContinuousDistribution1(double mean, double sigma)
+        public ContinuousDistribution1()
         {
-            Mean = mean;
-            Sigma = sigma;
-            Variance = sigma * sigma;
-        }
 
-        public override string ToString()
-        {
-            return string.Format("[ContinuousDistribution1: Mean={0}, Sigma={1}]", Mean, Sigma);
         }
 
         /// <summary>

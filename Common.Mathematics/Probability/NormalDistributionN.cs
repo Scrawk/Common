@@ -10,13 +10,29 @@ namespace Common.Mathematics.Probability
     {
 
         private double m_factor;
-   
-        public NormalDistributionN(double[] mean, double[,] covariance) : base(mean, covariance)
-        {
 
-            m_factor = 1.0 / Math.Sqrt(Math.Pow(2.0 * Math.PI, Dimension) * Determinant);
+        private double[,] m_inverse;
+
+        private double m_determinant;
+
+        public NormalDistributionN(double[] mean, double[,] covariance)
+        {
+            Dimension = mean.Length;
+            Mean = mean;
+            Covariance = covariance;
+
+            m_inverse = MatrixMxN.Inverse(covariance);
+            m_determinant = MatrixMxN.Determinant(covariance);
+
+            m_factor = 1.0 / Math.Sqrt(Math.Pow(2.0 * Math.PI, Dimension) * m_determinant);
 
         }
+
+        public int Dimension { get; private set; }
+
+        public double[] Mean { get; private set; }
+
+        public double[,] Covariance { get; private set; }
 
         public override double PDF(double[] x)
         {
@@ -28,7 +44,7 @@ namespace Common.Mathematics.Probability
             for (int i = 0; i < Dimension; i++)
                 xm[i] = x[i] - Mean[i];
 
-            double[] xmTC = MatrixMxN.MultiplyMatrix(xm, Inverse);
+            double[] xmTC = MatrixMxN.MultiplyMatrix(xm, m_inverse);
 
             double dp = 0;
             for (int i = 0; i < Dimension; i++)
@@ -47,7 +63,7 @@ namespace Common.Mathematics.Probability
             for (int i = 0; i < Dimension; i++)
                 xm[i] = x[i] - Mean[i];
 
-            double[] xmTC = MatrixMxN.MultiplyMatrix(xm, Inverse);
+            double[] xmTC = MatrixMxN.MultiplyMatrix(xm, m_inverse);
 
             double dp = 0;
             for (int i = 0; i < Dimension; i++)
