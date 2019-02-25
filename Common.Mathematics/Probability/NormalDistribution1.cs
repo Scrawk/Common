@@ -45,6 +45,41 @@ namespace Common.Mathematics.Probability
             return 0.5 * (1.0 + erf);
         }
 
+        /// <summary>
+        /// Sample a value from distribution for a given random varible.
+        /// </summary>
+        /// <param name="rnd">Generator for a random varible between 0-1 (inculsive)</param>
+        /// <returns>A value from the distribution</returns>
+        private bool m_useLast;
+        private double m_y2;
+        public override double Sample(System.Random rnd)
+        {
+            double x1, x2, w, y1;
+
+            if (m_useLast)
+            {
+                y1 = m_y2;
+                m_useLast = false;
+            }
+            else
+            {
+                do
+                {
+                    x1 = 2.0 * rnd.NextDouble() - 1.0;
+                    x2 = 2.0 * rnd.NextDouble() - 1.0;
+                    w = x1 * x1 + x2 * x2;
+                }
+                while (w >= 1.0);
+
+                w = Math.Sqrt(-2.0 * Math.Log(w) / w);
+                y1 = x1 * w;
+                m_y2 = x2 * w;
+                m_useLast = true;
+            }
+
+            return Mean + y1 * Sigma;
+        }
+
         private double ErrorFunction(double x)
         {
             // constants

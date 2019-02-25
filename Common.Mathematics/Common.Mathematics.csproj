@@ -56,7 +56,6 @@
     <Compile Include="Probability\NormalDistributionN.cs" />
     <Compile Include="Probability\Statistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Random\GaussianRandom.cs" />
     <Compile Include="Random\IRandomGenerator.cs" />
     <Compile Include="Random\RandomGenerator.cs" />
     <Compile Include="Random\SubtractiveGenerator.cs" />

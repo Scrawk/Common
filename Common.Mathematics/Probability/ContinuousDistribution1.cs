@@ -45,13 +45,9 @@ namespace Common.Mathematics.Probability
         /// <summary>
         /// Sample a value from distribution for a given random varible.
         /// </summary>
-        /// <param name="x">A random varible between 0-1 (inculsive)</param>
-        /// <param name="deviations">The number of standard deviations to sample between</param>
+        /// <param name="rnd">Generator for a random varible between 0-1 (inculsive)</param>
         /// <returns>A value from the distribution</returns>
-        public virtual double Sample(double x, double deviations = 4)
-        {
-            return 0;
-        }
+        public abstract double Sample(System.Random rnd);
 
     }
 }
