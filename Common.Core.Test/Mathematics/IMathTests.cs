@@ -23,6 +23,20 @@ namespace Common.Core.Test.Mathematics
             Assert.AreEqual(6, IMath.Permutations(3));
             Assert.AreEqual(24, IMath.Permutations(4));
             Assert.AreEqual(120, IMath.Permutations(5));
+            Assert.AreEqual(2432902008176640000u, IMath.Permutations(20));
+        }
+
+        [TestMethod]
+        public void Factorial()
+        {
+            Assert.AreEqual(1u, IMath.Factorial(0));
+            Assert.AreEqual(1u, IMath.Factorial(1));
+            Assert.AreEqual(2u, IMath.Factorial(2));
+            Assert.AreEqual(6u, IMath.Factorial(3));
+            Assert.AreEqual(24u, IMath.Factorial(4));
+            Assert.AreEqual(120u, IMath.Factorial(5));
+            Assert.AreEqual(720u, IMath.Factorial(6));
+            Assert.AreEqual(2432902008176640000u, IMath.Factorial(20));
         }
 
         [TestMethod]
@@ -60,18 +74,5 @@ namespace Common.Core.Test.Mathematics
             Assert.AreEqual(2598960, IMath.PermutationsUnorderedWithoutRepeats(5, 52));
         }
 
-        [TestMethod]
-        public void Fibonacci()
-        {
-            ulong a = 0, b = 1, c = 0;
-            for (int i = 2; i <= IMath.MAX_FIBONACCI; i++)
-            {
-                c = a + b;
-                a = b;
-                b = c;
-
-                Assert.AreEqual(c, IMath.Fibonacci(i));
-            }
-        }
     }
 }

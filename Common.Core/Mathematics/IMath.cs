@@ -10,6 +10,10 @@ namespace Common.Core.Mathematics
 	public class IMath 
 	{
 
+        public const int MAX_FACTORIAL = 20;
+
+        private static ulong[] m_factorialTable;
+
         /// <summary>
         /// Clamp a value between min and max (inclusive).
         /// </summary>
@@ -102,6 +106,9 @@ namespace Common.Core.Mathematics
             if (b < 0) throw new ArgumentException("Exponent must be > 0");
             checked
             {
+                if (b == 2) return a * a;
+                if (b == 3) return a * a * a;
+
                 long p = 1;
                 for (int i = 0; i < b; i++)
                     p *= a;
@@ -113,6 +120,9 @@ namespace Common.Core.Mathematics
         {
             checked
             {
+                if (b == 2) return a * a;
+                if (b == 3) return a * a * a;
+
                 ulong p = 1;
                 for (uint i = 0; i < b; i++)
                     p *= a;
@@ -120,7 +130,7 @@ namespace Common.Core.Mathematics
             }
         }
 
-        public const int MAX_FACTORIAL = 20;
+        
 
         /// <summary>
         /// Returns the factorial of number.
@@ -132,12 +142,8 @@ namespace Common.Core.Mathematics
             if (num > MAX_FACTORIAL)
                 throw new ArgumentException("num > MAX_FACTORIAL");
 
-            ulong count = (ulong)num;
-            ulong f = 1;
-            for (ulong i = 1; i <= count; i++)
-                f = f * i;
-
-            return f;
+            CreateFactorialTable();
+            return m_factorialTable[num];
 
         }
 
@@ -146,10 +152,11 @@ namespace Common.Core.Mathematics
         /// </summary>
         public static BigInteger FactorialBI(int num)
         {
-            if (num <= 1) return 1;
+            if (num <= MAX_FACTORIAL)
+                return Factorial(num);
 
-            BigInteger f = 1;
-            for (int i = 1; i <= num; i++)
+            BigInteger f = Factorial(MAX_FACTORIAL);
+            for (int i = MAX_FACTORIAL; i <= num; i++)
                 f = f * i;
 
             return f;
@@ -222,25 +229,24 @@ namespace Common.Core.Mathematics
             return a / (b * c);
         }
 
-        public const int MAX_FIBONACCI = 61;
-
         /// <summary>
-        /// Returns the fibonacci number at index n in series.
-        /// Must be less than or equal MAX_FIBONACCI or precision errors
-        /// produce incorrect result.
+        /// Creates a look up table for factorials.
         /// </summary>
-        /// <param name="n">The index in series to return</param>
-        public static ulong Fibonacci(int n)
+        private static void CreateFactorialTable()
         {
-            if (n <= 0) return 0;
-            if (n > MAX_FIBONACCI)
-                throw new ArgumentException("n > MAX_FIBONACCI");
+            if (m_factorialTable != null) return;
 
-            const double sqrt5 = 2.23606797749979; //Math.Sqrt(5);
-            const double tau = 1.61803398874989; // (1.0 + sqrt5) / 2;
+            m_factorialTable = new ulong[MAX_FACTORIAL+1];
+            m_factorialTable[0] = 1;
 
-            return (ulong)Math.Round(Math.Pow(tau, n) / sqrt5);
+            ulong f = 1;
+            for (ulong i = 1; i < (ulong)m_factorialTable.Length; i++)
+            {
+                f = f * i;
+                m_factorialTable[i] = f;
+            }
         }
+
     }
 }
 
