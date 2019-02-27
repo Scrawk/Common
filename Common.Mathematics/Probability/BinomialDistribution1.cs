@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
+
+using Common.Core.Mathematics;
 
 namespace Common.Mathematics.Probability
 {
@@ -10,21 +13,41 @@ namespace Common.Mathematics.Probability
     public class BinomialDistribution1 : ContinuousDistribution1
     {
 
-        public BinomialDistribution1()
+        public BinomialDistribution1(int trials, double probability)
         {
-
+            Trials = trials;
+            TrailsFactorial = IMath.FactorialBI(Trials);
+            Probability = DMath.Clamp01(probability);
         }
+
+        /// <summary>
+        /// The number of trials.
+        /// </summary>
+        public int Trials { get; private set; }
+
+        /// <summary>
+        /// The constant factorial of the number of trials.
+        /// </summary>
+        private BigInteger TrailsFactorial { get; set; }
+
+        /// <summary>
+        /// The probibilty of the random varible
+        /// being equal to 1.
+        /// </summary>
+        public double Probability { get; private set; }
 
         /// <summary>
         /// The probability density function.
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values
         /// </summary>
-        /// <param name="x">A random varible from the distribution</param>
+        /// <param name="k">A random varible from the distribution</param>
         /// <returns>The probablity of the function at x.</returns>
-        public override double PDF(double x)
+        public override double PDF(double k)
         {
-            throw new NotImplementedException();
+            int K = (int)k;
+
+            return BinomialCoefficient(K) * Math.Pow(Probability, K) * Math.Pow(1.0 - Probability, Trials - K);
         }
 
         /// <summary>
@@ -32,11 +55,18 @@ namespace Common.Mathematics.Probability
         /// It gives the area under the probability density 
         /// function from minus infinity to x. 
         /// </summary>
-        /// <param name="x">A random varible from the distribution</param>
+        /// <param name="k">A random varible from the distribution</param>
         /// <returns>The area of the PDF function from -infiniy to x</returns>
-        public override double CDF(double x)
+        public override double CDF(double k)
         {
-            throw new NotImplementedException();
+            int K = (int)k;
+            if (K < 0) return 0;
+
+            double sum = 0;
+            for (int i = 0; i < K; i++)
+                sum += BinomialCoefficient(i) * Math.Pow(Probability, i) * Math.Pow(1.0 - Probability, Trials - i);
+
+            return sum;
         }
 
         /// <summary>
@@ -47,6 +77,14 @@ namespace Common.Mathematics.Probability
         public override double Sample(System.Random rnd)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The binomial coefficient using trials as n.
+        /// </summary>
+        private double BinomialCoefficient(int k)
+        {
+            return (double)(TrailsFactorial / (IMath.FactorialBI(k) * IMath.FactorialBI(Trials - k)));
         }
     }
 }

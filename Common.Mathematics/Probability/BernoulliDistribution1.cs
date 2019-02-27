@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.Mathematics;
+
 namespace Common.Mathematics.Probability
 {
     /// <summary>
@@ -9,21 +11,30 @@ namespace Common.Mathematics.Probability
     /// </summary>
     public class BernoulliDistribution1 : ContinuousDistribution1
     {
-        public BernoulliDistribution1()
-        {
 
+        public BernoulliDistribution1(double probability)
+        {
+            Probability = DMath.Clamp01(probability);
         }
+
+        /// <summary>
+        /// The probibilty of the random varible
+        /// being equal to 1.
+        /// </summary>
+        public double Probability { get; private set; }
 
         /// <summary>
         /// The probability density function.
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values
         /// </summary>
-        /// <param name="x">A random varible from the distribution</param>
+        /// <param name="k">A random varible from the distribution</param>
         /// <returns>The probablity of the function at x.</returns>
-        public override double PDF(double x)
+        public override double PDF(double k)
         {
-            throw new NotImplementedException();
+            if (k < 0) return 0;
+            if (k == 1) return Probability;
+            return 1.0 - Probability;
         }
 
         /// <summary>
@@ -31,11 +42,13 @@ namespace Common.Mathematics.Probability
         /// It gives the area under the probability density 
         /// function from minus infinity to x. 
         /// </summary>
-        /// <param name="x">A random varible from the distribution</param>
+        /// <param name="k">A random varible from the distribution</param>
         /// <returns>The area of the PDF function from -infiniy to x</returns>
-        public override double CDF(double x)
+        public override double CDF(double k)
         {
-            throw new NotImplementedException();
+            if (k < 0) return 0;
+            if (k < 1) return 1.0 - Probability;
+            return 1;
         }
 
         /// <summary>
@@ -45,7 +58,10 @@ namespace Common.Mathematics.Probability
         /// <returns>A value from the distribution</returns>
         public override double Sample(System.Random rnd)
         {
-            throw new NotImplementedException();
+            if (rnd.NextDouble() <= Probability)
+                return 1;
+            else
+                return 0;
         }
     }
 }

@@ -130,8 +130,6 @@ namespace Common.Core.Mathematics
             }
         }
 
-        
-
         /// <summary>
         /// Returns the factorial of number.
         /// Must be less than or equal MAX_FACTORIAL or overflow will occur.
