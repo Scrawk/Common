@@ -59,6 +59,7 @@
     <Compile Include="Probability\NormalDistribution2.cs" />
     <Compile Include="Probability\NormalDistributionN.cs" />
     <Compile Include="Probability\PoissonDistribution1.cs" />
+    <Compile Include="Probability\Probability1i.cs" />
     <Compile Include="Probability\Statistics.cs" />
     <Compile Include="Probability\UniformDistribution1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

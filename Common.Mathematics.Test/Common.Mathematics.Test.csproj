@@ -57,6 +57,7 @@
     <Compile Include="Probability\NormalDistribution2Test.cs" />
     <Compile Include="Probability\NormalDistributionNTest.cs" />
     <Compile Include="Probability\StatisticsTest.cs" />
+    <Compile Include="Probability\Probability1iTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
