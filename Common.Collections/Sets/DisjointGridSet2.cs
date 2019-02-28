@@ -15,8 +15,23 @@ namespace Common.Collections.Sets
 
         public DisjointGridSet2(int width, int height)
         {
+            Width = width;
+            Height = height;
             m_parent = new Vector2i[width, height];
             m_rank = new int[width, height];
+        }
+
+        public int Width { get; private set; }
+
+        public int Height { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[DisjointGridSet2: Width={0}, Height={1}]", Width, Height);
         }
 
         public void Clear()

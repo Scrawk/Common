@@ -27,6 +27,10 @@ namespace Common.Mathematics.Probability
 
         public double Sigma { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("[NormalDistribution1: Mean={0}, Sigma={1}]", Mean, Sigma);

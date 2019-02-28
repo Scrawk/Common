@@ -29,6 +29,10 @@ namespace Common.Mathematics.Probability
 
         public double Mean { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("[UniformDistribution1: Mean={0}, Width={1}, Height={2}]", Mean, Width, Height);

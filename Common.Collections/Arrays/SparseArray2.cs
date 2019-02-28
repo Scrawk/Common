@@ -156,6 +156,16 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[SparseArray2: Width={0}, Height={1}, GridSize={2}, Count={3}, GridCount={4}]", 
+                Width, Height, GridSize, Count, GridCount);
+        }
+
+        /// <summary>
         /// Enumerate all elements in the array.
         /// </summary>
         /// <returns></returns>

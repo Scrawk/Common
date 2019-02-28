@@ -48,6 +48,15 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[SystemArray: Width={0}, Height={1}, Count={2}]", Width, Height, Count);
+        }
+
+        /// <summary>
         /// Enumerate all elements in the array.
         /// </summary>
         /// <returns></returns>

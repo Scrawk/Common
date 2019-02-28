@@ -31,6 +31,15 @@ namespace Common.Mathematics.Probability
         private double ExpLambda { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[PoissonDistribution1: Lambda={0}]", Lambda);
+        }
+
+        /// <summary>
         /// The probability density function.
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values

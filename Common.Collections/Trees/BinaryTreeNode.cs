@@ -52,6 +52,15 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[BinaryTreeNode: IsLeaf={0}, Item={1}]", IsLeaf, Item);
+        }
+
+        /// <summary>
         /// Enumerate all items from this node.
         /// </summary>
         /// <returns></returns>

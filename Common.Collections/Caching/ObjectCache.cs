@@ -13,6 +13,17 @@ namespace Common.Collections.Caching
             m_cache = new List<T>();
         }
 
+        public int Count => m_cache.Count;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[ObjectCache: Count={0}]", Count);
+        }
+
         public void Clear()
         {
             m_cache.Clear();

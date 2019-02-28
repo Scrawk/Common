@@ -17,6 +17,17 @@ namespace Common.Collections.Sets
             m_rank = new int[size];
         }
 
+        public int Count => m_rank.Length;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[DisjointSet: Count={0}]", Count);
+        }
+
         public void Clear()
         {
             Array.Clear(m_parent, 0, m_parent.Length);

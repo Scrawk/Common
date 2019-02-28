@@ -42,6 +42,15 @@ namespace Common.Collections.Queues
             get { return false; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[PriorityList: Count={0}]", Count);
+        }
+
         public void Add(IEnumerable<T> items)
         {
             m_list.AddRange(items);

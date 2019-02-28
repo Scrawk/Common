@@ -77,6 +77,15 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[BinaryHeap: Count={0}]", Count);
+        }
+
+        /// <summary>
         /// Gets the first value in the heap without removing it.
         /// </summary>
         /// <returns>The lowest value of type T.</returns>

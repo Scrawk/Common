@@ -17,6 +17,17 @@ namespace Common.Collections.Sets
             m_rank = new Dictionary<int, int>();
         }
 
+        public int Count => m_rank.Count;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[DisjointMappedSet: Count={0}]", Count);
+        }
+
         public void Clear()
         {
             m_parent.Clear();

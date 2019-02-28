@@ -30,6 +30,15 @@ namespace Common.Collections.Lists
 
         public bool IsReadOnly { get { return false; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[LALinkedList: Count={0}, MaxCacheSize={1}]", Count, MaxCacheSize);
+        }
+
         public IEnumerator<TYPE> GetEnumerator()
         {
             m_users++;

@@ -12,6 +12,15 @@ namespace Common.Mathematics.Probability
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[ContinuousDistribution1: ]");
+        }
+
+        /// <summary>
         /// The probability density function.
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values

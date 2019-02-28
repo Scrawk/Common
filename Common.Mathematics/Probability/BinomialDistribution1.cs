@@ -37,6 +37,15 @@ namespace Common.Mathematics.Probability
         public double Probability { get; private set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[BinomialDistribution1: Probability={0}, Trials={1}]", Probability, Trials);
+        }
+
+        /// <summary>
         /// The probability density function.
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values

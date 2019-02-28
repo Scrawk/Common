@@ -25,6 +25,15 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[AVLTree: Count={0}, Depth={1}]", Count, Depth);
+        }
+
+        /// <summary>
         /// Add a item to the tree.
         /// Tree must be rebalanced.
         /// </summary>

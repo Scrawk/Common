@@ -7,5 +7,14 @@ namespace Common.Collections.Lists
     {
         public TYPE Value { get; set; }
         public LALinkedListNode<TYPE> Next { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[LALinkedListNode: Value={0}]", Value);
+        }
     }
 }

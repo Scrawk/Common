@@ -64,6 +64,15 @@ namespace Common.Collections.Trees
         public BinaryTreeNode<T> Root { get; protected set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[BinaryTree: Count={0}, Depth={1}]", Count, Depth);
+        }
+
+        /// <summary>
         /// Clears the tree.
         /// </summary>
         public void Clear()
