@@ -32,6 +32,11 @@ namespace Common.GraphTheory.Grids
             To = new Vector2i(tx, ty);
         }
 
+        public override string ToString()
+        {
+            return string.Format("[GridEdge: From={0}, To={1}, Weight={2}]", From, To, Weight);
+        }
+
         public int CompareTo(GridEdge other)
         {
             return Weight.CompareTo(other.Weight);

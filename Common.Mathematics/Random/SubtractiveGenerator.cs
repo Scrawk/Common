@@ -28,6 +28,15 @@ namespace Common.Mathematics.Random
 		}
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[SubtractiveGenerator: Seed={0}]", Seed);
+        }
+
+        /// <summary>
         /// Update the seed.
         /// </summary>
         public override void UpdateSeed(int seed)

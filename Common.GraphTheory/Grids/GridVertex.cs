@@ -29,6 +29,11 @@ namespace Common.GraphTheory.Grids
             Cost = cost;
         }
 
+        public override string ToString()
+        {
+            return string.Format("[GridVertex: Index={0}, Cost={1}]", Index, Cost);
+        }
+
         public int CompareTo(GridVertex other)
         {
             return Cost.CompareTo(other.Cost);

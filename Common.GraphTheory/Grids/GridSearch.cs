@@ -34,6 +34,12 @@ namespace Common.GraphTheory.Grids
             Clear();
         }
 
+        public override string ToString()
+        {
+            return string.Format("[GridGraph: Count={0}, Root={1}, Width={2}, Height={3}]",
+                Count, (Count > 0) ? Root : new Vector2i(-1), Width, Height);
+        }
+
         public void Clear()
         {
             Order.Clear();

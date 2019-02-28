@@ -15,6 +15,15 @@ namespace Common.Mathematics.Random
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[SystemRandom: Seed={0}]", Seed);
+        }
+
         public override void UpdateSeed(int seed)
         {
             Seed = seed;

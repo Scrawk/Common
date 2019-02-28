@@ -28,6 +28,15 @@ namespace Common.Mathematics.Random
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[RandomGenerator: Seed={0}]", Seed);
+        }
+
+        /// <summary>
         /// A random int between min and max (inclusive).
         /// </summary>
         public virtual int Range(int min, int max)

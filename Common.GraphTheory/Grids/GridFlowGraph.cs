@@ -38,6 +38,12 @@ namespace Common.GraphTheory.Grids
             Label = new byte[width, height];
         }
 
+        public override string ToString()
+        {
+            return string.Format("[GridFlowGraph: VertexCount={0}, MaxFlow={1}, Width={2}, Height={3}]",
+                VertexCount, MaxFlow, Width, Height);
+        }
+
         public void Clear()
         {
             Array.Clear(Capacity, 0, Capacity.Length);

@@ -27,6 +27,12 @@ namespace Common.GraphTheory.Grids
             Edges = new byte[width, height];
         }
 
+        public override string ToString()
+        {
+            return string.Format("[GridGraph: VertexCount={0}, EdgeCount={1}, Width={2}, Height={3}]", 
+                VertexCount, EdgeCount, Width, Height);
+        }
+
         public void Clear()
         {
             Array.Clear(Edges, 0, Edges.Length);

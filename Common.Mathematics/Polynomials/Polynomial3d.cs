@@ -31,6 +31,11 @@ namespace Common.Mathematics.Polynomials
             this.d = d;
         }
 
+        public override string ToString()
+        {
+            return string.Format("[Polynomial3d: A={0}, B={1}, C={2}, D={3}]", a, b, c, d);
+        }
+
         public double Solve(double x)
         {
             return a * x * x * x + b * x * x + c * x + d;

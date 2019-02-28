@@ -26,6 +26,12 @@ namespace Common.GraphTheory.Adjacency
                 Parent[i] = -1;
         }
 
+        public override string ToString()
+        {
+            return string.Format("[AdjacencySearch: Count={0}, Root={1}]", 
+                Count, (Count > 0) ? Root : -1);
+        }
+
         public void Clear()
         {
             Order.Clear();

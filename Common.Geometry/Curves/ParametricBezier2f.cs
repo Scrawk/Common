@@ -33,6 +33,15 @@ namespace Common.Geometry.Curves
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[ParametricBezier2f: Degree={0}, Steps={1}, MaxError={2}]", Degree, Steps, MaxError);
+        }
+
+        /// <summary>
         /// Finds the t parameter at length s on the curve.
         /// </summary>
         /// <param name="s">Value between 0 and length</param>

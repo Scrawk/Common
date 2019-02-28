@@ -28,6 +28,11 @@ namespace Common.Mathematics.Polynomials
             this.c = c;
         }
 
+        public override string ToString()
+        {
+            return string.Format("[Polynomial2d: A={0}, B={1}, C={2}]", a, b, c);
+        }
+
         public double Solve(double x)
         {
             return a * x * x + b * x + c;

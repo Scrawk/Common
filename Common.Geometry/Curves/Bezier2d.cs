@@ -48,6 +48,15 @@ namespace Common.Geometry.Curves
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Bezier2d: Degree={0}]", Degree);
+        }
+
+        /// <summary>
         /// The position on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>

@@ -24,6 +24,12 @@ namespace Common.GraphTheory.Adjacency
             m_minCut = new bool[VertexCount];
         }
 
+        public override string ToString()
+        {
+            return string.Format("[AdjacencyFlowGraph: VertexCount={0}, EdgeCount={1}, MaxFlow={2}, Source={3}, Sink={4}]",
+                VertexCount, EdgeCount, MaxFlow, Source, Sink);
+        }
+
         public bool InSourceCut(int i)
         {
             return m_minCut[i];

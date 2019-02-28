@@ -73,6 +73,11 @@ namespace Common.GraphTheory.Adjacency
             Edges = new List<EDGE>[Vertices.Count];
         }
 
+        public override string ToString()
+        {
+            return string.Format("[AdjacencyGraph: VertexCount={0}, EdgeCount={1}]", VertexCount, EdgeCount);
+        }
+
         public void SetVertexIndices()
         {
             for (int i = 0; i < VertexCount; i++)
