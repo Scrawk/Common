@@ -30,6 +30,16 @@ namespace Common.Core.ProceduralNoise
             Combination = VORONOI_COMBINATION.D1_D0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[WorleyNoise: Frequency={0}, Amplitude={1}, Offset={2}, Jitter={3}, Distance={4}, Combination={5}]", 
+                Frequency, Amplitude, Offset, Jitter, Distance, Combination);
+        }
+
         public override double Sample1D(double x)
         {
             x = (x + Offset.x) * Frequency;

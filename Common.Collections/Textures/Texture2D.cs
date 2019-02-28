@@ -49,6 +49,16 @@ namespace Common.Collections.Textures
             Data = data;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Texture2D: Width={0}, Height={1}, Channels={2}, BitDepth={3}, Wrap={4}, Interpolation={5}, MipmapLevels={6}]",
+                GetWidth(), GetHeight(), Channels, BitDepth, Wrap, Interpolation, MipmapLevels);
+        }
+
         public void Resize(int width, int height, int channels, int bitDepth)
         {
             if(GetWidth() != width || GetHeight() != height || Channels != channels || BitDepth != bitDepth)

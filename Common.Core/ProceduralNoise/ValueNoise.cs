@@ -19,6 +19,15 @@ namespace Common.Core.ProceduralNoise
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[ValueNoise: Frequency={0}, Amplitude={1}, Offset={2}]", Frequency, Amplitude, Offset);
+        }
+
         public override double Sample1D(double x)
         {
             x = (x + Offset.x) * Frequency;

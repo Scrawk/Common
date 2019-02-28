@@ -16,7 +16,16 @@ namespace Common.Core.ProceduralNoise
 
         }
 
-		public override double Sample1D(double x)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[SimplexNoise: Frequency={0}, Amplitude={1}, Offset={2}]", Frequency, Amplitude, Offset);
+        }
+
+        public override double Sample1D(double x)
         {
             //The 0.5 is to make the scale simliar to the other noise algorithms
             x = (x + Offset.x) * Frequency * 0.5;

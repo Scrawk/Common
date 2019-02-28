@@ -111,6 +111,16 @@ namespace Common.Core.Raw
             FindSize();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[RawFile: BitDepth={0}, ByteOrder={1}, ByteCount={2}, ElementCount={3}]", 
+                BitDepth, ByteOrder, ByteCount, ElementCount);
+        }
+
         public float Read(int i)
         {
             switch(BitDepth)

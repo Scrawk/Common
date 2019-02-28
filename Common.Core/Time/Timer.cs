@@ -24,6 +24,16 @@ namespace Common.Core.Time
             m_watch = new Stopwatch();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Timer: IsHighPerformance={0}, NanoSecondsPerTick={1}, ElapsedTicks={2}, ElapsedSeconds={3}]",
+                IsHighPerformance, NanoSecondsPerTick, ElapsedTicks, ElapsedSeconds);
+        }
+
         public void Start()
         {
             m_watch.Start();

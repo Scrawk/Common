@@ -41,6 +41,16 @@ namespace Common.Collections.Textures
             Wrap = TEXTURE_WRAP.CLAMP;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Texture: Channels={0}, BitDepth={1}, Wrap={2}, Interpolation={3}]", 
+                Channels, BitDepth, Wrap, Interpolation);
+        }
+
         public abstract void Clear();
 
         protected int Index(int i, int size)

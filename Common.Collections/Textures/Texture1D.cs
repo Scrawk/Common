@@ -23,6 +23,16 @@ namespace Common.Collections.Textures
             CreateData(width, channels, bitDepth);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Texture1D: Width={0}, Channels={1}, BitDepth={2}, Wrap={3}, Interpolation={4}]",
+                GetWidth(), Channels, BitDepth, Wrap, Interpolation);
+        }
+
         public void Resize(int width, int channels, int bitDepth)
         {
             if (Data.GetWidth() != width || Data.Channels != channels || Data.BitDepth != bitDepth)

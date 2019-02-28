@@ -24,6 +24,16 @@ namespace Common.Core.ProceduralNoise
             Combination = VORONOI_COMBINATION.D1_D0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[VoronoiNoise: Frequency={0}, Amplitude={1}, Offset={2}, Distance={3}, Combination={4}]",
+                Frequency, Amplitude, Offset, Distance, Combination);
+        }
+
         public override double Sample1D(double x)
         {
             //The 0.75 is to make the scale simliar to the other noise algorithms

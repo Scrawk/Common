@@ -28,6 +28,15 @@ namespace Common.Collections.Textures
             MipmapMode = TEXTURE_MIPMAP.NONE;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[TextureData: Channels={0}, BitDepth={1}, Levels]", Channels, BitDepth, Levels);
+        }
+
         public virtual void GenerateMipmaps()
         {
 

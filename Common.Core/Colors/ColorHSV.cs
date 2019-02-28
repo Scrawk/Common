@@ -215,7 +215,7 @@ namespace Common.Core.Colors
         /// </summary>
 		public override string ToString()
         {
-            return string.Format("0},{1},{2}", h, s, v);
+            return string.Format("{0},{1},{2}", h, s, v);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace Common.Core.Colors
         /// </summary>
         public string ToString(string f)
         {
-            return string.Format("0},{1},{2}", h.ToString(f), s.ToString(f), v.ToString(f));
+            return string.Format("{0},{1},{2}", h.ToString(f), s.ToString(f), v.ToString(f));
         }
 
         /// <summary>

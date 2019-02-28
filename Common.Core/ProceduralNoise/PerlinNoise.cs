@@ -11,8 +11,17 @@ namespace Common.Core.ProceduralNoise
 		{
 
         }
-		
-		public override double Sample1D( double x )
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[PerlinNoise: Frequency={0}, Amplitude={1}, Offset={2}]", Frequency, Amplitude, Offset);
+        }
+
+        public override double Sample1D( double x )
 		{
             x = (x + Offset.x) * Frequency;
 

@@ -83,6 +83,16 @@ namespace Common.Core.ProceduralNoise
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[FractalNoise: Octaves={0}, Frequency={1}, Amplitude={2}, Offset={3}, Lacunarity={4}, Gain={5}]",
+                Octaves, Frequency, Amplitude, Offset, Lacunarity, Gain);
+        }
+
+        /// <summary>
         /// Calculates the amplitudes and frequencies tables for each octave
         /// based on the fractal settings. The tables are used so individual 
         /// octaves can be sampled. Must be called when object is first created

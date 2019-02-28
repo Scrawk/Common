@@ -28,6 +28,16 @@ namespace Common.Collections.Textures
             CreateData(width, height, depth, channels, bitDepth);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Texture3D: Width={0}, Height={1}, Depth={2}, Channels={3}, BitDepth={4}, Wrap={5}, Interpolation={6}]",
+                GetWidth(), GetHeight(), GetDepth(), Channels, BitDepth, Wrap, Interpolation);
+        }
+
         public void Resize(int width, int height, int depth, int channels, int bitDepth)
         {
             if (GetWidth() != width || GetHeight() != height || GetDepth() != depth || Channels != channels || BitDepth != bitDepth)

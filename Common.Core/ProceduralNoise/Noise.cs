@@ -25,7 +25,16 @@ namespace Common.Core.ProceduralNoise
             Perm = new PermutationTable(256, 255, seed);
 		}
 
-		public abstract double Sample1D(double x);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Noise: Frequency={0}, Amplitude={1}, Offset={2}]", Frequency, Amplitude, Offset);
+        }
+
+        public abstract double Sample1D(double x);
 
 		public abstract double Sample2D(double x, double y);
 

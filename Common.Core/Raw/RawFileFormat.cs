@@ -14,6 +14,16 @@ namespace Common.Core.Raw
 
         public BYTE_ORDER byteOrder;
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[RawFileFormat: FileName={0}, ByteOrder={1}, ByteCount={2}]",
+                fileName, bitDepth, byteOrder);
+        }
     }
 
 }
