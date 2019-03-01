@@ -366,6 +366,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector4f)) return false;
@@ -376,6 +377,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal given the error.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool EqualsWithError(Vector4f v, float eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
@@ -397,6 +399,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -413,6 +416,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Compare two vectors by axis.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Vector4f other)
         {
             if (x != other.x)
@@ -596,7 +600,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Lerp(Vector4f from, Vector4f to, float t)
         {
             if (t < 0.0f) t = 0.0f;

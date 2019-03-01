@@ -340,6 +340,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector2d)) return false;
@@ -350,6 +351,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal given the error.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool EqualsWithError(Vector2d v, double eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
@@ -369,6 +371,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -383,6 +386,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Compare two vectors by axis.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Vector2d other)
         {
             if (x != other.x)
@@ -604,7 +608,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2d Lerp(Vector2d from, Vector2d to, double t)
         {
             if (t < 0.0) t = 0.0;
@@ -623,7 +626,6 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Slerp between two vectors arc.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2d Slerp(Vector2d from, Vector2d to, double t)
         {
             if (t < 0.0) t = 0.0;

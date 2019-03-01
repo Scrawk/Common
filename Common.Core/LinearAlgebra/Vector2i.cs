@@ -292,6 +292,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector2i)) return false;
@@ -311,6 +312,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
 		{
             unchecked
@@ -325,6 +327,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Compare two vectors by axis.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Vector2i other)
         {
             if (x != other.x)
