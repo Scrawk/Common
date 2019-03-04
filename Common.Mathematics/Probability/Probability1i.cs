@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
@@ -32,6 +32,15 @@ namespace Common.Mathematics.Probability
         {
             Probability = DMath.Clamp01(p);
             Outcome = outcome;
+        }
+
+        /// <summary>
+        /// The probabilty of this event not occuring.
+        /// </summary>
+        public double Not
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return 1.0 - Probability; }
         }
 
         /// <summary>
@@ -202,6 +211,52 @@ namespace Common.Mathematics.Probability
         public static Probability1i NonExclusiveOr(Probability1i a, Probability1i b, int outcome = 0)
         {
             return new Probability1i(a.Probability + b.Probability - a.Probability * b.Probability, outcome);
+        }
+
+        /// <summary>
+        /// Determine the probability of a depending on z, P(A|Z)
+        /// </summary>
+        /// <param name="a">probability of a</param>
+        /// <param name="za">probability of z depending on a</param>
+        /// <param name="z">probability of z</param>
+        /// <param name="outcome"> the outcome of A|Z occuring</param>
+        /// <returns>probability of a depending on z</returns>
+        public static Probability1i SimpleBayes(Probability1i a, Probability1i za, Probability1i z, int outcome = 0)
+        {
+            return new Probability1i(za.Probability * a.Probability / z.Probability, outcome);
+        }
+
+        /// <summary>
+        /// Determine the probability of a depending on z, P(A|Z)
+        /// </summary>
+        /// <param name="a">probability of a</param>
+        /// <param name="za">probability of z depending on a</param>
+        /// <param name="z_not_a">probability of z depending on not a</param>
+        /// <param name="outcome">the outcome of A|Z occuring</param>
+        /// <returns>probability of a depending on z</returns>
+        public static Probability1i ExplicitBayes(Probability1i a, Probability1i za, Probability1i z_not_a, int outcome = 0)
+        {
+            var zaa = za.Probability * a.Probability;
+            return new Probability1i(zaa / (zaa + z_not_a.Probability * a.Not), outcome);
+        }
+
+        /// <summary>
+        /// Determine the probability of ai depending on z, P(Ai|Z)
+        /// </summary>
+        /// <param name="index">The index of the probability of interest</param>
+        /// <param name="a">List of probabilites a</param>
+        /// <param name="za">List of probabilites z depending on a</param>
+        /// <param name="outcome">the outcome of Ai|Z occuring</param>
+        /// <returns>probability of ai depending on z</returns>
+        public static Probability1i GeneralBayes(int index, IList<Probability1i> a, IList<Probability1i> za, int outcome = 0)
+        {
+            var zaa = za[index].Probability * a[index].Probability;
+
+            double sum = 0;
+            for (int i = 0; i < a.Count; i++)
+                sum += za[i].Probability * a[i].Probability;
+
+            return new Probability1i(zaa / sum, outcome);
         }
     }
 }

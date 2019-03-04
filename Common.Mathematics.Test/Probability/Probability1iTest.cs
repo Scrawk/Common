@@ -65,5 +65,31 @@ namespace Common.Mathematics.Test.Probability
 
             Assert.AreEqual(Math.Round(2.0 / 3.0, 4), ab.Probability);
         }
+
+        [TestMethod]
+        public void ExplicitBayes()
+        {
+            //A hospital administers a test for a disease. 
+            //Assuming these threee facts.
+            //1. 2% of the population have the disease.
+            //2. If a person does not have the disease the test has a 95% chance of giving negative.
+            //3. If a person does have the disease the test has a 10% of giving negative.
+
+            //If a patient tests positive what is the probability they actually have the disease?
+
+            //probability of having the disease.
+            var a = new Probability1i(0.02);
+            //probability of testing positive and having the disease.
+            var za = new Probability1i(0.95);
+            //probability of testing positive and not having the disease.
+            var z_not_a = new Probability1i(0.1);
+
+            //The probability of testing positive and having the disease.
+            var az = Probability1i.ExplicitBayes(a, za, z_not_a);
+            az.Round(2);
+
+            Assert.AreEqual(0.16, az.Probability);
+        }
+
     }
 }
