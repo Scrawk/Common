@@ -8,7 +8,7 @@ namespace Common.Mathematics.Probability
     /// Given enough samples many other distributions
     /// reduce to guassian.
     /// </summary>
-    public class NormalDistribution1 : ContinuousDistribution1
+    public class NormalDistribution1 : ProbabilityDistribution1
     {
 
         private double m_factor;

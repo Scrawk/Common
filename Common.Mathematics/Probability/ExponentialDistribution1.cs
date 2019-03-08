@@ -7,7 +7,7 @@ namespace Common.Mathematics.Probability
     /// The probability for the waiting time t until 
     /// the next event, for a completely random process.
     /// </summary>
-    public class ExponentialDistribution1 : ContinuousDistribution1
+    public class ExponentialDistribution1 : ProbabilityDistribution1
     {
 
         public ExponentialDistribution1(double time)

@@ -11,7 +11,7 @@ namespace Common.Mathematics.Probability
     /// of events that happen in a given region 
     /// (of time, space, etc) for a completely random process.
     /// </summary>
-    public class PoissonDistribution1 : ContinuousDistribution1
+    public class PoissonDistribution1 : ProbabilityDistribution1
     {
 
         public PoissonDistribution1(int lambda)
@@ -44,7 +44,8 @@ namespace Common.Mathematics.Probability
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values
         /// </summary>
-        /// <param name="k">A random varible from the distribution</param>
+        /// <param name="k">A random varible from the distribution. 
+        /// Should be a whole number representing the number of expected events.</param>
         /// <returns>The probablity of the function at x.</returns>
         public override double PDF(double k)
         {

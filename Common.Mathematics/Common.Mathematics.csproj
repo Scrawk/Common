@@ -50,9 +50,9 @@
     <Compile Include="Polynomials\Polynomial3d.cs" />
     <Compile Include="Probability\BernoulliDistribution1.cs" />
     <Compile Include="Probability\BinomialDistribution1.cs" />
-    <Compile Include="Probability\ContinuousDistribution1.cs" />
-    <Compile Include="Probability\ContinuousDistribution2.cs" />
-    <Compile Include="Probability\ContinuousDistributionN.cs" />
+    <Compile Include="Probability\ProbabilityDistribution1.cs" />
+    <Compile Include="Probability\ProbabilityDistribution2.cs" />
+    <Compile Include="Probability\PropabilityDistributionN.cs" />
     <Compile Include="Probability\ExponentialDistribution1.cs" />
     <Compile Include="Probability\Histogram1.cs" />
     <Compile Include="Probability\NormalDistribution1.cs" />

@@ -6,7 +6,7 @@ using Common.Core.LinearAlgebra;
 namespace Common.Mathematics.Probability
 {
 
-    public class NormalDistribution2 : ContinuousDistribution2
+    public class NormalDistribution2 : ProbabilityDistribution2
     {
 
         private double m_factor;

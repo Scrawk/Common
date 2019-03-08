@@ -9,7 +9,7 @@ namespace Common.Mathematics.Probability
     /// The random varible can take on only two values,
     /// 1 and 0, with probabilities p and 1-p.
     /// </summary>
-    public class BernoulliDistribution1 : ContinuousDistribution1
+    public class BernoulliDistribution1 : ProbabilityDistribution1
     {
 
         public BernoulliDistribution1(double probability)
@@ -37,7 +37,7 @@ namespace Common.Mathematics.Probability
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values
         /// </summary>
-        /// <param name="k">A random varible from the distribution</param>
+        /// <param name="k">A random varible from the distribution. Should be 0 or 1</param>
         /// <returns>The probablity of the function at x.</returns>
         public override double PDF(double k)
         {

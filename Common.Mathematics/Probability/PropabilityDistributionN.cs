@@ -5,10 +5,10 @@ using Common.Core.LinearAlgebra;
 
 namespace Common.Mathematics.Probability
 {
-    public abstract class ContinuousDistributionN
+    public abstract class PropabilityDistributionN
     {
 
-        public ContinuousDistributionN()
+        public PropabilityDistributionN()
         {
 
         }

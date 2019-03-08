@@ -7,7 +7,7 @@ namespace Common.Mathematics.Probability
     /// The uniform distribution is constant over a given range 
     /// and zero otherwise.
     /// </summary>
-    public class UniformDistribution1 : ContinuousDistribution1
+    public class UniformDistribution1 : ProbabilityDistribution1
     {
 
         public UniformDistribution1(double mean, double width)

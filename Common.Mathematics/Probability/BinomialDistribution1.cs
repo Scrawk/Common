@@ -10,7 +10,7 @@ namespace Common.Mathematics.Probability
     /// The random varible is the number k  of 
     /// successes in a collection of n Bernoulli process.
     /// </summary>
-    public class BinomialDistribution1 : ContinuousDistribution1
+    public class BinomialDistribution1 : ProbabilityDistribution1
     {
 
         public BinomialDistribution1(int trials, double probability)
@@ -50,7 +50,9 @@ namespace Common.Mathematics.Probability
         /// Used to specify the probability of the random 
         /// variable falling within a particular range of values
         /// </summary>
-        /// <param name="k">A random varible from the distribution</param>
+        /// <param name="k">A random varible from the distribution. 
+        /// Should be a whole number representing the number of 
+        /// successful outcome in trials</param>
         /// <returns>The probablity of the function at x.</returns>
         public override double PDF(double k)
         {

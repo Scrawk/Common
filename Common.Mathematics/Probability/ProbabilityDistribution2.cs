@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace Common.Mathematics.Probability
 {
 
-    public abstract class ContinuousDistribution2
+    public abstract class ProbabilityDistribution2
     {
 
-        public ContinuousDistribution2()
+        public ProbabilityDistribution2()
         {
 
         }

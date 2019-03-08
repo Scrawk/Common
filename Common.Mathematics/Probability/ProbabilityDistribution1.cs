@@ -3,10 +3,13 @@ using System.Collections.Generic;
 
 namespace Common.Mathematics.Probability
 {
-    public abstract class ContinuousDistribution1
+    /// <summary>
+    /// A continuous or discrete probability distribution. 
+    /// </summary>
+    public abstract class ProbabilityDistribution1
     {
 
-        public ContinuousDistribution1()
+        public ProbabilityDistribution1()
         {
 
         }
@@ -17,7 +20,7 @@ namespace Common.Mathematics.Probability
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[ContinuousDistribution1: ]");
+            return string.Format("[ProbabilityDistribution1: ]");
         }
 
         /// <summary>
