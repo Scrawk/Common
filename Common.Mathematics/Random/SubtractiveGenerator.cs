@@ -8,21 +8,15 @@ namespace Common.Mathematics.Random
     /// </summary>
 	public class SubtractiveGenerator : RandomGenerator
 	{
-		static int MAX = 1000000000;
-		static double INV_MAX = 1.0 / MAX;
+		private const uint MAX = 1000000000;
 
-        /// <summary>
-        /// Random double between 0 and 1 (inclusive).
-        /// </summary>
-		public override double Value { get { return Next() * INV_MAX; } }
+        private uint[] m_state = new uint[55];
 
-        int[] m_state = new int[55];
+        private uint[] m_temp = new uint[55];
 
-        int[] m_temp = new int[55];
-
-        int m_pos;
+        private int m_pos;
 		
-		public SubtractiveGenerator(int seed) : base(seed)
+		public SubtractiveGenerator(uint seed) : base(seed)
 		{
             
 		}
@@ -37,11 +31,22 @@ namespace Common.Mathematics.Random
         }
 
         /// <summary>
+        /// A random int between 0 - MaxInt.
+        /// </summary>
+        public override int Next()
+        {
+            uint temp = mod(m_state[(m_pos + 1) % 55] - m_state[(m_pos + 32) % 55]);
+            m_pos = (m_pos + 1) % 55;
+            m_state[m_pos] = temp;
+
+            return (int)(temp % int.MaxValue);
+        }
+
+        /// <summary>
         /// Update the seed.
         /// </summary>
-        public override void UpdateSeed(int seed)
+        public override void UpdateSeed(uint seed)
         {
-
             Seed = seed;
 
             m_temp[0] = mod(seed);
@@ -58,18 +63,11 @@ namespace Common.Mathematics.Random
                 Next();
         }
 
-        private int mod(int n)
+        private uint mod(uint n)
         {
             return ((n % MAX) + MAX) % MAX;
         }
-		
-		private int Next() 
-		{
-			int temp = mod(m_state[(m_pos + 1) % 55] - m_state[(m_pos + 32) % 55]);
-			m_pos = (m_pos + 1) % 55;
-			m_state[m_pos] = temp;
-			return temp;
-		}
+	
 
 	}
 }

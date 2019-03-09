@@ -14,19 +14,9 @@ namespace System
             return min + rnd.NextDouble() * (max - min);
         }
 
-        public static double NextDouble(this Random rnd, double max)
-        {
-            return rnd.NextDouble() * max;
-        }
-
         public static float NextFloat(this Random rnd, float min, float max)
         {
             return min + (float)rnd.NextDouble() * (max-min);
-        }
-
-        public static float NextFloat(this Random rnd, float max)
-        {
-            return (float)rnd.NextDouble() * max;
         }
 
         public static float NextFloat(this Random rnd)
@@ -96,27 +86,27 @@ namespace System
 
         public static ColorRGB NextColorRGB(this Random rnd)
         {
-            float r = (float)rnd.NextDouble();
-            float g = (float)rnd.NextDouble();
-            float b = (float)rnd.NextDouble();
+            float r = rnd.NextFloat();
+            float g = rnd.NextFloat();
+            float b = rnd.NextFloat();
 
             return new ColorRGB(r, g, b);
         }
 
         public static ColorRGBA NextColorRGBA(this Random rnd)
         {
-            float r = (float)rnd.NextDouble();
-            float g = (float)rnd.NextDouble();
-            float b = (float)rnd.NextDouble();
+            float r = rnd.NextFloat();
+            float g = rnd.NextFloat();
+            float b = rnd.NextFloat();
 
             return new ColorRGBA(r, g, b, 1);
         }
 
         public static ColorHSV NextColorHSV(this Random rnd)
         {
-            float h = (float)rnd.NextDouble();
-            float s = (float)rnd.NextDouble();
-            float v = (float)rnd.NextDouble();
+            float h = rnd.NextFloat();
+            float s = rnd.NextFloat();
+            float v = rnd.NextFloat();
 
             return new ColorHSV(h, s, v);
         }

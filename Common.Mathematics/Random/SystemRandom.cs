@@ -6,11 +6,9 @@ namespace Common.Mathematics.Random
     public class SystemRandom : RandomGenerator
     {
 
-        public override double Value { get { return Rnd.NextDouble(); } }
-
         private System.Random Rnd { get; set; }
 
-        public SystemRandom(int seed) : base(seed)
+        public SystemRandom(uint seed) : base(seed)
         {
 
         }
@@ -24,10 +22,22 @@ namespace Common.Mathematics.Random
             return string.Format("[SystemRandom: Seed={0}]", Seed);
         }
 
-        public override void UpdateSeed(int seed)
+        /// <summary>
+        /// A random int between 0 - MaxInt.
+        /// </summary>
+        public override int Next()
+        {
+            return Rnd.Next();
+        }
+
+        /// <summary>
+        /// Update seed.
+        /// Called when seed changes.
+        /// </summary>
+        public override void UpdateSeed(uint seed)
         {
             Seed = seed;
-            Rnd = new System.Random(seed);
+            Rnd = new System.Random((int)seed);
         }
         
     }

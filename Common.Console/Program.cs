@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using CONSOLE = System.Console;
 
-using Common.Core.Mathematics;
+using Common.Mathematics.Random;
 
 namespace Common.Console
 {
@@ -14,7 +11,12 @@ namespace Common.Console
     {
         static void Main(string[] args)
         {
+            var rnd = new SubtractiveGenerator(0);
 
+            for (int i = 0; i < 100; i++)
+            {
+                CONSOLE.WriteLine(rnd.Next());
+            }
         }
     }
 }
