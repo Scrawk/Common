@@ -220,7 +220,6 @@ namespace Common.Meshing.HalfEdgeBased
                 e.Set(v, face, previous, next, null);
                 Mesh.Edges.Add(e);
             }
-
         }
 
         /// <summary>

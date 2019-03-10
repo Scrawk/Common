@@ -14,6 +14,60 @@ namespace Common.Core.Mathematics
         public const float Deg2Rad = PI / 180.0f;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sin(float a)
+        {
+            return (float)Math.Sin(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Asin(float a)
+        {
+            return (float)Math.Asin(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Cos(float a)
+        {
+            return (float)Math.Cos(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Acos(float a)
+        {
+            return (float)Math.Acos(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Tan(float a)
+        {
+            return (float)Math.Tan(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Atan(float a)
+        {
+            return (float)Math.Atan(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Atan2(float x, float y)
+        {
+            return (float)Math.Atan2(x, y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Pow(float x, float y)
+        {
+            return (float)Math.Pow(x, y);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sqrt(float d)
+        {
+            return (float)Math.Sqrt(d);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeAcos(float r)
         {
             return (float)Math.Acos(Math.Min(1.0f, Math.Max(-1.0f, r)));
