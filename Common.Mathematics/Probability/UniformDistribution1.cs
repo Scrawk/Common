@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Mathematics.Random;
+
 namespace Common.Mathematics.Probability
 {
     /// <summary>
@@ -71,7 +73,7 @@ namespace Common.Mathematics.Probability
         /// </summary>
         /// <param name="rnd">Generator for a random varible between 0-1 (inculsive)</param>
         /// <returns>A value from the distribution</returns>
-        public override double Sample(System.Random rnd)
+        public override double Sample(RandomGenerator rnd)
         {
             return Min + rnd.NextDouble() * Width;
         }

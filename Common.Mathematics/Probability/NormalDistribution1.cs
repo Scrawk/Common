@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Mathematics.Random;
+
 namespace Common.Mathematics.Probability
 {
     /// <summary>
@@ -69,7 +71,7 @@ namespace Common.Mathematics.Probability
         /// <returns>A value from the distribution</returns>
         private bool m_useLast;
         private double m_y2;
-        public override double Sample(System.Random rnd)
+        public override double Sample(RandomGenerator rnd)
         {
             double x1, x2, w, y1;
 
@@ -96,7 +98,7 @@ namespace Common.Mathematics.Probability
 
             return Mean + y1 * Sigma;
         }
-        
+
         private double ErrorFunction(double x)
         {
             // constants
