@@ -11,12 +11,7 @@ namespace Common.Console
     {
         static void Main(string[] args)
         {
-            var rnd = new SubtractiveGenerator(0);
 
-            for (int i = 0; i < 100; i++)
-            {
-                CONSOLE.WriteLine(rnd.Next());
-            }
         }
     }
 }
