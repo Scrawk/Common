@@ -1,87 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2B93010B-F90A-4DDE-87C4-83A08BE28FC0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Meshing</RootNamespace>
-    <AssemblyName>Common.Meshing</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Common.Core\Common.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Constructors\CreateGeneralMesh2.cs" />
-    <Compile Include="Constructors\CreateTriangleMesh2.cs" />
-    <Compile Include="Constructors\IEdgeMeshConstructor.cs" />
-    <Compile Include="Constructors\IPolygonalMeshConstructor.cs" />
-    <Compile Include="Constructors\ITetrahedralMeshConstructor.cs" />
-    <Compile Include="Constructors\ITriangularMeshConstructor.cs" />
-    <Compile Include="FaceBased\FBFace.cs" />
-    <Compile Include="FaceBased\FBMesh.cs" />
-    <Compile Include="FaceBased\FBMesh2f.cs" />
-    <Compile Include="FaceBased\FBMesh3f.cs" />
-    <Compile Include="FaceBased\FBMeshConstructor.cs" />
-    <Compile Include="FaceBased\FBVertex.cs" />
-    <Compile Include="FaceBased\FBVertex2f.cs" />
-    <Compile Include="FaceBased\FBVertex3f.cs" />
-    <Compile Include="HalfEdgeBased\HBEdge.cs" />
-    <Compile Include="HalfEdgeBased\HBFace.cs" />
-    <Compile Include="HalfEdgeBased\HBMesh.cs" />
-    <Compile Include="HalfEdgeBased\HBMesh2f.cs" />
-    <Compile Include="HalfEdgeBased\HBMesh3f.cs" />
-    <Compile Include="HalfEdgeBased\HBMeshConstructor.cs" />
-    <Compile Include="HalfEdgeBased\HBEdgeOperations.cs" />
-    <Compile Include="HalfEdgeBased\HBVertex.cs" />
-    <Compile Include="HalfEdgeBased\HBVertex2f.cs" />
-    <Compile Include="HalfEdgeBased\HBVertex3f.cs" />
-    <Compile Include="IndexBased\IndexableMesh.cs" />
-    <Compile Include="IndexBased\Mesh2f.cs" />
-    <Compile Include="IndexBased\Mesh3f.cs" />
-    <Compile Include="IndexBased\MeshConstructor2f.cs" />
-    <Compile Include="IndexBased\MeshConstructor3f.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common.Core\Common.Core.csproj">
-      <Project>{76d7c24e-78bf-4a30-ac40-2f07e2eef18b}</Project>
-      <Name>Common.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "D:\Projects\Unity Projects\Common\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "D:\Projects\Unity Projects\CGALUnity\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.Meshing.dll" "D:\Projects\Unity Projects\GeoMorph\Assets\Common\Plugins" /y</PostBuildEvent>
-  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Meshing.dll&quot; &quot;D:\Projects\Unity Projects\Common\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Meshing.dll&quot; &quot;D:\Projects\Unity Projects\CGALUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Meshing.dll&quot; &quot;D:\Projects\Unity Projects\GeoMorph\Assets\Common\Plugins&quot; /y" />
+  </Target>
+
 </Project>

@@ -1,89 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{479939C9-D6BC-44F4-80E6-FEDE5085AF3A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.GraphTheory</RootNamespace>
-    <AssemblyName>Common.GraphTheory</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Common.Collections\Common.Collections.csproj" />
+    <ProjectReference Include="..\Common.Core\Common.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Adjacency\AdjacencyEdge.cs" />
-    <Compile Include="Adjacency\AdjacencyFlowEdge.cs" />
-    <Compile Include="Adjacency\AdjacencyFlowGraph.cs" />
-    <Compile Include="Adjacency\AdjacencyGraph.cs" />
-    <Compile Include="Adjacency\AdjacencySearch.cs" />
-    <Compile Include="Adjacency\AdjacencyVertex.cs" />
-    <Compile Include="CyclicGraphException.cs" />
-    <Compile Include="Grids\GridEdge.cs" />
-    <Compile Include="Grids\GridFlowGraph.cs" />
-    <Compile Include="Grids\GridGraph.cs" />
-    <Compile Include="Grids\GridSearch.cs" />
-    <Compile Include="Grids\GridVertex.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Searches\AStarSearch.cs" />
-    <Compile Include="Searches\BreadthFirstSearch.cs" />
-    <Compile Include="Searches\DepthFirstSearch.cs" />
-    <Compile Include="Searches\DijkstrasShortestPathTree.cs" />
-    <Compile Include="Searches\FordFulkersonAdjacency.cs" />
-    <Compile Include="Searches\FordFulkersonGrid.cs" />
-    <Compile Include="Searches\KhansTopologicalSort.cs" />
-    <Compile Include="Searches\KruskalsMinimumSpanningForest.cs" />
-    <Compile Include="Searches\PrimsMinimumSpanningTree.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common.Collections\Common.Collections.csproj">
-      <Project>{23c27947-d8f9-49ad-989f-6517dbcc3850}</Project>
-      <Name>Common.Collections</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.Core\Common.Core.csproj">
-      <Project>{76d7c24e-78bf-4a30-ac40-2f07e2eef18b}</Project>
-      <Name>Common.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.GraphTheory.dll" "D:\Projects\Unity Projects\Common\Assets\Common\Plugins" /y
-xcopy "$(ProjectDir)bin\$(ConfigurationName)\Common.GraphTheory.dll" "D:\Projects\Unity Projects\GeoMorph\Assets\Common\Plugins" /y</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.GraphTheory.dll&quot; &quot;D:\Projects\Unity Projects\Common\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.GraphTheory.dll&quot; &quot;D:\Projects\Unity Projects\GeoMorph\Assets\Common\Plugins&quot; /y" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
