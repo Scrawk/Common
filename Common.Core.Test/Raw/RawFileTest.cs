@@ -19,7 +19,6 @@ namespace Common.Core.Test.Raw
             Random rnd = new Random(0);
 
             int size = 1024;
-            int stripSize = 32;
 
             float[] data = new float[size];
             for (int i = 0; i < size; i++)
@@ -28,12 +27,11 @@ namespace Common.Core.Test.Raw
             try
             {
                 RawFile.Save32Bit(fileName, data);
-                RawFile raw = new RawFile(fileName, 32, BYTE_ORDER.WINDOWS, stripSize);
+                RawFile raw = new RawFile(fileName, 32, BYTE_ORDER.WINDOWS);
 
                 Assert.AreEqual(fileName, raw.FileName);
                 Assert.AreEqual(size, raw.ElementCount, "Element count incorrect");
                 Assert.AreEqual(size * 4, raw.ByteCount, "Byte count incorrect");
-                Assert.AreEqual(stripSize, raw.StripSize, "Strip size incorrect");
                 Assert.AreEqual(32, raw.BitDepth);
                 Assert.AreEqual(BYTE_ORDER.WINDOWS, raw.ByteOrder);
 
@@ -72,7 +70,6 @@ namespace Common.Core.Test.Raw
             Random rnd = new Random(0);
 
             int size = 1024;
-            int stripSize = 32;
 
             float[] data = new float[size];
             for (int i = 0; i < size; i++)
@@ -81,12 +78,11 @@ namespace Common.Core.Test.Raw
             try
             {
                 RawFile.Save16Bit(fileName, data, BYTE_ORDER.WINDOWS);
-                RawFile raw = new RawFile(fileName, 16, BYTE_ORDER.WINDOWS, stripSize);
+                RawFile raw = new RawFile(fileName, 16, BYTE_ORDER.WINDOWS);
 
                 Assert.AreEqual(fileName, raw.FileName);
                 Assert.AreEqual(size, raw.ElementCount, "Element count incorrect");
                 Assert.AreEqual(size * 2, raw.ByteCount, "Byte count incorrect");
-                Assert.AreEqual(stripSize, raw.StripSize, "Strip size incorrect");
                 Assert.AreEqual(16, raw.BitDepth);
                 Assert.AreEqual(BYTE_ORDER.WINDOWS, raw.ByteOrder);
 
@@ -125,7 +121,6 @@ namespace Common.Core.Test.Raw
             Random rnd = new Random(0);
 
             int size = 1024;
-            int stripSize = 32;
 
             float[] data = new float[size];
             for (int i = 0; i < size; i++)
@@ -134,12 +129,11 @@ namespace Common.Core.Test.Raw
             try
             {
                 RawFile.Save8Bit(fileName, data);
-                RawFile raw = new RawFile(fileName, 8, BYTE_ORDER.WINDOWS, stripSize);
+                RawFile raw = new RawFile(fileName, 8, BYTE_ORDER.WINDOWS);
 
                 Assert.AreEqual(fileName, raw.FileName);
                 Assert.AreEqual(size, raw.ElementCount);
                 Assert.AreEqual(size, raw.ByteCount);
-                Assert.AreEqual(stripSize, raw.StripSize);
                 Assert.AreEqual(8, raw.BitDepth);
                 Assert.AreEqual(BYTE_ORDER.WINDOWS, raw.ByteOrder);
 
@@ -170,27 +164,6 @@ namespace Common.Core.Test.Raw
             {
                 File.Delete(fileName);
             }
-        }
-
-        //[TestMethod]
-        public void BigFileTest()
-        {
-
-            string directory = "C:/Users/Justin/Desktop/Residuals/";
-            string fileName = directory + "YellowStone_5m_Ortho_8192_8_3.raw";
-
-            RawFileFormat fileFormat = new RawFileFormat();
-            fileFormat.bitDepth = 8;
-            fileFormat.byteOrder = BYTE_ORDER.WINDOWS;
-            fileFormat.fileName = fileName;
-
-            RawFile raw = new RawFile(fileFormat);
-
-            int count = raw.ElementCount;
-
-            for (int i = 0; i < count; i++)
-                raw.Read(i);
-
         }
 
         float[] ToArray(RawFile raw)

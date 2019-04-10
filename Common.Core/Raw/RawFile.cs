@@ -16,12 +16,46 @@ namespace Common.Core.Raw
     public class RawFile
     {
 
-        private const int STRIP_SIZE = 1024 * 1024;
+		/// <summary>
+		/// Load 32 bit data from file name.
+		/// </summary>
+        public RawFile(string fileName)
+        {
+            FileName = fileName;
+            BitDepth = 32;
+            ByteOrder = BYTE_ORDER.WINDOWS;
+
+            FindSize();
+        }
 
 		/// <summary>
-		/// The filename to load from and save to.
+		/// Load data from file with the provided bitdepth and byte order.
 		/// </summary>
-		public string FileName { get; set; }
+        public RawFile(string fileName, int bitDepth, BYTE_ORDER byteOrder = BYTE_ORDER.WINDOWS)
+        {
+            FileName = fileName;
+            BitDepth = bitDepth;
+            ByteOrder = byteOrder;
+
+            FindSize();
+        }
+
+        /// <summary>
+        /// Load data from file with the provided format.
+        /// </summary>
+        public RawFile(RawFileFormat format)
+        {
+            FileName = format.fileName;
+            BitDepth = format.bitDepth;
+            ByteOrder = format.byteOrder;
+
+            FindSize();
+        }
+
+        /// <summary>
+        /// The filename to load from and save to.
+        /// </summary>
+        public string FileName { get; set; }
 
         /// <summary>
         /// 
@@ -33,14 +67,14 @@ namespace Common.Core.Raw
         /// </summary>
         public int BitDepth { get; private set; }
 
-		/// <summary>
-		/// Gets the byte order. Only needed for 16 bit files.
-		/// </summary>
+        /// <summary>
+        /// Gets the byte order. Only needed for 16 bit files.
+        /// </summary>
         public BYTE_ORDER ByteOrder { get; private set; }
 
-		/// <summary>
-		/// Gets the size of the file in bytes.
-		/// </summary>
+        /// <summary>
+        /// Gets the size of the file in bytes.
+        /// </summary>
         public int ByteCount { get; private set; }
 
         /// <summary>
@@ -49,67 +83,9 @@ namespace Common.Core.Raw
         public int ElementCount { get; private set; }
 
         /// <summary>
-        /// Max contiguous size of the data.
+        /// The loaded data.
         /// </summary>
-        public int StripSize { get; private set; }
-
-        /// <summary>
-        /// The loaded byte data converted to a float.
-        /// </summary>
-        private byte[] Strip { get; set; }
-
-        /// <summary>
-        /// The current file offset were the strip was read from.
-        /// </summary>
-        private int CurrentOffset { get; set; }
-
-		/// <summary>
-		/// Load 32 bit data from file name.
-		/// </summary>
-        public RawFile(string fileName, int stripSize = 2048)
-        {
-            if (stripSize % 4 != 0)
-                stripSize += stripSize % 4;
-
-            FileName = fileName;
-            BitDepth = 32;
-            ByteOrder = BYTE_ORDER.WINDOWS;
-            StripSize = stripSize;
-            
-            FindSize();
-        }
-
-		/// <summary>
-		/// Load data from file with the provided bitdepth and byte order.
-		/// </summary>
-        public RawFile(string fileName, int bitDepth, BYTE_ORDER byteOrder = BYTE_ORDER.WINDOWS, int stripSize = STRIP_SIZE)
-        {
-            if (stripSize % 4 != 0)
-                stripSize += stripSize % 4;
-
-            FileName = fileName;
-            BitDepth = bitDepth;
-            ByteOrder = byteOrder;
-            StripSize = stripSize;
-         
-            FindSize();
-        }
-
-        /// <summary>
-        /// Load data from file with the provided format.
-        /// </summary>
-        public RawFile(RawFileFormat format, int stripSize = STRIP_SIZE)
-        {
-            if (stripSize % 4 != 0)
-                stripSize += stripSize % 4;
-
-            FileName = format.fileName;
-            BitDepth = format.bitDepth;
-            ByteOrder = format.byteOrder;
-            StripSize = stripSize;
-       
-            FindSize();
-        }
+        public byte[] Data { get; set; }
 
         /// <summary>
         /// 
@@ -146,15 +122,12 @@ namespace Common.Core.Raw
         {
             int index = i * 4;
 
-            if (index >= ByteCount)
+            if (index < 0 || index >= ByteCount)
                 throw new IndexOutOfRangeException("Index out of bounds");
 
-            int offset = index / StripSize * StripSize;
+            if (Data == null) LoadData();
 
-            if (Strip == null || offset != CurrentOffset)
-                LoadStrip(offset);
-
-            return BitConverter.ToSingle(Strip, index % StripSize);
+            return BitConverter.ToSingle(Data, index);
         }
 
         /// <summary>
@@ -164,18 +137,15 @@ namespace Common.Core.Raw
         {
             int index = i * 2;
 
-            if (index >= ByteCount)
+            if (index < 0 || index >= ByteCount)
                 throw new IndexOutOfRangeException("Index out of bounds");
 
-            int offset = index / StripSize * StripSize;
+            if (Data == null) LoadData();
 
-            if (Strip == null || offset != CurrentOffset)
-                LoadStrip(offset);
-
-            if(BigEndian)
-                return (ushort)(Strip[index % StripSize] * 256 + Strip[index % StripSize + 1]);
+            if (BigEndian)
+                return (ushort)(Data[index] * 256 + Data[index + 1]);
             else
-                return (ushort)(Strip[index % StripSize] + Strip[index % StripSize + 1] * 256);
+                return (ushort)(Data[index] + Data[index + 1] * 256);
 
         }
 
@@ -186,15 +156,12 @@ namespace Common.Core.Raw
         {
             int index = i;
 
-            if (index >= ByteCount)
+            if (index < 0 || index >= ByteCount)
                 throw new IndexOutOfRangeException("Index out of bounds");
 
-            int offset = index / StripSize * StripSize;
+            if (Data == null) LoadData();
 
-            if (Strip == null || offset != CurrentOffset)
-                LoadStrip(offset);
-
-            return Strip[index % StripSize];
+            return Data[index];
         }
 
         /// <summary>
@@ -223,20 +190,9 @@ namespace Common.Core.Raw
         /// <summary>
         /// Loads the bytes from file.
         /// </summary>
-        private void LoadStrip(int offset)
+        public void LoadData()
         {
-            if(Strip == null)
-                Strip = new byte[StripSize];
-
-            int count = Math.Min(ByteCount - offset, StripSize);
-
-            using (Stream stream = new FileStream(FileName, FileMode.Open))
-            {
-                stream.Seek(offset, SeekOrigin.Begin);
-                stream.Read(Strip, 0, count);
-            }
-
-            CurrentOffset = offset;
+            Data = File.ReadAllBytes(FileName);
         }
 
 		/// <summary>
