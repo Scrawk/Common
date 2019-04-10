@@ -41,6 +41,18 @@ namespace Common.Core.Raw
         }
 
         /// <summary>
+        /// Load data from file with the provided bitdepth and byte order.
+        /// </summary>
+        public RawFile(string fileName, int bitDepth, bool bigEndian)
+        {
+            FileName = fileName;
+            BitDepth = bitDepth;
+            ByteOrder = bigEndian ? BYTE_ORDER.MAC : BYTE_ORDER.WINDOWS;
+
+            FindSize();
+        }
+
+        /// <summary>
         /// Load data from file with the provided format.
         /// </summary>
         public RawFile(RawFileFormat format)
@@ -213,10 +225,18 @@ namespace Common.Core.Raw
 			return data;
 		}
 
-		/// <summary>
-		/// Loads 16 bit file and convert to float.
-		/// </summary>
-		public static float[] Load16Bit(string fileName, BYTE_ORDER byteOrder)
+        /// <summary>
+        /// Loads 16 bit file and convert to float.
+        /// </summary>
+        public static float[] Load16Bit(string fileName, bool bigEndian)
+        {
+            return Load16Bit(fileName, bigEndian ? BYTE_ORDER.MAC : BYTE_ORDER.WINDOWS);
+        }
+
+        /// <summary>
+        /// Loads 16 bit file and convert to float.
+        /// </summary>
+        public static float[] Load16Bit(string fileName, BYTE_ORDER byteOrder)
 		{
             byte[] bytes = File.ReadAllBytes(fileName);
 			
@@ -266,10 +286,18 @@ namespace Common.Core.Raw
 			File.WriteAllBytes(filename, bytes);
 		}
 
-		/// <summary>
-		/// Saves float data to 16 bit..
-		/// </summary>
-		public static void Save16Bit(string filename, float[] data, BYTE_ORDER byteOrder)
+        /// <summary>
+        /// Saves float data to 16 bit..
+        /// </summary>
+        public static void Save16Bit(string filename, float[] data, bool bigEndian)
+        {
+            Save16Bit(filename, data, bigEndian ? BYTE_ORDER.MAC : BYTE_ORDER.WINDOWS);
+        }
+
+        /// <summary>
+        /// Saves float data to 16 bit..
+        /// </summary>
+        public static void Save16Bit(string filename, float[] data, BYTE_ORDER byteOrder)
 		{
 			int size = data.Length * 2;
 
