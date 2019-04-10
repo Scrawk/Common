@@ -94,7 +94,7 @@ namespace Common.Collections.Textures
             return Data[x, c, m];
         }
 
-        public float GetChannel(float x, int c, int m = 0)
+        public float GetChannel(double x, int c, int m = 0)
         {
             if (c >= Data.Channels) return 0;
 
@@ -133,7 +133,7 @@ namespace Common.Collections.Textures
             return pixel;
         }
 
-        public ColorRGBA GetPixel(float x, int m = 0)
+        public ColorRGBA GetPixel(double x, int m = 0)
         {
             int W = Data.GetWidth(m);
 
@@ -174,13 +174,13 @@ namespace Common.Collections.Textures
 
         private float GetBicubic(BicubicIndex x, int c, int m)
         {
-            float fx = x.fi;
-            float v0 = Data[x.i0, c, m];
-            float v1 = Data[x.i1, c, m];
-            float v2 = Data[x.i2, c, m];
-            float v3 = Data[x.i3, c, m];
+            double fx = x.fi;
+            double v0 = Data[x.i0, c, m];
+            double v1 = Data[x.i1, c, m];
+            double v2 = Data[x.i2, c, m];
+            double v3 = Data[x.i3, c, m];
 
-            return Bicubic(fx, v0, v1, v2, v3);
+            return (float)Bicubic(fx, v0, v1, v2, v3);
         }
 
         private void CreateData(int width, int channels, int bitDepth)

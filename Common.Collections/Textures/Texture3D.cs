@@ -120,7 +120,7 @@ namespace Common.Collections.Textures
         /// <summary>
         /// Get a channel.
         /// </summary>
-        public float GetChannel(float x, float y, float z, int c, int m = 0)
+        public float GetChannel(double x, double y, double z, int c, int m = 0)
         {
             if (c >= Channels) return 0;
 
@@ -168,7 +168,7 @@ namespace Common.Collections.Textures
         /// <summary>
         /// Get channels into color.
         /// </summary>
-        public ColorRGBA GetPixel(float x, float y, float z, int m = 0)
+        public ColorRGBA GetPixel(double x, double y, double z, int m = 0)
         {
             int W = GetWidth(m);
             int H = GetHeight(m);
@@ -205,20 +205,20 @@ namespace Common.Collections.Textures
         private float GetBilinear(BilinearIndex x, BilinearIndex y, BilinearIndex z, int c, int m)
         {
 
-            float fx1 = 1.0f - x.fi;
-            float fy1 = 1.0f - y.fi;
-            float fz1 = 1.0f - z.fi;
+            double fx1 = 1.0 - x.fi;
+            double fy1 = 1.0 - y.fi;
+            double fz1 = 1.0 - z.fi;
 
-            float v00 = Data[x.i0, y.i0, z.i0, c, m] * fx1 + Data[x.i1, y.i0, z.i0, c, m] * x.fi;
-            float v10 = Data[x.i0, y.i1, z.i0, c, m] * fx1 + Data[x.i1, y.i1, z.i0, c, m] * x.fi;
+            double v00 = Data[x.i0, y.i0, z.i0, c, m] * fx1 + Data[x.i1, y.i0, z.i0, c, m] * x.fi;
+            double v10 = Data[x.i0, y.i1, z.i0, c, m] * fx1 + Data[x.i1, y.i1, z.i0, c, m] * x.fi;
 
-            float v01 = Data[x.i0, y.i0, z.i1, c, m] * fx1 + Data[x.i1, y.i0, z.i1, c, m] * x.fi;
-            float v11 = Data[x.i0, y.i1, z.i1, c, m] * fx1 + Data[x.i1, y.i1, z.i1, c, m] * x.fi;
+            double v01 = Data[x.i0, y.i0, z.i1, c, m] * fx1 + Data[x.i1, y.i0, z.i1, c, m] * x.fi;
+            double v11 = Data[x.i0, y.i1, z.i1, c, m] * fx1 + Data[x.i1, y.i1, z.i1, c, m] * x.fi;
 
-            float v0 = v00 * fy1 + v10 * y.fi;
-            float v1 = v01 * fy1 + v11 * y.fi;
+            double v0 = v00 * fy1 + v10 * y.fi;
+            double v1 = v01 * fy1 + v11 * y.fi;
 
-            return v0 * fz1 + v1 * z.fi;
+            return (float)(v0 * fz1 + v1 * z.fi);
         }
 
         /// <summary>

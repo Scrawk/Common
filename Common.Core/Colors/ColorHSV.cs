@@ -26,6 +26,13 @@ namespace Common.Core.Colors
             this.v = v;
         }
 
+        public ColorHSV(double h, double s, double v)
+        {
+            this.h = (float)h;
+            this.s = (float)s;
+            this.v = (float)v;
+        }
+
         public ColorRGB rgb
         {
             get { return ToRGB(h, s, v); }

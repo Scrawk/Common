@@ -17,13 +17,13 @@ namespace Common.Collections.Textures
 
         protected struct BilinearIndex
         {
-            internal float fi;
+            internal double fi;
             internal int i0, i1, size;
         }
 
         protected struct BicubicIndex
         {
-            internal float fi;
+            internal double fi;
             internal int i0, i1, i2, i3, size;
         }
 
@@ -63,10 +63,10 @@ namespace Common.Collections.Textures
                 return IMath.Mirror(i, size);
         }
 
-        protected BilinearIndex NewBilinearIndex(float i, int size)
+        protected BilinearIndex NewBilinearIndex(double i, int size)
         {
 
-            float fi = i - (int)i;
+            double fi = i - (int)i;
             if (fi < 0) fi = 1.0f + fi;
 
             int i0 = (int)i;
@@ -99,10 +99,10 @@ namespace Common.Collections.Textures
             return idx;
         }
 
-        protected BicubicIndex NewBicubicIndex(float i, int size)
+        protected BicubicIndex NewBicubicIndex(double i, int size)
         {
 
-            float fi = i - (int)i;
+            double fi = i - (int)i;
             if (fi < 0) fi = 1.0f + fi;
    
             int i1 = (int)i;
@@ -142,9 +142,9 @@ namespace Common.Collections.Textures
             return idx;
         }
 
-        protected float Bicubic(float fx, float v0, float v1, float v2, float v3)
+        protected double Bicubic(double fx, double v0, double v1, double v2, double v3)
         {
-            return v1 + 0.5f * fx * (v2 - v0 + fx * (2.0f * v0 - 5.0f * v1 + 4.0f * v2 - v3 + fx * (3.0f * (v1 - v2) + v3 - v0)));
+            return v1 + 0.5 * fx * (v2 - v0 + fx * (2.0 * v0 - 5.0 * v1 + 4.0 * v2 - v3 + fx * (3.0 * (v1 - v2) + v3 - v0)));
         }
 
     }

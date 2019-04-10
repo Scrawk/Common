@@ -29,11 +29,20 @@ namespace Common.Core.Colors
             this.b = b;
         }
 
-        public ColorRGB(float v)
+        public ColorRGB(float v) : this(v,v,v)
         {
-            this.r = v;
-            this.g = v;
-            this.b = v;
+
+        }
+
+        public ColorRGB(double r, double g, double b) 
+            : this((float)r, (float)g, (float)b)
+        {
+
+        }
+
+        public ColorRGB(double v) : this(v, v, v)
+        {
+
         }
 
         public ColorHSV hsv

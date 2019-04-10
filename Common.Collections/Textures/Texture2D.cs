@@ -132,7 +132,7 @@ namespace Common.Collections.Textures
             return Data[x, y, c, m];
         }
 
-        public float GetChannel(float x, float y, int c, int m = 0)
+        public float GetChannel(double x, double y, int c, int m = 0)
         {
             if (c >= Channels) return 0;
 
@@ -177,7 +177,7 @@ namespace Common.Collections.Textures
             return pixel;
         }
 
-        public ColorRGBA GetPixel(float x, float y, int m = 0)
+        public ColorRGBA GetPixel(double x, double y, int m = 0)
         {
             int W = GetWidth(m);
             int H = GetHeight(m);
@@ -219,15 +219,15 @@ namespace Common.Collections.Textures
 
         private float GetBilinear(BilinearIndex x, BilinearIndex y, int c, int m)
         {
-            float v0 = Data[x.i0, y.i0, c, m] * (1.0f - x.fi) + Data[x.i1, y.i0, + c, m] * x.fi;
-            float v1 = Data[x.i0, y.i1, c, m] * (1.0f - x.fi) + Data[x.i1, y.i1, c, m] * x.fi;
+            double v0 = Data[x.i0, y.i0, c, m] * (1.0 - x.fi) + Data[x.i1, y.i0, + c, m] * x.fi;
+            double v1 = Data[x.i0, y.i1, c, m] * (1.0 - x.fi) + Data[x.i1, y.i1, c, m] * x.fi;
 
             return (float)(v0 * (1.0 - y.fi) + v1 * y.fi);
         }
 
         private float GetBicubic(BicubicIndex x, BicubicIndex y, int c, int m)
         {
-            float fx, fy, v0, v1, v2, v3;
+            double fx, fy, v0, v1, v2, v3;
 
             fx = x.fi;
             fy = y.fi;
@@ -236,30 +236,30 @@ namespace Common.Collections.Textures
             v2 = Data[x.i2, y.i0, c, m];
             v3 = Data[x.i3, y.i0, c, m];
 
-            float v00 = Bicubic(fx, v0, v1, v2, v3);
+            double v00 = Bicubic(fx, v0, v1, v2, v3);
 
             v0 = Data[x.i0, y.i1, c, m];
             v1 = Data[x.i1, y.i1, c, m];
             v2 = Data[x.i2, y.i1, c, m];
             v3 = Data[x.i3, y.i1, c, m];
 
-            float v01 = Bicubic(fx, v0, v1, v2, v3);
+            double v01 = Bicubic(fx, v0, v1, v2, v3);
 
             v0 = Data[x.i0, y.i2, c, m];
             v1 = Data[x.i1, y.i2, c, m];
             v2 = Data[x.i2, y.i2, c, m];
             v3 = Data[x.i3, y.i2, c, m];
 
-            float v02 = Bicubic(fx, v0, v1, v2, v3);
+            double v02 = Bicubic(fx, v0, v1, v2, v3);
 
             v0 = Data[x.i0, y.i3, c, m];
             v1 = Data[x.i1, y.i3, c, m];
             v2 = Data[x.i2, y.i3, c, m];
             v3 = Data[x.i3, y.i3, c, m];
 
-            float v03 = Bicubic(fx, v0, v1, v2, v3);
+            double v03 = Bicubic(fx, v0, v1, v2, v3);
 
-            return Bicubic(fy, v00, v01, v02, v03);
+            return (float)(Bicubic(fy, v00, v01, v02, v03));
 
         }
 

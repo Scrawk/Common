@@ -31,28 +31,40 @@ namespace Common.Core.Colors
             this.a = a;
         }
 
-        public ColorRGBA(float r, float g, float b)
+        public ColorRGBA(float r, float g, float b) : this(r,g,b,1)
         {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = 1.0f;
+
         }
 
-        public ColorRGBA(float v)
+        public ColorRGBA(float v) : this(v,v,v,v)
         {
-            this.r = v;
-            this.g = v;
-            this.b = v;
-            this.a = v;
+
         }
 
-        public ColorRGBA(float v, float a)
+        public ColorRGBA(float v, float a) : this(v,v,v, 1)
         {
-            this.r = v;
-            this.g = v;
-            this.b = v;
-            this.a = a;
+
+        }
+
+        public ColorRGBA(double r, double g, double b, double a) 
+            : this((float)r, (float)g, (float)b, (float)a)
+        {
+
+        }
+
+        public ColorRGBA(double r, double g, double b) : this(r, g, b, 1)
+        {
+
+        }
+
+        public ColorRGBA(double v) : this(v, v, v, v)
+        {
+
+        }
+
+        public ColorRGBA(double v, double a) : this(v, v, v, 1)
+        {
+
         }
 
         public float this[int i]
