@@ -37,7 +37,7 @@ namespace Common.Meshing.Test.FaceBased
             Assert.AreEqual(mesh.IndexOf(f.Vertices[2]), v2);
         }
 
-        public static void CheckAllTrianglesCCW<VERTEX, EDGE, FACE>(FBMesh<VERTEX, FACE> mesh)
+        public static void CheckAllTrianglesCCW<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
             where VERTEX : FBVertex2f, new()
             where FACE : FBFace, new()
         {
@@ -45,7 +45,7 @@ namespace Common.Meshing.Test.FaceBased
             {
                 Assert.AreEqual(3, f.NumVertices);
 
-                var a =  f.GetVertex< FBVertex2f>(0).Position;
+                var a =  f.GetVertex<FBVertex2f>(0).Position;
                 var b = f.GetVertex<FBVertex2f>(1).Position;
                 var c = f.GetVertex<FBVertex2f>(2).Position;
 

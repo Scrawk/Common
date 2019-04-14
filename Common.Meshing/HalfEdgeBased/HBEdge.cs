@@ -223,6 +223,16 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Add all edges in face to list.
+        /// </summary>
+        public void GetEdges<EDGE>(List<EDGE> edges, bool forwards = true)
+            where EDGE : HBEdge
+        {
+            foreach (var e in EnumerateEdges(forwards))
+                edges.Add(e as EDGE);
+        }
+
+        /// <summary>
         /// Add all vertices in face to list.
         /// </summary>
         public void GetVertices<VERTEX>(List<VERTEX> vertices, bool forwards = true)

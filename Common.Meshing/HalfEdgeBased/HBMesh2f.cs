@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
 using Common.Meshing.IndexBased;
+using Common.Meshing.FaceBased;
 
 namespace Common.Meshing.HalfEdgeBased
 {
@@ -36,26 +37,72 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Convert mesh to indexable mesh.
+        /// Convert mesh to indexable edge mesh.
         /// </summary>
-        public Mesh2f ToMesh2f(int faceVertices = 3)
+        public Mesh2f ToEdgeMesh2f()
         {
             var positions = new List<Vector2f>(Vertices.Count);
 
-            if(faceVertices == 2)
+            var indices = new List<int>(Edges.Count);
+            GetEdgeIndices(indices);
+            GetPositions(positions);
+            return new Mesh2f(positions, indices);
+        }
+
+        /// <summary>
+        /// Convert mesh to indexable triangle mesh.
+        /// </summary>
+        public Mesh2f ToTriangleMesh2f()
+        {
+            var positions = new List<Vector2f>(Vertices.Count);
+
+            var indices = new List<int>(Faces.Count * 3);
+            GetFaceIndices(indices, 3);
+            GetPositions(positions);
+            return new Mesh2f(positions, indices);
+        }
+
+        /// <summary>
+        /// Convert to a triangle face based mesh.
+        /// </summary>
+        public FBMesh2f ToFBTriangleMesh2f()
+        {
+            TagAll();
+
+            var constructor = new FBMeshConstructor2f();
+            constructor.PushTriangularMesh(Vertices.Count, Faces.Count);
+
+            foreach (var vertex in Vertices)
+                constructor.AddVertex(vertex.Position);
+
+            var vertices = new List<HBVertex2f>(3);
+            var neighbours = new List<HBFace>(3);
+
+            foreach (var face in Faces)
             {
-                var indices = new List<int>(Edges.Count);
-                GetEdgeIndices(indices);
-                GetPositions(positions);
-                return new Mesh2f(positions, indices);
+                vertices.Clear();
+                face.GetVertices(vertices);
+                if (vertices.Count != 3)
+                    throw new InvalidOperationException("Face does not contain 3 vertices.");
+
+                constructor.AddFace(vertices[0].Tag, vertices[1].Tag, vertices[2].Tag);
             }
-            else
+
+            foreach (var face in Faces)
             {
-                var indices = new List<int>(Faces.Count * faceVertices);
-                GetFaceIndices(indices, faceVertices);
-                GetPositions(positions);
-                return new Mesh2f(positions, indices);
+                neighbours.Clear();
+                face.GetNeighbours(neighbours, true, true);
+
+                if (neighbours.Count != 3)
+                    throw new InvalidOperationException("Face does not have 3 edges.");
+
+                int i0 = neighbours[0] != null ? neighbours[0].Tag : -1;
+                int i1 = neighbours[1] != null ? neighbours[1].Tag : -1;
+                int i2 = neighbours[2] != null ? neighbours[2].Tag : -1;
+                constructor.AddFaceConnection(face.Tag, i0, i1, i2);
             }
+
+            return constructor.PopMesh();
         }
     }
 

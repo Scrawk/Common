@@ -69,14 +69,17 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Add all neighbours of face to list.
         /// </summary>
-        public void GetNeighbours<FACE>(List<FACE> faces, bool forwards = true)
+        public void GetNeighbours<FACE>(List<FACE> faces, bool forwards = true, bool incudeNull = false)
             where FACE : HBFace
         {
             foreach (var e in Edge.EnumerateEdges(forwards))
             {
-                if (e.Opposite == null) continue;
-                if (e.Opposite.Face == null) continue;
-                faces.Add(e.Opposite.Face as FACE);
+                if (e.Opposite == null || e.Opposite.Face == null) 
+                {
+                    if(incudeNull) faces.Add(null);
+                }
+                else
+                    faces.Add(e.Opposite.Face as FACE);
             }
         }
 
