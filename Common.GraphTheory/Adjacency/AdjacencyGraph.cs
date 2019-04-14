@@ -146,40 +146,5 @@ namespace Common.GraphTheory.Adjacency
             }
         }
 
-        public void DepthFirstSearch(AdjacencySearch search, int root)
-        {
-            Searches.DepthFirstSearch.Search(this, search, root);
-        }
-
-        public void BreadthFirstSearch(AdjacencySearch search, int root)
-        {
-            Searches.BreadthFirstSearch.Search(this, search, root);
-        }
-
-        public List<VERTEX> KhansTopologicalSort()
-        {
-            return Searches.KhansTopologicalSort.Sort(this);
-        }
-
-        public void PrimsMinimumSpanningTree(AdjacencySearch search, int root)
-        {
-            Searches.PrimsMinimumSpanningTree.Search(this, search, root);
-        }
-
-        public void DijkstrasShortestPathTree(AdjacencySearch search, int root)
-        {
-            Searches.DijkstrasShortestPathTree.Search(this, search, root);
-        }
-
-        public Dictionary<int, List<EDGE>> KruskalsMinimumSpanningForest()
-        {
-            return Searches.KruskalsMinimumSpanningForest.Search(this);
-        }
-
-        public AdjacencyFlowGraph<VERTEX> FoldFulkersonMaxFlow(int source, int sink)
-        {
-            return Searches.FordFulkersonAdjacency.MaxFlow(this, source, sink);
-        }
-
     }
 }

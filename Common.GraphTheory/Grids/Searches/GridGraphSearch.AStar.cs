@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 using Common.Core.Directions;
 using Common.Core.LinearAlgebra;
-using Common.GraphTheory.Adjacency;
-using Common.GraphTheory.Grids;
 
-namespace Common.GraphTheory.Searches
+namespace Common.GraphTheory.Grids
 {
-    internal static class AStarSearch
+    public static partial class GridGraphSearch
     {
-
         private struct Node
         {
             public int x, y, g, h, f;
@@ -24,7 +21,7 @@ namespace Common.GraphTheory.Searches
             }
         }
 
-        internal static void Search(GridGraph graph, GridSearch search, Vector2i start, Vector2i target)
+        public static void AStar(GridGraph graph, GridSearch search, Vector2i start, Vector2i target)
         {
             search.Clear();
             int width = graph.Width;

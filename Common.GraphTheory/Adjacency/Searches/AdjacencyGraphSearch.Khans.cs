@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-using Common.GraphTheory.Adjacency;
-
-namespace Common.GraphTheory.Searches
+namespace Common.GraphTheory.Adjacency
 {
-    internal static class KhansTopologicalSort
+    public static partial class AdjacencyGraphSearch
     {
-        internal static List<VERTEX> Sort<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph)
+        public static List<VERTEX> KhansTopologicalSort<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph)
             where EDGE : class, IAdjacencyEdge, new()
             where VERTEX : class, IAdjacencyVertex, new()
         {
@@ -18,13 +17,13 @@ namespace Common.GraphTheory.Searches
             int edgeCount = graph.Edges.Count;
             List<EDGE>[] edges = new List<EDGE>[edgeCount];
 
-            for(int i = 0; i < edgeCount; i++)
+            for (int i = 0; i < edgeCount; i++)
             {
                 if (graph.Edges[i] == null) continue;
                 edges[i] = new List<EDGE>(graph.Edges[i]);
             }
 
-            for(int i = 0; i < graph.Vertices.Count; i++)
+            for (int i = 0; i < graph.Vertices.Count; i++)
             {
                 int idegree = GetInverseDegree(edges, i);
 
@@ -42,7 +41,7 @@ namespace Common.GraphTheory.Searches
 
                 if (edges[i] == null || edges[i].Count == 0) continue;
 
-                for(int j = 0; j < edges[i].Count; j++)
+                for (int j = 0; j < edges[i].Count; j++)
                 {
                     int to = edges[i][j].To;
 
@@ -64,7 +63,7 @@ namespace Common.GraphTheory.Searches
 
         }
 
-        private  static int GetInverseDegree<EDGE>(List<EDGE>[] Edges, int i)
+        private static int GetInverseDegree<EDGE>(List<EDGE>[] Edges, int i)
             where EDGE : class, IAdjacencyEdge, new()
         {
             int degree = 0;
@@ -95,6 +94,5 @@ namespace Common.GraphTheory.Searches
 
             return count;
         }
-
     }
 }

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-using Common.GraphTheory.Adjacency;
-
-namespace Common.GraphTheory.Searches
+namespace Common.GraphTheory.Adjacency
 {
-
-    internal static class FordFulkersonAdjacency
+    public static partial class AdjacencyGraphSearch
     {
-
-        internal static AdjacencyFlowGraph<VERTEX> MaxFlow<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, int source, int sink)
+        public static AdjacencyFlowGraph<VERTEX> FordFulkersonMaxFlow<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph, int source, int sink)
             where EDGE : class, IAdjacencyEdge, new()
             where VERTEX : class, IAdjacencyVertex, new()
         {
@@ -53,7 +50,7 @@ namespace Common.GraphTheory.Searches
             }
 
             var flowGraph = new AdjacencyFlowGraph<VERTEX>(graph.Vertices, source, sink, maxFlow);
-     
+
             for (int i = 0; i < count; i++)
             {
                 if (edges[i] == null || edges[i].Count == 0) continue;
@@ -76,7 +73,7 @@ namespace Common.GraphTheory.Searches
             var edges = flow[from];
             int count = edges.Count;
 
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
                 if (edges[i].To == to) return edges[i];
 
             return null;
@@ -96,14 +93,14 @@ namespace Common.GraphTheory.Searches
             while (queue.Count != 0)
             {
                 int u = queue.Dequeue();
- 
+
                 var edges = flow[u];
                 if (edges == null) continue;
 
                 for (int i = 0; i < edges.Count; i++)
                 {
                     int to = edges[i].To;
-      
+
                     if (isVisited[to] || edges[i].Residual <= 0) continue;
 
                     queue.Enqueue(to);
@@ -143,7 +140,7 @@ namespace Common.GraphTheory.Searches
                     flow[i].Add(new AdjacencyFlowEdge(from, to, capacity));
                 }
             }
-            
+
             for (int i = 0; i < count; i++)
             {
                 var edges = flow[i];
@@ -156,7 +153,7 @@ namespace Common.GraphTheory.Searches
 
                     var redge = FindEdge(flow, to, from);
 
-                    if(flow[to] == null)
+                    if (flow[to] == null)
                         flow[to] = new List<AdjacencyFlowEdge>();
 
                     if (redge == null)
@@ -166,6 +163,5 @@ namespace Common.GraphTheory.Searches
 
             return flow;
         }
-
     }
 }

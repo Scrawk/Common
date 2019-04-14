@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.LinearAlgebra;
 using Common.Core.Directions;
+using Common.Core.LinearAlgebra;
 
-using Common.GraphTheory.Grids;
-
-namespace Common.GraphTheory.Searches
+namespace Common.GraphTheory.Grids
 {
-    internal static class FordFulkersonGrid
+    public static partial class GridGraphSearch
     {
-
-        internal static float MaxFlow(GridFlowGraph graph)
+        public static float FordFulkersonMaxFlow(GridFlowGraph graph)
         {
-
             int width = graph.Width;
             int height = graph.Height;
 
@@ -27,7 +23,7 @@ namespace Common.GraphTheory.Searches
                 float flow = float.PositiveInfinity;
 
                 v = sink;
-                while(true)
+                while (true)
                 {
                     Vector3i u = parent[v.x, v.y];
                     if (u.x == v.x && u.y == v.y)
@@ -51,7 +47,7 @@ namespace Common.GraphTheory.Searches
                 while (true)
                 {
                     Vector3i u = parent[v.x, v.y];
-    
+
                     graph.Flow[u.x, u.y, u.z] += flow;
                     graph.Flow[v.x, v.y, D8.OPPOSITES[u.z]] -= flow;
 
@@ -64,12 +60,10 @@ namespace Common.GraphTheory.Searches
             }
 
             return maxFlow;
-
         }
 
         private static bool BreadthFirstSearch(GridFlowGraph graph, Vector3i[,] parent, out Vector3i sink)
         {
-
             int width = graph.Width;
             int height = graph.Height;
 
@@ -118,6 +112,5 @@ namespace Common.GraphTheory.Searches
             sink = new Vector3i(-1, -1, -1);
             return false;
         }
-
     }
 }

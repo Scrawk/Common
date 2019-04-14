@@ -310,35 +310,5 @@ namespace Common.GraphTheory.Grids
 
         }
 
-        public void DepthFirstSearch(GridSearch search, int x, int y)
-        {
-            Searches.DepthFirstSearch.Search(this, search, x, y);
-        }
-
-        public void BreadthFirstSearch(GridSearch search, int x, int y)
-        {
-            Searches.BreadthFirstSearch.Search(this, search, x, y);
-        }
-
-        public void AStarSearch(GridSearch search, Vector2i start, Vector2i target)
-        {
-            Searches.AStarSearch.Search(this, search, start, target);
-        }
-
-        public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, float[,] weights)
-        {
-            Searches.PrimsMinimumSpanningTree.Search(this, search, x, y, weights);
-        }
-
-        public void DijkstrasShortestPathTree(GridSearch search, int x, int y)
-        {
-            Searches.DijkstrasShortestPathTree.Search(this, search, x, y);
-        }
-
-        public Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(float[,] weights)
-        {
-            return Searches.KruskalsMinimumSpanningForest.Search(this, weights);
-        }
-
     }
 }

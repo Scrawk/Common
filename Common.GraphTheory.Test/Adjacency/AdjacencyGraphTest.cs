@@ -15,7 +15,7 @@ namespace Common.GraphTheory.Test.Adjacency
 
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            graph.DepthFirstSearch(search, 5);
+            AdjacencyGraphSearch.DepthFirst(graph, search, 5);
 
             int[] order = new int[] { 5, 7, 8, 11, 10, 2, 1, 9, 6, 4, 3, 0 };
 
@@ -33,7 +33,7 @@ namespace Common.GraphTheory.Test.Adjacency
 
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            graph.BreadthFirstSearch(search, 5);
+            AdjacencyGraphSearch.BreadthFirst(graph, search, 5);
 
             int[] order = new int[] { 5, 0, 3, 4, 6, 7, 1, 2, 8, 10, 9, 11 };
 
@@ -52,7 +52,7 @@ namespace Common.GraphTheory.Test.Adjacency
 
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            graph.DijkstrasShortestPathTree(search, 5);
+            AdjacencyGraphSearch.DijkstrasShortestPathTree(graph, search, 5);
 
             int[] order = new int[] { 5, 4, 7, 6, 3, 10, 11, 8, 2, 9, 0, 1 };
 
@@ -71,7 +71,7 @@ namespace Common.GraphTheory.Test.Adjacency
         {
             var graph = CreateCitiesGraph();
             var search = new AdjacencySearch(graph.VertexCount);
-            graph.PrimsMinimumSpanningTree(search, 0);
+            AdjacencyGraphSearch.PrimsMinimumSpanningTree(graph, search, 0);
 
             int[] order = new int[] { 0, 1, 2, 3, 4, 10, 11, 5, 8, 9, 7, 6 };
 
@@ -88,9 +88,10 @@ namespace Common.GraphTheory.Test.Adjacency
         public void KruskalsMinimumSpanningForest()
         {
             var graph = CreateCitiesGraph();
-            var forest = graph.KruskalsMinimumSpanningForest();
+            
+            var forest = AdjacencyGraphSearch.KruskalsMinimumSpanningForest(graph);
 
-            foreach(var kvp in forest)
+            foreach (var kvp in forest)
             {
                 float sum = 0;
                 foreach (var edge in kvp.Value)
@@ -128,7 +129,7 @@ namespace Common.GraphTheory.Test.Adjacency
             graph.AddEdge(v[3], v[6]);
             graph.AddEdge(v[3], v[7]);
 
-            List<AdjacencyVertex<int>> sorted = graph.KhansTopologicalSort();
+            List<AdjacencyVertex<int>> sorted = AdjacencyGraphSearch.KhansTopologicalSort(graph);
 
             Dictionary<int, IList<int>> dependacies = new Dictionary<int, IList<int>>();
 
@@ -188,7 +189,7 @@ namespace Common.GraphTheory.Test.Adjacency
             int source = 0;
             int sink = 5;
 
-            var flow = graph.FoldFulkersonMaxFlow(source, sink);
+            var flow = AdjacencyGraphSearch.FordFulkersonMaxFlow(graph, source, sink);
 
             Assert.AreEqual(23, flow.MaxFlow);
 

@@ -53,7 +53,7 @@ namespace Common.GraphTheory.Grids
 
         public void FordFulkersonMaxFlow()
         {
-            MaxFlow = Searches.FordFulkersonGrid.MaxFlow(this);
+            MaxFlow = GridGraphSearch.FordFulkersonMaxFlow(this);
             CalculateMinCut();
         }
 
