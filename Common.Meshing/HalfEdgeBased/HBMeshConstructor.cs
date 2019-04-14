@@ -86,7 +86,7 @@ namespace Common.Meshing.HalfEdgeBased
         public MESH PopMesh()
         {
             if (AddBoundary)
-                Mesh.AddBoundaryEdges();
+                HBOperations.AddBoundaryEdges(Mesh);
 
             var tmp = Mesh;
             Mesh = null;

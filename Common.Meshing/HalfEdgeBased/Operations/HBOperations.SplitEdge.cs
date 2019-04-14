@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static class HBEdgeOperations
+    public static partial class HBOperations
     {
 
         /// <summary>

@@ -56,14 +56,16 @@
     <Compile Include="FaceBased\FBVertexTest.cs" />
     <Compile Include="FaceBased\FBFaceTest.cs" />
     <Compile Include="FaceBased\FBMesh2fTest.cs" />
+    <Compile Include="FaceBased\FBOperations2fTest.cs" />
     <Compile Include="HalfEdgeBased\HBMeshHelper.cs" />
     <Compile Include="HalfEdgeBased\HBEdgeTest.cs" />
     <Compile Include="HalfEdgeBased\HBFaceTest.cs" />
     <Compile Include="HalfEdgeBased\HBMeshTest.cs" />
     <Compile Include="HalfEdgeBased\HBVertex2fTest.cs" />
     <Compile Include="HalfEdgeBased\HBVertexTest.cs" />
-    <Compile Include="HalfEdgeBased\HBEdgeOperationsTest.cs" />
+    <Compile Include="HalfEdgeBased\HBOperationsTest.cs" />
     <Compile Include="HalfEdgeBased\HBMesh2fTest.cs" />
+    <Compile Include="HalfEdgeBased\HBOperations2fTest.cs" />
     <Compile Include="IndexBased\Mesh2fTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
