@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
@@ -656,11 +656,31 @@ namespace Common.Core.LinearAlgebra
             return v;
         }
 
+        /// <summary>
+        /// Round vector.
+        /// </summary>
+        /// <param name="digits">number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round(int digits = 0)
         {
             x = (float)Math.Round(x, digits);
             y = (float)Math.Round(y, digits);
+        }
+
+        /// <summary>
+        /// Returns if list of verts make a CCW polygon.
+        /// Presumes polygon is simple.
+        /// </summary>
+        public static bool IsCCW(IList<Vector2f> vertices)
+        {
+            float sum = 0.0f;
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector2f v1 = vertices[i];
+                Vector2f v2 = vertices[(i + 1) % vertices.Count];
+                sum += (v2.x - v1.x) * (v2.y + v1.y);
+            }
+            return sum < 0.0f;
         }
 
     }
