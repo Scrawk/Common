@@ -7,13 +7,13 @@ namespace Common.Meshing.FaceBased
 {
 
     /// <summary>
-    /// FBMesh with Vector3f as vertices.
+    /// FBMesh with Vector3d as vertices.
     /// </summary>
-    public class FBMesh3f : FBMesh<FBVertex3f, FBFace>
+    public class FBMesh3d : FBMesh<FBVertex3d, FBFace>
     {
-        public FBMesh3f() { }
+        public FBMesh3d() { }
 
-        public FBMesh3f(int numVertices, int numFaces)
+        public FBMesh3d(int numVertices, int numFaces)
             : base(numVertices, numFaces)
         {
 
@@ -21,14 +21,14 @@ namespace Common.Meshing.FaceBased
 
         public override string ToString()
         {
-            return string.Format("[FBMesh3f: Vertices={0}, Faces={1}]",
+            return string.Format("[FBMesh3d: Vertices={0}, Faces={1}]",
                 Vertices.Count, Faces.Count);
         }
 
         /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>
-        public void GetPositions(List<Vector3f> positions)
+        public void GetPositions(List<Vector3d> positions)
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].Position);

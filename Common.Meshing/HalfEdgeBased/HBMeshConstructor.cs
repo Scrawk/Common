@@ -25,6 +25,22 @@ namespace Common.Meshing.HalfEdgeBased
     }
 
     /// <summary>
+    /// Constructor for HBMesh2f
+    /// </summary>
+    public class HBMeshConstructor2d : HBMeshConstructor<HBMesh2d, HBVertex2d, HBEdge, HBFace>
+    {
+
+    }
+
+    /// <summary>
+    /// Constructor for HBMesh3f
+    /// </summary>
+    public class HBMeshConstructor3d : HBMeshConstructor<HBMesh3d, HBVertex3d, HBEdge, HBFace>
+    {
+
+    }
+
+    /// <summary>
     /// Half edge based mesh constructor.
     /// Supports triangle or polygon meshes.
     /// </summary>
@@ -114,6 +130,30 @@ namespace Common.Meshing.HalfEdgeBased
             CheckMeshIsPushed();
             VERTEX v = new VERTEX();
             v.Initialize(pos);
+            Mesh.Vertices.Add(v);
+        }
+
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
+        public void AddVertex(Vector2d pos)
+        {
+            CheckMeshIsPushed();
+            VERTEX v = new VERTEX();
+            v.Initialize((Vector2f)pos);
+            Mesh.Vertices.Add(v);
+        }
+
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
+        public void AddVertex(Vector3d pos)
+        {
+            CheckMeshIsPushed();
+            VERTEX v = new VERTEX();
+            v.Initialize((Vector3f)pos);
             Mesh.Vertices.Add(v);
         }
 

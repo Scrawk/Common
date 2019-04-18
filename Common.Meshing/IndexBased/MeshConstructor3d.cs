@@ -10,13 +10,13 @@ namespace Common.Meshing.IndexBased
     /// Indexed based mesh constructor.
     /// Supports triangle or edge meshes.
     /// </summary>
-    public class MeshConstructor3f : 
-        IEdgeMeshConstructor<Mesh3f>, 
-        ITriangularMeshConstructor<Mesh3f>,
-        ITetrahedralMeshConstructor<Mesh3f>
+    public class MeshConstructor3d :
+        IEdgeMeshConstructor<Mesh3d>,
+        ITriangularMeshConstructor<Mesh3d>,
+        ITetrahedralMeshConstructor<Mesh3d>
     {
 
-        private Mesh3f m_mesh;
+        private Mesh3d m_mesh;
 
         private int m_vertexIndex;
 
@@ -45,7 +45,7 @@ namespace Common.Meshing.IndexBased
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
             m_faceVerts = 2;
-            m_mesh = new Mesh3f(numVertices, numEdges * m_faceVerts);
+            m_mesh = new Mesh3d(numVertices, numEdges * m_faceVerts);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Common.Meshing.IndexBased
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
             m_faceVerts = 3;
-            m_mesh = new Mesh3f(numVertices, numFaces * m_faceVerts);
+            m_mesh = new Mesh3d(numVertices, numFaces * m_faceVerts);
         }
 
         /// <summary>
@@ -69,19 +69,19 @@ namespace Common.Meshing.IndexBased
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
             m_faceVerts = 4;
-            m_mesh = new Mesh3f(numVertices, numFaces * m_faceVerts);
+            m_mesh = new Mesh3d(numVertices, numFaces * m_faceVerts);
         }
 
         /// <summary>
         /// Return the created mesh and reset constructor.
         /// </summary>
-        public Mesh3f PopMesh()
+        public Mesh3d PopMesh()
         {
 
             if (SplitFaces && m_faceVerts == 3)
             {
                 //Presumes its a triangle mesh.
-                var mesh = new Mesh3f(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
+                var mesh = new Mesh3d(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
 
                 var indices = m_mesh.Indices;
                 var positions = m_mesh.Positions;
@@ -100,7 +100,7 @@ namespace Common.Meshing.IndexBased
                 m_mesh = mesh;
             }
 
-            Mesh3f tmp = m_mesh;
+            Mesh3d tmp = m_mesh;
             Reset();
 
             return tmp;
@@ -147,7 +147,7 @@ namespace Common.Meshing.IndexBased
         public void AddVertex(Vector2d pos)
         {
             CheckMeshIsPushed();
-            m_mesh.Positions[m_vertexIndex] = (Vector3f)pos.xy0;
+            m_mesh.Positions[m_vertexIndex] = pos.xy0;
             m_vertexIndex++;
         }
 
@@ -158,7 +158,7 @@ namespace Common.Meshing.IndexBased
         public void AddVertex(Vector3d pos)
         {
             CheckMeshIsPushed();
-            m_mesh.Positions[m_vertexIndex] = (Vector3f)pos;
+            m_mesh.Positions[m_vertexIndex] = pos;
             m_vertexIndex++;
         }
 

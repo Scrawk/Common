@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
+using Common.Meshing.IndexBased;
+using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.FaceBased
 {
 
     /// <summary>
-    /// FBMesh with Vector3f as vertices.
+    /// FBMesh with Vector2d as vertices.
     /// </summary>
-    public class FBMesh3f : FBMesh<FBVertex3f, FBFace>
+    public class FBMesh2d : FBMesh<FBVertex2d, FBFace>
     {
-        public FBMesh3f() { }
+        public FBMesh2d() { }
 
-        public FBMesh3f(int numVertices, int numFaces)
+        public FBMesh2d(int numVertices, int numFaces)
             : base(numVertices, numFaces)
         {
 
@@ -21,14 +23,14 @@ namespace Common.Meshing.FaceBased
 
         public override string ToString()
         {
-            return string.Format("[FBMesh3f: Vertices={0}, Faces={1}]",
+            return string.Format("[FBMesh2d: Vertices={0}, Faces={1}]",
                 Vertices.Count, Faces.Count);
         }
 
         /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>
-        public void GetPositions(List<Vector3f> positions)
+        public void GetPositions(List<Vector2d> positions)
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].Position);

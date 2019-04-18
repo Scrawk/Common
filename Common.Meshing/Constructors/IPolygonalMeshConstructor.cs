@@ -18,6 +18,10 @@ namespace Common.Meshing.Constructors
 
         void AddVertex(Vector3f pos);
 
+        void AddVertex(Vector2d pos);
+
+        void AddVertex(Vector3d pos);
+
         void AddFace(IList<int> vertList);
 
         void AddFace(int vertStart, int numVertices);

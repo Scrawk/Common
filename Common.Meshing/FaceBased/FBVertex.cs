@@ -35,7 +35,12 @@ namespace Common.Meshing.FaceBased
 
         }
 
-        public virtual void Initialize(Vector4f pos)
+        public virtual void Initialize(Vector2d pos)
+        {
+
+        }
+
+        public virtual void Initialize(Vector3d pos)
         {
 
         }

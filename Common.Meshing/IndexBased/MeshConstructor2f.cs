@@ -126,6 +126,28 @@ namespace Common.Meshing.IndexBased
         }
 
         /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
+        public void AddVertex(Vector2d pos)
+        {
+            CheckMeshIsPushed();
+            m_mesh.Positions[m_vertexIndex] = (Vector2f)pos;
+            m_vertexIndex++;
+        }
+
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
+        public void AddVertex(Vector3d pos)
+        {
+            CheckMeshIsPushed();
+            m_mesh.Positions[m_vertexIndex] = (Vector2f)pos.xy;
+            m_vertexIndex++;
+        }
+
+        /// <summary>
         /// Add a CCW triangle face.
         /// </summary>
         /// <param name="i0">index of vertex 0</param>

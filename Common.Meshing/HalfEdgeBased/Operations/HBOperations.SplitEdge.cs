@@ -8,11 +8,12 @@ namespace Common.Meshing.HalfEdgeBased
 
         /// <summary>
         /// Splits a edge. Creates a new vertex at split 
-        /// position os edge and connects newly created edges.
+        /// position on edge and connects newly created edges.
         /// </summary>
         /// <param name="mesh">parent mesh</param>
         /// <param name="edge">the edge to split</param>
-        /// <param name="t">the point to split at</param>
+        /// <param name="t">the point to split at</param> 
+        /// <returns>The new vertex added at the split position</returns>
         public static VERTEX SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, float t = 0.5f)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()

@@ -24,6 +24,22 @@ namespace Common.Meshing.FaceBased
     }
 
     /// <summary>
+    /// Constructor for HBMesh2f
+    /// </summary>
+    public class FBMeshConstructor2d : FBMeshConstructor<FBMesh2d, FBVertex2d, FBFace>
+    {
+
+    }
+
+    /// <summary>
+    /// Constructor for HBMesh3f
+    /// </summary>
+    public class FBMeshConstructor3d : FBMeshConstructor<FBMesh3d, FBVertex3d, FBFace>
+    {
+
+    }
+
+    /// <summary>
     /// Face based mesh constructor.
     /// Supports triangle or polygon meshes.
     /// </summary>
@@ -120,6 +136,30 @@ namespace Common.Meshing.FaceBased
             CheckMeshIsPushed();
             VERTEX v = new VERTEX();
             v.Initialize(pos);
+            Mesh.Vertices.Add(v);
+        }
+
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
+        public void AddVertex(Vector2d pos)
+        {
+            CheckMeshIsPushed();
+            VERTEX v = new VERTEX();
+            v.Initialize((Vector2f)pos);
+            Mesh.Vertices.Add(v);
+        }
+
+        /// <summary>
+        /// Add a vertex to the mesh with this position.
+        /// </summary>
+        /// <param name="pos">The vertex position</param>
+        public void AddVertex(Vector3d pos)
+        {
+            CheckMeshIsPushed();
+            VERTEX v = new VERTEX();
+            v.Initialize((Vector3f)pos);
             Mesh.Vertices.Add(v);
         }
 
