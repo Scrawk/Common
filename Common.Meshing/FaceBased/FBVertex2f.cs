@@ -19,9 +19,29 @@ namespace Common.Meshing.FaceBased
             Position = position;
         }
 
+        public override void Initialize(FBVertex vert)
+        {
+            Position = (vert as FBVertex2f).Position;
+        }
+
         public override void Initialize(Vector2f pos)
         {
             Position = pos;
+        }
+
+        public override void Initialize(Vector3f pos)
+        {
+            Position = pos.xy;
+        }
+
+        public override void Initialize(Vector2d pos)
+        {
+            Position = (Vector2f)pos;
+        }
+
+        public override void Initialize(Vector3d pos)
+        {
+            Position = (Vector2f)pos.xy;
         }
 
         /// <summary>

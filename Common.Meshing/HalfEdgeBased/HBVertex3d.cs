@@ -19,16 +19,29 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
-        public override void Initialize(HBVertex vertex)
-        {
-            var v3 = vertex as HBVertex3d;
-            if (v3 == null) return;
-            Position = v3.Position;
-        }
-
         public HBVertex3d(Vector3d pos)
         {
             Position = pos;
+        }
+
+        public override void Initialize(HBVertex vertex)
+        {
+            Position = (vertex as HBVertex3d).Position;
+        }
+
+        public override void Initialize(Vector2f pos)
+        {
+            Position = pos.xy0;
+        }
+
+        public override void Initialize(Vector3f pos)
+        {
+            Position = pos;
+        }
+
+        public override void Initialize(Vector2d pos)
+        {
+            Position = pos.xy0;
         }
 
         public override void Initialize(Vector3d pos)

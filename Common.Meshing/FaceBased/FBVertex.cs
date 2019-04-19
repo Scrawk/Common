@@ -25,6 +25,11 @@ namespace Common.Meshing.FaceBased
             }
         }
 
+        public virtual void Initialize(FBVertex vert)
+        {
+
+        }
+
         public virtual void Initialize(Vector2f pos)
         {
 
