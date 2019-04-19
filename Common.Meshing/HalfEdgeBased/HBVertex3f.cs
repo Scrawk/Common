@@ -53,9 +53,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="to">other vertex</param>
         /// <returns>interpolation< between the two/returns>
-        public override HBVertex Interpolate(HBVertex to, float t)
+        public override HBVertex Interpolate(HBVertex to, double t)
         {
-            var pos = Vector3f.Lerp(Position, (to as HBVertex3f).Position, t);
+            var pos = Vector3f.Lerp(Position, (to as HBVertex3f).Position, (float)t);
             return new HBVertex3f(pos);
         }
 

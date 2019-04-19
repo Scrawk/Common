@@ -20,7 +20,14 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromTriangle<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2f A, Vector2f B, Vector2f C)
+        public static HBMesh2d FromTriangle(Vector2d A, Vector2d B, Vector2d C)
+        {
+            var constructor = new HBMeshConstructor2d();
+            FromTriangle(constructor, A, B, C);
+            return constructor.PopMesh();
+        }
+
+        public static void FromTriangle<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2d A, Vector2d B, Vector2d C)
         {
             constructor.PushPolygonalMesh(3, 1);
 
@@ -37,14 +44,21 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromBox<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
+        public static HBMesh2d FromBox(Vector2d min, Vector2d max)
+        {
+            var constructor = new HBMeshConstructor2d();
+            FromBox(constructor, min, max);
+            return constructor.PopMesh();
+        }
+
+        public static void FromBox<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
         {
             constructor.PushPolygonalMesh(4, 1);
 
             constructor.AddVertex(min);
-            constructor.AddVertex(new Vector2f(max.x, min.y));
+            constructor.AddVertex(new Vector2d(max.x, min.y));
             constructor.AddVertex(max);
-            constructor.AddVertex(new Vector2f(min.x, max.y));
+            constructor.AddVertex(new Vector2d(min.x, max.y));
 
             constructor.AddFace(0, 4);
         }
@@ -56,21 +70,28 @@ namespace Common.Meshing.Constructors
             return constructor.PopMesh();
         }
 
-        public static void FromCircle<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
+        public static HBMesh2d FromCircle(Vector2d center, double radius, int segments)
+        {
+            var constructor = new HBMeshConstructor2d();
+            FromCircle(constructor, center, radius, segments);
+            return constructor.PopMesh();
+        }
+
+        public static void FromCircle<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
         {
             constructor.PushPolygonalMesh(segments, 1);
 
-            float pi = (float)Math.PI;
-            float fseg = segments;
+            double pi = Math.PI;
+            double fseg = segments;
 
             for (int i = 0; i < segments; i++)
             {
-                float theta = 2.0f * pi * i / fseg;
+                double theta = 2.0f * pi * i / fseg;
 
-                float x = -radius * (float)Math.Cos(theta);
-                float y = -radius * (float)Math.Sin(theta);
+                double x = -radius * Math.Cos(theta);
+                double y = -radius * Math.Sin(theta);
 
-                constructor.AddVertex(center + new Vector2f(x, y));
+                constructor.AddVertex(center + new Vector2d(x, y));
             }
 
             constructor.AddFace(0, segments);

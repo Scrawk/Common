@@ -14,7 +14,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="edge">the edge to split</param>
         /// <param name="t">the point to split at</param> 
         /// <returns>The new vertex added at the split position</returns>
-        public static VERTEX SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, float t = 0.5f)
+        public static VERTEX SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, double t = 0.5)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
