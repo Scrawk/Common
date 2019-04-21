@@ -34,7 +34,7 @@ namespace Common.Core.ProceduralNoise
             Seed = seed;
             Table = new int[Size];
 
-            System.Random rnd = new System.Random(Seed);
+            Random rnd = new Random(Seed);
 
             for(int i = 0; i < Size; i++)
             {

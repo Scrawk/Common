@@ -16,12 +16,6 @@ namespace Common.Core.ProceduralNoise
 
         private const double Ko = 3.0 / 7.0;
 
-        public double Jitter { get; set; }
-
-        public VORONOI_DISTANCE Distance { get; set; }
-
-        public VORONOI_COMBINATION Combination { get; set; }
-
         public WorleyNoise(int seed, double frequency, double jitter, double amplitude = 1.0) 
             : base(seed, frequency, amplitude)
         {
@@ -29,6 +23,20 @@ namespace Common.Core.ProceduralNoise
             Distance = VORONOI_DISTANCE.EUCLIDIAN;
             Combination = VORONOI_COMBINATION.D1_D0;
         }
+
+        public WorleyNoise(int seed, Vector3d frequency, double jitter, double amplitude = 1.0)
+            : base(seed, frequency, amplitude)
+        {
+            Jitter = jitter;
+            Distance = VORONOI_DISTANCE.EUCLIDIAN;
+            Combination = VORONOI_COMBINATION.D1_D0;
+        }
+
+        public double Jitter { get; set; }
+
+        public VORONOI_DISTANCE Distance { get; set; }
+
+        public VORONOI_COMBINATION Combination { get; set; }
 
         /// <summary>
         /// 
@@ -42,7 +50,7 @@ namespace Common.Core.ProceduralNoise
 
         public override double Sample1D(double x)
         {
-            x = (x + Offset.x) * Frequency;
+            x = (x + Offset.x) * Frequency.x;
 
             int Pi0 = (int)Math.Floor(x);
             double Pf0 = Frac(x);
@@ -89,9 +97,8 @@ namespace Common.Core.ProceduralNoise
 
         public override double Sample2D(double x, double y)
         {
-
-            x = (x + Offset.x) * Frequency;
-            y = (y + Offset.y) * Frequency;
+            x = (x + Offset.x) * Frequency.x;
+            y = (y + Offset.y) * Frequency.y;
 
             int Pi0 = (int)Math.Floor(x);
             int Pi1 = (int)Math.Floor(y);
@@ -150,10 +157,9 @@ namespace Common.Core.ProceduralNoise
 
         public override double Sample3D(double x, double y, double z)
         {
-
-            x = (x + Offset.x) * Frequency;
-            y = (y + Offset.y) * Frequency;
-            z = (z + Offset.z) * Frequency;
+            x = (x + Offset.x) * Frequency.x;
+            y = (y + Offset.y) * Frequency.y;
+            z = (z + Offset.z) * Frequency.z;
 
             int Pi0 = (int)Math.Floor(x);
             int Pi1 = (int)Math.Floor(y);
@@ -174,9 +180,9 @@ namespace Common.Core.ProceduralNoise
             pY[2] = Perm[Pi1 + 1];
 
             double d0, d1, d2;
-            double F0 = 1e6;
-            double F1 = 1e6;
-            double F2 = 1e6;
+            double F0 = double.PositiveInfinity;
+            double F1 = double.PositiveInfinity;
+            double F2 = double.PositiveInfinity;
 
             int px, py, pz;
             double oxx, oxy, oxz;

@@ -19,7 +19,7 @@ namespace Common.Core.ProceduralNoise
         /// <summary>
         /// The frequency of the fractal.
         /// </summary>
-        public double Frequency { get; set; }
+        public Vector3d Frequency { get; set; }
 
         /// <summary>
         /// The amplitude of the fractal.
@@ -54,9 +54,22 @@ namespace Common.Core.ProceduralNoise
         /// <summary>
         /// The frequencies for each octave.
         /// </summary>
-        public double[] Frequencies { get; set; }
-		
+        public Vector3d[] Frequencies { get; set; }
+
         public FractalNoise(INoise noise, int octaves, double frequency, double amplitude = 1.0)
+        {
+
+            Octaves = octaves;
+            Frequency = new Vector3d(frequency);
+            Amplitude = amplitude;
+            Offset = Vector3d.Zero;
+            Lacunarity = 2.0;
+            Gain = 0.5;
+
+            UpdateTable(new INoise[] { noise });
+        }
+
+        public FractalNoise(INoise noise, int octaves, Vector3d frequency, double amplitude = 1.0)
         {
 
             Octaves = octaves;
@@ -69,7 +82,7 @@ namespace Common.Core.ProceduralNoise
             UpdateTable(new INoise[] { noise });
         }
 
-        public FractalNoise(INoise[] noises, int octaves, double frequency, double amplitude = 1.0)
+        public FractalNoise(INoise[] noises, int octaves, Vector3d frequency, double amplitude = 1.0)
         {
 
             Octaves = octaves;
@@ -106,13 +119,13 @@ namespace Common.Core.ProceduralNoise
         protected virtual void UpdateTable(INoise[] noises)
 		{
 			Amplitudes = new double[Octaves];
-			Frequencies = new double[Octaves];
+			Frequencies = new Vector3d[Octaves];
             Noises = new INoise[Octaves];
 
             int numNoises = noises.Length;
 			
 			double amp = 0.5;
-			double frq = Frequency;
+            Vector3d frq = Frequency;
 			for(int i = 0; i < Octaves; i++)
 			{
                 Noises[i] = noises[Math.Min(i, numNoises - 1)];
@@ -137,8 +150,8 @@ namespace Common.Core.ProceduralNoise
 
 			x = x + Offset.x;
 
-			double frq = Frequencies[i];
-			return Noises[i].Sample1D(x * frq) * Amplitudes[i] * Amplitude;
+			double fx = Frequencies[i].x;
+			return Noises[i].Sample1D(x * fx) * Amplitudes[i] * Amplitude;
 		}
 		
         /// <summary>
@@ -156,8 +169,9 @@ namespace Common.Core.ProceduralNoise
 			x = x + Offset.x;
 			y = y + Offset.y;
 
-			double frq = Frequencies[i];
-            return Noises[i].Sample2D(x * frq, y * frq) * Amplitudes[i] * Amplitude;
+			double fx = Frequencies[i].x;
+            double fy = Frequencies[i].y;
+            return Noises[i].Sample2D(x * fx, y * fy) * Amplitudes[i] * Amplitude;
 		}
 		
         /// <summary>
@@ -177,8 +191,10 @@ namespace Common.Core.ProceduralNoise
 			y = y + Offset.y;
 			z = z + Offset.z;
 
-			double frq = Frequencies[i];
-            return Noises[i].Sample3D(x * frq, y * frq, z * frq) * Amplitudes[i] * Amplitude;
+            double fx = Frequencies[i].x;
+            double fy = Frequencies[i].y;
+            double fz = Frequencies[i].z;
+            return Noises[i].Sample3D(x * fx, y * fy, z * fz) * Amplitudes[i] * Amplitude;
 		}
 
         /// <summary>
@@ -190,13 +206,13 @@ namespace Common.Core.ProceduralNoise
         {
 			x = x + Offset.x;
 
-	        double sum = 0, frq;
+	        double sum = 0;
 			for(int i = 0; i < Octaves; i++) 
-	        {	
-				frq = Frequencies[i];
+	        {
+                double fx = Frequencies[i].x;
 
                 if (Noises[i] != null)
-                    sum += Noises[i].Sample1D(x * frq) * Amplitudes[i];
+                    sum += Noises[i].Sample1D(x * fx) * Amplitudes[i];
 	        }
 			return sum * Amplitude;
         }
@@ -212,13 +228,14 @@ namespace Common.Core.ProceduralNoise
 			x = x + Offset.x;
 			y = y + Offset.y;
 
-	        double sum = 0, frq;
+	        double sum = 0;
 	        for(int i = 0; i < Octaves; i++) 
 	        {
-				frq = Frequencies[i];
+                double fx = Frequencies[i].x;
+                double fy = Frequencies[i].y;
 
                 if (Noises[i] != null)
-                    sum += Noises[i].Sample2D(x * frq, y * frq) * Amplitudes[i];
+                    sum += Noises[i].Sample2D(x * fx, y * fy) * Amplitudes[i];
 			}
 			return sum * Amplitude;
         }
@@ -236,13 +253,15 @@ namespace Common.Core.ProceduralNoise
 			y = y + Offset.y;
 			z = z + Offset.z;
 
-	        double sum = 0, frq;
+	        double sum = 0;
 			for(int i = 0; i < Octaves; i++) 
 	        {
-				frq = Frequencies[i];
+                double fx = Frequencies[i].x;
+                double fy = Frequencies[i].y;
+                double fz = Frequencies[i].z;
 
                 if (Noises[i] != null)
-                    sum += Noises[i].Sample3D(x * frq, y * frq, z * frq) * Amplitudes[i];
+                    sum += Noises[i].Sample3D(x * fx, y * fy, z * fz) * Amplitudes[i];
 	        }
 			return sum * Amplitude;
         }

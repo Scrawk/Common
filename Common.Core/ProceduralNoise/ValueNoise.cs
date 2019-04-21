@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Common.Core.LinearAlgebra;
 
 namespace Common.Core.ProceduralNoise
 {
@@ -19,6 +20,12 @@ namespace Common.Core.ProceduralNoise
 
         }
 
+        public ValueNoise(int seed, Vector3d frequency, double amplitude = 1.0)
+            : base(seed, frequency, amplitude)
+        {
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,7 +37,7 @@ namespace Common.Core.ProceduralNoise
 
         public override double Sample1D(double x)
         {
-            x = (x + Offset.x) * Frequency;
+            x = (x + Offset.x) * Frequency.x;
 
             int ix0;
             double fx0;
@@ -53,8 +60,8 @@ namespace Common.Core.ProceduralNoise
 
         public override double Sample2D(double x, double y)
         {
-            x = (x + Offset.x) * Frequency;
-            y = (y + Offset.y) * Frequency;
+            x = (x + Offset.x) * Frequency.x;
+            y = (y + Offset.y) * Frequency.y;
 
             int ix0, iy0;
             double fx0, fy0, s, t, nx0, nx1, n0, n1;
@@ -88,9 +95,9 @@ namespace Common.Core.ProceduralNoise
         public override double Sample3D(double x, double y, double z)
         {
 
-            x = (x + Offset.x) * Frequency;
-            y = (y + Offset.y) * Frequency;
-            z = (z + Offset.z) * Frequency;
+            x = (x + Offset.x) * Frequency.x;
+            y = (y + Offset.y) * Frequency.y;
+            z = (z + Offset.z) * Frequency.z;
 
             int ix0, iy0, iz0;
             double fx0, fy0, fz0;

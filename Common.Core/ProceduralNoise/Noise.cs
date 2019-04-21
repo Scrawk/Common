@@ -9,7 +9,7 @@ namespace Common.Core.ProceduralNoise
 	public abstract class Noise : INoise
 	{
 
-        public double Frequency { get; set; }
+        public Vector3d Frequency { get; set; }
 
         public double Amplitude { get; set; }
 
@@ -19,11 +19,19 @@ namespace Common.Core.ProceduralNoise
 
 		public Noise(int seed, double frequency, double amplitude)
 		{
-            Frequency = frequency;
+            Frequency = new Vector3d(frequency);
             Amplitude = amplitude;
             Offset = Vector3d.Zero;
             Perm = new PermutationTable(256, 255, seed);
 		}
+
+        public Noise(int seed, Vector3d frequency, double amplitude)
+        {
+            Frequency = frequency;
+            Amplitude = amplitude;
+            Offset = Vector3d.Zero;
+            Perm = new PermutationTable(256, 255, seed);
+        }
 
         /// <summary>
         /// 

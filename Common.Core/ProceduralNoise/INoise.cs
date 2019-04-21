@@ -9,7 +9,7 @@ namespace Common.Core.ProceduralNoise
 	public interface INoise 
 	{
 
-        double Frequency { get; set; }
+        Vector3d Frequency { get; set; }
 
         double Amplitude { get; set; }
 
