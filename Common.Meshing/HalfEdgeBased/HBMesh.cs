@@ -196,11 +196,24 @@ namespace Common.Meshing.HalfEdgeBased
                 Faces[i].Tag = tag;
         }
 
+        /// <summary>
+        /// Sets all vertex, edge and face tags.
+        /// </summary>
         public void TagAll()
         {
             TagVertices();
             TagEdges();
             TagFaces();
+        }
+
+        /// <summary>
+        /// Sets all vertex, edge and face tags.
+        /// </summary>
+        public void TagAll(int tag)
+        {
+            TagVertices(tag);
+            TagEdges(tag);
+            TagFaces(tag);
         }
 
         /// <summary>

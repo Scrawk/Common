@@ -147,10 +147,22 @@ namespace Common.Meshing.FaceBased
                 Faces[i].Tag = tag;
         }
 
+        /// <summary>
+        /// Sets all vertex and face tags.
+        /// </summary>
         public void TagAll()
         {
             TagVertices();
             TagFaces();
+        }
+
+        /// <summary>
+        /// Sets all vertex and face tags.
+        /// </summary>
+        public void TagAll(int tag)
+        {
+            TagVertices(tag);
+            TagFaces(tag);
         }
 
         /// <summary>
