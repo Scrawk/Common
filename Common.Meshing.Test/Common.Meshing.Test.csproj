@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdjacencyGraphs\AdjacencyGraphTest.cs" />
     <Compile Include="Constructors\CreateGeneralMesh2Test.cs" />
     <Compile Include="Constructors\CreateTriangleMesh2Test.cs" />
     <Compile Include="FaceBased\FBMeshHelper.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="FaceBased\FBFaceTest.cs" />
     <Compile Include="FaceBased\FBMesh2fTest.cs" />
     <Compile Include="FaceBased\FBOperations2fTest.cs" />
+    <Compile Include="GridsGraphs\GridGraphTest.cs" />
     <Compile Include="HalfEdgeBased\HBMeshHelper.cs" />
     <Compile Include="HalfEdgeBased\HBEdgeTest.cs" />
     <Compile Include="HalfEdgeBased\HBFaceTest.cs" />

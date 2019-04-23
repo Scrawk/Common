@@ -63,9 +63,8 @@ namespace Common.Meshing.IndexBased
         public Mesh2d PopMesh()
         {
 
-            if (SplitFaces && m_faceVerts == 0)
+            if (SplitFaces && m_faceVerts == 3)
             {
-                //Presumes its a triangle mesh.
                 var mesh = new Mesh2d(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
 
                 var indices = m_mesh.Indices;

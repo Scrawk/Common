@@ -80,7 +80,6 @@ namespace Common.Meshing.IndexBased
 
             if (SplitFaces && m_faceVerts == 3)
             {
-                //Presumes its a triangle mesh.
                 var mesh = new Mesh3d(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
 
                 var indices = m_mesh.Indices;

@@ -53,7 +53,7 @@ namespace Common.Meshing.HalfEdgeBased
             where FACE : HBFace, new()
     {
 
-        protected MESH Mesh;
+        private MESH Mesh;
 
         /// <summary>
         /// Does a half edge mesh support face connections.
