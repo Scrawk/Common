@@ -15,7 +15,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="e1">A edge intersecting e0.</param>
         /// <param name="s">The length along e0 where the intersection occurs.</param>
         /// <param name="t">The length along e1 where the intersection occurs.</param>
-        private static void JoinEdges<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE e0, EDGE e1, double s, double t)
+        public static void JoinEdges<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE e0, EDGE e1, double s, double t)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
