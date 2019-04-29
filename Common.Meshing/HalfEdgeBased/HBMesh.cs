@@ -279,7 +279,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="faceVertices">The number of vertices each face has</param>
         /// <param name="indices">list representing the vertices of each face</param>
-        public void GetFaceIndices(List<int> indices, int faceVertices = 3)
+        public void GetFaceIndices(List<int> indices, int faceVertices)
         {
             if (faceVertices < 3)
                 throw new ArgumentException("faceVertices can not be less than 3.");

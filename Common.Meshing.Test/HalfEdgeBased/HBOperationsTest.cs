@@ -44,8 +44,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             var mesh = new HBMesh<HBVertex, HBEdge, HBFace>();
 
-            HBOperations.Append(mesh, mesh0);
-            HBOperations.Append(mesh, mesh1);
+            HBOperations.Append(mesh, mesh0, true);
+            HBOperations.Append(mesh, mesh1, true);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);
