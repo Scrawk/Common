@@ -9,8 +9,16 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// A half edge vertex. Presumes edges are connected in CCW order.
     /// </summary>
-    public class HBVertex
+    public abstract class HBVertex
     {
+        /// <summary>
+        /// The dimension of the vertex, ie 2D, 3D.
+        /// </summary>
+        public abstract int Dimension { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int Tag;
 
         /// <summary>
@@ -19,31 +27,6 @@ namespace Common.Meshing.HalfEdgeBased
         public HBEdge Edge;
 
         public HBVertex()
-        {
-
-        }
-
-        public virtual void Initialize(HBVertex vertex)
-        {
-
-        }
-
-        public virtual void Initialize(Vector2f pos)
-        {
-    
-        }
-
-        public virtual void Initialize(Vector3f pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector2d pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector3d pos)
         {
 
         }
@@ -157,16 +140,19 @@ namespace Common.Meshing.HalfEdgeBased
             Edge = null;
         }
 
+        public abstract void SetPosition(HBVertex vertex);
+
+        public abstract void SetPosition(Vector3d pos);
+
+        public abstract Vector3d GetPosition();
+
         /// <summary>
         /// Create a vertex that is a interpolation 
         /// from this to the other vertex.
         /// </summary>
         /// <param name="to">other vertex</param>
         /// <returns>interpolation< between the two/returns>
-        public virtual HBVertex Interpolate(HBVertex to, double t)
-        {
-            return new HBVertex();
-        }
+        public abstract HBVertex Interpolate(HBVertex to, double t);
 
     }
 }

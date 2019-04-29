@@ -6,10 +6,22 @@ using Common.Core.LinearAlgebra;
 namespace Common.Meshing.FaceBased
 {
 
-    public class FBVertex
+    public abstract class FBVertex
     {
+        /// <summary>
+        /// The dimension of the vertex, ie 2D, 3D.
+        /// </summary>
+        public abstract int Dimension { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public int Tag;
 
+        /// <summary>
+        /// A list of all faces surrounding vertex.
+        /// Null by default.
+        /// </summary>
         public List<FBFace> Faces { get; set; }
 
         public FBVertex()
@@ -25,31 +37,6 @@ namespace Common.Meshing.FaceBased
             }
         }
 
-        public virtual void Initialize(FBVertex vert)
-        {
-
-        }
-
-        public virtual void Initialize(Vector2f pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector3f pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector2d pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector3d pos)
-        {
-
-        }
-
         /// <summary>
         /// Convert vertex to string.
         /// </summary>
@@ -61,6 +48,12 @@ namespace Common.Meshing.FaceBased
         {
             return string.Format("[FBVertex: Id={0}, Faces={1}]", mesh.IndexOf(this), NumFaces);
         }
+
+        public abstract void SetPosition(FBVertex vert);
+
+        public abstract void SetPosition(Vector3d pos);
+
+        public abstract Vector3d GetPosition();
 
         public FACE GetFace<FACE>(int i) where FACE : FBFace
         {

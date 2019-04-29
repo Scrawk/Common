@@ -91,9 +91,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
             }
         }
 
-        public static HBMesh<HBVertex, HBEdge, HBFace> CreateTriangle()
+        public static HBMesh2f CreateTriangle()
         {
-            var mesh = new HBMesh<HBVertex, HBEdge, HBFace>();
+            var mesh = new HBMesh2f();
             mesh.Fill(3, 3, 1);
 
             var E = mesh.Edges;
@@ -113,9 +113,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
             return mesh;
         }
 
-        public static HBMesh<HBVertex2f, HBEdge, HBFace> CreateTriangle(Vector2f A, Vector2f B, Vector2f C)
+        public static HBMesh2f CreateTriangle(Vector2f A, Vector2f B, Vector2f C)
         {
-            var mesh = new HBMesh<HBVertex2f, HBEdge, HBFace>();
+            var mesh = new HBMesh2f();
             mesh.Fill(3, 3, 1);
 
             var E = mesh.Edges;
@@ -143,9 +143,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         /// See CGALCSharp.Test/Meshes/HalfEdgeBased/Cross.png
         /// </summary>
         /// <returns></returns>
-        public static HBMesh<HBVertex, HBEdge, HBFace> CreateCross()
+        public static HBMesh2f CreateCross()
         {
-            var mesh = new HBMesh<HBVertex, HBEdge, HBFace>();
+            var mesh = new HBMesh2f();
             mesh.Fill(5, 8, 0);
 
             var E = mesh.Edges;
@@ -173,9 +173,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         /// See CGALCSharp.Test/Meshes/HalfEdgeBased/SquareWithCenter.png
         /// </summary>
         /// <returns></returns>
-        public static HBMesh<HBVertex, HBEdge, HBFace> CreateSquareWithCenter()
+        public static HBMesh2f CreateSquareWithCenter()
         {
-            var mesh = new HBMesh<HBVertex, HBEdge, HBFace>();
+            var mesh = new HBMesh2f();
             mesh.Fill(5, 12, 4);
 
             var E = mesh.Edges;

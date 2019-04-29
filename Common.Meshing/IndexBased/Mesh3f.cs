@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
-using Common.Meshing.IndexBased;
 
 namespace Common.Meshing.IndexBased
 {
@@ -62,6 +61,13 @@ namespace Common.Meshing.IndexBased
         {
             SetPositions(positions.Count);
             positions.CopyTo(Positions, 0);
+        }
+
+        public void SetPositions(IList<Vector3d> positions)
+        {
+            SetPositions(positions.Count);
+            for (int i = 0; i < positions.Count; i++)
+                Positions[i] = (Vector3f)positions[i];
         }
 
         public void SetNormals(int size)

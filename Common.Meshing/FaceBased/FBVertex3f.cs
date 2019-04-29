@@ -7,6 +7,11 @@ namespace Common.Meshing.FaceBased
 {
     public class FBVertex3f : FBVertex
     {
+        /// <summary>
+        /// The dimension of the vertex, ie 2D, 3D.
+        /// </summary>
+        public override int Dimension => 3;
+
         public Vector3f Position { get; set; }
 
         public FBVertex3f()
@@ -19,31 +24,6 @@ namespace Common.Meshing.FaceBased
             Position = position;
         }
 
-        public override void Initialize(FBVertex vert)
-        {
-            Position = (vert as FBVertex3f).Position;
-        }
-
-        public override void Initialize(Vector2f pos)
-        {
-            Position = pos.xy0;
-        }
-
-        public override void Initialize(Vector3f pos)
-        {
-            Position = pos;
-        }
-
-        public override void Initialize(Vector2d pos)
-        {
-            Position = (Vector3f)pos.xy0;
-        }
-
-        public override void Initialize(Vector3d pos)
-        {
-            Position = (Vector3f)pos;
-        }
-
         /// <summary>
         /// Convert vertex to string.
         /// </summary>
@@ -53,6 +33,21 @@ namespace Common.Meshing.FaceBased
         {
             return string.Format("[FBVertex3f: Id={0}, Faces={1}, Position={2}]",
                 mesh.IndexOf(this), NumFaces, Position);
+        }
+
+        public override void SetPosition(FBVertex vert)
+        {
+            Position = (vert as FBVertex3f).Position;
+        }
+
+        public override void SetPosition(Vector3d pos)
+        {
+            Position = (Vector3f)pos;
+        }
+
+        public override Vector3d GetPosition()
+        {
+            return Position;
         }
 
     }

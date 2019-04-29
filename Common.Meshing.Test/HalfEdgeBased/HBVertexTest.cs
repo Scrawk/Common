@@ -21,7 +21,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void EmptyEnumerateEdges()
         {
-            var vertex = new HBVertex();
+            var vertex = new HBVertex2f();
             var edges = new List<HBEdge>();
 
             foreach (var edge in vertex.EnumerateEdges(true))
@@ -29,7 +29,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             Assert.AreEqual(0, edges.Count);
 
-            vertex = new HBVertex();
+            vertex = new HBVertex2f();
             edges = new List<HBEdge>();
 
             foreach (var edge in vertex.EnumerateEdges(false))

@@ -24,29 +24,20 @@ namespace Common.Meshing.AdjacencyGraphs
 
         public Vector3f Position { get; set; }
 
-        public override void Initialize(Vector2f pos)
-        {
-            Position = pos.xy0;
-        }
-
-        public override void Initialize(Vector3f pos)
-        {
-            Position = pos;
-        }
-
-        public override void Initialize(Vector2d pos)
-        {
-            Position = (Vector3f)pos.xy0;
-        }
-
-        public override void Initialize(Vector3d pos)
-        {
-            Position = (Vector3f)pos;
-        }
-
         public override string ToString()
         {
             return string.Format("[AdjacencyVertex3f: Index={0}, Cost={1}, Position={2}]", Index, Cost, Position);
         }
+
+        public override void SetPosition(Vector3d pos)
+        {
+            Position = (Vector3f)pos;
+        }
+
+        public override Vector3d GetPosition()
+        {
+            return Position;
+        }
+
     }
 }

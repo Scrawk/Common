@@ -7,38 +7,57 @@ using Common.Meshing.FaceBased;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBOperations3f
+    public static partial class HBOperations
     {
         /// <summary>
         /// Convert mesh to indexable edge mesh.
         /// </summary>
-        public static Mesh3f ToEdgeMesh3f(HBMesh3f mesh)
+        public static Mesh3f ToEdgeMesh3f<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
         {
-            var positions = new List<Vector3f>(mesh.Vertices.Count);
+            var positions = new List<Vector3d>(mesh.Vertices.Count);
 
             var indices = new List<int>(mesh.Edges.Count);
             mesh.GetEdgeIndices(indices);
             mesh.GetPositions(positions);
-            return new Mesh3f(positions, indices);
+
+            var m = new Mesh3f();
+            m.SetPositions(positions);
+            m.SetIndices(indices);
+
+            return m;
         }
 
         /// <summary>
         /// Convert mesh to indexable triangle mesh.
         /// </summary>
-        public static Mesh3f ToMesh3f(HBMesh3f mesh)
+        public static Mesh3f ToMesh3f<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
         {
-            var positions = new List<Vector3f>(mesh.Vertices.Count);
+            var positions = new List<Vector3d>(mesh.Vertices.Count);
 
             var indices = new List<int>(mesh.Faces.Count * 3);
             mesh.GetFaceIndices(indices, 3);
             mesh.GetPositions(positions);
-            return new Mesh3f(positions, indices);
+
+            var m = new Mesh3f();
+            m.SetPositions(positions);
+            m.SetIndices(indices);
+
+            return m;
         }
 
         /// <summary>
         /// Convert to a triangle face based mesh.
         /// </summary>
-        public static FBMesh3f ToFBTriangleMesh3f(HBMesh3f mesh)
+        public static FBMesh3f ToFBTriangleMesh3f<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
         {
             mesh.TagAll();
 
@@ -46,7 +65,7 @@ namespace Common.Meshing.HalfEdgeBased
             constructor.PushTriangularMesh(mesh.Vertices.Count, mesh.Faces.Count);
 
             foreach (var vertex in mesh.Vertices)
-                constructor.AddVertex(vertex.Position);
+                constructor.AddVertex(vertex.GetPosition());
 
             var vertices = new List<HBVertex3f>(3);
             var neighbours = new List<HBFace>(3);

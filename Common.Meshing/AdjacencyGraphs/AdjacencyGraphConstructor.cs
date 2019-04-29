@@ -78,41 +78,13 @@ namespace Common.Meshing.AdjacencyGraphs
         /// Add a vertex to the mesh with this position.
         /// </summary>
         /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector2f pos)
-        {
-            CheckGraphIsPushed();
-
-            var v = new VERTEX();
-            v.Index = m_vertexIndex;
-            v.Initialize(pos);
-            m_graph.Vertices[m_vertexIndex++] = v;
-        }
-
-        /// <summary>
-        /// Add a vertex to the mesh with this position.
-        /// </summary>
-        /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector3f pos)
-        {
-            CheckGraphIsPushed();
-
-            var v = new VERTEX();
-            v.Index = m_vertexIndex;
-            v.Initialize(pos);
-            m_graph.Vertices[m_vertexIndex++] = v;
-        }
-
-        /// <summary>
-        /// Add a vertex to the mesh with this position.
-        /// </summary>
-        /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector2d pos)
         {
             CheckGraphIsPushed();
 
             var v = new VERTEX();
             v.Index = m_vertexIndex;
-            v.Initialize(pos);
+            v.SetPosition(pos.xy0);
             m_graph.Vertices[m_vertexIndex++] = v;
         }
 
@@ -126,7 +98,7 @@ namespace Common.Meshing.AdjacencyGraphs
 
             var v = new VERTEX();
             v.Index = m_vertexIndex;
-            v.Initialize(pos);
+            v.SetPosition(pos);
             m_graph.Vertices[m_vertexIndex++] = v;
         }
 

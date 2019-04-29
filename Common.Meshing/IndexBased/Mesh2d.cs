@@ -70,6 +70,13 @@ namespace Common.Meshing.IndexBased
                 Normals = new Vector2d[size];
         }
 
+        public void SetPositions(IList<Vector3d> positions)
+        {
+            SetPositions(positions.Count);
+            for (int i = 0; i < positions.Count; i++)
+                Positions[i] = positions[i].xy;
+        }
+
         public void SetNormals(IList<Vector2d> normals)
         {
             SetNormals(normals.Count);

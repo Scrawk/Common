@@ -10,7 +10,7 @@ namespace Common.Meshing.GridGraphs
     /// A graph were the vertices make up a grid
     /// like the pixels in a image. Each vertex
     /// has a byte flag where the bits represent 
-    /// if a edge is present to a neibhouring
+    /// if a edge is present to a neighbouring
     /// vertex.
     /// </summary>
     public class GridGraph

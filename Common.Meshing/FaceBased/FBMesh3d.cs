@@ -25,15 +25,6 @@ namespace Common.Meshing.FaceBased
                 Vertices.Count, Faces.Count);
         }
 
-        /// <summary>
-        /// Copy all vertex positions into list.
-        /// </summary>
-        public void GetPositions(List<Vector3d> positions)
-        {
-            for (int i = 0; i < Vertices.Count; i++)
-                positions.Add(Vertices[i].Position);
-        }
-
     }
 
 }

@@ -106,28 +106,6 @@ namespace Common.Meshing.IndexBased
         /// Add a vertex to the mesh with this position.
         /// </summary>
         /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector2f pos)
-        {
-            CheckMeshIsPushed();
-            m_mesh.Positions[m_vertexIndex] = pos;
-            m_vertexIndex++;
-        }
-
-        /// <summary>
-        /// Add a vertex to the mesh with this position.
-        /// </summary>
-        /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector3f pos)
-        {
-            CheckMeshIsPushed();
-            m_mesh.Positions[m_vertexIndex] = pos.xy;
-            m_vertexIndex++;
-        }
-
-        /// <summary>
-        /// Add a vertex to the mesh with this position.
-        /// </summary>
-        /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector2d pos)
         {
             CheckMeshIsPushed();

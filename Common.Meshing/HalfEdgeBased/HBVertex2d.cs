@@ -12,6 +12,11 @@ namespace Common.Meshing.HalfEdgeBased
     /// </summary>
     public class HBVertex2d : HBVertex
     {
+        /// <summary>
+        /// The dimension of the vertex, ie 2D, 3D.
+        /// </summary>
+        public override int Dimension => 2;
+
         public Vector2d Position;
 
         public HBVertex2d()
@@ -24,31 +29,6 @@ namespace Common.Meshing.HalfEdgeBased
             Position = pos;
         }
 
-        public override void Initialize(HBVertex vertex)
-        {
-            Position = (vertex as HBVertex2d).Position;
-        }
-
-        public override void Initialize(Vector2f pos)
-        {
-            Position = pos;
-        }
-
-        public override void Initialize(Vector3f pos)
-        {
-            Position = pos.xy;
-        }
-
-        public override void Initialize(Vector2d pos)
-        {
-            Position = pos;
-        }
-
-        public override void Initialize(Vector3d pos)
-        {
-            Position = pos.xy;
-        }
-
         /// <summary>
         /// Convert vertex to string.
         /// </summary>
@@ -58,6 +38,21 @@ namespace Common.Meshing.HalfEdgeBased
         {
             return string.Format("[HBVertex2d: Id={0}, Edge={1}, Position={2}]",
                 mesh.IndexOf(this), mesh.IndexOf(Edge), Position);
+        }
+
+        public override void SetPosition(HBVertex vertex)
+        {
+            Position = (vertex as HBVertex2d).Position;
+        }
+
+        public override void SetPosition(Vector3d pos)
+        {
+            Position = pos.xy;
+        }
+
+        public override Vector3d GetPosition()
+        {
+            return Position.xy0;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ using Common.Meshing.Test.HalfEdgeBased;
 namespace Common.Meshing.Test.FaceBased
 {
     [TestClass]
-    public class Meshing_FaceBased_FBOperations2fTest
+    public class Meshing_FaceBased_FBOperationsTest
     {
         [TestMethod]
         public void ToHBTriangleMesh2f()
@@ -21,7 +21,7 @@ namespace Common.Meshing.Test.FaceBased
             CreateTriangleMesh2.FromBox(constructor, min, max);
             var tmp = constructor.PopMesh();
 
-            var mesh = FBOperations2f.ToHBTriangleMesh2f(tmp);
+            var mesh = FBOperations.ToHBTriangleMesh2f(tmp);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(10, mesh.Edges.Count);

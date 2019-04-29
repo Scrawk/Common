@@ -7,12 +7,14 @@ using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.FaceBased
 {
-    public static partial class FBOperations3d
+    public static partial class FBOperations
     {
         /// <summary>
         /// Convert mesh to indexable triangle mesh.
         /// </summary>
-        public static Mesh3d ToTriangleMesh3d(FBMesh3d mesh)
+        public static Mesh3d ToTriangleMesh3d<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
+            where VERTEX : FBVertex, new()
+            where FACE : FBFace, new()
         {
             var positions = new List<Vector3d>(mesh.Vertices.Count);
 
@@ -25,7 +27,9 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Convert to a half edge based mesh.
         /// </summary>
-        public static HBMesh3d ToHBTriangleMesh3d(FBMesh3d mesh)
+        public static HBMesh3d ToHBTriangleMesh3d<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
+            where VERTEX : FBVertex, new()
+            where FACE : FBFace, new()
         {
             mesh.TagAll();
 
@@ -33,7 +37,7 @@ namespace Common.Meshing.FaceBased
             constructor.PushTriangularMesh(mesh.Vertices.Count, mesh.Faces.Count);
 
             foreach (var vertex in mesh.Vertices)
-                constructor.AddVertex(vertex.Position);
+                constructor.AddVertex(vertex.GetPosition());
 
             foreach (var face in mesh.Faces)
             {

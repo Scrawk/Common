@@ -51,30 +51,14 @@ namespace Common.Meshing.AdjacencyGraphs
         /// </summary>
         public float Cost { get; set; }
 
-        public virtual void Initialize(Vector2f pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector3f pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector2d pos)
-        {
-
-        }
-
-        public virtual void Initialize(Vector3d pos)
-        {
-
-        }
-
         public override string ToString()
         {
             return string.Format("[AdjacencyVertex: Index={0}, Cost={1}]", Index, Cost);
         }
+
+        public abstract void SetPosition(Vector3d pos);
+
+        public abstract Vector3d GetPosition();
 
         /// <summary>
         /// Used to sort vertices by cost.

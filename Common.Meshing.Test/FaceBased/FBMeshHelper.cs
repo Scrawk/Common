@@ -55,9 +55,9 @@ namespace Common.Meshing.Test.FaceBased
             }
         }
 
-        public static FBMesh<FBVertex, FBFace> CreateTriangle()
+        public static FBMesh2f CreateTriangle()
         {
-            var mesh = new FBMesh<FBVertex, FBFace>();
+            var mesh = new FBMesh2f();
  
             var v0 = mesh.NewVertex();
             var v1 = mesh.NewVertex();
@@ -77,9 +77,9 @@ namespace Common.Meshing.Test.FaceBased
             return mesh;
         }
 
-        public static FBMesh<FBVertex2f, FBFace> CreateTriangle(Vector2f A, Vector2f B, Vector2f C)
+        public static FBMesh2f CreateTriangle(Vector2f A, Vector2f B, Vector2f C)
         {
-            var mesh = new FBMesh<FBVertex2f, FBFace>();
+            var mesh = new FBMesh2f();
 
             var v0 = mesh.NewVertex();
             var v1 = mesh.NewVertex();
@@ -102,9 +102,9 @@ namespace Common.Meshing.Test.FaceBased
             return mesh;
         }
 
-        public static FBMesh<FBVertex, FBFace> CreateSquareWithCenter()
+        public static FBMesh2f CreateSquareWithCenter()
         {
-            var mesh = new FBMesh<FBVertex, FBFace>();
+            var mesh = new FBMesh2f();
 
             var v0 = mesh.NewVertex();
             var v1 = mesh.NewVertex();

@@ -64,6 +64,13 @@ namespace Common.Meshing.IndexBased
             positions.CopyTo(Positions, 0);
         }
 
+        public void SetPositions(IList<Vector3d> positions)
+        {
+            SetPositions(positions.Count);
+            for (int i = 0; i < positions.Count; i++)
+                Positions[i] = (Vector2f)positions[i].xy;
+        }
+
         public void SetNormals(int size)
         {
             if (Normals == null || Normals.Length != size)

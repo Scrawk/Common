@@ -58,9 +58,9 @@ namespace Common.Meshing.Test.FaceBased
             var face = new FBFace();
 
             face.SetVerticesSize(2);
-            var v0 = new FBVertex();
-            var v1 = new FBVertex();
-            var v2 = new FBVertex();
+            var v0 = new FBVertex2f();
+            var v1 = new FBVertex2f();
+            var v2 = new FBVertex2f();
 
             face.Vertices[0] = v0;
             face.Vertices[1] = v1;

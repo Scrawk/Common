@@ -5,6 +5,8 @@ using Common.Core.LinearAlgebra;
 using Common.Meshing.HalfEdgeBased;
 using Common.Meshing.Constructors;
 
+using Common.Meshing.Test.FaceBased;
+
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
@@ -42,7 +44,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var mesh0 = HBMeshHelper.CreateTriangle();
             var mesh1 = HBMeshHelper.CreateTriangle();
 
-            var mesh = new HBMesh<HBVertex, HBEdge, HBFace>();
+            var mesh = new HBMesh2f();
 
             HBOperations.Append(mesh, mesh0, true);
             HBOperations.Append(mesh, mesh1, true);
@@ -87,6 +89,27 @@ namespace Common.Meshing.Test.HalfEdgeBased
             HBMeshHelper.CheckEdge(mesh, edge: 3, from: 1, face: -1, previous: 4, next: 5, opposite: 0);
             HBMeshHelper.CheckEdge(mesh, edge: 4, from: 2, face: -1, previous: 5, next: 3, opposite: 1);
             HBMeshHelper.CheckEdge(mesh, edge: 5, from: 0, face: -1, previous: 3, next: 4, opposite: 2);
+        }
+
+        [TestMethod]
+        public void ToFBTriangleMesh2f()
+        {
+            var min = new Vector2f(-1, -1);
+            var max = new Vector2f(1, 1);
+
+            var tmp = CreateTriangleMesh2.FromBox(min, max);
+            var mesh = HBOperations.ToFBTriangleMesh2f(tmp);
+
+            Assert.AreEqual(4, mesh.Vertices.Count);
+            Assert.AreEqual(2, mesh.Faces.Count);
+            Assert.AreEqual(min, mesh.Vertices[0].Position);
+            Assert.AreEqual(new Vector2f(max.x, min.y), mesh.Vertices[1].Position);
+            Assert.AreEqual(max, mesh.Vertices[2].Position);
+            Assert.AreEqual(new Vector2f(min.x, max.y), mesh.Vertices[3].Position);
+
+            FBMeshHelper.CheckFace(mesh, face: 0, v0: 0, v1: 1, v2: 2);
+            FBMeshHelper.CheckFace(mesh, face: 1, v0: 2, v1: 3, v2: 0);
+            FBMeshHelper.CheckAllTrianglesCCW(mesh);
         }
     }
 }

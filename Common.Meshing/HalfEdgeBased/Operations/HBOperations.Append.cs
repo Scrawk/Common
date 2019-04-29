@@ -108,7 +108,7 @@ namespace Common.Meshing.HalfEdgeBased
             for (int i = 0; i < mesh1.Vertices.Count; i++)
             {
                 var v = new VERTEX();
-                v.Initialize(mesh1.Vertices[i]);
+                v.SetPosition(mesh1.Vertices[i]);
                 Vertices.Add(v);
             }
 

@@ -166,6 +166,15 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Copy all vertex positions into list.
+        /// </summary>
+        public void GetPositions(List<Vector3d> positions)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                positions.Add(Vertices[i].GetPosition());
+        }
+
+        /// <summary>
         /// Fills the mesh by creating the require number of vertices and faces.
         /// </summary>
         /// <param name="numVertices">Number of vertices to create</param>

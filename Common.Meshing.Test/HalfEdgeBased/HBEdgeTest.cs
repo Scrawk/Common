@@ -15,9 +15,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var f0 = new HBFace();
 
-            var v0 = new HBVertex();
-            var v1 = new HBVertex();
-            var v2 = new HBVertex();
+            var v0 = new HBVertex2f();
+            var v1 = new HBVertex2f();
+            var v2 = new HBVertex2f();
 
             var e0 = new HBEdge();
             var e1 = new HBEdge();
@@ -47,9 +47,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var f0 = new HBFace();
 
-            var v0 = new HBVertex();
-            var v1 = new HBVertex();
-            var v2 = new HBVertex();
+            var v0 = new HBVertex2f();
+            var v1 = new HBVertex2f();
+            var v2 = new HBVertex2f();
 
             var e0 = new HBEdge();
             var e1 = new HBEdge();

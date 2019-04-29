@@ -113,35 +113,11 @@ namespace Common.Meshing.HalfEdgeBased
         /// Add a vertex to the mesh with this position.
         /// </summary>
         /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector2f pos)
-        {
-            CheckMeshIsPushed();
-            VERTEX v = new VERTEX();
-            v.Initialize(pos);
-            Mesh.Vertices.Add(v);
-        }
-
-        /// <summary>
-        /// Add a vertex to the mesh with this position.
-        /// </summary>
-        /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector3f pos)
-        {
-            CheckMeshIsPushed();
-            VERTEX v = new VERTEX();
-            v.Initialize(pos);
-            Mesh.Vertices.Add(v);
-        }
-
-        /// <summary>
-        /// Add a vertex to the mesh with this position.
-        /// </summary>
-        /// <param name="pos">The vertex position</param>
         public void AddVertex(Vector2d pos)
         {
             CheckMeshIsPushed();
             VERTEX v = new VERTEX();
-            v.Initialize((Vector2f)pos);
+            v.SetPosition(pos.xy0);
             Mesh.Vertices.Add(v);
         }
 
@@ -153,7 +129,7 @@ namespace Common.Meshing.HalfEdgeBased
         {
             CheckMeshIsPushed();
             VERTEX v = new VERTEX();
-            v.Initialize((Vector3f)pos);
+            v.SetPosition(pos);
             Mesh.Vertices.Add(v);
         }
 
