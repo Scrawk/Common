@@ -126,22 +126,20 @@ namespace Common.Geometry.Shapes
             return string.Format("[Box2i: Min={0}, Max={1}, Width={2}, Height={3}]", Min, Max, Width, Height);
         }
 
-        public IList<Vector2i> GetCorners()
-        {
-            var corners = new Vector2i[4];
-            corners[0] = new Vector2i(Min.x, Min.y);
-            corners[1] = new Vector2i(Max.x, Min.y);
-            corners[2] = new Vector2i(Max.x, Max.y);
-            corners[3] = new Vector2i(Min.x, Max.y);
-            return corners;
-        }
-
         public void GetCorners(IList<Vector2i> corners)
         {
             corners[0] = new Vector2i(Min.x, Min.y);
             corners[1] = new Vector2i(Max.x, Min.y);
             corners[2] = new Vector2i(Max.x, Max.y);
             corners[3] = new Vector2i(Min.x, Max.y);
+        }
+
+        public void GetCorners(IList<Vector2d> corners)
+        {
+            corners[0] = new Vector2d(Min.x, Min.y);
+            corners[1] = new Vector2d(Max.x, Min.y);
+            corners[2] = new Vector2d(Max.x, Max.y);
+            corners[3] = new Vector2d(Min.x, Max.y);
         }
 
         public void GetCornersXZ(IList<Vector3i> corners, int y = 0)
