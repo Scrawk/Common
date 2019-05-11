@@ -78,6 +78,17 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2f zy
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2f(z, y); }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set { z = value.x; y = value.y; }
+        }
+
+        /// <summary>
         /// Convert to a 4 dimension vector.
         /// </summary>
         public Vector4f xyz0
@@ -206,6 +217,22 @@ namespace Common.Core.LinearAlgebra
             get
             {
                 return new Vector3f(Math.Abs(x), Math.Abs(y), Math.Abs(z));
+            }
+        }
+
+        /// <summary>
+        /// Convert a normalized vector to tangent space.
+        /// </summary>
+        public Vector3f TangentSpaceNormal
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                float x = this.x * 0.5f + 0.5f;
+                float y = this.z * 0.5f + 0.5f;
+                float z = this.y;
+
+                return new Vector3f(x, y, z);
             }
         }
 
