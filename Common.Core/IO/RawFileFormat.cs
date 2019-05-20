@@ -1,6 +1,6 @@
 using System;
 
-namespace Common.Core.Raw
+namespace Common.Core.IO
 {
     /// <summary>
     /// Raw file Settings.

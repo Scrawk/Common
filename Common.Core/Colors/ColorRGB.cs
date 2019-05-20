@@ -45,6 +45,16 @@ namespace Common.Core.Colors
 
         }
 
+        public ColorRGB rrr
+        {
+            get { return new ColorRGB(r, r, r); }
+        }
+
+        public ColorRGB bgr
+        {
+            get { return new ColorRGB(b, g, r); }
+        }
+
         public ColorHSV hsv
         {
             get { return ToHSV(r, g, b); }

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Common.Core.Raw;
+using Common.Core.IO;
 
-namespace Common.Core.Test.Raw
+namespace Common.Core.Test.IO
 {
     [TestClass]
-    public class Core_Raw_RawFileTest
+    public class Core_IO_RawFileTest
     {
 
         const string fileName = "D:/Projects/Visual Studio Projects/Common/Common.Core.Test/Raw/TestRawFile.raw";

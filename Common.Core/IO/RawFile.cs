@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Common.Core.Mathematics;
 
-namespace Common.Core.Raw
+namespace Common.Core.IO
 {
     
     public enum BYTE_ORDER { WINDOWS, MAC };

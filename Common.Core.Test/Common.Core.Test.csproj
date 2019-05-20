@@ -73,7 +73,7 @@
     <Compile Include="LinearAlgebra\Vector4dTest.cs" />
     <Compile Include="Mathematics\IMathTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Raw\RawFileTest.cs" />
+    <Compile Include="IO\RawFileTest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

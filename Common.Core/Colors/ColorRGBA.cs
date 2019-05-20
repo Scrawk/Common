@@ -93,6 +93,16 @@ namespace Common.Core.Colors
             }
         }
 
+        public ColorRGBA rrra
+        {
+            get { return new ColorRGBA(r, r, r, a); }
+        }
+
+        public ColorRGBA bgra
+        {
+            get { return new ColorRGBA(b, g, r, a); }
+        }
+
         public ColorRGB rgb
         {
             get { return new ColorRGB(r, g, b); }
