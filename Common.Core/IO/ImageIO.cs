@@ -35,7 +35,7 @@ namespace Common.Core.IO
                 for (int x = 0; x < width; x++)
                 {
                     ColorRGBA pixel = new ColorRGBA();
-                    for (int c = 0; c < channels; c++)
+                    for (int c = 0; c < byteChannels; c++)
                     {
                         int i = (x + y * width) * byteChannels + c;
                         pixel[c] = Read(i, bytes, properties);
@@ -66,20 +66,11 @@ namespace Common.Core.IO
                     ColorRGBA pixel = pixels[x, y];
 
                     if (channels == 1)
-                    {
-                        float r = pixel.r;
-                        pixel.g = r;
-                        pixel.b = r;
-                    }
+                        pixel = pixel.rrra;
                     else if (properties.IsBGRA)
-                    {
-                        float r = pixel.r;
-                        float b = pixel.b;
-                        pixel.r = b;
-                        pixel.b = r;
-                    }
+                        pixel = pixel.bgra;
 
-                    for (int c = 0; c < channels; c++)
+                    for (int c = 0; c < byteChannels; c++)
                     {
                         int i = (x + y * width) * byteChannels + c;
                         Write(pixel[c], i, bytes, properties);
