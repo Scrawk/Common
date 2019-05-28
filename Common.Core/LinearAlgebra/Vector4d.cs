@@ -279,7 +279,7 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4d operator -(double s, Vector4d v1)
         {
-            return new Vector4d(v1.x - s, v1.y - s, v1.z - s, v1.w - s);
+            return new Vector4d(s - v1.x, s - v1.y, s - v1.z, s - v1.w);
         }
 
         /// <summary>

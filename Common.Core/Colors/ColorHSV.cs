@@ -112,7 +112,7 @@ namespace Common.Core.Colors
         /// </summary>
         public static ColorHSV operator -(float s, ColorHSV hsv1)
         {
-            return new ColorHSV(hsv1.h - s, hsv1.s - s, hsv1.v - s);
+            return new ColorHSV(s - hsv1.h, s - hsv1.s, s - hsv1.v);
         }
 
         /// <summary>

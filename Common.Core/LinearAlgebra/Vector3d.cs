@@ -290,7 +290,7 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator -(double s, Vector3d v1)
         {
-            return new Vector3d(v1.x - s, v1.y - s, v1.z - s);
+            return new Vector3d(s - v1.x, s - v1.y, s - v1.z);
         }
 
         /// <summary>

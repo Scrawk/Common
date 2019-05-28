@@ -167,7 +167,7 @@ namespace Common.Core.Colors
         /// </summary>
         public static ColorRGB operator -(float s, ColorRGB v1)
         {
-            return new ColorRGB(v1.r - s, v1.g - s, v1.b - s);
+            return new ColorRGB(s - v1.r, s - v1.g, s - v1.b);
         }
 
         /// <summary>

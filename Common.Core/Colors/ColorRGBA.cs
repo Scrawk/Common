@@ -191,7 +191,7 @@ namespace Common.Core.Colors
         /// </summary>
         public static ColorRGBA operator -(float s, ColorRGBA v1)
         {
-            return new ColorRGBA(v1.r - s, v1.g - s, v1.b - s, v1.a - s);
+            return new ColorRGBA(s - v1.r,s -  v1.g, s - v1.b, s - v1.a);
         }
 
         /// <summary>

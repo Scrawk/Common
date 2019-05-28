@@ -259,7 +259,7 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f operator -(float s, Vector2f v1)
         {
-            return new Vector2f(v1.x - s, v1.y - s);
+            return new Vector2f(s - v1.x, s - v1.y);
         }
 
         /// <summary>

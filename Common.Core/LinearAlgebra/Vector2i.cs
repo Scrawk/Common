@@ -211,7 +211,7 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2i operator -(int s, Vector2i v1)
         {
-            return new Vector2i(v1.x - s, v1.y - s);
+            return new Vector2i(s - v1.x, s - v1.y);
         }
 
         /// <summary>
