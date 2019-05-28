@@ -62,8 +62,6 @@ namespace Common.Core.LinearAlgebra
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector2f(x, y); }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { x = value.x; y = value.y; }
         }
 
         /// <summary>
@@ -73,8 +71,6 @@ namespace Common.Core.LinearAlgebra
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector2f(x, z); }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { x = value.x; z = value.y; }
         }
 
         /// <summary>
@@ -84,8 +80,6 @@ namespace Common.Core.LinearAlgebra
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector2f(z, y); }
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set { z = value.x; y = value.y; }
         }
 
         /// <summary>
