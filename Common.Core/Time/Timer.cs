@@ -7,17 +7,19 @@ namespace Common.Core.Time
     public class Timer
     {
 
-        public float ElapsedMilliseconds { get; private set; }
+        public double ElapsedMilliseconds { get; private set; }
 
-        public float ElapsedSeconds { get; private set; }
+        public double ElapsedSeconds { get; private set; }
 
-        public long ElapsedTicks {  get { return m_watch.ElapsedTicks; } }
+        public long ElapsedTicks => m_watch.ElapsedTicks;
 
-        public bool IsHighPerformance {  get { return Stopwatch.IsHighResolution;  } }
+        public bool IsHighPerformance => Stopwatch.IsHighResolution;
 
-        public long NanoSecondsPerTick { get { return (1000L * 1000L * 1000L) / Stopwatch.Frequency; } }
+        public bool IsRunning => m_watch.IsRunning;
 
-        Stopwatch m_watch;
+        public long NanoSecondsPerTick => (1000L * 1000L * 1000L) / Stopwatch.Frequency;
+
+        private Stopwatch m_watch;
 
         public Timer()
         {
@@ -39,28 +41,28 @@ namespace Common.Core.Time
             m_watch.Start();
         }
 
-        public float Stop()
+        public double Stop()
         {
             m_watch.Stop();
 
-            ElapsedMilliseconds = (ElapsedTicks * NanoSecondsPerTick) / 1000000.0f;
-            ElapsedSeconds = ElapsedMilliseconds / 1000.0f;
+            ElapsedMilliseconds = (ElapsedTicks * NanoSecondsPerTick) / 1000000.0;
+            ElapsedSeconds = ElapsedMilliseconds / 1000.0;
 
             return ElapsedMilliseconds;
         }
 
-        public float Tick()
+        public double Tick()
         {
-            ElapsedMilliseconds = (ElapsedTicks * NanoSecondsPerTick) / 1000000.0f;
-            ElapsedSeconds = ElapsedMilliseconds / 1000.0f;
+            ElapsedMilliseconds = (ElapsedTicks * NanoSecondsPerTick) / 1000000.0;
+            ElapsedSeconds = ElapsedMilliseconds / 1000.0;
 
             return ElapsedMilliseconds;
         }
 
         public void Reset()
         {
-            ElapsedMilliseconds = 0.0f;
-            ElapsedSeconds = 0.0f;
+            ElapsedMilliseconds = 0.0;
+            ElapsedSeconds = 0.0;
             m_watch.Reset();
         }
 
