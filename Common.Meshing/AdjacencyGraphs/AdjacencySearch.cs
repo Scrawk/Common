@@ -40,7 +40,7 @@ namespace Common.Meshing.AdjacencyGraphs
         {
             Order.Clear();
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Parent.Count; i++)
             {
                 Parent[i] = -1;
                 IsVisited[i] = false;
