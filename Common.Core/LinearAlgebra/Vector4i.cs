@@ -107,29 +107,21 @@ namespace Common.Core.LinearAlgebra
 			this.w = w;
 		}
 
-        public int this[int i]
+        unsafe public int this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                    default: throw new IndexOutOfRangeException("Vector4i index out of range: " + i);
-                }
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("Vector4i index out of range.");
+
+                fixed (Vector4i* array = &this) { return ((int*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                    default: throw new IndexOutOfRangeException("Vector4i index out of range: " + i);
-                }
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("Vector4i index out of range.");
+
+                fixed (int* array = &x) { array[i] = value; }
             }
         }
 

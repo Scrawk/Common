@@ -4,6 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.dll&quot; &quot;D:\Projects\Unity Projects\Common\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.dll&quot; &quot;D:\Projects\Unity Projects\CGALUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.dll&quot; &quot;D:\Projects\Unity Projects\GeoMorphUnity\Assets\Common\Plugins&quot; /y" />
   </Target>

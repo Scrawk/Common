@@ -104,25 +104,21 @@ namespace Common.Core.LinearAlgebra
             this.y = y;
         }
 
-        public float this[int i]
+        unsafe public float this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    default: throw new IndexOutOfRangeException("Vector2f index out of range: " + i);
-                }
+                if ((uint)i >= 2)
+                    throw new IndexOutOfRangeException("Vector2f index out of range.");
+
+                fixed (Vector2f* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    default: throw new IndexOutOfRangeException("Vector2f index out of range: " + i);
-                }
+                if ((uint)i >= 2)
+                    throw new IndexOutOfRangeException("Vector2f index out of range.");
+
+                fixed (float* array = &x) { array[i] = value; }
             }
         }
 

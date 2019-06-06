@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
@@ -22,6 +23,7 @@ namespace Common.Core.Colors
 
         public float r, g, b;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(float r, float g, float b)
         {
             this.r = r;
@@ -29,17 +31,20 @@ namespace Common.Core.Colors
             this.b = b;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(float v) : this(v,v,v)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(double r, double g, double b) 
             : this((float)r, (float)g, (float)b)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(double v) : this(v, v, v)
         {
 
@@ -47,46 +52,55 @@ namespace Common.Core.Colors
 
         public ColorRGB rrr
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new ColorRGB(r, r, r); }
         }
 
         public ColorRGB bgr
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new ColorRGB(b, g, r); }
         }
 
         public ColorHSV hsv
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return ToHSV(r, g, b); }
         }
 
         public ColorRGBA rgb1
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new ColorRGBA(r, g, b, 1); }
         }
 
         public float Magnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return (float)Math.Sqrt(SqrMagnitude); }
         }
 
         public float SqrMagnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return (r * r + g * g + b * b); }
         }
 
         public float Intensity 
-        { 
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return (r + g + b) / 3.0f; } 
         }
 
         public float Luminance 
-        { 
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return 0.2126f * r + 0.7152f * g + 0.0722f * b; } 
         }
 
         public int Integer
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 int R = (int)FMath.Clamp(r * 255.0f, 0.0f, 255.0f);
@@ -98,33 +112,28 @@ namespace Common.Core.Colors
             }
         }
 
-        public float this[int i]
+        unsafe public float this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return r;
-                    case 1: return g;
-                    case 2: return b;
-                    default: throw new IndexOutOfRangeException("ColorRGB index out of range: " + i);
-                }
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("ColorRGB index out of range.");
+
+                fixed (ColorRGB* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: r = value; break;
-                    case 1: g = value; break;
-                    case 2: b = value; break;
-                    default: throw new IndexOutOfRangeException("ColorRGB index out of range: " + i);
-                }
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("ColorRGB index out of range.");
+
+                fixed (float* array = &r) { array[i] = value; }
             }
         }
 
         /// <summary>
         /// Add two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator +(ColorRGB v1, ColorRGB v2)
         {
             return new ColorRGB(v1.r + v2.r, v1.g + v2.g, v1.b + v2.b);
@@ -133,6 +142,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator +(ColorRGB v1, float s)
         {
             return new ColorRGB(v1.r + s, v1.g + s, v1.b + s);
@@ -141,6 +151,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator +(float s, ColorRGB v1)
         {
             return new ColorRGB(v1.r + s, v1.g + s, v1.b + s);
@@ -149,6 +160,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator -(ColorRGB v1, ColorRGB v2)
         {
             return new ColorRGB(v1.r - v2.r, v1.g - v2.g, v1.b - v2.b);
@@ -157,6 +169,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator -(ColorRGB v1, float s)
         {
             return new ColorRGB(v1.r - s, v1.g - s, v1.b - s);
@@ -165,6 +178,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator -(float s, ColorRGB v1)
         {
             return new ColorRGB(s - v1.r, s - v1.g, s - v1.b);
@@ -173,6 +187,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator *(ColorRGB v1, ColorRGB v2)
         {
             return new ColorRGB(v1.r * v2.r, v1.g * v2.g, v1.b * v2.b);
@@ -181,6 +196,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator *(ColorRGB v, float s)
         {
             return new ColorRGB(v.r * s, v.g * s, v.b * s);
@@ -189,6 +205,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator *(float s, ColorRGB v)
         {
             return new ColorRGB(v.r * s, v.g * s, v.b * s);
@@ -197,6 +214,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Divide two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator /(ColorRGB v1, ColorRGB v2)
         {
             return new ColorRGB(v1.r / v2.r, v1.g / v2.g, v1.b / v2.b);
@@ -205,6 +223,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Divide a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB operator /(ColorRGB v, float s)
         {
             return new ColorRGB(v.r / s, v.g / s, v.b / s);
@@ -213,6 +232,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(ColorRGB v1, ColorRGB v2)
         {
             return (v1.r == v2.r && v1.g == v2.g && v1.b == v2.b);
@@ -221,6 +241,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors not equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(ColorRGB v1, ColorRGB v2)
         {
             return (v1.r != v2.r || v1.g != v2.g || v1.b != v2.b);
@@ -229,6 +250,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
             if (!(obj is ColorRGB)) return false;
@@ -241,6 +263,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal given the error.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool EqualsWithError(ColorRGB v, float eps)
         {
             if (Math.Abs(r - v.r) > eps) return false;
@@ -252,6 +275,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(ColorRGB v)
         {
             return this == v;
@@ -260,6 +284,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// colors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -311,6 +336,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(float s)
         {
             r = Math.Min(r, s);
@@ -321,6 +347,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(float s)
         {
             r = Math.Max(r, s);
@@ -331,6 +358,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(float min, float max)
         {
             r = Math.Max(Math.Min(r, max), min);
@@ -341,6 +369,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB Lerp(ColorRGB v1, ColorRGB v2, float a)
         {
             float a1 = 1.0f - a;

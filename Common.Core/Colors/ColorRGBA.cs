@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
@@ -23,6 +24,7 @@ namespace Common.Core.Colors
 
         public float r, g, b, a;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(float r, float g, float b, float a)
         {
             this.r = r;
@@ -31,110 +33,118 @@ namespace Common.Core.Colors
             this.a = a;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(float r, float g, float b) : this(r,g,b,1)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(float v) : this(v,v,v,v)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(float v, float a) : this(v,v,v, 1)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(double r, double g, double b, double a) 
             : this((float)r, (float)g, (float)b, (float)a)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(double r, double g, double b) : this(r, g, b, 1)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(double v) : this(v, v, v, v)
         {
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGBA(double v, double a) : this(v, v, v, 1)
         {
 
         }
 
-        public float this[int i]
+        unsafe public float this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return r;
-                    case 1: return g;
-                    case 2: return b;
-                    case 3: return a;
-                    default: throw new IndexOutOfRangeException("ColorRGBA index out of range: " + i);
-                }
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("ColorRGBA index out of range.");
+
+                fixed (ColorRGBA* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: r = value; break;
-                    case 1: g = value; break;
-                    case 2: b = value; break;
-                    case 3: a = value; break;
-                    default: throw new IndexOutOfRangeException("ColorRGBA index out of range: " + i);
-                }
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("ColorRGBA index out of range.");
+
+                fixed (float* array = &r) { array[i] = value; }
             }
         }
 
         public ColorRGBA rrra
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new ColorRGBA(r, r, r, a); }
         }
 
         public ColorRGBA bgra
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new ColorRGBA(b, g, r, a); }
         }
 
         public ColorRGB rgb
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new ColorRGB(r, g, b); }
         }
 
         public ColorHSV hsv
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return ColorRGB.ToHSV(r, g, b); }
         }
 
         public float Magnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return (float)Math.Sqrt(SqrMagnitude); }
         }
 
         public float SqrMagnitude
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return (r * r + g * g + b * b + a*a); }
         }
 
         public float Intensity
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return (r + g + b) / 3.0f; }
         }
 
         public float Luminance
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return 0.2126f * r + 0.7152f * g + 0.0722f * b; }
         }
 
         public int Integer
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 int R = (int)FMath.Clamp(r * 255.0f, 0.0f, 255.0f);
@@ -149,6 +159,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Add two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator +(ColorRGBA v1, ColorRGBA v2)
         {
             return new ColorRGBA(v1.r + v2.r, v1.g + v2.g, v1.b + v2.b, v1.a + v2.a);
@@ -157,6 +168,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Add color and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator +(ColorRGBA v1, float s)
         {
             return new ColorRGBA(v1.r + s, v1.g + s, v1.b + s, v1.a + s);
@@ -165,6 +177,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Add color and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator +(float s, ColorRGBA v1)
         {
             return new ColorRGBA(v1.r + s, v1.g + s, v1.b + s, v1.a + s);
@@ -173,6 +186,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator -(ColorRGBA v1, ColorRGBA v2)
         {
             return new ColorRGBA(v1.r - v2.r, v1.g - v2.g, v1.b - v2.b, v1.a - v2.a);
@@ -181,6 +195,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract color and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator -(ColorRGBA v1, float s)
         {
             return new ColorRGBA(v1.r - s, v1.g - s, v1.b - s, v1.a - s);
@@ -189,6 +204,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract color and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator -(float s, ColorRGBA v1)
         {
             return new ColorRGBA(s - v1.r,s -  v1.g, s - v1.b, s - v1.a);
@@ -197,6 +213,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator *(ColorRGBA v1, ColorRGBA v2)
         {
             return new ColorRGBA(v1.r * v2.r, v1.g * v2.g, v1.b * v2.b, v1.a * v2.a);
@@ -205,6 +222,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply a color and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator *(ColorRGBA v, float s)
         {
             return new ColorRGBA(v.r * s, v.g * s, v.b * s, v.a * s);
@@ -213,6 +231,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply a color and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator *(float s, ColorRGBA v)
         {
             return new ColorRGBA(v.r * s, v.g * s, v.b * s, v.a * s);
@@ -221,6 +240,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Divide two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator /(ColorRGBA v1, ColorRGBA v2)
         {
             return new ColorRGBA(v1.r / v2.r, v1.g / v2.g, v1.b / v2.b, v1.a / v2.a);
@@ -229,6 +249,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Divide a color and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA operator /(ColorRGBA v, float s)
         {
             return new ColorRGBA(v.r / s, v.g / s, v.b / s, v.a / s);
@@ -237,6 +258,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(ColorRGBA v1, ColorRGBA v2)
         {
             return (v1.r == v2.r && v1.g == v2.g && v1.b == v2.b && v1.a == v2.a);
@@ -245,6 +267,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors not equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(ColorRGBA v1, ColorRGBA v2)
         {
             return (v1.r != v2.r || v1.g != v2.g || v1.b != v2.b || v1.a != v2.a);
@@ -253,6 +276,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
             if (!(obj is ColorRGBA)) return false;
@@ -265,6 +289,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal given the error.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool EqualsWithError(ColorRGBA v, float eps)
         {
             if (Math.Abs(r - v.r) > eps) return false;
@@ -277,6 +302,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(ColorRGBA v)
         {
             return this == v;
@@ -285,6 +311,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// colors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -338,6 +365,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// The minimum value between s and each component in color.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Min(float s)
         {
             r = Math.Min(r, s);
@@ -349,6 +377,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// The maximum value between s and each component in color.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Max(float s)
         {
             r = Math.Max(r, s);
@@ -360,6 +389,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(float min, float max)
         {
             r = Math.Max(Math.Min(r, max), min);
@@ -371,6 +401,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Lerp between two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGBA Lerp(ColorRGBA v1, ColorRGBA v2, float a)
         {
             float a1 = 1.0f - a;

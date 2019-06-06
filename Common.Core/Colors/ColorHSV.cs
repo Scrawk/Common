@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
@@ -19,6 +20,7 @@ namespace Common.Core.Colors
 
         public float h, s, v;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorHSV(float h, float s, float v)
         {
             this.h = h;
@@ -26,6 +28,7 @@ namespace Common.Core.Colors
             this.v = v;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorHSV(double h, double s, double v)
         {
             this.h = (float)h;
@@ -35,41 +38,38 @@ namespace Common.Core.Colors
 
         public ColorRGB rgb
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return ToRGB(h, s, v); }
         }
 
         public ColorRGBA rgb1
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return ToRGB(h, s, v).rgb1; }
         }
 
-        public float this[int i]
+        unsafe public float this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return h;
-                    case 1: return s;
-                    case 2: return v;
-                    default: throw new IndexOutOfRangeException("ColorHSV index out of range: " + i);
-                }
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("ColorHSV index out of range.");
+
+                fixed (ColorHSV* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: h = value; break;
-                    case 1: s = value; break;
-                    case 2: v = value; break;
-                    default: throw new IndexOutOfRangeException("ColorHSV index out of range: " + i);
-                }
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("ColorHSV index out of range.");
+
+                fixed (float* array = &h) { array[i] = value; }
             }
         }
 
         /// <summary>
         /// Add two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator +(ColorHSV hsv1, ColorHSV hsv2)
         {
             return new ColorHSV(hsv1.h + hsv2.h, hsv1.s + hsv2.s, hsv1.v + hsv2.v);
@@ -78,6 +78,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator +(ColorHSV hsv1, float s)
         {
             return new ColorHSV(hsv1.h + s, hsv1.s + s, hsv1.v + s);
@@ -86,6 +87,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator +(float s, ColorHSV hsv1)
         {
             return new ColorHSV(hsv1.h + s, hsv1.s + s, hsv1.v + s);
@@ -94,6 +96,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator -(ColorHSV hsv1, ColorHSV hsv2)
         {
             return new ColorHSV(hsv1.h - hsv2.h, hsv1.s - hsv2.s, hsv1.v - hsv2.v);
@@ -102,6 +105,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator -(ColorHSV hsv1, float s)
         {
             return new ColorHSV(hsv1.h - s, hsv1.s - s, hsv1.v - s);
@@ -110,6 +114,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator -(float s, ColorHSV hsv1)
         {
             return new ColorHSV(s - hsv1.h, s - hsv1.s, s - hsv1.v);
@@ -118,6 +123,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator *(ColorHSV hsv1, ColorHSV hsv2)
         {
             return new ColorHSV(hsv1.h * hsv2.h, hsv1.s * hsv2.s, hsv1.v * hsv2.v);
@@ -126,6 +132,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator *(ColorHSV hsv, float s)
         {
             return new ColorHSV(hsv.h * s, hsv.s * s, hsv.v * s);
@@ -134,6 +141,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator *(float s, ColorHSV v)
         {
             return new ColorHSV(v.h * s, v.s * s, v.v * s);
@@ -142,6 +150,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Divide two colors.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator /(ColorHSV hsv1, ColorHSV hsv2)
         {
             return new ColorHSV(hsv1.h / hsv2.h, hsv1.s / hsv2.s, hsv1.v / hsv2.v);
@@ -150,6 +159,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Divide a vector and a scalar.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorHSV operator /(ColorHSV hsv, float s)
         {
             return new ColorHSV(hsv.h / s, hsv.s / s, hsv.v / s);
@@ -158,6 +168,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(ColorHSV hsv1, ColorHSV hsv2)
         {
             return (hsv1.h == hsv2.h && hsv1.s == hsv2.s && hsv1.v == hsv2.v);
@@ -166,6 +177,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors not equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(ColorHSV hsv1, ColorHSV hsv2)
         {
             return (hsv1.h != hsv2.h || hsv1.s != hsv2.s || hsv1.v != hsv2.v);
@@ -174,6 +186,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
             if (!(obj is ColorHSV)) return false;
@@ -186,6 +199,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal given the error.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool EqualsWithError(ColorHSV hsv, float eps)
         {
             if (Math.Abs(h - hsv.h) > eps) return false;
@@ -197,6 +211,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(ColorHSV hsv)
         {
             return this == hsv;
@@ -205,6 +220,7 @@ namespace Common.Core.Colors
         /// <summary>
         /// colors hash code. 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked

@@ -67,6 +67,15 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2i zy
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2i(z, y); }
+        }
+
+        /// <summary>
         /// Convert to a 4 dimension vector.
         /// </summary>
         public Vector4i xyz0
@@ -108,27 +117,21 @@ namespace Common.Core.LinearAlgebra
             this.z = 0;
         }
 
-        public int this[int i]
+        unsafe public int this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    default: throw new IndexOutOfRangeException("Vector3i index out of range: " + i);
-                }
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("Vector3i index out of range.");
+
+                fixed (Vector3i* array = &this) { return ((int*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    default: throw new IndexOutOfRangeException("Vector3i index out of range: " + i);
-                }
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("Vector3i index out of range.");
+
+                fixed (int* array = &x) { array[i] = value; }
             }
         }
 

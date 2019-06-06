@@ -27,6 +27,10 @@ namespace Common.Core.Threading
 
     public class ParallelAlgorithm2D : ParallelAlgorithm
     {
+        public static IList<Block2D> CreateBlocks(Vector2i size, int blockSize, bool single = false)
+        {
+            return CreateBlocks(size.x, size.y, blockSize, single);
+        }
 
         public static IList<Block2D> CreateBlocks(int width, int height, int blockSize, bool single = false)
         {
@@ -40,9 +44,8 @@ namespace Common.Core.Threading
             {
                 int sizeX = width / blockSize + 1;
                 int sizeY = height / blockSize + 1;
-                var blocks = new Block2D[sizeX * sizeY];
+                var blocks = new List<Block2D>(sizeX * sizeY);
 
-                int i = 0;
                 for (int y = 0; y < height; y += blockSize)
                 {
                     for (int x = 0; x < width; x += blockSize)
@@ -52,7 +55,7 @@ namespace Common.Core.Threading
                         box.Max.x = Math.Min(x + blockSize, width);
                         box.Max.y = Math.Min(y + blockSize, height);
 
-                        blocks[i++] = box;
+                        blocks.Add(box);
                     }
                 }
 
