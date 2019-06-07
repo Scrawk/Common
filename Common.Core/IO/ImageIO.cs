@@ -18,6 +18,7 @@ namespace Common.Core.IO
         public int BitDepth;
         public bool BigEndian;
         public bool IsBGRA;
+        public bool FlipY;
     }
 
     public static class ImageIO
@@ -46,7 +47,8 @@ namespace Common.Core.IO
                     else if (properties.IsBGRA)
                         pixel = pixel.bgra;
 
-                    pixels[x, y] = pixel;
+                    int Y = properties.FlipY ? height - y - 1 : y;
+                    pixels[x, Y] = pixel;
                 }
             }
 
@@ -63,7 +65,8 @@ namespace Common.Core.IO
             {
                 for (int x = 0; x < width; x++)
                 {
-                    ColorRGBA pixel = pixels[x, y];
+                    int Y = properties.FlipY ? height - y - 1 : y;
+                    ColorRGBA pixel = pixels[x, Y];
 
                     if (channels == 1)
                         pixel = pixel.rrra;
