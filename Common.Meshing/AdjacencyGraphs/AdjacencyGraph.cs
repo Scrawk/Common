@@ -108,6 +108,20 @@ namespace Common.Meshing.AdjacencyGraphs
             Edges[i].Add(edge);
         }
 
+        public bool ContainsEdge(EDGE edge)
+        {
+            int i = edge.From;
+
+            if (Edges[i] == null)
+                return false;
+
+            foreach (var e in Edges[i])
+                if (e.To == edge.To)
+                    return true;
+
+            return false;
+        }
+
         /// <summary>
         /// Add a edge to the graph.
         /// The edge starts at the from vertex 
