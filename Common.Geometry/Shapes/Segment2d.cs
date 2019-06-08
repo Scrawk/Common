@@ -101,6 +101,14 @@ namespace Common.Geometry.Shapes
             return string.Format("[Segment2d: A={0}, B={1}]", A, B);
         }
 
+        /// <summary>
+        /// Does the two segments intersect.
+        /// </summary>
+        /// <param name="seg">other segment</param>
+        public bool Intersects(Segment2d seg)
+        {
+            return Intersects(seg, out double t);
+        }
 
         /// <summary>
         /// Does the two segments intersect.

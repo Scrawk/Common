@@ -102,6 +102,15 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Does the two segments intersect.
+        /// </summary>
+        /// <param name="seg">other segment</param>
+        public bool Intersects(Segment2f seg)
+        {
+            return Intersects(seg, out float t);
+        }
+
+        /// <summary>
         /// Do the two segments intersect.
         /// </summary>
         /// <param name="seg">other segment</param>

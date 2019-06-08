@@ -27,6 +27,11 @@ namespace Common.Meshing.HalfEdgeBased
                 Vertices.Count, Edges.Count, Faces.Count);
         }
 
+        public Vector2f Position(int i)
+        {
+            return Vertices[i].Position;
+        }
+
         /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>

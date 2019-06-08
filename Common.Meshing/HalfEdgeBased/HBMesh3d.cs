@@ -24,6 +24,11 @@ namespace Common.Meshing.HalfEdgeBased
                 Vertices.Count, Edges.Count, Faces.Count);
         }
 
+        public Vector3d Position(int i)
+        {
+            return Vertices[i].Position;
+        }
+
     }
 }
 

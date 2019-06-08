@@ -108,15 +108,13 @@ namespace Common.Meshing.AdjacencyGraphs
             Edges[i].Add(edge);
         }
 
-        public bool ContainsEdge(EDGE edge)
+        public bool ContainsEdge(int from, int to)
         {
-            int i = edge.From;
-
-            if (Edges[i] == null)
+            if (Edges[from] == null)
                 return false;
 
-            foreach (var e in Edges[i])
-                if (e.To == edge.To)
+            foreach (var e in Edges[from])
+                if (e.To == to)
                     return true;
 
             return false;

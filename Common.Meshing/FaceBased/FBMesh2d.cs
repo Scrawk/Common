@@ -27,6 +27,11 @@ namespace Common.Meshing.FaceBased
                 Vertices.Count, Faces.Count);
         }
 
+        public Vector2d Position(int i)
+        {
+            return Vertices[i].Position;
+        }
+
         /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>

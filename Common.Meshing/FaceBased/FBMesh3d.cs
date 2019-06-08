@@ -19,6 +19,11 @@ namespace Common.Meshing.FaceBased
 
         }
 
+        public Vector3d Position(int i)
+        {
+            return Vertices[i].Position;
+        }
+
         public override string ToString()
         {
             return string.Format("[FBMesh3d: Vertices={0}, Faces={1}]",
