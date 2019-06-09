@@ -73,6 +73,7 @@ namespace Common.Meshing.FaceBased
 
             Faces.Add(face);
         }
+
         public void AddFace(FBFace f0, FBFace f1)
         {
             if (Faces == null)
