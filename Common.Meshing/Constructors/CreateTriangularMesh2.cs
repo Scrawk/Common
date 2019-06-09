@@ -12,7 +12,7 @@ namespace Common.Meshing.Constructors
     /// Create triangle meshes via mesh constructor.
     /// All triangles are CCW.
     /// </summary>
-    public static class CreateTriangleMesh2
+    public static class CreateTriangularMesh2
     {
 
         public static HBMesh2f FromTriangle(Vector2f A, Vector2f B, Vector2f C)

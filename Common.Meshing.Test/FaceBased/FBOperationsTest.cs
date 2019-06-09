@@ -18,7 +18,7 @@ namespace Common.Meshing.Test.FaceBased
             var max = new Vector2f(1, 1);
 
             var constructor = new FBMeshConstructor2f();
-            CreateTriangleMesh2.FromBox(constructor, min, max);
+            CreateTriangularMesh2.FromBox(constructor, min, max);
             var tmp = constructor.PopMesh();
 
             var mesh = FBOperations.ToHBTriangleMesh2f(tmp);

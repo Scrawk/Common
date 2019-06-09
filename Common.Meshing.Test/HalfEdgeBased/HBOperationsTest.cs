@@ -19,7 +19,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var b = new Vector2f(-1, -1);
             var c = new Vector2f(1, -1);
 
-            HBMesh2f mesh = CreateTriangleMesh2.FromTriangle(a, b, c);
+            HBMesh2f mesh = CreateTriangularMesh2.FromTriangle(a, b, c);
 
             HBOperations.SplitEdge(mesh, mesh.Edges[0]);
 
@@ -97,7 +97,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var min = new Vector2f(-1, -1);
             var max = new Vector2f(1, 1);
 
-            var tmp = CreateTriangleMesh2.FromBox(min, max);
+            var tmp = CreateTriangularMesh2.FromBox(min, max);
             var mesh = HBOperations.ToFBTriangleMesh2f(tmp);
 
             Assert.AreEqual(4, mesh.Vertices.Count);

@@ -10,7 +10,7 @@ namespace Common.Meshing.Constructors
     /// Create general meshes via mesh constructor.
     /// All faces are CCW.
     /// </summary>
-    public static class CreateGeneralMesh2
+    public static class CreatePolygonalMesh2
     {
 
         public static HBMesh2f FromTriangle(Vector2f A, Vector2f B, Vector2f C)

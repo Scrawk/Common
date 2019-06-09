@@ -11,7 +11,7 @@ using Common.Meshing.Test.HalfEdgeBased;
 namespace Common.Meshing.Test.Constructors
 {
     [TestClass]
-    public class Meshing_Constructors_CreateTriangleMesh2Test
+    public class Meshing_Constructors_CreateTriangularMesh2Test
     { 
         [TestMethod]
         public void FromTriangle()
@@ -19,7 +19,7 @@ namespace Common.Meshing.Test.Constructors
             var a = new Vector2f(-1, -1);
             var b = new Vector2f(1, -1);
             var c = new Vector2f(0, 1);
-            var mesh = CreateTriangleMesh2.FromTriangle(a, b, c);
+            var mesh = CreateTriangularMesh2.FromTriangle(a, b, c);
 
             Assert.AreEqual(3, mesh.Vertices.Count);
             Assert.AreEqual(6, mesh.Edges.Count);
@@ -47,7 +47,7 @@ namespace Common.Meshing.Test.Constructors
         {
             var min = new Vector2f(-1, -1);
             var max = new Vector2f(1, 1);
-            var mesh = CreateTriangleMesh2.FromBox(min, max);
+            var mesh = CreateTriangularMesh2.FromBox(min, max);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(10, mesh.Edges.Count);
@@ -80,7 +80,7 @@ namespace Common.Meshing.Test.Constructors
         [TestMethod]
         public void FromCircle()
         {
-            var mesh = CreateTriangleMesh2.FromCircle(Vector2f.Zero, 1.0f, 4);
+            var mesh = CreateTriangularMesh2.FromCircle(Vector2f.Zero, 1.0f, 4);
 
             Assert.AreEqual(5, mesh.Vertices.Count);
             Assert.AreEqual(16, mesh.Edges.Count);

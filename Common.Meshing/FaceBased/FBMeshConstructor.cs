@@ -52,12 +52,12 @@ namespace Common.Meshing.FaceBased
            where FACE : FBFace, new()
     {
 
-        protected MESH Mesh { get; set; }
+        private MESH Mesh;
 
         /// <summary>
         /// Does a face mesh support face connections.
         /// </summary>
-        public bool SupportsFaceConnections { get { return true; } }
+        public bool SupportsFaceConnections => true;
 
         /// <summary>
         /// Create a triangle mesh. All faces are triangles.

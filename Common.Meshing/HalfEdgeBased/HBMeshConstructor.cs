@@ -59,7 +59,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Does a half edge mesh support face connections.
         /// Done via edge opposite member.
         /// </summary>
-        public bool SupportsFaceConnections { get { return true; } }
+        public bool SupportsFaceConnections => true;
 
         /// <summary>
         /// Add a boundary so all edges have a opposite member.
@@ -79,7 +79,8 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         public void PushPolygonalMesh(int numVertices, int numFaces)
         {
-            NewMesh(numVertices, 0, numFaces);
+            int numEdges = numVertices * 2; //Guess
+            NewMesh(numVertices, numEdges, numFaces);
         }
 
         /// <summary>
