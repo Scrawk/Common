@@ -88,6 +88,27 @@ namespace Common.Meshing.IndexBased
             texCoords.CopyTo(TexCoords0, 0);
         }
 
+        public void Translate(Vector3d translate)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] += translate;
+        }
+
+        public void Scale(Vector3d scale)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] *= scale;
+        }
+
+        public void Transform(Matrix4x4d m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = (m * Positions[i].xyz1).xyz;
+        }
+
         public void Transform(Matrix3x3d m)
         {
             int numVerts = Positions.Length;

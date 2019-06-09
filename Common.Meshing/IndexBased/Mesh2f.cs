@@ -95,6 +95,26 @@ namespace Common.Meshing.IndexBased
             texCoords.CopyTo(TexCoords0, 0);
         }
 
+        public void Translate(Vector2f translate)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] += translate;
+        }
+
+        public void Scale(Vector2f scale)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] *= scale;
+        }
+
+        public void Transform(Matrix4x4f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = (m * Positions[i].xy01).xy;
+        }
         public void Transform(Matrix2x2f m)
         {
             int numVerts = Positions.Length;

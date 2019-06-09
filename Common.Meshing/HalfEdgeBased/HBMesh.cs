@@ -336,5 +336,32 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        public void Translate(Vector3d translate)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                var p = Vertices[i].GetPosition();
+                Vertices[i].SetPosition(p + translate);
+            }
+        }
+
+        public void Scale(Vector3d scale)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                var p = Vertices[i].GetPosition();
+                Vertices[i].SetPosition(p * scale);
+            }
+        }
+
+        public void Transform(Matrix4x4d matrix)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                var p = Vertices[i].GetPosition();
+                Vertices[i].SetPosition((matrix * p.xyz1).xyz);
+            }
+        }
+
     }
 }

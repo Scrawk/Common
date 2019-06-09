@@ -40,6 +40,7 @@ namespace Common.Meshing.HalfEdgeBased
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].Position);
         }
+
     }
 
 }
