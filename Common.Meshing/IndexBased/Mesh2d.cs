@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Common.Core.LinearAlgebra;
-using Common.Meshing.IndexBased;
 
 namespace Common.Meshing.IndexBased
 {
@@ -122,8 +122,6 @@ namespace Common.Meshing.IndexBased
             for (int i = 0; i < numVerts; i++)
                 Positions[i] = m * Positions[i];
         }
-
-
 
     }
 }

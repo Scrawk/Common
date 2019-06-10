@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Common.Core.LinearAlgebra;
 
@@ -283,6 +284,21 @@ namespace Common.Meshing.FaceBased
                 var p = Vertices[i].GetPosition();
                 Vertices[i].SetPosition((matrix * p.xyz1).xyz);
             }
+        }
+
+        public string Print()
+        {
+            var builder = new StringBuilder();
+
+            builder.AppendLine(this.ToString());
+
+            foreach (var v in Vertices)
+                builder.AppendLine(v.ToString(this));
+
+            foreach (var f in Faces)
+                builder.AppendLine(f.ToString(this));
+
+            return builder.ToString();
         }
 
     }
