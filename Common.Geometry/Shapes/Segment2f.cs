@@ -202,9 +202,7 @@ namespace Common.Geometry.Shapes
             if (len < FMath.EPS) return;
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
-
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
+            t = FMath.Clamp01(t);
         }
 
         /// <summary>
