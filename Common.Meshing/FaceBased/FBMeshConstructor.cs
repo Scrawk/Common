@@ -6,6 +6,21 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.FaceBased
 {
+    /// <summary>
+    /// Constructor for HBMesh2i
+    /// </summary>
+    public class FBMeshConstructor2i : FBMeshConstructor<FBMesh2i, FBVertex2i, FBFace>
+    {
+
+    }
+
+    /// <summary>
+    /// Constructor for HBMesh3i
+    /// </summary>
+    public class FBMeshConstructor3i : FBMeshConstructor<FBMesh3i, FBVertex3i, FBFace>
+    {
+
+    }
 
     /// <summary>
     /// Constructor for HBMesh2f
