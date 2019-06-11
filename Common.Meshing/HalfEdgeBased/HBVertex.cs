@@ -146,13 +146,5 @@ namespace Common.Meshing.HalfEdgeBased
 
         public abstract Vector3d GetPosition();
 
-        /// <summary>
-        /// Create a vertex that is a interpolation 
-        /// from this to the other vertex.
-        /// </summary>
-        /// <param name="to">other vertex</param>
-        /// <returns>interpolation< between the two/returns>
-        public abstract HBVertex Interpolate(HBVertex to, double t);
-
     }
 }

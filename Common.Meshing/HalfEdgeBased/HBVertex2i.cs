@@ -7,24 +7,24 @@ using Common.Core.LinearAlgebra;
 namespace Common.Meshing.HalfEdgeBased
 {
     /// <summary>
-    /// A half edge vertex with 3D position.
+    /// A half edge vertex with 2D position.
     /// Presumes edges are connected in CCW order.
     /// </summary>
-    public class HBVertex3f : HBVertex
+    public class HBVertex2i : HBVertex
     {
         /// <summary>
         /// The dimension of the vertex, ie 2D, 3D.
         /// </summary>
-        public override int Dimension => 3;
+        public override int Dimension => 2;
 
-        public Vector3f Position;
+        public Vector2i Position;
 
-        public HBVertex3f()
+        public HBVertex2i()
         {
 
         }
 
-        public HBVertex3f(Vector3f pos)
+        public HBVertex2i(Vector2i pos)
         {
             Position = pos;
         }
@@ -36,23 +36,23 @@ namespace Common.Meshing.HalfEdgeBased
         /// <returns>Vertex as string</returns>
         public override string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
         {
-            return string.Format("[HBVertex3f: Id={0}, Edge={1}, Position={2}]",
+            return string.Format("[HBVertex2i: Id={0}, Edge={1}, Position={2}]",
                 mesh.IndexOf(this), mesh.IndexOf(Edge), Position);
         }
 
         public override void SetPosition(HBVertex vertex)
         {
-            Position = (vertex as HBVertex3f).Position;
+            Position = (vertex as HBVertex2i).Position;
         }
 
         public override void SetPosition(Vector3d pos)
         {
-            Position = (Vector3f)pos;
+            Position = (Vector2i)pos.xy;
         }
 
         public override Vector3d GetPosition()
         {
-            return Position;
+            return Position.xy0;
         }
 
     }

@@ -9,6 +9,22 @@ namespace Common.Meshing.HalfEdgeBased
 {
 
     /// <summary>
+    /// Constructor for HBMesh2i
+    /// </summary>
+    public class HBMeshConstructor2i : HBMeshConstructor<HBMesh2i, HBVertex2i, HBEdge, HBFace>
+    {
+
+    }
+
+    /// <summary>
+    /// Constructor for HBMesh3i
+    /// </summary>
+    public class HBMeshConstructor3i : HBMeshConstructor<HBMesh3i, HBVertex3i, HBEdge, HBFace>
+    {
+
+    }
+
+    /// <summary>
     /// Constructor for HBMesh2f
     /// </summary>
     public class HBMeshConstructor2f : HBMeshConstructor<HBMesh2f, HBVertex2f, HBEdge, HBFace>

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
-using Common.Meshing.IndexBased;
-using Common.Meshing.FaceBased;
 
 namespace Common.Meshing.HalfEdgeBased
 {

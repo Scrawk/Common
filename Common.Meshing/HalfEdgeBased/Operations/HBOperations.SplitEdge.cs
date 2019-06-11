@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.LinearAlgebra;
+
 namespace Common.Meshing.HalfEdgeBased
 {
     public static partial class HBOperations
@@ -30,7 +32,9 @@ namespace Common.Meshing.HalfEdgeBased
             //Create a new vertex at t dist starting at from.
             var from = right0.From;
             var to = left0.From;
-            var mid = from.Interpolate(to, t);
+            var pos = Vector3d.Lerp(from.GetPosition(), to.GetPosition(), t);
+            var mid = new VERTEX();
+            mid.SetPosition(pos);
 
             //Create a new half edge.
             EDGE right1, left1;
@@ -73,18 +77,6 @@ namespace Common.Meshing.HalfEdgeBased
             e2 = new EDGE();
             e1.Opposite = e2;
             e2.Opposite = e1;
-        }
-
-        /// <summary>
-        /// Create edges opposite.
-        /// </summary>
-        private static EDGE NewEdge<EDGE>(EDGE edge)
-            where EDGE : HBEdge, new()
-        {
-            var opp = new EDGE();
-            opp.Opposite = edge;
-            edge.Opposite = opp;
-            return opp;
         }
 
         /// <summary>

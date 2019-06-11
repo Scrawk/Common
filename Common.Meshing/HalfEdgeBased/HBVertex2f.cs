@@ -55,17 +55,5 @@ namespace Common.Meshing.HalfEdgeBased
             return Position.xy0;
         }
 
-        /// <summary>
-        /// Create a vertex that is a interpolation 
-        /// from this to the other vertex.
-        /// </summary>
-        /// <param name="to">other vertex</param>
-        /// <returns>interpolation< between the two/returns>
-        public override HBVertex Interpolate(HBVertex to, double t)
-        {
-            var pos = Vector2f.Lerp(Position, (to as HBVertex2f).Position, (float)t);
-            return new HBVertex2f(pos);
-        }
-
     }
 }
