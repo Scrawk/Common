@@ -9,7 +9,7 @@ namespace Common.Meshing.Constructors
     {
         int VertexCount { get; }
 
-        int FaceCount { get; }
+        int TriangleCount { get; }
 
         Vector3d GetPosition(int i);
 

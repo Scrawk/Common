@@ -10,7 +10,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// A half edge based mesh.
     /// </summary>
-    public class HBMesh<VERTEX, EDGE, FACE> : ITriangularMesh
+    public class HBMesh<VERTEX, EDGE, FACE> : ITriangularMesh, IPolygonalMesh
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -51,9 +51,14 @@ namespace Common.Meshing.HalfEdgeBased
         public List<FACE> Faces { get; private set; }
 
         /// <summary>
-        /// The number of faces in mesh.
+        /// The number of triangles in mesh.
         /// </summary>
-        public int FaceCount => Faces.Count;
+        public int TriangleCount => Faces.Count;
+
+        /// <summary>
+        /// The number of polygons in mesh.
+        /// </summary>
+        public int PolygonCount => Faces.Count;
 
         /// <summary>
         /// Convert mesh to string.
@@ -228,20 +233,20 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Get the position at index i.
+        /// </summary>
+        public Vector3d GetPosition(int i)
+        {
+            return Vertices[i].GetPosition();
+        }
+
+        /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>
         public void GetPositions(List<Vector3d> positions)
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].GetPosition());
-        }
-
-        /// <summary>
-        /// Get the position at index i.
-        /// </summary>
-        public Vector3d GetPosition(int i)
-        {
-            return Vertices[i].GetPosition();
         }
 
         /// <summary>
@@ -256,6 +261,18 @@ namespace Common.Meshing.HalfEdgeBased
             int b = face.Edge.From.Tag;
             int c = face.Edge.Next.From.Tag;
             return new Vector3i(a, b, c);
+        }
+
+        /// <summary>
+        /// Gets the polygon at index i.
+        /// Presumes faces are polygons 
+        /// and vertices have been tagged.
+        /// </summary>
+        public void GetPolygon(int i, List<int> indices)
+        {
+            var face = Faces[i];
+            foreach (var v in face.Edge.EnumerateEdges())
+                indices.Add(v.Tag);
         }
 
         /// <summary>
@@ -369,6 +386,9 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        /// <summary>
+        /// Translate all vertices.
+        /// </summary>
         public void Translate(Vector3d translate)
         {
             for (int i = 0; i < Vertices.Count; i++)
@@ -378,6 +398,9 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        /// <summary>
+        /// Scale all vertices.
+        /// </summary>
         public void Scale(Vector3d scale)
         {
             for (int i = 0; i < Vertices.Count; i++)
@@ -387,6 +410,9 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        /// <summary>
+        /// Transform all vertices.
+        /// </summary>
         public void Transform(Matrix4x4d matrix)
         {
             for (int i = 0; i < Vertices.Count; i++)
@@ -396,6 +422,9 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        /// <summary>
+        /// Print the mesh for debugging.
+        /// </summary>
         public string Print()
         {
             var builder = new StringBuilder();

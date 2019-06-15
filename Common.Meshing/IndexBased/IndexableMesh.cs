@@ -7,31 +7,72 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.IndexBased
 {
-    public abstract class IndexableMesh : ITriangularMesh, IEdgeMesh
+    public abstract class IndexableMesh : ITriangularMesh, IPolygonalMesh, IEdgeMesh
     {
 
+        /// <summary>
+        /// The number of vertices in mesh.
+        /// </summary>
         public abstract int VertexCount { get; }
 
-        public int FaceCount => IndicesCount / 3;
+        /// <summary>
+        /// The number of triangles in mesh.
+        /// </summary>
+        public int TriangleCount => IndicesCount / 3;
 
+        /// <summary>
+        /// The number of polygons in mesh.
+        /// Presumes polygons are triangles.
+        /// </summary>
+        public int PolygonCount => IndicesCount / 3;
+
+        /// <summary>
+        /// The number of edges in mesh.
+        /// </summary>
         public int EdgeCount => IndicesCount / 2;
 
+        /// <summary>
+        /// Does the mesh have indices.
+        /// </summary>
         public bool HasIndice { get { return Indices != null; } }
 
+        /// <summary>
+        /// The number of indices in mesh.
+        /// </summary>
         public int IndicesCount { get { return (Indices != null) ? Indices.Length : 0; } }
 
+        /// <summary>
+        /// The mesh indices.
+        /// </summary>
         public int[] Indices { get; protected set; }
 
+        /// <summary>
+        /// Does the mesh have colors.
+        /// </summary>
         public bool HasColors { get { return Colors != null; } }
 
+        /// <summary>
+        /// The mesh colors.
+        /// </summary>
         public ColorRGBA[] Colors { get; protected set; }
 
         public abstract Vector3d GetPosition(int i);
 
+        /// <summary>
+        /// Get the vertex position at index i.
+        /// </summary>
         public abstract void SetPosition(int i, Vector3d pos);
 
+        /// <summary>
+        /// Create the vertex array. 
+        /// </summary>
+        /// <param name="size">size of the array</param>
         public abstract void SetPositions(int size);
 
+        /// <summary>
+        /// Get the triangle at index i.
+        /// Presumes indices represents triangles.
+        /// </summary>
         public Vector3i GetTriangle(int i)
         {
             int a = Indices[i / 3 + 0];
@@ -40,6 +81,21 @@ namespace Common.Meshing.IndexBased
             return new Vector3i(a, b, c);
         }
 
+        /// <summary>
+        /// Get the polygon at index i.
+        /// Presumes indices represents triangles.
+        /// </summary>
+        public void GetPolygon(int i, List<int> indices)
+        {
+            indices.Add(Indices[i / 3 + 0]);
+            indices.Add(Indices[i / 3 + 1]);
+            indices.Add(Indices[i / 3 + 2]);
+        }
+
+        /// <summary>
+        /// Get the edge at index i.
+        /// Presumes indices represents edges.
+        /// </summary>
         public Vector2i GetEdge(int i)
         {
             int a = Indices[i / 3 + 0];
@@ -47,30 +103,50 @@ namespace Common.Meshing.IndexBased
             return new Vector2i(a, b);
         }
 
+        /// <summary>
+        /// Creates the index array.
+        /// </summary>
+        /// <param name="size">The size of the array.</param>
         public void SetIndices(int size)
         {
             if (Indices == null || Indices.Length != size)
                 Indices = new int[size];
         }
 
+        /// <summary>
+        /// Create the index array.
+        /// </summary>
+        /// <param name="indices">Array to copy from.</param>
         public void SetIndices(IList<int> indices)
         {
             SetIndices(indices.Count);
             indices.CopyTo(Indices, 0);
         }
 
+        /// <summary>
+        /// Creates the color array.
+        /// </summary>
+        /// <param name="size">The size of the array.</param>
         public void SetColors(int size)
         {
             if (Colors == null || Colors.Length != size)
                 Colors = new ColorRGBA[size];
         }
 
+        /// <summary>
+        /// Create the color array.
+        /// </summary>
+        /// <param name="indices">Array to copy from.</param>
         public void SetColors(IList<ColorRGBA> colors)
         {
             SetColors(colors.Count);
             colors.CopyTo(Colors, 0);
         }
 
+        /// <summary>
+        /// Flip winding order of the triangles.
+        /// Presumes indices represent triangles.
+        /// </summary>
         public void FlipTriangles()
         {
             if (Indices == null) return;
@@ -83,6 +159,10 @@ namespace Common.Meshing.IndexBased
             }
         }
 
+        /// <summary>
+        /// Create the indices presumig the mesh
+        /// represents a polygon.
+        /// </summary>
         public void BuildPolygonIndices()
         {
             int numPoints = VertexCount;

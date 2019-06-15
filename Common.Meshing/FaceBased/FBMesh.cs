@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Common.Core.LinearAlgebra;
+using Common.Meshing.Constructors;
 
 namespace Common.Meshing.FaceBased
 {
@@ -12,14 +13,10 @@ namespace Common.Meshing.FaceBased
     /// </summary>
     /// <typeparam name="VERTEX">The element type for the vertices</typeparam>
     /// <typeparam name="FACE">The element type for the faces</typeparam>
-    public class FBMesh<VERTEX, FACE>
+    public class FBMesh<VERTEX, FACE> : ITriangularMesh, IPolygonalMesh
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
-
-        public List<VERTEX> Vertices { get; private set; }
-
-        public List<FACE> Faces { get; private set; }
 
         /// <summary>
         /// Create a new mesh.
@@ -40,6 +37,31 @@ namespace Common.Meshing.FaceBased
             Vertices = new List<VERTEX>(numVertices);
             Faces = new List<FACE>(numFaces);
         }
+
+        /// <summary>
+        /// All the vertices in the mesh.
+        /// </summary>
+        public List<VERTEX> Vertices { get; private set; }
+
+        /// <summary>
+        /// The number of vertices in mesh.
+        /// </summary>
+        public int VertexCount => Vertices.Count;
+
+        /// <summary>
+        /// All the faces in the mesh.
+        /// </summary>
+        public List<FACE> Faces { get; private set; }
+
+        /// <summary>
+        /// The number of triangles in mesh.
+        /// </summary>
+        public int TriangleCount => Faces.Count;
+
+        /// <summary>
+        /// The number of polygons in mesh.
+        /// </summary>
+        public int PolygonCount => Faces.Count;
 
         /// <summary>
         /// Convert mesh to string.
@@ -167,12 +189,46 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Get the position at index i.
+        /// </summary>
+        public Vector3d GetPosition(int i)
+        {
+            return Vertices[i].GetPosition();
+        }
+
+        /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>
         public void GetPositions(List<Vector3d> positions)
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].GetPosition());
+        }
+
+        /// <summary>
+        /// Gets the triangle at index i.
+        /// Presumes faces are triangles 
+        /// and vertices have been tagged.
+        /// </summary>
+        public Vector3i GetTriangle(int i)
+        {
+            var face = Faces[i];
+            int a = face.Vertices[0].Tag;
+            int b = face.Vertices[1].Tag;
+            int c = face.Vertices[2].Tag;
+            return new Vector3i(a, b, c);
+        }
+
+        /// <summary>
+        /// Gets the polygon at index i.
+        /// Presumes faces are polygons 
+        /// and vertices have been tagged.
+        /// </summary>
+        public void GetPolygon(int i, List<int> indices)
+        {
+            var face = Faces[i];
+            foreach (var v in face.Vertices)
+                indices.Add(v.Tag);
         }
 
         /// <summary>
@@ -259,6 +315,9 @@ namespace Common.Meshing.FaceBased
                 Vertices[i].Faces = null;
         }
 
+        /// <summary>
+        /// Translate all vertices.
+        /// </summary>
         public void Translate(Vector3d translate)
         {
             for (int i = 0; i < Vertices.Count; i++)
@@ -268,6 +327,9 @@ namespace Common.Meshing.FaceBased
             }
         }
 
+        /// <summary>
+        /// Scale all vertices.
+        /// </summary>
         public void Scale(Vector3d scale)
         {
             for (int i = 0; i < Vertices.Count; i++)
@@ -277,6 +339,9 @@ namespace Common.Meshing.FaceBased
             }
         }
 
+        /// <summary>
+        /// Transform all vertices.
+        /// </summary>
         public void Transform(Matrix4x4d matrix)
         {
             for (int i = 0; i < Vertices.Count; i++)
@@ -286,6 +351,9 @@ namespace Common.Meshing.FaceBased
             }
         }
 
+        /// <summary>
+        /// Print mesh for debugging.
+        /// </summary>
         public string Print()
         {
             var builder = new StringBuilder();
