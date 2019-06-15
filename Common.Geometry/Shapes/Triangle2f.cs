@@ -2,6 +2,11 @@
 using System.Runtime.InteropServices;
 
 using Common.Core.LinearAlgebra;
+using Common.Core.Mathematics;
+
+using REAL = System.Single;
+using VECTOR2 = Common.Core.LinearAlgebra.Vector2f;
+using VECTOR3 = Common.Core.LinearAlgebra.Vector3f;
 
 namespace Common.Geometry.Shapes
 {
@@ -10,27 +15,27 @@ namespace Common.Geometry.Shapes
     public struct Triangle2f : IEquatable<Triangle2f>
     {
 
-        public Vector2f A;
+        public VECTOR2 A;
 
-        public Vector2f B;
+        public VECTOR2 B;
 
-        public Vector2f C;
+        public VECTOR2 C;
 
-        public Triangle2f(Vector2f a, Vector2f b, Vector2f c)
+        public Triangle2f(VECTOR2 a, VECTOR2 b, VECTOR2 c)
         {
             A = a;
             B = b;
             C = c;
         }
 
-        public Triangle2f(float ax, float ay, float bx, float by, float cx, float cy)
+        public Triangle2f(REAL ax, REAL ay, REAL bx, REAL by, REAL cx, REAL cy)
         {
-            A = new Vector2f(ax, ay);
-            B = new Vector2f(bx, by);
-            C = new Vector2f(cx, cy);
+            A = new VECTOR2(ax, ay);
+            B = new VECTOR2(bx, by);
+            C = new VECTOR2(cx, cy);
         }
 
-        public Vector2f Center
+        public VECTOR2 Center
         {
             get { return (A + B + C) / 3.0f; }
         }
@@ -40,24 +45,131 @@ namespace Common.Geometry.Shapes
             get { return SignedArea > 0; }
         }
 
-        public float Area
+        public REAL Area
         {
             get { return Math.Abs(SignedArea); }
         }
 
-        public float SignedArea
+        public REAL SignedArea
         {
             get { return (A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x); }
+        }
+
+        /// <summary>
+        /// The side lengths are given as
+        /// a = sqrt((cx - bx)^2 + (cy - by)^2) -- side BC opposite of A
+        /// b = sqrt((cx - ax)^2 + (cy - ay)^2) -- side CA opposite of B
+        /// c = sqrt((ax - bx)^2 + (ay - by)^2) -- side AB opposite of C
+        /// </summary>
+        public VECTOR3 SideLengths
+        {
+            get
+            {
+                var a = FMath.Sqrt(FMath.Sqr(C.x - B.x) + FMath.Sqr(C.y - B.y));
+                var b = FMath.Sqrt(FMath.Sqr(C.x - A.x) + FMath.Sqr(C.y - A.y));
+                var c = FMath.Sqrt(FMath.Sqr(A.x - B.x) + FMath.Sqr(A.y - B.y));
+                return new VECTOR3(a, b, c);
+            }
+        }
+
+        /// <summary>
+        /// The side lengths are given as
+        /// ang_a = acos((b^2 + c^2 - a^2)  / (2 * b * c)) -- angle at A
+        /// ang_b = acos((c^2 + a^2 - b^2)  / (2 * c * a)) -- angle at B
+        /// ang_c = acos((a^2 + b^2 - c^2)  / (2 * a * b)) -- angle at C
+        /// </summary>
+        public VECTOR3 Angles
+        {
+            get
+            {
+                var len = SideLengths;
+                var a2 = len.a * len.a;
+                var b2 = len.b * len.b;
+                var c2 = len.c * len.c;
+                var a = FMath.Acos((b2 + c2 - a2) * (2 * len.b * len.c));
+                var b = FMath.Acos((c2 + a2 - b2) * (2 * len.c * len.a));
+                var c = FMath.Acos((a2 + b2 - c2) * (2 * len.a * len.b));
+                return new VECTOR3(a, b, c);
+            }
+        }
+
+        /// <summary>
+        /// The semiperimeter is given as
+        /// s = (a + b + c) / 2
+        /// </summary>
+        public REAL Semiperimeter
+        {
+            get
+            {
+                return SideLengths.Sum / 2;
+            }
+        }
+
+        /// <summary>
+        /// The inradius is given as
+        ///   r = D / s
+        /// </summary>
+        public REAL Inradius
+        {
+            get
+            {
+                return Area / Semiperimeter;
+            }
+        }
+
+        /// <summary>
+        /// The circumradius is given as
+        ///   R = a * b * c / (4 * D)
+        /// </summary>
+        public REAL Circumradius
+        {
+            get
+            {
+                return SideLengths.Mul / (4 * Area);
+            }
+        }
+
+        /// <summary>
+        /// The altitudes are given as
+        ///   alt_a = 2 * D / a -- altitude above side a
+        ///   alt_b = 2 * D / b -- altitude above side b
+        ///   alt_c = 2 * D / c -- altitude above side c
+        /// </summary>
+        public VECTOR3 Altitudes
+        {
+            get
+            {
+                var a = 2 * Area / SideLengths.a;
+                var b = 2 * Area / SideLengths.b;
+                var c = 2 * Area / SideLengths.c;
+                return new VECTOR3(a, b, c);
+            }
+        }
+
+        /// <summary>
+        /// The aspect ratio may be given as the ratio of the longest to the
+        /// shortest edge or, more commonly as the ratio of the circumradius 
+        /// to twice the inradius
+        ///   ar = R / (2 * r)
+        ///      = a * b * c / (8 * (s - a) * (s - b) * (s - c))
+        ///      = a * b * c / ((b + c - a) * (c + a - b) * (a + b - c))
+        /// </summary>
+        public REAL AspectRatio
+        {
+            get
+            {
+                return Circumradius / (2 * Inradius);
+            }
         }
 
         public Box2f Bounds
         {
             get
             {
-                float xmin = Math.Min(A.x, Math.Min(B.x, C.x));
-                float xmax = Math.Max(A.x, Math.Max(B.x, C.x));
-                float ymin = Math.Min(A.y, Math.Min(B.y, C.y));
-                float ymax = Math.Max(A.y, Math.Max(B.y, C.y));
+                REAL xmin = Math.Min(A.x, Math.Min(B.x, C.x));
+                REAL xmax = Math.Max(A.x, Math.Max(B.x, C.x));
+                REAL ymin = Math.Min(A.y, Math.Min(B.y, C.y));
+                REAL ymax = Math.Max(A.y, Math.Max(B.y, C.y));
 
                 return new Box2f(xmin, xmax, ymin, ymax);
             }
@@ -107,27 +219,27 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <returns>closest point</returns>
-        public Vector2f Closest(Vector2f p)
+        public VECTOR2 Closest(VECTOR2 p)
         {
-            Vector2f ab = B - A;
-            Vector2f ac = C - A;
-            Vector2f ap = p - A;
+            VECTOR2 ab = B - A;
+            VECTOR2 ac = C - A;
+            VECTOR2 ap = p - A;
 
             // Check if P in vertex region outside A
-            float d1 = Vector2f.Dot(ab, ap);
-            float d2 = Vector2f.Dot(ac, ap);
+            REAL d1 = VECTOR2.Dot(ab, ap);
+            REAL d2 = VECTOR2.Dot(ac, ap);
             if (d1 <= 0.0 && d2 <= 0.0)
             {
                 // barycentric coordinates (1,0,0)
                 return A;
             }
 
-            float v, w;
+            REAL v, w;
 
             // Check if P in vertex region outside B
-            Vector2f bp = p - B;
-            float d3 = Vector2f.Dot(ab, bp);
-            float d4 = Vector2f.Dot(ac, bp);
+            VECTOR2 bp = p - B;
+            REAL d3 = VECTOR2.Dot(ab, bp);
+            REAL d4 = VECTOR2.Dot(ac, bp);
             if (d3 >= 0.0 && d4 <= d3)
             {
                 // barycentric coordinates (0,1,0)
@@ -135,7 +247,7 @@ namespace Common.Geometry.Shapes
             }
 
             // Check if P in edge region of AB, if so return projection of P onto AB
-            float vc = d1 * d4 - d3 * d2;
+            REAL vc = d1 * d4 - d3 * d2;
             if (vc <= 0.0f && d1 >= 0.0f && d3 <= 0.0f)
             {
                 v = d1 / (d1 - d3);
@@ -144,9 +256,9 @@ namespace Common.Geometry.Shapes
             }
 
             // Check if P in vertex region outside C
-            Vector2f cp = p - C;
-            float d5 = Vector2f.Dot(ab, cp);
-            float d6 = Vector2f.Dot(ac, cp);
+            VECTOR2 cp = p - C;
+            REAL d5 = VECTOR2.Dot(ab, cp);
+            REAL d6 = VECTOR2.Dot(ac, cp);
             if (d6 >= 0.0f && d5 <= d6)
             {
                 // barycentric coordinates (0,0,1)
@@ -154,7 +266,7 @@ namespace Common.Geometry.Shapes
             }
 
             // Check if P in edge region of AC, if so return projection of P onto AC
-            float vb = d5 * d2 - d1 * d6;
+            REAL vb = d5 * d2 - d1 * d6;
             if (vb <= 0.0f && d2 >= 0.0f && d6 <= 0.0f)
             {
                 w = d2 / (d2 - d6);
@@ -163,7 +275,7 @@ namespace Common.Geometry.Shapes
             }
 
             // Check if P in edge region of BC, if so return projection of P onto BC
-            float va = d3 * d6 - d5 * d4;
+            REAL va = d3 * d6 - d5 * d4;
             if (va <= 0.0f && (d4 - d3) >= 0.0f && (d5 - d6) >= 0.0f)
             {
                 w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
@@ -172,7 +284,7 @@ namespace Common.Geometry.Shapes
             }
 
             // P inside face region. Compute Q through its barycentric coordinates (u,v,w)
-            float denom = 1.0f / (va + vb + vc);
+            REAL denom = 1.0f / (va + vb + vc);
             v = vb * denom;
             w = vc * denom;
 
@@ -185,14 +297,14 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <returns>true if triangle contains point</returns>
-        public bool Contains(Vector2f p)
+        public bool Contains(VECTOR2 p)
         {
-            float pab = Vector2f.Cross(p - A, B - A);
-            float pbc = Vector2f.Cross(p - B, C - B);
+            REAL pab = VECTOR2.Cross(p - A, B - A);
+            REAL pbc = VECTOR2.Cross(p - B, C - B);
 
             if (Math.Sign(pab) != Math.Sign(pbc)) return false;
 
-            float pca = Vector2f.Cross(p - C, A - C);
+            REAL pca = VECTOR2.Cross(p - C, A - C);
 
             if (Math.Sign(pab) != Math.Sign(pca)) return false;
 
@@ -205,11 +317,11 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <returns>true if triangle contains point</returns>
-        public bool ContainsCCW(Vector2f p)
+        public bool ContainsCCW(VECTOR2 p)
         {
-            if (Vector2f.Cross(p - A, B - A) > 0.0) return false;
-            if (Vector2f.Cross(p - B, C - B) > 0.0) return false;
-            if (Vector2f.Cross(p - C, A - C) > 0.0) return false;
+            if (VECTOR2.Cross(p - A, B - A) > 0.0) return false;
+            if (VECTOR2.Cross(p - B, C - B) > 0.0) return false;
+            if (VECTOR2.Cross(p - C, A - C) > 0.0) return false;
 
             return true;
         }

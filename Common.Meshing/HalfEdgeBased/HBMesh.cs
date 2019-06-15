@@ -3,33 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 
 using Common.Core.LinearAlgebra;
-using Common.Core.Mathematics;
+using Common.Meshing.Constructors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
     /// <summary>
     /// A half edge based mesh.
     /// </summary>
-    public class HBMesh<VERTEX, EDGE, FACE>
+    public class HBMesh<VERTEX, EDGE, FACE> : ITriangularMesh
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
     {
-
-        /// <summary>
-        /// All the vertices in the mesh.
-        /// </summary>
-        public List<VERTEX> Vertices { get; private set; }
-
-        /// <summary>
-        /// All the edges in the mesh.
-        /// </summary>
-        public List<EDGE> Edges { get; private set; }
-
-        /// <summary>
-        /// All the faces in the mesh.
-        /// </summary>
-        public List<FACE> Faces { get; private set; }
 
         public HBMesh()
         {
@@ -46,6 +31,31 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// All the vertices in the mesh.
+        /// </summary>
+        public List<VERTEX> Vertices { get; private set; }
+
+        /// <summary>
+        /// The number of vertices in mesh.
+        /// </summary>
+        public int VertexCount => Vertices.Count;
+
+        /// <summary>
+        /// All the edges in the mesh.
+        /// </summary>
+        public List<EDGE> Edges { get; private set; }
+
+        /// <summary>
+        /// All the faces in the mesh.
+        /// </summary>
+        public List<FACE> Faces { get; private set; }
+
+        /// <summary>
+        /// The number of faces in mesh.
+        /// </summary>
+        public int FaceCount => Faces.Count;
+
+        /// <summary>
         /// Convert mesh to string.
         /// </summary>
         /// <returns>Mesh as string</returns>
@@ -58,7 +68,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Clear mesh.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             for (int i = 0; i < Vertices.Count; i++)
                 Vertices[i].Clear();
@@ -224,6 +234,28 @@ namespace Common.Meshing.HalfEdgeBased
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].GetPosition());
+        }
+
+        /// <summary>
+        /// Get the position at index i.
+        /// </summary>
+        public Vector3d GetPosition(int i)
+        {
+            return Vertices[i].GetPosition();
+        }
+
+        /// <summary>
+        /// Gets the triangle at index i.
+        /// Presumes faces are triangles 
+        /// and vertices have been tagged.
+        /// </summary>
+        public Vector3i GetTriangle(int i)
+        {
+            var face = Faces[i];
+            int a = face.Edge.Previous.From.Tag;
+            int b = face.Edge.From.Tag;
+            int c = face.Edge.Next.From.Tag;
+            return new Vector3i(a, b, c);
         }
 
         /// <summary>

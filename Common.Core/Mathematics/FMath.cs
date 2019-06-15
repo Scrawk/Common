@@ -122,6 +122,12 @@ namespace Common.Core.Mathematics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Sqr(float v)
+        {
+            return v * v;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Clamp(float v, float min, float max)
         {
             if (v < min) v = min;

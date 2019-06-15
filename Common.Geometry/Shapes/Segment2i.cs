@@ -27,9 +27,9 @@ namespace Common.Geometry.Shapes
             B = new Vector2i(bx, by);
         }
 
-        public Vector2i Center
+        public Vector2d Center
         {
-            get { return (A + B) / 2; }
+            get { return (Vector2d)(A + B) * 0.5; }
         }
 
         public double Length

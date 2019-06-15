@@ -69,6 +69,12 @@ namespace Common.Core.Mathematics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sqr(double v)
+        {
+            return v * v;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Clamp(double v, double min, double max)
         {
             if (v < min) v = min;

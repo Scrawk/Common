@@ -8,7 +8,7 @@ namespace Common.Meshing.IndexBased
 {
     public class Mesh2f : IndexableMesh
     {
-        public override int VerticesCount { get { return (Positions != null) ? Positions.Length : 0; } }
+        public override int VertexCount { get { return (Positions != null) ? Positions.Length : 0; } }
 
         public Vector2f[] Positions { get; private set; }
 
@@ -49,10 +49,20 @@ namespace Common.Meshing.IndexBased
 
         public override string ToString()
         {
-            return string.Format("[Mesh2f: Vertices={0}, Indices={1}]", VerticesCount, IndicesCount);
+            return string.Format("[Mesh2f: Vertices={0}, Indices={1}]", VertexCount, IndicesCount);
         }
 
-        public void SetPositions(int size)
+        public override Vector3d GetPosition(int i)
+        {
+            return Positions[i].xy0;
+        }
+
+        public override void SetPosition(int i, Vector3d pos)
+        {
+            Positions[i] = (Vector2f)pos.xy;
+        }
+
+        public override void SetPositions(int size)
         {
             if (Positions == null || Positions.Length != size)
                 Positions = new Vector2f[size];

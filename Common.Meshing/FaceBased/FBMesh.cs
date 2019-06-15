@@ -54,7 +54,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Clears the vertex and face lists.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             for (int i = 0; i < Vertices.Count; i++)
                 Vertices[i].Clear();

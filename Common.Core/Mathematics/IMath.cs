@@ -50,6 +50,12 @@ namespace Common.Core.Mathematics
             return v;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Sqr(int v)
+        {
+            return v * v;
+        }
+
         /// <summary>
         /// Is number a power of 2.
         /// </summary>

@@ -6,14 +6,38 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.IndexBased
 {
+    public class MeshConstructor2d : IndexableMeshConstructor<Mesh2d>
+    {
+
+    }
+
+    public class MeshConstructor2f : IndexableMeshConstructor<Mesh2f>
+    {
+
+    }
+
+    public class MeshConstructor3d : IndexableMeshConstructor<Mesh3d>
+    {
+
+    }
+
+    public class MeshConstructor3f : IndexableMeshConstructor<Mesh3f>
+    {
+
+    }
+
     /// <summary>
     /// Indexed based mesh constructor.
     /// Supports triangle or edge meshes.
     /// </summary>
-    public class MeshConstructor2d : IEdgeMeshConstructor<Mesh2d>, ITriangularMeshConstructor<Mesh2d>
+    public class IndexableMeshConstructor<MESH> :
+        IEdgeMeshConstructor<MESH>,
+        ITriangularMeshConstructor<MESH>,
+        ITetrahedralMeshConstructor<MESH>
+        where MESH : IndexableMesh, new()
     {
 
-        private Mesh2d m_mesh;
+        private MESH m_mesh;
 
         private int m_vertexIndex;
 
@@ -42,7 +66,7 @@ namespace Common.Meshing.IndexBased
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
             m_faceVerts = 2;
-            m_mesh = new Mesh2d(numVertices, numEdges * m_faceVerts);
+            m_mesh = NewMesh(numVertices, numEdges * m_faceVerts);
         }
 
         /// <summary>
@@ -54,27 +78,46 @@ namespace Common.Meshing.IndexBased
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
 
             m_faceVerts = 3;
-            m_mesh = new Mesh2d(numVertices, numFaces * m_faceVerts);
+            m_mesh = NewMesh(numVertices, numFaces * m_faceVerts);
+        }
+
+        /// <summary>
+        /// Push a new tetrahedral mesh.
+        /// </summary>
+        public void PushTetrahedralMesh(int numVertices, int numFaces)
+        {
+            if (m_mesh != null)
+                throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
+
+            m_faceVerts = 4;
+            m_mesh = NewMesh(numVertices, numFaces * m_faceVerts);
+        }
+
+        private MESH NewMesh(int numPositions, int numIndices)
+        {
+            var mesh = new MESH();
+            mesh.SetPositions(numPositions);
+            mesh.SetIndices(numIndices);
+            return mesh;
         }
 
         /// <summary>
         /// Return the created mesh and reset constructor.
         /// </summary>
-        public Mesh2d PopMesh()
+        public MESH PopMesh()
         {
-
+            
             if (SplitFaces && m_faceVerts == 3)
             {
-                var mesh = new Mesh2d(m_mesh.VerticesCount * 3, m_mesh.IndicesCount);
+                var mesh = NewMesh(m_mesh.VertexCount * 3, m_mesh.IndicesCount);
 
                 var indices = m_mesh.Indices;
-                var positions = m_mesh.Positions;
 
                 for (int i = 0; i < m_mesh.IndicesCount / 3; i++)
                 {
-                    mesh.Positions[i * 3 + 0] = positions[indices[i * 3 + 0]];
-                    mesh.Positions[i * 3 + 1] = positions[indices[i * 3 + 1]];
-                    mesh.Positions[i * 3 + 2] = positions[indices[i * 3 + 2]];
+                    mesh.SetPosition(i * 3 + 0, mesh.GetPosition(indices[i * 3 + 0]));
+                    mesh.SetPosition(i * 3 + 1, mesh.GetPosition(indices[i * 3 + 1]));
+                    mesh.SetPosition(i * 3 + 2, mesh.GetPosition(indices[i * 3 + 2]));
 
                     mesh.Indices[i * 3 + 0] = i * 3 + 0;
                     mesh.Indices[i * 3 + 1] = i * 3 + 1;
@@ -83,8 +126,9 @@ namespace Common.Meshing.IndexBased
 
                 m_mesh = mesh;
             }
+            
 
-            Mesh2d tmp = m_mesh;
+            MESH tmp = m_mesh;
             Reset();
 
             return tmp;
@@ -109,7 +153,7 @@ namespace Common.Meshing.IndexBased
         public void AddVertex(Vector2d pos)
         {
             CheckMeshIsPushed();
-            m_mesh.Positions[m_vertexIndex] = pos;
+            m_mesh.SetPosition(m_vertexIndex, pos.xy0);
             m_vertexIndex++;
         }
 
@@ -120,8 +164,21 @@ namespace Common.Meshing.IndexBased
         public void AddVertex(Vector3d pos)
         {
             CheckMeshIsPushed();
-            m_mesh.Positions[m_vertexIndex] = pos.xy;
+            m_mesh.SetPosition(m_vertexIndex, pos);
             m_vertexIndex++;
+        }
+
+        /// <summary>
+        /// Add a edge.
+        /// </summary>
+        /// <param name="i0">index of vertex 0</param>
+        /// <param name="i1">index of vertex 1</param>
+        public void AddEdge(int i0, int i1)
+        {
+            CheckMeshIsPushed();
+            m_mesh.Indices[m_edgeIndex * 2 + 0] = i0;
+            m_mesh.Indices[m_edgeIndex * 2 + 1] = i1;
+            m_edgeIndex++;
         }
 
         /// <summary>
@@ -140,22 +197,34 @@ namespace Common.Meshing.IndexBased
         }
 
         /// <summary>
-        /// Add a edge.
+        /// Add a tetrahedron face.
         /// </summary>
         /// <param name="i0">index of vertex 0</param>
         /// <param name="i1">index of vertex 1</param>
-        public void AddEdge(int i0, int i1)
+        /// <param name="i2">index of vertex 2</param>
+        /// <param name="i3">index of vertex 3</param>
+        public void AddFace(int i0, int i1, int i2, int i3)
         {
             CheckMeshIsPushed();
-            m_mesh.Indices[m_edgeIndex * 2 + 0] = i0;
-            m_mesh.Indices[m_edgeIndex * 2 + 1] = i1;
-            m_edgeIndex++;
+            m_mesh.Indices[m_faceIndex * 4 + 0] = i0;
+            m_mesh.Indices[m_faceIndex * 4 + 1] = i1;
+            m_mesh.Indices[m_faceIndex * 4 + 2] = i2;
+            m_mesh.Indices[m_faceIndex * 4 + 3] = i3;
+            m_faceIndex++;
         }
 
         /// <summary>
         /// Face connections not supported for indexable meshes.
         /// </summary>
         public void AddFaceConnection(int faceIndex, int i0, int i1, int i2)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Face connections not supported for indexable meshes.
+        /// </summary>
+        public void AddFaceConnection(int faceIndex, int i0, int i1, int i2, int i3)
         {
             throw new NotSupportedException();
         }

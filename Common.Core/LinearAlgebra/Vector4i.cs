@@ -5,13 +5,20 @@ using System.Runtime.CompilerServices;
 
 using Common.Core.Mathematics;
 
+using REAL = System.Int32;
+
 namespace Common.Core.LinearAlgebra
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector4i : IEquatable<Vector4i>, IComparable<Vector4i>
 	{
-		public int x, y, z, w;
+		public REAL x, y, z, w;
+
+        public REAL a => x;
+        public REAL b => y;
+        public REAL c => z;
+        public REAL d => w;
 
         /// <summary>
         /// The unit x vector.
@@ -44,14 +51,14 @@ namespace Common.Core.LinearAlgebra
 	    public readonly static Vector4i One = new Vector4i(1);
 
         /// <summary>
-        /// A vector of min int.
+        /// A vector of min REAL.
         /// </summary>
-        public readonly static Vector4i MinInt = new Vector4i(int.MinValue);
+        public readonly static Vector4i MinInt = new Vector4i(REAL.MinValue);
 
         /// <summary>
-        /// A vector of max int.
+        /// A vector of max REAL.
         /// </summary>
-        public readonly static Vector4i MaxInt = new Vector4i(int.MaxValue);
+        public readonly static Vector4i MaxInt = new Vector4i(REAL.MaxValue);
 
         /// <summary>
         /// Convert to a 2 dimension vector.
@@ -90,7 +97,7 @@ namespace Common.Core.LinearAlgebra
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector4i(int v)
+        public Vector4i(REAL v)
         {
             this.x = v;
             this.y = v;
@@ -99,7 +106,7 @@ namespace Common.Core.LinearAlgebra
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector4i(int x, int y, int z, int w)
+        public Vector4i(REAL x, REAL y, REAL z, REAL w)
 		{
 			this.x = x;
 			this.y = y;
@@ -107,21 +114,45 @@ namespace Common.Core.LinearAlgebra
 			this.w = w;
 		}
 
-        unsafe public int this[int i]
+        unsafe public REAL this[REAL i]
         {
             get
             {
                 if ((uint)i >= 4)
                     throw new IndexOutOfRangeException("Vector4i index out of range.");
 
-                fixed (Vector4i* array = &this) { return ((int*)array)[i]; }
+                fixed (Vector4i* array = &this) { return ((REAL*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 4)
                     throw new IndexOutOfRangeException("Vector4i index out of range.");
 
-                fixed (int* array = &x) { array[i] = value; }
+                fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// The sum of the vector.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y + z + w;
+            }
+        }
+
+        /// <summary>
+        /// The multiple of the vector.
+        /// </summary>
+        public REAL Mul
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y * z * w;
             }
         }
 
@@ -140,7 +171,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The length of the vector squared.
         /// </summary>
-        public int SqrMagnitude
+        public REAL SqrMagnitude
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
@@ -174,7 +205,7 @@ namespace Common.Core.LinearAlgebra
         /// Add vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4i operator +(Vector4i v1, int s)
+        public static Vector4i operator +(Vector4i v1, REAL s)
         {
             return new Vector4i(v1.x + s, v1.y + s, v1.z + s, v1.w + s);
         }
@@ -183,7 +214,7 @@ namespace Common.Core.LinearAlgebra
         /// Add vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4i operator +(int s, Vector4i v1)
+        public static Vector4i operator +(REAL s, Vector4i v1)
         {
             return new Vector4i(v1.x + s, v1.y + s, v1.z + s, v1.w + s);
         }
@@ -210,7 +241,7 @@ namespace Common.Core.LinearAlgebra
         /// Subtract vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4i operator -(Vector4i v1, int s)
+        public static Vector4i operator -(Vector4i v1, REAL s)
         {
             return new Vector4i(v1.x - s, v1.y - s, v1.z - s, v1.w - s);
         }
@@ -219,7 +250,7 @@ namespace Common.Core.LinearAlgebra
         /// Subtract vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4i operator -(int s, Vector4i v1)
+        public static Vector4i operator -(REAL s, Vector4i v1)
         {
             return new Vector4i(s - v1.x, s - v1.y, s - v1.z, s - v1.w);
         }
@@ -237,7 +268,7 @@ namespace Common.Core.LinearAlgebra
         /// Multiply a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4i operator *(Vector4i v, int s)
+        public static Vector4i operator *(Vector4i v, REAL s)
         {
             return new Vector4i(v.x * s, v.y * s, v.z * s, v.w * s);
         }
@@ -246,7 +277,7 @@ namespace Common.Core.LinearAlgebra
         /// Multiply a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4i operator *(int s, Vector4i v)
+        public static Vector4i operator *(REAL s, Vector4i v)
         {
             return new Vector4i(v.x * s, v.y * s, v.z * s, v.w * s);
         }
@@ -264,7 +295,7 @@ namespace Common.Core.LinearAlgebra
         /// Divide a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector4i operator /(Vector4i v, int s)
+        public static Vector4i operator /(Vector4i v, REAL s)
         {
             return new Vector4i(v.x / s, v.y / s, v.z / s, v.w / s);
         }
@@ -272,13 +303,13 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Vector4i(Vector4f v)
         {
-            return new Vector4i((int)v.x, (int)v.y, (int)v.z, (int)v.w);
+            return new Vector4i((REAL)v.x, (REAL)v.y, (REAL)v.z, (REAL)v.w);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Vector4i(Vector4d v)
         {
-            return new Vector4i((int)v.x, (int)v.y, (int)v.z, (int)v.w);
+            return new Vector4i((REAL)v.x, (REAL)v.y, (REAL)v.z, (REAL)v.w);
         }
 
         /// <summary>
@@ -383,10 +414,10 @@ namespace Common.Core.LinearAlgebra
                 string[] separators = new string[] { "," };
                 string[] result = s.Split(separators, StringSplitOptions.None);
 
-                v.x = int.Parse(result[0]);
-                v.y = int.Parse(result[1]);
-                v.z = int.Parse(result[2]);
-                v.w = int.Parse(result[3]);
+                v.x = REAL.Parse(result[0]);
+                v.y = REAL.Parse(result[1]);
+                v.z = REAL.Parse(result[2]);
+                v.w = REAL.Parse(result[3]);
             }
             catch { }
 			
@@ -397,7 +428,7 @@ namespace Common.Core.LinearAlgebra
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Dot(Vector4i v0, Vector4i v1)
+        public static REAL Dot(Vector4i v0, Vector4i v1)
         {
             return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
         }
@@ -428,7 +459,7 @@ namespace Common.Core.LinearAlgebra
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(int s)
+        public void Min(REAL s)
         {
             x = Math.Min(x, s);
             y = Math.Min(y, s);
@@ -452,7 +483,7 @@ namespace Common.Core.LinearAlgebra
         /// The maximum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(int s)
+        public void Max(REAL s)
         {
             x = Math.Max(x, s);
             y = Math.Max(y, s);
@@ -488,7 +519,7 @@ namespace Common.Core.LinearAlgebra
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(int min, int max)
+        public void Clamp(REAL min, REAL max)
         {
             x = Math.Max(Math.Min(x, max), min);
             y = Math.Max(Math.Min(y, max), min);

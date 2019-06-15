@@ -3,13 +3,18 @@ using System.Collections.Generic;
 
 using Common.Core.LinearAlgebra;
 using Common.Core.Colors;
+using Common.Meshing.Constructors;
 
 namespace Common.Meshing.IndexBased
 {
-    public abstract class IndexableMesh
+    public abstract class IndexableMesh : ITriangularMesh, IEdgeMesh
     {
 
-        public abstract int VerticesCount { get; }
+        public abstract int VertexCount { get; }
+
+        public int FaceCount => IndicesCount / 3;
+
+        public int EdgeCount => IndicesCount / 2;
 
         public bool HasIndice { get { return Indices != null; } }
 
@@ -20,6 +25,27 @@ namespace Common.Meshing.IndexBased
         public bool HasColors { get { return Colors != null; } }
 
         public ColorRGBA[] Colors { get; protected set; }
+
+        public abstract Vector3d GetPosition(int i);
+
+        public abstract void SetPosition(int i, Vector3d pos);
+
+        public abstract void SetPositions(int size);
+
+        public Vector3i GetTriangle(int i)
+        {
+            int a = Indices[i / 3 + 0];
+            int b = Indices[i / 3 + 1];
+            int c = Indices[i / 3 + 2];
+            return new Vector3i(a, b, c);
+        }
+
+        public Vector2i GetEdge(int i)
+        {
+            int a = Indices[i / 3 + 0];
+            int b = Indices[i / 3 + 1];
+            return new Vector2i(a, b);
+        }
 
         public void SetIndices(int size)
         {
@@ -59,7 +85,7 @@ namespace Common.Meshing.IndexBased
 
         public void BuildPolygonIndices()
         {
-            int numPoints = VerticesCount;
+            int numPoints = VertexCount;
             if (numPoints == 0) return;
 
             int size = numPoints * 2;

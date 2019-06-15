@@ -47,7 +47,7 @@ namespace Common.Meshing.FaceBased
 
         public override Vector3d GetPosition()
         {
-            return Position.xy0;
+            return Position;
         }
 
     }
