@@ -113,25 +113,6 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Enlarge the circle so it contains the point p.
-        /// </summary>
-        public void Enlarge(Vector2f p)
-        {
-            Vector2f d = p - Center;
-            float dist2 = d.SqrMagnitude;
-
-            if (dist2 > Radius2)
-            {
-                float dist = (float)Math.Sqrt(dist2);
-                float radius = (Radius + dist) * 0.5f;
-                float k = (radius - Radius) / dist;
-
-                Center += d * k;
-                Radius = radius;
-            }
-        }
-
-        /// <summary>
         /// Find the closest point on the circles 
         /// circumference to the point.
         /// </summary>
@@ -163,6 +144,27 @@ namespace Common.Geometry.Shapes
         {
             float r = Radius + circle.Radius;
             return Vector2f.SqrDistance(Center, circle.Center) <= r * r;
+        }
+
+        /// <summary>
+        /// Enlarge the circle so it contains the point p.
+        /// </summary>
+        public static Circle2f Enlarge(Circle2f cir, Vector2f p)
+        {
+            Vector2f d = p - cir.Center;
+            float dist2 = d.SqrMagnitude;
+
+            if (dist2 > cir.Radius2)
+            {
+                float dist = (float)Math.Sqrt(dist2);
+                float radius = (cir.Radius + dist) * 0.5f;
+                float k = (radius - cir.Radius) / dist;
+
+                cir.Center += d * k;
+                cir.Radius = radius;
+            }
+
+            return cir;
         }
 
         /// <summary>
@@ -217,8 +219,7 @@ namespace Common.Geometry.Shapes
         public static Circle2f CalculateBounds(Vector2f p0, Vector2f p1, Vector2f p2)
         {
             var bounds = CircumCircle(p0, p1);
-            bounds.Enlarge(p2);
-            return bounds;
+            return Enlarge(bounds, p2);
         }
 
         /// <summary>
@@ -233,7 +234,7 @@ namespace Common.Geometry.Shapes
 
             int count = points.Count;
             for (int i = 2; i < count; i++)
-                bounds.Enlarge(points[i]);
+                bounds = Enlarge(bounds, points[i]);
 
             return bounds;
         }

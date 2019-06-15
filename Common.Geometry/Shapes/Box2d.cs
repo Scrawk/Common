@@ -151,33 +151,36 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the bounding box containing this box and the given point.
         /// </summary>
-        public void Enlarge(Vector2d p)
+        public static Box2d Enlarge(Box2d box, Vector2d p)
         {
-            Min.x = Math.Min(Min.x, p.x);
-            Min.y = Math.Min(Min.y, p.y);
-            Max.x = Math.Max(Max.x, p.x);
-            Max.y = Math.Max(Max.y, p.y);
+            var b = new Box2d();
+            b.Min.x = Math.Min(box.Min.x, p.x);
+            b.Min.y = Math.Min(box.Min.y, p.y);
+            b.Max.x = Math.Max(box.Max.x, p.x);
+            b.Max.y = Math.Max(box.Max.y, p.y);
+            return b;
         }
 
         /// <summary>
         /// Returns the bounding box containing this box and the given box.
         /// </summary>
-        public void Enlarge(Box2d box)
+        public static Box2d Enlarge(Box2d box0, Box2d box1)
         {
-            Min.x = Math.Min(Min.x, box.Min.x);
-            Min.y = Math.Min(Min.y, box.Min.y);
-            Max.x = Math.Max(Max.x, box.Max.x);
-            Max.y = Math.Max(Max.y, box.Max.y);
+            var b = new Box2d();
+            b.Min.x = Math.Min(box0.Min.x, box1.Min.x);
+            b.Min.y = Math.Min(box0.Min.y, box1.Min.y);
+            b.Max.x = Math.Max(box0.Max.x, box1.Max.x);
+            b.Max.y = Math.Max(box0.Max.y, box1.Max.y);
+            return b;
         }
 
         /// <summary>
         /// Enlarge the box by a given percent.
         /// </summary>
-        public void Enlarge(double percent)
+        public static Box2d Enlarge(Box2d box, double percent)
         {
-            var amount = Size * percent;
-            Min -= amount;
-            Max += amount;
+            var amount = box.Size * percent;
+            return new Box2d(box.Min - amount, box.Max + amount);
         }
 
         /// <summary>

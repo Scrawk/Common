@@ -158,37 +158,40 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the bounding box containing this box and the given point.
         /// </summary>
-        public void Enlarge(Vector3d p)
+        public static Box3d Enlarge(Box3d box, Vector3d p)
         {
-            Min.x = Math.Min(Min.x, p.x);
-            Min.y = Math.Min(Min.y, p.y);
-            Min.z = Math.Min(Min.z, p.z);
-            Max.x = Math.Max(Max.x, p.x);
-            Max.y = Math.Max(Max.y, p.y);
-            Max.z = Math.Max(Max.z, p.z);
+            var b = new Box3d();
+            b.Min.x = Math.Min(box.Min.x, p.x);
+            b.Min.y = Math.Min(box.Min.y, p.y);
+            b.Min.z = Math.Min(box.Min.z, p.z);
+            b.Max.x = Math.Max(box.Max.x, p.x);
+            b.Max.y = Math.Max(box.Max.y, p.y);
+            b.Max.z = Math.Max(box.Max.z, p.z);
+            return b;
         }
 
         /// <summary>
         /// Returns the bounding box containing this box and the given box.
         /// </summary>
-        public void Enlarge(Box3d box)
+        public static Box3d Enlarge(Box3d box0, Box3d box1)
         {
-            Min.x = Math.Min(Min.x, box.Min.x);
-            Min.y = Math.Min(Min.y, box.Min.y);
-            Min.z = Math.Min(Min.z, box.Min.z);
-            Max.x = Math.Max(Max.x, box.Max.x);
-            Max.y = Math.Max(Max.y, box.Max.y);
-            Max.z = Math.Max(Max.z, box.Max.z);
+            var b = new Box3d();
+            b.Min.x = Math.Min(box0.Min.x, box1.Min.x);
+            b.Min.y = Math.Min(box0.Min.y, box1.Min.y);
+            b.Min.z = Math.Min(box0.Min.z, box1.Min.z);
+            b.Max.x = Math.Max(box0.Max.x, box1.Max.x);
+            b.Max.y = Math.Max(box0.Max.y, box1.Max.y);
+            b.Max.z = Math.Max(box0.Max.z, box1.Max.z);
+            return b;
         }
 
         /// <summary>
         /// Enlarge the box by a given percent.
         /// </summary>
-        public void Enlarge(double percent)
+        public static Box3d Enlarge(Box3d box, double percent)
         {
-            var amount = Size * percent;
-            Min -= amount;
-            Max += amount;
+            var amount = box.Size * percent;
+            return new Box3d(box.Min - amount, box.Max + amount);
         }
 
         /// <summary>
