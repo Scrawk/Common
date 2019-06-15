@@ -171,13 +171,13 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Returns the bounding box containing this box and the given box.
+        /// Enlarge the box by a given percent.
         /// </summary>
-        public static Box2d Enlarge(Box2d box0, Box2d box1)
+        public void Enlarge(double percent)
         {
-            var box = box0;
-            box.Enlarge(box1);
-            return box;
+            var amount = Size * percent;
+            Min -= amount;
+            Max += amount;
         }
 
         /// <summary>
