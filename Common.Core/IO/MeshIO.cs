@@ -130,7 +130,7 @@ namespace Common.Core.IO
             for (int i = 0; i < indices.Count; i += 3)
             {
                 if(flip)
-                    sb.Append(string.Format("f {0} {1} {2}\n", indices[i + 2] + 1, indices[i + 1] + 1, indices[i + 1] + 1));
+                    sb.Append(string.Format("f {0} {1} {2}\n", indices[i + 2] + 1, indices[i + 1] + 1, indices[i + 0] + 1));
                 else
                     sb.Append(string.Format("f {0} {1} {2}\n", indices[i + 0] + 1, indices[i + 1] + 1, indices[i + 2] + 1));
             }
