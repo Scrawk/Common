@@ -33,7 +33,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Convert mesh to indexable triangle mesh.
         /// </summary>
-        public static Mesh3f ToMesh3f<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public static Mesh3f ToTriangleMesh3f<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
