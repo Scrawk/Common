@@ -61,7 +61,6 @@ namespace Common.Core.Threading
 
                 return blocks;
             }
-
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Common.Core.IO
     {
         public string FileName;
         public string Extension;
+        public bool FilpTriangles;
         public List<Vector3d> Positions = new List<Vector3d>();
         public List<Vector3d> Normals = new List<Vector3d>();
         public List<int> Indices = new List<int>();
@@ -29,6 +30,7 @@ namespace Common.Core.IO
             var normals = properties.Normals;
             var indices = properties.Indices;
             var uvs = properties.TexCoords;
+            var flip = properties.FilpTriangles;
 
             using (streamReader)
             {
@@ -47,9 +49,18 @@ namespace Common.Core.IO
                             string[] face2 = elements[2].Split(slash, StringSplitOptions.None);
                             string[] face3 = elements[3].Split(slash, StringSplitOptions.None);
 
-                            indices.Add(int.Parse(face1[0]) - 1);
-                            indices.Add(int.Parse(face2[0]) - 1);
-                            indices.Add(int.Parse(face3[0]) - 1);
+                            if (flip)
+                            {
+                                indices.Add(int.Parse(face3[0]) - 1);
+                                indices.Add(int.Parse(face2[0]) - 1);
+                                indices.Add(int.Parse(face1[0]) - 1);
+                            }
+                            else
+                            {
+                                indices.Add(int.Parse(face1[0]) - 1);
+                                indices.Add(int.Parse(face2[0]) - 1);
+                                indices.Add(int.Parse(face3[0]) - 1);
+                            }
                         }
                     }
                     else if (line[0] == 'v')
@@ -94,6 +105,7 @@ namespace Common.Core.IO
             var normals = properties.Normals;
             var indices = properties.Indices;
             var uvs = properties.TexCoords;
+            var flip = properties.FilpTriangles;
 
             StringBuilder sb = new StringBuilder();
 
@@ -117,7 +129,10 @@ namespace Common.Core.IO
 
             for (int i = 0; i < indices.Count; i += 3)
             {
-                sb.Append(string.Format("f {0} {1} {2}\n", indices[i] + 1, indices[i + 1] + 1, indices[i + 2] + 1));
+                if(flip)
+                    sb.Append(string.Format("f {0} {1} {2}\n", indices[i + 2] + 1, indices[i + 1] + 1, indices[i + 1] + 1));
+                else
+                    sb.Append(string.Format("f {0} {1} {2}\n", indices[i + 0] + 1, indices[i + 1] + 1, indices[i + 2] + 1));
             }
 
             return sb.ToString();
