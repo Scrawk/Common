@@ -12,6 +12,43 @@ namespace Common.Meshing.Test.HalfEdgeBased
     [TestClass]
     public class Meshing_HalfEdgeBased_HBOperationsTest
     {
+
+        [TestMethod]
+        public void FlipEdge()
+        {
+            var max = new Vector2f(1, 1);
+            var min = new Vector2f(-1, -1);
+
+            var mesh = CreateTriangularMesh2.FromBox(min, max);
+
+            var edge = mesh.Edges[2];
+            //var edge = mesh.Edges[5];
+
+            HBOperations.FlipEdge(mesh, edge);
+
+            Assert.AreEqual(4, mesh.Vertices.Count);
+            Assert.AreEqual(10, mesh.Edges.Count);
+            Assert.AreEqual(2, mesh.Faces.Count);
+
+            HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
+            HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);
+            HBMeshHelper.CheckVertex(mesh, vertex: 2, edge: 3);
+            HBMeshHelper.CheckVertex(mesh, vertex: 3, edge: 4);
+            HBMeshHelper.CheckEdge(mesh, edge:0, from:0, face:0, previous:4, next:2, opposite:6);
+            HBMeshHelper.CheckEdge(mesh, edge:1, from:1, face:1, previous:5, next:3, opposite:7);
+            HBMeshHelper.CheckEdge(mesh, edge:2, from:1, face:0, previous:0, next:4, opposite:5);
+            HBMeshHelper.CheckEdge(mesh, edge:3, from:2, face:1, previous:1, next:5, opposite:8);
+            HBMeshHelper.CheckEdge(mesh, edge:4, from:3, face:0, previous:2, next:0, opposite:9);
+            HBMeshHelper.CheckEdge(mesh, edge:5, from:3, face:1, previous:3, next:1, opposite:2);
+            HBMeshHelper.CheckEdge(mesh, edge:6, from:1, face:-1, previous:7, next:9, opposite:0);
+            HBMeshHelper.CheckEdge(mesh, edge:7, from:2, face:-1, previous:8, next:6, opposite:1);
+            HBMeshHelper.CheckEdge(mesh, edge:8, from:3, face:-1, previous:9, next:7, opposite:3);
+            HBMeshHelper.CheckEdge(mesh, edge:9, from:0, face:-1, previous:6, next:8, opposite:4);
+            HBMeshHelper.CheckFace(mesh, face: 0, edge: 2);
+            HBMeshHelper.CheckFace(mesh, face: 1, edge: 5);
+ 
+        }
+
         [TestMethod]
         public void PokeFace()
         {
@@ -46,8 +83,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             HBMeshHelper.CheckFace(mesh, face: 0, edge : 9);
             HBMeshHelper.CheckFace(mesh, face: 1, edge : 11);
             HBMeshHelper.CheckFace(mesh, face: 2, edge : 7);
-    }
-
+        }
 
         [TestMethod]
         public void JoinEdges()
