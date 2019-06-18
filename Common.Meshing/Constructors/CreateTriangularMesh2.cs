@@ -124,5 +124,73 @@ namespace Common.Meshing.Constructors
 
         }
 
+        public static void FromGrid<MESH>(ITriangularMeshConstructor<MESH> constructor, int width, int height)
+        {
+
+            int numVerts = width * height;
+            int numFaces = (width-1) * (height-1) * 2;
+            int width1 = width - 1;
+            int height1 = height - 1;
+
+            constructor.PushTriangularMesh(numVerts, numFaces);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                    constructor.AddVertex(new Vector2d(x, y));
+            }
+
+            for (int y = 0; y < height1; y++)
+            {
+                for (int x = 0; x < width1; x++)
+                {
+                    int i0 = x + y * width;
+                    int i1 = (x + 1) + (y + 1) * width;
+                    int i2 = x + (y + 1) * width;
+                    int i3 = (x + 1) + y * width;
+
+                    constructor.AddFace(i0, i1, i2);
+                    constructor.AddFace(i0, i1, i3);
+                }
+            }
+
+            if(constructor.SupportsFaceConnections)
+            {
+                for (int y = 0; y < height1; y++)
+                {
+                    for (int x = 0; x < width1; x++)
+                    {
+                        int i0 = (x + y * width1) * 2 + 0;
+                        int i1 = (x + y * width1) * 2 + 1;
+                        int n0, n1, n2, n3;
+
+                        if (x > 0)
+                            n0 = ((x - 1) + y * width1) * 2 + 0;
+                        else
+                            n0 = -1;
+
+                        if (y > 0)
+                            n1 = (x + (y - 1) * width1) * 2 + 1;
+                        else
+                            n1 = -1;
+
+                        if (x < width1 - 1)
+                            n2 = ((x + 1) + y * width1) * 2 + 1;
+                        else
+                            n2 = -1;
+
+                        if (y < height1 - 1)
+                            n3 = (x + (y + 1) * width1) * 2 + 0;
+                        else
+                            n3 = -1;
+
+                        constructor.AddFaceConnection(i0, n0, i1, n3);
+                        constructor.AddFaceConnection(i1, i0, n1, n2);
+                    }
+                }
+            }
+
+        }
+
     }
 }

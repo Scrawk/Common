@@ -90,5 +90,16 @@ namespace Common.Meshing.Test.Constructors
 
         }
 
+        [TestMethod]
+        public void FromGrid()
+        {
+            var constructor = new HBMeshConstructor2d();
+            CreateTriangularMesh2.FromGrid(constructor, 3, 3);
+            var mesh = constructor.PopMesh();
+
+            Console.WriteLine(mesh.Print());
+
+        }
+
     }
 }
