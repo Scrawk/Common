@@ -8,26 +8,59 @@ namespace Common.Meshing.HalfEdgeBased
 {
     public static partial class HBOperations
     {
+        /// <summary>
+        /// Adds a vertex inside the face and creates a edge from
+        /// that vertex to each other vertex in the face.
+        /// Will resolute in the face being subdivided into triangles.
+        /// Used the faces centroid as the position.
+        /// </summary>
+        /// <param name="mesh">The mesh the face belongs to.</param>
+        /// <param name="face">Th face to be poked. Must have at least 3 vertices.</param>
+        /// <returns>The created vertex.</returns>
         public static VERTEX PokeFace<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, FACE face)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
             int count = face.EdgeCount;
-            if (count == 0)
-                throw new InvalidOperationException("Face has 0 vertices.");
+            if (count < 3)
+                throw new InvalidOperationException("Face has < 3 vertices.");
 
-            var p = FindCentriod(face);
-            var v = new VERTEX();
-            v.SetPosition(p);
-            mesh.Vertices.Add(v as VERTEX);
+            var pos = face.Edge.GetCentriod();
+            return PokeFace(mesh, face, pos);
+        }
 
+        /// <summary>
+        /// Adds a vertex inside the face and creates a edge from
+        /// that vertex to each other vertex in the face.
+        /// Will resolute in the face being subdivided into triangles.
+        /// </summary>
+        /// <param name="mesh">The mesh the face belongs to.</param>
+        /// <param name="face">Th face to be poked. Must have at least 3 vertices.</param>
+        /// <param name="pos">The position of the new vertex.</param>
+        /// <returns>The created vertex.</returns>
+        public static VERTEX PokeFace<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, FACE face, Vector3d pos)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            int count = face.EdgeCount;
+            if (count < 3)
+                throw new InvalidOperationException("Face has < 3 vertices.");
+
+            //Create the new vertex, set the pos and add to mesh.
+            var vert = new VERTEX();
+            vert.SetPosition(pos);
+            mesh.Vertices.Add(vert as VERTEX);
+
+            //Create a tmp array to hold the new and old edges.
             var oldEdges = new HBEdge[count];
             var newEdges = new HBEdge[count];
 
             int index = 0;
             foreach (var edge in face.Edge.EnumerateEdges())
             {
+                //Create a new edge. e0 and e1 are the half edges.
                 NewEdge(out EDGE e0, out EDGE e1);
                 mesh.Edges.Add(e0 as EDGE);
                 mesh.Edges.Add(e1 as EDGE);
@@ -44,13 +77,17 @@ namespace Common.Meshing.HalfEdgeBased
                 var e0 = newEdges[i];
                 var e1 = e0.Opposite;
 
-                e0.From = v;
+                //Make the connections with the existing edge.
+                //e0 goes from the new vertex and to the existing vert.
+                //e1 goes from the existing vert and to the new vert.
+                e0.From = vert;
                 e0.Next = edge;
                 edge.Previous = e0;
                 e1.From = edge.From;
                 e1.Previous = previous;
                 previous.Next = e1;
 
+                //Make the connections with the new edges.
                 previous = newEdges[IMath.Wrap(i + 1, count)].Opposite;
                 var next = newEdges[IMath.Wrap(i - 1, count)];
 
@@ -61,37 +98,32 @@ namespace Common.Meshing.HalfEdgeBased
                 next.Previous = e1;
             }
 
+            //The first created edge should be long to 
+            //the existing face.
             newEdges[0].Face = face;
             face.Edge = newEdges[0];
+            vert.Edge = newEdges[0];
 
             for (int i = 0; i < count; i++)
             {
                 var f = newEdges[i].Face;
 
+                //If the new edge does not have a face create one.
                 if (f == null)
                 {
                     f = new FACE();
                     mesh.Faces.Add(f as FACE);
                 }
 
+                //Enmerate around the edges and set the face.
                 foreach (var edge in newEdges[i].EnumerateEdges())
+                {
                     edge.Face = f;
+                    f.Edge = edge;
+                }
             }
 
-            return v;
-        }
-
-        private static Vector3d FindCentriod(HBFace face)
-        {
-            int count = 0;
-            Vector3d centroid = Vector3d.Zero;
-            foreach(var v in face.Edge.EnumerateVertices())
-            {
-                centroid += v.GetPosition();
-                count++;
-            }
-
-            return centroid / count;
+            return vert;
         }
 
     }

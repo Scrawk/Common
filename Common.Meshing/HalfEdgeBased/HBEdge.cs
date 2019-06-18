@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.LinearAlgebra;
+
 namespace Common.Meshing.HalfEdgeBased
 {
     /// <summary>
@@ -182,6 +184,18 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Clear edge of all connections.
+        /// </summary>
+        public virtual void Clear()
+        {
+            From = null;
+            Face = null;
+            Next = null;
+            Previous = null;
+            Opposite = null;
+        }
+
+        /// <summary>
         /// Enumerate all edges starting from this edge.
         /// If edge is closed this will enumerate all edges in the face.
         /// </summary>
@@ -243,15 +257,22 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Clear edge of all connections.
+        /// Calculate the average position of the vertices.
         /// </summary>
-        public virtual void Clear()
+        public Vector3d GetCentriod()
         {
-            From = null;
-            Face = null;
-            Next = null;
-            Previous = null;
-            Opposite = null;
+            int count = 0;
+            Vector3d centroid = Vector3d.Zero;
+            foreach (var v in EnumerateVertices())
+            {
+                centroid += v.GetPosition();
+                count++;
+            }
+
+            if (count == 0)
+                return centroid;
+            else
+                return centroid / count;
         }
 
     }

@@ -45,6 +45,14 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+        /// <summary>
+        /// Clear face of all connections.
+        /// </summary>
+        public virtual void Clear()
+        {
+            Edge = null;
+        }
+
         public EDGE GetEdge<EDGE>() where EDGE : HBEdge
         {
             if (Edge == null) return null;
@@ -74,21 +82,13 @@ namespace Common.Meshing.HalfEdgeBased
         {
             foreach (var e in Edge.EnumerateEdges(forwards))
             {
-                if (e.Opposite == null || e.Opposite.Face == null) 
+                if (e.Opposite == null || e.Opposite.Face == null)
                 {
-                    if(incudeNull) faces.Add(null);
+                    if (incudeNull) faces.Add(null);
                 }
                 else
                     faces.Add(e.Opposite.Face as FACE);
             }
-        }
-
-        /// <summary>
-        /// Clear face of all connections.
-        /// </summary>
-        public virtual void Clear()
-        {
-            Edge = null;
         }
 
     }
