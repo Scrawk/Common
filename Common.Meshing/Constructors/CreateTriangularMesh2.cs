@@ -166,34 +166,6 @@ namespace Common.Meshing.Constructors
                 {
                     for (int x = 0; x < width1; x++)
                     {
-                        int i0 = faces[x + y * width1, 0];
-                        int i1 = faces[x + y * width1, 1];
-                        int n0, n1, n2, n3;
-
-                        if (x > 0)
-                            n0 = faces[(x-1) + y * width1, 1];
-                        else
-                            n0 = -1;
-
-                        if (y > 0)
-                            n1 = faces[x + (y-1) * width1, 0];
-                        else
-                            n1 = -1;
-
-                        if (x < width1 - 1)
-                            n2 = faces[(x + 1) + y * width1, 0];
-                        else
-                            n2 = -1;
-
-                        if (y < height1 - 1)
-                            n3 = faces[x + (y+1) * width1, 1];
-                        else
-                            n3 = -1;
-
-                        constructor.AddFaceConnection(i0, i1, n3, n0);
-                        constructor.AddFaceConnection(i1, i0, n1, n2);
-
-                        /*
                         int i0 = (x + y * width1) * 2 + 0;
                         int i1 = (x + y * width1) * 2 + 1;
                         int n0, n1, n2, n3;
@@ -218,9 +190,8 @@ namespace Common.Meshing.Constructors
                         else
                             n3 = -1;
 
-                        constructor.AddFaceConnection(i0, n0, i1, n3);
+                        constructor.AddFaceConnection(i0, i1, n3, n0);
                         constructor.AddFaceConnection(i1, i0, n1, n2);
-                        */
                     }
                 }
             }
