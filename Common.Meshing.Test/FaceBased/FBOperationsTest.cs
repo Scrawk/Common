@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.LinearAlgebra;
 using Common.Meshing.FaceBased;
+using Common.Meshing.HalfEdgeBased;
 using Common.Meshing.Constructors;
 using Common.Meshing.Test.HalfEdgeBased;
 
@@ -12,16 +13,18 @@ namespace Common.Meshing.Test.FaceBased
     public class Meshing_FaceBased_FBOperationsTest
     {
         [TestMethod]
-        public void ToHBTriangleMesh2f()
+        public void ToHBTriangleMesh()
         {
             var min = new Vector2f(-1, -1);
             var max = new Vector2f(1, 1);
 
-            var constructor = new FBMeshConstructor2f();
-            CreateTriangularMesh2.FromBox(constructor, min, max);
-            var tmp = constructor.PopMesh();
+            var constructor1 = new FBMeshConstructor2f();
+            CreateTriangularMesh2.FromBox(constructor1, min, max);
+            var tmp = constructor1.PopMesh();
 
-            var mesh = FBOperations.ToHBTriangleMesh2f(tmp);
+            var constructor2 = new HBMeshConstructor2f();
+            FBOperations.ToTriangularMesh(constructor2, tmp);
+            var mesh = constructor2.PopMesh();
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(10, mesh.Edges.Count);

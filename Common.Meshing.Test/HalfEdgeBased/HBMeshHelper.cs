@@ -139,6 +139,32 @@ namespace Common.Meshing.Test.HalfEdgeBased
             return mesh;
         }
 
+        public static HBMesh3d CreateTriangle(Vector3d A, Vector3d B, Vector3d C)
+        {
+            var mesh = new HBMesh3d();
+            mesh.Fill(3, 3, 1);
+
+            var E = mesh.Edges;
+            var V = mesh.Vertices;
+            var F = mesh.Faces;
+
+            F[0].Edge = E[0];
+
+            V[0].Edge = E[0];
+            V[1].Edge = E[1];
+            V[2].Edge = E[2];
+
+            V[0].Position = A;
+            V[1].Position = B;
+            V[2].Position = C;
+
+            E[0].Set(V[0], F[0], E[2], E[1], null);
+            E[1].Set(V[1], F[0], E[0], E[2], null);
+            E[2].Set(V[2], F[0], E[1], E[0], null);
+
+            return mesh;
+        }
+
         /// <summary>
         /// See CGALCSharp.Test/Meshes/HalfEdgeBased/Cross.png
         /// </summary>

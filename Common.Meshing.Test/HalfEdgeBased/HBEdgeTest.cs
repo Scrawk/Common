@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using Common.Core.LinearAlgebra;
 using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Test.HalfEdgeBased
@@ -150,6 +151,20 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(mesh.Vertices[0], vertices[0]);
             Assert.AreEqual(mesh.Vertices[2], vertices[1]);
             Assert.AreEqual(mesh.Vertices[1], vertices[2]);
+        }
+
+        [TestMethod]
+        public void GetCentriod()
+        {
+            var a = new Vector3d(-1, 0, 1);
+            var b = new Vector3d(1, 0, 2);
+            var c = new Vector3d(0, 1, 3);
+
+            var mesh = HBMeshHelper.CreateTriangle(a, b, c);
+            var edge = mesh.Edges[0];
+
+            var centroid = edge.GetCentriod();
+            Assert.AreEqual((a + b + c) / 3, centroid);
         }
     }
 }

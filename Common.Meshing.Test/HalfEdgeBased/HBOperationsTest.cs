@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Common.Core.LinearAlgebra;
 using Common.Meshing.HalfEdgeBased;
 using Common.Meshing.Constructors;
+using Common.Meshing.FaceBased;
 
 using Common.Meshing.Test.FaceBased;
 
@@ -55,6 +56,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var a = new Vector2f(0, 1);
             var b = new Vector2f(-1, -1);
             var c = new Vector2f(1, -1);
+            var d = (a + b + c) / 3;
 
             HBMesh2f mesh = CreateTriangularMesh2.FromTriangle(a, b, c);
 
@@ -64,10 +66,10 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(12, mesh.Edges.Count);
             Assert.AreEqual(3, mesh.Faces.Count);
 
-            HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
-            HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);
-            HBMeshHelper.CheckVertex(mesh, vertex: 2, edge: 2);
-            HBMeshHelper.CheckVertex(mesh, vertex: 3, edge: 6);
+            HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0, a);
+            HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1, b);
+            HBMeshHelper.CheckVertex(mesh, vertex: 2, edge: 2, c);
+            HBMeshHelper.CheckVertex(mesh, vertex: 3, edge: 6, d);
             HBMeshHelper.CheckEdge(mesh, edge: 0, from: 0, face: 0, previous: 6, next: 9, opposite: 3);
             HBMeshHelper.CheckEdge(mesh, edge: 1, from: 1, face: 1, previous: 8, next: 11, opposite: 4);
             HBMeshHelper.CheckEdge(mesh, edge: 2, from: 2, face: 2, previous: 10, next: 7, opposite: 5);
@@ -228,13 +230,16 @@ namespace Common.Meshing.Test.HalfEdgeBased
         }
 
         [TestMethod]
-        public void ToFBTriangleMesh2f()
+        public void ToFBTriangleMesh()
         {
             var min = new Vector2f(-1, -1);
             var max = new Vector2f(1, 1);
 
             var tmp = CreateTriangularMesh2.FromBox(min, max);
-            var mesh = HBOperations.ToFBTriangleMesh2f(tmp);
+
+            var constructor = new FBMeshConstructor2f();
+            HBOperations.ToTriangularMesh(constructor, tmp);
+            var mesh = constructor.PopMesh();
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(2, mesh.Faces.Count);

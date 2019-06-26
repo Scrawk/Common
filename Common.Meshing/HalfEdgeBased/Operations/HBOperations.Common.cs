@@ -38,5 +38,18 @@ namespace Common.Meshing.HalfEdgeBased
             edge.From = vert;
             vert.Edge = edge;
         }
+
+        /// <summary>
+        /// Sets the tag for the edge and its opposite.
+        /// </summary>
+        private static void TagEdgeAndOpposite(HBEdge edge, int tag)
+        {
+            if (edge == null) return;
+
+            edge.Tag = tag;
+
+            if (edge.Opposite != null)
+                edge.Opposite.Tag = tag;
+        }
     }
 }
