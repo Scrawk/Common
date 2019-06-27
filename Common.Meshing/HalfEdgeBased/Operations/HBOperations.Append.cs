@@ -87,33 +87,33 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Append the contents of mesh1 into mesh0 as a deep copy.
         /// </summary>
-        /// <param name="mesh0">mesh that get appended to</param>
-        /// <param name="mesh1">mesh that gets appended from</param>
+        /// <param name="source">mesh that get appended to</param>
+        /// <param name="dest">mesh that gets appended from</param>
         /// <param name="incudeFaces">should the mesh faces also be appended</param>
-        public static void Append<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh0, HBMesh<VERTEX, EDGE, FACE> mesh1, bool incudeFaces, bool isTagged)
+        public static void Append<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> source, HBMesh<VERTEX, EDGE, FACE> dest, bool incudeFaces, bool isTagged)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            var Vertices = mesh0.Vertices;
-            var Edges = mesh0.Edges;
-            var Faces = mesh0.Faces;
+            var Vertices = source.Vertices;
+            var Edges = source.Edges;
+            var Faces = source.Faces;
 
             int vStart = Vertices.Count;
             int eStart = Edges.Count;
             int fStart = Faces.Count;
 
             if(!isTagged)
-                mesh1.TagAll();
+                dest.TagAll();
 
-            for (int i = 0; i < mesh1.Vertices.Count; i++)
+            for (int i = 0; i < dest.Vertices.Count; i++)
             {
                 var v = new VERTEX();
-                v.SetPosition(mesh1.Vertices[i]);
+                v.SetPosition(dest.Vertices[i]);
                 Vertices.Add(v);
             }
 
-            for (int i = 0; i < mesh1.Edges.Count; i++)
+            for (int i = 0; i < dest.Edges.Count; i++)
             {
                 var e = new EDGE();
                 Edges.Add(e);
@@ -121,25 +121,25 @@ namespace Common.Meshing.HalfEdgeBased
 
             if (incudeFaces)
             {
-                for (int i = 0; i < mesh1.Faces.Count; i++)
+                for (int i = 0; i < dest.Faces.Count; i++)
                 {
                     var f = new FACE();
                     Faces.Add(f);
                 }
             }
 
-            for (int i = 0; i < mesh1.Vertices.Count; i++)
+            for (int i = 0; i < dest.Vertices.Count; i++)
             {
-                var v0 = mesh1.Vertices[i];
+                var v0 = dest.Vertices[i];
                 var v1 = Vertices[vStart + i];
 
                 var edge = (v0.Edge != null) ? Edges[eStart + v0.Edge.Tag] : null;
                 v1.Edge = edge;
             }
 
-            for (int i = 0; i < mesh1.Edges.Count; i++)
+            for (int i = 0; i < dest.Edges.Count; i++)
             {
-                var e0 = mesh1.Edges[i];
+                var e0 = dest.Edges[i];
                 var e1 = Edges[eStart + i];
 
                 var from = (e0.From != null) ? Vertices[vStart + e0.From.Tag] : null;
@@ -153,9 +153,9 @@ namespace Common.Meshing.HalfEdgeBased
 
             if (incudeFaces)
             {
-                for (int i = 0; i < mesh1.Faces.Count; i++)
+                for (int i = 0; i < dest.Faces.Count; i++)
                 {
-                    var f0 = mesh1.Faces[i];
+                    var f0 = dest.Faces[i];
                     var f1 = Faces[fStart + i];
 
                     var edge = (f0.Edge != null) ? Edges[eStart + f0.Edge.Tag] : null;
