@@ -10,7 +10,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// A half edge based mesh.
     /// </summary>
-    public class HBMesh<VERTEX, EDGE, FACE> : ITriangularMesh, IPolygonalMesh
+    public class HBMesh<VERTEX, EDGE, FACE>
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -36,11 +36,6 @@ namespace Common.Meshing.HalfEdgeBased
         public List<VERTEX> Vertices { get; private set; }
 
         /// <summary>
-        /// The number of vertices in mesh.
-        /// </summary>
-        public int VertexCount => Vertices.Count;
-
-        /// <summary>
         /// All the edges in the mesh.
         /// </summary>
         public List<EDGE> Edges { get; private set; }
@@ -49,16 +44,6 @@ namespace Common.Meshing.HalfEdgeBased
         /// All the faces in the mesh.
         /// </summary>
         public List<FACE> Faces { get; private set; }
-
-        /// <summary>
-        /// The number of triangles in mesh.
-        /// </summary>
-        public int TriangleCount => Faces.Count;
-
-        /// <summary>
-        /// The number of polygons in mesh.
-        /// </summary>
-        public int PolygonCount => Faces.Count;
 
         /// <summary>
         /// Convert mesh to string.
@@ -247,32 +232,6 @@ namespace Common.Meshing.HalfEdgeBased
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].GetPosition());
-        }
-
-        /// <summary>
-        /// Gets the triangle at index i.
-        /// Presumes faces are triangles 
-        /// and vertices have been tagged.
-        /// </summary>
-        public Vector3i GetTriangle(int i)
-        {
-            var face = Faces[i];
-            int a = face.Edge.Previous.From.Tag;
-            int b = face.Edge.From.Tag;
-            int c = face.Edge.Next.From.Tag;
-            return new Vector3i(a, b, c);
-        }
-
-        /// <summary>
-        /// Gets the polygon at index i.
-        /// Presumes faces are polygons 
-        /// and vertices have been tagged.
-        /// </summary>
-        public void GetPolygon(int i, List<int> indices)
-        {
-            var face = Faces[i];
-            foreach (var v in face.Edge.EnumerateEdges())
-                indices.Add(v.Tag);
         }
 
         /// <summary>

@@ -19,33 +19,56 @@ namespace Common.Meshing.AdjacencyGraphs
 
         public AdjacencyGraph(int size)
         {
-            Vertices = new VERTEX[size];
-            Edges = new List<EDGE>[size];
-
-            for (int i = 0; i < size; i++)
-            {
-                Vertices[i] = new VERTEX();
-                Vertices[i].Index = i;
-            }
+            Fill(size);
         }
 
         public AdjacencyGraph(IEnumerable<VERTEX> vertices)
         {
             Vertices = new List<VERTEX>(vertices);
-            Edges = new List<EDGE>[Vertices.Count];
+            Edges = new List<List<EDGE>>(Vertices.Count);
+
+            for (int i = 0; i < Vertices.Count; i++)
+                Edges.Add(null);
         }
 
         public int VertexCount { get { return Vertices.Count; } }
 
         public int EdgeCount { get; private set; }
 
-        public IList<VERTEX> Vertices { get; set; }
+        public List<VERTEX> Vertices { get; set; }
 
-        public IList<IList<EDGE>> Edges { get; set; }
+        public List<List<EDGE>> Edges { get; set; }
 
         public override string ToString()
         {
             return string.Format("[AdjacencyGraph: VertexCount={0}, EdgeCount={1}]", VertexCount, EdgeCount);
+        }
+
+        /// <summary>
+        /// Clear the graph.
+        /// </summary>
+        public virtual void Clear()
+        {
+            EdgeCount = 0;
+            Vertices.Clear();
+            Edges.Clear();
+        }
+
+        /// <summary>
+        /// Fill the graph.
+        /// </summary>
+        public void Fill(int size)
+        {
+            Vertices = new List<VERTEX>(size);
+            Edges = new List<List<EDGE>>(size);
+
+            for (int i = 0; i < size; i++)
+            {
+                var v = new VERTEX();
+                v.Index = i;
+                Vertices.Add(v);
+                Edges.Add(null);
+            }
         }
 
         /// <summary>

@@ -21,15 +21,18 @@ namespace Common.Meshing.AdjacencyGraphs
         public AdjacencyDataGraph(IEnumerable<T> vertices)
         {
             Vertices = new List<AdjacencyDataVertex<T>>();
+            Edges = new List<List<AdjacencyEdge>>(Vertices.Count);
+
             foreach (var data in vertices)
             {
                 var v = new AdjacencyDataVertex<T>();
                 v.Index = Vertices.Count;
                 v.Data = data;
                 Vertices.Add(v);
+                Edges.Add(null);
             }
 
-            Edges = new List<AdjacencyEdge>[Vertices.Count];
+            
         }
 
         /// <summary>

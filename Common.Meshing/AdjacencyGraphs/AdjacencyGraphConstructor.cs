@@ -58,8 +58,7 @@ namespace Common.Meshing.AdjacencyGraphs
 
             m_vertexIndex = 0;
             m_graph = new GRAPH();
-            m_graph.Vertices = new VERTEX[numVertices];
-            m_graph.Edges = new List<EDGE>[numVertices];
+            m_graph.Fill(numVertices);
         }
 
         /// <summary>
@@ -103,7 +102,7 @@ namespace Common.Meshing.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Add a edge connecting to vertices.
+        /// Add a edge connecting two vertices.
         /// Edges are directional so add a 
         /// edge for each direction.
         /// </summary>

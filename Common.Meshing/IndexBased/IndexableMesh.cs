@@ -7,29 +7,13 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.IndexBased
 {
-    public abstract class IndexableMesh : ITriangularMesh, IPolygonalMesh, IEdgeMesh
+    public abstract class IndexableMesh
     {
 
         /// <summary>
         /// The number of vertices in mesh.
         /// </summary>
         public abstract int VertexCount { get; }
-
-        /// <summary>
-        /// The number of triangles in mesh.
-        /// </summary>
-        public int TriangleCount => IndicesCount / 3;
-
-        /// <summary>
-        /// The number of polygons in mesh.
-        /// Presumes polygons are triangles.
-        /// </summary>
-        public int PolygonCount => IndicesCount / 3;
-
-        /// <summary>
-        /// The number of edges in mesh.
-        /// </summary>
-        public int EdgeCount => IndicesCount / 2;
 
         /// <summary>
         /// Does the mesh have indices.
@@ -79,17 +63,6 @@ namespace Common.Meshing.IndexBased
             int b = Indices[i / 3 + 1];
             int c = Indices[i / 3 + 2];
             return new Vector3i(a, b, c);
-        }
-
-        /// <summary>
-        /// Get the polygon at index i.
-        /// Presumes indices represents triangles.
-        /// </summary>
-        public void GetPolygon(int i, List<int> indices)
-        {
-            indices.Add(Indices[i / 3 + 0]);
-            indices.Add(Indices[i / 3 + 1]);
-            indices.Add(Indices[i / 3 + 2]);
         }
 
         /// <summary>

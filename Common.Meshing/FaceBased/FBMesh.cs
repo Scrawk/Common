@@ -13,7 +13,7 @@ namespace Common.Meshing.FaceBased
     /// </summary>
     /// <typeparam name="VERTEX">The element type for the vertices</typeparam>
     /// <typeparam name="FACE">The element type for the faces</typeparam>
-    public class FBMesh<VERTEX, FACE> : ITriangularMesh, IPolygonalMesh
+    public class FBMesh<VERTEX, FACE>
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
     {
@@ -44,24 +44,9 @@ namespace Common.Meshing.FaceBased
         public List<VERTEX> Vertices { get; private set; }
 
         /// <summary>
-        /// The number of vertices in mesh.
-        /// </summary>
-        public int VertexCount => Vertices.Count;
-
-        /// <summary>
         /// All the faces in the mesh.
         /// </summary>
         public List<FACE> Faces { get; private set; }
-
-        /// <summary>
-        /// The number of triangles in mesh.
-        /// </summary>
-        public int TriangleCount => Faces.Count;
-
-        /// <summary>
-        /// The number of polygons in mesh.
-        /// </summary>
-        public int PolygonCount => Faces.Count;
 
         /// <summary>
         /// Convert mesh to string.
@@ -203,32 +188,6 @@ namespace Common.Meshing.FaceBased
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].GetPosition());
-        }
-
-        /// <summary>
-        /// Gets the triangle at index i.
-        /// Presumes faces are triangles 
-        /// and vertices have been tagged.
-        /// </summary>
-        public Vector3i GetTriangle(int i)
-        {
-            var face = Faces[i];
-            int a = face.Vertices[0].Tag;
-            int b = face.Vertices[1].Tag;
-            int c = face.Vertices[2].Tag;
-            return new Vector3i(a, b, c);
-        }
-
-        /// <summary>
-        /// Gets the polygon at index i.
-        /// Presumes faces are polygons 
-        /// and vertices have been tagged.
-        /// </summary>
-        public void GetPolygon(int i, List<int> indices)
-        {
-            var face = Faces[i];
-            foreach (var v in face.Vertices)
-                indices.Add(v.Tag);
         }
 
         /// <summary>
