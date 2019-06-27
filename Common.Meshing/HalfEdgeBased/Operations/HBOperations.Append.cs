@@ -90,7 +90,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="mesh0">mesh that get appended to</param>
         /// <param name="mesh1">mesh that gets appended from</param>
         /// <param name="incudeFaces">should the mesh faces also be appended</param>
-        public static void Append<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh0, HBMesh<VERTEX, EDGE, FACE> mesh1, bool incudeFaces)
+        public static void Append<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh0, HBMesh<VERTEX, EDGE, FACE> mesh1, bool incudeFaces, bool isTagged)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -103,7 +103,8 @@ namespace Common.Meshing.HalfEdgeBased
             int eStart = Edges.Count;
             int fStart = Faces.Count;
 
-            mesh1.TagAll();
+            if(!isTagged)
+                mesh1.TagAll();
 
             for (int i = 0; i < mesh1.Vertices.Count; i++)
             {
