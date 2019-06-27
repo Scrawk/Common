@@ -50,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdjacencyGraphs\AdjacencyGraphTest.cs" />
-    <Compile Include="Constructors\CreatePolygonalMesh2Test.cs" />
-    <Compile Include="Constructors\CreateTriangularMesh2Test.cs" />
+    <Compile Include="HalfEdgeBased\HBCreatePolygonalMesh2Test.cs" />
+    <Compile Include="HalfEdgeBased\HBCreateTriangularMesh2Test.cs" />
     <Compile Include="FaceBased\FBMeshHelper.cs" />
     <Compile Include="FaceBased\FBMeshTest.cs" />
     <Compile Include="FaceBased\FBVertexTest.cs" />
@@ -87,7 +87,9 @@
       <Name>Common.Meshing</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Constructors\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="HalfEdgeBased\TestMesh_Cross.png" />
     <Content Include="HalfEdgeBased\TestMesh_SquareWithCenter.png" />

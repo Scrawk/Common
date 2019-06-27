@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Core">
+      <HintPath>..\Common.Core\bin\Release\netstandard2.0\Common.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Meshing">
+      <HintPath>..\Common.Meshing\bin\Release\netstandard2.0\Common.Meshing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

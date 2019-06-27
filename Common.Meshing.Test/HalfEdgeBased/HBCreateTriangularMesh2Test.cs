@@ -3,23 +3,21 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.LinearAlgebra;
-using Common.Geometry.Shapes;
 using Common.Meshing.HalfEdgeBased;
-using Common.Meshing.Constructors;
-using Common.Meshing.Test.HalfEdgeBased;
 
-namespace Common.Meshing.Test.Constructors
+
+namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_Constructors_CreateTriangularMesh2Test
+    public class Meshing_HalfEdgeBased_HBCreateTriangularMesh2Test
     { 
         [TestMethod]
         public void FromTriangle()
         {
-            var a = new Vector2f(-1, -1);
-            var b = new Vector2f(1, -1);
-            var c = new Vector2f(0, 1);
-            var mesh = CreateTriangularMesh2.FromTriangle(a, b, c);
+            var a = new Vector2d(-1, -1);
+            var b = new Vector2d(1, -1);
+            var c = new Vector2d(0, 1);
+            var mesh = HBCreateTriangularMesh2.FromTriangle(a, b, c);
 
             Assert.AreEqual(3, mesh.Vertices.Count);
             Assert.AreEqual(6, mesh.Edges.Count);
@@ -45,17 +43,17 @@ namespace Common.Meshing.Test.Constructors
         [TestMethod]
         public void FromBox()
         {
-            var min = new Vector2f(-1, -1);
-            var max = new Vector2f(1, 1);
-            var mesh = CreateTriangularMesh2.FromBox(min, max);
+            var min = new Vector2d(-1, -1);
+            var max = new Vector2d(1, 1);
+            var mesh = HBCreateTriangularMesh2.FromBox(min, max);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(10, mesh.Edges.Count);
             Assert.AreEqual(2, mesh.Faces.Count);
             Assert.AreEqual(min, mesh.Vertices[0].Position);
-            Assert.AreEqual(new Vector2f(max.x, min.y), mesh.Vertices[1].Position);
+            Assert.AreEqual(new Vector2d(max.x, min.y), mesh.Vertices[1].Position);
             Assert.AreEqual(max, mesh.Vertices[2].Position);
-            Assert.AreEqual(new Vector2f(min.x, max.y), mesh.Vertices[3].Position);
+            Assert.AreEqual(new Vector2d(min.x, max.y), mesh.Vertices[3].Position);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 5);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);
@@ -80,7 +78,7 @@ namespace Common.Meshing.Test.Constructors
         [TestMethod]
         public void FromCircle()
         {
-            var mesh = CreateTriangularMesh2.FromCircle(Vector2f.Zero, 1.0f, 4);
+            var mesh = HBCreateTriangularMesh2.FromCircle(Vector2d.Zero, 1.0f, 4);
 
             Assert.AreEqual(5, mesh.Vertices.Count);
             Assert.AreEqual(16, mesh.Edges.Count);
@@ -93,9 +91,8 @@ namespace Common.Meshing.Test.Constructors
         [TestMethod]
         public void FromGrid()
         {
-            var constructor = new HBMeshConstructor2d();
-            CreateTriangularMesh2.FromGrid(constructor, 3, 3);
-            var mesh = constructor.PopMesh();
+
+            var mesh = HBCreateTriangularMesh2.FromGrid(3, 3, 1.0);
 
             Assert.AreEqual(9, mesh.Vertices.Count);
             Assert.AreEqual(32, mesh.Edges.Count);

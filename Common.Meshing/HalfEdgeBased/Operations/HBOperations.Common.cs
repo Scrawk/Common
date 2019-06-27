@@ -40,6 +40,33 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        private static void SetNext(HBEdge edge, HBEdge next)
+        {
+            edge.Next = next;
+            next.Previous = edge;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void SetPrevious(HBEdge edge, HBEdge previous)
+        {
+            edge.Previous = previous;
+            previous.Next = edge;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static void SetFace(HBEdge edge, HBFace face)
+        {
+            edge.Face = face;
+            face.Edge = edge;
+        }
+
+        /// <summary>
         /// Sets the tag for the edge and its opposite.
         /// </summary>
         private static void TagEdgeAndOpposite(HBEdge edge, int tag)

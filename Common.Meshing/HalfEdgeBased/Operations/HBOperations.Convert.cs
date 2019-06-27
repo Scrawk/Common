@@ -41,25 +41,28 @@ namespace Common.Meshing.HalfEdgeBased
             foreach (var face in mesh.Faces)
             {
                 vertices.Clear();
-                face.GetVertices(vertices);
+                face.Edge.GetVertices(vertices);
                 if (vertices.Count != 3)
                     throw new InvalidOperationException("Face does not contain 3 vertices.");
 
                 constructor.AddFace(vertices[0].Tag, vertices[1].Tag, vertices[2].Tag);
             }
 
-            foreach (var face in mesh.Faces)
+            if (constructor.SupportsFaceConnections)
             {
-                neighbours.Clear();
-                face.GetNeighbours(neighbours, true, true);
+                foreach (var face in mesh.Faces)
+                {
+                    neighbours.Clear();
+                    face.Edge.GetNeighbours(neighbours, true, true);
 
-                if (neighbours.Count != 3)
-                    throw new InvalidOperationException("Face does not have 3 edges.");
+                    if (neighbours.Count != 3)
+                        throw new InvalidOperationException("Face does not have 3 edges.");
 
-                int i0 = neighbours[0] != null ? neighbours[0].Tag : -1;
-                int i1 = neighbours[1] != null ? neighbours[1].Tag : -1;
-                int i2 = neighbours[2] != null ? neighbours[2].Tag : -1;
-                constructor.AddFaceConnection(face.Tag, i0, i1, i2);
+                    int i0 = neighbours[0] != null ? neighbours[0].Tag : -1;
+                    int i1 = neighbours[1] != null ? neighbours[1].Tag : -1;
+                    int i2 = neighbours[2] != null ? neighbours[2].Tag : -1;
+                    constructor.AddFaceConnection(face.Tag, i0, i1, i2);
+                }
             }
         }
     }

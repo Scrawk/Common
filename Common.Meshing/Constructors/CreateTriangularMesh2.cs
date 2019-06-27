@@ -15,20 +15,6 @@ namespace Common.Meshing.Constructors
     public static class CreateTriangularMesh2
     {
 
-        public static HBMesh2f FromTriangle(Vector2f A, Vector2f B, Vector2f C)
-        {
-            var constructor = new HBMeshConstructor2f();
-            FromTriangle(constructor, A, B, C);
-            return constructor.PopMesh();
-        }
-
-        public static HBMesh2d FromTriangle(Vector2d A, Vector2d B, Vector2d C)
-        {
-            var constructor = new HBMeshConstructor2d();
-            FromTriangle(constructor, A, B, C);
-            return constructor.PopMesh();
-        }
-
         public static void FromTriangle<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2d A, Vector2d B, Vector2d C)
         {
             constructor.PushTriangularMesh(3, 1);
@@ -37,20 +23,6 @@ namespace Common.Meshing.Constructors
             constructor.AddVertex(B);
             constructor.AddVertex(C);
             constructor.AddFace(0, 1, 2);
-        }
-
-        public static HBMesh2f FromBox(Vector2f min, Vector2f max)
-        {
-            var constructor = new HBMeshConstructor2f();
-            FromBox(constructor, min, max);
-            return constructor.PopMesh();
-        }
-
-        public static HBMesh2d FromBox(Vector2d min, Vector2d max)
-        {
-            var constructor = new HBMeshConstructor2d();
-            FromBox(constructor, min, max);
-            return constructor.PopMesh();
         }
 
         public static void FromBox<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
@@ -70,20 +42,6 @@ namespace Common.Meshing.Constructors
                 constructor.AddFaceConnection(0, 1, -1, -1);
                 constructor.AddFaceConnection(1, 0, -1, -1);
             }
-        }
-
-        public static HBMesh2f FromCircle(Vector2f center, float radius, int segments)
-        {
-            var constructor = new HBMeshConstructor2f();
-            FromCircle(constructor, center, radius, segments);
-            return constructor.PopMesh();
-        }
-
-        public static HBMesh2d FromCircle(Vector2d center, double radius, int segments)
-        {
-            var constructor = new HBMeshConstructor2d();
-            FromCircle(constructor, center, radius, segments);
-            return constructor.PopMesh();
         }
 
         public static void FromCircle<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
@@ -124,7 +82,7 @@ namespace Common.Meshing.Constructors
 
         }
 
-        public static void FromGrid<MESH>(ITriangularMeshConstructor<MESH> constructor, int width, int height)
+        public static void FromGrid<MESH>(ITriangularMeshConstructor<MESH> constructor, int width, int height, double scale)
         {
 
             int numVerts = width * height;
@@ -137,7 +95,7 @@ namespace Common.Meshing.Constructors
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
-                    constructor.AddVertex(new Vector2d(x, y));
+                    constructor.AddVertex(new Vector2d(x, y) * scale);
             }
 
             int idx = 0;

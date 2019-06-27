@@ -51,6 +51,16 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(v.Position, pos);
         }
 
+        public static void CheckVertex<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, int vertex, int edge, Vector2d pos)
+            where VERTEX : HBVertex2d, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var v = mesh.Vertices[vertex];
+            Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
+            Assert.AreEqual(v.Position, pos);
+        }
+
         public static void CheckEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, 
             int edge, int from, int face, int previous, int next, int opposite)
             where VERTEX : HBVertex, new()
@@ -79,14 +89,18 @@ namespace Common.Meshing.Test.HalfEdgeBased
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            var list = new List<HBVertex2f>();
+            var list = new List<HBVertex>();
             foreach (var f in mesh.Faces)
             {
                 list.Clear();
-                f.GetVertices(list);
+                f.Edge.GetVertices(list);
+
+                var a = list[0].GetPosition().xy;
+                var b = list[1].GetPosition().xy;
+                var c = list[2].GetPosition().xy;
 
                 Assert.AreEqual(3, list.Count);
-                var tri = new Triangle2f(list[0].Position, list[1].Position, list[2].Position);
+                var tri = new Triangle2d(a, b, c);
                 Assert.IsTrue(tri.IsCCW);
             }
         }

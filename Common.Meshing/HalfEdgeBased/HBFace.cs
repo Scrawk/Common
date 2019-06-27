@@ -64,32 +64,5 @@ namespace Common.Meshing.HalfEdgeBased
             return edge;
         }
 
-        /// <summary>
-        /// Add all vertices in face to list.
-        /// </summary>
-        public void GetVertices<VERTEX>(List<VERTEX> vertices, bool forwards = true)
-            where VERTEX : HBVertex
-        {
-            foreach (var v in Edge.EnumerateVertices(forwards))
-                vertices.Add(v as VERTEX);
-        }
-
-        /// <summary>
-        /// Add all neighbours of face to list.
-        /// </summary>
-        public void GetNeighbours<FACE>(List<FACE> faces, bool forwards = true, bool incudeNull = false)
-            where FACE : HBFace
-        {
-            foreach (var e in Edge.EnumerateEdges(forwards))
-            {
-                if (e.Opposite == null || e.Opposite.Face == null)
-                {
-                    if (incudeNull) faces.Add(null);
-                }
-                else
-                    faces.Add(e.Opposite.Face as FACE);
-            }
-        }
-
     }
 }

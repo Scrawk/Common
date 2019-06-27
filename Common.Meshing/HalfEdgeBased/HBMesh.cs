@@ -352,7 +352,7 @@ namespace Common.Meshing.HalfEdgeBased
                 var face = Faces[i];
 
                 vertices.Clear();
-                face.GetVertices(vertices);
+                face.Edge.GetVertices(vertices);
 
                 if (vertices.Count != faceVertices)
                     throw new InvalidOperationException("Face does not contain the required number of vertices.");

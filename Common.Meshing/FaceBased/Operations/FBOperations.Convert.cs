@@ -29,16 +29,19 @@ namespace Common.Meshing.FaceBased
                 constructor.AddFace(v[0].Tag, v[1].Tag, v[2].Tag);
             }
 
-            foreach (var face in mesh.Faces)
+            if (constructor.SupportsFaceConnections)
             {
-                var n = face.Neighbours;
-                if (n.Length != 3)
-                    throw new InvalidOperationException("Face does not contain 3 neighbours.");
+                foreach (var face in mesh.Faces)
+                {
+                    var n = face.Neighbours;
+                    if (n.Length != 3)
+                        throw new InvalidOperationException("Face does not contain 3 neighbours.");
 
-                int i0 = n[0] != null ? n[0].Tag : -1;
-                int i1 = n[1] != null ? n[1].Tag : -1;
-                int i2 = n[2] != null ? n[2].Tag : -1;
-                constructor.AddFaceConnection(face.Tag, i0, i1, i2);
+                    int i0 = n[0] != null ? n[0].Tag : -1;
+                    int i1 = n[1] != null ? n[1].Tag : -1;
+                    int i2 = n[2] != null ? n[2].Tag : -1;
+                    constructor.AddFaceConnection(face.Tag, i0, i1, i2);
+                }
             }
         }
     }
