@@ -19,6 +19,8 @@ namespace Common.Meshing.AdjacencyGraphs
 
         public AdjacencyGraph(int size)
         {
+            Vertices = new List<VERTEX>(size);
+            Edges = new List<List<EDGE>>(size);
             Fill(size);
         }
 
@@ -59,8 +61,9 @@ namespace Common.Meshing.AdjacencyGraphs
         /// </summary>
         public void Fill(int size)
         {
-            Vertices = new List<VERTEX>(size);
-            Edges = new List<List<EDGE>>(size);
+            Clear();
+            Vertices.Capacity = size;
+            Edges.Capacity = size;
 
             for (int i = 0; i < size; i++)
             {
