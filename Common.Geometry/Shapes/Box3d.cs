@@ -190,7 +190,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public static Box3d Enlarge(Box3d box, double percent)
         {
-            var amount = box.Size * percent;
+            var amount = box.Size * percent * 0.5;
             return new Box3d(box.Min - amount, box.Max + amount);
         }
 

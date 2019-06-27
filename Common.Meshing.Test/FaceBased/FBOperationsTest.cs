@@ -15,14 +15,14 @@ namespace Common.Meshing.Test.FaceBased
         [TestMethod]
         public void ToHBTriangleMesh()
         {
-            var min = new Vector2f(-1, -1);
-            var max = new Vector2f(1, 1);
+            var min = new Vector2d(-1, -1);
+            var max = new Vector2d(1, 1);
 
-            var constructor1 = new FBMeshConstructor2f();
+            var constructor1 = new FBMeshConstructor2d();
             CreateTriangularMesh2.FromBox(constructor1, min, max);
             var tmp = constructor1.PopMesh();
 
-            var constructor2 = new HBMeshConstructor2f();
+            var constructor2 = new HBMeshConstructor2d();
             FBOperations.ToTriangularMesh(constructor2, tmp);
             var mesh = constructor2.PopMesh();
 
@@ -30,9 +30,9 @@ namespace Common.Meshing.Test.FaceBased
             Assert.AreEqual(10, mesh.Edges.Count);
             Assert.AreEqual(2, mesh.Faces.Count);
             Assert.AreEqual(min, mesh.Vertices[0].Position);
-            Assert.AreEqual(new Vector2f(max.x, min.y), mesh.Vertices[1].Position);
+            Assert.AreEqual(new Vector2d(max.x, min.y), mesh.Vertices[1].Position);
             Assert.AreEqual(max, mesh.Vertices[2].Position);
-            Assert.AreEqual(new Vector2f(min.x, max.y), mesh.Vertices[3].Position);
+            Assert.AreEqual(new Vector2d(min.x, max.y), mesh.Vertices[3].Position);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 5);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);

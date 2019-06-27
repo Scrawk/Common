@@ -179,7 +179,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public static Box2f Enlarge(Box2f box, float percent)
         {
-            var amount = box.Size * percent;
+            var amount = box.Size * percent * 0.5f;
             return new Box2f(box.Min - amount, box.Max + amount);
         }
 
