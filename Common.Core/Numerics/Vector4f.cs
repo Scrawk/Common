@@ -3,11 +3,11 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
 using REAL = System.Single;
 
-namespace Common.Core.LinearAlgebra
+namespace Common.Core.Numerics
 {
 
     [Serializable]

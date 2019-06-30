@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Common.Core.Directions;
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
 namespace Common.Meshing.GridGraphs
 {

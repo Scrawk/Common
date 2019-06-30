@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 using Common.Mathematics.Random;
 
 namespace Common.Mathematics.Probability

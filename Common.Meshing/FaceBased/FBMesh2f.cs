@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 using Common.Meshing.IndexBased;
 using Common.Meshing.HalfEdgeBased;
 

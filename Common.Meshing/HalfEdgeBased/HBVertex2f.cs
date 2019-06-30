@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Collections.Generic;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
 namespace Common.Meshing.HalfEdgeBased
 {

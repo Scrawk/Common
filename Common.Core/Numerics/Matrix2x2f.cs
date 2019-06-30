@@ -2,29 +2,28 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
-namespace Common.Core.LinearAlgebra
+namespace Common.Core.Numerics
 {
-
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Matrix2x2d
+    public struct Matrix2x2f
     {
         /// <summary>
         /// The matrix
         /// </summary>
-        public double m00, m01, m10, m11;
+        public float m00, m10, m01, m11;
 
         /// <summary>
         /// The Matrix Idenity.
         /// </summary>
-        static readonly public Matrix2x2d Identity = new Matrix2x2d(1, 0, 0, 1);
+        static readonly public Matrix2x2f Identity = new Matrix2x2f(1, 0, 0, 1);
 
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix2x2d(double m00, double m01, double m10, double m11)
+        public Matrix2x2f(float m00, float m01, float m10, float m11)
         {
 			this.m00 = m00; this.m01 = m01;
 			this.m10 = m10; this.m11 = m11;
@@ -33,7 +32,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// A matrix from the following column vectors.
         /// </summary>
-        public Matrix2x2d(Vector2d c0, Vector2d c1)
+        public Matrix2x2f(Vector2f c0, Vector2f c1)
         {
             m00 = c0.x; m01 = c1.x;
             m10 = c0.y; m11 = c1.y;
@@ -42,7 +41,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix2x2d(double v)
+        public Matrix2x2f(float v)
         {
             m00 = v; m01 = v;
             m10 = v; m11 = v;
@@ -51,7 +50,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// A matrix copied from a array of varibles.
         /// </summary>
-        public Matrix2x2d(double[,] m)
+        public Matrix2x2f(float[,] m)
         {
             m00 = m[0,0]; m01 = m[0,1];
             m10 = m[1,0]; m11 = m[1,1];
@@ -60,7 +59,7 @@ namespace Common.Core.LinearAlgebra
 		/// <summary>
 		/// A matrix copied from a array of varibles.
 		/// </summary>
-		public Matrix2x2d(double[] m)
+		public Matrix2x2f(float[] m)
 		{
             m00 = m[0 + 0 * 2]; m01 = m[0 + 1 * 2];
             m10 = m[1 + 0 * 2]; m11 = m[1 + 1 * 2];
@@ -69,7 +68,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Access the varible at index i
         /// </summary>
-        public double this[int i]
+        public float this[int i]
         {
             get
             {
@@ -79,7 +78,7 @@ namespace Common.Core.LinearAlgebra
                     case 1: return m10;
                     case 2: return m01;
                     case 3: return m11;
-                    default: throw new IndexOutOfRangeException("Matrix2x2d index out of range: " + i);
+                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + i);
                 }
             }
             set
@@ -90,38 +89,7 @@ namespace Common.Core.LinearAlgebra
                     case 1: m10 = value; break;
                     case 2: m01 = value; break;
                     case 3: m11 = value; break;
-                    default: throw new IndexOutOfRangeException("Matrix2x2d index out of range: " + i);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Access the varible at index i,j.
-        /// </summary>
-        public double this[int i, int j]
-        {
-            get
-            {
-                int k = i + j * 2;
-                switch (k)
-                {
-                    case 0: return m00;
-                    case 1: return m10;
-                    case 2: return m01;
-                    case 3: return m11;
-                    default: throw new IndexOutOfRangeException("Matrix2x2d index out of range: " + k);
-                }
-            }
-            set
-            {
-                int k = i + j * 2;
-                switch (k)
-                {
-                    case 0: m00 = value; break;
-                    case 1: m10 = value; break;
-                    case 2: m01 = value; break;
-                    case 3: m11 = value; break;
-                    default: throw new IndexOutOfRangeException("Matrix2x2d index out of range: " + k);
+                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + i);
                 }
             }
         }
@@ -129,11 +97,11 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The transpose of the matrix. The rows and columns are flipped.
         /// </summary>
-        public Matrix2x2d Transpose
+        public Matrix2x2f Transpose
         {
             get
             {
-                Matrix2x2d kTranspose = new Matrix2x2d();
+                Matrix2x2f kTranspose = new Matrix2x2f();
                 kTranspose.m00 = m00;
                 kTranspose.m10 = m01;
                 kTranspose.m01 = m10;
@@ -146,7 +114,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The determinate of a matrix. 
         /// </summary>
-        public double Determinant
+        public float Determinant
         {
             get
             {
@@ -158,17 +126,17 @@ namespace Common.Core.LinearAlgebra
         /// The inverse of the matrix.
         /// A matrix multipled by its inverse is the idenity.
         /// </summary>
-        public Matrix2x2d Inverse
+        public Matrix2x2f Inverse
         {
             get
             {
-                Matrix2x2d kInverse = Identity;
+                Matrix2x2f kInverse = Identity;
                 TryInverse(ref kInverse);
                 return kInverse;
             }
         }
 
-        public double Trace
+        public float Trace
         {
             get
             {
@@ -177,11 +145,42 @@ namespace Common.Core.LinearAlgebra
         }
 
         /// <summary>
+        /// Access the varible at index i,j.
+        /// </summary>
+        public float this[int i, int j]
+        {
+            get
+            {
+                int k = i + j * 2;
+                switch (k)
+                {
+                    case 0: return m00;
+                    case 1: return m10;
+                    case 2: return m01;
+                    case 3: return m11;
+                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + k);
+                }
+            }
+            set
+            {
+                int k = i + j * 2;
+                switch (k)
+                {
+                    case 0: m00 = value; break;
+                    case 1: m10 = value; break;
+                    case 2: m01 = value; break;
+                    case 3: m11 = value; break;
+                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + k);
+                }
+            }
+        }
+
+        /// <summary>
         /// Add two matrices.
         /// </summary>
-        public static Matrix2x2d operator +(Matrix2x2d m1, Matrix2x2d m2)
+        public static Matrix2x2f operator +(Matrix2x2f m1, Matrix2x2f m2)
         {
-            Matrix2x2d kSum = new Matrix2x2d();
+            Matrix2x2f kSum = new Matrix2x2f();
             kSum.m00 = m1.m00 + m2.m00;
             kSum.m10 = m1.m10 + m2.m10;
             kSum.m01 = m1.m01 + m2.m01;
@@ -193,9 +192,9 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Subtract two matrices.
         /// </summary>
-        public static Matrix2x2d operator -(Matrix2x2d m1, Matrix2x2d m2)
+        public static Matrix2x2f operator -(Matrix2x2f m1, Matrix2x2f m2)
         {
-            Matrix2x2d kSum = new Matrix2x2d();
+            Matrix2x2f kSum = new Matrix2x2f();
             kSum.m00 = m1.m00 - m2.m00;
             kSum.m10 = m1.m10 - m2.m10;
             kSum.m01 = m1.m01 - m2.m01;
@@ -206,9 +205,9 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply two matrices.
         /// </summary>
-        public static Matrix2x2d operator *(Matrix2x2d m1, Matrix2x2d m2)
+        public static Matrix2x2f operator *(Matrix2x2f m1, Matrix2x2f m2)
         {
-            Matrix2x2d kProd = new Matrix2x2d();
+            Matrix2x2f kProd = new Matrix2x2f();
             kProd.m00 = m1.m00 * m2.m00 + m1.m01 * m2.m10;
             kProd.m10 = m1.m10 * m2.m00 + m1.m11 * m2.m10;
             kProd.m01 = m1.m00 * m2.m01 + m1.m01 * m2.m11;
@@ -220,9 +219,9 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply  a vector by a matrix.
         /// </summary>
-        public static Vector2d operator *(Matrix2x2d m, Vector2d v)
+        public static Vector2f operator *(Matrix2x2f m, Vector2f v)
         {
-            Vector2d kProd = new Vector2d();
+            Vector2f kProd = new Vector2f();
 
 			kProd.x = m.m00 * v.x + m.m01 * v.y;
 			kProd.y = m.m10 * v.x + m.m11 * v.y;
@@ -233,9 +232,9 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix2x2d operator *(Matrix2x2d m, double s)
+        public static Matrix2x2f operator *(Matrix2x2f m, float s)
         {
-            Matrix2x2d kProd = new Matrix2x2d();
+            Matrix2x2f kProd = new Matrix2x2f();
             kProd.m00 = m.m00 * s;
             kProd.m10 = m.m10 * s;
             kProd.m01 = m.m01 * s;
@@ -247,9 +246,9 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix2x2d operator *(double s, Matrix2x2d m)
+        public static Matrix2x2f operator *(float s, Matrix2x2f m)
         {
-            Matrix2x2d kProd = new Matrix2x2d();
+            Matrix2x2f kProd = new Matrix2x2f();
             kProd.m00 = m.m00 * s;
             kProd.m10 = m.m10 * s;
             kProd.m01 = m.m01 * s;
@@ -261,7 +260,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool operator ==(Matrix2x2d m1, Matrix2x2d m2)
+        public static bool operator ==(Matrix2x2f m1, Matrix2x2f m2)
         {
 
             if (m1.m00 != m2.m00) return false;
@@ -275,7 +274,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these matrices not equal.
         /// </summary>
-        public static bool operator !=(Matrix2x2d m1, Matrix2x2d m2)
+        public static bool operator !=(Matrix2x2f m1, Matrix2x2f m2)
         {
             if (m1.m00 != m2.m00) return true;
             if (m1.m10 != m2.m10) return true;
@@ -290,9 +289,9 @@ namespace Common.Core.LinearAlgebra
 		/// </summary>
 		public override bool Equals (object obj)
 		{
-			if(!(obj is Matrix2x2d)) return false;
+			if(!(obj is Matrix2x2f)) return false;
 			
-			Matrix2x2d mat = (Matrix2x2d)obj;
+			Matrix2x2f mat = (Matrix2x2f)obj;
 			
 			return this == mat;
 		}
@@ -300,7 +299,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public bool Equals(Matrix2x2d mat)
+        public bool Equals(Matrix2x2f mat)
         {
             return this == mat;
         }
@@ -308,7 +307,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public bool EqualsWithError(Matrix2x2d m, double eps)
+        public bool EqualsWithError(Matrix2x2f m, float eps)
         {
             if (Math.Abs(m00 - m.m00) > eps) return false;
             if (Math.Abs(m10 - m.m10) > eps) return false;
@@ -347,14 +346,14 @@ namespace Common.Core.LinearAlgebra
         /// Returns false if the matrix has no inverse.
         /// A matrix multipled by its inverse is the idenity.
         /// </summary>
-        public bool TryInverse(ref Matrix2x2d mInv)
+        public bool TryInverse(ref Matrix2x2f mInv)
         {
-            double det = Determinant;
+            float det = Determinant;
 
-            if (DMath.IsZero(det))
+            if (FMath.IsZero(det))
                 return false;
 
-            double invDet = 1.0 / det;
+            float invDet = 1.0f / det;
 
 			mInv.m00 = m11 * invDet;
 			mInv.m01 = -m01 * invDet;
@@ -366,15 +365,15 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Get the ith column as a vector.
         /// </summary>
-        public Vector2d GetColumn(int iCol)
+        public Vector2f GetColumn(int iCol)
         {
-			return new Vector2d(this[0, iCol], this[1, iCol]);
+			return new Vector2f(this[0, iCol], this[1, iCol]);
         }
 
         /// <summary>
         /// Set the ith column from avector.
         /// </summary>
-        public void SetColumn(int iCol, Vector2d v)
+        public void SetColumn(int iCol, Vector2f v)
         {
 			this[0, iCol] = v.x;
 			this[1, iCol] = v.y;
@@ -382,44 +381,44 @@ namespace Common.Core.LinearAlgebra
 
         /// <summary>
         /// Get the ith row as a vector.
-        /// </summar
-        public Vector2d GetRow(int iRow)
+        /// </summary>
+        public Vector2f GetRow(int iRow)
         {
-			return new Vector2d(this[iRow, 0], this[iRow, 1]);
+			return new Vector2f(this[iRow, 0], this[iRow, 1]);
         }
 
         /// <summary>
         /// Set the ith row from avector.
         /// </summary>
-        public void SetRow(int iRow, Vector2d v)
+        public void SetRow(int iRow, Vector2f v)
         {
-			this[iRow, 0] = v.x;
-			this[iRow, 1] = v.y;
+			this[iRow, 0 ] = v.x;
+			this[iRow, 1 ] = v.y;
         }
 
         /// <summary>
         /// Create a rotation out of a angle.
         /// </summary>
-        static public Matrix2x2d Rotate(double angle)
+        static public Matrix2x2f Rotate(float angle)
         {
-            double ca = Math.Cos(angle * Math.PI / 180.0);
-            double sa = Math.Sin(angle * Math.PI / 180.0);
+            float ca = (float)Math.Cos(angle * Math.PI / 180.0);
+            float sa = (float)Math.Sin(angle * Math.PI / 180.0);
 
-            return new Matrix2x2d(ca, -sa,
+            return new Matrix2x2f(ca, -sa,
                                   sa, ca);
         }
 
         /// <summary>
-        /// Convert to a float precision 3 dimension matrix.
+        /// Convert to a single precision 3 dimension matrix.
         /// </summary>
-        public Matrix3x3d ToMatrix3x3d()
+        public Matrix3x3f ToMatrix3x3f()
         {
-			return new Matrix3x3d(m00, m01, 0.0,
-			                      m10, m11, 0.0,
-                                  0.0, 0.0, 0.0);
+			return new Matrix3x3f(m00, m01, 0.0f,
+			                      m10, m11, 0.0f,
+                                  0.0f, 0.0f, 0.0f);
         }
 
-	}
+    }
 
 }
 

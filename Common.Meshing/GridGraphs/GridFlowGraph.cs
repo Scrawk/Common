@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 using Common.Core.Directions;
 
 namespace Common.Meshing.GridGraphs

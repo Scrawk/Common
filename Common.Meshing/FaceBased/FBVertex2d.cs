@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
 namespace Common.Meshing.FaceBased
 {
@@ -37,7 +37,7 @@ namespace Common.Meshing.FaceBased
 
         public override void SetPosition(FBVertex vert)
         {
-            Position = (vert as FBVertex2f).Position;
+            Position = (vert as FBVertex2d).Position;
         }
 
         public override void SetPosition(Vector3d pos)

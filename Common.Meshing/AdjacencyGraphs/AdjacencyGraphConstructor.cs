@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.LinearAlgebra;
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
+using Common.Core.Numerics;
 using Common.Meshing.Constructors;
 
 namespace Common.Meshing.AdjacencyGraphs

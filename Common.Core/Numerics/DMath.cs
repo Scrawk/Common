@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace Common.Core.Mathematics
+namespace Common.Core.Numerics
 {
     public class DMath
     {

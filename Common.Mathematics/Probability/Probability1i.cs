@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
 namespace Common.Mathematics.Probability
 {

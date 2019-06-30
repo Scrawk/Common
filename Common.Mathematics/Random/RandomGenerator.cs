@@ -1,5 +1,5 @@
 ﻿using System;
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 using Common.Core.Colors;
 
 namespace Common.Mathematics.Random

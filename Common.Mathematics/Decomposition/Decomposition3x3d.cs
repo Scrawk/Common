@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
 namespace Common.Mathematics.Decomposition
 {

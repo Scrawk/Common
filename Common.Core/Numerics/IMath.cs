@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Numerics;
 
-namespace Common.Core.Mathematics
+namespace Common.Core.Numerics
 {
     /// <summary>
     /// Integer math functions.

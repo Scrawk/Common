@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
 namespace Common.Collections.Textures
 {

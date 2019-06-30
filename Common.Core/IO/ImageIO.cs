@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Common.Core.Colors;
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
 namespace Common.Core.IO
 {

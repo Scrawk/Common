@@ -2,9 +2,9 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
-namespace Common.Core.LinearAlgebra
+namespace Common.Core.Numerics
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]

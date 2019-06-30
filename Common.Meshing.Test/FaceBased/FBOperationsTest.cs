@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 using Common.Meshing.FaceBased;
 using Common.Meshing.HalfEdgeBased;
 using Common.Meshing.Constructors;
@@ -12,6 +12,35 @@ namespace Common.Meshing.Test.FaceBased
     [TestClass]
     public class Meshing_FaceBased_FBOperationsTest
     {
+
+        [TestMethod]
+        public void Append()
+        {
+            var min = new Vector2d(-1, -1);
+            var max = new Vector2d(1, 1);
+
+            var constructor1 = new FBMeshConstructor2d();
+            CreateTriangularMesh2.FromBox(constructor1, min, max);
+            var source = constructor1.PopMesh();
+
+            var mesh = new FBMesh2d();
+            FBOperations.Append(source, mesh);
+
+            source.Clear();
+
+            Assert.AreEqual(4, mesh.Vertices.Count);
+            Assert.AreEqual(2, mesh.Faces.Count);
+            Assert.AreEqual(min, mesh.Vertices[0].Position);
+            Assert.AreEqual(new Vector2d(max.x, min.y), mesh.Vertices[1].Position);
+            Assert.AreEqual(max, mesh.Vertices[2].Position);
+            Assert.AreEqual(new Vector2d(min.x, max.y), mesh.Vertices[3].Position);
+
+            FBMeshHelper.CheckFace(mesh, face: 0, v0: 0, v1: 1, v2: 2);
+            FBMeshHelper.CheckFace(mesh, face: 1, v0: 2, v1: 3, v2: 0);
+            FBMeshHelper.CheckAllTrianglesCCW(mesh);
+        }
+
+
         [TestMethod]
         public void ToHBTriangleMesh()
         {

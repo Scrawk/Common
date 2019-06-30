@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using Common.Core.LinearAlgebra;
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
+using Common.Core.Numerics;
 
 using REAL = System.Single;
-using VECTOR2 = Common.Core.LinearAlgebra.Vector2f;
-using VECTOR3 = Common.Core.LinearAlgebra.Vector3f;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
+using VECTOR3 = Common.Core.Numerics.Vector3f;
 
 namespace Common.Geometry.Shapes
 {

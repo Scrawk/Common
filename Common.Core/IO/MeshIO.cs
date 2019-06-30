@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
 namespace Common.Core.IO
 {

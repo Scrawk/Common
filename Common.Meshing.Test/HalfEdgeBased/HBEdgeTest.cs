@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Test.HalfEdgeBased

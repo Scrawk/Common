@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 using Common.Meshing.Constructors;
 
 namespace Common.Meshing.FaceBased

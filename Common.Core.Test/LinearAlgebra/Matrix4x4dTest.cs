@@ -1,13 +1,13 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
-namespace Common.Core.Test.LinearAlgebra
+namespace Common.Core.Test.Numerics
 {
 
     [TestClass]
-    public class Core_LinearAlgebra_Matrix4x4dTest
+    public class Core_Numerics_Matrix4x4dTest
     {
 
         const int HALF_SIZE = 4;

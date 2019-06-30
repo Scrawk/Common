@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
-namespace Common.Core.Test.Mathematics
+namespace Common.Core.Test.Numerics
 {
     [TestClass]
-    public class Core_Mathematics_IMathTests
+    public class Core_Numerics_IMathTests
     {
         [TestMethod]
         public void Pow()

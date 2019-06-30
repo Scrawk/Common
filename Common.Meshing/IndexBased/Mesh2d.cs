@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
-using VECTOR = Common.Core.LinearAlgebra.Vector2d;
-using MATRIX = Common.Core.LinearAlgebra.Matrix2x2d;
+using VECTOR = Common.Core.Numerics.Vector2d;
+using MATRIX = Common.Core.Numerics.Matrix2x2d;
 
 namespace Common.Meshing.IndexBased
 {

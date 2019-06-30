@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
 namespace Common.Geometry.Shapes
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 using Common.Mathematics.Random;
 
 namespace Common.Mathematics.Probability

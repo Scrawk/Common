@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
-using REAL = System.Single;
+using REAL = System.Double;
 
-namespace Common.Core.LinearAlgebra
+namespace Common.Core.Numerics
 {
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector3f : IEquatable<Vector3f>, IComparable<Vector3f>
+    public struct Vector3d : IEquatable<Vector3d>, IComparable<Vector3d>
     {
-        public REAL x, y, z;
+		public REAL x, y, z;
 
         public REAL a => x;
         public REAL b => y;
@@ -24,112 +24,112 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The unit x vector.
         /// </summary>
-        public readonly static Vector3f UnitX = new Vector3f(1, 0, 0);
+        public readonly static Vector3d UnitX = new Vector3d(1, 0, 0);
 
         /// <summary>
         /// The unit y vector.
         /// </summary>
-	    public readonly static Vector3f UnitY = new Vector3f(0, 1, 0);
+	    public readonly static Vector3d UnitY = new Vector3d(0, 1, 0);
 
         /// <summary>
         /// The unit z vector.
         /// </summary>
-	    public readonly static Vector3f UnitZ = new Vector3f(0, 0, 1);
+	    public readonly static Vector3d UnitZ = new Vector3d(0, 0, 1);
 
         /// <summary>
         /// A vector of zeros.
         /// </summary>
-	    public readonly static Vector3f Zero = new Vector3f(0);
+	    public readonly static Vector3d Zero = new Vector3d(0);
 
         /// <summary>
         /// A vector of ones.
         /// </summary>
-        public readonly static Vector3f One = new Vector3f(1);
+        public readonly static Vector3d One = new Vector3d(1);
 
         /// <summary>
         /// A vector of 0.5.
         /// </summary>
-        public readonly static Vector3f Half = new Vector3f(0.5f);
+        public readonly static Vector3d Half = new Vector3d(0.5);
 
         /// <summary>
         /// A vector of positive infinity.
         /// </summary>
-        public readonly static Vector3f PositiveInfinity = new Vector3f(REAL.PositiveInfinity);
+        public readonly static Vector3d PositiveInfinity = new Vector3d(REAL.PositiveInfinity);
 
         /// <summary>
         /// A vector of negative infinity.
         /// </summary>
-        public readonly static Vector3f NegativeInfinity = new Vector3f(REAL.NegativeInfinity);
+        public readonly static Vector3d NegativeInfinity = new Vector3d(REAL.NegativeInfinity);
 
         /// <summary>
         /// Convert to a 2 dimension vector.
         /// </summary>
-        public Vector2f xy
+	    public Vector2d xy
+	    {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2d(x, y); }
+	    }
+
+        /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2d xz
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2f(x, y); }
+            get { return new Vector2d(x, z); }
         }
 
         /// <summary>
         /// Convert to a 2 dimension vector.
         /// </summary>
-        public Vector2f xz
+        public Vector2d zy
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2f(x, z); }
-        }
-
-        /// <summary>
-        /// Convert to a 2 dimension vector.
-        /// </summary>
-        public Vector2f zy
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2f(z, y); }
+            get { return new Vector2d(z, y); }
         }
 
         /// <summary>
         /// Convert to a 4 dimension vector.
         /// </summary>
-        public Vector4f xyz0
+        public Vector4d xyz0
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector4f(x, y, z, 0); }
+            get { return new Vector4d(x, y, z, 0); }
         }
 
         /// <summary>
         /// Convert to a 4 dimension vector.
         /// </summary>
-        public Vector4f xyz1
+        public Vector4d xyz1
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector4f(x, y, z, 1); }
+            get { return new Vector4d(x, y, z, 1); }
         }
 
         /// <summary>
         /// A vector all with the value v.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3f(REAL v)
-        {
-            this.x = v;
-            this.y = v;
-            this.z = v;
-        }
+        public Vector3d(REAL v) 
+		{
+			this.x = v; 
+			this.y = v; 
+			this.z = v;
+		}
 
         /// <summary>
         /// A vector from the varibles.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3f(REAL x, REAL y, REAL z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
+        public Vector3d(REAL x, REAL y, REAL z) 
+		{
+			this.x = x; 
+			this.y = y;
+			this.z = z;
+		}
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3f(REAL x, REAL y)
+        public Vector3d(REAL x, REAL y)
         {
             this.x = x;
             this.y = y;
@@ -140,26 +140,26 @@ namespace Common.Core.LinearAlgebra
         /// A vector from a 2d vector and the z varible.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3f(Vector2f v, REAL z)
-        {
-            x = v.x;
-            y = v.y;
-            this.z = z;
-        }
+        public Vector3d(Vector2d v, REAL z) 
+		{ 
+			x = v.x; 
+			y = v.y; 
+			this.z = z;
+		}
 
         unsafe public REAL this[int i]
         {
             get
             {
                 if ((uint)i >= 3)
-                    throw new IndexOutOfRangeException("Vector3f index out of range.");
+                    throw new IndexOutOfRangeException("Vector3d index out of range.");
 
-                fixed (Vector3f* array = &this) { return ((REAL*)array)[i]; }
+                fixed (Vector3d* array = &this) { return ((REAL*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 3)
-                    throw new IndexOutOfRangeException("Vector3f index out of range.");
+                    throw new IndexOutOfRangeException("Vector3d index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
             }
@@ -197,7 +197,7 @@ namespace Common.Core.LinearAlgebra
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return FMath.SafeSqrt(SqrMagnitude);
+                return DMath.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -216,41 +216,41 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// The vector normalized.
         /// </summary>
-        public Vector3f Normalized
+        public Vector3d Normalized
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y + z * z);
-                return new Vector3f(x * invLength, y * invLength, z * invLength);
+                REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z);
+                return new Vector3d(x * invLength, y * invLength, z * invLength);
             }
         }
 
         /// <summary>
         /// The vectors absolute values.
         /// </summary>
-        public Vector3f Absolute
+        public Vector3d Absolute
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return new Vector3f(Math.Abs(x), Math.Abs(y), Math.Abs(z));
+                return new Vector3d(Math.Abs(x), Math.Abs(y), Math.Abs(z));
             }
         }
 
         /// <summary>
         /// Convert a normalized vector to tangent space.
         /// </summary>
-        public Vector3f TangentSpaceNormal
+        public Vector3d TangentSpaceNormal
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL x = this.x * 0.5f + 0.5f;
-                REAL y = this.z * 0.5f + 0.5f;
+                REAL x = this.x * 0.5 + 0.5;
+                REAL y = this.z * 0.5 + 0.5;
                 REAL z = this.y;
 
-                return new Vector3f(x, y, z);
+                return new Vector3d(x, y, z);
             }
         }
 
@@ -258,127 +258,127 @@ namespace Common.Core.LinearAlgebra
         /// Add two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator +(Vector3f v1, Vector3f v2)
+        public static Vector3d operator +(Vector3d v1, Vector3d v2)
         {
-            return new Vector3f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+            return new Vector3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
         }
 
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator +(Vector3f v1, REAL s)
+        public static Vector3d operator +(Vector3d v1, REAL s)
         {
-            return new Vector3f(v1.x + s, v1.y + s, v1.z + s);
+            return new Vector3d(v1.x + s, v1.y + s, v1.z + s);
         }
 
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator +(REAL s, Vector3f v1)
+        public static Vector3d operator +(REAL s, Vector3d v1)
         {
-            return new Vector3f(v1.x + s, v1.y + s, v1.z + s);
+            return new Vector3d(v1.x + s, v1.y + s, v1.z + s);
         }
 
         /// <summary>
         /// Negate vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator -(Vector3f v)
+        public static Vector3d operator -(Vector3d v)
         {
-            return new Vector3f(-v.x, -v.y, -v.z);
+            return new Vector3d(-v.x, -v.y, -v.z);
         }
 
         /// <summary>
         /// Subtract two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator -(Vector3f v1, Vector3f v2)
+        public static Vector3d operator -(Vector3d v1, Vector3d v2)
         {
-            return new Vector3f(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+            return new Vector3d(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
         }
 
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator -(Vector3f v1, REAL s)
+        public static Vector3d operator -(Vector3d v1, REAL s)
         {
-            return new Vector3f(v1.x - s, v1.y - s, v1.z - s);
+            return new Vector3d(v1.x - s, v1.y - s, v1.z - s);
         }
 
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator -(REAL s, Vector3f v1)
+        public static Vector3d operator -(REAL s, Vector3d v1)
         {
-            return new Vector3f(s - v1.x, s - v1.y, s - v1.z);
+            return new Vector3d(s - v1.x, s - v1.y, s - v1.z);
         }
 
         /// <summary>
         /// Multiply two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator *(Vector3f v1, Vector3f v2)
+        public static Vector3d operator *(Vector3d v1, Vector3d v2)
         {
-            return new Vector3f(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+            return new Vector3d(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
         }
 
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator *(Vector3f v, REAL s)
+        public static Vector3d operator *(Vector3d v, REAL s)
         {
-            return new Vector3f(v.x * s, v.y * s, v.z * s);
+            return new Vector3d(v.x * s, v.y * s, v.z * s);
         }
 
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator *(REAL s, Vector3f v)
+        public static Vector3d operator *(REAL s, Vector3d v)
         {
-            return new Vector3f(v.x * s, v.y * s, v.z * s);
+            return new Vector3d(v.x * s, v.y * s, v.z * s);
         }
 
         /// <summary>
         /// Divide two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator /(Vector3f v1, Vector3f v2)
+        public static Vector3d operator /(Vector3d v1, Vector3d v2)
         {
-            return new Vector3f(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
+            return new Vector3d(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
         }
 
         /// <summary>
         /// Divide a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f operator /(Vector3f v, REAL s)
+        public static Vector3d operator /(Vector3d v, REAL s)
         {
-            return new Vector3f(v.x / s, v.y / s, v.z / s);
+            return new Vector3d(v.x / s, v.y / s, v.z / s);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator Vector3f(Vector3d v)
+        public static implicit operator Vector3d(Vector3f v)
         {
-            return new Vector3f((REAL)v.x, (REAL)v.y, (REAL)v.z);
+            return new Vector3d(v.x, v.y, v.z);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector3f(Vector3i v)
+        public static implicit operator Vector3d(Vector3i v)
         {
-            return new Vector3f(v.x, v.y, v.z);
+            return new Vector3d(v.x, v.y, v.z);
         }
 
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(Vector3f v1, Vector3f v2)
+        public static bool operator ==(Vector3d v1, Vector3d v2)
 		{
 			return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z);
 		}
@@ -387,7 +387,7 @@ namespace Common.Core.LinearAlgebra
         /// Are these vectors not equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(Vector3f v1, Vector3f v2)
+        public static bool operator !=(Vector3d v1, Vector3d v2)
 		{
 			return (v1.x != v2.x || v1.y != v2.y || v1.z != v2.z);
 		}
@@ -398,8 +398,8 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
-			if(!(obj is Vector3f)) return false;
-			Vector3f v = (Vector3f)obj;
+			if(!(obj is Vector3d)) return false;
+			Vector3d v = (Vector3d)obj;
 			return this == v;
 		}
 
@@ -407,7 +407,7 @@ namespace Common.Core.LinearAlgebra
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool EqualsWithError(Vector3f v, REAL eps)
+        public bool EqualsWithError(Vector3d v, REAL eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
 			if(Math.Abs(y-v.y)> eps) return false;
@@ -419,7 +419,7 @@ namespace Common.Core.LinearAlgebra
         /// Are these vectors equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Vector3f v)
+        public bool Equals(Vector3d v)
         {
             return this == v;
         }
@@ -444,7 +444,7 @@ namespace Common.Core.LinearAlgebra
         /// Compare two vectors by axis.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int CompareTo(Vector3f other)
+        public int CompareTo(Vector3d other)
         {
             if (x != other.x)
                 return x < other.x ? -1 : 1;
@@ -476,9 +476,9 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Vector from a string.
         /// </summary>
-        static public Vector3f FromString(string s)
+        static public Vector3d FromString(string s)
 		{
-            Vector3f v = new Vector3f();
+            Vector3d v = new Vector3d();
 
             try
             {
@@ -498,9 +498,9 @@ namespace Common.Core.LinearAlgebra
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Dot(Vector3f v0, Vector3f v1)
+        public static REAL Dot(Vector3d v0, Vector3d v1)
 		{
-			return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z);
+			return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 		}
 
         /// <summary>
@@ -508,57 +508,57 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
-        {
-            REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y + z * z);
-            x *= invLength;
-            y *= invLength;
-            z *= invLength;
-        }
+		{
+            REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z);
+	    	x *= invLength;
+			y *= invLength;
+			z *= invLength;
+		}
 
         /// <summary>
         /// Angle between two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Angle180(Vector3f a, Vector3f b)
+        public static REAL Angle180(Vector3d a, Vector3d b)
         {
-            REAL dp = Vector3f.Dot(a, b);
+            REAL dp = Vector3d.Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
 
-            return (REAL)Math.Acos(FMath.SafeDiv(dp, m)) * FMath.Rad2Deg;
+            return Math.Acos(DMath.SafeDiv(dp, m)) * DMath.Rad2Deg;
         }
 
         /// <summary>
         /// Cross two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3f Cross(Vector3f v)
-        {
-            return new Vector3f(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
-        }
-
-        /// <summary>
-        /// Cross two vectors.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f Cross(Vector3f v0, Vector3f v1)
+        public Vector3d Cross(Vector3d v)
 		{
-			return new Vector3f(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x);
+			return new Vector3d(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
+		}
+
+        /// <summary>
+        /// Cross two vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3d Cross(Vector3d v0, Vector3d v1)
+		{
+			return new Vector3d(v0.y*v1.z - v0.z*v1.y, v0.z*v1.x - v0.x*v1.z, v0.x*v1.y - v0.y*v1.x);
 		}
 
         /// <summary>
         /// Distance between two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Distance(Vector3f v0, Vector3f v1)
+        public static REAL Distance(Vector3d v0, Vector3d v1)
         {
-            return FMath.SafeSqrt(SqrDistance(v0, v1));
+            return DMath.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
         /// Square distance between two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL SqrDistance(Vector3f v0, Vector3f v1)
+        public static REAL SqrDistance(Vector3d v0, Vector3d v1)
         {
             REAL x = v0.x - v1.x;
             REAL y = v0.y - v1.y;
@@ -570,7 +570,7 @@ namespace Common.Core.LinearAlgebra
         /// Project v on to normal n.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f Project(Vector3f v, Vector3f n)
+        public static Vector3d Project(Vector3d v, Vector3d n)
         {
             return Dot(v, n) * n;
         }
@@ -579,7 +579,7 @@ namespace Common.Core.LinearAlgebra
         /// Given an incident vector i and a normal vector n.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f Reflect(Vector3f i, Vector3f n)
+        public static Vector3d Reflect(Vector3d i, Vector3d n)
         {
             return i - 2 * n * Dot(i, n);
         }
@@ -589,12 +589,12 @@ namespace Common.Core.LinearAlgebra
         /// the normal vector n and the refraction index eta.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f Refract(Vector3f i, Vector3f n, REAL eta)
+        public static Vector3d Refract(Vector3d i, Vector3d n, float eta)
         {
             REAL ni = Dot(n, i);
             REAL k = 1.0f - eta * eta * (1.0f - ni * ni);
 
-            return (k >= 0) ? eta * i - (eta * ni + FMath.SafeSqrt(k)) * n : Zero;
+            return (k >= 0) ? eta * i - (eta * ni + DMath.SafeSqrt(k)) * n : Zero;
         }
 
         /// <summary>
@@ -612,7 +612,7 @@ namespace Common.Core.LinearAlgebra
         /// The minimum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(Vector3f v)
+        public void Min(Vector3d v)
         {
             x = Math.Min(x, v.x);
             y = Math.Min(y, v.y);
@@ -634,7 +634,7 @@ namespace Common.Core.LinearAlgebra
         /// The maximum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(Vector3f v)
+        public void Max(Vector3d v)
         {
             x = Math.Max(x, v.x);
             y = Math.Max(y, v.y);
@@ -667,7 +667,7 @@ namespace Common.Core.LinearAlgebra
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(Vector3f min, Vector3f max)
+        public void Clamp(Vector3d min, Vector3d max)
         {
             x = Math.Max(Math.Min(x, max.x), min.x);
             y = Math.Max(Math.Min(y, max.y), min.y);
@@ -677,16 +677,16 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector3f Lerp(Vector3f from, Vector3f to, REAL t)
+        public static Vector3d Lerp(Vector3d from, Vector3d to, REAL t)
         {
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
+            if (t < 0.0) t = 0.0;
+            if (t > 1.0) t = 1.0;
 
-            if (t == 0.0f) return from;
-            if (t == 1.0f) return to;
+            if (t == 0.0) return from;
+            if (t == 1.0) return to;
 
-            REAL t1 = 1.0f - t;
-            Vector3f v = new Vector3f();
+            REAL t1 = 1.0 - t;
+            Vector3d v = new Vector3d();
             v.x = from.x * t1 + to.x * t;
             v.y = from.y * t1 + to.y * t;
             v.z = from.z * t1 + to.z * t;
@@ -696,7 +696,7 @@ namespace Common.Core.LinearAlgebra
         /// <summary>
         /// Slerp between two vectors arc.
         /// </summary>
-        public static Vector3f Slerp(Vector3f from, Vector3f to, REAL t)
+        public static Vector3d Slerp(Vector3d from, Vector3d to, REAL t)
         {
             if (t < 0.0f) t = 0.0f;
             if (t > 1.0f) t = 1.0f;
@@ -706,17 +706,17 @@ namespace Common.Core.LinearAlgebra
             if (to.x == from.x && to.y == from.y && to.z == from.z) return to;
 
             REAL m = from.Magnitude * to.Magnitude;
-            if (FMath.IsZero(m)) return Vector3f.Zero;
+            if (DMath.IsZero(m)) return Vector3d.Zero;
 
-            double theta = Math.Acos(Dot(from, to) / m);
+            REAL theta = Math.Acos(Dot(from, to) / m);
 
             if (theta == 0.0) return to;
 
-            double sinTheta = Math.Sin(theta);
-            REAL st1 = (REAL)(Math.Sin((1.0 - t) * theta) / sinTheta);
-            REAL st = (REAL)(Math.Sin(t * theta) / sinTheta);
+            REAL sinTheta = Math.Sin(theta);
+            REAL st1 = Math.Sin((1.0 - t) * theta) / sinTheta;
+            REAL st = Math.Sin(t * theta) / sinTheta;
 
-            Vector3f v = new Vector3f();
+            Vector3d v = new Vector3d();
             v.x = from.x * st1 + to.x * st;
             v.y = from.y * st1 + to.y * st;
             v.z = from.z * st1 + to.z * st;
@@ -727,13 +727,12 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round(int digits = 0)
         {
-            x = (REAL)Math.Round(x, digits);
-            y = (REAL)Math.Round(y, digits);
-            z = (REAL)Math.Round(z, digits);
+            x = Math.Round(x, digits);
+            y = Math.Round(y, digits);
+            z = Math.Round(z, digits);
         }
 
     }
-
 
 }
 

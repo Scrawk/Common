@@ -1,127 +1,169 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Mathematics;
+using Common.Core.Numerics;
 
-using REAL = System.Single;
+using REAL = System.Double;
 
-namespace Common.Core.LinearAlgebra
+namespace Common.Core.Numerics
 {
+
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2f : IEquatable<Vector2f>, IComparable<Vector2f>
+    public struct Vector4d : IEquatable<Vector4d>, IComparable<Vector4d>
     {
-        public REAL x, y;
+	
+		public REAL x, y, z, w;
 
         public REAL a => x;
         public REAL b => y;
+        public REAL c => z;
+        public REAL d => w;
 
         /// <summary>
         /// The unit x vector.
         /// </summary>
-        public readonly static Vector2f UnitX = new Vector2f(1, 0);
+        public readonly static Vector4d UnitX = new Vector4d(1, 0, 0, 0);
 
         /// <summary>
         /// The unit y vector.
         /// </summary>
-	    public readonly static Vector2f UnitY = new Vector2f(0, 1);
+	    public readonly static Vector4d UnitY = new Vector4d(0, 1, 0, 0);
+
+        /// <summary>
+        /// The unit z vector.
+        /// </summary>
+	    public readonly static Vector4d UnitZ = new Vector4d(0, 0, 1, 0);
+
+        /// <summary>
+        /// The unit w vector.
+        /// </summary>
+	    public readonly static Vector4d UnitW = new Vector4d(0, 0, 0, 1);
 
         /// <summary>
         /// A vector of zeros.
         /// </summary>
-	    public readonly static Vector2f Zero = new Vector2f(0);
+	    public readonly static Vector4d Zero = new Vector4d(0);
 
         /// <summary>
         /// A vector of ones.
         /// </summary>
-	    public readonly static Vector2f One = new Vector2f(1);
+	    public readonly static Vector4d One = new Vector4d(1);
 
         /// <summary>
         /// A vector of 0.5.
         /// </summary>
-        public readonly static Vector2f Half = new Vector2f(0.5f);
+        public readonly static Vector4d Half = new Vector4d(0.5);
 
         /// <summary>
         /// A vector of positive infinity.
         /// </summary>
-        public readonly static Vector2f PositiveInfinity = new Vector2f(REAL.PositiveInfinity);
+        public readonly static Vector4d PositiveInfinity = new Vector4d(REAL.PositiveInfinity);
 
         /// <summary>
         /// A vector of negative infinity.
         /// </summary>
-        public readonly static Vector2f NegativeInfinity = new Vector2f(REAL.NegativeInfinity);
+        public readonly static Vector4d NegativeInfinity = new Vector4d(REAL.NegativeInfinity);
 
         /// <summary>
-        /// Convert to a 3 dimension vector.
+        /// Convert to a 2 dimension vector.
         /// </summary>
-        public Vector3f x0y
+	    public Vector2d xy
+	    {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2d(x, y); }
+	    }
+
+        /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2d xz
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector3f(x, 0, y); }
+            get { return new Vector2d(x, z); }
         }
 
         /// <summary>
         /// Convert to a 3 dimension vector.
         /// </summary>
-        public Vector3f xy0
-        {
+	    public Vector3d xyz
+	    {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector3f(x, y, 0); }
+            get { return new Vector3d(x, y, z); }
         }
 
         /// <summary>
-        /// Convert to a 4 dimension vector.
+        /// A copy of the vector with w as 0.
         /// </summary>
-        public Vector4f xy01
+        public Vector4d xyz0
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector4f(x, y, 0, 1); }
-        }
-
-        /// <summary>
-        /// Convert to a 4 dimension vector.
-        /// </summary>
-        public Vector4f x0y1
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector4f(x, 0, y, 1); }
+            get { return new Vector4d(x, y, z, 0); }
         }
 
         /// <summary>
         /// A vector all with the value v.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2f(REAL v)
-        {
-            this.x = v;
-            this.y = v;
-        }
+        public Vector4d(REAL v) 
+		{
+			this.x = v; 
+			this.y = v; 
+			this.z = v;
+			this.w = v;
+		}
 
         /// <summary>
-        /// A vector from the variables.
+        /// A vector from the varibles.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector2f(REAL x, REAL y)
-        {
-            this.x = x;
-            this.y = y;
-        }
+        public Vector4d(REAL x, REAL y, REAL z, REAL w) 
+		{
+			this.x = x; 
+			this.y = y;
+			this.z = z;
+			this.w = w;
+		}
+
+        /// <summary>
+        /// A vector from a 2d vector and the z and w varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector4d(Vector2d v, REAL z, REAL w) 
+		{ 
+			x = v.x; 
+			y = v.y; 
+			this.z = z;
+			this.w = w;
+		}
+
+        /// <summary>
+        /// A vector from a 3d vector and the w varible.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector4d(Vector3d v, REAL w) 
+		{ 
+			x = v.x; 
+			y = v.y; 
+			z = v.z;
+			this.w = w;
+		}
 
         unsafe public REAL this[int i]
         {
             get
             {
-                if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Vector2f index out of range.");
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("Vector4d index out of range.");
 
-                fixed (Vector2f* array = &this) { return ((REAL*)array)[i]; }
+                fixed (Vector4d* array = &this) { return ((REAL*)array)[i]; }
             }
             set
             {
-                if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Vector2f index out of range.");
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("Vector4d index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
             }
@@ -135,7 +177,7 @@ namespace Common.Core.LinearAlgebra
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return x + y;
+                return x + y + z + w;
             }
         }
 
@@ -147,7 +189,7 @@ namespace Common.Core.LinearAlgebra
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return x * y;
+                return x * y * z * w;
             }
         }
 
@@ -159,7 +201,7 @@ namespace Common.Core.LinearAlgebra
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return FMath.SafeSqrt(SqrMagnitude);
+                return DMath.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -171,56 +213,32 @@ namespace Common.Core.LinearAlgebra
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return (x * x + y * y);
+                return (x * x + y * y + z * z + w * w);
             }
         }
 
         /// <summary>
         /// The vector normalized.
         /// </summary>
-        public Vector2f Normalized
+        public Vector4d Normalized
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y);
-                return new Vector2f(x * invLength, y * invLength);
-            }
-        }
-
-        /// <summary>
-        /// Counter clock-wise perpendicular.
-        /// </summary>
-        public Vector2f PerpendicularCCW
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return new Vector2f(-y, x);
-            }
-        }
-
-        /// <summary>
-        /// Clock-wise perpendicular.
-        /// </summary>
-        public Vector2f PerpendicularCW
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return new Vector2f(y, -x);
+                REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z + w * w);
+                return new Vector4d(x * invLength, y * invLength, z * invLength, w * invLength);
             }
         }
 
         /// <summary>
         /// The vectors absolute values.
         /// </summary>
-        public Vector2f Absolute
+        public Vector4d Absolute
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return new Vector2f(Math.Abs(x), Math.Abs(y));
+                return new Vector4d(Math.Abs(x), Math.Abs(y), Math.Abs(z), Math.Abs(w));
             }
         }
 
@@ -228,138 +246,138 @@ namespace Common.Core.LinearAlgebra
         /// Add two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator +(Vector2f v1, Vector2f v2)
+        public static Vector4d operator +(Vector4d v1, Vector4d v2)
         {
-            return new Vector2f(v1.x + v2.x, v1.y + v2.y);
+            return new Vector4d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w);
         }
 
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator +(Vector2f v1, REAL s)
+        public static Vector4d operator +(Vector4d v1, REAL s)
         {
-            return new Vector2f(v1.x + s, v1.y + s);
+            return new Vector4d(v1.x + s, v1.y + s, v1.z + s, v1.w + s);
         }
 
         /// <summary>
         /// Add vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator +(REAL s, Vector2f v1)
+        public static Vector4d operator +(REAL s, Vector4d v1)
         {
-            return new Vector2f(v1.x + s, v1.y + s);
+            return new Vector4d(v1.x + s, v1.y + s, v1.z + s, v1.w + s);
         }
 
         /// <summary>
         /// Negate vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator -(Vector2f v)
+        public static Vector4d operator -(Vector4d v)
         {
-            return new Vector2f(-v.x, -v.y);
+            return new Vector4d(-v.x, -v.y, -v.z, -v.w);
         }
 
         /// <summary>
         /// Subtract two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator -(Vector2f v1, Vector2f v2)
+        public static Vector4d operator -(Vector4d v1, Vector4d v2)
         {
-            return new Vector2f(v1.x - v2.x, v1.y - v2.y);
+            return new Vector4d(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w);
         }
 
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator -(Vector2f v1, REAL s)
+        public static Vector4d operator -(Vector4d v1, REAL s)
         {
-            return new Vector2f(v1.x - s, v1.y - s);
+            return new Vector4d(v1.x - s, v1.y - s, v1.z - s, v1.w - s);
         }
 
         /// <summary>
         /// Subtract vector and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator -(REAL s, Vector2f v1)
+        public static Vector4d operator -(REAL s, Vector4d v1)
         {
-            return new Vector2f(s - v1.x, s - v1.y);
+            return new Vector4d(s - v1.x, s - v1.y, s - v1.z, s - v1.w);
         }
 
         /// <summary>
         /// Multiply two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator *(Vector2f v1, Vector2f v2)
+        public static Vector4d operator *(Vector4d v1, Vector4d v2)
         {
-            return new Vector2f(v1.x * v2.x, v1.y * v2.y);
+            return new Vector4d(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z, v1.w * v2.w);
         }
 
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator *(Vector2f v, REAL s)
+        public static Vector4d operator *(Vector4d v, REAL s)
         {
-            return new Vector2f(v.x * s, v.y * s);
+            return new Vector4d(v.x * s, v.y * s, v.z * s, v.w * s);
         }
 
         /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator *(REAL s, Vector2f v)
+        public static Vector4d operator *(REAL s, Vector4d v)
         {
-            return new Vector2f(v.x * s, v.y * s);
+            return new Vector4d(v.x * s, v.y * s, v.z * s, v.w * s);
         }
 
         /// <summary>
         /// Divide two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator /(Vector2f v1, Vector2f v2)
+        public static Vector4d operator /(Vector4d v1, Vector4d v2)
         {
-            return new Vector2f(v1.x / v2.x, v1.y / v2.y);
+            return new Vector4d(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z, v1.w / v2.w);
         }
 
         /// <summary>
         /// Divide a vector and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f operator /(Vector2f v, REAL s)
+        public static Vector4d operator /(Vector4d v, REAL s)
         {
-            return new Vector2f(v.x / s, v.y / s);
+            return new Vector4d(v.x / s, v.y / s, v.z / s, v.w / s);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator Vector2f(Vector2d v)
+        public static implicit operator Vector4d(Vector4f v)
         {
-            return new Vector2f((REAL)v.x, (REAL)v.y);
+            return new Vector4d(v.x, v.y, v.z, v.w);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector2f(Vector2i v)
+        public static implicit operator Vector4d(Vector4i v)
         {
-            return new Vector2f(v.x, v.y);
+            return new Vector4d(v.x, v.y, v.z, v.w);
         }
 
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(Vector2f v1, Vector2f v2)
+        public static bool operator ==(Vector4d v1, Vector4d v2)
 		{
-			return (v1.x == v2.x && v1.y == v2.y);
+			return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z && v1.w == v2.w);
 		}
 
         /// <summary>
         /// Are these vectors not equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(Vector2f v1, Vector2f v2)
+        public static bool operator !=(Vector4d v1, Vector4d v2)
 		{
-			return (v1.x != v2.x || v1.y != v2.y);
+			return (v1.x != v2.x || v1.y != v2.y || v1.z != v2.z || v1.w != v2.w);
 		}
 
         /// <summary>
@@ -368,8 +386,8 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
-			if(!(obj is Vector2f)) return false;
-			Vector2f v = (Vector2f)obj;
+			if(!(obj is Vector4d)) return false;
+			Vector4d v = (Vector4d)obj;
 			return this == v;
 		}
 
@@ -377,10 +395,12 @@ namespace Common.Core.LinearAlgebra
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool EqualsWithError(Vector2f v, REAL eps)
+        public bool EqualsWithError(Vector4d v, REAL eps)
 		{
 			if(Math.Abs(x-v.x)> eps) return false;
 			if(Math.Abs(y-v.y)> eps) return false;
+			if(Math.Abs(z-v.z)> eps) return false;
+			if(Math.Abs(w-v.w)> eps) return false;
 			return true;
 		}
 
@@ -388,7 +408,7 @@ namespace Common.Core.LinearAlgebra
         /// Are these vectors equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Vector2f v)
+        public bool Equals(Vector4d v)
         {
             return this == v;
         }
@@ -404,6 +424,8 @@ namespace Common.Core.LinearAlgebra
                 int hash = (int)2166136261;
                 hash = (hash * 16777619) ^ x.GetHashCode();
                 hash = (hash * 16777619) ^ y.GetHashCode();
+                hash = (hash * 16777619) ^ z.GetHashCode();
+                hash = (hash * 16777619) ^ w.GetHashCode();
                 return hash;
             }
         }
@@ -412,12 +434,16 @@ namespace Common.Core.LinearAlgebra
         /// Compare two vectors by axis.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int CompareTo(Vector2f other)
+        public int CompareTo(Vector4d other)
         {
             if (x != other.x)
                 return x < other.x ? -1 : 1;
             else if (y != other.y)
                 return y < other.y ? -1 : 1;
+            else if (z != other.z)
+                return z < other.z ? -1 : 1;
+            else if (w != other.w)
+                return w < other.w ? -1 : 1;
             return 0;
         }
 
@@ -427,7 +453,7 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
-            return string.Format("{0},{1}", x, y);
+            return string.Format("{0},{1},{2},{3}", x, y, z, w);
         }
 
         /// <summary>
@@ -436,16 +462,15 @@ namespace Common.Core.LinearAlgebra
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
-            return string.Format("{0},{1}", x.ToString(f), y.ToString(f));
+            return string.Format("{0},{1},{2},{3}", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
         }
 
         /// <summary>
         /// Vector from a string.
         /// </summary>
-        public static Vector2f FromString(string s)
+        static public Vector4d FromString(string s)
 		{
-            Vector2f v = new Vector2f();
-
+            Vector4d v = new Vector4d();
             try
             {
                 string[] separators = new string[] { "," };
@@ -453,6 +478,8 @@ namespace Common.Core.LinearAlgebra
 
                 v.x = REAL.Parse(result[0]);
                 v.y = REAL.Parse(result[1]);
+                v.z = REAL.Parse(result[2]);
+                v.w = REAL.Parse(result[3]);
             }
             catch { }
 			
@@ -463,105 +490,45 @@ namespace Common.Core.LinearAlgebra
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Dot(Vector2f v0, Vector2f v1)
-		{
-			return v0.x * v1.x + v0.y * v1.y;
+        public static REAL Dot(Vector4d v0, Vector4d v1) 
+        {
+			return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z + v0.w*v1.w);
 		}
-
-        /// <summary>
-        /// Normalize the vector.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Normalize()
-        {
-            REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y);
-            x *= invLength;
-            y *= invLength;
-        }
-
-        /// <summary>
-        /// Cross two vectors.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Cross(Vector2f v0, Vector2f v1)
-        {
-            return v0.x * v1.y - v0.y * v1.x;
-        }
 
         /// <summary>
         /// Distance between two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Distance(Vector2f v0, Vector2f v1)
+        public static REAL Distance(Vector4d v0, Vector4d v1)
         {
-            return FMath.SafeSqrt(SqrDistance(v0, v1));
+            return DMath.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
         /// Square distance between two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL SqrDistance(Vector2f v0, Vector2f v1)
+        public static REAL SqrDistance(Vector4d v0, Vector4d v1)
         {
             REAL x = v0.x - v1.x;
             REAL y = v0.y - v1.y;
-            return x * x + y * y;
+            REAL z = v0.z - v1.z;
+            REAL w = v0.w - v1.w;
+            return x * x + y * y + z * z + w * w;
         }
 
         /// <summary>
-        /// Given an incident vector i and a normal vector n.
+        /// Normalize the vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f Reflect(Vector2f i, Vector2f n)
-        {
-            return i - 2 * n * Dot(i, n);
-        }
-
-        /// <summary>
-        /// Returns the refraction vector given the incident vector i, 
-        /// the normal vector n and the refraction index eta.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f Refract(Vector2f i, Vector2f n, REAL eta)
-        {
-            REAL ni = Dot(n, i);
-            REAL k = 1.0f - eta * eta * (1.0f - ni * ni);
-
-            return (k >= 0) ? eta * i - (eta * ni + FMath.SafeSqrt(k)) * n : Zero;
-        }
-
-        /// <summary>
-        /// Angle between two vectors in degrees from 0 to 180.
-        /// A and b origin treated as 0,0.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Angle180(Vector2f a, Vector2f b)
-        {
-            REAL m = a.Magnitude * b.Magnitude;
-            if (m == 0.0f) return 0;
-
-            REAL angle = Dot(a, b) / m;
-
-            if (angle < -1.0f) angle = -1.0f;
-            if (angle > 1.0f) angle = 1.0f;
-
-            return FMath.SafeAcos(angle) * FMath.Rad2Deg;
-        }
-
-        /// <summary>
-        /// Angle between two vectors in degrees from 0 to 360 ccw.
-        /// A and b origin treated as 0,0.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Angle360(Vector2f a, Vector2f b)
-        {
-            REAL angle = (REAL)(Math.Atan2(a.y, a.x) - Math.Atan2(b.y, b.x));
-
-            if (angle <= 0.0f)
-                angle = (REAL)Math.PI * 2.0f + angle;
-
-            return 360 - angle * FMath.Rad2Deg;
-        }
+        public void Normalize()
+		{
+            REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z + w * w);
+	    	x *= invLength;
+			y *= invLength;
+			z *= invLength;
+			w *= invLength;
+		}
 
         /// <summary>
         /// The minimum value between s and each component in vector.
@@ -571,16 +538,20 @@ namespace Common.Core.LinearAlgebra
         {
             x = Math.Min(x, s);
             y = Math.Min(y, s);
+            z = Math.Min(z, s);
+            w = Math.Min(w, s);
         }
 
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(Vector2f v)
+        public void Min(Vector4d v)
         {
             x = Math.Min(x, v.x);
             y = Math.Min(y, v.y);
+            z = Math.Min(z, v.z);
+            w = Math.Min(w, v.w);
         }
 
         /// <summary>
@@ -591,16 +562,20 @@ namespace Common.Core.LinearAlgebra
         {
             x = Math.Max(x, s);
             y = Math.Max(y, s);
+            z = Math.Max(z, s);
+            w = Math.Max(w, s);
         }
 
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(Vector2f v)
+        public void Max(Vector4d v)
         {
             x = Math.Max(x, v.x);
             y = Math.Max(y, v.y);
+            z = Math.Max(z, v.z);
+            w = Math.Max(w, v.w);
         }
 
         /// <summary>
@@ -611,6 +586,8 @@ namespace Common.Core.LinearAlgebra
         {
             x = Math.Abs(x);
             y = Math.Abs(y);
+            z = Math.Abs(z);
+            w = Math.Abs(w);
         }
 
         /// <summary>
@@ -618,94 +595,52 @@ namespace Common.Core.LinearAlgebra
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(REAL min, REAL max)
-		{
-			x = Math.Max(Math.Min(x, max), min);
-			y = Math.Max(Math.Min(y, max), min);
-		}
+        {
+            x = Math.Max(Math.Min(x, max), min);
+            y = Math.Max(Math.Min(y, max), min);
+            z = Math.Max(Math.Min(z, max), min);
+            w = Math.Max(Math.Min(w, max), min);
+        }
 
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(Vector2f min, Vector2f max)
+        public void Clamp(Vector4d min, Vector4d max)
         {
             x = Math.Max(Math.Min(x, max.x), min.x);
             y = Math.Max(Math.Min(y, max.y), min.y);
+            z = Math.Max(Math.Min(z, max.z), min.z);
+            w = Math.Max(Math.Min(w, max.w), min.w);
         }
 
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector2f Lerp(Vector2f from, Vector2f to, REAL t)
+        public static Vector4d Lerp(Vector4d from, Vector4d to, REAL t)
         {
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
+            if (t < 0.0) t = 0.0;
+            if (t > 1.0) t = 1.0;
 
-            if (t == 0.0f) return from;
-            if (t == 1.0f) return to;
+            if (t == 0.0) return from;
+            if (t == 1.0) return to;
 
-            REAL t1 = 1.0f - t;
-			Vector2f v = new Vector2f();
+            REAL t1 = 1.0 - t;
+            Vector4d v = new Vector4d();
             v.x = from.x * t1 + to.x * t;
             v.y = from.y * t1 + to.y * t;
-			return v;
-        }
-
-        /// <summary>
-        /// Slerp between two vectors arc.
-        /// </summary>
-        public static Vector2f Slerp(Vector2f from, Vector2f to, REAL t)
-        {
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
-
-            if (t == 0.0f) return from;
-            if (t == 1.0f) return to;
-            if (to.x == from.x && to.y == from.y) return to;
-
-            REAL m = from.Magnitude * to.Magnitude;
-            if (FMath.IsZero(m)) return Vector2f.Zero;
-
-            double theta = Math.Acos(Dot(from, to) / m);
-
-            if (theta == 0.0) return to;
-
-            double sinTheta = Math.Sin(theta);
-            REAL st1 = (REAL)(Math.Sin((1.0 - t) * theta) / sinTheta);
-            REAL st = (REAL)(Math.Sin(t * theta) / sinTheta);
-
-            Vector2f v = new Vector2f();
-            v.x = from.x * st1 + to.x * st;
-            v.y = from.y * st1 + to.y * st;
-
+            v.z = from.z * t1 + to.z * t;
+            v.w = from.w * t1 + to.w * t;
             return v;
         }
 
-        /// <summary>
-        /// Round vector.
-        /// </summary>
-        /// <param name="digits">number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round(int digits = 0)
         {
-            x = (REAL)Math.Round(x, digits);
-            y = (REAL)Math.Round(y, digits);
-        }
-
-        /// <summary>
-        /// Returns if list of verts make a CCW polygon.
-        /// Presumes polygon is simple.
-        /// </summary>
-        public static bool IsCCW(IList<Vector2f> vertices)
-        {
-            REAL sum = 0.0f;
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                Vector2f v1 = vertices[i];
-                Vector2f v2 = vertices[(i + 1) % vertices.Count];
-                sum += (v2.x - v1.x) * (v2.y + v1.y);
-            }
-            return sum < 0.0f;
+            x = Math.Round(x, digits);
+            y = Math.Round(y, digits);
+            z = Math.Round(z, digits);
+            w = Math.Round(w, digits);
         }
 
     }

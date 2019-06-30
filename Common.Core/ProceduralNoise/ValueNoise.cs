@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 
 namespace Common.Core.ProceduralNoise
 {

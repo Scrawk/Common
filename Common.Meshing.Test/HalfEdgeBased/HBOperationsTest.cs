@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Common.Core.LinearAlgebra;
+using Common.Core.Numerics;
 using Common.Meshing.HalfEdgeBased;
 using Common.Meshing.Constructors;
 using Common.Meshing.FaceBased;
@@ -97,7 +97,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             mesh.RemoveFaces();
             mesh2.RemoveFaces();
 
-            HBOperations.Append(mesh, mesh2, false, false);
+            HBOperations._Append(mesh2, mesh, false);
 
             var edge2 = mesh.Edges[2];
             var edge15 = mesh.Edges[15];
@@ -180,11 +180,10 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var mesh0 = HBMeshHelper.CreateTriangle();
             var mesh1 = HBMeshHelper.CreateTriangle();
-
             var mesh = new HBMesh2d();
 
-            HBOperations.Append(mesh, mesh0, true, false);
-            HBOperations.Append(mesh, mesh1, true, false);
+            HBOperations._Append(mesh0, mesh, true);
+            HBOperations._Append(mesh1, mesh, true);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);
@@ -201,8 +200,6 @@ namespace Common.Meshing.Test.HalfEdgeBased
             HBMeshHelper.CheckEdge(mesh, edge: 4, from: 4, face: 1, previous: 3, next: 5, opposite: -1);
             HBMeshHelper.CheckEdge(mesh, edge: 5, from: 5, face: 1, previous: 4, next: 3, opposite: -1);
             HBMeshHelper.CheckFace(mesh, face: 1, edge: 3);
-
-            HBMeshHelper.PrintMesh(mesh);
         }
 
         [TestMethod]
