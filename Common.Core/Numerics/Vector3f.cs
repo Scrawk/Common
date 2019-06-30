@@ -21,6 +21,10 @@ namespace Common.Core.Numerics
         public REAL b => y;
         public REAL c => z;
 
+        public REAL u => x;
+        public REAL v => y;
+        public REAL w => z;
+
         /// <summary>
         /// The unit x vector.
         /// </summary>
