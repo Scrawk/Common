@@ -182,6 +182,14 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Get the position at index i.
+        /// </summary>
+        public void SetPosition(int i, Vector3d p)
+        {
+            Vertices[i].SetPosition(p);
+        }
+
+        /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>
         public void GetPositions(List<Vector3d> positions)

@@ -90,7 +90,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="source">mesh that get appended to</param>
         /// <param name="dest">mesh that gets appended from</param>
         /// <param name="incudeFaces">should the mesh faces also be appended</param>
-        public static void _Append<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> source, HBMesh<VERTEX, EDGE, FACE> dest, bool incudeFaces)
+        public static void Append<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> source, HBMesh<VERTEX, EDGE, FACE> dest, bool incudeFaces)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()

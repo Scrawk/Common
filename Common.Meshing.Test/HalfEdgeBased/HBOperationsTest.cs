@@ -97,7 +97,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             mesh.RemoveFaces();
             mesh2.RemoveFaces();
 
-            HBOperations._Append(mesh2, mesh, false);
+            HBOperations.Append(mesh2, mesh, false);
 
             var edge2 = mesh.Edges[2];
             var edge15 = mesh.Edges[15];
@@ -182,8 +182,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var mesh1 = HBMeshHelper.CreateTriangle();
             var mesh = new HBMesh2d();
 
-            HBOperations._Append(mesh0, mesh, true);
-            HBOperations._Append(mesh1, mesh, true);
+            HBOperations.Append(mesh0, mesh, true);
+            HBOperations.Append(mesh1, mesh, true);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);
