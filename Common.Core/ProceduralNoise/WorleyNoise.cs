@@ -64,6 +64,7 @@ namespace Common.Core.ProceduralNoise
             double F0 = double.PositiveInfinity;
             double F1 = double.PositiveInfinity;
             double F2 = double.PositiveInfinity;
+            double S = 0;
 
             int px, py, pz;
             double oxx, oxy, oxz;
@@ -80,19 +81,19 @@ namespace Common.Core.ProceduralNoise
             d1 = Distance1(Pf0, OFFSET_F[1] + Jitter * oxy);
             d2 = Distance1(Pf0, OFFSET_F[2] + Jitter * oxz);
 
-            if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; }
+            if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; S = px * Perm.Inverse; }
             else if (d0 < F1) { F2 = F1; F1 = d0; }
             else if (d0 < F2) { F2 = d0; }
 
-            if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; }
+            if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; S = py * Perm.Inverse; }
             else if (d1 < F1) { F2 = F1; F1 = d1; }
             else if (d1 < F2) { F2 = d1; }
 
-            if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; }
+            if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; S = pz * Perm.Inverse; }
             else if (d2 < F1) { F2 = F1; F1 = d2; }
             else if (d2 < F2) { F2 = d2; }
 
-            return Combine(F0, F1, F2) * Amplitude;
+            return Combine(F0, F1, F2, S) * Amplitude;
         }
 
         public override double Sample2D(double x, double y)
@@ -115,6 +116,7 @@ namespace Common.Core.ProceduralNoise
             double F0 = double.PositiveInfinity;
             double F1 = double.PositiveInfinity;
             double F2 = double.PositiveInfinity;
+            double S = 0;
 
             int px, py, pz;
             double oxx, oxy, oxz;
@@ -138,21 +140,21 @@ namespace Common.Core.ProceduralNoise
                 d1 = Distance2(Pf0, Pf1, OFFSET_F[i] + Jitter * oxy, 0.5f + Jitter * oyy);
                 d2 = Distance2(Pf0, Pf1, OFFSET_F[i] + Jitter * oxz, 1.5f + Jitter * oyz);
 
-                if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; }
+                if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; S = px * Perm.Inverse; }
                 else if (d0 < F1) { F2 = F1; F1 = d0; }
                 else if (d0 < F2) { F2 = d0; }
 
-                if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; }
+                if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; S = py * Perm.Inverse; }
                 else if (d1 < F1) { F2 = F1; F1 = d1; }
                 else if (d1 < F2) { F2 = d1; }
 
-                if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; }
+                if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; S = pz * Perm.Inverse; }
                 else if (d2 < F1) { F2 = F1; F1 = d2; }
                 else if (d2 < F2) { F2 = d2; }
 
             }
 
-            return Combine(F0, F1, F2) * Amplitude;
+            return Combine(F0, F1, F2, S) * Amplitude;
         }
 
         public override double Sample3D(double x, double y, double z)
@@ -183,6 +185,7 @@ namespace Common.Core.ProceduralNoise
             double F0 = double.PositiveInfinity;
             double F1 = double.PositiveInfinity;
             double F2 = double.PositiveInfinity;
+            double S = 0;
 
             int px, py, pz;
             double oxx, oxy, oxz;
@@ -218,21 +221,21 @@ namespace Common.Core.ProceduralNoise
                     d1 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxy, OFFSET_F[j] + Jitter * oyy, 0.5f + Jitter * ozy);
                     d2 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxz, OFFSET_F[j] + Jitter * oyz, 1.5f + Jitter * ozz);
 
-                    if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; }
+                    if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; S = px * Perm.Inverse; }
                     else if (d0 < F1) { F2 = F1; F1 = d0; }
                     else if (d0 < F2) { F2 = d0; }
 
-                    if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; }
+                    if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; S = py * Perm.Inverse; }
                     else if (d1 < F1) { F2 = F1; F1 = d1; }
                     else if (d1 < F2) { F2 = d1; }
 
-                    if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; }
+                    if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; S = pz * Perm.Inverse; }
                     else if (d2 < F1) { F2 = F1; F1 = d2; }
                     else if (d2 < F2) { F2 = d2; }
                 }
             }
 
-            return Combine(F0, F1, F2) * Amplitude;
+            return Combine(F0, F1, F2, S) * Amplitude;
         }
 
         private double Mod(double x, double y)
@@ -296,7 +299,7 @@ namespace Common.Core.ProceduralNoise
             return 0;
         }
 
-        private double Combine(double f0, double f1, double f2)
+        private double Combine(double f0, double f1, double f2, double s)
         {
             switch (Combination)
             {
@@ -308,6 +311,9 @@ namespace Common.Core.ProceduralNoise
 
                 case VORONOI_COMBINATION.D2_D0:
                     return f2 - f0;
+
+                case VORONOI_COMBINATION.SOLID:
+                    return s;
             }
 
             return 0;
