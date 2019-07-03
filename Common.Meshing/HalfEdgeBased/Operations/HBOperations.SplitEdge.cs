@@ -12,7 +12,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">A triangle mesh the edge belongs to.</param>
         /// <param name="edge">The edge to splits.</param>
-        public static void SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge)
+        public static VERTEX SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -67,9 +67,12 @@ namespace Common.Meshing.HalfEdgeBased
             SetFaces(nedge, f2);
             SetFaces(nopp, f3);
 
-            //Add newly created objects to mesh;
+            //Add newly created objects to mesh.
             mesh.Edges.Add(e0, e1, e2, e3);
             mesh.Faces.Add(f2, f3);
+
+            //return the new vertex.
+            return v;
         }
     }
 }
