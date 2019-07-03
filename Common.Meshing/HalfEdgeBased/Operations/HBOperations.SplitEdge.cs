@@ -1,71 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Common.Core.Numerics;
+using System.Text;
 
 namespace Common.Meshing.HalfEdgeBased
 {
     public static partial class HBOperations
     {
-
         /// <summary>
-        /// Splits a edge. Creates a new vertex at split 
-        /// position on edge and connects newly created edges.
+        /// Splits a edge at its mid point and adds 
+        /// the new edges to keep all faces as triangles.
         /// </summary>
-        /// <param name="mesh">parent mesh</param>
-        /// <param name="edge">the edge to split</param>
-        /// <param name="t">the point to split at</param> 
-        /// <returns>The new vertex added at the split position</returns>
-        public static VERTEX SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, double t = 0.5)
+        /// <param name="mesh">A triangle mesh the edge belongs to.</param>
+        /// <param name="edge">The edge to splits.</param>
+        public static void SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            //Say we are looking at the edge going top to bottom.
-            //The half edge on right goes from bottom to top.
-            //The half edge on the left goes top to bottom.
-            var right0 = edge;
-            var left0 = edge.Opposite;
-            var leftPrevious = left0.Previous;
-            var rightNext = right0.Next;
+            var opp = edge.Opposite;
 
-            //Create a new vertex at t dist starting at from.
-            var from = right0.From;
-            var to = left0.From;
-            var pos = Vector3d.Lerp(from.GetPosition(), to.GetPosition(), t);
-            var mid = new VERTEX();
-            mid.SetPosition(pos);
+            if (opp == null)
+                throw new NullReferenceException("Edge does not have a opposite edge.");
 
-            //Create a new half edge.
-            EDGE right1, left1;
-            NewEdge(out right1, out left1);
+            if (edge.EdgeCount != 3)
+                throw new NotSupportedException("Can only split triangle edges");
 
-            //right1 starts at the new vertex above right0.
-            //Which means right1 goes between right0 and righ0's next edge.
-            SetFrom(right1, mid);
-            InsertBetween(right1, right0, rightNext);
-            right1.Face = right0.Face;
+            if (opp.EdgeCount != 3)
+                throw new NotSupportedException("Can only split triangle edges");
 
-            //left1 starts at left0 from vertex.
-            //Which means left1 goes between left0 and left0's previous edge.
-            SetFrom(left1, to);
-            InsertBetween(left1, leftPrevious, left0);
-            left1.Face = left0.Face;
+            //Add new vertex at mid point.
+            //edge now goes to this vertex and the new edge from it.
+            var v = PokeEdge(mesh, edge, 0.5);
 
-            //left0 new starts at new vertex.
-            left0.From = mid;
+            //Get the new edge and its opposite.
+            var nedge = v.Edge;
+            var nopp = nedge.Opposite;
 
-            VERTEX v = mid as VERTEX;
+            //The faces are now quads.
+            //Need two new edges (4 half edges) to make four triangles
+            NewEdge(out EDGE e0, out EDGE e1);
+            NewEdge(out EDGE e2, out EDGE e3);
 
-            mesh.Edges.Add(right1);
-            mesh.Edges.Add(left1);
-            mesh.Vertices.Add(v);
+            //Connect the new edges previous and next edges.
+            InsertBetween(e0, edge, edge.Previous);
+            InsertBetween(e1, nedge.Next, nedge);
+            InsertBetween(e2, opp.Next, opp);
+            InsertBetween(e3, nopp, nopp.Previous);
 
-            //return new vertex. 
-            //The new edge starts from this 
-            //vertex and the old edge goes to it.
-            return v;
+            //Connect the new edges vertices.
+            SetFrom(e0, v);
+            SetFrom(e1, edge.Previous.From);
+            SetFrom(e2, nopp.Previous.From);
+            SetFrom(e3, v);
+
+            //The are two existing faces but need four.
+            //Create two new faces.
+            var f0 = edge.Face;
+            var f1 = opp.Face;
+            var f2 = new FACE();
+            var f3 = new FACE();
+
+            //Iterate all edges in each face and
+            //set the correct face for all edges.
+            SetFaces(edge, f0);
+            SetFaces(opp, f1);
+            SetFaces(nedge, f2);
+            SetFaces(nopp, f3);
+
+            //Add newly created objects to mesh;
+            mesh.Edges.Add(e0, e1, e2, e3);
+            mesh.Faces.Add(f2, f3);
         }
-
     }
 }

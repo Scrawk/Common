@@ -67,6 +67,15 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public static void SetFaces(HBEdge edge, HBFace face)
+        {
+            foreach (var e in edge.EnumerateEdges())
+                SetFace(e, face);
+        }
+
+        /// <summary>
         /// Sets the tag for the edge and its opposite.
         /// </summary>
         public static void TagEdgeAndOpposite(HBEdge edge, int tag)

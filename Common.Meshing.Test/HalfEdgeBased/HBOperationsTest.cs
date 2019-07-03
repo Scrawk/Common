@@ -15,6 +15,49 @@ namespace Common.Meshing.Test.HalfEdgeBased
     {
 
         [TestMethod]
+        public void SplitEdge()
+        {
+            var max = new Vector2d(1, 1);
+            var min = new Vector2d(-1, -1);
+
+            var mesh = HBCreateTriangularMesh2.FromBox(min, max);
+
+            var edge = mesh.Edges[2];
+
+            HBOperations.SplitEdge(mesh, edge);
+
+            Assert.AreEqual(5, mesh.Vertices.Count);
+            Assert.AreEqual(16, mesh.Edges.Count);
+            Assert.AreEqual(4, mesh.Faces.Count);
+
+            HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 11);
+            HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 13);
+            HBMeshHelper.CheckVertex(mesh, vertex: 2, edge: 3);
+            HBMeshHelper.CheckVertex(mesh, vertex: 3, edge: 14);
+            HBMeshHelper.CheckVertex(mesh, vertex: 4, edge: 15);
+            HBMeshHelper.CheckEdge(mesh, edge: 0, from: 0, face: 2, previous: 10, next: 13, opposite: 6);
+            HBMeshHelper.CheckEdge(mesh, edge: 1, from: 1, face: 0, previous: 12, next: 2, opposite: 7);
+            HBMeshHelper.CheckEdge(mesh, edge: 2, from: 2, face: 0, previous: 1, next: 12, opposite: 5);
+            HBMeshHelper.CheckEdge(mesh, edge: 3, from: 2, face: 1, previous: 5, next: 14, opposite: 8);
+            HBMeshHelper.CheckEdge(mesh, edge: 4, from: 3, face: 3, previous: 15, next: 11, opposite: 9);
+            HBMeshHelper.CheckEdge(mesh, edge: 5, from: 4, face: 1, previous: 14, next: 3, opposite: 2);
+            HBMeshHelper.CheckEdge(mesh, edge: 6, from: 1, face: -1, previous: 7, next: 9, opposite: 0);
+            HBMeshHelper.CheckEdge(mesh, edge: 7, from: 2, face: -1, previous: 8, next: 6, opposite: 1);
+            HBMeshHelper.CheckEdge(mesh, edge: 8, from: 3, face: -1, previous: 9, next: 7, opposite: 3);
+            HBMeshHelper.CheckEdge(mesh, edge: 9, from: 0, face: -1, previous: 6, next: 8, opposite: 4);
+            HBMeshHelper.CheckEdge(mesh, edge: 10, from: 4, face: 2, previous: 13, next: 0, opposite: 11);
+            HBMeshHelper.CheckEdge(mesh, edge: 11, from: 0, face: 3, previous: 4, next: 15, opposite: 10);
+            HBMeshHelper.CheckEdge(mesh, edge: 12, from: 4, face: 0, previous: 2, next: 1, opposite: 13);
+            HBMeshHelper.CheckEdge(mesh, edge: 13, from: 1, face: 2, previous: 0, next: 10, opposite: 12);
+            HBMeshHelper.CheckEdge(mesh, edge: 14, from: 3, face: 1, previous: 3, next: 5, opposite: 15);
+            HBMeshHelper.CheckEdge(mesh, edge: 15, from: 4, face: 3, previous: 11, next: 4, opposite: 14);
+            HBMeshHelper.CheckFace(mesh, face: 0, edge: 1);
+            HBMeshHelper.CheckFace(mesh, face: 1, edge: 14);
+            HBMeshHelper.CheckFace(mesh, face: 2, edge: 13);
+            HBMeshHelper.CheckFace(mesh, face: 3, edge: 4);
+        }
+
+        [TestMethod]
         public void FlipEdge()
         {
             var max = new Vector2d(1, 1);
@@ -150,7 +193,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
 
         [TestMethod]
-        public void SplitEdge()
+        public void PokeEdge()
         {
             var a = new Vector2d(0, 1);
             var b = new Vector2d(-1, -1);
@@ -158,7 +201,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             HBMesh2d mesh = HBCreateTriangularMesh2.FromTriangle(a, b, c);
 
-            HBOperations.SplitEdge(mesh, mesh.Edges[0], 0.5);
+            HBOperations.PokeEdge(mesh, mesh.Edges[0], 0.5);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 7);
