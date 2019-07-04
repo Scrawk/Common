@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Common.Core.Numerics;
 
@@ -276,7 +277,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Calculate the average position of the vertices.
         /// </summary>
-        public Vector3d GetCentriod()
+        public virtual Vector3d GetCentriod()
         {
             int count = 0;
             Vector3d centroid = Vector3d.Zero;
@@ -290,6 +291,61 @@ namespace Common.Meshing.HalfEdgeBased
                 return centroid;
             else
                 return centroid / count;
+        }
+
+        /// <summary>
+        /// Check the edge is valid.
+        /// </summary>
+        /// <returns>A list of errors</returns>
+        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var builder = new StringBuilder();
+
+            if (From == null)
+                builder.AppendLine("From is null.");
+            else
+            {
+                if (mesh.IndexOf(From) == -1)
+                    builder.Append("From is not found in mesh.");
+            }
+
+            if (Opposite == null)
+                builder.AppendLine("Opposite is null.");
+            else
+            {
+                if (Opposite.Opposite != this)
+                    builder.Append("Opposite is not opposite to this edge.");
+
+                if (mesh.IndexOf(Opposite) == -1)
+                    builder.Append("Opposite is not found in mesh.");
+            }
+
+            if (Next == null)
+                builder.AppendLine("Next is null.");
+            else
+            {
+                if (Next.Previous != this)
+                    builder.Append("Next is not previous to this edge.");
+
+                if (mesh.IndexOf(Next) == -1)
+                    builder.Append("Next is not found in mesh.");
+            }
+
+            if (Previous == null)
+                builder.AppendLine("Previous is null.");
+            else
+            {
+                if (Previous.Next != this)
+                    builder.Append("Previous is not next to this edge.");
+
+                if (mesh.IndexOf(Previous) == -1)
+                    builder.Append("Previous is not found in mesh.");
+            }
+
+            return builder.ToString();
         }
 
     }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Xml;
+using System.Text;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
@@ -150,7 +150,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Compute the vertices centroid from the 
         /// edges to vertex surrounding it.
         /// </summary>
-        public Vector3d GetCentriod()
+        public virtual Vector3d GetCentriod()
         {
             int count = 0;
             Vector3d centroid = Vector3d.Zero;
@@ -169,12 +169,20 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Compute the vertices area weighted normal. 
         /// </summary>
-        public Vector3d GetNormal()
+        public virtual Vector3d GetNormal()
         {
             var n = Vector3d.Zero;
-
             foreach (var e in EnumerateEdges())
             {
+                if (e.From == null)
+                    throw new Exception("From == null");
+
+                if (e.Opposite == null)
+                    throw new Exception("Opposite == null");
+
+                if (e.Opposite.From == null)
+                    throw new Exception("Opposite.From == null");
+
                 var p0 = e.From.GetPosition();
                 var p1 = e.To.GetPosition();
                 var p2 = e.Opposite.Next.To.GetPosition();
@@ -182,6 +190,31 @@ namespace Common.Meshing.HalfEdgeBased
             }
 
             return n.Normalized;
+        }
+
+        /// <summary>
+        /// Check the vertex is valid.
+        /// </summary>
+        /// <returns>A list of errors</returns>
+        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var builder = new StringBuilder();
+
+            if (Edge == null)
+                builder.AppendLine("Edge is null.");
+            else
+            {
+                if (Edge.From != this)
+                    builder.Append("Edge is not from this vertex.");
+
+                if (mesh.IndexOf(Edge) == -1)
+                    builder.Append("Edge is not found in mesh.");
+            }
+
+            return builder.ToString();
         }
 
     }

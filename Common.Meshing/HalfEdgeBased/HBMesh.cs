@@ -437,5 +437,51 @@ namespace Common.Meshing.HalfEdgeBased
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Check the mesh for debugging.
+        /// </summary>
+        public string Check()
+        {
+            var builder = new StringBuilder();
+
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                var errors = Vertices[i].Check(this);
+
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    builder.AppendLine("Vertex " + i + " contains errors:");
+                    builder.AppendLine(errors);
+                }
+            }
+
+            for (int i = 0; i < Edges.Count; i++)
+            {
+                var errors = Edges[i].Check(this);
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    builder.AppendLine("Edge " + i + " contains errors:");
+                    builder.AppendLine(errors);
+                }
+            }
+
+            for (int i = 0; i < Faces.Count; i++)
+            {
+                var errors = Faces[i].Check(this);
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    builder.AppendLine("Face " + i + " contains errors:");
+                    builder.AppendLine(errors);
+                }
+            }
+
+            var msg = builder.ToString();
+
+            if (string.IsNullOrEmpty(msg))
+                msg = "Mesh contains no errors";
+
+            return msg;
+        }
+
     }
 }

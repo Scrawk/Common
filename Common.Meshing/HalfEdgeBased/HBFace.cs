@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Common.Meshing.HalfEdgeBased
 {
@@ -62,6 +63,31 @@ namespace Common.Meshing.HalfEdgeBased
                 throw new InvalidCastException("Edge is not a " + typeof(EDGE));
 
             return edge;
+        }
+
+        /// <summary>
+        /// Check the face is valid.
+        /// </summary>
+        /// <returns>A list of errors</returns>
+        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+            where VERTEX : HBVertex, new()
+            where EDGE : HBEdge, new()
+            where FACE : HBFace, new()
+        {
+            var builder = new StringBuilder();
+
+            if (Edge == null)
+                builder.AppendLine("Edge is null.");
+            else
+            {
+                if (Edge.Face != this)
+                    builder.Append("Edge is not part of this face.");
+
+                if (mesh.IndexOf(Edge) == -1)
+                    builder.Append("Edge is not found in mesh.");
+            }
+
+            return builder.ToString();
         }
 
     }
