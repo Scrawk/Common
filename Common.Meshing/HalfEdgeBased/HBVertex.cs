@@ -146,5 +146,43 @@ namespace Common.Meshing.HalfEdgeBased
 
         public abstract Vector3d GetPosition();
 
+        /// <summary>
+        /// Compute the vertices centroid from the 
+        /// edges to vertex surrounding it.
+        /// </summary>
+        public Vector3d GetCentriod()
+        {
+            int count = 0;
+            Vector3d centroid = Vector3d.Zero;
+            foreach (var edge in EnumerateEdges())
+            {
+                centroid += edge.To.GetPosition();
+                count++;
+            }
+
+            if (count != 0)
+                centroid /= count;
+
+            return centroid;
+        }
+
+        /// <summary>
+        /// Compute the vertices area weighted normal. 
+        /// </summary>
+        public Vector3d GetNormal()
+        {
+            var n = Vector3d.Zero;
+
+            foreach (var e in EnumerateEdges())
+            {
+                var p0 = e.From.GetPosition();
+                var p1 = e.To.GetPosition();
+                var p2 = e.Opposite.Next.To.GetPosition();
+                n = Vector3d.Cross(p2 - p0, p1 - p0);
+            }
+
+            return n.Normalized;
+        }
+
     }
 }

@@ -243,6 +243,33 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Copy all vertex normals into list.
+        /// </summary>
+        public void GetVertexNormals(List<Vector3d> normals)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                normals.Add(Vertices[i].GetNormal());
+        }
+
+        /// <summary>
+        /// Copy all vertex centroids into list.
+        /// </summary>
+        public void GetVertexCentroids(List<Vector3d> centroids)
+        {
+            for (int i = 0; i < Vertices.Count; i++)
+                centroids.Add(Vertices[i].GetCentriod());
+        }
+
+        /// <summary>
+        /// Copy all face centroids into list.
+        /// </summary>
+        public void GetFaceCentroids(List<Vector3d> centroids)
+        {
+            for (int i = 0; i < Faces.Count; i++)
+                centroids.Add(Faces[i].Edge.GetCentriod());
+        }
+
+        /// <summary>
         /// Find the edge that uses these two vertices.
         /// Presumes all edges have opposites.
         /// </summary>
