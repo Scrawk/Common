@@ -174,15 +174,6 @@ namespace Common.Meshing.HalfEdgeBased
             var n = Vector3d.Zero;
             foreach (var e in EnumerateEdges())
             {
-                if (e.From == null)
-                    throw new Exception("From == null");
-
-                if (e.Opposite == null)
-                    throw new Exception("Opposite == null");
-
-                if (e.Opposite.From == null)
-                    throw new Exception("Opposite.From == null");
-
                 var p0 = e.From.GetPosition();
                 var p1 = e.To.GetPosition();
                 var p2 = e.Opposite.Next.To.GetPosition();
@@ -208,10 +199,10 @@ namespace Common.Meshing.HalfEdgeBased
             else
             {
                 if (Edge.From != this)
-                    builder.Append("Edge is not from this vertex.");
+                    builder.AppendLine("Edge is not from this vertex.");
 
                 if (mesh.IndexOf(Edge) == -1)
-                    builder.Append("Edge is not found in mesh.");
+                    builder.AppendLine("Edge is not found in mesh.");
             }
 
             return builder.ToString();

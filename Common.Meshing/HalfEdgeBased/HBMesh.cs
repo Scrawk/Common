@@ -442,6 +442,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         public string Check()
         {
+            int count = 0;
             var builder = new StringBuilder();
 
             for (int i = 0; i < Vertices.Count; i++)
@@ -452,6 +453,7 @@ namespace Common.Meshing.HalfEdgeBased
                 {
                     builder.AppendLine("Vertex " + i + " contains errors:");
                     builder.AppendLine(errors);
+                    count++;
                 }
             }
 
@@ -462,6 +464,7 @@ namespace Common.Meshing.HalfEdgeBased
                 {
                     builder.AppendLine("Edge " + i + " contains errors:");
                     builder.AppendLine(errors);
+                    count++;
                 }
             }
 
@@ -472,6 +475,7 @@ namespace Common.Meshing.HalfEdgeBased
                 {
                     builder.AppendLine("Face " + i + " contains errors:");
                     builder.AppendLine(errors);
+                    count++;
                 }
             }
 
@@ -481,6 +485,49 @@ namespace Common.Meshing.HalfEdgeBased
                 msg = "Mesh contains no errors";
 
             return msg;
+        }
+
+        /// <summary>
+        /// Returns true if any edge references this vertex.
+        /// </summary>
+        public bool References(HBVertex vert)
+        {
+            foreach(var edge in Edges)
+                if (edge.From == vert) return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if any vertex, edge or face references this edge.
+        /// </summary>
+        public bool References(HBEdge edge)
+        {
+            foreach (var vert in Vertices)
+                if (vert.Edge == edge) return true;
+
+            foreach (var face in Faces)
+                if (face.Edge == edge) return true;
+
+            foreach (var e in Edges)
+            {
+                if (e.Opposite == edge) return true;
+                if (e.Next == edge) return true;
+                if (e.Previous == edge) return true;
+            }
+                
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if any edge references this face.
+        /// </summary>
+        public bool References(HBFace face)
+        {
+            foreach (var edge in Edges)
+                if (edge.Face == face) return true;
+
+            return false;
         }
 
     }

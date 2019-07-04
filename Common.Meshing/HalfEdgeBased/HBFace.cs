@@ -81,10 +81,10 @@ namespace Common.Meshing.HalfEdgeBased
             else
             {
                 if (Edge.Face != this)
-                    builder.Append("Edge is not part of this face.");
+                    builder.AppendLine("Edge is not part of this face.");
 
                 if (mesh.IndexOf(Edge) == -1)
-                    builder.Append("Edge is not found in mesh.");
+                    builder.AppendLine("Edge is not found in mesh.");
             }
 
             return builder.ToString();

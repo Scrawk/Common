@@ -309,7 +309,7 @@ namespace Common.Meshing.HalfEdgeBased
             else
             {
                 if (mesh.IndexOf(From) == -1)
-                    builder.Append("From is not found in mesh.");
+                    builder.AppendLine("From is not found in mesh.");
             }
 
             if (Opposite == null)
@@ -317,10 +317,10 @@ namespace Common.Meshing.HalfEdgeBased
             else
             {
                 if (Opposite.Opposite != this)
-                    builder.Append("Opposite is not opposite to this edge.");
+                    builder.AppendLine("Opposite is not opposite to this edge.");
 
                 if (mesh.IndexOf(Opposite) == -1)
-                    builder.Append("Opposite is not found in mesh.");
+                    builder.AppendLine("Opposite is not found in mesh.");
             }
 
             if (Next == null)
@@ -328,10 +328,10 @@ namespace Common.Meshing.HalfEdgeBased
             else
             {
                 if (Next.Previous != this)
-                    builder.Append("Next is not previous to this edge.");
+                    builder.AppendLine("Next is not previous to this edge.");
 
                 if (mesh.IndexOf(Next) == -1)
-                    builder.Append("Next is not found in mesh.");
+                    builder.AppendLine("Next is not found in mesh.");
             }
 
             if (Previous == null)
@@ -339,10 +339,10 @@ namespace Common.Meshing.HalfEdgeBased
             else
             {
                 if (Previous.Next != this)
-                    builder.Append("Previous is not next to this edge.");
+                    builder.AppendLine("Previous is not next to this edge.");
 
                 if (mesh.IndexOf(Previous) == -1)
-                    builder.Append("Previous is not found in mesh.");
+                    builder.AppendLine("Previous is not found in mesh.");
             }
 
             return builder.ToString();

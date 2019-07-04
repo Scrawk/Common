@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+
+using Common.Core.Numerics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
@@ -17,15 +18,18 @@ namespace Common.Meshing.HalfEdgeBased
             where FACE : HBFace, new()
         {
             var opp = edge.Opposite;
-
             if (opp == null)
                 throw new NullReferenceException("Edge does not have a opposite edge.");
 
+            //Dont collapse boundary edges
+            if (edge.Face == null) return null;
+            if (opp.Face == null) return null;
+
             if (edge.EdgeCount != 3)
-                throw new NotSupportedException("Can only split triangle edges");
+                throw new NotSupportedException("Can only collapse triangle edges");
 
             if (opp.EdgeCount != 3)
-                throw new NotSupportedException("Can only split triangle edges");
+                throw new NotSupportedException("Can only collapse triangle edges");
 
             var v0 = edge.From;
             var v1 = opp.From;
@@ -41,12 +45,47 @@ namespace Common.Meshing.HalfEdgeBased
             //Check for some degenerate cases.
             if (mesh.Vertices.Count <= 3) return null;
             if (mesh.Faces.Count == 1) return null;
+            if (v0 == v1) return null;
+            if (v2 == v3) return null;
             if (e0.Opposite == e2) return null;
             if (e1.Opposite == e3) return null;
 
+            //Check for non-manifold cases.
+            if (e0.Opposite.Previous.From == e1.Opposite.Previous.From) return null;
+            if (e2.Opposite.Previous.From == e3.Opposite.Previous.From) return null;
+
             //move v0 to mid point on edge.
-            var mid = (v0.GetPosition() + v1.GetPosition()) * 0.5;
-            v0.SetPosition(mid);
+            var newPos = (v0.GetPosition() + v1.GetPosition()) * 0.5;
+
+            //check if any of the triangles flip 
+            //if moved to new pos. If so return.
+            foreach(var e in v0.EnumerateEdges())
+            {
+                if (e == edge) continue;
+
+                var p0 = e.From.GetPosition();
+                var p1 = e.To.GetPosition();
+                var p2 = e.Opposite.Next.To.GetPosition();
+                var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+                var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
+
+                if (Vector3d.Dot(n0, n1) < 0) return null;
+            }
+
+            foreach (var e in v1.EnumerateEdges())
+            {
+                if (e == opp) continue;
+
+                var p0 = e.From.GetPosition();
+                var p1 = e.To.GetPosition();
+                var p2 = e.Opposite.Next.To.GetPosition();
+                var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+                var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
+
+                if (Vector3d.Dot(n0, n1) < 0) return null;
+            }
+
+            v0.SetPosition(newPos);
 
             //Make sure all the verts that get kept dont
             //point to a edge that gets removed.
@@ -61,21 +100,21 @@ namespace Common.Meshing.HalfEdgeBased
 
             //For the half edges that are being removed
             //connect their new opposite edges.
-            e0.Opposite.Opposite = e1.Opposite;
-            e1.Opposite.Opposite = e0.Opposite;
-            e2.Opposite.Opposite = e3.Opposite;
-            e3.Opposite.Opposite = e2.Opposite;
+            var opp0 = e0.Opposite;
+            var opp1 = e1.Opposite;
+            var opp2 = e2.Opposite;
+            var opp3 = e3.Opposite;
 
-            //Cear and remove unused objects.
-            v1.Clear();
-            edge.Clear();
-            opp.Clear();
+            opp0.Opposite = opp1;
+            opp1.Opposite = opp0;
+            opp2.Opposite = opp3;
+            opp3.Opposite = opp2;
+
+            //Clear and remove unused objects.
             e0.Clear();
             e1.Clear();
             e2.Clear();
             e3.Clear();
-            f0.Clear();
-            f1.Clear();
 
             mesh.Vertices.Remove(v1 as VERTEX);
             mesh.Edges.Remove(edge as EDGE);
