@@ -105,10 +105,10 @@ namespace Common.Meshing.Constructors
             }
         }
 
-        public static void FromMesh<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector3d[] positions, int[] indices, bool ccw)
+        public static void FromMesh<MESH>(ITriangularMeshConstructor<MESH> constructor, IList<Vector3d> positions, IList<int> indices, bool ccw)
         {
-            int numPositions = positions.Length;
-            int numTriangles = indices.Length / 3;
+            int numPositions = positions.Count;
+            int numTriangles = indices.Count / 3;
 
             constructor.PushTriangularMesh(numPositions, numTriangles);
 
