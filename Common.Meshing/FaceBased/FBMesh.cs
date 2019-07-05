@@ -295,6 +295,19 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Rotate all vertices.
+        /// </summary>
+        public void Rotate(Vector3d rotate)
+        {
+            var q = Quaternion3d.FromEuler(rotate);
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                var p = Vertices[i].GetPosition();
+                Vertices[i].SetPosition(p * q);
+            }
+        }
+
+        /// <summary>
         /// Scale all vertices.
         /// </summary>
         public void Scale(Vector3d scale)

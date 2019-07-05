@@ -75,6 +75,28 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Fill the mesh with vertices, faces and edges.
+        /// Connections will need to be set manually.
+        /// </summary>
+        public void Fill(int numVertices, int numEdges, int numFaces)
+        {
+            Clear();
+
+            Vertices.Capacity = numVertices;
+            Edges.Capacity = numEdges;
+            Faces.Capacity = numFaces;
+
+            for (int i = 0; i < numVertices; i++)
+                Vertices.Add(new VERTEX());
+
+            for (int i = 0; i < numEdges; i++)
+                Edges.Add(new EDGE());
+
+            for (int i = 0; i < numFaces; i++)
+                Faces.Add(new FACE());
+        }
+
+        /// <summary>
         /// Find the index of this vertex.
         /// </summary>
         /// <returns>The vertex index or -1 if not found.</returns>
@@ -293,28 +315,6 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Fill the mesh with vertices, faces and edges.
-        /// Connections will need to be set manually.
-        /// </summary>
-        public void Fill(int numVertices, int numEdges, int numFaces) 
-        {
-            Clear();
-
-            Vertices.Capacity = numVertices;
-            Edges.Capacity = numEdges;
-            Faces.Capacity = numFaces;
-
-            for (int i = 0; i < numVertices; i++)
-                Vertices.Add(new VERTEX());
-
-            for (int i = 0; i < numEdges; i++)
-                Edges.Add(new EDGE());
-
-            for (int i = 0; i < numFaces; i++)
-                Faces.Add(new FACE());
-        }
-
-        /// <summary>
         /// Remove all faces.
         /// Will clear faces from all edges.
         /// </summary>
@@ -389,6 +389,19 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 var p = Vertices[i].GetPosition();
                 Vertices[i].SetPosition(p + translate);
+            }
+        }
+
+        /// <summary>
+        /// Rotate all vertices.
+        /// </summary>
+        public void Rotate(Vector3d rotate)
+        {
+            var q = Quaternion3d.FromEuler(rotate);
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                var p = Vertices[i].GetPosition();
+                Vertices[i].SetPosition(p * q);
             }
         }
 

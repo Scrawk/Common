@@ -13,16 +13,6 @@ namespace Common.Meshing.Constructors
     public static class CreatePolygonalMesh2
     {
 
-        public static void FromTriangle<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2d A, Vector2d B, Vector2d C)
-        {
-            constructor.PushPolygonalMesh(3, 1);
-
-            constructor.AddVertex(A);
-            constructor.AddVertex(B);
-            constructor.AddVertex(C);
-            constructor.AddFace(0, 3);
-        }
-
         public static void FromBox<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
         {
             constructor.PushPolygonalMesh(4, 1);

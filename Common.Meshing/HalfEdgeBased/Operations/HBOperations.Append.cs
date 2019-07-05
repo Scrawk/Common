@@ -85,7 +85,7 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Append the contents of mesh1 into mesh0 as a deep copy.
+        /// Append the contents of dest into source as a deep copy.
         /// </summary>
         /// <param name="source">mesh that get appended to</param>
         /// <param name="dest">mesh that gets appended from</param>

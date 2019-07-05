@@ -17,7 +17,7 @@ namespace Common.Meshing.Constructors
         /// <summary>
         /// Create a triangle were a,b,c are ccw vertices.
         /// </summary>
-        public static void FromTriangle<MESH>(ITriangularMeshConstructor<MESH> constructor, 
+        public static void FromTriangle<MESH>(ITriangularMeshConstructor<MESH> constructor,
             Vector3d A, Vector3d B, Vector3d C)
         {
             constructor.PushTriangularMesh(3, 1);
@@ -28,7 +28,7 @@ namespace Common.Meshing.Constructors
             constructor.AddFace(0, 1, 2);
         }
 
-        public static void FromTertahedron<MESH>(ITriangularMeshConstructor<MESH> constructor, 
+        public static void FromTertahedron<MESH>(ITriangularMeshConstructor<MESH> constructor,
             Vector3d A, Vector3d B, Vector3d C, Vector3d D)
         {
             constructor.PushTriangularMesh(4, 1);
@@ -105,6 +105,70 @@ namespace Common.Meshing.Constructors
             }
         }
 
+        public static void FromMesh<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector3d[] positions, int[] indices, bool ccw)
+        {
+            int numPositions = positions.Length;
+            int numTriangles = indices.Length / 3;
+
+            constructor.PushTriangularMesh(numPositions, numTriangles);
+
+            Dictionary<Vector2i, int> edges = null;
+            if (constructor.SupportsFaceConnections)
+                edges = new Dictionary<Vector2i, int>(numTriangles * 3);
+
+            for (int i = 0; i < numPositions; i++)
+                constructor.AddVertex(positions[i]);
+
+            for (int i = 0; i < numTriangles; i++)
+            {
+                int a = indices[i * 3 + 0];
+                int b = indices[i * 3 + 1];
+                int c = indices[i * 3 + 2];
+
+                if (!ccw)
+                {
+                    int tmp = a;
+                    a = c;
+                    c = tmp;
+                }
+
+                constructor.AddFace(a, b, c);
+
+                if (edges != null)
+                {
+                    edges.Add(new Vector2i(a, b), i);
+                    edges.Add(new Vector2i(b, c), i);
+                    edges.Add(new Vector2i(c, a), i);
+                }
+            }
+
+            if (edges != null)
+            {
+                for (int i = 0; i < numTriangles; i++)
+                {
+                    int a = indices[i * 3 + 0];
+                    int b = indices[i * 3 + 1];
+                    int c = indices[i * 3 + 2];
+
+                    if (!ccw)
+                    {
+                        int tmp = a;
+                        a = c;
+                        c = tmp;
+                    }
+
+                    int n0, n1, n2;
+                    n0 = n1 = n2 = -1;
+
+                    edges.TryGetValue(new Vector2i(b, a), out n0);
+                    edges.TryGetValue(new Vector2i(c, b), out n1);
+                    edges.TryGetValue(new Vector2i(a, c), out n2);
+
+                    constructor.AddFaceConnection(i, n0, n1, n2);
+                }
+            }
+
+        }
 
         public static void FromIcosahedron<MESH>(ITriangularMeshConstructor<MESH> constructor, double scale)
         {

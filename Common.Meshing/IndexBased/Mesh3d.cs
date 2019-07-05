@@ -163,6 +163,17 @@ namespace Common.Meshing.IndexBased
         }
 
         /// <summary>
+        /// Rotate allpositions.
+        /// </summary>
+        public void Rotate(VECTOR rotate)
+        {
+            var q = Quaternion3d.FromEuler(rotate);
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] *= q;
+        }
+
+        /// <summary>
         /// Scale the positions.
         /// </summary>
         public void Scale(VECTOR scale)
