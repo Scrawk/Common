@@ -16,13 +16,10 @@ namespace Common.Meshing.HalfEdgeBased
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            var opp = edge.Opposite;
-            if (opp == null)
-                throw new NullReferenceException("Edge does not have a opposite edge.");
+            //Dont collapse boundary edges
+            if (edge.IsBoundary) return;
 
-            //Dont flip boundary edges
-            if (edge.Face == null) return;
-            if (opp.Face == null) return;
+            var opp = edge.Opposite;
 
             if (edge.EdgeCount != 3)
                 throw new NotSupportedException("Can only flip triangle edges");

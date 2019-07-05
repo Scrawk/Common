@@ -7,6 +7,53 @@ namespace Common.Meshing.HalfEdgeBased
 {
     public static partial class HBOperations
     {
+
+        /// <summary>
+        /// Returns true if collapsing this edge 
+        /// would flip the triangle face.
+        /// </summary>
+        /// <param name="edge">The edge to be collapsed</param>
+        /// <returns>true if triangle will be flipped.</returns>
+        public static bool FlipsTriangle(HBEdge edge)
+        {
+            var opp = edge.Opposite;
+            if (opp == null)
+                throw new NullReferenceException("Edge does not have a opposite edge.");
+
+            var v0 = edge.From;
+            var v1 = opp.From;
+
+            var newPos = (v0.GetPosition() + v1.GetPosition()) * 0.5;
+
+            foreach (var e in v0.EnumerateEdges())
+            {
+                if (e == edge) continue;
+
+                var p0 = e.From.GetPosition();
+                var p1 = e.To.GetPosition();
+                var p2 = e.Opposite.Next.To.GetPosition();
+                var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+                var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
+
+                if (Vector3d.Dot(n0, n1) < 0) return true;
+            }
+
+            foreach (var e in v1.EnumerateEdges())
+            {
+                if (e == opp) continue;
+
+                var p0 = e.From.GetPosition();
+                var p1 = e.To.GetPosition();
+                var p2 = e.Opposite.Next.To.GetPosition();
+                var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+                var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
+
+                if (Vector3d.Dot(n0, n1) < 0) return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Removes a edges and the two faces either side of it.
         /// </summary>
@@ -18,13 +65,10 @@ namespace Common.Meshing.HalfEdgeBased
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
-            var opp = edge.Opposite;
-            if (opp == null)
-                throw new NullReferenceException("Edge does not have a opposite edge.");
-
             //Dont collapse boundary edges
-            if (edge.Face == null) return null;
-            if (opp.Face == null) return null;
+            if (edge.IsBoundary) return null;
+
+            var opp = edge.Opposite;
 
             if (edge.EdgeCount != 3)
                 throw new NotSupportedException("Can only collapse triangle edges");
@@ -57,38 +101,6 @@ namespace Common.Meshing.HalfEdgeBased
 
             //move v0 to mid point on edge.
             var newPos = (v0.GetPosition() + v1.GetPosition()) * 0.5;
-
-            if (v0.Dimension == 3)
-            {
-                //check if any of the triangles flip 
-                //if moved to new pos. If so return.
-                foreach (var e in v0.EnumerateEdges())
-                {
-                    if (e == edge) continue;
-
-                    var p0 = e.From.GetPosition();
-                    var p1 = e.To.GetPosition();
-                    var p2 = e.Opposite.Next.To.GetPosition();
-                    var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
-                    var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
-
-                    if (Vector3d.Dot(n0, n1) < 0) return null;
-                }
-
-                foreach (var e in v1.EnumerateEdges())
-                {
-                    if (e == opp) continue;
-
-                    var p0 = e.From.GetPosition();
-                    var p1 = e.To.GetPosition();
-                    var p2 = e.Opposite.Next.To.GetPosition();
-                    var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
-                    var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
-
-                    if (Vector3d.Dot(n0, n1) < 0) return null;
-                }
-            }
-
             v0.SetPosition(newPos);
 
             //Make sure all the verts that get kept dont

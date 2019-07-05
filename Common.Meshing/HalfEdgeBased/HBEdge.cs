@@ -185,6 +185,21 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Is this edge on a boundary.
+        /// </summary>
+        public bool IsBoundary
+        {
+            get
+            {
+                if (Face == null) return true;
+                if (Opposite == null) return true;
+                if (Opposite.Face == null) return true;
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Clear edge of all connections.
         /// </summary>
         public virtual void Clear()
