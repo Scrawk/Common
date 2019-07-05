@@ -12,7 +12,8 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">A triangle mesh the edge belongs to.</param>
         /// <param name="edge">The edge to collapse</param>
-        public static VERTEX CollapseEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge)
+        /// <param name="remove">Should the objects be removed or tagged with -1</param>
+        public static VERTEX CollapseEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, bool remove)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -57,32 +58,35 @@ namespace Common.Meshing.HalfEdgeBased
             //move v0 to mid point on edge.
             var newPos = (v0.GetPosition() + v1.GetPosition()) * 0.5;
 
-            //check if any of the triangles flip 
-            //if moved to new pos. If so return.
-            foreach(var e in v0.EnumerateEdges())
+            if (v0.Dimension == 3)
             {
-                if (e == edge) continue;
+                //check if any of the triangles flip 
+                //if moved to new pos. If so return.
+                foreach (var e in v0.EnumerateEdges())
+                {
+                    if (e == edge) continue;
 
-                var p0 = e.From.GetPosition();
-                var p1 = e.To.GetPosition();
-                var p2 = e.Opposite.Next.To.GetPosition();
-                var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
-                var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
+                    var p0 = e.From.GetPosition();
+                    var p1 = e.To.GetPosition();
+                    var p2 = e.Opposite.Next.To.GetPosition();
+                    var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+                    var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
 
-                if (Vector3d.Dot(n0, n1) < 0) return null;
-            }
+                    if (Vector3d.Dot(n0, n1) < 0) return null;
+                }
 
-            foreach (var e in v1.EnumerateEdges())
-            {
-                if (e == opp) continue;
+                foreach (var e in v1.EnumerateEdges())
+                {
+                    if (e == opp) continue;
 
-                var p0 = e.From.GetPosition();
-                var p1 = e.To.GetPosition();
-                var p2 = e.Opposite.Next.To.GetPosition();
-                var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
-                var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
+                    var p0 = e.From.GetPosition();
+                    var p1 = e.To.GetPosition();
+                    var p2 = e.Opposite.Next.To.GetPosition();
+                    var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+                    var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
 
-                if (Vector3d.Dot(n0, n1) < 0) return null;
+                    if (Vector3d.Dot(n0, n1) < 0) return null;
+                }
             }
 
             v0.SetPosition(newPos);
@@ -111,20 +115,36 @@ namespace Common.Meshing.HalfEdgeBased
             opp3.Opposite = opp2;
 
             //Clear and remove unused objects.
-            e0.Clear();
-            e1.Clear();
-            e2.Clear();
-            e3.Clear();
+            v1.Clear();
+            edge.Clear(); opp.Clear();
+            e0.Clear(); e1.Clear();
+            e2.Clear(); e3.Clear();
+            f0.Clear(); f1.Clear();
 
-            mesh.Vertices.Remove(v1 as VERTEX);
-            mesh.Edges.Remove(edge as EDGE);
-            mesh.Edges.Remove(opp as EDGE);
-            mesh.Edges.Remove(e0 as EDGE);
-            mesh.Edges.Remove(e1 as EDGE);
-            mesh.Edges.Remove(e2 as EDGE);
-            mesh.Edges.Remove(e3 as EDGE);
-            mesh.Faces.Remove(f0 as FACE);
-            mesh.Faces.Remove(f1 as FACE);
+            if (remove)
+            {
+                mesh.Vertices.Remove(v1 as VERTEX);
+                mesh.Edges.Remove(edge as EDGE);
+                mesh.Edges.Remove(opp as EDGE);
+                mesh.Edges.Remove(e0 as EDGE);
+                mesh.Edges.Remove(e1 as EDGE);
+                mesh.Edges.Remove(e2 as EDGE);
+                mesh.Edges.Remove(e3 as EDGE);
+                mesh.Faces.Remove(f0 as FACE);
+                mesh.Faces.Remove(f1 as FACE);
+            }
+            else
+            {
+                v1.Tag = -1;
+                edge.Tag = -1;
+                opp.Tag = -1;
+                e0.Tag = -1;
+                e1.Tag = -1;
+                e2.Tag = -1;
+                e3.Tag = -1;
+                f0.Tag = -1;
+                f1.Tag = -1;
+            }
 
             //return the kept vertex.
             return v0 as VERTEX;

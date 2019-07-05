@@ -56,7 +56,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             var mesh = constructor.PopMesh();
             var edge = mesh.Edges[7];
-            HBOperations.CollapseEdge(mesh, edge);
+            HBOperations.CollapseEdge(mesh, edge, true);
 
             Assert.AreEqual(9, mesh.Vertices.Count);
             Assert.AreEqual(32, mesh.Edges.Count);

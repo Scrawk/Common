@@ -453,14 +453,14 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Check the mesh for debugging.
         /// </summary>
-        public string Check()
+        public string Check(bool quick = true)
         {
             int count = 0;
             var builder = new StringBuilder();
 
             for (int i = 0; i < Vertices.Count; i++)
             {
-                var errors = Vertices[i].Check(this);
+                var errors = Vertices[i].Check(this, quick);
 
                 if (!string.IsNullOrEmpty(errors))
                 {
@@ -472,7 +472,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             for (int i = 0; i < Edges.Count; i++)
             {
-                var errors = Edges[i].Check(this);
+                var errors = Edges[i].Check(this, quick);
                 if (!string.IsNullOrEmpty(errors))
                 {
                     builder.AppendLine("Edge " + i + " contains errors:");
@@ -483,7 +483,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             for (int i = 0; i < Faces.Count; i++)
             {
-                var errors = Faces[i].Check(this);
+                var errors = Faces[i].Check(this, quick);
                 if (!string.IsNullOrEmpty(errors))
                 {
                     builder.AppendLine("Face " + i + " contains errors:");

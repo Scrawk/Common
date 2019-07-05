@@ -69,7 +69,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Check the face is valid.
         /// </summary>
         /// <returns>A list of errors</returns>
-        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, bool quick)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -83,7 +83,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (Edge.Face != this)
                     builder.AppendLine("Edge is not part of this face.");
 
-                if (mesh.IndexOf(Edge) == -1)
+                if (!quick && mesh.IndexOf(Edge) == -1)
                     builder.AppendLine("Edge is not found in mesh.");
             }
 

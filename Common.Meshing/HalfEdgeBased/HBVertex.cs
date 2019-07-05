@@ -187,7 +187,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Check the vertex is valid.
         /// </summary>
         /// <returns>A list of errors</returns>
-        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, bool quick)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -201,7 +201,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (Edge.From != this)
                     builder.AppendLine("Edge is not from this vertex.");
 
-                if (mesh.IndexOf(Edge) == -1)
+                if (!quick && mesh.IndexOf(Edge) == -1)
                     builder.AppendLine("Edge is not found in mesh.");
             }
 

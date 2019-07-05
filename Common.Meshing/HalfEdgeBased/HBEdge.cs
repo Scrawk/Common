@@ -297,7 +297,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Check the edge is valid.
         /// </summary>
         /// <returns>A list of errors</returns>
-        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, bool quick)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
@@ -308,7 +308,7 @@ namespace Common.Meshing.HalfEdgeBased
                 builder.AppendLine("From is null.");
             else
             {
-                if (mesh.IndexOf(From) == -1)
+                if (!quick && mesh.IndexOf(From) == -1)
                     builder.AppendLine("From is not found in mesh.");
             }
 
@@ -319,7 +319,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (Opposite.Opposite != this)
                     builder.AppendLine("Opposite is not opposite to this edge.");
 
-                if (mesh.IndexOf(Opposite) == -1)
+                if (!quick && mesh.IndexOf(Opposite) == -1)
                     builder.AppendLine("Opposite is not found in mesh.");
             }
 
@@ -330,7 +330,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (Next.Previous != this)
                     builder.AppendLine("Next is not previous to this edge.");
 
-                if (mesh.IndexOf(Next) == -1)
+                if (!quick && mesh.IndexOf(Next) == -1)
                     builder.AppendLine("Next is not found in mesh.");
             }
 
@@ -341,7 +341,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (Previous.Next != this)
                     builder.AppendLine("Previous is not next to this edge.");
 
-                if (mesh.IndexOf(Previous) == -1)
+                if (!quick && mesh.IndexOf(Previous) == -1)
                     builder.AppendLine("Previous is not found in mesh.");
             }
 
