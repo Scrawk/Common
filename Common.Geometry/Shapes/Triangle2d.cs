@@ -177,6 +177,24 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        unsafe public VECTOR2 this[int i]
+        {
+            get
+            {
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("Triangle2d index out of range.");
+
+                fixed (Triangle2d* array = &this) { return ((VECTOR2*)array)[i]; }
+            }
+            set
+            {
+                if ((uint)i >= 3)
+                    throw new IndexOutOfRangeException("Triangle2d index out of range.");
+
+                fixed (VECTOR2* array = &A) { array[i] = value; }
+            }
+        }
+
         public static bool operator ==(Triangle2d t1, Triangle2d t2)
         {
             return t1.A == t2.A && t1.B == t2.B && t1.C == t2.C;

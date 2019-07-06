@@ -62,6 +62,24 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        unsafe public Vector2f this[int i]
+        {
+            get
+            {
+                if ((uint)i >= 2)
+                    throw new IndexOutOfRangeException("Segment2f index out of range.");
+
+                fixed (Segment2f* array = &this) { return ((Vector2f*)array)[i]; }
+            }
+            set
+            {
+                if ((uint)i >= 2)
+                    throw new IndexOutOfRangeException("Segment2f index out of range.");
+
+                fixed (Vector2f* array = &A) { array[i] = value; }
+            }
+        }
+
         public static bool operator ==(Segment2f s1, Segment2f s2)
         {
             return s1.A == s2.A && s1.B == s2.B;
