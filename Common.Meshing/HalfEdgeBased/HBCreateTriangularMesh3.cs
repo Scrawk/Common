@@ -29,7 +29,7 @@ namespace Common.Meshing.HalfEdgeBased
             return constructor.PopMesh();
         }
 
-        public static HBMesh3d FromMesh<MESH>(IList<Vector3d> positions, IList<int> indices, bool ccw)
+        public static HBMesh3d FromMesh(IList<Vector3d> positions, IList<int> indices, bool ccw)
         {
             var constructor = new HBMeshConstructor3d();
             CreateTriangularMesh3.FromMesh(constructor, positions, indices, ccw);
