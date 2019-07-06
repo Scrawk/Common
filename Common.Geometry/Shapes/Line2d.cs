@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
-using Common.Core.Numerics;
 
 namespace Common.Geometry.Shapes
 {

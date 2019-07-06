@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
-using Common.Core.Numerics;
 
 using REAL = System.Double;
 using VECTOR2 = Common.Core.Numerics.Vector2d;
