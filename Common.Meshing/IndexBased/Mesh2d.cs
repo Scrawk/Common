@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 
-using VECTOR = Common.Core.Numerics.Vector2d;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
 using MATRIX = Common.Core.Numerics.Matrix2x2d;
 
 namespace Common.Meshing.IndexBased
@@ -18,15 +18,15 @@ namespace Common.Meshing.IndexBased
 
         public Mesh2d(int numPositions)
         {
-            Positions = new VECTOR[numPositions];
+            Positions = new VECTOR2[numPositions];
         }
 
-        public Mesh2d(IList<VECTOR> positions)
+        public Mesh2d(IList<VECTOR2> positions)
         {
             SetPositions(positions);
         }
 
-        public Mesh2d(IList<VECTOR> positions, IList<int> indices)
+        public Mesh2d(IList<VECTOR2> positions, IList<int> indices)
         {
             SetPositions(positions);
             SetIndices(indices);
@@ -34,7 +34,7 @@ namespace Common.Meshing.IndexBased
 
         public Mesh2d(int numPositions, int numIndices)
         {
-            Positions = new VECTOR[numPositions];
+            Positions = new VECTOR2[numPositions];
             Indices = new int[numIndices];
         }
 
@@ -46,7 +46,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// The vertex positions.
         /// </summary>
-        public VECTOR[] Positions { get; private set; }
+        public VECTOR2[] Positions { get; private set; }
 
         /// <summary>
         /// Does the mesh have normals.
@@ -56,7 +56,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// The vertex normals.
         /// </summary>
-        public VECTOR[] Normals { get; private set; }
+        public VECTOR2[] Normals { get; private set; }
 
         /// <summary>
         /// Does the mesh have uvs.
@@ -66,14 +66,14 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// The vertex uvs.
         /// </summary>
-        public VECTOR[] TexCoords { get; private set; }
+        public VECTOR2[] TexCoords { get; private set; }
 
         /// <summary>
         /// Convert mesh to string.
         /// </summary>
         public override string ToString()
         {
-            return string.Format("[Mesh2d: Vertices={0}, Indices={1}]", VertexCount, IndicesCount);
+            return string.Format("[Mesh2d: Vertices={0}, Indices={1}]", VertexCount, IndexCount);
         }
 
         /// <summary>
@@ -99,14 +99,14 @@ namespace Common.Meshing.IndexBased
         public override void SetPositions(int size)
         {
             if (Positions == null || Positions.Length != size)
-                Positions = new VECTOR[size];
+                Positions = new VECTOR2[size];
         }
 
         /// <summary>
         /// Create the position array.
         /// </summary>
         /// <param name="indices">Array to copy from.</param>
-        public void SetPositions(IList<VECTOR> positions)
+        public void SetPositions(IList<VECTOR2> positions)
         {
             SetPositions(positions.Count);
             positions.CopyTo(Positions, 0);
@@ -130,14 +130,14 @@ namespace Common.Meshing.IndexBased
         public void SetNormals(int size)
         {
             if (Normals == null || Normals.Length != size)
-                Normals = new VECTOR[size];
+                Normals = new VECTOR2[size];
         }
 
         /// <summary>
         /// Create the normal array.
         /// </summary>
         /// <param name="indices">Array to copy from.</param>
-        public void SetNormals(IList<VECTOR> normals)
+        public void SetNormals(IList<VECTOR2> normals)
         {
             SetNormals(normals.Count);
             normals.CopyTo(Normals, 0);
@@ -150,14 +150,14 @@ namespace Common.Meshing.IndexBased
         public void SetTexCoords(int size)
         {
             if (TexCoords == null || TexCoords.Length != size)
-                TexCoords = new VECTOR[size];
+                TexCoords = new VECTOR2[size];
         }
 
         /// <summary>
         /// Create the uv array.
         /// </summary>
         /// <param name="indices">Array to copy from.</param>
-        public void SetTexCoords(IList<VECTOR> texCoords)
+        public void SetTexCoords(IList<VECTOR2> texCoords)
         {
             SetTexCoords(texCoords.Count);
             texCoords.CopyTo(TexCoords, 0);
@@ -166,7 +166,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// Translate the positions.
         /// </summary>
-        public void Translate(VECTOR translate)
+        public void Translate(VECTOR2 translate)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
@@ -176,7 +176,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// Scale the positions.
         /// </summary>
-        public void Scale(VECTOR scale)
+        public void Scale(VECTOR2 scale)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)

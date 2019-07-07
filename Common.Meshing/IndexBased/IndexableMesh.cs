@@ -23,7 +23,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// The number of indices in mesh.
         /// </summary>
-        public int IndicesCount { get { return (Indices != null) ? Indices.Length : 0; } }
+        public int IndexCount { get { return (Indices != null) ? Indices.Length : 0; } }
 
         /// <summary>
         /// The mesh indices.
@@ -123,7 +123,7 @@ namespace Common.Meshing.IndexBased
         public void FlipTriangles()
         {
             if (Indices == null) return;
-            int count = IndicesCount;
+            int count = IndexCount;
             for (int i = 0; i < count / 3; i++)
             {
                 int tmp = Indices[i * 3 + 0];
