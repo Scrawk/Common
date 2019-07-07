@@ -20,7 +20,7 @@ namespace Common.Meshing.Test.FaceBased
             var max = new Vector2d(1, 1);
 
             var constructor1 = new FBMeshConstructor2d();
-            CreateTriangularMesh2.FromBox(constructor1, min, max);
+            CreateTriangleMesh2.FromBox(constructor1, min, max);
             var source = constructor1.PopMesh();
 
             var mesh = new FBMesh2d();
@@ -48,7 +48,7 @@ namespace Common.Meshing.Test.FaceBased
             var max = new Vector2d(1, 1);
 
             var constructor1 = new FBMeshConstructor2d();
-            CreateTriangularMesh2.FromBox(constructor1, min, max);
+            CreateTriangleMesh2.FromBox(constructor1, min, max);
             var tmp = constructor1.PopMesh();
 
             var constructor2 = new HBMeshConstructor2d();

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Core.Numerics;
-using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Constructors
 {
@@ -12,7 +10,7 @@ namespace Common.Meshing.Constructors
     /// Create triangle meshes via mesh constructor.
     /// All triangles are CCW.
     /// </summary>
-    public static class CreateTriangularMesh3
+    public static class CreateTriangleMesh3
     {
         /// <summary>
         /// Create a triangle were a,b,c are ccw vertices.

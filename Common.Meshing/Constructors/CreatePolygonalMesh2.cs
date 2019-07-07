@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.Constructors
 {
@@ -10,7 +9,7 @@ namespace Common.Meshing.Constructors
     /// Create general meshes via mesh constructor.
     /// All faces are CCW.
     /// </summary>
-    public static class CreatePolygonalMesh2
+    public static class CreatePolygonMesh2
     {
 
         public static void FromBox<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
