@@ -4,32 +4,37 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
+using MATRIX3 = Common.Core.Numerics.Matrix3x3d;
+
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Circle2d : IEquatable<Circle2d>
     {
-        public Vector2d Center;
+        public VECTOR2 Center;
 
-        public double Radius;
+        public REAL Radius;
 
-        public Circle2d(Vector2d centre, double radius)
+        public Circle2d(VECTOR2 centre, REAL radius)
         {
             Center = centre;
             Radius = radius;
         }
 
-        public Circle2d(double x, double y, double radius)
+        public Circle2d(REAL x, REAL y, REAL radius)
         {
-            Center = new Vector2d(x, y);
+            Center = new VECTOR2(x, y);
             Radius = radius;
         }
 
         /// <summary>
         /// The squared radius.
         /// </summary>
-        public double Radius2
+        public REAL Radius2
         {
             get { return Radius * Radius; }
         }
@@ -37,7 +42,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The circles diameter.
         /// </summary>
-        public double Diameter
+        public REAL Diameter
         {
             get { return Radius * 2.0; }
         }
@@ -45,7 +50,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The circles area.
         /// </summary>
-        public double Area
+        public REAL Area
         {
             get { return Math.PI * Radius * Radius; }
         }
@@ -53,7 +58,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// the circles circumference.
         /// </summary>
-        public double Circumference
+        public REAL Circumference
         {
             get { return Math.PI * Radius * 2.0; }
         }
@@ -65,10 +70,10 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                double xmin = Center.x - Radius;
-                double xmax = Center.x + Radius;
-                double ymin = Center.y - Radius;
-                double ymax = Center.y + Radius;
+                REAL xmin = Center.x - Radius;
+                REAL xmax = Center.x + Radius;
+                REAL ymin = Center.y - Radius;
+                REAL ymax = Center.y + Radius;
 
                 return new Box2d(xmin, xmax, ymin, ymax);
             }
@@ -118,10 +123,10 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">a point that is not equal to the circles center</param>
         /// <returns>The closest point on the circumference</returns>
-        public Vector2d Closest(Vector2d p)
+        public VECTOR2 Closest(VECTOR2 p)
         {
-            Vector2d n = (Center - p).Normalized;
-            if (n == Vector2d.Zero) n = Vector2d.UnitX;
+            VECTOR2 n = (Center - p).Normalized;
+            if (n == VECTOR2.Zero) n = VECTOR2.UnitX;
             return Center + Radius * n;
         }
 
@@ -130,9 +135,9 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">The point</param>
         /// <returns>true if circle contains point</returns>
-        public bool Contains(Vector2d p)
+        public bool Contains(VECTOR2 p)
         {
-            return Vector2d.SqrDistance(Center, p) <= Radius2;
+            return VECTOR2.SqrDistance(Center, p) <= Radius2;
         }
 
         /// <summary>
@@ -142,23 +147,23 @@ namespace Common.Geometry.Shapes
         /// <returns>True if the circles intersect</returns>
         public bool Intersects(Circle2d circle)
         {
-            double r = Radius + circle.Radius;
-            return Vector2d.SqrDistance(Center, circle.Center) <= r * r;
+            REAL r = Radius + circle.Radius;
+            return VECTOR2.SqrDistance(Center, circle.Center) <= r * r;
         }
 
         /// <summary>
         /// Enlarge the circle so it contains the point p.
         /// </summary>
-        public static Circle2d Enlarge(Circle2d cir, Vector2d p)
+        public static Circle2d Enlarge(Circle2d cir, VECTOR2 p)
         {
-            Vector2d d = p - cir.Center;
-            double dist2 = d.SqrMagnitude;
+            VECTOR2 d = p - cir.Center;
+            REAL dist2 = d.SqrMagnitude;
 
             if (dist2 > cir.Radius2)
             {
-                double dist = Math.Sqrt(dist2);
-                double radius = (cir.Radius + dist) * 0.5;
-                double k = (radius - cir.Radius) / dist;
+                REAL dist = Math.Sqrt(dist2);
+                REAL radius = (cir.Radius + dist) * 0.5;
+                REAL k = (radius - cir.Radius) / dist;
 
                 cir.Center += d * k;
                 cir.Radius = radius;
@@ -170,10 +175,10 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Creates a circle that has both points on its circumference.
         /// </summary>
-        public static Circle2d CircumCircle(Vector2d p0, Vector2d p1)
+        public static Circle2d CircumCircle(VECTOR2 p0, VECTOR2 p1)
         {
             var centre = (p0 + p1) * 0.5;
-            var radius = Vector2d.Distance(p0, p1) * 0.5;
+            var radius = VECTOR2.Distance(p0, p1) * 0.5;
             var bounds = new Circle2d(centre, radius);
             return bounds;
         }
@@ -183,32 +188,32 @@ namespace Common.Geometry.Shapes
         /// From MathWorld: http://mathworld.wolfram.com/Circumcircle.html.
         /// Fails if the points are colinear.
         /// </summary>
-        public static Circle2d CircumCircle(Vector2d p0, Vector2d p1, Vector2d p2)
+        public static Circle2d CircumCircle(VECTOR2 p0, VECTOR2 p1, VECTOR2 p2)
         {
-            var m = new Matrix3x3d();
+            var m = new MATRIX3();
 
             // x, y, 1
-            m.SetRow(0, new Vector3d(p0.x, p0.y, 1));
-            m.SetRow(1, new Vector3d(p1.x, p1.y, 1));
-            m.SetRow(2, new Vector3d(p2.x, p2.y, 1));
-            double a = m.Determinant;
+            m.SetRow(0, new VECTOR3(p0.x, p0.y, 1));
+            m.SetRow(1, new VECTOR3(p1.x, p1.y, 1));
+            m.SetRow(2, new VECTOR3(p2.x, p2.y, 1));
+            REAL a = m.Determinant;
 
             // size, y, 1
-            m.SetColumn(0, new Vector3d(p0.SqrMagnitude, p1.SqrMagnitude, p2.SqrMagnitude));
-            double dx = -m.Determinant;
+            m.SetColumn(0, new VECTOR3(p0.SqrMagnitude, p1.SqrMagnitude, p2.SqrMagnitude));
+            REAL dx = -m.Determinant;
 
             // size, x, 1
-            m.SetColumn(1, new Vector3d(p0.x, p1.x, p2.x));
-            double dy = m.Determinant;
+            m.SetColumn(1, new VECTOR3(p0.x, p1.x, p2.x));
+            REAL dy = m.Determinant;
 
             // size, x, y
-            m.SetColumn(2, new Vector3d(p0.y, p1.y, p2.y));
-            double c = -m.Determinant;
+            m.SetColumn(2, new VECTOR3(p0.y, p1.y, p2.y));
+            REAL c = -m.Determinant;
 
-            double s = -1.0 / (2.0 * a);
+            REAL s = -1.0 / (2.0 * a);
 
-            var circumCenter = new Vector2d(s * dx, s * dy);
-            double radius = Math.Abs(s) * Math.Sqrt(dx * dx + dy * dy - 4.0 * a * c);
+            var circumCenter = new VECTOR2(s * dx, s * dy);
+            REAL radius = Math.Abs(s) * Math.Sqrt(dx * dx + dy * dy - 4.0 * a * c);
 
             return new Circle2d(circumCenter, radius);
         }
@@ -216,7 +221,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Creates a circle that contains all three point.
         /// </summary>
-        public static Circle2d CalculateBounds(Vector2d p0, Vector2d p1, Vector2d p2)
+        public static Circle2d CalculateBounds(VECTOR2 p0, VECTOR2 p1, VECTOR2 p2)
         {
             var bounds = CircumCircle(p0, p1);
             return Enlarge(bounds, p2);
@@ -226,7 +231,7 @@ namespace Common.Geometry.Shapes
         /// Calculate the minimum bounding circle that contains 
         /// all the points in the list.
         /// </summary>
-        public static Circle2d CalculateBounds(IList<Vector2d> points)
+        public static Circle2d CalculateBounds(IList<VECTOR2> points)
         {
             var idx = ExtremePoints(points);
 
@@ -242,7 +247,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Finds which axis contains the two most extreme points
         /// </summary>
-        private static Vector2i ExtremePoints(IList<Vector2d> points)
+        private static Vector2i ExtremePoints(IList<VECTOR2> points)
         {
             Vector2i min = new Vector2i();
             Vector2i max = new Vector2i();
@@ -258,8 +263,8 @@ namespace Common.Geometry.Shapes
                 if (v.y > points[max.y].y) max.y = i;
             }
 
-            var d2x = Vector2d.SqrDistance(points[max.x], points[min.x]);
-            var d2y = Vector2d.SqrDistance(points[max.y], points[min.y]);
+            var d2x = VECTOR2.SqrDistance(points[max.x], points[min.x]);
+            var d2y = VECTOR2.SqrDistance(points[max.y], points[min.y]);
 
             if (d2x > d2y)
                 return new Vector2i(min.x, max.x);

@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+
 namespace Common.Geometry.Shapes
 {
 
@@ -16,16 +19,16 @@ namespace Common.Geometry.Shapes
     public struct Line2d : IEquatable<Line2d>
     {
 
-        public double A, B, C;
+        public REAL A, B, C;
 
-        public Line2d(double a, double b, double c)
+        public Line2d(REAL a, REAL b, REAL c)
         {
             A = a;
             B = b;
             C = c;
         }
 
-        public Line2d(Vector2d p1, Vector2d p2)
+        public Line2d(VECTOR2 p1, VECTOR2 p2)
         {
             A = p1.y - p2.y;
             B = p2.x - p1.x;
@@ -101,13 +104,13 @@ namespace Common.Geometry.Shapes
         /// with the positive direction of the X axis.
         /// </summary>
         /// <returns></returns>
-        public double Angle
+        public REAL Angle
         {
             get
             {
                 if (IsVertical) return Math.PI / 2.0;
 
-                double atan = Math.Atan(-A / B);
+                REAL atan = Math.Atan(-A / B);
                 if (atan < 0) atan += Math.PI;
 
                 return atan;
@@ -161,7 +164,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Calculates the X coordinate of a point on the line by its Y coordinate.
         /// </summary>
-        public double XforY(double y)
+        public REAL XforY(REAL y)
         {
             return (-C - B * y) / A;
         }
@@ -169,7 +172,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Calculates the Y coordinate of a point on the line by its X coordinate.
         /// </summary>
-        public double YforX(double x)
+        public REAL YforX(REAL x)
         {
             return (-C - A * x) / B;
         }
@@ -179,7 +182,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns>if the point lies on the line</returns>
-        public bool PointOnLine(Vector2d p)
+        public bool PointOnLine(VECTOR2 p)
         {
             return A * p.x + B * p.y + C == 0;
         }
@@ -188,7 +191,7 @@ namespace Common.Geometry.Shapes
         /// Calculates the perpendicular line that
         /// passes through the given point.
         /// </summary>
-        public Line2d PerpendicularLine(Vector2d p)
+        public Line2d PerpendicularLine(VECTOR2 p)
         {
             return new Line2d(B, -A, -B * p.x + A * p.y);
         }
@@ -197,7 +200,7 @@ namespace Common.Geometry.Shapes
         /// Determines whether the point lies
         /// on the left side of the line.
         /// </summary>
-        public bool IsLeftPoint(Vector2d p)
+        public bool IsLeftPoint(VECTOR2 p)
         {
             return p.x < XforY(p.y);
         }
@@ -206,7 +209,7 @@ namespace Common.Geometry.Shapes
         /// Determines whether the point lies
         /// on the right side of the line.
         /// </summary>
-        public bool IsRightPoint(Vector2d p)
+        public bool IsRightPoint(VECTOR2 p)
         {
             return p.x > XforY(p.y);
         }
@@ -217,23 +220,23 @@ namespace Common.Geometry.Shapes
         /// <param name="line">the other line</param>
         /// <param name="p">intersection point</param>
         /// <returns>if lines intersect</returns>
-        public bool Intersects(Line2d line, out Vector2d p)
+        public bool Intersects(Line2d line, out VECTOR2 p)
         {
 
             if (B != 0)
             {
-                double f = line.A - line.B * A / B;
+                REAL f = line.A - line.B * A / B;
                 if (f == 0)
                 {
-                    p = Vector2d.Zero;
+                    p = VECTOR2.Zero;
                     return false;
                 }
                 else
                 {
-                    double x = (-line.C + line.B * C / B) / f;
-                    double y = (-C - A * x) / B;
+                    REAL x = (-line.C + line.B * C / B) / f;
+                    REAL y = (-C - A * x) / B;
 
-                    p = new Vector2d(x, y);
+                    p = new VECTOR2(x, y);
                     return true;
                 }
             }
@@ -241,23 +244,23 @@ namespace Common.Geometry.Shapes
             {
                 if (A == 0)
                 {
-                    p = Vector2d.Zero;
+                    p = VECTOR2.Zero;
                     return false;
                 }
                 else
                 {
-                    double f = line.B - line.A * B / A;
+                    REAL f = line.B - line.A * B / A;
                     if (f == 0)
                     {
-                        p = Vector2d.Zero;
+                        p = VECTOR2.Zero;
                         return false;
                     }
                     else
                     {
-                        double y = (-line.C + line.A * C / A) / f;
-                        double x = (-C - B * y) / A;
+                        REAL y = (-line.C + line.A * C / A) / f;
+                        REAL x = (-C - B * y) / A;
 
-                        p = new Vector2d(x, y);
+                        p = new VECTOR2(x, y);
                         return true;
                     }
                 }

@@ -238,6 +238,11 @@ namespace Common.Geometry.Shapes
             return new Triangle2f(m * tri.A, m * tri.B, m * tri.C);
         }
 
+        public static explicit operator Triangle2f(Triangle2d tri)
+        {
+            return new Triangle2f((VECTOR2)tri.A, (VECTOR2)tri.B, (VECTOR2)tri.C);
+        }
+
         public static bool operator ==(Triangle2f t1, Triangle2f t2)
         {
             return t1.A == t2.A && t1.B == t2.B && t1.C == t2.C;

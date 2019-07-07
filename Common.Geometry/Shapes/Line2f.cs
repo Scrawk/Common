@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Single;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
+
 namespace Common.Geometry.Shapes
 {
 
@@ -16,16 +19,16 @@ namespace Common.Geometry.Shapes
     public struct Line2f : IEquatable<Line2f>
     {
 
-        public float A, B, C;
+        public REAL A, B, C;
 
-        public Line2f(float a, float b, float c)
+        public Line2f(REAL a, REAL b, REAL c)
         {
             A = a;
             B = b;
             C = c;
         }
 
-        public Line2f(Vector2f p1, Vector2f p2)
+        public Line2f(VECTOR2 p1, VECTOR2 p2)
         {
             A = p1.y - p2.y;
             B = p2.x - p1.x;
@@ -101,22 +104,22 @@ namespace Common.Geometry.Shapes
         /// with the positive direction of the X axis.
         /// </summary>
         /// <returns></returns>
-        public float Angle
+        public REAL Angle
         {
             get
             {
-                if (IsVertical) return (float)(Math.PI / 2.0);
+                if (IsVertical) return FMath.PI / 2.0f;
 
-                double atan = Math.Atan(-A / B);
-                if (atan < 0) atan += Math.PI;
+                REAL atan = FMath.Atan(-A / B);
+                if (atan < 0) atan += FMath.PI;
 
-                return (float)atan;
+                return atan;
             }
         }
 
-        public static explicit operator Line2f(Line2d line)
+        public static implicit operator Line2f(Line2d line)
         {
-            return new Line2f((float)line.A, (float)line.B, (float)line.C);
+            return new Line2f((REAL)line.A, (REAL)line.B, (REAL)line.C);
         }
 
         public static bool operator ==(Line2f i1, Line2f i2)
@@ -161,7 +164,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Calculates the X coordinate of a point on the line by its Y coordinate.
         /// </summary>
-        public float XforY(float y)
+        public REAL XforY(REAL y)
         {
             return (-C - B * y) / A;
         }
@@ -169,7 +172,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Calculates the Y coordinate of a point on the line by its X coordinate.
         /// </summary>
-        public float YforX(float x)
+        public REAL YforX(REAL x)
         {
             return (-C - A * x) / B;
         }
@@ -179,7 +182,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns>if the point lies on the line</returns>
-        public bool PointOnLine(Vector2f p)
+        public bool PointOnLine(VECTOR2 p)
         {
             return A * p.x + B * p.y + C == 0;
         }
@@ -188,7 +191,7 @@ namespace Common.Geometry.Shapes
         /// Calculates the perpendicular line that
         /// passes through the given point.
         /// </summary>
-        public Line2f PerpendicularLine(Vector2f p)
+        public Line2f PerpendicularLine(VECTOR2 p)
         {
             return new Line2f(B, -A, -B * p.x + A * p.y);
         }
@@ -197,7 +200,7 @@ namespace Common.Geometry.Shapes
         /// Determines whether the point lies
         /// on the left side of the line.
         /// </summary>
-        public bool IsLeftPoint(Vector2f p)
+        public bool IsLeftPoint(VECTOR2 p)
         {
             return p.x < XforY(p.y);
         }
@@ -206,7 +209,7 @@ namespace Common.Geometry.Shapes
         /// Determines whether the point lies
         /// on the right side of the line.
         /// </summary>
-        public bool IsRightPoint(Vector2f p)
+        public bool IsRightPoint(VECTOR2 p)
         {
             return p.x > XforY(p.y);
         }
@@ -217,23 +220,23 @@ namespace Common.Geometry.Shapes
         /// <param name="line">the other line</param>
         /// <param name="p">intersection point</param>
         /// <returns>if lines intersect</returns>
-        public bool Intersects(Line2f line, out Vector2f p)
+        public bool Intersects(Line2f line, out VECTOR2 p)
         {
-            
+
             if (B != 0)
             {
-                float f = line.A - line.B * A / B;
+                REAL f = line.A - line.B * A / B;
                 if (f == 0)
                 {
-                    p = Vector2f.Zero;
+                    p = VECTOR2.Zero;
                     return false;
                 }
                 else
                 {
-                    float x = (-line.C + line.B * C / B) / f;
-                    float y = (-C - A * x) / B;
+                    REAL x = (-line.C + line.B * C / B) / f;
+                    REAL y = (-C - A * x) / B;
 
-                    p = new Vector2f(x, y);
+                    p = new VECTOR2(x, y);
                     return true;
                 }
             }
@@ -241,23 +244,23 @@ namespace Common.Geometry.Shapes
             {
                 if (A == 0)
                 {
-                    p = Vector2f.Zero;
+                    p = VECTOR2.Zero;
                     return false;
                 }
                 else
                 {
-                    float f = line.B - line.A * B / A;
+                    REAL f = line.B - line.A * B / A;
                     if (f == 0)
                     {
-                        p = Vector2f.Zero;
+                        p = VECTOR2.Zero;
                         return false;
                     }
                     else
                     {
-                        float y = (-line.C + line.A * C / A) / f;
-                        float x = (-C - B * y) / A;
+                        REAL y = (-line.C + line.A * C / A) / f;
+                        REAL x = (-C - B * y) / A;
 
-                        p = new Vector2f(x, y);
+                        p = new VECTOR2(x, y);
                         return true;
                     }
                 }

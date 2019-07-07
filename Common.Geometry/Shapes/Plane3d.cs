@@ -4,6 +4,10 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
+
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -11,17 +15,17 @@ namespace Common.Geometry.Shapes
     public struct Plane3d : IEquatable<Plane3d>
     {
 
-        public Vector3d Normal;
+        public VECTOR3 Normal;
 
-        public Vector3d Position;
+        public VECTOR3 Position;
 
-        public Plane3d(Vector3d position, Vector3d normal)
+        public Plane3d(VECTOR3 position, VECTOR3 normal)
         {
             Normal = normal;
             Position = position;
         }
 
-        public Plane3d(Vector3d normal, double distance)
+        public Plane3d(VECTOR3 normal, REAL distance)
         {
             Normal = normal;
             Position = Normal * distance;
@@ -30,19 +34,19 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// From three noncollinear points (ordered ccw).
         /// </summary>
-        public Plane3d(Vector3d a, Vector3d b, Vector3d c)
+        public Plane3d(VECTOR3 a, VECTOR3 b, VECTOR3 c)
         {
-            Normal = Vector3d.Cross(b - a, c - a);
+            Normal = VECTOR3.Cross(b - a, c - a);
             Normal.Normalize();
-            Position = Normal * Vector3d.Dot(Normal, a);
+            Position = Normal * VECTOR3.Dot(Normal, a);
         }
 
-        public double Distance
+        public REAL Distance
         {
             get { return Position.Magnitude; }
         }
 
-        public double SqrDistance
+        public REAL SqrDistance
         {
             get { return Position.SqrMagnitude; }
         }
@@ -85,9 +89,9 @@ namespace Common.Geometry.Shapes
             return string.Format("[Plane3d: Positions{0}, Normal={1}]", Position, Normal);
         }
 
-        public Vector3d Closest(Vector3d p)
+        public VECTOR3 Closest(VECTOR3 p)
         {
-            double t = Vector3d.Dot(Normal, p) - Distance;
+            REAL t = VECTOR3.Dot(Normal, p) - Distance;
             return p - t * Normal;
         }
 

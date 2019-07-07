@@ -49,7 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Curves\Bezier2fTest.cs" />
+    <Compile Include="Curves\Bezier2dTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

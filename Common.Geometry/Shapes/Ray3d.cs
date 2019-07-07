@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Double;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
+
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -10,11 +13,11 @@ namespace Common.Geometry.Shapes
     public struct Ray3d : IEquatable<Ray3d>
     {
 
-        public Vector3f Position;
+        public VECTOR3 Position;
 
-        public Vector3f Direction;
+        public VECTOR3 Direction;
 
-        public Ray3d(Vector3f position, Vector3f direction)
+        public Ray3d(VECTOR3 position, VECTOR3 direction)
         {
             Position = position;
             Direction = direction;
@@ -64,18 +67,18 @@ namespace Common.Geometry.Shapes
         /// <param name="sphere">the sphere</param>
         /// <param name="t">Intersection point = Position + t * Direction</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Sphere3d sphere, out double t)
+        public bool Intersects(Sphere3d sphere, out REAL t)
         {
             t = 0;
-            Vector3d m = Position - sphere.Center;
+            VECTOR3 m = Position - sphere.Center;
 
-            double b = Vector3d.Dot(m, Direction);
-            double c = Vector3d.Dot(m, m) - sphere.Radius2;
+            REAL b = VECTOR3.Dot(m, Direction);
+            REAL c = VECTOR3.Dot(m, m) - sphere.Radius2;
 
-            if (c > 0.0f && b > 0.0f) return false;
+            if (c > 0.0 && b > 0.0) return false;
 
-            double discr = b * b - c;
-            if (discr < 0.0f) return false;
+            REAL discr = b * b - c;
+            if (discr < 0.0) return false;
 
             t = -b - Math.Sqrt(discr);
 

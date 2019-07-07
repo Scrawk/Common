@@ -93,6 +93,33 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2d ab
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2d(a, b); }
+        }
+
+        /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2d bc
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2d(b, c); }
+        }
+
+        /// <summary>
+        /// Convert to a 2 dimension vector.
+        /// </summary>
+        public Vector2d ca
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return new Vector2d(c, a); }
+        }
+
+        /// <summary>
         /// Convert to a 4 dimension vector.
         /// </summary>
         public Vector4d xyz0

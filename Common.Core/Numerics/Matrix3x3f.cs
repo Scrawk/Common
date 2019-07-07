@@ -428,7 +428,7 @@ namespace Common.Core.Numerics
                 int hash = (int)2166136261;
 
                 for (int i = 0; i < 9; i++)
-                    hash ^= this[i].GetHashCode();
+                    hash = (hash * 16777619) ^ this[i].GetHashCode();
 
                 return hash;
             }

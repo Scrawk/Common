@@ -89,6 +89,51 @@ namespace Common.Geometry.Shapes
             get { return (Max.x - Min.x) * (Max.y - Min.y); } 
         }
 
+        public static Box2d operator +(Box2d box, REAL s)
+        {
+            return new Box2d(box.Min + s, box.Max + s);
+        }
+
+        public static Box2d operator +(Box2d box, VECTOR2 v)
+        {
+            return new Box2d(box.Min + v, box.Max + v);
+        }
+
+        public static Box2d operator -(Box2d box, REAL s)
+        {
+            return new Box2d(box.Min - s, box.Max - s);
+        }
+
+        public static Box2d operator -(Box2d box, VECTOR2 v)
+        {
+            return new Box2d(box.Min - v, box.Max - v);
+        }
+
+        public static Box2d operator *(Box2d box, REAL s)
+        {
+            return new Box2d(box.Min * s, box.Max * s);
+        }
+
+        public static Box2d operator *(Box2d box, VECTOR2 v)
+        {
+            return new Box2d(box.Min * v, box.Max * v);
+        }
+
+        public static Box2d operator /(Box2d box, REAL s)
+        {
+            return new Box2d(box.Min / s, box.Max / s);
+        }
+
+        public static Box2d operator /(Box2d box, VECTOR2 v)
+        {
+            return new Box2d(box.Min / v, box.Max / v);
+        }
+
+        public static Box2d operator *(Box2d box, MATRIX2 m)
+        {
+            return new Box2d(m * box.Min, m * box.Max);
+        }
+
         public static implicit operator Box2d(Box2f box)
         {
             return new Box2d(box.Min, box.Max);

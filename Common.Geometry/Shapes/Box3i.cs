@@ -7,6 +7,7 @@ using Common.Core.Numerics;
 using REAL = System.Int32;
 using VECTOR2 = Common.Core.Numerics.Vector2i;
 using VECTOR3 = Common.Core.Numerics.Vector3i;
+using VECTOR4 = Common.Core.Numerics.Vector4i;
 
 namespace Common.Geometry.Shapes
 {
@@ -36,9 +37,9 @@ namespace Common.Geometry.Shapes
             Max = max;
         }
 
-        public Vector3f Center 
+        public Vector3d Center 
         { 
-            get { return new Vector3f((Min + Max).x * 0.5f, (Min + Max).y * 0.5f, (Min + Max).z * 0.5f); } 
+            get { return new Vector3d((Min + Max).x * 0.5, (Min + Max).y * 0.5, (Min + Max).z * 0.5); } 
         }
 
         public VECTOR3 Size 
@@ -76,6 +77,46 @@ namespace Common.Geometry.Shapes
                 VECTOR3 d = Max - Min;
                 return 2 * (d.x * d.y + d.x * d.z + d.y * d.z);
             }
+        }
+
+        public static Box3i operator +(Box3i box, REAL s)
+        {
+            return new Box3i(box.Min + s, box.Max + s);
+        }
+
+        public static Box3i operator +(Box3i box, VECTOR3 v)
+        {
+            return new Box3i(box.Min + v, box.Max + v);
+        }
+
+        public static Box3i operator -(Box3i box, REAL s)
+        {
+            return new Box3i(box.Min - s, box.Max - s);
+        }
+
+        public static Box3i operator -(Box3i box, VECTOR3 v)
+        {
+            return new Box3i(box.Min - v, box.Max - v);
+        }
+
+        public static Box3i operator *(Box3i box, REAL s)
+        {
+            return new Box3i(box.Min * s, box.Max * s);
+        }
+
+        public static Box3i operator *(Box3i box, VECTOR3 v)
+        {
+            return new Box3i(box.Min * v, box.Max * v);
+        }
+
+        public static Box3i operator /(Box3i box, REAL s)
+        {
+            return new Box3i(box.Min / s, box.Max / s);
+        }
+
+        public static Box3i operator /(Box3i box, VECTOR3 v)
+        {
+            return new Box3i(box.Min / v, box.Max / v);
         }
 
         public static explicit operator Box3i(Box3f box)
@@ -152,17 +193,17 @@ namespace Common.Geometry.Shapes
             corners[7] = new Vector3d(Min.x, Max.y, Max.z);
         }
 
-        public void GetCorners(IList<Vector4i> corners)
+        public void GetCorners(IList<VECTOR4> corners)
         {
-            corners[0] = new Vector4i(Min.x, Min.y, Min.z, 1);
-            corners[1] = new Vector4i(Max.x, Min.y, Min.z, 1);
-            corners[2] = new Vector4i(Max.x, Min.y, Max.z, 1);
-            corners[3] = new Vector4i(Min.x, Min.y, Max.z, 1);
+            corners[0] = new VECTOR4(Min.x, Min.y, Min.z, 1);
+            corners[1] = new VECTOR4(Max.x, Min.y, Min.z, 1);
+            corners[2] = new VECTOR4(Max.x, Min.y, Max.z, 1);
+            corners[3] = new VECTOR4(Min.x, Min.y, Max.z, 1);
 
-            corners[4] = new Vector4i(Min.x, Max.y, Min.z, 1);
-            corners[5] = new Vector4i(Max.x, Max.y, Min.z, 1);
-            corners[6] = new Vector4i(Max.x, Max.y, Max.z, 1);
-            corners[7] = new Vector4i(Min.x, Max.y, Max.z, 1);
+            corners[4] = new VECTOR4(Min.x, Max.y, Min.z, 1);
+            corners[5] = new VECTOR4(Max.x, Max.y, Min.z, 1);
+            corners[6] = new VECTOR4(Max.x, Max.y, Max.z, 1);
+            corners[7] = new VECTOR4(Min.x, Max.y, Max.z, 1);
         }
 
         /// <summary>

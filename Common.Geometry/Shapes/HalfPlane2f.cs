@@ -4,6 +4,10 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Single;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
+using LINE2 = Common.Geometry.Shapes.Line2f;
+
 namespace Common.Geometry.Shapes
 {
 
@@ -17,7 +21,7 @@ namespace Common.Geometry.Shapes
     public struct HalfPlane2f : IEquatable<HalfPlane2f>
     {
 
-        public Line2f Line;
+        public LINE2 Line;
 
         public bool RightSide;
 
@@ -29,7 +33,7 @@ namespace Common.Geometry.Shapes
         /// <param name="rightSide">rightSide true, if the 
         /// halfplanes lies on the right side of the line, 
         /// false otherwise</param>
-        public HalfPlane2f(Line2f line, bool rightSide)
+        public HalfPlane2f(LINE2 line, bool rightSide)
         {
             Line = line;
             RightSide = rightSide;
@@ -63,7 +67,7 @@ namespace Common.Geometry.Shapes
 
         public static explicit operator HalfPlane2f(HalfPlane2d hp)
         {
-            return new HalfPlane2f((Line2f)hp.Line, hp.RightSide);
+            return new HalfPlane2f((LINE2)hp.Line, hp.RightSide);
         }
 
         public static bool operator ==(HalfPlane2f h1, HalfPlane2f h2)
@@ -109,7 +113,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns>if the point lies in the left halfplane, false otherwise</returns>
-        public bool Contains(Vector2f p)
+        public bool Contains(VECTOR2 p)
         {
             if (IsLeftBoundary)
             {

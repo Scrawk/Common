@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Single;
+using VECTOR3 = Common.Core.Numerics.Vector3f;
+
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -10,11 +13,11 @@ namespace Common.Geometry.Shapes
     public struct Ray3f : IEquatable<Ray3f>
     {
 
-        public Vector3f Position;
+        public VECTOR3 Position;
 
-        public Vector3f Direction;
+        public VECTOR3 Direction;
 
-        public Ray3f(Vector3f position, Vector3f direction)
+        public Ray3f(VECTOR3 position, VECTOR3 direction)
         {
             Position = position;
             Direction = direction;
@@ -64,20 +67,20 @@ namespace Common.Geometry.Shapes
         /// <param name="sphere">the sphere</param>
         /// <param name="t">Intersection point = Position + t * Direction</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Sphere3f sphere, out float t)
+        public bool Intersects(Sphere3f sphere, out REAL t)
         {
             t = 0;
-            Vector3f m = Position - sphere.Center;
+            VECTOR3 m = Position - sphere.Center;
 
-            float b = Vector3f.Dot(m, Direction);
-            float c = Vector3f.Dot(m, m) - sphere.Radius2;
+            REAL b = VECTOR3.Dot(m, Direction);
+            REAL c = VECTOR3.Dot(m, m) - sphere.Radius2;
 
-            if (c > 0.0f && b > 0.0f) return false;
+            if (c > 0.0 && b > 0.0) return false;
 
-            float discr = b * b - c;
-            if (discr < 0.0f) return false;
+            REAL discr = b * b - c;
+            if (discr < 0.0) return false;
 
-            t = -b - (float)Math.Sqrt(discr);
+            t = -b - FMath.Sqrt(discr);
 
             if (t < 0) t = 0;
             return true;

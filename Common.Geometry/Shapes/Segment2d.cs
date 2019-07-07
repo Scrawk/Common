@@ -3,6 +3,10 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using MATRIX2 = Common.Core.Numerics.Matrix2x2d;
+
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -10,38 +14,38 @@ namespace Common.Geometry.Shapes
     public struct Segment2d : IEquatable<Segment2d>
     {
 
-        public Vector2d A;
+        public VECTOR2 A;
 
-        public Vector2d B;
+        public VECTOR2 B;
 
-        public Segment2d(Vector2d a, Vector2d b)
+        public Segment2d(VECTOR2 a, VECTOR2 b)
         {
             A = a;
             B = b;
         }
 
-        public Segment2d(double ax, double ay, double bx, double by)
+        public Segment2d(REAL ax, REAL ay, REAL bx, REAL by)
         {
-            A = new Vector2d(ax, ay);
-            B = new Vector2d(bx, by);
+            A = new VECTOR2(ax, ay);
+            B = new VECTOR2(bx, by);
         }
 
-        public Vector2d Center
+        public VECTOR2 Center
         {
             get { return (A + B) * 0.5f; }
         }
 
-        public double Length
+        public REAL Length
         {
-            get { return Vector2d.Distance(A, B); }
+            get { return VECTOR2.Distance(A, B); }
         }
 
-        public double SqrLength
+        public REAL SqrLength
         {
-            get { return Vector2d.SqrDistance(A, B); }
+            get { return VECTOR2.SqrDistance(A, B); }
         }
 
-        public Vector2d Normal
+        public VECTOR2 Normal
         {
             get
             {
@@ -53,31 +57,81 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                double xmin = Math.Min(A.x, B.x);
-                double xmax = Math.Max(A.x, B.x);
-                double ymin = Math.Min(A.y, B.y);
-                double ymax = Math.Max(A.y, B.y);
+                REAL xmin = Math.Min(A.x, B.x);
+                REAL xmax = Math.Max(A.x, B.x);
+                REAL ymin = Math.Min(A.y, B.y);
+                REAL ymax = Math.Max(A.y, B.y);
 
                 return new Box2d(xmin, xmax, ymin, ymax);
             }
         }
 
-        unsafe public Vector2d this[int i]
+        unsafe public VECTOR2 this[int i]
         {
             get
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment2d index out of range.");
 
-                fixed (Segment2d* array = &this) { return ((Vector2d*)array)[i]; }
+                fixed (Segment2d* array = &this) { return ((VECTOR2*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment2d index out of range.");
 
-                fixed (Vector2d* array = &A) { array[i] = value; }
+                fixed (VECTOR2* array = &A) { array[i] = value; }
             }
+        }
+
+        public static Segment2d operator +(Segment2d seg, REAL s)
+        {
+            return new Segment2d(seg.A + s, seg.B + s);
+        }
+
+        public static Segment2d operator +(Segment2d seg, VECTOR2 v)
+        {
+            return new Segment2d(seg.A + v, seg.B + v);
+        }
+
+        public static Segment2d operator -(Segment2d seg, REAL s)
+        {
+            return new Segment2d(seg.A - s, seg.B - s);
+        }
+
+        public static Segment2d operator -(Segment2d seg, VECTOR2 v)
+        {
+            return new Segment2d(seg.A - v, seg.B - v);
+        }
+
+        public static Segment2d operator *(Segment2d seg, REAL s)
+        {
+            return new Segment2d(seg.A * s, seg.B * s);
+        }
+
+        public static Segment2d operator *(Segment2d seg, VECTOR2 v)
+        {
+            return new Segment2d(seg.A * v, seg.B * v);
+        }
+
+        public static Segment2d operator /(Segment2d seg, REAL s)
+        {
+            return new Segment2d(seg.A / s, seg.B / s);
+        }
+
+        public static Segment2d operator /(Segment2d seg, VECTOR2 v)
+        {
+            return new Segment2d(seg.A / v, seg.B / v);
+        }
+
+        public static Segment2d operator *(Segment2d seg, MATRIX2 m)
+        {
+            return new Segment2d(m * seg.A, m * seg.B);
+        }
+
+        public static implicit operator Segment2d(Segment2f seg)
+        {
+            return new Segment2d(seg.A, seg.B);
         }
 
         public static bool operator ==(Segment2d s1, Segment2d s2)
@@ -124,7 +178,7 @@ namespace Common.Geometry.Shapes
         /// <param name="seg">other segment</param>
         public bool Intersects(Segment2d seg)
         {
-            return Intersects(seg, out double t);
+            return Intersects(seg, out REAL t);
         }
 
         /// <summary>
@@ -133,16 +187,16 @@ namespace Common.Geometry.Shapes
         /// <param name="seg">other segment</param>
         /// <param name="t">Intersection point = A + t * (B - A)</param>
         /// <returns>If they intersect</returns>
-        public bool Intersects(Segment2d seg, out double t)
+        public bool Intersects(Segment2d seg, out REAL t)
         {
-            double area1 = SignedTriArea(A, B, seg.B);
-            double area2 = SignedTriArea(A, B, seg.A);
+            REAL area1 = SignedTriArea(A, B, seg.B);
+            REAL area2 = SignedTriArea(A, B, seg.A);
             t = 0.0;
 
             if (area1 * area2 < 0.0)
             {
-                double area3 = SignedTriArea(seg.A, seg.B, A);
-                double area4 = area3 + area2 - area1;
+                REAL area3 = SignedTriArea(seg.A, seg.B, A);
+                REAL area4 = area3 + area2 - area1;
 
                 if (area3 * area4 < 0.0)
                 {
@@ -161,25 +215,25 @@ namespace Common.Geometry.Shapes
         /// <param name="s">Intersection point = A + s * (B - A)</param>
         /// <param name="t">Intersection point = seg.A + t * (seg.B - seg.A)</param>
         /// <returns>If they intersect</returns>
-        public bool Intersects(Segment2d seg, out double s, out double t)
+        public bool Intersects(Segment2d seg, out REAL s, out REAL t)
         {
 
-            double area1 = SignedTriArea(A, B, seg.B);
-            double area2 = SignedTriArea(A, B, seg.A);
+            REAL area1 = SignedTriArea(A, B, seg.B);
+            REAL area2 = SignedTriArea(A, B, seg.A);
             s = 0.0;
             t = 0.0;
 
             if (area1 * area2 < 0.0)
             {
-                double area3 = SignedTriArea(seg.A, seg.B, A);
-                double area4 = area3 + area2 - area1;
+                REAL area3 = SignedTriArea(seg.A, seg.B, A);
+                REAL area4 = area3 + area2 - area1;
 
                 if (area3 * area4 < 0.0)
                 {
                     s = area3 / (area3 - area4);
 
-                    double a2 = area2;
-                    double a3 = area3;
+                    REAL a2 = area2;
+                    REAL a3 = area3;
 
                     area1 = SignedTriArea(seg.A, seg.B, B);
                     area2 = a3;
@@ -197,9 +251,9 @@ namespace Common.Geometry.Shapes
         /// The closest point on segment to point.
         /// </summary>
         /// <param name="p">point</param>
-        public Vector2d Closest(Vector2d p)
+        public VECTOR2 Closest(VECTOR2 p)
         {
-            double t;
+            REAL t;
             Closest(p, out t);
             return A + (B - A) * t;
         }
@@ -209,13 +263,13 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <param name="t">closest point = A + t * (B - A)</param>
-        public void Closest(Vector2d p, out double t)
+        public void Closest(VECTOR2 p, out REAL t)
         {
             t = 0.0;
-            Vector2d ab = B - A;
-            Vector2d ap = p - A;
+            VECTOR2 ab = B - A;
+            VECTOR2 ap = p - A;
 
-            double len = ab.x * ab.x + ab.y * ab.y;
+            REAL len = ab.x * ab.x + ab.y * ab.y;
             if (len < DMath.EPS) return;
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
@@ -228,7 +282,7 @@ namespace Common.Geometry.Shapes
         /// <param name="seg">the other segment</param>
         public Segment2d Closest(Segment2d seg)
         {
-            double s, t;
+            REAL s, t;
             Closest(seg, out s, out t);
             return new Segment2d(A + (B - A) * s, seg.A + (seg.B - seg.A) * t);
         }
@@ -239,16 +293,16 @@ namespace Common.Geometry.Shapes
         /// <param name="seg">the other segment</param>
         /// <param name="s">closest point = A + s * (B - A)</param>
         /// <param name="t">other closest point = seg.A + t * (seg.B - seg.A)</param>
-        public void Closest(Segment2d seg, out double s, out double t)
+        public void Closest(Segment2d seg, out REAL s, out REAL t)
         {
 
-            Vector2d ab0 = B - A;
-            Vector2d ab1 = seg.B - seg.A;
-            Vector2d a01 = A - seg.A;
+            VECTOR2 ab0 = B - A;
+            VECTOR2 ab1 = seg.B - seg.A;
+            VECTOR2 a01 = A - seg.A;
 
-            double d00 = Vector2d.Dot(ab0, ab0);
-            double d11 = Vector2d.Dot(ab1, ab1);
-            double d1 = Vector2d.Dot(ab1, a01);
+            REAL d00 = VECTOR2.Dot(ab0, ab0);
+            REAL d11 = VECTOR2.Dot(ab1, ab1);
+            REAL d1 = VECTOR2.Dot(ab1, a01);
 
             s = 0;
             t = 0;
@@ -265,7 +319,7 @@ namespace Common.Geometry.Shapes
             }
             else
             {
-                double c = Vector2d.Dot(ab0, a01);
+                REAL c = VECTOR2.Dot(ab0, a01);
 
                 if (d11 < DMath.EPS)
                 {
@@ -276,8 +330,8 @@ namespace Common.Geometry.Shapes
                 else
                 {
                     //The generate non degenerate case starts here.
-                    double d2 = Vector2d.Dot(ab0, ab1);
-                    double denom = d00 * d11 - d2 * d2;
+                    REAL d2 = VECTOR2.Dot(ab0, ab1);
+                    REAL denom = d00 * d11 - d2 * d2;
 
                     //if segments not parallel compute closest point and clamp to segment.
                     if (!DMath.IsZero(denom))
@@ -301,7 +355,7 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        private static double SignedTriArea(Vector2d a, Vector2d b, Vector2d c)
+        private static REAL SignedTriArea(VECTOR2 a, VECTOR2 b, VECTOR2 c)
         {
             return (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
         }
