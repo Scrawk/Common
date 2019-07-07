@@ -5,12 +5,12 @@ using Common.Core.Numerics;
 
 namespace Common.Meshing.Constructors
 {
-    public interface IPolygonalMeshConstructor<MESH>
+    public interface IPolygonMeshConstructor<MESH>
     {
 
         bool SupportsFaceConnections { get; }
 
-        void PushPolygonalMesh(int numVertices, int numFaces);
+        void PushPolygonMesh(int numVertices, int numFaces);
 
         MESH PopMesh();
 

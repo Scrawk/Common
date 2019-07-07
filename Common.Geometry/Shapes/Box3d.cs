@@ -4,6 +4,11 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
+using MATRIX3 = Common.Core.Numerics.Matrix3x3d;
+
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -11,23 +16,23 @@ namespace Common.Geometry.Shapes
     public struct Box3d : IEquatable<Box3d>
     {
 
-        public Vector3d Min;
+        public VECTOR3 Min;
 
-        public Vector3d Max;
+        public VECTOR3 Max;
 
-        public Box3d(double min, double max)
+        public Box3d(REAL min, REAL max)
         {
-            Min = new Vector3d(min);
-            Max = new Vector3d(max);
+            Min = new VECTOR3(min);
+            Max = new VECTOR3(max);
         }
 
-        public Box3d(double minX, double maxX, double minY, double maxY, double minZ, double maxZ)
+        public Box3d(REAL minX, REAL maxX, REAL minY, REAL maxY, REAL minZ, REAL maxZ)
         {
-            Min = new Vector3d(minX, minY, minZ);
-            Max = new Vector3d(maxX, maxY, maxZ);
+            Min = new VECTOR3(minX, minY, minZ);
+            Max = new VECTOR3(maxX, maxY, maxZ);
         }
 
-        public Box3d(Vector3d min, Vector3d max)
+        public Box3d(VECTOR3 min, VECTOR3 max)
         {
             Min = min;
             Max = max;
@@ -35,36 +40,36 @@ namespace Common.Geometry.Shapes
 
         public Box3d(Vector3i min, Vector3i max)
         {
-            Min = new Vector3d(min.x, min.y, min.z);
-            Max = new Vector3d(max.x, max.y, max.z); ;
+            Min = new VECTOR3(min.x, min.y, min.z);
+            Max = new VECTOR3(max.x, max.y, max.z); ;
         }
 
-        public Vector3d Center 
+        public VECTOR3 Center 
         { 
             get { return (Min + Max) * 0.5f; } 
         }
 
-        public Vector3d Size 
+        public VECTOR3 Size 
         { 
-            get { return new Vector3d(Width, Height, Depth); } 
+            get { return new VECTOR3(Width, Height, Depth); } 
         }
 
-        public double Width 
+        public REAL Width 
         { 
             get { return Max.x - Min.x; } 
         }
 
-        public double Height 
+        public REAL Height 
         { 
             get { return Max.y - Min.y; } 
         }
 
-        public double Depth 
+        public REAL Depth 
         { 
             get { return Max.z - Min.z; } 
         }
 
-        public double Area
+        public REAL Area
         {
             get
             {
@@ -72,11 +77,11 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        public double SurfaceArea
+        public REAL SurfaceArea
         {
             get
             {
-                Vector3d d = Max - Min;
+                VECTOR3 d = Max - Min;
                 return 2.0 * (d.x * d.y + d.x * d.z + d.y * d.z);
             }
         }
@@ -129,17 +134,17 @@ namespace Common.Geometry.Shapes
             return string.Format("[Box3d: Min={0}, Max={1}, Width={2}, Height={3}, Depth={4}]", Min, Max, Width, Height, Depth);
         }
 
-        public void GetCorners(IList<Vector3d> corners)
+        public void GetCorners(IList<VECTOR3> corners)
         {
-            corners[0] = new Vector3d(Min.x, Min.y, Min.z);
-            corners[1] = new Vector3d(Max.x, Min.y, Min.z);
-            corners[2] = new Vector3d(Max.x, Min.y, Max.z);
-            corners[3] = new Vector3d(Min.x, Min.y, Max.z);
+            corners[0] = new VECTOR3(Min.x, Min.y, Min.z);
+            corners[1] = new VECTOR3(Max.x, Min.y, Min.z);
+            corners[2] = new VECTOR3(Max.x, Min.y, Max.z);
+            corners[3] = new VECTOR3(Min.x, Min.y, Max.z);
 
-            corners[4] = new Vector3d(Min.x, Max.y, Min.z);
-            corners[5] = new Vector3d(Max.x, Max.y, Min.z);
-            corners[6] = new Vector3d(Max.x, Max.y, Max.z);
-            corners[7] = new Vector3d(Min.x, Max.y, Max.z);
+            corners[4] = new VECTOR3(Min.x, Max.y, Min.z);
+            corners[5] = new VECTOR3(Max.x, Max.y, Min.z);
+            corners[6] = new VECTOR3(Max.x, Max.y, Max.z);
+            corners[7] = new VECTOR3(Min.x, Max.y, Max.z);
         }
 
         public void GetCorners(IList<Vector4d> corners)
@@ -158,7 +163,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the bounding box containing this box and the given point.
         /// </summary>
-        public static Box3d Enlarge(Box3d box, Vector3d p)
+        public static Box3d Enlarge(Box3d box, VECTOR3 p)
         {
             var b = new Box3d();
             b.Min.x = Math.Min(box.Min.x, p.x);
@@ -188,7 +193,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the box by a given percent.
         /// </summary>
-        public static Box3d Enlarge(Box3d box, double percent)
+        public static Box3d Enlarge(Box3d box, REAL percent)
         {
             var amount = box.Size * percent * 0.5;
             return new Box3d(box.Min - amount, box.Max + amount);
@@ -219,7 +224,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns true if this bounding box contains the given point.
         /// </summary>
-        public bool Contains(Vector3d p)
+        public bool Contains(VECTOR3 p)
         {
             if (p.x > Max.x || p.x < Min.x) return false;
             if (p.y > Max.y || p.y < Min.y) return false;
@@ -230,9 +235,9 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the closest point on the box.
         /// </summary>
-        public Vector3d Closest(Vector3d p)
+        public VECTOR3 Closest(VECTOR3 p)
         {
-            Vector3d c;
+            VECTOR3 c;
 
             if (p.x < Min.x)
                 c.x = Min.x;
@@ -258,10 +263,10 @@ namespace Common.Geometry.Shapes
             return c;
         }
 
-        public static Box3d CalculateBounds(IList<Vector3d> vertices)
+        public static Box3d CalculateBounds(IList<VECTOR3> vertices)
         {
-            Vector3d min = Vector3d.PositiveInfinity;
-            Vector3d max = Vector3d.NegativeInfinity;
+            VECTOR3 min = VECTOR3.PositiveInfinity;
+            VECTOR3 max = VECTOR3.NegativeInfinity;
 
             int count = vertices.Count;
             for (int i = 0; i < count; i++)
@@ -279,14 +284,14 @@ namespace Common.Geometry.Shapes
             return new Box3d(min, max);
         }
 
-        public static Box3d CalculateBounds(Vector3d a, Vector3d b)
+        public static Box3d CalculateBounds(VECTOR3 a, VECTOR3 b)
         {
-            double xmin = Math.Min(a.x, b.x);
-            double xmax = Math.Max(a.x, b.x);
-            double ymin = Math.Min(a.y, b.y);
-            double ymax = Math.Max(a.y, b.y);
-            double zmin = Math.Min(a.z, b.z);
-            double zmax = Math.Max(a.z, b.z);
+            REAL xmin = Math.Min(a.x, b.x);
+            REAL xmax = Math.Max(a.x, b.x);
+            REAL ymin = Math.Min(a.y, b.y);
+            REAL ymax = Math.Max(a.y, b.y);
+            REAL zmin = Math.Min(a.z, b.z);
+            REAL zmax = Math.Max(a.z, b.z);
 
             return new Box3d(xmin, xmax, ymin, ymax, zmin, zmax);
         }

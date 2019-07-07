@@ -6,7 +6,7 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static class HBCreateTriangularMesh3
+    public static class HBCreateTriangleMesh3
     {
         public static HBMesh3d FromTriangle(Vector3d A, Vector3d B, Vector3d C)
         {

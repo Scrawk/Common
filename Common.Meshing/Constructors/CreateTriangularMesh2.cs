@@ -15,9 +15,9 @@ namespace Common.Meshing.Constructors
     public static class CreateTriangularMesh2
     {
 
-        public static void FromTriangle<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2d A, Vector2d B, Vector2d C)
+        public static void FromTriangle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2d A, Vector2d B, Vector2d C)
         {
-            constructor.PushTriangularMesh(3, 1);
+            constructor.PushTriangleMesh(3, 1);
 
             constructor.AddVertex(A);
             constructor.AddVertex(B);
@@ -25,9 +25,9 @@ namespace Common.Meshing.Constructors
             constructor.AddFace(0, 1, 2);
         }
 
-        public static void FromBox<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
+        public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
         {
-            constructor.PushTriangularMesh(4, 2);
+            constructor.PushTriangleMesh(4, 2);
 
             constructor.AddVertex(min);
             constructor.AddVertex(new Vector2d(max.x, min.y));
@@ -44,9 +44,9 @@ namespace Common.Meshing.Constructors
             }
         }
 
-        public static void FromCircle<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
+        public static void FromCircle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
         {
-            constructor.PushTriangularMesh(segments + 1, segments * 3);
+            constructor.PushTriangleMesh(segments + 1, segments * 3);
             constructor.AddVertex(center);
 
             double pi = Math.PI;
@@ -82,7 +82,7 @@ namespace Common.Meshing.Constructors
 
         }
 
-        public static void FromGrid<MESH>(ITriangularMeshConstructor<MESH> constructor, int width, int height, double scale)
+        public static void FromGrid<MESH>(ITriangleMeshConstructor<MESH> constructor, int width, int height, double scale)
         {
 
             int numVerts = width * height;
@@ -90,7 +90,7 @@ namespace Common.Meshing.Constructors
             int width1 = width - 1;
             int height1 = height - 1;
 
-            constructor.PushTriangularMesh(numVerts, numFaces);
+            constructor.PushTriangleMesh(numVerts, numFaces);
 
             for (int y = 0; y < height; y++)
             {

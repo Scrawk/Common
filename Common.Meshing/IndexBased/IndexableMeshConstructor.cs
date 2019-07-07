@@ -32,8 +32,8 @@ namespace Common.Meshing.IndexBased
     /// </summary>
     public class IndexableMeshConstructor<MESH> :
         IEdgeMeshConstructor<MESH>,
-        ITriangularMeshConstructor<MESH>,
-        ITetrahedralMeshConstructor<MESH>
+        ITriangleMeshConstructor<MESH>,
+        ITetrahedronMeshConstructor<MESH>
         where MESH : IndexableMesh, new()
     {
 
@@ -72,7 +72,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// Push a new triangle mesh.
         /// </summary>
-        public void PushTriangularMesh(int numVertices, int numFaces)
+        public void PushTriangleMesh(int numVertices, int numFaces)
         {
             if (m_mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
@@ -84,7 +84,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// Push a new tetrahedral mesh.
         /// </summary>
-        public void PushTetrahedralMesh(int numVertices, int numFaces)
+        public void PushTetrahedronMesh(int numVertices, int numFaces)
         {
             if (m_mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");

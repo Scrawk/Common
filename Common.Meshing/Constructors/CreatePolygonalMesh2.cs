@@ -13,9 +13,9 @@ namespace Common.Meshing.Constructors
     public static class CreatePolygonalMesh2
     {
 
-        public static void FromBox<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
+        public static void FromBox<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
         {
-            constructor.PushPolygonalMesh(4, 1);
+            constructor.PushPolygonMesh(4, 1);
 
             constructor.AddVertex(min);
             constructor.AddVertex(new Vector2d(max.x, min.y));
@@ -25,9 +25,9 @@ namespace Common.Meshing.Constructors
             constructor.AddFace(0, 4);
         }
 
-        public static void FromCircle<MESH>(IPolygonalMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
+        public static void FromCircle<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
         {
-            constructor.PushPolygonalMesh(segments, 1);
+            constructor.PushPolygonMesh(segments, 1);
 
             double pi = Math.PI;
             double fseg = segments;

@@ -50,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdjacencyGraphs\AdjacencyGraphTest.cs" />
-    <Compile Include="HalfEdgeBased\HBCreatePolygonalMesh2Test.cs" />
-    <Compile Include="HalfEdgeBased\HBCreateTriangularMesh2Test.cs" />
+    <Compile Include="HalfEdgeBased\HBCreatePolygonMesh2Test.cs" />
+    <Compile Include="HalfEdgeBased\HBCreateTriangleMesh2Test.cs" />
     <Compile Include="FaceBased\FBMeshHelper.cs" />
     <Compile Include="FaceBased\FBMeshTest.cs" />
     <Compile Include="FaceBased\FBVertexTest.cs" />
@@ -59,7 +59,7 @@
     <Compile Include="FaceBased\FBMesh2fTest.cs" />
     <Compile Include="FaceBased\FBOperationsTest.cs" />
     <Compile Include="GridsGraphs\GridGraphTest.cs" />
-    <Compile Include="HalfEdgeBased\HBCreateTriangularMesh3Test.cs" />
+    <Compile Include="HalfEdgeBased\HBCreateTriangleMesh3Test.cs" />
     <Compile Include="HalfEdgeBased\HBMeshHelper.cs" />
     <Compile Include="HalfEdgeBased\HBEdgeTest.cs" />
     <Compile Include="HalfEdgeBased\HBFaceTest.cs" />

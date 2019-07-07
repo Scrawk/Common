@@ -19,7 +19,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
 
             var constructor = new HBMeshConstructor2d();
-            constructor.PushTriangularMesh(10, 10);
+            constructor.PushTriangleMesh(10, 10);
 
             constructor.AddVertex(new Vector2d(-3, 0));
             constructor.AddVertex(new Vector2d(-2, 1));
@@ -119,7 +119,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var max = new Vector2d(1, 1);
             var min = new Vector2d(-1, -1);
 
-            var mesh = HBCreateTriangularMesh2.FromBox(min, max);
+            var mesh = HBCreateTriangleMesh2.FromBox(min, max);
 
             var edge = mesh.Edges[2];
 
@@ -162,7 +162,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var max = new Vector2d(1, 1);
             var min = new Vector2d(-1, -1);
 
-            var mesh = HBCreateTriangularMesh2.FromBox(min, max);
+            var mesh = HBCreateTriangleMesh2.FromBox(min, max);
 
             var edge = mesh.Edges[2];
             //var edge = mesh.Edges[5];
@@ -199,7 +199,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var c = new Vector2d(1, -1);
             var d = (a + b + c) / 3;
 
-            HBMesh2d mesh = HBCreateTriangularMesh2.FromTriangle(a, b, c);
+            HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
 
             HBOperations.PokeFace(mesh, mesh.Faces[0]);
 
@@ -234,8 +234,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var max = new Vector2d(1, 1);
             var min = new Vector2d(-1, -1);
 
-            var mesh = HBCreatePolygonalMesh2.FromBox(min, max);
-            var mesh2 = HBCreatePolygonalMesh2.FromBox(min + 1, max + 1);
+            var mesh = HBCreatePolygonMesh2.FromBox(min, max);
+            var mesh2 = HBCreatePolygonMesh2.FromBox(min + 1, max + 1);
             mesh.RemoveFaces();
             mesh2.RemoveFaces();
 
@@ -298,7 +298,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var b = new Vector2d(-1, -1);
             var c = new Vector2d(1, -1);
 
-            HBMesh2d mesh = HBCreateTriangularMesh2.FromTriangle(a, b, c);
+            HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
 
             HBOperations.PokeEdge(mesh, mesh.Edges[0], 0.5);
 
@@ -373,7 +373,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var min = new Vector2d(-1, -1);
             var max = new Vector2d(1, 1);
 
-            var tmp = HBCreateTriangularMesh2.FromBox(min, max);
+            var tmp = HBCreateTriangleMesh2.FromBox(min, max);
 
             var constructor = new FBMeshConstructor2d();
             HBOperations.ToTriangularMesh(constructor, tmp);

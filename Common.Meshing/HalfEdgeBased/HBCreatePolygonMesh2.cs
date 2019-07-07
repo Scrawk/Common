@@ -6,7 +6,7 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static class HBCreatePolygonalMesh2
+    public static class HBCreatePolygonMesh2
     {
         public static HBMesh2d FromBox(Vector2d min, Vector2d max)
         {

@@ -59,9 +59,9 @@ namespace Common.Meshing.FaceBased
     /// Supports triangle or polygon meshes.
     /// </summary>
     public class FBMeshConstructor<MESH, VERTEX, FACE> :
-           ITriangularMeshConstructor<MESH>,
-           IPolygonalMeshConstructor<MESH>,
-           ITetrahedralMeshConstructor<MESH>
+           ITriangleMeshConstructor<MESH>,
+           IPolygonMeshConstructor<MESH>,
+           ITetrahedronMeshConstructor<MESH>
            where MESH : FBMesh<VERTEX, FACE>, new()
            where VERTEX : FBVertex, new()
            where FACE : FBFace, new()
@@ -77,7 +77,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Create a triangle mesh. All faces are triangles.
         /// </summary>
-        public void PushTriangularMesh(int numVertices, int numFaces)
+        public void PushTriangleMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
@@ -88,7 +88,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Create a polygon mesh. Faces can have any number of edges.
         /// </summary>
-        public void PushPolygonalMesh(int numVertices, int numFaces)
+        public void PushPolygonMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");
@@ -99,7 +99,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Create a tetrahedral mesh. All faces are tetrahedron.
         /// </summary>
-        public void PushTetrahedralMesh(int numVertices, int numFaces)
+        public void PushTetrahedronMesh(int numVertices, int numFaces)
         {
             if (Mesh != null)
                 throw new InvalidOperationException("Mesh under construction. Can not push new mesh.");

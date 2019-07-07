@@ -17,10 +17,10 @@ namespace Common.Meshing.Constructors
         /// <summary>
         /// Create a triangle were a,b,c are ccw vertices.
         /// </summary>
-        public static void FromTriangle<MESH>(ITriangularMeshConstructor<MESH> constructor,
+        public static void FromTriangle<MESH>(ITriangleMeshConstructor<MESH> constructor,
             Vector3d A, Vector3d B, Vector3d C)
         {
-            constructor.PushTriangularMesh(3, 1);
+            constructor.PushTriangleMesh(3, 1);
 
             constructor.AddVertex(A);
             constructor.AddVertex(B);
@@ -28,10 +28,10 @@ namespace Common.Meshing.Constructors
             constructor.AddFace(0, 1, 2);
         }
 
-        public static void FromTertahedron<MESH>(ITriangularMeshConstructor<MESH> constructor,
+        public static void FromTertahedron<MESH>(ITriangleMeshConstructor<MESH> constructor,
             Vector3d A, Vector3d B, Vector3d C, Vector3d D)
         {
-            constructor.PushTriangularMesh(4, 1);
+            constructor.PushTriangleMesh(4, 1);
 
             constructor.AddVertex(A);
             constructor.AddVertex(B);
@@ -52,9 +52,9 @@ namespace Common.Meshing.Constructors
             }
         }
 
-        public static void FromBox<MESH>(ITriangularMeshConstructor<MESH> constructor, Vector3d min, Vector3d max)
+        public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector3d min, Vector3d max)
         {
-            constructor.PushTriangularMesh(8, 12);
+            constructor.PushTriangleMesh(8, 12);
 
             constructor.AddVertex(new Vector3d(min.x, min.y, min.z));
             constructor.AddVertex(new Vector3d(max.x, min.y, min.z));
@@ -105,12 +105,12 @@ namespace Common.Meshing.Constructors
             }
         }
 
-        public static void FromMesh<MESH>(ITriangularMeshConstructor<MESH> constructor, IList<Vector3d> positions, IList<int> indices, bool ccw)
+        public static void FromMesh<MESH>(ITriangleMeshConstructor<MESH> constructor, IList<Vector3d> positions, IList<int> indices, bool ccw)
         {
             int numPositions = positions.Count;
             int numTriangles = indices.Count / 3;
 
-            constructor.PushTriangularMesh(numPositions, numTriangles);
+            constructor.PushTriangleMesh(numPositions, numTriangles);
 
             Dictionary<Vector2i, int> edges = null;
             if (constructor.SupportsFaceConnections)
@@ -170,9 +170,9 @@ namespace Common.Meshing.Constructors
 
         }
 
-        public static void FromIcosahedron<MESH>(ITriangularMeshConstructor<MESH> constructor, double scale)
+        public static void FromIcosahedron<MESH>(ITriangleMeshConstructor<MESH> constructor, double scale)
         {
-            constructor.PushTriangularMesh(12, 20);
+            constructor.PushTriangleMesh(12, 20);
 
             var s = scale;
             var t = (1.0 + Math.Sqrt(5.0)) / 2.0 * scale;

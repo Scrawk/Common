@@ -24,13 +24,13 @@ namespace Common.Meshing.HalfEdgeBased
                 constructor.AddEdge(edge.Tag, edge.Opposite.Tag);
         }
 
-        public static void ToTriangularMesh<MESH, VERTEX, EDGE, FACE>(ITriangularMeshConstructor<MESH> constructor, HBMesh<VERTEX, EDGE, FACE> mesh)
+        public static void ToTriangularMesh<MESH, VERTEX, EDGE, FACE>(ITriangleMeshConstructor<MESH> constructor, HBMesh<VERTEX, EDGE, FACE> mesh)
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
             where FACE : HBFace, new()
         {
             mesh.TagAll();
-            constructor.PushTriangularMesh(mesh.Vertices.Count, mesh.Faces.Count);
+            constructor.PushTriangleMesh(mesh.Vertices.Count, mesh.Faces.Count);
 
             foreach (var vertex in mesh.Vertices)
                 constructor.AddVertex(vertex.GetPosition());

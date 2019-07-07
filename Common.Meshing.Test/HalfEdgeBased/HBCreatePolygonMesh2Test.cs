@@ -7,7 +7,7 @@ using Common.Meshing.HalfEdgeBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBCreatePolygonalMesh2Test
+    public class Meshing_HalfEdgeBased_HBCreatePolygonMesh2Test
     {
 
         [TestMethod]
@@ -16,7 +16,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var min = new Vector2d(-1, -1);
             var max = new Vector2d(1, 1);
 
-            var mesh = HBCreatePolygonalMesh2.FromBox(min, max);
+            var mesh = HBCreatePolygonMesh2.FromBox(min, max);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(8, mesh.Edges.Count);
@@ -44,7 +44,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void FromCircle()
         {
-            var mesh = HBCreatePolygonalMesh2.FromCircle(Vector2d.Zero, 1.0, 4);
+            var mesh = HBCreatePolygonMesh2.FromCircle(Vector2d.Zero, 1.0, 4);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(8, mesh.Edges.Count);

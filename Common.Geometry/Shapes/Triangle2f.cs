@@ -6,6 +6,7 @@ using Common.Core.Numerics;
 using REAL = System.Single;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
 using VECTOR3 = Common.Core.Numerics.Vector3f;
+using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
 
 namespace Common.Geometry.Shapes
 {
@@ -190,6 +191,51 @@ namespace Common.Geometry.Shapes
 
                 fixed (VECTOR2* array = &A) { array[i] = value; }
             }
+        }
+
+        public static Triangle2f operator +(Triangle2f tri, REAL s)
+        {
+            return new Triangle2f(tri.A + s, tri.B + s, tri.C + s);
+        }
+
+        public static Triangle2f operator +(Triangle2f tri, VECTOR2 v)
+        {
+            return new Triangle2f(tri.A + v, tri.B + v, tri.C + v);
+        }
+
+        public static Triangle2f operator -(Triangle2f tri, REAL s)
+        {
+            return new Triangle2f(tri.A - s, tri.B - s, tri.C - s);
+        }
+
+        public static Triangle2f operator -(Triangle2f tri, VECTOR2 v)
+        {
+            return new Triangle2f(tri.A - v, tri.B - v, tri.C - v);
+        }
+
+        public static Triangle2f operator *(Triangle2f tri, REAL s)
+        {
+            return new Triangle2f(tri.A * s, tri.B * s, tri.C * s);
+        }
+
+        public static Triangle2f operator *(Triangle2f tri, VECTOR2 v)
+        {
+            return new Triangle2f(tri.A * v, tri.B * v, tri.C * v);
+        }
+
+        public static Triangle2f operator /(Triangle2f tri, REAL s)
+        {
+            return new Triangle2f(tri.A / s, tri.B / s, tri.C / s);
+        }
+
+        public static Triangle2f operator /(Triangle2f tri, VECTOR2 v)
+        {
+            return new Triangle2f(tri.A / v, tri.B / v, tri.C / v);
+        }
+
+        public static Triangle2f operator *(Triangle2f tri, MATRIX2 m)
+        {
+            return new Triangle2f(m * tri.A, m * tri.B, m * tri.C);
         }
 
         public static bool operator ==(Triangle2f t1, Triangle2f t2)

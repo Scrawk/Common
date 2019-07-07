@@ -61,8 +61,8 @@ namespace Common.Meshing.HalfEdgeBased
     /// Supports triangle or polygon meshes.
     /// </summary>
     public class HBMeshConstructor<MESH, VERTEX, EDGE, FACE> : 
-            ITriangularMeshConstructor<MESH>,
-            IPolygonalMeshConstructor<MESH>
+            ITriangleMeshConstructor<MESH>,
+            IPolygonMeshConstructor<MESH>
             where MESH : HBMesh<VERTEX, EDGE, FACE>, new()
             where VERTEX : HBVertex, new()
             where EDGE : HBEdge, new()
@@ -85,7 +85,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Create a triangle mesh. All faces are triangles.
         /// </summary>
-        public void PushTriangularMesh(int numVertices, int numFaces)
+        public void PushTriangleMesh(int numVertices, int numFaces)
         {
             NewMesh(numVertices, numFaces * 3 * 2, numFaces);
         }
@@ -93,7 +93,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Create a polygon mesh. Faces can have any number of edges.
         /// </summary>
-        public void PushPolygonalMesh(int numVertices, int numFaces)
+        public void PushPolygonMesh(int numVertices, int numFaces)
         {
             int numEdges = numVertices * 2; //Guess
             NewMesh(numVertices, numEdges, numFaces);

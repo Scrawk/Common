@@ -9,13 +9,13 @@ namespace Common.Meshing.FaceBased
 {
     public static partial class FBOperations
     {
-        public static void ToTriangularMesh<MESH, VERTEX, FACE>(ITriangularMeshConstructor<MESH> constructor, FBMesh<VERTEX, FACE> mesh)
+        public static void ToTriangularMesh<MESH, VERTEX, FACE>(ITriangleMeshConstructor<MESH> constructor, FBMesh<VERTEX, FACE> mesh)
             where VERTEX : FBVertex, new()
             where FACE : FBFace, new()
         {
             mesh.TagAll();
 
-            constructor.PushTriangularMesh(mesh.Vertices.Count, mesh.Faces.Count);
+            constructor.PushTriangleMesh(mesh.Vertices.Count, mesh.Faces.Count);
 
             foreach (var vertex in mesh.Vertices)
                 constructor.AddVertex(vertex.GetPosition());

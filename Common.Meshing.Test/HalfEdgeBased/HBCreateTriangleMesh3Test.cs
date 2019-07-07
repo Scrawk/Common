@@ -8,7 +8,7 @@ using Common.Meshing.HalfEdgeBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBCreateTriangularMesh3Test
+    public class Meshing_HalfEdgeBased_HBCreateTriangleMesh3Test
     {
         [TestMethod]
         public void FromTriangle()
@@ -16,7 +16,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var a = new Vector3d(-1, -1, 0);
             var b = new Vector3d(1, -1, 0);
             var c = new Vector3d(0, 1, 0);
-            var mesh = HBCreateTriangularMesh3.FromTriangle(a, b, c);
+            var mesh = HBCreateTriangleMesh3.FromTriangle(a, b, c);
 
             Assert.AreEqual(3, mesh.Vertices.Count);
             Assert.AreEqual(6, mesh.Edges.Count);
@@ -46,7 +46,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var b = new Vector3d(1, -1, 0);
             var c = new Vector3d(0, 1, 0);
             var d = new Vector3d(0, 0, 1);
-            var mesh = HBCreateTriangularMesh3.FromTetrahedron(a, b, c, d);
+            var mesh = HBCreateTriangleMesh3.FromTetrahedron(a, b, c, d);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(4 * 3, mesh.Edges.Count);
@@ -60,7 +60,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var min = new Vector3d(-1);
             var max = new Vector3d(1);
-            var mesh = HBCreateTriangularMesh3.FromBox(min, max);
+            var mesh = HBCreateTriangleMesh3.FromBox(min, max);
 
             Assert.AreEqual(8, mesh.Vertices.Count);
             Assert.AreEqual(12*3, mesh.Edges.Count);
@@ -72,7 +72,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void FromIcosahedron()
         {
-            var mesh = HBCreateTriangularMesh3.FromIcosahedron(1);
+            var mesh = HBCreateTriangleMesh3.FromIcosahedron(1);
 
             Assert.AreEqual(12, mesh.Vertices.Count);
             Assert.AreEqual(20 * 3, mesh.Edges.Count);

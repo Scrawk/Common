@@ -9,7 +9,7 @@ using Common.Meshing.HalfEdgeBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBCreateTriangularMesh2Test
+    public class Meshing_HalfEdgeBased_HBCreateTriangleMesh2Test
     { 
         [TestMethod]
         public void FromTriangle()
@@ -17,7 +17,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var a = new Vector2d(-1, -1);
             var b = new Vector2d(1, -1);
             var c = new Vector2d(0, 1);
-            var mesh = HBCreateTriangularMesh2.FromTriangle(a, b, c);
+            var mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
 
             Assert.AreEqual(3, mesh.Vertices.Count);
             Assert.AreEqual(6, mesh.Edges.Count);
@@ -45,7 +45,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var min = new Vector2d(-1, -1);
             var max = new Vector2d(1, 1);
-            var mesh = HBCreateTriangularMesh2.FromBox(min, max);
+            var mesh = HBCreateTriangleMesh2.FromBox(min, max);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(10, mesh.Edges.Count);
@@ -78,7 +78,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void FromCircle()
         {
-            var mesh = HBCreateTriangularMesh2.FromCircle(Vector2d.Zero, 1.0f, 4);
+            var mesh = HBCreateTriangleMesh2.FromCircle(Vector2d.Zero, 1.0f, 4);
 
             Assert.AreEqual(5, mesh.Vertices.Count);
             Assert.AreEqual(16, mesh.Edges.Count);
@@ -92,7 +92,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         public void FromGrid()
         {
 
-            var mesh = HBCreateTriangularMesh2.FromGrid(3, 3, 1.0);
+            var mesh = HBCreateTriangleMesh2.FromGrid(3, 3, 1.0);
 
             Assert.AreEqual(9, mesh.Vertices.Count);
             Assert.AreEqual(32, mesh.Edges.Count);

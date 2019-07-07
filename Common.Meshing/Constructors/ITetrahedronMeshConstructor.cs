@@ -5,11 +5,11 @@ using Common.Core.Numerics;
 
 namespace Common.Meshing.Constructors
 {
-    public interface ITetrahedralMeshConstructor<MESH>
+    public interface ITetrahedronMeshConstructor<MESH>
     {
         bool SupportsFaceConnections { get; }
 
-        void PushTetrahedralMesh(int numVertices, int numFaces);
+        void PushTetrahedronMesh(int numVertices, int numFaces);
 
         MESH PopMesh();
 
