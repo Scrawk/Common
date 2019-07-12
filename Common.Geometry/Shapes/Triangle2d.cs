@@ -21,11 +21,22 @@ namespace Common.Geometry.Shapes
 
         public VECTOR2 C;
 
+        public int Tag;
+
         public Triangle2d(VECTOR2 a, VECTOR2 b, VECTOR2 c)
         {
             A = a;
             B = b;
             C = c;
+            Tag = 0;
+        }
+
+        public Triangle2d(VECTOR2 a, VECTOR2 b, VECTOR2 c, int tag)
+        {
+            A = a;
+            B = b;
+            C = c;
+            Tag = tag;
         }
 
         public Triangle2d(REAL ax, REAL ay, REAL bx, REAL by, REAL cx, REAL cy)
@@ -33,6 +44,7 @@ namespace Common.Geometry.Shapes
             A = new VECTOR2(ax, ay);
             B = new VECTOR2(bx, by);
             C = new VECTOR2(cx, cy);
+            Tag = 0;
         }
 
         public VECTOR2 Center
@@ -203,47 +215,47 @@ namespace Common.Geometry.Shapes
 
         public static Triangle2d operator +(Triangle2d tri, VECTOR2 v)
         {
-            return new Triangle2d(tri.A + v, tri.B + v, tri.C + v);
+            return new Triangle2d(tri.A + v, tri.B + v, tri.C + v, tri.Tag);
         }
 
         public static Triangle2d operator -(Triangle2d tri, REAL s)
         {
-            return new Triangle2d(tri.A - s, tri.B - s, tri.C - s);
+            return new Triangle2d(tri.A - s, tri.B - s, tri.C - s, tri.Tag);
         }
 
         public static Triangle2d operator -(Triangle2d tri, VECTOR2 v)
         {
-            return new Triangle2d(tri.A - v, tri.B - v, tri.C - v);
+            return new Triangle2d(tri.A - v, tri.B - v, tri.C - v, tri.Tag);
         }
 
         public static Triangle2d operator *(Triangle2d tri, REAL s)
         {
-            return new Triangle2d(tri.A * s, tri.B * s, tri.C * s);
+            return new Triangle2d(tri.A * s, tri.B * s, tri.C * s, tri.Tag);
         }
 
         public static Triangle2d operator *(Triangle2d tri, VECTOR2 v)
         {
-            return new Triangle2d(tri.A * v, tri.B * v, tri.C * v);
+            return new Triangle2d(tri.A * v, tri.B * v, tri.C * v, tri.Tag);
         }
 
         public static Triangle2d operator /(Triangle2d tri, REAL s)
         {
-            return new Triangle2d(tri.A / s, tri.B / s, tri.C / s);
+            return new Triangle2d(tri.A / s, tri.B / s, tri.C / s, tri.Tag);
         }
 
         public static Triangle2d operator /(Triangle2d tri, VECTOR2 v)
         {
-            return new Triangle2d(tri.A / v, tri.B / v, tri.C / v);
+            return new Triangle2d(tri.A / v, tri.B / v, tri.C / v, tri.Tag);
         }
 
         public static Triangle2d operator *(Triangle2d tri, MATRIX2 m)
         {
-            return new Triangle2d(m * tri.A, m * tri.B, m * tri.C);
+            return new Triangle2d(m * tri.A, m * tri.B, m * tri.C, tri.Tag);
         }
 
         public static implicit operator Triangle2d(Triangle2f tri)
         {
-            return new Triangle2d(tri.A, tri.B, tri.C);
+            return new Triangle2d(tri.A, tri.B, tri.C, tri.Tag);
         }
 
         public static bool operator ==(Triangle2d t1, Triangle2d t2)

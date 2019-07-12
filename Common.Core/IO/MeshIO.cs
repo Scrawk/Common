@@ -107,6 +107,9 @@ namespace Common.Core.IO
             var uvs = properties.TexCoords;
             var flip = properties.FilpTriangles;
 
+            bool hasUVs = uvs != null && uvs.Count == positions.Count;
+            bool hasNormals = normals != null && normals.Count == positions.Count;
+
             StringBuilder sb = new StringBuilder();
 
             foreach (Vector3d v in positions)
@@ -129,10 +132,25 @@ namespace Common.Core.IO
 
             for (int i = 0; i < indices.Count; i += 3)
             {
-                if(flip)
-                    sb.Append(string.Format("f {0} {1} {2}\n", indices[i + 2] + 1, indices[i + 1] + 1, indices[i + 0] + 1));
+                int i0 = indices[i + 0] + 1;
+                int i1 = indices[i + 1] + 1;
+                int i2 = indices[i + 2] + 1;
+
+                if (flip)
+                {
+                    int tmp = i0;
+                    i0 = i2;
+                    i2 = tmp;
+                }
+
+                if(hasUVs && hasNormals)
+                    sb.Append(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}\n", i0, i1, i2));
+                else if (hasUVs)
+                    sb.Append(string.Format("f {0}/{0} {1}/{1} {2}/{2}\n", i0, i1, i2));
+                else if (hasNormals)
+                    sb.Append(string.Format("f {0}//{0} {1}//{1} {2}//{2}\n", i0, i1, i2));
                 else
-                    sb.Append(string.Format("f {0} {1} {2}\n", indices[i + 0] + 1, indices[i + 1] + 1, indices[i + 2] + 1));
+                    sb.Append(string.Format("f {0} {1} {2}\n", i0, i1, i2));
             }
 
             return sb.ToString();
