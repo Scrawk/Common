@@ -308,6 +308,18 @@ namespace Common.Meshing.HalfEdgeBased
                 return centroid / count;
         }
 
+
+        /// <summary>
+        /// Compute the face normal. 
+        /// </summary>
+        public virtual Vector3d GetNormal()
+        {
+            var p0 = From.GetPosition();
+            var p1 = To.GetPosition();
+            var p2 = Previous.From.GetPosition();
+            return Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+        }
+
         /// <summary>
         /// Check the edge is valid.
         /// </summary>

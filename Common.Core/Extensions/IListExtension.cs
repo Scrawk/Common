@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
+using Common.Core.Numerics;
 
 namespace System.Collections.Generic
 {
@@ -32,6 +33,11 @@ namespace System.Collections.Generic
                 list[n] = list[k];
                 list[k] = temp;
             }
+        }
+
+        public static T GetCircular<T>(this IList<T> list, int i)
+        {
+            return list[IMath.Wrap(i, list.Count)];
         }
 
     }

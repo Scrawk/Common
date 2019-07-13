@@ -292,6 +292,15 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Copy all face normals into list.
+        /// </summary>
+        public void GetFaceNormals(List<Vector3d> normals)
+        {
+            for (int i = 0; i < Faces.Count; i++)
+                normals.Add(Faces[i].Edge.GetNormal());
+        }
+
+        /// <summary>
         /// Find the edge that uses these two vertices.
         /// Presumes all edges have opposites.
         /// </summary>
