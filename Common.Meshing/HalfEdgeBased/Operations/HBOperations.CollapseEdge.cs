@@ -31,7 +31,7 @@ namespace Common.Meshing.HalfEdgeBased
 
                 var p0 = e.From.GetPosition();
                 var p1 = e.To.GetPosition();
-                var p2 = e.Opposite.Next.To.GetPosition();
+                var p2 = e.Previous.From.GetPosition();
                 var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
                 var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
 
@@ -44,7 +44,7 @@ namespace Common.Meshing.HalfEdgeBased
 
                 var p0 = e.From.GetPosition();
                 var p1 = e.To.GetPosition();
-                var p2 = e.Opposite.Next.To.GetPosition();
+                var p2 = e.Previous.From.GetPosition();
                 var n0 = Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
                 var n1 = Vector3d.Cross(p2 - newPos, p1 - newPos).Normalized;
 
