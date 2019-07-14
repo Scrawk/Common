@@ -283,6 +283,25 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Return th barycentric coordinates
+        /// with respect to p.
+        /// </summary>
+        public VECTOR3 Barycentric(VECTOR2 p)
+        {
+            VECTOR2 v0 = B - A, v1 = C - A, v2 = p - A;
+            REAL d00 = VECTOR2.Dot(v0, v0);
+            REAL d01 = VECTOR2.Dot(v0, v1);
+            REAL d11 = VECTOR2.Dot(v1, v1);
+            REAL d20 = VECTOR2.Dot(v2, v0);
+            REAL d21 = VECTOR2.Dot(v2, v1);
+            REAL denom = d00 * d11 - d01 * d01;
+            REAL v = (d11 * d20 - d01 * d21) / denom;
+            REAL w = (d00 * d21 - d01 * d20) / denom;
+            REAL u = 1.0f - v - w;
+            return new VECTOR3(u, v, w);
+        }
+
+        /// <summary>
         /// Closest point on triangle.
         /// </summary>
         /// <param name="p">point</param>

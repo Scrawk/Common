@@ -301,6 +301,19 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Get the vertex indices of a triangle face.
+        /// Presumes vertices have been tagged.
+        /// </summary>
+        public Vector3i GetTriangle(int i)
+        {
+            var face = Faces[i];
+            int a = face.Edge.Previous.From.Tag;
+            int b = face.Edge.From.Tag;
+            int c = face.Edge.Next.From.Tag;
+            return new Vector3i(a, b, c);
+        }
+
+        /// <summary>
         /// Find the edge that uses these two vertices.
         /// Presumes all edges have opposites.
         /// </summary>
