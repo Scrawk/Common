@@ -317,7 +317,7 @@ namespace Common.Meshing.HalfEdgeBased
             var p0 = From.GetPosition();
             var p1 = To.GetPosition();
             var p2 = Previous.From.GetPosition();
-            return Vector3d.Cross(p2 - p0, p1 - p0).Normalized;
+            return Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
         }
 
         /// <summary>
