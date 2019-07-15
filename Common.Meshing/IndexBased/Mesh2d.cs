@@ -35,7 +35,7 @@ namespace Common.Meshing.IndexBased
         public Mesh2d(int numPositions, int numIndices)
         {
             Positions = new VECTOR2[numPositions];
-            Indices = new int[numIndices];
+            SetIndices(numIndices);
         }
 
         /// <summary>

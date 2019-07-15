@@ -7,6 +7,21 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.IndexBased
 {
+    public struct MeshVertex
+    {
+        public int position, normal, uv, color;
+    }
+
+    public struct MeshTriangle
+    {
+        public MeshVertex a, b, c;
+    }
+
+    public struct MeshEdge
+    {
+        public MeshVertex a, b;
+    }
+
     public abstract class IndexableMesh
     {
 
@@ -28,7 +43,7 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// The mesh indices.
         /// </summary>
-        public int[] Indices { get; protected set; }
+        public MeshVertex[] Indices { get; protected set; }
 
         /// <summary>
         /// Does the mesh have colors.
@@ -57,23 +72,25 @@ namespace Common.Meshing.IndexBased
         /// Get the triangle at index i.
         /// Presumes indices represents triangles.
         /// </summary>
-        public Vector3i GetTriangle(int i)
+        public MeshTriangle GetTriangle(int i)
         {
-            int a = Indices[i / 3 + 0];
-            int b = Indices[i / 3 + 1];
-            int c = Indices[i / 3 + 2];
-            return new Vector3i(a, b, c);
+            var triangle = new MeshTriangle();
+            triangle.a = Indices[i / 3 + 0];
+            triangle.b = Indices[i / 3 + 1];
+            triangle.c = Indices[i / 3 + 2];
+            return triangle;
         }
 
         /// <summary>
         /// Get the edge at index i.
         /// Presumes indices represents edges.
         /// </summary>
-        public Vector2i GetEdge(int i)
+        public MeshEdge GetEdge(int i)
         {
-            int a = Indices[i / 3 + 0];
-            int b = Indices[i / 3 + 1];
-            return new Vector2i(a, b);
+            var edge = new MeshEdge();
+            edge.a = Indices[i / 3 + 0];
+            edge.b = Indices[i / 3 + 1];
+            return edge;
         }
 
         /// <summary>
@@ -83,7 +100,17 @@ namespace Common.Meshing.IndexBased
         public void SetIndices(int size)
         {
             if (Indices == null || Indices.Length != size)
-                Indices = new int[size];
+                Indices = new MeshVertex[size];
+        }
+
+        /// <summary>
+        /// Create the index array.
+        /// </summary>
+        /// <param name="indices">Array to copy from.</param>
+        public void SetIndices(IList<MeshVertex> indices)
+        {
+            SetIndices(indices.Count);
+            indices.CopyTo(Indices, 0);
         }
 
         /// <summary>
@@ -93,7 +120,8 @@ namespace Common.Meshing.IndexBased
         public void SetIndices(IList<int> indices)
         {
             SetIndices(indices.Count);
-            indices.CopyTo(Indices, 0);
+            for (int i = 0; i < indices.Count; i++)
+                Indices[i].position = indices[i];
         }
 
         /// <summary>
@@ -114,41 +142,6 @@ namespace Common.Meshing.IndexBased
         {
             SetColors(colors.Count);
             colors.CopyTo(Colors, 0);
-        }
-
-        /// <summary>
-        /// Flip winding order of the triangles.
-        /// Presumes indices represent triangles.
-        /// </summary>
-        public void FlipTriangles()
-        {
-            if (Indices == null) return;
-            int count = IndexCount;
-            for (int i = 0; i < count / 3; i++)
-            {
-                int tmp = Indices[i * 3 + 0];
-                Indices[i * 3 + 0] = Indices[i * 3 + 2];
-                Indices[i * 3 + 2] = tmp;
-            }
-        }
-
-        /// <summary>
-        /// Create the indices presumig the mesh
-        /// represents a polygon.
-        /// </summary>
-        public void BuildPolygonIndices()
-        {
-            int numPoints = VertexCount;
-            if (numPoints == 0) return;
-
-            int size = numPoints * 2;
-            SetIndices(size);
-
-            for (int i = 0; i < numPoints; i++)
-            {
-                Indices[i * 2 + 0] = i;
-                Indices[i * 2 + 1] = (i + 1) % numPoints;
-            }
         }
 
     }

@@ -36,7 +36,7 @@ namespace Common.Meshing.IndexBased
         public Mesh3f(int numPositions, int numIndices)
         {
             Positions = new VECTOR3[numPositions];
-            Indices = new int[numIndices];
+            SetIndices(numIndices);
         }
 
         /// <summary>

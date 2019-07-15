@@ -115,13 +115,17 @@ namespace Common.Meshing.IndexBased
 
                 for (int i = 0; i < m_mesh.IndexCount / 3; i++)
                 {
-                    mesh.SetPosition(i * 3 + 0, mesh.GetPosition(indices[i * 3 + 0]));
-                    mesh.SetPosition(i * 3 + 1, mesh.GetPosition(indices[i * 3 + 1]));
-                    mesh.SetPosition(i * 3 + 2, mesh.GetPosition(indices[i * 3 + 2]));
+                    int i0 = i * 3 + 0;
+                    int i1 = i * 3 + 1;
+                    int i2 = i * 3 + 2;
 
-                    mesh.Indices[i * 3 + 0] = i * 3 + 0;
-                    mesh.Indices[i * 3 + 1] = i * 3 + 1;
-                    mesh.Indices[i * 3 + 2] = i * 3 + 2;
+                    mesh.SetPosition(i0, mesh.GetPosition(indices[i0].position));
+                    mesh.SetPosition(i1, mesh.GetPosition(indices[i1].position));
+                    mesh.SetPosition(i2, mesh.GetPosition(indices[i2].position));
+
+                    mesh.Indices[i0].position = i0;
+                    mesh.Indices[i1].position = i1;
+                    mesh.Indices[i2].position = i2;
                 }
 
                 m_mesh = mesh;
@@ -176,8 +180,8 @@ namespace Common.Meshing.IndexBased
         public void AddEdge(int i0, int i1)
         {
             CheckMeshIsPushed();
-            m_mesh.Indices[m_edgeIndex * 2 + 0] = i0;
-            m_mesh.Indices[m_edgeIndex * 2 + 1] = i1;
+            m_mesh.Indices[m_edgeIndex * 2 + 0].position = i0;
+            m_mesh.Indices[m_edgeIndex * 2 + 1].position = i1;
             m_edgeIndex++;
         }
 
@@ -190,9 +194,9 @@ namespace Common.Meshing.IndexBased
         public void AddFace(int i0, int i1, int i2)
         {
             CheckMeshIsPushed();
-            m_mesh.Indices[m_faceIndex * 3 + 0] = i0;
-            m_mesh.Indices[m_faceIndex * 3 + 1] = i1;
-            m_mesh.Indices[m_faceIndex * 3 + 2] = i2;
+            m_mesh.Indices[m_faceIndex * 3 + 0].position = i0;
+            m_mesh.Indices[m_faceIndex * 3 + 1].position = i1;
+            m_mesh.Indices[m_faceIndex * 3 + 2].position = i2;
             m_faceIndex++;
         }
 
@@ -206,10 +210,10 @@ namespace Common.Meshing.IndexBased
         public void AddFace(int i0, int i1, int i2, int i3)
         {
             CheckMeshIsPushed();
-            m_mesh.Indices[m_faceIndex * 4 + 0] = i0;
-            m_mesh.Indices[m_faceIndex * 4 + 1] = i1;
-            m_mesh.Indices[m_faceIndex * 4 + 2] = i2;
-            m_mesh.Indices[m_faceIndex * 4 + 3] = i3;
+            m_mesh.Indices[m_faceIndex * 4 + 0].position = i0;
+            m_mesh.Indices[m_faceIndex * 4 + 1].position = i1;
+            m_mesh.Indices[m_faceIndex * 4 + 2].position = i2;
+            m_mesh.Indices[m_faceIndex * 4 + 3].position = i3;
             m_faceIndex++;
         }
 
