@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 
 using Common.Core.Numerics;
+using Common.Core.Colors;
 
 namespace Common.Core.IO
 {
@@ -13,9 +14,11 @@ namespace Common.Core.IO
         public string Extension;
         public bool FilpTriangles;
         public List<Vector3d> Positions = new List<Vector3d>();
+        public List<int> PositionIndices = new List<int>();
         public List<Vector3d> Normals = new List<Vector3d>();
-        public List<int> Indices = new List<int>();
+        public List<int> NormalIndices = new List<int>();
         public List<Vector2d> TexCoords = new List<Vector2d>();
+        public List<int> TexCoordIndices = new List<int>();
     }
 
     public static class MeshIO
@@ -27,9 +30,11 @@ namespace Common.Core.IO
             var options = StringSplitOptions.RemoveEmptyEntries;
 
             var positions = properties.Positions;
+            var pIndices = properties.PositionIndices;
             var normals = properties.Normals;
-            var indices = properties.Indices;
+            var nIndices = properties.NormalIndices;
             var uvs = properties.TexCoords;
+            var uvIndices = properties.TexCoordIndices;
             var flip = properties.FilpTriangles;
 
             using (streamReader)
@@ -51,16 +56,14 @@ namespace Common.Core.IO
 
                             if (flip)
                             {
-                                indices.Add(int.Parse(face3[0]) - 1);
-                                indices.Add(int.Parse(face2[0]) - 1);
-                                indices.Add(int.Parse(face1[0]) - 1);
+                                var tmp = face1;
+                                face1 = face3;
+                                face3 = tmp;
                             }
-                            else
-                            {
-                                indices.Add(int.Parse(face1[0]) - 1);
-                                indices.Add(int.Parse(face2[0]) - 1);
-                                indices.Add(int.Parse(face3[0]) - 1);
-                            }
+
+                            pIndices.Add(int.Parse(face1[0]) - 1);
+                            pIndices.Add(int.Parse(face2[0]) - 1);
+                            pIndices.Add(int.Parse(face3[0]) - 1);
                         }
                     }
                     else if (line[0] == 'v')
@@ -102,13 +105,15 @@ namespace Common.Core.IO
         public static string ToObj(MeshProperties3d properties)
         {
             var positions = properties.Positions;
+            var pIndices = properties.PositionIndices;
             var normals = properties.Normals;
-            var indices = properties.Indices;
+            var nIndices = properties.NormalIndices;
             var uvs = properties.TexCoords;
+            var uvIndices = properties.TexCoordIndices;
             var flip = properties.FilpTriangles;
 
-            bool hasUVs = uvs != null && uvs.Count == positions.Count;
-            bool hasNormals = normals != null && normals.Count == positions.Count;
+            bool hasUVs = uvs != null && uvs.Count != 0 && uvIndices.Count == pIndices.Count;
+            bool hasNormals = normals != null && normals.Count != 0 && nIndices.Count == pIndices.Count;
 
             StringBuilder sb = new StringBuilder();
 
@@ -130,11 +135,11 @@ namespace Common.Core.IO
             }
             sb.Append("\n");
 
-            for (int i = 0; i < indices.Count; i += 3)
+            for (int i = 0; i < pIndices.Count; i += 3)
             {
-                int i0 = indices[i + 0] + 1;
-                int i1 = indices[i + 1] + 1;
-                int i2 = indices[i + 2] + 1;
+                int i0 = i + 0;
+                int i1 = i + 1;
+                int i2 = i + 2;
 
                 if (flip)
                 {
@@ -143,14 +148,34 @@ namespace Common.Core.IO
                     i2 = tmp;
                 }
 
-                if(hasUVs && hasNormals)
-                    sb.Append(string.Format("f {0}/{0}/{0} {1}/{1}/{1} {2}/{2}/{2}\n", i0, i1, i2));
+                if (hasUVs && hasNormals)
+                {
+                    sb.Append(string.Format("f {0}/{1}/{2} {3}/{4}/{4} {6}/{7}/{8}\n",
+                        pIndices[i0] + 1, uvIndices[i0] + 1, nIndices[i0] + 1,
+                        pIndices[i1] + 1, uvIndices[i1] + 1, nIndices[i1] + 1,
+                        pIndices[i2] + 1, uvIndices[i2] + 1, nIndices[i2] + 1));
+                }
                 else if (hasUVs)
-                    sb.Append(string.Format("f {0}/{0} {1}/{1} {2}/{2}\n", i0, i1, i2));
+                {
+                    sb.Append(string.Format("f {0}/{1} {2}/{3} {4}/{5}\n",
+                        pIndices[i0] + 1, uvIndices[i0] + 1,
+                        pIndices[i1] + 1, uvIndices[i1] + 1,
+                        pIndices[i2] + 1, uvIndices[i2] + 1));
+                }
                 else if (hasNormals)
-                    sb.Append(string.Format("f {0}//{0} {1}//{1} {2}//{2}\n", i0, i1, i2));
+                {
+                    sb.Append(string.Format("f {0}//{1} {2}//{3} {4}//{5}\n",
+                        pIndices[i0] + 1, nIndices[i0] + 1,
+                        pIndices[i1] + 1, nIndices[i1] + 1,
+                        pIndices[i2] + 1, nIndices[i2] + 1));
+                }
                 else
-                    sb.Append(string.Format("f {0} {1} {2}\n", i0, i1, i2));
+                {
+                    sb.Append(string.Format("f {0} {1} {2}\n",
+                        pIndices[i0] + 1,
+                        pIndices[i1] + 1,
+                        pIndices[i2] + 1));
+                }
             }
 
             return sb.ToString();
