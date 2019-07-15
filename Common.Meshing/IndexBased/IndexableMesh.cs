@@ -10,25 +10,75 @@ namespace Common.Meshing.IndexBased
     public struct MeshVertex
     {
         public int position, normal, uv, color;
+
+        public MeshVertex(int position)
+        {
+            this.position = position;
+            normal = 0;
+            uv = 0;
+            color = 0;
+        }
+
+        public MeshVertex(int position, int normal)
+        {
+            this.position = position;
+            this.normal = normal;
+            uv = 0;
+            color = 0;
+        }
+
+        public MeshVertex(int position, int normal, int uv)
+        {
+            this.position = position;
+            this.normal = normal;
+            this.uv = uv;
+            color = 0;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("[MeshVertex: Position={0}, Normal={1}, UV={2}, Color={3}]", 
+                position, normal, uv, color);
+        }
     }
 
     public struct MeshTriangle
     {
         public MeshVertex a, b, c;
+
+        public override string ToString()
+        {
+            return string.Format("[MeshTriangle: A={0}, B={1}, C={2}]",a, b, c);
+        }
     }
 
     public struct MeshEdge
     {
         public MeshVertex a, b;
+
+        public override string ToString()
+        {
+            return string.Format("[MeshEdge: A={0}, B={1}]", a, b);
+        }
     }
 
     public abstract class IndexableMesh
     {
 
         /// <summary>
-        /// The number of vertices in mesh.
+        /// The number of positions in mesh.
         /// </summary>
-        public abstract int VertexCount { get; }
+        public abstract int PositionCount { get; }
+
+        /// <summary>
+        /// The number of normals in mesh.
+        /// </summary>
+        public abstract int NormalCount { get; }
+
+        /// <summary>
+        /// The number of texCoords in mesh.
+        /// </summary>
+        public abstract int TexCoordCount { get; }
 
         /// <summary>
         /// Does the mesh have indices.
@@ -46,9 +96,9 @@ namespace Common.Meshing.IndexBased
         public MeshVertex[] Indices { get; protected set; }
 
         /// <summary>
-        /// Does the mesh have colors.
+        /// The number of colors in mesh.
         /// </summary>
-        public bool HasColors { get { return Colors != null; } }
+        public int ColorCount { get { return Colors != null ? Colors.Length : 0; } }
 
         /// <summary>
         /// The mesh colors.

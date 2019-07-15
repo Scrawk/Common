@@ -109,7 +109,7 @@ namespace Common.Meshing.IndexBased
             
             if (SplitFaces && m_faceVerts == 3)
             {
-                var mesh = NewMesh(m_mesh.VertexCount * 3, m_mesh.IndexCount);
+                var mesh = NewMesh(m_mesh.PositionCount * 3, m_mesh.IndexCount);
 
                 var indices = m_mesh.Indices;
 

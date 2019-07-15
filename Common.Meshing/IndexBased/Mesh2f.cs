@@ -39,9 +39,9 @@ namespace Common.Meshing.IndexBased
         }
 
         /// <summary>
-        /// The number of vertices in mesh.
+        /// The number of positions in mesh.
         /// </summary>
-        public override int VertexCount { get { return (Positions != null) ? Positions.Length : 0; } }
+        public override int PositionCount { get { return (Positions != null) ? Positions.Length : 0; } }
 
         /// <summary>
         /// The vertex positions.
@@ -49,19 +49,14 @@ namespace Common.Meshing.IndexBased
         public VECTOR2[] Positions { get; private set; }
 
         /// <summary>
-        /// Does the mesh have normals.
-        /// </summary>
-        public bool HasNormals { get { return Normals != null; } }
-
-        /// <summary>
         /// The vertex normals.
         /// </summary>
         public VECTOR2[] Normals { get; private set; }
 
         /// <summary>
-        /// Does the mesh have uvs.
+        /// The number of normals in mesh.
         /// </summary>
-        public bool HasTexCoords { get { return TexCoords != null; } }
+        public override int NormalCount { get { return (Normals != null) ? Normals.Length : 0; } }
 
         /// <summary>
         /// The vertex uvs.
@@ -69,11 +64,16 @@ namespace Common.Meshing.IndexBased
         public VECTOR2[] TexCoords { get; private set; }
 
         /// <summary>
+        /// The number of texCoords in mesh.
+        /// </summary>
+        public override int TexCoordCount { get { return (TexCoords != null) ? TexCoords.Length : 0; } }
+
+        /// <summary>
         /// Convert mesh to string.
         /// </summary>
         public override string ToString()
         {
-            return string.Format("[Mesh2d: Vertices={0}, Indices={1}]", VertexCount, IndexCount);
+            return string.Format("[Mesh2d: Vertices={0}, Indices={1}]", PositionCount, IndexCount);
         }
 
         /// <summary>
