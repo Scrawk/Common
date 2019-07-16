@@ -25,11 +25,14 @@ namespace Common.Meshing.HalfEdgeBased
 
             foreach (var edge in vertex.EnumerateEdges())
             {
+                var vert = edge.To;
                 var next = edge.Next;
                 var previous = edge.Opposite.Previous;
 
                 next.Previous = previous;
                 previous.Next = next;
+                next.From = vert;
+                vert.Edge = next;
 
                 if (sideEdge == null)
                     sideEdge = next;

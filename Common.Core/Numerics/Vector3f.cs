@@ -555,7 +555,7 @@ namespace Common.Core.Numerics
             REAL dp = Vector3f.Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
 
-            return (REAL)Math.Acos(FMath.SafeDiv(dp, m)) * FMath.Rad2Deg;
+            return FMath.SafeAcos(FMath.SafeDiv(dp, m)) * FMath.Rad2Deg;
         }
 
         /// <summary>

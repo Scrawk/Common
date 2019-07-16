@@ -30,12 +30,13 @@ namespace Common.Meshing.HalfEdgeBased
                 if (e == edge) continue;
 
                 var p0 = e.From.GetPosition();
-                var p1 = e.To.GetPosition();
+                var p1 = e.Next.From.GetPosition();
                 var p2 = e.Previous.From.GetPosition();
                 var n0 = Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
                 var n1 = Vector3d.Cross(p1 - newPos, p2 - newPos).Normalized;
+                var dp = Vector3d.Dot(n0, n1);
 
-                if (Vector3d.Dot(n0, n1) < 0) return true;
+                if (dp < 0) return true;
             }
 
             foreach (var e in v1.EnumerateEdges())
@@ -43,12 +44,13 @@ namespace Common.Meshing.HalfEdgeBased
                 if (e == opp) continue;
 
                 var p0 = e.From.GetPosition();
-                var p1 = e.To.GetPosition();
+                var p1 = e.Next.From.GetPosition();
                 var p2 = e.Previous.From.GetPosition();
                 var n0 = Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
                 var n1 = Vector3d.Cross(p1 - newPos, p2 - newPos).Normalized;
+                var dp = Vector3d.Dot(n0, n1);
 
-                if (Vector3d.Dot(n0, n1) < 0) return true;
+                if (dp < 0) return true;
             }
 
             return false;
