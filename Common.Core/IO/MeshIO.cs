@@ -12,7 +12,7 @@ namespace Common.Core.IO
     {
         public string FileName;
         public string Extension;
-        public bool FilpTriangles;
+        public bool FlipTriangles;
         public List<Vector3d> Positions = new List<Vector3d>();
         public List<int> PositionIndices = new List<int>();
         public List<Vector3d> Normals = new List<Vector3d>();
@@ -35,7 +35,7 @@ namespace Common.Core.IO
             var nIndices = properties.NormalIndices;
             var uvs = properties.TexCoords;
             var uvIndices = properties.TexCoordIndices;
-            var flip = properties.FilpTriangles;
+            var flip = properties.FlipTriangles;
 
             using (streamReader)
             {
@@ -110,7 +110,7 @@ namespace Common.Core.IO
             var nIndices = properties.NormalIndices;
             var uvs = properties.TexCoords;
             var uvIndices = properties.TexCoordIndices;
-            var flip = properties.FilpTriangles;
+            var flip = properties.FlipTriangles;
 
             bool hasUVs = uvs != null && uvs.Count != 0 && uvIndices.Count == pIndices.Count;
             bool hasNormals = normals != null && normals.Count != 0 && nIndices.Count == pIndices.Count;

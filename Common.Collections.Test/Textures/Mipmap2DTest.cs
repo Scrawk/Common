@@ -7,7 +7,7 @@ using Common.Collections.Textures.Data2D;
 namespace Common.Collections.Test.Textures
 {
     [TestClass]
-    public class Collections_Textures_Mipmap2DTest
+    public class Mipmap2DTest
     {
 
         [TestMethod]

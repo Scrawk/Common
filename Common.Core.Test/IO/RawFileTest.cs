@@ -8,7 +8,7 @@ using Common.Core.IO;
 namespace Common.Core.Test.IO
 {
     [TestClass]
-    public class Core_IO_RawFileTest
+    public class RawFileTest
     {
 
         const string fileName = "D:/Projects/Visual Studio Projects/Common/Common.Core.Test/IO/TestRawFile.raw";

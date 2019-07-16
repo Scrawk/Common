@@ -7,7 +7,7 @@ namespace Common.Mathematics.Test.Probability
 {
  
     [TestClass]
-    public class Mathematics_Probability_NormalDistribution2Test
+    public class NormalDistribution2Test
     {
         /*
         [TestMethod]

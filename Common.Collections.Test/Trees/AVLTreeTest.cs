@@ -4,13 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 using Common.Collections.Trees;
-using Common.Collections.Queues;
-using Common.Core.Time;
 
 namespace Common.Collections.Test.Trees
 {
     [TestClass]
-    public class Collections_Trees_AVLTreeTest
+    public class AVLTreeTest
     {
         [TestMethod]
         public void Add()

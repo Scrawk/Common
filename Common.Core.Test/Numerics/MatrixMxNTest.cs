@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 namespace Common.Core.Test.Numerics
 {
     [TestClass]
-    public class Core_Numerics_MatrixMxNTest
+    public class MatrixMxNTest
     {
         [TestMethod]
         public void Multiply2x3Scalar()

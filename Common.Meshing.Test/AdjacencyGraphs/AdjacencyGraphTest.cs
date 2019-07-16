@@ -7,7 +7,7 @@ using Common.Meshing.AdjacencyGraphs;
 namespace Common.Meshing.Test.AdjacencyGraphs
 {
     [TestClass]
-    public class Meshing_AdjacencyGraphs_AdjacencyGraphTest
+    public class AdjacencyGraphTest
     {
         [TestMethod]
         public void DepthFirstSearch()

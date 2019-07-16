@@ -6,7 +6,7 @@ using Common.Collections.Arrays;
 namespace Common.Collections.Test.Arrays
 {
     [TestClass]
-    public class Collections_Arrays_SparseArray2Test
+    public class SparseArray2Test
     {
         [TestMethod]
         public void SetIntTest()

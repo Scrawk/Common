@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Collections.Test.Extensions
+namespace Common.Core.Test.Extensions
 {
     [TestClass]
-    public class Collections_IListExtensionTest
+    public class IListExtensionTest
     {
         [TestMethod]
         public void Shuffle()

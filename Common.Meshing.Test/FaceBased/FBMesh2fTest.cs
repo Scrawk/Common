@@ -8,7 +8,7 @@ using Common.Meshing.FaceBased;
 namespace Common.Meshing.Test.FaceBased
 {
     [TestClass]
-    public class Meshing_FaceBased_FBMesh2fTest
+    public class FBMesh2fTest
     {
 
         [TestMethod]

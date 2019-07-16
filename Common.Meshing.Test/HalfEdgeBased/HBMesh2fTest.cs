@@ -9,7 +9,7 @@ using Common.Meshing.HalfEdgeBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBMesh2fTest
+    public class HBMesh2fTest
     {
         [TestMethod]
         public void GetPositions()

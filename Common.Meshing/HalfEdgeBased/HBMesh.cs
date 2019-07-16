@@ -307,9 +307,9 @@ namespace Common.Meshing.HalfEdgeBased
         public Vector3i GetTriangle(int i)
         {
             var face = Faces[i];
-            int a = face.Edge.Previous.From.Tag;
-            int b = face.Edge.From.Tag;
-            int c = face.Edge.Next.From.Tag;
+            int a = face.Edge.From.Tag;
+            int b = face.Edge.Next.From.Tag;
+            int c = face.Edge.Next.Next.From.Tag;
             return new Vector3i(a, b, c);
         }
 

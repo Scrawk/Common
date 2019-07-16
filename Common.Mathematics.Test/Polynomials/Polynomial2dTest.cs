@@ -6,7 +6,7 @@ using Common.Mathematics.Polynomials;
 namespace Common.Mathematics.Test.Polynomials
 {
     [TestClass]
-    public class Mathematics_Polynomials_Polynomial2dTest
+    public class Polynomial2dTest
     {
         [TestMethod]
         public void Solve()

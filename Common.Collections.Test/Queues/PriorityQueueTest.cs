@@ -6,7 +6,7 @@ using Common.Collections.Queues;
 namespace Common.Collections.Test.Queues
 {
     [TestClass]
-    public class Collections_Queues_PriorityQueueTest
+    public class PriorityQueueTest
     {
 
         [TestMethod]

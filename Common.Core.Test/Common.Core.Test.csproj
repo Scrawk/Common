@@ -58,6 +58,7 @@
     <Compile Include="Colors\ColorRGBATest.cs" />
     <Compile Include="Colors\ColorRGBTest.cs" />
     <Compile Include="Directions\D26Test.cs" />
+    <Compile Include="Extensions\IListExtensionTest.cs" />
     <Compile Include="Numerics\Matrix2x2dTest.cs" />
     <Compile Include="Numerics\Matrix3x3dTest.cs" />
     <Compile Include="Numerics\Matrix4x4dTest.cs" />

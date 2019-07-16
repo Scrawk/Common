@@ -7,7 +7,7 @@ using Common.Meshing.HalfEdgeBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBCreatePolygonMesh2Test
+    public class HBCreatePolygonMesh2Test
     {
 
         [TestMethod]

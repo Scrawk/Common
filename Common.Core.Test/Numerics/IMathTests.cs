@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 namespace Common.Core.Test.Numerics
 {
     [TestClass]
-    public class Core_Numerics_IMathTests
+    public class IMathTests
     {
         [TestMethod]
         public void Pow()

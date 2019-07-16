@@ -2,13 +2,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
-using Common.Core.Numerics;
 
 namespace Common.Core.Test.Numerics
 {
 
     [TestClass]
-    public class Core_Numerics_Vector2fTest
+    public class Vector2fTest
     {
 
         [TestMethod]

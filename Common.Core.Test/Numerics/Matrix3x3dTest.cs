@@ -7,7 +7,7 @@ namespace Common.Core.Test.Numerics
 {
 
     [TestClass]
-    public class Core_Numerics_Matrix3x3dTest
+    public class Matrix3x3dTest
     {
 
         const int HALF_SIZE = 3;

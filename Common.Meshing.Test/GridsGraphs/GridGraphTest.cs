@@ -9,7 +9,7 @@ using Common.Meshing.GridGraphs;
 namespace Common.Meshing.Test.GridGraphs
 {
     [TestClass]
-    public class Meshing_GridGraphs_GridGraphTest
+    public class GridGraphTest
     {
         [TestMethod]
         public void FoldFulkersonMaxFlow()

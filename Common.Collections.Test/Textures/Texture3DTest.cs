@@ -8,7 +8,7 @@ using Common.Collections.Textures.Data3D;
 namespace Common.Collections.Test.Textures
 {
     [TestClass]
-    public class Collections_Textures_Texture3DTest
+    public class Texture3DTest
     {
 
         [TestMethod]

@@ -10,7 +10,7 @@ using Common.Meshing.Test.HalfEdgeBased;
 namespace Common.Meshing.Test.FaceBased
 {
     [TestClass]
-    public class Meshing_FaceBased_FBOperationsTest
+    public class FBOperationsTest
     {
 
         [TestMethod]

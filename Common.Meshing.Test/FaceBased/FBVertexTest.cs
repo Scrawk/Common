@@ -7,7 +7,7 @@ using Common.Meshing.FaceBased;
 namespace Common.Meshing.Test.FaceBased
 {
     [TestClass]
-    public class Meshing_FaceBased_FBVertexTest
+    public class FBVertexTest
     {
 
     }

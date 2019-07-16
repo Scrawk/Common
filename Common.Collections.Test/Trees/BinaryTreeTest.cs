@@ -7,7 +7,7 @@ using Common.Collections.Trees;
 namespace Common.Collections.Test.Trees
 {
     [TestClass]
-    public class Collections_Trees_BinaryTreeTest
+    public class BinaryTreeTest
     {
         [TestMethod]
         public void Count()

@@ -8,7 +8,7 @@ using Common.Core.Numerics;
 namespace Common.Core.Test.Directions
 {
     [TestClass]
-    public class Core_Directions_D26Test
+    public class D26Test
     {
         [TestMethod]
         public void Offsets()

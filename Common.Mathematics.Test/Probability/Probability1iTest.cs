@@ -6,7 +6,7 @@ using Common.Mathematics.Probability;
 namespace Common.Mathematics.Test.Probability
 {
     [TestClass]
-    public class Mathematics_Probability1iTest
+    public class Probability1iTest
     {
         [TestMethod]
         public void IndependantAnd()

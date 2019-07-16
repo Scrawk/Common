@@ -6,7 +6,7 @@ using Common.Mathematics.Probability;
 namespace Common.Mathematics.Test.Probability
 {
     [TestClass]
-    public class Mathematics_Probability_NormalDistribution1Test
+    public class NormalDistribution1Test
     {
 
         [TestMethod]

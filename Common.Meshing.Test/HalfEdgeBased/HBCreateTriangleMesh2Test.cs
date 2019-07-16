@@ -9,7 +9,7 @@ using Common.Meshing.HalfEdgeBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBCreateTriangleMesh2Test
+    public class HBCreateTriangleMesh2Test
     { 
         [TestMethod]
         public void FromTriangle()

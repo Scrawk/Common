@@ -6,7 +6,7 @@ using Common.Collections.Queues;
 namespace Common.Collections.Test.Lists
 {
     [TestClass]
-    public class Collections_Queues_BinaryHeapTest
+    public class BinaryHeapTest
     {
 
         [TestMethod]

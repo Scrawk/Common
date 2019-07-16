@@ -7,7 +7,7 @@ using Common.Collections.Lists;
 namespace Common.Collections.Test.Lists
 {
     [TestClass]
-    public class Collections_Lists_LALinkedListTest
+    public class LALinkedListTest
     {
         [TestMethod]
         public void AddFirst()

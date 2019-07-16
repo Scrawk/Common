@@ -6,7 +6,7 @@ using Common.Core.Colors;
 namespace Common.Core.Test.Colors
 {
     [TestClass]
-    public class Core_Colors_ColorHSVTest
+    public class ColorHSVTest
     {
         [TestMethod]
         public void AreEqual()

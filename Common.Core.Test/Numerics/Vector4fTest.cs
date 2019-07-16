@@ -7,7 +7,7 @@ namespace Common.Core.Test.Numerics
 {
 
     [TestClass]
-    public class Core_Numerics_Vector4fTest
+    public class Vector4fTest
     {
 
         [TestMethod]

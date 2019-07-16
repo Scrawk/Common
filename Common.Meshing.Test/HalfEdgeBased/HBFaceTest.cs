@@ -7,7 +7,7 @@ using Common.Meshing.HalfEdgeBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBFaceTest
+    public class HBFaceTest
     {
 
     }

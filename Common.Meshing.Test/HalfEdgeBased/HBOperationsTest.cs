@@ -11,7 +11,7 @@ using Common.Meshing.Test.FaceBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class Meshing_HalfEdgeBased_HBOperationsTest
+    public class HBOperationsTest
     {
 
         [TestMethod]
