@@ -57,6 +57,42 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// If this edge was collapsed what is the 
+        /// longest edge that would be created.
+        /// </summary>
+        /// <param name="edge">The edge to be collapsed</param>
+        /// <returns>The longest edge that would occur if collapsed</returns>
+        public static double LongestCollapsedEdge(HBEdge edge)
+        {
+            var opp = edge.Opposite;
+            if (opp == null)
+                throw new NullReferenceException("Edge does not have a opposite edge.");
+
+            var v0 = edge.From;
+            var v1 = opp.From;
+
+            var newPos = (v0.GetPosition() + v1.GetPosition()) * 0.5;
+
+            double max = double.NegativeInfinity;
+
+            foreach (var e in v0.EnumerateEdges())
+            {
+                if (e == edge) continue;
+                var len = Vector3d.SqrDistance(e.To.GetPosition(), newPos);
+                if (len > max) max = len;
+            }
+
+            foreach (var e in v1.EnumerateEdges())
+            {
+                if (e == edge) continue;
+                var len = Vector3d.SqrDistance(e.To.GetPosition(), newPos);
+                if (len > max) max = len;
+            }
+
+            return Math.Sqrt(max);
+        }
+
+        /// <summary>
         /// Removes a edges and the two faces either side of it.
         /// </summary>
         /// <param name="mesh">A triangle mesh the edge belongs to.</param>
