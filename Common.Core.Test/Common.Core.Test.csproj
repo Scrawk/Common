@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Bits\BitTest.cs" />
     <Compile Include="Colors\ColorHSVTest.cs" />
     <Compile Include="Colors\ColorRGBATest.cs" />
     <Compile Include="Colors\ColorRGBTest.cs" />
