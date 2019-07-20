@@ -144,6 +144,27 @@ namespace Common.Meshing.IndexBased
         }
 
         /// <summary>
+        /// Creates the color array.
+        /// </summary>
+        /// <param name="size">The size of the array.</param>
+        public void SetColors(int size)
+        {
+            if (Colors == null || Colors.Length != size)
+                Colors = new ColorRGBA[size];
+        }
+
+        /// <summary>
+        /// Create the color array.
+        /// </summary>
+        /// <param name="indices">Array to copy from.</param>
+        public void SetColors(IList<ColorRGBA> colors)
+        {
+            SetColors(colors.Count);
+            colors.CopyTo(Colors, 0);
+        }
+
+
+        /// <summary>
         /// Creates the index array.
         /// </summary>
         /// <param name="size">The size of the array.</param>
@@ -164,10 +185,10 @@ namespace Common.Meshing.IndexBased
         }
 
         /// <summary>
-        /// Create the index array.
+        /// Create the index array for the positions.
         /// </summary>
         /// <param name="indices">Array to copy from.</param>
-        public void SetIndices(IList<int> indices)
+        public void SetPositionIndices(IList<int> indices)
         {
             SetIndices(indices.Count);
             for (int i = 0; i < indices.Count; i++)
@@ -175,23 +196,15 @@ namespace Common.Meshing.IndexBased
         }
 
         /// <summary>
-        /// Creates the color array.
+        /// Return a copy of the positions indices.
         /// </summary>
-        /// <param name="size">The size of the array.</param>
-        public void SetColors(int size)
+        public List<int> GetPositionIndices()
         {
-            if (Colors == null || Colors.Length != size)
-                Colors = new ColorRGBA[size];
-        }
+            var indices = new List<int>(IndexCount);
+            for (int i = 0; i < IndexCount; i++)
+                indices.Add(Indices[i].position);
 
-        /// <summary>
-        /// Create the color array.
-        /// </summary>
-        /// <param name="indices">Array to copy from.</param>
-        public void SetColors(IList<ColorRGBA> colors)
-        {
-            SetColors(colors.Count);
-            colors.CopyTo(Colors, 0);
+            return indices;
         }
 
     }

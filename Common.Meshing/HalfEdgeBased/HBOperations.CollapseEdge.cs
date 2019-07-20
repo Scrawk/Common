@@ -14,7 +14,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="edge">The edge to be collapsed</param>
         /// <returns>true if triangle will be flipped.</returns>
-        public static bool FlipsTriangle(HBEdge edge)
+        public static bool FlipsTriangleIfCollapsed(HBEdge edge)
         {
             var opp = edge.Opposite;
             if (opp == null)

@@ -29,7 +29,7 @@ namespace Common.Meshing.IndexBased
         public Mesh2f(IList<VECTOR2> positions, IList<int> indices)
         {
             SetPositions(positions);
-            SetIndices(indices);
+            SetPositionIndices(indices);
         }
 
         public Mesh2f(int numPositions, int numIndices)

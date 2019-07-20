@@ -30,7 +30,7 @@ namespace Common.Meshing.IndexBased
         public Mesh3d(IList<VECTOR3> positions, IList<int> indices)
         {
             SetPositions(positions);
-            SetIndices(indices);
+            SetPositionIndices(indices);
         }
 
         public Mesh3d(int numPositions, int numIndices)
