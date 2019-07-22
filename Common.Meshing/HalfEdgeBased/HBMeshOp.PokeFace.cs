@@ -25,7 +25,7 @@ namespace Common.Meshing.HalfEdgeBased
             if (count < 3)
                 throw new InvalidOperationException("Face has < 3 vertices.");
 
-            var pos = face.Edge.GetCentriod();
+            var pos = face.Edge.FaceCentriod;
             return PokeFace(mesh, face, pos);
         }
 

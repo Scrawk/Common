@@ -94,6 +94,49 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Compute the vertices centroid from the 
+        /// edges to vertex surrounding it.
+        /// </summary>
+        public Vector3d Centriod
+        {
+            get
+            {
+                int count = 0;
+                Vector3d centroid = Vector3d.Zero;
+                foreach (var edge in EnumerateEdges())
+                {
+                    centroid += edge.To.GetPosition();
+                    count++;
+                }
+
+                if (count != 0)
+                    centroid /= count;
+
+                return centroid;
+            }
+        }
+
+        /// <summary>
+        /// Compute the vertices area weighted normal. 
+        /// </summary>
+        public Vector3d Normal
+        {
+            get
+            {
+                var n = Vector3d.Zero;
+                foreach (var e in EnumerateEdges())
+                {
+                    var p0 = e.From.GetPosition();
+                    var p1 = e.To.GetPosition();
+                    var p2 = e.Previous.From.GetPosition();
+                    n = Vector3d.Cross(p1 - p0, p2 - p0);
+                }
+
+                return n.Normalized;
+            }
+        }
+
+        /// <summary>
         /// Enumerate all edges connected to this vertex.
         /// Edges must have a opposite member.
         /// </summary>
@@ -134,43 +177,6 @@ namespace Common.Meshing.HalfEdgeBased
         public abstract void SetPosition(Vector3d pos);
 
         public abstract Vector3d GetPosition();
-
-        /// <summary>
-        /// Compute the vertices centroid from the 
-        /// edges to vertex surrounding it.
-        /// </summary>
-        public virtual Vector3d GetCentriod()
-        {
-            int count = 0;
-            Vector3d centroid = Vector3d.Zero;
-            foreach (var edge in EnumerateEdges())
-            {
-                centroid += edge.To.GetPosition();
-                count++;
-            }
-
-            if (count != 0)
-                centroid /= count;
-
-            return centroid;
-        }
-
-        /// <summary>
-        /// Compute the vertices area weighted normal. 
-        /// </summary>
-        public virtual Vector3d GetNormal()
-        {
-            var n = Vector3d.Zero;
-            foreach (var e in EnumerateEdges())
-            {
-                var p0 = e.From.GetPosition();
-                var p1 = e.To.GetPosition();
-                var p2 = e.Previous.From.GetPosition();
-                n = Vector3d.Cross(p1 - p0, p2 - p0);
-            }
-
-            return n.Normalized;
-        }
 
         /// <summary>
         /// Check the vertex is valid.

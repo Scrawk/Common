@@ -60,6 +60,31 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Calculate the average position of the vertices.
+        /// </summary>
+        public Vector3d Centriod
+        {
+            get
+            {
+                if (Vertices == null)
+                    return Vector3d.Zero;
+
+                int count = 0;
+                Vector3d centroid = Vector3d.Zero;
+                foreach (var v in Vertices)
+                {
+                    centroid += v.GetPosition();
+                    count++;
+                }
+
+                if (count == 0)
+                    return centroid;
+                else
+                    return centroid / count;
+            }
+        }
+
+        /// <summary>
         /// Convert face to string.
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
@@ -167,29 +192,6 @@ namespace Common.Meshing.FaceBased
             Vertices = null;
             Neighbours = null;
         }
-
-        /// <summary>
-        /// Calculate the average position of the vertices.
-        /// </summary>
-        public Vector3d GetCentriod()
-        {
-            if(Vertices == null)
-                return Vector3d.Zero;
-
-            int count = 0;
-            Vector3d centroid = Vector3d.Zero;
-            foreach (var v in Vertices)
-            {
-                centroid += v.GetPosition();
-                count++;
-            }
-
-            if (count == 0)
-                return centroid;
-            else
-                return centroid / count;
-        }
-
 
     }
 }

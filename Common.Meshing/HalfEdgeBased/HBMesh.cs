@@ -270,7 +270,7 @@ namespace Common.Meshing.HalfEdgeBased
         public void GetVertexNormals(List<Vector3d> normals)
         {
             for (int i = 0; i < Vertices.Count; i++)
-                normals.Add(Vertices[i].GetNormal());
+                normals.Add(Vertices[i].Normal);
         }
 
         /// <summary>
@@ -279,7 +279,7 @@ namespace Common.Meshing.HalfEdgeBased
         public void GetVertexCentroids(List<Vector3d> centroids)
         {
             for (int i = 0; i < Vertices.Count; i++)
-                centroids.Add(Vertices[i].GetCentriod());
+                centroids.Add(Vertices[i].Centriod);
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace Common.Meshing.HalfEdgeBased
         public void GetFaceCentroids(List<Vector3d> centroids)
         {
             for (int i = 0; i < Faces.Count; i++)
-                centroids.Add(Faces[i].Edge.GetCentriod());
+                centroids.Add(Faces[i].Edge.FaceCentriod);
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace Common.Meshing.HalfEdgeBased
         public void GetFaceNormals(List<Vector3d> normals)
         {
             for (int i = 0; i < Faces.Count; i++)
-                normals.Add(Faces[i].Edge.GetNormal());
+                normals.Add(Faces[i].Edge.FaceNormal);
         }
 
         /// <summary>

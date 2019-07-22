@@ -154,7 +154,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         }
 
         [TestMethod]
-        public void GetCentriod()
+        public void FaceCentriod()
         {
             var a = new Vector3d(-1, 0, 1);
             var b = new Vector3d(1, 0, 2);
@@ -163,7 +163,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var mesh = HBMeshHelper.CreateTriangle(a, b, c);
             var edge = mesh.Edges[0];
 
-            var centroid = edge.GetCentriod();
+            var centroid = edge.FaceCentriod;
             Assert.AreEqual((a + b + c) / 3, centroid);
         }
     }

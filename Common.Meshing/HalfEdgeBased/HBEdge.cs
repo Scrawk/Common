@@ -139,6 +139,69 @@ namespace Common.Meshing.HalfEdgeBased
             }
         }
 
+
+        /// <summary>
+        /// Calculate the average position of the vertices.
+        /// </summary>
+        public Vector3d FaceCentriod
+        {
+            get
+            {
+                int count = 0;
+                Vector3d centroid = Vector3d.Zero;
+                foreach (var v in EnumerateVertices())
+                {
+                    centroid += v.GetPosition();
+                    count++;
+                }
+
+                if (count == 0)
+                    return centroid;
+                else
+                    return centroid / count;
+            }
+        }
+
+        /// <summary>
+        /// Compute the face normal. 
+        /// </summary>
+        public Vector3d FaceNormal
+        {
+            get
+            {
+                var p0 = From.GetPosition();
+                var p1 = To.GetPosition();
+                var p2 = Previous.From.GetPosition();
+                return Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
+            }
+        }
+
+        /// <summary>
+        /// Get the length of the edge. 
+        /// </summary>
+        public double Length
+        {
+            get
+            {
+                var p0 = From.GetPosition();
+                var p1 = To.GetPosition();
+                return Vector3d.Distance(p0, p1);
+            }
+        }
+
+        /// <summary>
+        /// Get the sqr length of the edge. 
+        /// </summary>
+        public double SqrLength
+        {
+            get
+            {
+                var p0 = From.GetPosition();
+                var p1 = To.GetPosition();
+                return Vector3d.SqrDistance(p0, p1);
+            }
+        }
+
         /// <summary>
         /// Clear edge of all connections.
         /// </summary>
@@ -230,40 +293,9 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
-        /// Calculate the average position of the vertices.
-        /// </summary>
-        public virtual Vector3d GetCentriod()
-        {
-            int count = 0;
-            Vector3d centroid = Vector3d.Zero;
-            foreach (var v in EnumerateVertices())
-            {
-                centroid += v.GetPosition();
-                count++;
-            }
-
-            if (count == 0)
-                return centroid;
-            else
-                return centroid / count;
-        }
-
-
-        /// <summary>
-        /// Compute the face normal. 
-        /// </summary>
-        public virtual Vector3d GetNormal()
-        {
-            var p0 = From.GetPosition();
-            var p1 = To.GetPosition();
-            var p2 = Previous.From.GetPosition();
-            return Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
-        }
-
-        /// <summary>
         /// Get the position on edge. 
         /// </summary>
-        public virtual Vector3d GetPosition(double t)
+        public Vector3d GetPosition(double t)
         {
             var p0 = From.GetPosition();
             var p1 = To.GetPosition();
