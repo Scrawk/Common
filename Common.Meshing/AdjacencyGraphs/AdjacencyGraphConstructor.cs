@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Core.Numerics;
 using Common.Meshing.Constructors;
 
 namespace Common.Meshing.AdjacencyGraphs

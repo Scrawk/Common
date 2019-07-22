@@ -11,7 +11,7 @@ using Common.Meshing.Test.FaceBased;
 namespace Common.Meshing.Test.HalfEdgeBased
 {
     [TestClass]
-    public class HBOperationsTest
+    public class HBMeshOpTest
     {
 
         [TestMethod]
@@ -22,9 +22,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var c = new Vector2d(1, -1);
 
             HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
-            HBOperations.PokeFace(mesh, mesh.Faces[0]);
+            HBMeshOp.PokeFace(mesh, mesh.Faces[0]);
 
-            HBOperations.RemoveVertex(mesh, mesh.Vertices[3], true);
+            HBMeshOp.RemoveVertex(mesh, mesh.Vertices[3], true);
 
             Assert.AreEqual(3, mesh.Vertices.Count);
             Assert.AreEqual(6, mesh.Edges.Count);
@@ -84,7 +84,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             var mesh = constructor.PopMesh();
             var edge = mesh.Edges[7];
-            HBOperations.CollapseEdge(mesh, edge, true);
+            HBMeshOp.CollapseEdge(mesh, edge, edge.GetPosition(0.5), true);
 
             Assert.AreEqual(9, mesh.Vertices.Count);
             Assert.AreEqual(32, mesh.Edges.Count);
@@ -151,7 +151,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             var edge = mesh.Edges[2];
 
-            HBOperations.SplitEdge(mesh, edge);
+            HBMeshOp.SplitEdge(mesh, edge);
 
             Assert.AreEqual(5, mesh.Vertices.Count);
             Assert.AreEqual(16, mesh.Edges.Count);
@@ -195,7 +195,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var edge = mesh.Edges[2];
             //var edge = mesh.Edges[5];
 
-            HBOperations.FlipEdge(mesh, edge);
+            HBMeshOp.FlipEdge(mesh, edge);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(10, mesh.Edges.Count);
@@ -229,7 +229,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
 
-            HBOperations.PokeFace(mesh, mesh.Faces[0]);
+            HBMeshOp.PokeFace(mesh, mesh.Faces[0]);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(12, mesh.Edges.Count);
@@ -267,7 +267,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             mesh.RemoveFaces();
             mesh2.RemoveFaces();
 
-            HBOperations.Append(mesh2, mesh, false);
+            HBMeshOp.Append(mesh2, mesh, false);
 
             var edge2 = mesh.Edges[2];
             var edge15 = mesh.Edges[15];
@@ -275,8 +275,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var edge1 = mesh.Edges[1];
             var edge8 = mesh.Edges[8];
 
-            HBOperations.JoinEdges(mesh, edge2, edge15, 0.5);
-            HBOperations.JoinEdges(mesh, edge1, edge8, 0.5);
+            HBMeshOp.JoinEdges(mesh, edge2, edge15, 0.5);
+            HBMeshOp.JoinEdges(mesh, edge1, edge8, 0.5);
 
             Assert.AreEqual(10, mesh.Vertices.Count);
             Assert.AreEqual(24, mesh.Edges.Count);
@@ -328,7 +328,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
 
-            HBOperations.PokeEdge(mesh, mesh.Edges[0], 0.5);
+            HBMeshOp.PokeEdge(mesh, mesh.Edges[0], 0.5);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 7);
@@ -352,8 +352,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var mesh1 = HBMeshHelper.CreateTriangle();
             var mesh = new HBMesh2d();
 
-            HBOperations.Append(mesh0, mesh, true);
-            HBOperations.Append(mesh1, mesh, true);
+            HBMeshOp.Append(mesh0, mesh, true);
+            HBMeshOp.Append(mesh1, mesh, true);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 1);
@@ -385,7 +385,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             HBMeshHelper.CheckEdge(mesh, edge: 2, from: 2, face: 0, previous: 1, next: 0, opposite: -1);
             HBMeshHelper.CheckFace(mesh, face: 0, edge: 0);
 
-            HBOperations.AddBoundaryEdges(mesh);
+            HBMeshOp.AddBoundaryEdges(mesh);
 
             HBMeshHelper.CheckEdge(mesh, edge: 0, from: 0, face: 0, previous: 2, next: 1, opposite: 3);
             HBMeshHelper.CheckEdge(mesh, edge: 1, from: 1, face: 0, previous: 0, next: 2, opposite: 4);
@@ -404,7 +404,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var tmp = HBCreateTriangleMesh2.FromBox(min, max);
 
             var constructor = new FBMeshConstructor2d();
-            HBOperations.ToTriangularMesh(constructor, tmp);
+            HBMeshOp.ToTriangularMesh(constructor, tmp);
             var mesh = constructor.PopMesh();
 
             Assert.AreEqual(4, mesh.Vertices.Count);

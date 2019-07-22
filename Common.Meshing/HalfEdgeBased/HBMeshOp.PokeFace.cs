@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Core.Numerics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBOperations
+    public static partial class HBMeshOp
     {
         /// <summary>
         /// Adds a vertex inside the face and creates a edge from

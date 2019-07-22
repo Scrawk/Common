@@ -84,66 +84,6 @@ namespace Common.Meshing.HalfEdgeBased
                 mesh.IndexOf(Previous), mesh.IndexOf(Next), mesh.IndexOf(Opposite));
         }
 
-        public VERTEX GetFrom<VERTEX>() where VERTEX : HBVertex
-        {
-            if (From == null) return null;
-            VERTEX vert = From as VERTEX;
-            if (vert == null)
-                throw new InvalidCastException("Vertex is not a " + typeof(VERTEX));
-
-            return vert;
-        }
-
-        public VERTEX GetTo<VERTEX>() where VERTEX : HBVertex
-        {
-            if (To == null) return null;
-            VERTEX vert = To as VERTEX;
-            if (vert == null)
-                throw new InvalidCastException("To is not a " + typeof(VERTEX));
-
-            return vert;
-        }
-
-        public FACE GetFace<FACE>() where FACE : HBFace
-        {
-            if (Face == null) return null;
-            FACE face = Face as FACE;
-            if (face == null)
-                throw new InvalidCastException("Face is not a " + typeof(FACE));
-
-            return face;
-        }
-
-        public EDGE GetNext<EDGE>() where EDGE : HBEdge
-        {
-            if (Next == null) return null;
-            EDGE edge = Next as EDGE;
-            if (edge == null)
-                throw new InvalidCastException("Edge is not a " + typeof(EDGE));
-
-            return edge;
-        }
-
-        public EDGE GetPrevious<EDGE>() where EDGE : HBEdge
-        {
-            if (Previous == null) return null;
-            EDGE edge = Previous as EDGE;
-            if (edge == null)
-                throw new InvalidCastException("Edge is not a " + typeof(EDGE));
-
-            return edge;
-        }
-
-        public EDGE GetOpposite<EDGE>() where EDGE : HBEdge
-        {
-            if (Opposite == null) return null;
-            EDGE edge = Opposite as EDGE;
-            if (edge == null)
-                throw new InvalidCastException("Edge is not a " + typeof(EDGE));
-
-            return edge;
-        }
-
         /// <summary>
         /// The number of edges proceeding this edge, including this edge.
         /// If edge is closed this will be the total number of in face.
@@ -318,6 +258,16 @@ namespace Common.Meshing.HalfEdgeBased
             var p1 = To.GetPosition();
             var p2 = Previous.From.GetPosition();
             return Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
+        }
+
+        /// <summary>
+        /// Get the position on edge. 
+        /// </summary>
+        public virtual Vector3d GetPosition(double t)
+        {
+            var p0 = From.GetPosition();
+            var p1 = To.GetPosition();
+            return p0 + (p1 - p0) * t;
         }
 
         /// <summary>

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace System.Collections.Generic
 {
@@ -27,6 +25,12 @@ namespace System.Collections.Generic
             list.Add(item2);
             list.Add(item3);
             list.Add(item4);
+        }
+
+        public static void AddRange<T>(this List<T> list, int count, T item)
+        {
+            for (int i = 0; i < count; i++)
+                list.Add(item);
         }
     }
 }

@@ -5,7 +5,7 @@ using Common.Core.Numerics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBOperations
+    public static partial class HBMeshOp
     {
         /// <summary>
         /// Joins two edges where they intersect.
@@ -43,8 +43,8 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Split both edges at intersection point.
             //Presumes v0 and v1 end up at same position.
-            var v0 = HBOperations.PokeEdge(mesh, e0, s);
-            var v1 = HBOperations.PokeEdge(mesh, e1, t);
+            var v0 = HBMeshOp.PokeEdge(mesh, e0, s);
+            var v1 = HBMeshOp.PokeEdge(mesh, e1, t);
 
             //Say the horizontal edge is the half edge starting at v0.
             //Say the vertical edge is the half edge starting at v1.

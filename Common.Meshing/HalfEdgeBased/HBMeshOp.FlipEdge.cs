@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBOperations
+    public static partial class HBMeshOp
     {
         /// <summary>
         /// Takes a edge that connects 2 triangle faces making a quad

@@ -55,17 +55,6 @@ namespace Common.Meshing.FaceBased
 
         public abstract Vector3d GetPosition();
 
-        public FACE GetFace<FACE>(int i) where FACE : FBFace
-        {
-            if (Faces == null) return null;
-
-            FACE face = Faces[i] as FACE;
-            if (face == null)
-                throw new InvalidCastException("Face is not a " + typeof(FACE));
-
-            return face;
-        }
-
         public void AddFace(FBFace face)
         {
             if (Faces == null)

@@ -31,17 +31,6 @@ namespace Common.Meshing.HalfEdgeBased
 
         }
 
-        public EDGE GetEdge<EDGE>() where EDGE : HBEdge
-        {
-            if (Edge == null) return null;
-
-            EDGE edge = Edge as EDGE;
-            if (edge == null)
-                throw new InvalidCastException("Edge is not a " + typeof(EDGE));
-
-            return edge;
-        }
-
         /// <summary>
         /// Convert vertex to string.
         /// </summary>

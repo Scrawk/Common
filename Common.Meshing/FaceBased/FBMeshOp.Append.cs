@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Common.Meshing.FaceBased
 {
-    public static partial class FBOperations
+    public static partial class FBMeshOp
     {
 
         /// <summary>

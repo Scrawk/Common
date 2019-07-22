@@ -6,7 +6,7 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBOperations
+    public static partial class HBMeshOp
     {
 
         public static void ToEdgeMesh<MESH, VERTEX, EDGE, FACE>(IEdgeMeshConstructor<MESH> constructor, HBMesh<VERTEX, EDGE, FACE> mesh)

@@ -2,27 +2,10 @@
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Core.Numerics;
 using Common.Meshing.Constructors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-
-    /// <summary>
-    /// Constructor for HBMesh2i
-    /// </summary>
-    public class HBMeshConstructor2i : HBMeshConstructor<HBMesh2i, HBVertex2i, HBEdge, HBFace>
-    {
-
-    }
-
-    /// <summary>
-    /// Constructor for HBMesh3i
-    /// </summary>
-    public class HBMeshConstructor3i : HBMeshConstructor<HBMesh3i, HBVertex3i, HBEdge, HBFace>
-    {
-
-    }
 
     /// <summary>
     /// Constructor for HBMesh2f
@@ -119,7 +102,7 @@ namespace Common.Meshing.HalfEdgeBased
         public MESH PopMesh()
         {
             if (AddBoundary)
-                HBOperations.AddBoundaryEdges(Mesh);
+                HBMeshOp.AddBoundaryEdges(Mesh);
 
             var tmp = Mesh;
             Mesh = null;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBOperations
+    public static partial class HBMeshOp
     {
         /// <summary>
         /// Add opposite edges to all edges that dont have one.

@@ -7,7 +7,7 @@ using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.FaceBased
 {
-    public static partial class FBOperations
+    public static partial class FBMeshOp
     {
         public static void ToTriangularMesh<MESH, VERTEX, FACE>(ITriangleMeshConstructor<MESH> constructor, FBMesh<VERTEX, FACE> mesh)
             where VERTEX : FBVertex, new()
