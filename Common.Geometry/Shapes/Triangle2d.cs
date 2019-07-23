@@ -169,10 +169,10 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                var xmin = Math.Min(A.x, Math.Min(B.x, C.x));
-                var xmax = Math.Max(A.x, Math.Max(B.x, C.x));
-                var ymin = Math.Min(A.y, Math.Min(B.y, C.y));
-                var ymax = Math.Max(A.y, Math.Max(B.y, C.y));
+                var xmin = DMath.Min(A.x, B.x, C.x);
+                var xmax = DMath.Max(A.x, B.x, C.x);
+                var ymin = DMath.Min(A.y, B.y, C.y);
+                var ymax = DMath.Max(A.y, B.y, C.y);
 
                 return new Box2d(xmin, xmax, ymin, ymax);
             }

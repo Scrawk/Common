@@ -32,7 +32,7 @@ namespace Common.Geometry.Shapes
 
         public VECTOR2 Center
         {
-            get { return (A + B) * 0.5f; }
+            get { return (A + B) * 0.5; }
         }
 
         public REAL Length

@@ -310,6 +310,22 @@ namespace Common.Geometry.Shapes
             return c;
         }
 
+
+        /// <summary>
+        /// Return the signed distance to the point. 
+        /// If point is outside box field is positive.
+        /// If point is inside box field is negative.
+        /// </summary>
+        public REAL SignedDistance(VECTOR3 p)
+        {
+            VECTOR3 d = (p - Center).Absolute - Size * 0.5;
+
+            VECTOR3 max = d;
+            max.Max(0);
+
+            return max.Magnitude + Math.Min(DMath.Max(d.x, d.y, d.z), 0.0);
+        }
+
         public static Box3d CalculateBounds(IList<VECTOR3> vertices)
         {
             VECTOR3 min = VECTOR3.PositiveInfinity;

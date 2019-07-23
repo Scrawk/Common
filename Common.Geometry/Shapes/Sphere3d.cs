@@ -146,6 +146,17 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Return the signed distance to the point. 
+        /// If point is outside sphere field is positive.
+        /// If point is inside spher field is negative.
+        /// </summary>
+        public REAL SignedDistance(VECTOR3 p)
+        {
+            p = p - Center;
+            return p.Magnitude - Radius;
+        }
+
+        /// <summary>
         /// Does the sphere contain the point.
         /// </summary>
         /// <param name="p">The point</param>

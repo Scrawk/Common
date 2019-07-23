@@ -166,10 +166,10 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                REAL xmin = Math.Min(A.x, Math.Min(B.x, C.x));
-                REAL xmax = Math.Max(A.x, Math.Max(B.x, C.x));
-                REAL ymin = Math.Min(A.y, Math.Min(B.y, C.y));
-                REAL ymax = Math.Max(A.y, Math.Max(B.y, C.y));
+                var xmin = FMath.Min(A.x, B.x, C.x);
+                var xmax = FMath.Max(A.x, B.x, C.x);
+                var ymin = FMath.Min(A.y, B.y, C.y);
+                var ymax = FMath.Max(A.y, B.y, C.y);
 
                 return new Box2f(xmin, xmax, ymin, ymax);
             }
