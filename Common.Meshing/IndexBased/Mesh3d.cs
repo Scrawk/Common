@@ -204,5 +204,36 @@ namespace Common.Meshing.IndexBased
                 Positions[i] = m * Positions[i];
         }
 
+        /// <summary>
+        /// Create the area weighted normals
+        /// presuming mesh has triangle faces.
+        /// </summary>
+        public void CreateTriangleNormals()
+        {
+            if (IndexCount == 0) return;
+
+            SetNormals(PositionCount);
+            Array.Clear(Normals, 0, NormalCount);
+
+            for (int i = 0; i < IndexCount; i++)
+                Indices[i].normal = Indices[i].position;
+
+            for (int i = 0; i < IndexCount / 3; i++)
+            {
+                var p0 = Positions[Indices[i * 3 + 0].position];
+                var p1 = Positions[Indices[i * 3 + 1].position];
+                var p2 = Positions[Indices[i * 3 + 2].position];
+
+                var n = VECTOR3.Cross(p1 - p0, p2 - p0);
+
+                Normals[Indices[i * 3 + 0].normal] += n;
+                Normals[Indices[i * 3 + 1].normal] += n;
+                Normals[Indices[i * 3 + 2].normal] += n;
+            }
+
+            for (int i = 0; i < NormalCount; i++)
+                Normals[i] = Normals[i].Normalized;
+        }
+
     }
 }
