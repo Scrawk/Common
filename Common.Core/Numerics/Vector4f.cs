@@ -534,48 +534,52 @@ namespace Common.Core.Numerics
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(REAL s)
+        public static Vector4f Min(Vector4f v, REAL s)
         {
-            x = Math.Min(x, s);
-            y = Math.Min(y, s);
-            z = Math.Min(z, s);
-            w = Math.Min(w, s);
+            v.x = Math.Min(v.x, s);
+            v.y = Math.Min(v.y, s);
+            v.z = Math.Min(v.z, s);
+            v.w = Math.Min(v.w, s);
+            return v;
         }
 
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(Vector4f v)
+        public static Vector4f Min(Vector4f v0, Vector4f v1)
         {
-            x = Math.Min(x, v.x);
-            y = Math.Min(y, v.y);
-            z = Math.Min(z, v.z);
-            w = Math.Min(w, v.w);
+            v0.x = Math.Min(v0.x, v1.x);
+            v0.y = Math.Min(v0.y, v1.y);
+            v0.z = Math.Min(v0.z, v1.z);
+            v0.w = Math.Min(v0.w, v1.w);
+            return v0;
         }
 
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(REAL s)
+        public static Vector4f Max(Vector4f v, REAL s)
         {
-            x = Math.Max(x, s);
-            y = Math.Max(y, s);
-            z = Math.Max(z, s);
-            w = Math.Max(w, s);
+            v.x = Math.Max(v.x, s);
+            v.y = Math.Max(v.y, s);
+            v.z = Math.Max(v.z, s);
+            v.w = Math.Max(v.w, s);
+            return v;
         }
 
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(Vector4f v)
+        public static Vector4f Max(Vector4f v0, Vector4f v1)
         {
-            x = Math.Max(x, v.x);
-            y = Math.Max(y, v.y);
-            z = Math.Max(z, v.z);
-            w = Math.Max(w, v.w);
+            v0.x = Math.Max(v0.x, v1.x);
+            v0.y = Math.Max(v0.y, v1.y);
+            v0.z = Math.Max(v0.z, v1.z);
+            v0.w = Math.Max(v0.w, v1.w);
+            return v0;
         }
 
         /// <summary>

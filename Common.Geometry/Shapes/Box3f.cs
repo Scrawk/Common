@@ -318,10 +318,7 @@ namespace Common.Geometry.Shapes
         public REAL SignedDistance(VECTOR3 p)
         {
             VECTOR3 d = (p - Center).Absolute - Size * 0.5f;
-
-            VECTOR3 max = d;
-            max.Max(0);
-
+            VECTOR3 max = VECTOR3.Max(d, 0);
             return max.Magnitude + Math.Min(FMath.Max(d.x, d.y, d.z), 0.0f);
         }
 

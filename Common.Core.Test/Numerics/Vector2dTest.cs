@@ -242,11 +242,11 @@ namespace Common.Core.Test.Numerics
         public void Min()
         {
             Vector2d v = Vector2d.One;
-            v.Min(0.5f);
+            v = Vector2d.Min(v, 0.5f);
             Assert.AreEqual(v, new Vector2d(0.5f, 0.5f));
 
             v = Vector2d.One;
-            v.Min(new Vector2d(0.5f, 0.6f));
+            v = Vector2d.Min(v, new Vector2d(0.5f, 0.6f));
             Assert.AreEqual(v, new Vector2d(0.5f, 0.6f));
         }
 
@@ -254,11 +254,11 @@ namespace Common.Core.Test.Numerics
         public void Max()
         {
             Vector2d v = Vector2d.One;
-            v.Max(1.5f);
+            v = Vector2d.Max(v, 1.5f);
             Assert.AreEqual(v, new Vector2d(1.5f, 1.5f));
 
             v = Vector2d.One;
-            v.Max(new Vector2d(1.5f, 1.6f));
+            v = Vector2d.Max(v, new Vector2d(1.5f, 1.6f));
             Assert.AreEqual(v, new Vector2d(1.5f, 1.6f));
         }
 

@@ -570,40 +570,44 @@ namespace Common.Core.Numerics
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(REAL s)
+        public static Vector2f Min(Vector2f v, REAL s)
         {
-            x = Math.Min(x, s);
-            y = Math.Min(y, s);
+            v.x = Math.Min(v.x, s);
+            v.y = Math.Min(v.y, s);
+            return v;
         }
 
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(Vector2f v)
+        public static Vector2f Min(Vector2f v0, Vector2f v1)
         {
-            x = Math.Min(x, v.x);
-            y = Math.Min(y, v.y);
+            v0.x = Math.Min(v0.x, v1.x);
+            v0.y = Math.Min(v0.y, v1.y);
+            return v0;
         }
 
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(REAL s)
+        public static Vector2f Max(Vector2f v, REAL s)
         {
-            x = Math.Max(x, s);
-            y = Math.Max(y, s);
+            v.x = Math.Max(v.x, s);
+            v.y = Math.Max(v.y, s);
+            return v;
         }
 
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(Vector2f v)
+        public static Vector2f Max(Vector2f v0, Vector2f v1)
         {
-            x = Math.Max(x, v.x);
-            y = Math.Max(y, v.y);
+            v0.x = Math.Max(v0.x, v1.x);
+            v0.y = Math.Max(v0.y, v1.y);
+            return v0;
         }
 
         /// <summary>

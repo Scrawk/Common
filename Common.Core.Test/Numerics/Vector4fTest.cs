@@ -113,11 +113,11 @@ namespace Common.Core.Test.Numerics
         public void Min()
         {
             Vector4f v = Vector4f.One;
-            v.Min(0.5f);
+            v = Vector4f.Min(v, 0.5f);
             Assert.AreEqual(v, new Vector4f(0.5f, 0.5f, 0.5f, 0.5f));
 
             v = Vector4f.One;
-            v.Min(new Vector4f(0.5f, 0.5f, 0.5f, 0.5f));
+            v = Vector4f.Min(v, new Vector4f(0.5f, 0.5f, 0.5f, 0.5f));
             Assert.AreEqual(v, new Vector4f(0.5f, 0.5f, 0.5f, 0.5f));
         }
 
@@ -125,11 +125,11 @@ namespace Common.Core.Test.Numerics
         public void Max()
         {
             Vector4f v = Vector4f.One;
-            v.Max(1.5f);
+            v = Vector4f.Max(v, 1.5f);
             Assert.AreEqual(v, new Vector4f(1.5f, 1.5f, 1.5f, 1.5f));
 
             v = Vector4f.One;
-            v.Max(new Vector4f(1.5f, 1.5f, 1.5f, 1.5f));
+            v = Vector4f.Max(v, new Vector4f(1.5f, 1.5f, 1.5f, 1.5f));
             Assert.AreEqual(v, new Vector4f(1.5f, 1.5f, 1.5f, 1.5f));
         }
 

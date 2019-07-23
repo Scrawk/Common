@@ -296,10 +296,7 @@ namespace Common.Geometry.Shapes
         public REAL SignedDistance(VECTOR2 p)
         {
             VECTOR2 d = (p - Center).Absolute - Size * 0.5f;
-
-            VECTOR2 max = d;
-            max.Max(0);
-
+            VECTOR2 max = VECTOR2.Max(d, 0);
             return max.Magnitude + Math.Min(Math.Max(d.x, d.y), 0.0f);
         }
 

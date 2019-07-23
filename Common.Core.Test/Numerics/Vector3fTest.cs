@@ -127,11 +127,11 @@ namespace Common.Core.Test.Numerics
         public void Min()
         {
             Vector3f v = Vector3f.One;
-            v.Min(0.5f);
+            v = Vector3f.Min(v, 0.5f);
             Assert.AreEqual(v, new Vector3f(0.5f, 0.5f, 0.5f));
 
             v = Vector3f.One;
-            v.Min(new Vector3f(0.5f, 0.5f, 0.5f));
+            v = Vector3f.Min(v, new Vector3f(0.5f, 0.5f, 0.5f));
             Assert.AreEqual(v, new Vector3f(0.5f, 0.5f, 0.5f));
         }
 
@@ -139,11 +139,11 @@ namespace Common.Core.Test.Numerics
         public void Max()
         {
             Vector3f v = Vector3f.One;
-            v.Max(1.5f);
+            v = Vector3f.Max(v,1.5f);
             Assert.AreEqual(v, new Vector3f(1.5f, 1.5f, 1.5f));
 
             v = Vector3f.One;
-            v.Max(new Vector3f(1.5f, 1.5f, 1.5f));
+            v = Vector3f.Max(v, new Vector3f(1.5f, 1.5f, 1.5f));
             Assert.AreEqual(v, new Vector3f(1.5f, 1.5f, 1.5f));
         }
 
