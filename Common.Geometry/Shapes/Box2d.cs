@@ -229,7 +229,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public static Box2d Enlarge(Box2d box, REAL percent)
         {
-            var amount = box.Size * percent * 0.5f;
+            var amount = box.Size * percent * 0.5;
             return new Box2d(box.Min - amount, box.Max + amount);
         }
 
@@ -264,7 +264,8 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Returns the closest point on the box.
+        /// Find the closest point to the box.
+        /// If point inside box return point.
         /// </summary>
         public VECTOR2 Closest(VECTOR2 p)
         {

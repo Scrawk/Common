@@ -135,16 +135,14 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Find the closest point on the spheres 
-        /// surface to the point.
+        /// Find the closest point to the sphere.
+        /// If point inside sphere return point.
         /// </summary>
-        /// <param name="p">a point that is not equal to the spheres center</param>
-        /// <returns>The closest point on the surface</returns>
         public VECTOR3 Closest(VECTOR3 p)
         {
-            VECTOR3 n = (Center - p).Normalized;
-            if (n == VECTOR3.Zero) n = VECTOR3.UnitX;
-            return Center + Radius * n;
+            VECTOR3 d = Center - p;
+            if (d.SqrMagnitude <= Radius2) return p;
+            return Center + Radius * d.Normalized;
         }
 
         /// <summary>

@@ -118,16 +118,14 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Find the closest point on the circles 
-        /// circumference to the point.
+        /// Find the closest point to the circle.
+        /// If point inside circle return point.
         /// </summary>
-        /// <param name="p">a point that is not equal to the circles center</param>
-        /// <returns>The closest point on the circumference</returns>
         public VECTOR2 Closest(VECTOR2 p)
         {
-            VECTOR2 n = (Center - p).Normalized;
-            if (n == VECTOR2.Zero) n = VECTOR2.UnitX;
-            return Center + Radius * n;
+            VECTOR2 d = Center - p;
+            if (d.SqrMagnitude <= Radius2) return p;
+            return Center + Radius * d.Normalized;
         }
 
         /// <summary>

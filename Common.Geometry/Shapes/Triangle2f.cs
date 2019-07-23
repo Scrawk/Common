@@ -302,10 +302,9 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Closest point on triangle.
+        /// Find the closest point to the triangle.
+        /// If point inside triangle return point.
         /// </summary>
-        /// <param name="p">point</param>
-        /// <returns>closest point</returns>
         public VECTOR2 Closest(VECTOR2 p)
         {
             VECTOR2 ab = B - A;

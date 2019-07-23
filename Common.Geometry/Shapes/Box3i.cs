@@ -270,7 +270,8 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Returns the closest poREAL on the box.
+        /// Find the closest point to the box.
+        /// If point inside box return point.
         /// </summary>
         public VECTOR3 Closest(VECTOR3 p)
         {
