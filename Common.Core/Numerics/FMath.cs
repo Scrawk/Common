@@ -68,6 +68,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Exp(float d)
+        {
+            return (float)Math.Exp(d);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeAcos(float r)
         {
             return (float)Math.Acos(Math.Min(1.0f, Math.Max(-1.0f, r)));
@@ -160,6 +166,25 @@ namespace Common.Core.Numerics
         public static float Lerp(float v0, float v1, float a)
         {
             return v0 * (1.0f - a) + v1 * a;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float SignOrZero(float v)
+        {
+            if (v == 0) return 0;
+            return Math.Sign(v);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Min(float a, float b, float c)
+        {
+            return Math.Min(a, Math.Min(b, c));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Max(float a, float b, float c)
+        {
+            return Math.Max(a, Math.Max(b, c));
         }
 
     }

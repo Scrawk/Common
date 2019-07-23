@@ -50,10 +50,35 @@ namespace Common.Core.Numerics
             return v;
         }
 
+        /// <summary>
+        /// Sqare the number.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Sqr(int v)
         {
             return v * v;
+        }
+
+        /// <summary>
+        /// return the sign of the number or 0.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int SignOrZero(int v)
+        {
+            if (v == 0) return 0;
+            return Math.Sign(v);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Min(int a, int b, int c)
+        {
+            return Math.Min(a, Math.Min(b, c));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Max(int a, int b, int c)
+        {
+            return Math.Max(a, Math.Max(b, c));
         }
 
         /// <summary>

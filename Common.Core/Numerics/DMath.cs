@@ -109,6 +109,26 @@ namespace Common.Core.Numerics
             return v0 * (1.0 - a) + v1 * a;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double SignOrZero(double v)
+        {
+            if (v == 0) return 0;
+            return Math.Sign(v);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Min(double a, double b, double c)
+        {
+            return Math.Min(a, Math.Min(b, c));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Max(double a, double b, double c)
+        {
+            return Math.Max(a, Math.Max(b, c));
+        }
+
+
     }
 }
 

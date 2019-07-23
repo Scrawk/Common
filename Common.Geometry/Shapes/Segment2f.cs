@@ -278,6 +278,15 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Return the signed distance to the point. 
+        /// Always positive.
+        /// </summary>
+        public REAL SignedDistance(VECTOR2 p)
+        {
+            return VECTOR2.Distance(Closest(p), p);
+        }
+
+        /// <summary>
         /// The closest segment spanning two other segments.
         /// </summary>
         /// <param name="seg">the other segment</param>

@@ -129,6 +129,17 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Return the signed distance to the point. 
+        /// If point is outside circle field is positive.
+        /// If point is inside circle field is negative.
+        /// </summary>
+        public REAL SignedDistance(VECTOR2 p)
+        {
+            p = p - Center;
+            return p.Magnitude - Radius;
+        }
+
+        /// <summary>
         /// Does the circle contain the point.
         /// </summary>
         /// <param name="p">The point</param>
