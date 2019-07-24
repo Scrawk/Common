@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
+using REAL = System.Double;
+using VECTOR = Common.Core.Numerics.Vector3d;
 
 namespace Common.Core.Test.Numerics
 {
@@ -13,14 +15,14 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void AreEqual()
         {
-            Assert.IsTrue(Vector3d.One.Equals(new Vector3d(1, 1, 1)));
-            Assert.IsTrue(Vector3d.One == new Vector3d(1, 1, 1));
+            Assert.IsTrue(VECTOR.One.Equals(new VECTOR(1, 1, 1)));
+            Assert.IsTrue(VECTOR.One == new VECTOR(1, 1, 1));
         }
 
         [TestMethod]
         public void AreNotEqual()
         {
-            Assert.IsTrue(Vector3d.One != new Vector3d(2, 2, 2));
+            Assert.IsTrue(VECTOR.One != new VECTOR(2, 2, 2));
         }
 
         [TestMethod]
@@ -32,56 +34,56 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void Add()
         {
-            Assert.AreEqual(Vector3d.One + Vector3d.One, new Vector3d(2, 2, 2));
-            Assert.AreEqual(Vector3d.One + 1, new Vector3d(2, 2, 2));
-            Assert.AreEqual(1 + Vector3d.One, new Vector3d(2, 2, 2));
+            Assert.AreEqual(VECTOR.One + VECTOR.One, new VECTOR(2, 2, 2));
+            Assert.AreEqual(VECTOR.One + 1, new VECTOR(2, 2, 2));
+            Assert.AreEqual(1 + VECTOR.One, new VECTOR(2, 2, 2));
         }
 
         [TestMethod]
         public void Sub()
         {
-            Assert.AreEqual(Vector3d.One - Vector3d.One, new Vector3d(0, 0, 0));
-            Assert.AreEqual(Vector3d.One - 1, new Vector3d(0, 0, 0));
-            Assert.AreEqual(1 - Vector3d.One, new Vector3d(0, 0, 0));
+            Assert.AreEqual(VECTOR.One - VECTOR.One, new VECTOR(0, 0, 0));
+            Assert.AreEqual(VECTOR.One - 1, new VECTOR(0, 0, 0));
+            Assert.AreEqual(1 - VECTOR.One, new VECTOR(0, 0, 0));
         }
 
         [TestMethod]
         public void Mul()
         {
-            Assert.AreEqual(Vector3d.One * new Vector3d(2, 2, 2), new Vector3d(2, 2, 2));
-            Assert.AreEqual(Vector3d.One * 2, new Vector3d(2, 2, 2));
-            Assert.AreEqual(2 * Vector3d.One, new Vector3d(2, 2, 2));
+            Assert.AreEqual(VECTOR.One * new VECTOR(2, 2, 2), new VECTOR(2, 2, 2));
+            Assert.AreEqual(VECTOR.One * 2, new VECTOR(2, 2, 2));
+            Assert.AreEqual(2 * VECTOR.One, new VECTOR(2, 2, 2));
         }
 
         [TestMethod]
         public void Div()
         {
-            Assert.AreEqual(Vector3d.One / new Vector3d(2, 2, 2), new Vector3d(0.5f, 0.5f, 0.5f));
-            Assert.AreEqual(Vector3d.One / 2, new Vector3d(0.5f, 0.5f, 0.5f));
+            Assert.AreEqual(VECTOR.One / new VECTOR(2, 2, 2), new VECTOR(0.5f, 0.5f, 0.5f));
+            Assert.AreEqual(VECTOR.One / 2, new VECTOR(0.5f, 0.5f, 0.5f));
         }
 
         [TestMethod]
         public void Dot()
         {
-            Assert.AreEqual(Vector3d.Dot(Vector3d.One, Vector3d.One), 3);
+            Assert.AreEqual(VECTOR.Dot(VECTOR.One, VECTOR.One), 3);
         }
 
         [TestMethod]
         public void Magnitude()
         {
-            Assert.IsTrue(NearlyEqual(Vector3d.One.Magnitude, Math.Sqrt(3)));
+            Assert.IsTrue(NearlyEqual(VECTOR.One.Magnitude, Math.Sqrt(3)));
         }
 
         [TestMethod]
         public void SqrMagnitude()
         {
-            Assert.AreEqual(Vector3d.One.SqrMagnitude, 3);
+            Assert.AreEqual(VECTOR.One.SqrMagnitude, 3);
         }
 
         [TestMethod]
         public void Absolute()
         {
-            Vector3d v = new Vector3d(-1, -2, -3);
+            VECTOR v = new VECTOR(-1, -2, -3);
             Assert.AreEqual(1, v.Absolute.x);
             Assert.AreEqual(2, v.Absolute.y);
             Assert.AreEqual(3, v.Absolute.z);
@@ -92,28 +94,67 @@ namespace Common.Core.Test.Numerics
         {
             Assert.IsTrue(NearlyEqual(Random3(0).Normalized.Magnitude, 1));
 
-            Vector3d v = Random3(0);
+            VECTOR v = Random3(0);
             v.Normalize();
 
             Assert.IsTrue(NearlyEqual(v.Magnitude, 1));
         }
 
         [TestMethod]
+        public void Angle180()
+        {
+            REAL error = 1e-4f;
+            VECTOR v = new VECTOR(1, 0, 0);
+
+            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle180(v, new VECTOR(1, 0, 0)), error));
+            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle180(v, new VECTOR(1, 1, 0)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle180(v, new VECTOR(0, 1, 0)), error));
+            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle180(v, new VECTOR(-1, 1, 0)), error));
+            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle180(v, new VECTOR(-1, 0, 0)), error));
+            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle180(v, new VECTOR(-1, -1, 0)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle180(v, new VECTOR(0, -1, 0)), error));
+            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle180(v, new VECTOR(1, -1, 0)), error));
+
+            v = new VECTOR(0, 1, 0);
+
+            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle180(v, new VECTOR(0, 1, 0)), error));
+            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle180(v, new VECTOR(-1, 1, 0)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle180(v, new VECTOR(1, 0, 0)), error));
+            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle180(v, new VECTOR(-1, -1, 0)), error));
+            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle180(v, new VECTOR(0, -1, 0)), error));
+            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle180(v, new VECTOR(1, -1, 0)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle180(v, new VECTOR(1, 0, 0)), error));
+            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle180(v, new VECTOR(1, 1, 0)), error));
+
+            v = new VECTOR(0, 0, 1);
+
+            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle180(v, new VECTOR(0, 0, 1)), error));
+            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle180(v, new VECTOR(0, 1, 1)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle180(v, new VECTOR(0, 1, 0)), error));
+            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle180(v, new VECTOR(0, 1, -1)), error));
+            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle180(v, new VECTOR(0, 0, -1)), error));
+            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle180(v, new VECTOR(0, -1, -1)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle180(v, new VECTOR(0, -1, 0)), error));
+            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle180(v, new VECTOR(0, -1, 1)), error));
+
+        }
+
+        [TestMethod]
         public void Cross()
         {
-            Vector3d v010 = new Vector3d(0, 1, 0);
-            Vector3d v100 = new Vector3d(1, 0, 0);
-            Vector3d v001 = new Vector3d(0, 0, 1);
+            VECTOR v010 = new VECTOR(0, 1, 0);
+            VECTOR v100 = new VECTOR(1, 0, 0);
+            VECTOR v001 = new VECTOR(0, 0, 1);
 
-            Assert.AreEqual(Vector3d.Cross(v100, v010), v001);
-            Assert.AreEqual(Vector3d.Cross(v100, v010), Vector3d.Cross(v010, v100) * -1);
+            Assert.AreEqual(VECTOR.Cross(v100, v010), v001);
+            Assert.AreEqual(VECTOR.Cross(v100, v010), VECTOR.Cross(v010, v100) * -1);
             Assert.AreEqual(v100.Cross(v010), v001);
         }
 
         [TestMethod]
         public void AccessedByIndex()
         {
-            Vector3d v = new Vector3d();
+            VECTOR v = new VECTOR();
             v[0] = 1;
             v[1] = 2;
             v[2] = 3;
@@ -126,70 +167,70 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void Min()
         {
-            Vector3d v = Vector3d.One;
-            v = Vector3d.Min(v, 0.5f);
-            Assert.AreEqual(v, new Vector3d(0.5f, 0.5f, 0.5f));
+            VECTOR v = VECTOR.One;
+            v = VECTOR.Min(v, 0.5f);
+            Assert.AreEqual(v, new VECTOR(0.5f, 0.5f, 0.5f));
 
-            v = Vector3d.One;
-            v = Vector3d.Min(v, new Vector3d(0.5f, 0.5f, 0.5f));
-            Assert.AreEqual(v, new Vector3d(0.5f, 0.5f, 0.5f));
+            v = VECTOR.One;
+            v = VECTOR.Min(v, new VECTOR(0.5f, 0.5f, 0.5f));
+            Assert.AreEqual(v, new VECTOR(0.5f, 0.5f, 0.5f));
         }
 
         [TestMethod]
         public void Max()
         {
-            Vector3d v = Vector3d.One;
-            v = Vector3d.Max(v, 1.5f);
-            Assert.AreEqual(v, new Vector3d(1.5f, 1.5f, 1.5f));
+            VECTOR v = VECTOR.One;
+            v = VECTOR.Max(v, 1.5f);
+            Assert.AreEqual(v, new VECTOR(1.5f, 1.5f, 1.5f));
 
-            v = Vector3d.One;
-            v = Vector3d.Max(v, new Vector3d(1.5f, 1.5f, 1.5f));
-            Assert.AreEqual(v, new Vector3d(1.5f, 1.5f, 1.5f));
+            v = VECTOR.One;
+            v = VECTOR.Max(v, new VECTOR(1.5f, 1.5f, 1.5f));
+            Assert.AreEqual(v, new VECTOR(1.5f, 1.5f, 1.5f));
         }
 
         [TestMethod]
         public void Clamp()
         {
-            Vector3d v = new Vector3d(0.4f, 1.6f, 0.1f);
+            VECTOR v = new VECTOR(0.4f, 1.6f, 0.1f);
             v.Clamp(0.5f, 1.5f);
-            Assert.AreEqual(v, new Vector3d(0.5f, 1.5f, 0.5f));
+            Assert.AreEqual(v, new VECTOR(0.5f, 1.5f, 0.5f));
 
-            v = new Vector3d(0.4f, 1.6f, 0.1f);
-            v.Clamp(new Vector3d(0.5f, 1.5f, 0.5f), new Vector3d(0.5f, 1.5f, 0.5f));
-            Assert.AreEqual(v, new Vector3d(0.5f, 1.5f, 0.5f));
+            v = new VECTOR(0.4f, 1.6f, 0.1f);
+            v.Clamp(new VECTOR(0.5f, 1.5f, 0.5f), new VECTOR(0.5f, 1.5f, 0.5f));
+            Assert.AreEqual(v, new VECTOR(0.5f, 1.5f, 0.5f));
         }
 
         [TestMethod]
         public void Abs()
         {
-            Vector3d v = new Vector3d(-1, -2, -3);
+            VECTOR v = new VECTOR(-1, -2, -3);
             v.Abs();
-            Assert.AreEqual(v, new Vector3d(1,2,3));
+            Assert.AreEqual(v, new VECTOR(1,2,3));
         }
 
         [TestMethod]
         public new void ToString()
         {
-            Vector3d v = new Vector3d(1, 2, 3);
+            VECTOR v = new VECTOR(1, 2, 3);
             Assert.AreEqual("1,2,3", v.ToString());
         }
 
         [TestMethod]
         public void FromString()
         {
-            Vector3d v = new Vector3d(1, 2, 3);
-            Assert.AreEqual(v, Vector3d.FromString("1,2,3"));
+            VECTOR v = new VECTOR(1, 2, 3);
+            Assert.AreEqual(v, VECTOR.FromString("1,2,3"));
         }
 
-        bool NearlyEqual(double f1, double f2, double eps = 1e-6)
+        bool NearlyEqual(REAL f1, REAL f2, REAL eps = 1e-6)
         {
             return Math.Abs(f1 - f2) < eps;
         }
 
-        Vector3d Random3(int seed)
+        VECTOR Random3(int seed)
         {
             Random rnd = new Random(seed);
-            return new Vector3d(rnd.NextDouble(), rnd.NextDouble(), rnd.NextDouble());
+            return new VECTOR(rnd.NextDouble(), rnd.NextDouble(), rnd.NextDouble());
         }
 
     }

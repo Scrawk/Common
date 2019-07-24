@@ -535,32 +535,14 @@ namespace Common.Core.Numerics
 
         /// <summary>
         /// Angle between two vectors in degrees from 0 to 180.
-        /// A and b origin treated as 0,0.
+        /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Angle180(Vector2d a, Vector2d b)
         {
+            REAL dp = Vector2d.Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
-            if (m == 0.0) return 0;
-
-            REAL angle = Dot(a, b) / m;
-
-            return DMath.SafeAcos(angle) * DMath.Rad2Deg;
-        }
-
-        /// <summary>
-        /// Angle between two vectors in degrees from 0 to 360 ccw.
-        /// A and b origin treated as 0,0.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Angle360(Vector2d a, Vector2d b)
-        {
-            REAL angle = Math.Atan2(a.y, a.x) - Math.Atan2(b.y, b.x);
-       
-            if (angle <= 0.0)
-                angle = Math.PI * 2.0 + angle;
-
-            return 360.0 - angle * DMath.Rad2Deg;
+            return DMath.SafeAcos(DMath.SafeDiv(dp, m)) * DMath.Rad2Deg;
         }
 
         /// <summary>

@@ -547,14 +547,14 @@ namespace Common.Core.Numerics
 		}
 
         /// <summary>
-        /// Angle between two vectors.
+        /// Angle between two vectors in degrees from 0 to 180.
+        /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Angle180(Vector3d a, Vector3d b)
         {
             REAL dp = Vector3d.Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
-
             return DMath.SafeAcos(DMath.SafeDiv(dp, m)) * DMath.Rad2Deg;
         }
 
