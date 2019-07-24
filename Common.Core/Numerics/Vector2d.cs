@@ -546,6 +546,23 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Angle between two vectors in degrees from 0 to 360.
+        /// Angle represents moving ccw from a to b.
+        /// A and b origin treated as 0,0 and do not need to be normalized.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static REAL Angle360(Vector2d a, Vector2d b)
+        {
+            REAL angle = Math.Atan2(a.y, a.x) - Math.Atan2(b.y, b.x);
+
+            if (angle <= 0.0)
+                angle = Math.PI * 2.0 + angle;
+
+            angle = 360.0 - angle * DMath.Rad2Deg;
+            return angle >= 360.0 ? 0 : angle;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -189,6 +189,46 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
+        public void Angle360()
+        {
+            REAL error = 1e-4f;
+            VECTOR v = new VECTOR(1, 0);
+
+            for (int i = 0; i < 360; i++)
+            {
+                float di = i / 360.0f;
+
+                REAL theta = 2.0f * FMath.PI * di;
+                REAL x = FMath.Cos(theta);
+                REAL y = FMath.Sin(theta);
+
+                Assert.IsTrue(NearlyEqual(i, VECTOR.Angle360(v, new VECTOR(x, y)), error));
+            }
+
+            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle360(v, new VECTOR(1, 0)), error));
+            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle360(v, new VECTOR(1, 1)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle360(v, new VECTOR(0, 1)), error));
+            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle360(v, new VECTOR(-1, 1)), error));
+            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle360(v, new VECTOR(-1, 0)), error));
+            Assert.IsTrue(NearlyEqual(225, VECTOR.Angle360(v, new VECTOR(-1, -1)), error));
+            Assert.IsTrue(NearlyEqual(270, VECTOR.Angle360(v, new VECTOR(0, -1)), error));
+
+            v = new VECTOR(-1, 0);
+
+            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle360(v, new VECTOR(-1, 0)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle360(v, new VECTOR(0, -1)), error));
+            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle360(v, new VECTOR(1, 0)), error));
+            Assert.IsTrue(NearlyEqual(270, VECTOR.Angle360(v, new VECTOR(0, 1)), error));
+
+            v = new VECTOR(0, 1);
+
+            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle360(v, new VECTOR(0, 1)), error));
+            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle360(v, new VECTOR(-1, 0)), error));
+            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle360(v, new VECTOR(0, -1)), error));
+            Assert.IsTrue(NearlyEqual(270, VECTOR.Angle360(v, new VECTOR(1, 0)), error));
+        }
+
+        [TestMethod]
         public void AccessedByIndex()
         {
             VECTOR v = new VECTOR();
