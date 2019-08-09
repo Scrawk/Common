@@ -9,7 +9,7 @@ namespace Common.Meshing.GridGraphs
 {
     public static partial class GridGraphSearch
     {
-        internal static void PrimsMinimumSpanningTree(GridGraph graph, GridSearch search, int x, int y, float[,] weights)
+        internal static void PrimsMinimumSpanningTree(GridGraph graph, GridSearch search, int x, int y, Func<GridEdge, float> GetWeight)
         {
             search.Clear();
             int width = graph.Width;
@@ -22,7 +22,7 @@ namespace Common.Meshing.GridGraphs
             var queue = new BinaryHeap<GridEdge>(8);
 
             List<GridEdge> edges = new List<GridEdge>(8);
-            graph.GetEdges(x, y, edges, weights);
+            graph.GetEdges(x, y, edges, GetWeight);
 
             if (edges.Count != 0)
             {
@@ -45,7 +45,7 @@ namespace Common.Meshing.GridGraphs
 
                 if (graph.Edges[v.x, v.y] == 0) continue;
 
-                graph.GetEdges(v.x, v.y, edges, weights);
+                graph.GetEdges(v.x, v.y, edges, GetWeight);
 
                 foreach (GridEdge e in edges)
                 {

@@ -156,11 +156,9 @@ namespace Common.Meshing.Constructors
                     }
 
                     int n0, n1, n2;
-                    n0 = n1 = n2 = -1;
-
-                    edges.TryGetValue(new Vector2i(b, a), out n0);
-                    edges.TryGetValue(new Vector2i(c, b), out n1);
-                    edges.TryGetValue(new Vector2i(a, c), out n2);
+                    if (!edges.TryGetValue(new Vector2i(b, a), out n0)) n0 = -1;
+                    if (!edges.TryGetValue(new Vector2i(c, b), out n1)) n1 = -1;
+                    if (!edges.TryGetValue(new Vector2i(a, c), out n2)) n2 = -1;
 
                     constructor.AddFaceConnection(i, n0, n1, n2);
                 }

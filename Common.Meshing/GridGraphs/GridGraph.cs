@@ -258,7 +258,7 @@ namespace Common.Meshing.GridGraphs
 
         }
 
-        public void GetAllEdges(List<GridEdge> edges, float[,] weights = null)
+        public void GetAllEdges(List<GridEdge> edges, Func<GridEdge, float> GetWeight)
         {
 
             for (int y = 0; y < Height; y++)
@@ -279,9 +279,7 @@ namespace Common.Meshing.GridGraphs
                         if ((edge & 1 << i) == 0) continue;
 
                         var e = new GridEdge(x, y, xi, yi);
-
-                        if (weights != null)
-                            e.Weight = weights[x, y] + weights[xi, yi];
+                        e.Weight = GetWeight(e);
 
                         edges.Add(e);
                     }
@@ -290,7 +288,7 @@ namespace Common.Meshing.GridGraphs
 
         }
 
-        public void GetEdges(int x, int y, List<GridEdge> edges, float[,] weights = null)
+        public void GetEdges(int x, int y, List<GridEdge> edges, Func<GridEdge, float> GetWeight)
         {
 
             int edge = Edges[x, y];
@@ -307,9 +305,7 @@ namespace Common.Meshing.GridGraphs
                 if ((edge & 1 << i) == 0) continue;
 
                 var e = new GridEdge(x, y, xi, yi);
-
-                if (weights != null)
-                    e.Weight = weights[x, y] + weights[xi, yi];
+                e.Weight = GetWeight(e);
 
                 edges.Add(e);
                 edges.Add(new GridEdge(x, y, xi, yi));

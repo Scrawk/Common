@@ -167,6 +167,22 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Does the sphere fully contain the box.
+        /// </summary>
+        public bool Contains(Box3f box)
+        {
+            if (!Contains(new VECTOR3(box.Min.x, box.Min.y, box.Min.z))) return false;
+            if (!Contains(new VECTOR3(box.Max.x, box.Min.y, box.Min.z))) return false;
+            if (!Contains(new VECTOR3(box.Max.x, box.Min.y, box.Max.z))) return false;
+            if (!Contains(new VECTOR3(box.Min.x, box.Min.y, box.Max.z))) return false;
+            if (!Contains(new VECTOR3(box.Min.x, box.Max.y, box.Min.z))) return false;
+            if (!Contains(new VECTOR3(box.Max.x, box.Max.y, box.Min.z))) return false;
+            if (!Contains(new VECTOR3(box.Max.x, box.Max.y, box.Max.z))) return false;
+            if (!Contains(new VECTOR3(box.Min.x, box.Max.y, box.Max.z))) return false;
+            return true;
+        }
+
+        /// <summary>
         /// Does this sphere intersect with the other sphere.
         /// </summary>
         /// <param name="sphere">The other sphere</param>
@@ -175,6 +191,15 @@ namespace Common.Geometry.Shapes
         {
             REAL r = Radius + sphere.Radius;
             return VECTOR3.SqrDistance(Center, sphere.Center) <= r * r;
+        }
+
+        /// <summary>
+        /// Does the sphere intersect the box.
+        /// </summary>
+        public bool Intersects(Box3f box)
+        {
+            var p = box.Closest(Center);
+            return VECTOR3.SqrDistance(p, Center) <= Radius2;
         }
 
         /// <summary>

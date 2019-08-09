@@ -12,6 +12,7 @@ namespace Common.Mathematics.Probability
         public static float Mean(IList<float> data)
         {
             int count = data.Count;
+            if (count == 0) return 0;
 
             float u = 0;
             for (int i = 0; i < count; i++)
@@ -23,6 +24,7 @@ namespace Common.Mathematics.Probability
         public static double Mean(IList<double> data)
         {
             int count = data.Count;
+            if (count == 0) return 0;
 
             double u = 0;
             for (int i = 0; i < count; i++)
@@ -31,33 +33,10 @@ namespace Common.Mathematics.Probability
             return u / count;
         }
 
-        public static ColorRGB Mean(IList<ColorRGB> data)
-        {
-            int count = data.Count;
-
-            ColorRGB u = new ColorRGB();
-            for (int i = 0; i < count; i++)
-                u += data[i];
-
-            return u / count;
-        }
-
-        public static ColorRGB Mean(ColorRGB[,] data)
-        {
-            int width = data.GetLength(0);
-            int height = data.GetLength(1);
-
-            ColorRGB u = new ColorRGB();
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
-                    u += data[i, j];
-
-            return u / (width*height);
-        }
-
         public static ColorRGBA Mean(IList<ColorRGBA> data)
         {
             int count = data.Count;
+            if (count == 0) return new ColorRGBA();
 
             ColorRGBA u = new ColorRGBA();
             for (int i = 0; i < count; i++)
@@ -104,47 +83,10 @@ namespace Common.Mathematics.Probability
             return u;
         }
 
-        public static float[] Mean(IList<float[]> data)
-        {
-            int count = data.Count;
-            int dimension = data[0].Length;
-
-            float[] u = new float[dimension];
-
-            for (int i = 0; i < count; i++)
-            {
-                for (int j = 0; j < dimension; j++)
-                    u[j] += data[i][j];
-            }
-
-            for (int j = 0; j < dimension; j++)
-                u[j] /= count;
-
-            return u;
-        }
-
-        public static double[] Mean(IList<double[]> data)
-        {
-            int count = data.Count;
-            int dimension = data[0].Length;
-
-            double[] u = new double[dimension];
-
-            for (int i = 0; i < count; i++)
-            {
-                for (int j = 0; j < dimension; j++)
-                    u[j] += data[i][j];
-            }
-
-            for (int j = 0; j < dimension; j++)
-                u[j] /= count;
-
-            return u;
-        }
-
         public static float Variance(IList<float> data, float mean)
         {
             int count = data.Count;
+            if (count == 0) return 0;
 
             float v = 0;
             for (int i = 0; i < count; i++)
@@ -159,6 +101,7 @@ namespace Common.Mathematics.Probability
         public static double Variance(IList<double> data, double mean)
         {
             int count = data.Count;
+            if (count == 0) return 0;
 
             double v = 0;
             for (int i = 0; i < count; i++)
@@ -236,69 +179,6 @@ namespace Common.Mathematics.Probability
             return cv;
         }
 
-        public static float[,] Covariance(IList<ColorRGB> data, ColorRGB mean)
-        {
-            int count = data.Count;
-            int dimensions = 3; 
-
-            ColorRGB[] deviations = new ColorRGB[count];
-
-            for (int i = 0; i < count; i++)
-                deviations[i] = data[i] - mean;
-
-            float[,] cv = new float[dimensions, dimensions];
-
-            for (int j = 0; j < dimensions; j++)
-            {
-                for (int i = 0; i < dimensions; i++)
-                {
-                    for (int k = 0; k < count; k++)
-                        cv[i, j] += deviations[k][i] * deviations[k][j];
-                }
-            }
-
-            for (int i = 0; i < dimensions; i++)
-            {
-                for (int j = 0; j < dimensions; j++)
-                    cv[i, j] /= count;
-            }
-
-            return cv;
-        }
-
-        public static float[,] Covariance(ColorRGB[,] data, ColorRGB mean)
-        {
-            int width = data.GetLength(0);
-            int height = data.GetLength(1);
-            int count = width * height;
-            int dimensions = 3;
-
-            ColorRGB[] deviations = new ColorRGB[count];
-
-            for (int i = 0; i < width; i++)
-                for (int j = 0; j < height; j++)
-                    deviations[i + j * width] = data[i, j] - mean;
-
-            float[,] cv = new float[dimensions, dimensions];
-
-            for (int j = 0; j < dimensions; j++)
-            {
-                for (int i = 0; i < dimensions; i++)
-                {
-                    for (int k = 0; k < count; k++)
-                        cv[i, j] += deviations[k][i] * deviations[k][j];
-                }
-            }
-
-            for (int i = 0; i < dimensions; i++)
-            {
-                for (int j = 0; j < dimensions; j++)
-                    cv[i, j] /= count;
-            }
-
-            return cv;
-        }
-
         public static float[,] Covariance(IList<ColorRGBA> data, ColorRGBA mean)
         {
             int count = data.Count;
@@ -323,39 +203,6 @@ namespace Common.Mathematics.Probability
             for (int i = 0; i < dimensions; i++)
             {
                 for (int j = 0; j < dimensions; j++)
-                    cv[i, j] /= count;
-            }
-
-            return cv;
-        }
-
-        public static double[,] Covariance(IList<double[]> data, double[] mean)
-        {
-            int count = data.Count;
-            int dimension = data[0].Length;
-
-            double[,] deviations = new double[count, dimension];
-
-            for (int i = 0; i < count; i++)
-            {
-                for (int j = 0; j < dimension; j++)
-                    deviations[i, j] = data[i][j] - mean[j];
-            }
-
-            double[,] cv = new double[dimension, dimension];
-
-            for (int j = 0; j < dimension; j++)
-            {
-                for (int i = 0; i < dimension; i++)
-                {
-                    for (int k = 0; k < count; k++)
-                        cv[i, j] += deviations[k, i] * deviations[k, j];
-                }
-            }
-
-            for (int i = 0; i < dimension; i++)
-            {
-                for (int j = 0; j < dimension; j++)
                     cv[i, j] /= count;
             }
 

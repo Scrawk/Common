@@ -9,7 +9,7 @@ namespace Common.Meshing.GridGraphs
 {
     public static partial class GridGraphSearch
     {
-        internal static Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(GridGraph graph, float[,] weights)
+        public static Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(GridGraph graph, Func<GridEdge, float> GetWeight)
         {
             int width = graph.Width;
             int height = graph.Height;
@@ -25,7 +25,7 @@ namespace Common.Meshing.GridGraphs
             }
 
             var sorted = new List<GridEdge>(width * height);
-            graph.GetAllEdges(sorted, weights);
+            graph.GetAllEdges(sorted, GetWeight);
             sorted.Sort();
 
             int edgeCount = sorted.Count;

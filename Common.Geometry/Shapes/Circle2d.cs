@@ -142,11 +142,22 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Does the circle contain the point.
         /// </summary>
-        /// <param name="p">The point</param>
         /// <returns>true if circle contains point</returns>
         public bool Contains(VECTOR2 p)
         {
             return VECTOR2.SqrDistance(Center, p) <= Radius2;
+        }
+
+        /// <summary>
+        /// Does the circle fully contain the box.
+        /// </summary>
+        public bool Contains(Box2d box)
+        {
+            if (!Contains(box.Corner00)) return false;
+            if (!Contains(box.Corner01)) return false;
+            if (!Contains(box.Corner10)) return false;
+            if (!Contains(box.Corner11)) return false;
+            return true;
         }
 
         /// <summary>
@@ -158,6 +169,15 @@ namespace Common.Geometry.Shapes
         {
             REAL r = Radius + circle.Radius;
             return VECTOR2.SqrDistance(Center, circle.Center) <= r * r;
+        }
+
+        /// <summary>
+        /// Does the circle intersect the box.
+        /// </summary>
+        public bool Intersects(Box2d box)
+        {
+            var p = box.Closest(Center);
+            return VECTOR2.SqrDistance(p, Center) <= Radius2;
         }
 
         /// <summary>

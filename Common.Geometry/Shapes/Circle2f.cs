@@ -150,6 +150,18 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Does the circle fully contain the box.
+        /// </summary>
+        public bool Contains(Box2f box)
+        {
+            if (!Contains(box.Corner00)) return false;
+            if (!Contains(box.Corner01)) return false;
+            if (!Contains(box.Corner10)) return false;
+            if (!Contains(box.Corner11)) return false;
+            return true;
+        }
+
+        /// <summary>
         /// Does this circle intersect with the other circle.
         /// </summary>
         /// <param name="circle">The other circle</param>
@@ -158,6 +170,15 @@ namespace Common.Geometry.Shapes
         {
             REAL r = Radius + circle.Radius;
             return VECTOR2.SqrDistance(Center, circle.Center) <= r * r;
+        }
+
+        /// <summary>
+        /// Does the circle intersect the box.
+        /// </summary>
+        public bool Intersects(Box2f box)
+        {
+            var p = box.Closest(Center);
+            return VECTOR2.SqrDistance(p, Center) <= Radius2;
         }
 
         /// <summary>
