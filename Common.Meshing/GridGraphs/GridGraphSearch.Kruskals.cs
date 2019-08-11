@@ -9,7 +9,7 @@ namespace Common.Meshing.GridGraphs
 {
     public static partial class GridGraphSearch
     {
-        public static Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(GridGraph graph, Func<GridEdge, float> GetWeight)
+        public static Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(GridGraph graph, Func<Vector2i, Vector2i, float> GetWeight)
         {
             int width = graph.Width;
             int height = graph.Height;

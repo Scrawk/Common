@@ -10,7 +10,6 @@ namespace Common.Meshing.GridGraphs
     {
         public static void DepthFirst(GridGraph graph, GridSearch search, int x, int y)
         {
-            search.Clear();
             int width = graph.Width;
             int height = graph.Height;
 

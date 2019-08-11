@@ -12,7 +12,6 @@ namespace Common.Meshing.AdjacencyGraphs
             where EDGE : class, IAdjacencyEdge, new()
             where VERTEX : class, IAdjacencyVertex, new()
         {
-            search.Clear();
             int count = graph.VertexCount;
 
             search.IsVisited[root] = true;

@@ -9,11 +9,12 @@ namespace Common.Meshing.GridGraphs
 {
     public static partial class GridGraphSearch
     {
-        private struct Node
+        private struct AStarNode
         {
-            public int x, y, g, h, f;
+            public int x, y;
+            public float g, h, f;
 
-            public Node(int x, int y)
+            public AStarNode(int x, int y)
             {
                 this.x = x;
                 this.y = y;
@@ -21,16 +22,18 @@ namespace Common.Meshing.GridGraphs
             }
         }
 
-        public static void AStar(GridGraph graph, GridSearch search, Vector2i start, Vector2i target)
+        public static void AStar(GridGraph graph, GridSearch search, Vector2i start, Vector2i target, Func<Vector2i, Vector2i, float> GetWeight = null)
         {
-            search.Clear();
             int width = graph.Width;
             int height = graph.Height;
 
+            if (GetWeight == null)
+                GetWeight = Distance;
+
             search.Parent[start.x, start.y] = start;
 
-            var open = new List<Node>();
-            open.Add(new Node(start.x, start.y));
+            var open = new List<AStarNode>();
+            open.Add(new AStarNode(start.x, start.y));
 
             int g = 0;
 
@@ -61,9 +64,9 @@ namespace Common.Meshing.GridGraphs
                     int idx = Contains(xi, yi, open);
                     if (idx == -1)
                     {
-                        var n = new Node(xi, yi);
+                        var n = new AStarNode(xi, yi);
                         n.g = g;
-                        n.h = Distance(target.x, target.y, xi, yi);
+                        n.h = GetWeight(target, new Vector2i(xi, yi));
                         n.f = n.g + n.h;
 
                         search.Parent[n.x, n.y] = new Vector2i(u.x, u.y);
@@ -84,12 +87,12 @@ namespace Common.Meshing.GridGraphs
             }
         }
 
-        private static int Distance(int ax, int ay, int bx, int by)
+        private static float Distance(Vector2i a, Vector2i b)
         {
-            return Math.Abs(ax - bx) + Math.Abs(ay - by);
+            return Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
         }
 
-        private static int Contains(int x, int y, List<Node> open)
+        private static int Contains(int x, int y, List<AStarNode> open)
         {
             for (int i = 0; i < open.Count; i++)
                 if (open[i].x == x && open[i].y == y) return i;

@@ -11,7 +11,6 @@ namespace Common.Meshing.AdjacencyGraphs
             where VERTEX : class, IAdjacencyVertex, new()
         {
 
-            search.Clear();
             int count = graph.VertexCount;
 
             for (int i = 0; i < count; i++)

@@ -9,9 +9,8 @@ namespace Common.Meshing.GridGraphs
 {
     public static partial class GridGraphSearch
     {
-        internal static void PrimsMinimumSpanningTree(GridGraph graph, GridSearch search, int x, int y, Func<GridEdge, float> GetWeight)
+        internal static void PrimsMinimumSpanningTree(GridGraph graph, GridSearch search, int x, int y, Func<Vector2i, Vector2i, float> GetWeight)
         {
-            search.Clear();
             int width = graph.Width;
             int height = graph.Height;
 

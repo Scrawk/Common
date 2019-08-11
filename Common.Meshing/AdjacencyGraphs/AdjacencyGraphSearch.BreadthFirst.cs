@@ -10,8 +10,6 @@ namespace Common.Meshing.AdjacencyGraphs
             where EDGE : class, IAdjacencyEdge, new()
             where VERTEX : class, IAdjacencyVertex, new()
         {
-            search.Clear();
-            int count = graph.VertexCount;
 
             Queue<int> queue = new Queue<int>();
             queue.Enqueue(root);
