@@ -270,6 +270,14 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// color from bytes.
+        /// </summary>
+        public static ColorHSV FromBytes(int h, int s, int v)
+        {
+            return new ColorHSV(h, s, v) / 255.0f;
+        }
+
+        /// <summary>
         /// Convert to RGB color space.
         /// </summary>
         public static ColorRGB ToRGB(float h, float s, float v)

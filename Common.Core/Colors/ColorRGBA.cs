@@ -363,6 +363,22 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// color from bytes.
+        /// </summary>
+        public static ColorRGBA FromBytes(int r, int g, int b)
+        {
+            return new ColorRGBA(r, g, b, 255) / 255.0f;
+        }
+
+        /// <summary>
+        /// color from ints.
+        /// </summary>
+        public static ColorRGBA FromBytes(int r, int g, int b, int a)
+        {
+            return new ColorRGBA(r, g, b, a) / 255.0f;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in color.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

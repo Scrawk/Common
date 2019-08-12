@@ -334,6 +334,14 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// color from bytes.
+        /// </summary>
+        public static ColorRGB FromBytes(int r, int g, int b)
+        {
+            return new ColorRGB(r, g, b) / 255.0f;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
