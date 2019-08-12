@@ -93,6 +93,20 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float SafeLog(float v)
+        {
+            if (v <= 0.0f) return 0.0f;
+            return (float)Math.Log(v);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float SafeLog10(float v)
+        {
+            if (v <= 0.0f) return 0.0f;
+            return (float)Math.Log10(v);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeInvSqrt(float n, float d, float eps = EPS)
         {
             if (d <= 0.0f) return 0.0f;

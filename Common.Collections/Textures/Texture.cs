@@ -117,18 +117,21 @@ namespace Common.Collections.Textures
                 i0 = IMath.Wrap(i0, size);
                 i1 = IMath.Wrap(i1, size);
                 i2 = IMath.Wrap(i2, size);
+                i3 = IMath.Wrap(i3, size);
             }
             else if (Wrap == TEXTURE_WRAP.CLAMP)
             {
                 i0 = IMath.Clamp(i0, 0, size - 1);
                 i1 = IMath.Clamp(i1, 0, size - 1);
                 i2 = IMath.Clamp(i2, 0, size - 1);
+                i3 = IMath.Clamp(i3, 0, size - 1);
             }
             else //MIRROR
             {
                 i0 = IMath.Mirror(i0, size);
                 i1 = IMath.Mirror(i1, size);
                 i2 = IMath.Mirror(i2, size);
+                i3 = IMath.Mirror(i3, size);
             }
 
             BicubicIndex idx;

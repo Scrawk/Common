@@ -34,6 +34,20 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double SafeLog(double v)
+        {
+            if (v <= 0.0) return 0.0;
+            return Math.Log(v);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double SafeLog10(double v)
+        {
+            if (v <= 0.0) return 0.0;
+            return Math.Log10(v);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double SafeInvSqrt(double n, double d, double eps = EPS)
         {
             if (d <= 0.0) return 0.0;

@@ -63,8 +63,6 @@ namespace Common.Collections.Test.Textures
         [TestMethod]
         public void  BilinearFilter_DoesWrap()
         {
-
-
             int width = 2;
             int height = 2;
             int bitDepth = 32;
@@ -90,14 +88,11 @@ namespace Common.Collections.Test.Textures
             Assert.AreEqual(1.0, tex.GetChannel(0.0f, 1.0f, 1));
             Assert.AreEqual(0.75, tex.GetChannel(0.0f, 1.25f, 1));
             Assert.AreEqual(0.5, tex.GetChannel(0.0f, 1.5f, 1));
-
         }
 
         [TestMethod]
         public void  BilinearFilter_DoesClamp()
         {
-
-
             int width = 2;
             int height = 2;
             int bitDepth = 32;
@@ -123,13 +118,11 @@ namespace Common.Collections.Test.Textures
             Assert.AreEqual(1.0, tex.GetChannel(0.0f, 1.0f, 1));
             Assert.AreEqual(1.0, tex.GetChannel(0.0f, 1.25f, 1));
             Assert.AreEqual(1.0, tex.GetChannel(0.0f, 1.5f, 1));
-
         }
 
         [TestMethod]
         public void  BilinearFilter_DoesMirror()
         {
-
             int width = 2;
             int height = 2;
             int bitDepth = 32;
@@ -155,7 +148,6 @@ namespace Common.Collections.Test.Textures
             Assert.AreEqual(1.0, tex.GetChannel(0.0f, 1.0f, 1));
             Assert.AreEqual(0.75, tex.GetChannel(0.0f, 1.25f, 1));
             Assert.AreEqual(0.5, tex.GetChannel(0.0f, 1.5f, 1));
-
         }
 
         [TestMethod]
@@ -270,7 +262,6 @@ namespace Common.Collections.Test.Textures
         [TestMethod]
         public void  GetPixelBilinear_IsCorrect()
         {
-
             int width = 65;
             int height = 65;
             int channels = 4;
@@ -291,7 +282,33 @@ namespace Common.Collections.Test.Textures
                     Assert.AreEqual((x + y * width) * channels + 1, col.g);
                 }
             }
+        }
 
+        [TestMethod]
+        public void GetPixelBicubic()
+        {
+            int width = 65;
+            int height = 65;
+            int channels = 4;
+            int bitDepth = 32;
+
+            Texture2D tex = CreateIndexFilledTexture(width, height, channels, bitDepth);
+            tex.Wrap = TEXTURE_WRAP.CLAMP;
+            tex.Interpolation = TEXTURE_INTERPOLATION.BICUBIC;
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    float fx = x / (width - 1.0f);
+                    float fy = y / (height - 1.0f);
+
+                    ColorRGBA col = tex.GetPixel(fx, fy);
+
+                    //Assert.AreEqual((x + y * width) * channels + 0, col.r);
+                    //Assert.AreEqual((x + y * width) * channels + 1, col.g);
+                }
+            }
         }
 
         [TestMethod]
