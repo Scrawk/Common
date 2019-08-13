@@ -9,6 +9,8 @@ namespace Common.Core.Numerics
 
         public const float PI = (float)Math.PI;
 
+        public const float SQRT2 = 1.414213562373095f;
+
         public const float Rad2Deg = 180.0f / PI;
 
         public const float Deg2Rad = PI / 180.0f;

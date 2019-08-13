@@ -10,6 +10,8 @@ namespace Common.Core.Numerics
 
         public const double PI = Math.PI;
 
+        public const double SQRT2 = 1.414213562373095;
+
         public const double Rad2Deg = 180.0 / PI;
 
         public const double Deg2Rad = PI / 180.0;
