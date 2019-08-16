@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Console", "Common.Console\Common.Console.csproj", "{E753D97F-83BB-4A50-A55F-F3EEAD1C8DE8}"
 EndProject
@@ -24,6 +24,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Meshing.Test", "Common.Meshing.Test\Common.Meshing.Test.csproj", "{2AC9AFF2-28B7-4790-94B2-828098DF8D04}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Collections.Test", "Common.Collections.Test\Common.Collections.Test.csproj", "{FE9EF716-DBAA-457F-A28A-9AE3877CA3F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.GraphTheory.Test", "Common.GraphTheory.Test\Common.GraphTheory.Test.csproj", "{90986382-062E-4E92-81FF-8D48988904BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.GraphTheory", "Common.GraphTheory\Common.GraphTheory.csproj", "{AAE15D50-F89F-4019-BB56-ADCDF5DB1955}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +79,14 @@ Global
 		{FE9EF716-DBAA-457F-A28A-9AE3877CA3F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE9EF716-DBAA-457F-A28A-9AE3877CA3F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE9EF716-DBAA-457F-A28A-9AE3877CA3F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90986382-062E-4E92-81FF-8D48988904BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90986382-062E-4E92-81FF-8D48988904BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90986382-062E-4E92-81FF-8D48988904BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90986382-062E-4E92-81FF-8D48988904BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE15D50-F89F-4019-BB56-ADCDF5DB1955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE15D50-F89F-4019-BB56-ADCDF5DB1955}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE15D50-F89F-4019-BB56-ADCDF5DB1955}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE15D50-F89F-4019-BB56-ADCDF5DB1955}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
