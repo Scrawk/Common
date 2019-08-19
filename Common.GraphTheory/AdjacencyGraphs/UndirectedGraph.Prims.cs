@@ -11,10 +11,10 @@ namespace Common.GraphTheory.AdjacencyGraphs
     {
         public GraphTree PrimsMinimumSpanningTree(int root)
         {
+            TagVertices(NOT_VISITED_TAG);
             int count = VertexCount;
 
-            var isVisited = new bool[count];
-            isVisited[root] = true;
+            Vertices[root].Tag = IS_VISITED_TAG;
 
             var tree = new GraphTree(root, count);
             var queue = new BinaryHeap<IGraphEdge>();
@@ -30,16 +30,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 var edge = queue.RemoveFirst();
 
                 int v = edge.To;
-                if (isVisited[v]) continue;
+                if (Vertices[v].Tag == IS_VISITED_TAG) continue;
 
-                isVisited[v] = true;
+                Vertices[v].Tag = IS_VISITED_TAG;
                 tree.Parent[v] = edge.From;
 
                 if (Edges[v] != null)
                 {
                     foreach (var e in Edges[v])
                     {
-                        if (isVisited[e.To]) continue;
+                        if (Vertices[e.To].Tag == IS_VISITED_TAG) continue;
                         queue.Add(e);
                     }
                 }

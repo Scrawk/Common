@@ -15,6 +15,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
         int Index { get; set; }
 
         /// <summary>
+        ///
+        /// </summary>
+        int Tag { get; set; }
+
+        /// <summary>
         /// The cost of this vertex.
         /// Used in some search algorithms.
         /// ie shortest paths.
@@ -34,9 +39,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
         }
 
-        public GraphVertex(int index, T data)
+        public GraphVertex(int index, T data) : base(index)
         {
-            Index = index;
             Data = data;
         }
 
@@ -73,6 +77,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// The index of this vertex in the graph.
         /// </summary>
         public int Index { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public int Tag { get; set; }
 
         /// <summary>
         /// The cost of this vertex.

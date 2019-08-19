@@ -12,13 +12,13 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
         public GraphOrdering DepthFirstOrder(int root)
         {
+            TagVertices(NOT_VISITED_TAG);
             int count = VertexCount;
 
             var queue = new Stack<int>(count);
             queue.Push(root);
 
-            var isVisited = new bool[count];
-            isVisited[root] = true;
+            Vertices[root].Tag = IS_VISITED_TAG;
 
             var ordering = new GraphOrdering(count);
 
@@ -34,10 +34,10 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 {
                     int to = edges[i].To;
 
-                    if (isVisited[to]) continue;
+                    if (Vertices[to].Tag == IS_VISITED_TAG) continue;
 
                     queue.Push(to);
-                    isVisited[to] = true;
+                    Vertices[to].Tag = IS_VISITED_TAG;
                 }
             }
 

@@ -12,6 +12,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
         where EDGE : class, IGraphEdge, new()
         where VERTEX : class, IGraphVertex, new()
     {
+        protected const int NOT_VISITED_TAG = 0;
+        protected const int IS_VISITED_TAG = 1;
 
         public AdjacencyGraph()
         {
@@ -32,7 +34,13 @@ namespace Common.GraphTheory.AdjacencyGraphs
             Edges = new List<List<EDGE>>(Vertices.Count);
 
             for (int i = 0; i < Vertices.Count; i++)
+            {
+                if (Vertices[i].Index != i)
+                    throw new InvalidOperationException("Vertex index is not correct.");
+
                 Edges.Add(null);
+            }
+                
         }
 
         /// <summary>
@@ -46,7 +54,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public int EdgeCount { get; protected set; }
 
         /// <summary>
-        /// 
+        /// The graph vertices.
+        /// The vertex index must match its position in array.
         /// </summary>
         public List<VERTEX> Vertices { get; set; }
 
@@ -104,12 +113,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Applies the vertex index.
+        /// Set the vertices tag.
         /// </summary>
-        public void SetVertexIndices()
+        public void TagVertices(int tag)
         {
             for (int i = 0; i < VertexCount; i++)
-                Vertices[i].Index = i;
+                Vertices[i].Tag = tag;
         }
 
         /// <summary>
@@ -178,9 +187,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 for (int j = 0; j < children.Count; j++)
                 {
                     var c = children[j];
-                    var from = Vertices[i].Index;
-                    var to = Vertices[c].Index;
-                    var edge = FindEdge(from, to);
+                    var edge = FindEdge(i, c);
 
                     sum += edge.Weight;
                 }

@@ -10,15 +10,14 @@ namespace Common.GraphTheory.AdjacencyGraphs
     {
         public GraphTree DijkstrasShortestPathTree(int root)
         {
+            TagVertices(NOT_VISITED_TAG);
             int count = VertexCount;
 
             for (int i = 0; i < count; i++)
                 Vertices[i].Cost = float.PositiveInfinity;
 
             Vertices[root].Cost = 0;
-
-            var isVisited = new bool[count];
-            isVisited[root] = true;
+            Vertices[root].Tag = IS_VISITED_TAG;
 
             var tree = new GraphTree(root, count);
             var queue = new List<VERTEX>(Vertices);
@@ -31,14 +30,14 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 queue.RemoveAt(0);
                 int u = vertex.Index;
 
-                isVisited[u] = true;
+                Vertices[u].Tag = IS_VISITED_TAG;
 
                 if (Edges[u] != null)
                 {
                     foreach (var e in Edges[u])
                     {
                         int v = e.To;
-                        if (isVisited[v]) continue;
+                        if (Vertices[v].Tag == IS_VISITED_TAG) continue;
 
                         float alt = Vertices[u].Cost + e.Weight;
 

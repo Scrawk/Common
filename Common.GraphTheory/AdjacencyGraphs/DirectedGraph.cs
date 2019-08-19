@@ -33,9 +33,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             foreach (var data in vertices)
             {
-                var v = new GraphVertex<T>();
-                v.Index = Vertices.Count;
-                v.Data = data;
+                int index = Vertices.Count;
+                var v = new GraphVertex<T>(index, data);
                 Vertices.Add(v);
                 Edges.Add(null);
             }
