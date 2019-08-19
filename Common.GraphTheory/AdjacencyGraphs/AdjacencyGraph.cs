@@ -1,67 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
-    /// <summary>
-    /// A adjacency graph where the vertices data can be any object.
-    /// </summary>
-    /// <typeparam name="T">The type of object the data represents</typeparam>
-    public class AdjacencyGraph<T> : AdjacencyGraph<AdjacencyVertex<T>, AdjacencyEdge>
-    {
-        public AdjacencyGraph(int size) : base(size)
-        {
-        }
-
-        public AdjacencyGraph(IEnumerable<AdjacencyVertex<T>> vertices) : base(vertices)
-        {
-        }
-
-        public AdjacencyGraph(IEnumerable<T> vertices)
-        {
-            Vertices = new List<AdjacencyVertex<T>>();
-            Edges = new List<List<AdjacencyEdge>>(Vertices.Count);
-
-            foreach (var data in vertices)
-            {
-                var v = new AdjacencyVertex<T>();
-                v.Index = Vertices.Count;
-                v.Data = data;
-                Vertices.Add(v);
-                Edges.Add(null);
-            }
-
-
-        }
-
-        /// <summary>
-        /// Find the vertex index belonging to this data.
-        /// </summary>
-        public int IndexOf(T data)
-        {
-            foreach (var v in Vertices)
-            {
-                if (ReferenceEquals(data, v.Data))
-                    return v.Index;
-            }
-
-            return -1;
-        }
-
-    }
 
     /// <summary>
     /// A adjacency graph made op of vertices and edges.
     /// </summary>
-    public class AdjacencyGraph<VERTEX, EDGE> 
-        where EDGE : class, IAdjacencyEdge, new()
-        where VERTEX : class, IAdjacencyVertex, new()
+    public abstract partial class AdjacencyGraph<VERTEX, EDGE>
+        where EDGE : class, IGraphEdge, new()
+        where VERTEX : class, IGraphVertex, new()
     {
 
         public AdjacencyGraph()
         {
-
+            Vertices = new List<VERTEX>();
+            Edges = new List<List<EDGE>>();
         }
 
         public AdjacencyGraph(int size)
@@ -80,14 +35,29 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 Edges.Add(null);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int VertexCount { get { return Vertices.Count; } }
 
-        public int EdgeCount { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int EdgeCount { get; protected set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<VERTEX> Vertices { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<List<EDGE>> Edges { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override string ToString()
         {
             return string.Format("[AdjacencyGraph: VertexCount={0}, EdgeCount={1}]", VertexCount, EdgeCount);
@@ -96,11 +66,23 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Clear the graph.
         /// </summary>
-        public virtual void Clear()
+        public void Clear()
+        {
+            Vertices.Clear();
+            ClearEdges();
+        }
+
+        /// <summary>
+        /// Clear the graph edges and leave the vertices.
+        /// </summary>
+        public void ClearEdges()
         {
             EdgeCount = 0;
-            Vertices.Clear();
-            Edges.Clear();
+            for (int i = 0; i < VertexCount; i++)
+            {
+                if (Edges[i] == null) continue;
+                Edges[i].Clear();
+            }
         }
 
         /// <summary>
@@ -131,29 +113,21 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Sets all edge tags.
+        /// Find the edge going
+        /// from and to vertices at the indexs.
         /// </summary>
-        public void TagEdges(int tag)
+        public EDGE FindEdge(int from, int to)
         {
-            for (int i = 0; i < Edges.Count; i++)
-                for (int j = 0; j < Edges[i].Count; j++)
-                    Edges[i][j].Tag = tag;
+            if (Edges[from] == null)
+                return null;
+
+            foreach (var e in Edges[from])
+                if (e.To == to)
+                    return e;
+
+            return null;
         }
 
-
-        /// <summary>
-        /// Add a edge to the graph.
-        /// </summary>
-        public void AddEdge(EDGE edge)
-        {
-            int i = edge.From;
-
-            if (Edges[i] == null)
-                Edges[i] = new List<EDGE>();
-
-            EdgeCount++;
-            Edges[i].Add(edge);
-        }
 
         /// <summary>
         /// Does the graph contain a edge going
@@ -161,58 +135,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public bool ContainsEdge(int from, int to)
         {
-            if (Edges[from] == null)
-                return false;
-
-            foreach (var e in Edges[from])
-                if (e.To == to)
-                    return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Add a edge to the graph.
-        /// The edge starts at the from vertex 
-        /// and ends at the to vertex.
-        /// </summary>
-        public void AddEdge(VERTEX from, VERTEX to, float weight = 0.0f)
-        {
-            int i = from.Index;
-            int j = to.Index;
-
-            if (Edges[i] == null)
-                Edges[i] = new List<EDGE>();
-
-            EDGE edge = new EDGE();
-            edge.From = i;
-            edge.To = j;
-            edge.Weight = weight;
-
-            EdgeCount++;
-            Edges[i].Add(edge);
-        }
-
-        /// <summary>
-        /// Add a edge to the graph.
-        /// The edge starts at the from vertex 
-        /// and ends at the to vertex.
-        /// </summary>
-        public void AddEdge(int from, int to, float weight = 0.0f)
-        {
-            int i = from;
-            int j = to;
-
-            if (Edges[i] == null)
-                Edges[i] = new List<EDGE>();
-
-            EDGE edge = new EDGE();
-            edge.From = i;
-            edge.To = j;
-            edge.Weight = weight;
-
-            EdgeCount++;
-            Edges[i].Add(edge);
+            return FindEdge(from, to) != null;
         }
 
         /// <summary>
@@ -238,6 +161,46 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 if (Edges[i] == null || Edges[i].Count == 0) continue;
                 edges.AddRange(Edges[i]);
             }
+        }
+
+        /// <summary>
+        /// Find the sum of the weights from the 
+        /// tree of this graph.
+        /// </summary>
+        public float FindWeightSum(GraphTree tree)
+        {
+            float sum = 0;
+            for (int i = 0; i < tree.Count; i++)
+            {
+                var children = tree.Children[i];
+                if (children == null) continue;
+
+                for (int j = 0; j < children.Count; j++)
+                {
+                    var c = children[j];
+                    var from = Vertices[i].Index;
+                    var to = Vertices[c].Index;
+                    var edge = FindEdge(from, to);
+
+                    sum += edge.Weight;
+                }
+            }
+
+            return sum;
+        }
+
+        /// <summary>
+        /// Add a edge to the graph.
+        /// </summary>
+        protected void AddEdgeInternal(EDGE edge)
+        {
+            int i = edge.From;
+
+            if (Edges[i] == null)
+                Edges[i] = new List<EDGE>();
+
+            EdgeCount++;
+            Edges[i].Add(edge);
         }
 
     }

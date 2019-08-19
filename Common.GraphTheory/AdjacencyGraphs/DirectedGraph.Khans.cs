@@ -1,34 +1,36 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
-    public static partial class AdjacencyGraphSearch
+
+    public partial class DirectedGraph<VERTEX, EDGE> : AdjacencyGraph<VERTEX, EDGE>
+        where EDGE : class, IGraphEdge, new()
+        where VERTEX : class, IGraphVertex, new()
     {
-        public static List<VERTEX> KhansTopologicalSort<VERTEX, EDGE>(AdjacencyGraph<VERTEX, EDGE> graph)
-            where EDGE : class, IAdjacencyEdge, new()
-            where VERTEX : class, IAdjacencyVertex, new()
+
+        public List<VERTEX> KhansTopologicalSort()
         {
 
             List<VERTEX> list = new List<VERTEX>();
             LinkedList<VERTEX> vertices = new LinkedList<VERTEX>();
 
-            int edgeCount = graph.Edges.Count;
+            int edgeCount = Edges.Count;
             List<EDGE>[] edges = new List<EDGE>[edgeCount];
 
             for (int i = 0; i < edgeCount; i++)
             {
-                if (graph.Edges[i] == null) continue;
-                edges[i] = new List<EDGE>(graph.Edges[i]);
+                if (Edges[i] == null) continue;
+                edges[i] = new List<EDGE>(Edges[i]);
             }
 
-            for (int i = 0; i < graph.Vertices.Count; i++)
+            for (int i = 0; i < Vertices.Count; i++)
             {
-                int idegree = GetInverseDegree(edges, i);
+                int idegree = Khans_GetInverseDegree(edges, i);
 
                 if (idegree == 0)
-                    vertices.AddLast(graph.Vertices[i]);
+                    vertices.AddLast(Vertices[i]);
             }
 
             while (vertices.Count > 0)
@@ -45,26 +47,23 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 {
                     int to = edges[i][j].To;
 
-                    int idegree = GetInverseDegree(edges, to);
+                    int idegree = Khans_GetInverseDegree(edges, to);
                     if (idegree == 1)
                     {
-                        vertices.AddLast(graph.Vertices[to]);
+                        vertices.AddLast(Vertices[to]);
                     }
                 }
 
                 edges[i].Clear();
-
             }
 
-            if (CountEdges(edges) > 0)
+            if (Khans_CountEdges(edges) > 0)
                 throw new InvalidOperationException("Can not find a topological sort on a cyclic graph");
             else
                 return list;
-
         }
 
-        private static int GetInverseDegree<EDGE>(List<EDGE>[] Edges, int i)
-            where EDGE : class, IAdjacencyEdge, new()
+        private int Khans_GetInverseDegree(List<EDGE>[] Edges, int i)
         {
             int degree = 0;
 
@@ -81,8 +80,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return degree;
         }
 
-        private static int CountEdges<EDGE>(List<EDGE>[] Edges)
-            where EDGE : class, IAdjacencyEdge, new()
+        private int Khans_CountEdges(List<EDGE>[] Edges)
         {
             int count = 0;
 
@@ -94,5 +92,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             return count;
         }
+
     }
 }

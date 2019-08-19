@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
     /// <summary>
-    /// The interface for adjacency edges.
+    /// The interface for adjacency graph edges.
     /// </summary>
-    public interface IAdjacencyEdge : IComparable<IAdjacencyEdge>
+    public interface IGraphEdge : IComparable<IGraphEdge>
     {
         /// <summary>
         /// The vertex index the edge starts at.
@@ -19,11 +19,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
         int To { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        int Tag { get; set; }
-
-        /// <summary>
         /// The edges weight. Used in some seaarch algorithms.
         /// ie spanning trees.
         /// </summary>
@@ -33,21 +28,21 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// <summary>
     /// A adjacency graphs edge.
     /// </summary>
-    public class AdjacencyEdge : IAdjacencyEdge
-	{
+    public class GraphEdge : IGraphEdge
+    {
 
-        public AdjacencyEdge()
+        public GraphEdge()
         {
 
         }
-		
-		public AdjacencyEdge(int from, int to)
-		{
-			From = from;
-			To = to;
-		}
 
-        public AdjacencyEdge(int from, int to, float weight)
+        public GraphEdge(int from, int to)
+        {
+            From = from;
+            To = to;
+        }
+
+        public GraphEdge(int from, int to, float weight)
         {
             From = from;
             To = to;
@@ -65,25 +60,23 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public int To { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public int Tag { get; set; }
-
-        /// <summary>
         /// The edges weight. Used in some seaarch algorithms.
         /// ie spanning trees.
         /// </summary>
         public float Weight { get; set; }
 
-        public override string ToString ()
-		{
-			return string.Format ("[AdjacencyEdge: From={0}, To={1}, Weight={2}]", From, To, Weight);
-		}
+        /// <summary>
+        /// 
+        /// </summary>
+        public override string ToString()
+        {
+            return string.Format("[GraphEdge: From={0}, To={1}, Weight={2}]", From, To, Weight);
+        }
 
         /// <summary>
         /// Used to sort edges by weight.
         /// </summary>
-        public int CompareTo(IAdjacencyEdge other)
+        public int CompareTo(IGraphEdge other)
         {
             return Weight.CompareTo(other.Weight);
         }
