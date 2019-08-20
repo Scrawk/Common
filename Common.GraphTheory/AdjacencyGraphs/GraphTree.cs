@@ -49,15 +49,40 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return string.Format("[GraphTree: Root={0}]", Root);
         }
 
+        public List<int> GetPathToRoot(int start)
+        {
+            var path = new List<int>();
+            GetPathToRoot(start, path);
+            return path;
+        }
+
         /// <summary>
         /// 
         /// </summary>
-        public void GetPathToRoot(int start, List<int> path)
+        public void GetPathToRoot(int vert, List<int> path)
         {
-            while (start != Parent[start] && Parent[start] != -1)
+            if (vert == Root) return;
+
+            while (true)
             {
-                path.Add(start);
-                start = Parent[start];
+                path.Add(vert);
+                vert = Parent[vert];
+
+                //Found the root. 
+                //Add it to path and return.
+                if(vert == Root)
+                {
+                    path.Add(vert);
+                    return;
+                }
+
+                //There is no path to the root.
+                //Clear path and return.
+                if (vert == -1)
+                {
+                    path.Clear();
+                    return;
+                }
             }
         }
 
@@ -78,6 +103,36 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 Children[i] = new List<int>();
 
             Children[i].Add(child);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void RemoveBranch(int i)
+        {
+            Parent[i] = -1;
+            
+            if(Children[i] != null)
+            {
+                foreach (var child in Children[i])
+                    RemoveBranch(child);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool InTree(int i)
+        {
+            return Parent[i] != -1;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsLeaf(int i)
+        {
+            return GetDegree(i) == 0;
         }
 
         /// <summary>
@@ -121,7 +176,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public GraphOrdering DepthFirstOrder()
         {
             int count = Parent.Length;
-
             var queue = new Stack<int>(count);
             queue.Push(Root);
 
@@ -145,6 +199,42 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     if (isVisited[to]) continue;
 
                     queue.Push(to);
+                    isVisited[to] = true;
+                }
+            }
+
+            return ordering;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public GraphOrdering BreadthFirstOrder()
+        {
+            int count = Parent.Length;
+            var queue = new Queue<int>(count);
+            queue.Enqueue(Root);
+
+            var isVisited = new bool[count];
+            isVisited[Root] = true;
+
+            var ordering = new GraphOrdering(count);
+
+            while (queue.Count != 0)
+            {
+                int u = queue.Dequeue();
+                ordering.Vertices.Add(u);
+
+                var edges = Children[u];
+                if (edges == null) continue;
+
+                for (int i = 0; i < edges.Count; i++)
+                {
+                    int to = edges[i];
+
+                    if (isVisited[to]) continue;
+
+                    queue.Enqueue(to);
                     isVisited[to] = true;
                 }
             }

@@ -42,7 +42,29 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = CreateCitiesDirectedGraph();
             var tree = graph.DijkstrasShortestPathTree(5);
+            var ordering = tree.DepthFirstOrder();
 
+            int[] order = new int[] { 5, 7, 6, 4, 10, 11, 8, 9, 3, 2, 1, 0 };
+
+            Assert.AreEqual(order.Length, ordering.Count);
+
+            for (int i = 0; i < order.Length; i++)
+            {
+                Assert.AreEqual(order[i], ordering.Vertices[i]);
+            }
+
+            Assert.AreEqual(2097, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Seattle"))));
+            Assert.AreEqual(2270, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("San Francisco"))));
+            Assert.AreEqual(2018, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Los Angeles"))));
+            Assert.AreEqual(1003, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Denver"))));
+            Assert.AreEqual(533, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Kansas City"))));
+            Assert.AreEqual(0, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Chicago"))));
+            Assert.AreEqual(983, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Boston"))));
+            Assert.AreEqual(787, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("New York"))));
+            Assert.AreEqual(1397, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Atlanta"))));
+            Assert.AreEqual(2058, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Miami"))));
+            Assert.AreEqual(1029, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Dallas"))));
+            Assert.AreEqual(1268, graph.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Houston"))));
         }
        
 
@@ -159,10 +181,10 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             var graph = new DirectedGraph<string>(12);
 
             graph.Vertices[0].Data = "Seattle";
-            graph.Vertices[1].Data = "San Fran";
+            graph.Vertices[1].Data = "San Francisco";
             graph.Vertices[2].Data = "Los Angeles";
             graph.Vertices[3].Data = "Denver";
-            graph.Vertices[4].Data = "Kansas";
+            graph.Vertices[4].Data = "Kansas City";
             graph.Vertices[5].Data = "Chicago";
             graph.Vertices[6].Data = "Boston";
             graph.Vertices[7].Data = "New York";
