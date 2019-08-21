@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdjacencyGraphs\AdjacencyGraphTest.cs" />
+    <Compile Include="AdjacencyGraphs\GraphTreeTest.cs" />
     <Compile Include="GridsGraphs\GridGraphTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

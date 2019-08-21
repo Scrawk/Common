@@ -4,11 +4,22 @@ using System.Collections.Generic;
 namespace Common.GraphTheory.AdjacencyGraphs
 {
     /// <summary>
-    /// 
+    /// Represents a tree of a given graph.
+    /// The tree only holds the indices of
+    /// the vertices from the graph it was 
+    /// created from.
     /// </summary>
     public class GraphTree
     {
 
+        /// <summary>
+        /// Create a new tree. Must be the same
+        /// size graph and include space for all
+        /// vertices of the graph even if they are 
+        /// not in the tree.
+        /// </summary>
+        /// <param name="root">The trees root.</param>
+        /// <param name="size">The size of the tree and graph</param>
         public GraphTree(int root, int size)
         {
             Root = root;
@@ -18,26 +29,28 @@ namespace Common.GraphTheory.AdjacencyGraphs
             for (int i = 0; i < size; i++)
                 Parent[i] = -1;
 
+            //The root is its own parent.
             Parent[root] = root;
         }
 
         /// <summary>
-        /// 
+        /// The number of verices in the tree.
         /// </summary>
         public int Count => Parent.Length;
 
         /// <summary>
-        /// 
+        /// The root vertex.
         /// </summary>
         public int Root { get; private set; }
 
         /// <summary>
-        /// 
+        /// The vertices parents. A vertex that is 
+        /// not in the tree has -1 as its parent.
         /// </summary>
         public int[] Parent { get; private set; }
 
         /// <summary>
-        /// 
+        /// The children of each vertex.
         /// </summary>
         public List<int>[] Children { get; private set; }
 
@@ -49,15 +62,22 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return string.Format("[GraphTree: Root={0}]", Root);
         }
 
-        public List<int> GetPathToRoot(int start)
+        /// <summary>
+        /// Get a path from the vertex to the root.
+        /// The path is made up of the vertices index 
+        /// in the graph the tree was created from.
+        /// </summary>
+        public List<int> GetPathToRoot(int vert)
         {
             var path = new List<int>();
-            GetPathToRoot(start, path);
+            GetPathToRoot(vert, path);
             return path;
         }
 
         /// <summary>
-        /// 
+        /// Get a path from the vertex to the root.
+        /// The path is made up of the vertices index 
+        /// in the graph the tree was created from.
         /// </summary>
         public void GetPathToRoot(int vert, List<int> path)
         {
@@ -87,7 +107,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Set the parent of a vertex.
         /// </summary>
         public void SetParent(int i, int parent)
         {
@@ -95,7 +115,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Set a child of a vertex.
         /// </summary>
         public void SetChild(int i, int child)
         {
@@ -106,21 +126,48 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Removes the vertex i from the tree 
+        /// and all other vertices decended
+        /// from that vertex.
         /// </summary>
         public void RemoveBranch(int i)
         {
-            Parent[i] = -1;
-            
-            if(Children[i] != null)
+            if (i == Root)
+                throw new InvalidOperationException("Can not remove the root branch.");
+
+            //Need to remove i from its 
+            //parents children list;
+            var p = Parent[i];
+            if (p != -1)
+            {
+                Children[p].Remove(i);
+                Parent[i] = -1;
+            }
+
+            if (Children[i] != null)
             {
                 foreach (var child in Children[i])
-                    RemoveBranch(child);
+                    RemoveBranchRecursive(child);
+
+                Children[i] = null;
             }
         }
 
+        private void RemoveBranchRecursive(int i)
+        {
+            if (Children[i] != null)
+            {
+                foreach (var child in Children[i])
+                    RemoveBranchRecursive(child);
+
+                Children[i] = null;
+            }
+
+            Parent[i] = -1;
+        }
+
         /// <summary>
-        /// 
+        /// Is this vert included in the tree.
         /// </summary>
         public bool InTree(int i)
         {
@@ -128,7 +175,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Is this vertex a leaf.
+        /// Leaf vertices have no children.
         /// </summary>
         public bool IsLeaf(int i)
         {
@@ -136,7 +184,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Get the degree of this vertex.
+        /// The degree represents the number 
+        /// of children a vertex has.
         /// </summary>
         public int GetDegree(int i)
         {
@@ -147,7 +197,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Presuming each vert has its parent set 
+        /// then find the children of each vertex.
         /// </summary>
         public void CreateChildren()
         {
@@ -171,7 +222,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Returns the vertices of the tree in depth first order.
         /// </summary>
         public GraphOrdering DepthFirstOrder()
         {
@@ -207,7 +258,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Returns the vertices of the tree in breadth first order.
         /// </summary>
         public GraphOrdering BreadthFirstOrder()
         {
