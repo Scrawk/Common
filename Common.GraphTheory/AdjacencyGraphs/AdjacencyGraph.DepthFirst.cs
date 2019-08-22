@@ -5,9 +5,7 @@ using System.Text;
 namespace Common.GraphTheory.AdjacencyGraphs
 {
 
-    public abstract partial class AdjacencyGraph<VERTEX, EDGE>
-        where EDGE : class, IGraphEdge, new()
-        where VERTEX : class, IGraphVertex, new()
+    public abstract partial class AdjacencyGraph
     {
 
         public GraphOrdering DepthFirstOrder(int root)

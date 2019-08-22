@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
+
     /// <summary>
-    /// A directed adjacency graph where the vertices data can be any object.
+    /// A directed adjacency graph made op of vertices and edges.
     /// </summary>
-    /// <typeparam name="T">The type of object the data represents</typeparam>
-    public class DirectedGraph<T> : DirectedGraph<GraphVertex<T>, GraphEdge>
+    public partial class DirectedGraph : AdjacencyGraph
     {
 
         public DirectedGraph()
@@ -21,46 +21,74 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
         }
 
-        public DirectedGraph(IEnumerable<GraphVertex<T>> vertices) : base(vertices)
+        public DirectedGraph(IEnumerable<GraphVertex> vertices) : base(vertices)
         {
-
-        }
-
-        public DirectedGraph(IEnumerable<T> vertices)
-        {
-            Vertices = new List<GraphVertex<T>>();
-            Edges = new List<List<GraphEdge>>(Vertices.Count);
-
-            foreach (var data in vertices)
-            {
-                int index = Vertices.Count;
-                var v = new GraphVertex<T>(index, data);
-                Vertices.Add(v);
-                Edges.Add(null);
-            }
-
 
         }
 
         /// <summary>
-        /// Find the vertex index belonging to this data.
+        /// 
         /// </summary>
-        public int IndexOf(T data)
+        public override string ToString()
         {
-            foreach (var v in Vertices)
-            {
-                if (ReferenceEquals(data, v.Data))
-                    return v.Index;
-            }
-
-            return -1;
+            return string.Format("[DirectedGraph: VertexCount={0}, EdgeCount={1}]", VertexCount, EdgeCount);
         }
 
-        public UndirectedGraph<T> ToUndirectedGraph()
+        /// <summary>
+        /// Add a edge to the graph.
+        /// </summary>
+        public void AddEdge(GraphEdge edge)
         {
-            var graph = new UndirectedGraph<T>(Vertices);
+            AddEdgeInternal(edge);
+        }
 
-            foreach(var neighbours in Edges)
+        /// <summary>
+        /// Add a edge to the graph.
+        /// The edge starts at the from vertex 
+        /// and ends at the to vertex.
+        /// </summary>
+        public void AddEdge(int from, int to, float weight = 0.0f)
+        {
+            var edge = new GraphEdge();
+            edge.From = from;
+            edge.To = to;
+            edge.Weight = weight;
+
+            AddEdgeInternal(edge);
+        }
+
+        /// <summary>
+        /// Create a graph of vertices from the enumeration of data.
+        /// A vertex for each data object will be created.
+        /// </summary>
+        public static DirectedGraph FromData<T>(IEnumerable<T> data)
+        {
+            var graph = new DirectedGraph();
+
+            graph.Vertices = new List<GraphVertex>();
+            graph.Edges = new List<List<GraphEdge>>();
+
+            foreach (var datum in data)
+            {
+                int index = graph.Vertices.Count;
+                var v = new GraphVertex(index, datum);
+                graph.Vertices.Add(v);
+                graph.Edges.Add(null);
+            }
+
+            return graph;
+        }
+
+        /// <summary>
+        /// Convert to a undirected graph by adding a 
+        /// edge for any directed edge that does not 
+        /// have a opposite edge.
+        /// </summary>
+        public UndirectedGraph ToUndirectedGraph()
+        {
+            var graph = new UndirectedGraph(Vertices);
+
+            foreach (var neighbours in Edges)
             {
                 if (neighbours == null) continue;
 
@@ -78,62 +106,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return graph;
         }
 
-    }
-
-    /// <summary>
-    /// A directed adjacency graph made op of vertices and edges.
-    /// </summary>
-    public partial class DirectedGraph<VERTEX, EDGE> : AdjacencyGraph<VERTEX, EDGE>
-        where EDGE : class, IGraphEdge, new()
-        where VERTEX : class, IGraphVertex, new()
-    {
-
-        public DirectedGraph()
-        {
-
-        }
-
-        public DirectedGraph(int size) : base(size)
-        {
-
-        }
-
-        public DirectedGraph(IEnumerable<VERTEX> vertices) : base(vertices)
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override string ToString()
-        {
-            return string.Format("[DirectedGraph: VertexCount={0}, EdgeCount={1}]", VertexCount, EdgeCount);
-        }
-
-        /// <summary>
-        /// Add a edge to the graph.
-        /// </summary>
-        public void AddEdge(EDGE edge)
-        {
-            AddEdgeInternal(edge);
-        }
-
-
-        /// <summary>
-        /// Add a edge to the graph.
-        /// The edge starts at the from vertex 
-        /// and ends at the to vertex.
-        /// </summary>
-        public void AddEdge(int from, int to, float weight = 0.0f)
-        {
-            EDGE edge = new EDGE();
-            edge.From = from;
-            edge.To = to;
-            edge.Weight = weight;
-
-            AddEdgeInternal(edge);
-        }
 
     }
 }

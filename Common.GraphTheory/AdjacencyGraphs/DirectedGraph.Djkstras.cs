@@ -4,9 +4,7 @@ using System.Text;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
-    public partial class DirectedGraph<VERTEX, EDGE> : AdjacencyGraph<VERTEX, EDGE>
-        where EDGE : class, IGraphEdge, new()
-        where VERTEX : class, IGraphVertex, new()
+    public partial class DirectedGraph : AdjacencyGraph
     {
         public GraphTree DijkstrasShortestPathTree(int root)
         {
@@ -20,7 +18,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             Vertices[root].Tag = IS_VISITED_TAG;
 
             var tree = new GraphTree(root, count);
-            var queue = new List<VERTEX>(Vertices);
+            var queue = new List<GraphVertex>(Vertices);
 
             while (queue.Count != 0)
             {

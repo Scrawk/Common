@@ -8,30 +8,28 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// <summary>
     /// A adjacency graph made op of vertices and edges.
     /// </summary>
-    public abstract partial class AdjacencyGraph<VERTEX, EDGE>
-        where EDGE : class, IGraphEdge, new()
-        where VERTEX : class, IGraphVertex, new()
+    public abstract partial class AdjacencyGraph
     {
         protected const int NOT_VISITED_TAG = 0;
         protected const int IS_VISITED_TAG = 1;
 
         public AdjacencyGraph()
         {
-            Vertices = new List<VERTEX>();
-            Edges = new List<List<EDGE>>();
+            Vertices = new List<GraphVertex>();
+            Edges = new List<List<GraphEdge>>();
         }
 
         public AdjacencyGraph(int size)
         {
-            Vertices = new List<VERTEX>(size);
-            Edges = new List<List<EDGE>>(size);
+            Vertices = new List<GraphVertex>(size);
+            Edges = new List<List<GraphEdge>>(size);
             Fill(size);
         }
 
-        public AdjacencyGraph(IEnumerable<VERTEX> vertices)
+        public AdjacencyGraph(IEnumerable<GraphVertex> vertices)
         {
-            Vertices = new List<VERTEX>(vertices);
-            Edges = new List<List<EDGE>>(Vertices.Count);
+            Vertices = new List<GraphVertex>(vertices);
+            Edges = new List<List<GraphEdge>>(Vertices.Count);
 
             for (int i = 0; i < Vertices.Count; i++)
             {
@@ -40,7 +38,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
                 Edges.Add(null);
             }
-                
         }
 
         /// <summary>
@@ -57,14 +54,14 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// The graph vertices.
         /// The vertex index must match its position in array.
         /// </summary>
-        public List<VERTEX> Vertices { get; set; }
+        public List<GraphVertex> Vertices { get; set; }
 
         /// <summary>
         /// The graph edges.
         /// Each vertex index is used to look up
         /// all the edges going from that vertex.
         /// </summary>
-        public List<List<EDGE>> Edges { get; set; }
+        public List<List<GraphEdge>> Edges { get; set; }
 
         /// <summary>
         /// 
@@ -107,7 +104,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             for (int i = 0; i < size; i++)
             {
-                var v = new VERTEX();
+                var v = new GraphVertex();
                 v.Index = i;
                 Vertices.Add(v);
                 Edges.Add(null);
@@ -124,10 +121,19 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Get the data belonging to
+        /// the vertex at index i.
+        /// </summary>
+        public T GetVertexData<T>(int i)
+        {
+            return (T)Vertices[i].Data;
+        }
+
+        /// <summary>
         /// Find the edge going
         /// from and to vertices at the indexs.
         /// </summary>
-        public EDGE FindEdge(int from, int to)
+        public GraphEdge FindEdge(int from, int to)
         {
             if (Edges[from] == null)
                 return null;
@@ -139,6 +145,19 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return null;
         }
 
+        /// <summary>
+        /// Find the vertex index belonging to this data.
+        /// </summary>
+        public int IndexOf<T>(T data)
+        {
+            foreach (var v in Vertices)
+            {
+                if (ReferenceEquals(data, v.Data))
+                    return v.Index;
+            }
+
+            return -1;
+        }
 
         /// <summary>
         /// Does the graph contain a edge going
@@ -165,23 +184,19 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Get a flattened list of all edges in the graph.
         /// </summary>
-        public void GetAllEdges<T>(List<T> edges)
-            where T : class, IGraphEdge, new()
+        public void GetAllEdges(List<GraphEdge> edges)
         {
             for (int i = 0; i < VertexCount; i++)
             {
                 if (Edges[i] == null || Edges[i].Count == 0) continue;
-
-                for (int j = 0; j < Edges[i].Count; j++)
-                    edges.Add(Edges[i][j] as T);
+                edges.AddRange(Edges[i]);
             }
         }
 
         /// <summary>
         /// Get a flattened list of all edges in the tree.
         /// </summary>
-        public void GetAllEdges<T>(List<T> edges, GraphTree tree)
-            where T : class, IGraphEdge, new()
+        public void GetAllEdges(List<GraphEdge> edges, GraphTree tree)
         {
             for (int i = 0; i < tree.Count; i++)
             {
@@ -191,7 +206,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 for (int j = 0; j < children.Count; j++)
                 {
                     var c = children[j];
-                    edges.Add(FindEdge(i, c) as T);
+                    var edge = FindEdge(i, c);
+                    if (edge == null) continue;
+                    edges.Add(edge);
                 }
             }
         }
@@ -240,12 +257,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// Used as a short cut when adding multiple 
         /// edges in derived classes.
         /// </summary>
-        protected void AddEdgeInternal(EDGE edge)
+        protected void AddEdgeInternal(GraphEdge edge)
         {
             int i = edge.From;
 
             if (Edges[i] == null)
-                Edges[i] = new List<EDGE>();
+                Edges[i] = new List<GraphEdge>();
 
             EdgeCount++;
             Edges[i].Add(edge);

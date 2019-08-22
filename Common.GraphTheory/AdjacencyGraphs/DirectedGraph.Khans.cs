@@ -5,24 +5,21 @@ using System.Text;
 namespace Common.GraphTheory.AdjacencyGraphs
 {
 
-    public partial class DirectedGraph<VERTEX, EDGE> : AdjacencyGraph<VERTEX, EDGE>
-        where EDGE : class, IGraphEdge, new()
-        where VERTEX : class, IGraphVertex, new()
+    public partial class DirectedGraph : AdjacencyGraph
     {
 
-        public List<VERTEX> KhansTopologicalSort()
+        public List<GraphVertex> KhansTopologicalSort()
         {
-
-            List<VERTEX> list = new List<VERTEX>();
-            LinkedList<VERTEX> vertices = new LinkedList<VERTEX>();
+            var list = new List<GraphVertex>();
+            var vertices = new LinkedList<GraphVertex>();
 
             int edgeCount = Edges.Count;
-            List<EDGE>[] edges = new List<EDGE>[edgeCount];
+            var edges = new List<GraphEdge>[edgeCount];
 
             for (int i = 0; i < edgeCount; i++)
             {
                 if (Edges[i] == null) continue;
-                edges[i] = new List<EDGE>(Edges[i]);
+                edges[i] = new List<GraphEdge>(Edges[i]);
             }
 
             for (int i = 0; i < Vertices.Count; i++)
@@ -35,7 +32,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             while (vertices.Count > 0)
             {
-                VERTEX v = vertices.Last.Value;
+                GraphVertex v = vertices.Last.Value;
                 vertices.RemoveLast();
 
                 list.Add(v);
@@ -63,7 +60,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 return list;
         }
 
-        private int Khans_GetInverseDegree(List<EDGE>[] Edges, int i)
+        private int Khans_GetInverseDegree(List<GraphEdge>[] Edges, int i)
         {
             int degree = 0;
 
@@ -80,7 +77,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return degree;
         }
 
-        private int Khans_CountEdges(List<EDGE>[] Edges)
+        private int Khans_CountEdges(List<GraphEdge>[] Edges)
         {
             int count = 0;
 

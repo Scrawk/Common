@@ -6,9 +6,7 @@ using Common.Collections.Sets;
 namespace Common.GraphTheory.AdjacencyGraphs
 {
 
-    public partial class UndirectedGraph<VERTEX, EDGE> : AdjacencyGraph<VERTEX, EDGE>
-        where EDGE : class, IGraphEdge, new()
-        where VERTEX : class, IGraphVertex, new()
+    public partial class UndirectedGraph : AdjacencyGraph
     {
 
         public GraphForest KruskalsMinimumSpanningForest()
@@ -18,12 +16,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
             for (int i = 0; i < VertexCount; i++)
                 set.Add(i, i);
 
-            var sorted = new List<EDGE>();
+            var sorted = new List<GraphEdge>();
             GetAllEdges(sorted);
             sorted.Sort();
 
             int edgeCount = sorted.Count;
-            var edges = new List<EDGE>(edgeCount);
+            var edges = new List<GraphEdge>(edgeCount);
 
             for (int i = 0; i < edgeCount; i++)
             {
@@ -34,7 +32,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     edges.Add(sorted[i]);
             }
 
-            var table = new Dictionary<int, List<EDGE>>();
+            var table = new Dictionary<int, List<GraphEdge>>();
 
             edgeCount = edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -42,13 +40,13 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 int root = set.FindParent(edges[i].From);
 
                 if (!table.ContainsKey(root))
-                    table.Add(root, new List<EDGE>());
+                    table.Add(root, new List<GraphEdge>());
 
                 table[root].Add(edges[i]);
             }
 
             var forest = new GraphForest();
-            var graph = new UndirectedGraph<VERTEX>(VertexCount);
+            var graph = new UndirectedGraph(VertexCount);
 
             foreach (var kvp in table)
             {
@@ -70,7 +68,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return forest;
         }
 
-        private GraphTree Kruskals_BuildTree(int root, UndirectedGraph<VERTEX> graph)
+        private GraphTree Kruskals_BuildTree(int root, UndirectedGraph graph)
         {
             int count = graph.VertexCount;
 

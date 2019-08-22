@@ -3,32 +3,11 @@ using System.Collections.Generic;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
-    /// <summary>
-    /// The interface for adjacency graph edges.
-    /// </summary>
-    public interface IGraphEdge : IComparable<IGraphEdge>
-    {
-        /// <summary>
-        /// The vertex index the edge starts at.
-        /// </summary>
-        int From { get; set; }
-
-        /// <summary>
-        /// The vertex index the edge ends at.
-        /// </summary>
-        int To { get; set; }
-
-        /// <summary>
-        /// The edges weight. Used in some seaarch algorithms.
-        /// ie spanning trees.
-        /// </summary>
-        float Weight { get; set; }
-    }
 
     /// <summary>
     /// A adjacency graphs edge.
     /// </summary>
-    public class GraphEdge : IGraphEdge
+    public class GraphEdge : IComparable<GraphEdge>
     {
 
         public GraphEdge()
@@ -66,6 +45,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public float Weight { get; set; }
 
         /// <summary>
+        /// The edges data.
+        /// </summary>
+        public object Data { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public override string ToString()
@@ -76,7 +60,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Used to sort edges by weight.
         /// </summary>
-        public int CompareTo(IGraphEdge other)
+        public int CompareTo(GraphEdge other)
         {
             return Weight.CompareTo(other.Weight);
         }

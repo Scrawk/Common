@@ -98,7 +98,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         [TestMethod]
         public void KhansTopologicalSort()
         {
-            var graph = new DirectedGraph<int>(8);
+            var graph = new DirectedGraph(8);
 
             graph.Vertices[0].Data = 7;
             graph.Vertices[1].Data = 5;
@@ -137,7 +137,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             int count = sorted.Count;
             for (int i = 0; i < count; i++)
             {
-                int Id = sorted[i].Data;
+                int Id = (int)sorted[i].Data;
 
                 IList<int> depList = dependacies[Id];
                 foreach (int d in depList)
@@ -150,15 +150,15 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             }
         }
 
-        public static UndirectedGraph<string> CreateCitiesUndirectedGraph()
+        public static UndirectedGraph CreateCitiesUndirectedGraph()
         {
             var directed = CreateCitiesDirectedGraph();
             return directed.ToUndirectedGraph();
         }
 
-        public static DirectedGraph<string> CreateCitiesDirectedGraph()
+        public static DirectedGraph CreateCitiesDirectedGraph()
         {
-            var graph = new DirectedGraph<string>(12);
+            var graph = new DirectedGraph(12);
 
             graph.Vertices[0].Data = "Seattle";
             graph.Vertices[1].Data = "San Francisco";
