@@ -130,10 +130,21 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Find the edge going
-        /// from and to vertices at the indexs.
+        /// Get the edge going from and 
+        /// to vertices at the indexs.
         /// </summary>
-        public GraphEdge FindEdge(int from, int to)
+        public T GetEdgeData<T>(int from, int to)
+        {
+            var edge = GetEdge(from, to);
+            if (edge == null) return default(T);
+            return (T)edge.Data;
+        }
+
+        /// <summary>
+        /// Get the edge going from and 
+        /// to vertices at the indexs.
+        /// </summary>
+        public GraphEdge GetEdge(int from, int to)
         {
             if (Edges[from] == null)
                 return null;
@@ -165,7 +176,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public bool ContainsEdge(int from, int to)
         {
-            return FindEdge(from, to) != null;
+            return GetEdge(from, to) != null;
         }
 
         /// <summary>
@@ -206,7 +217,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 for (int j = 0; j < children.Count; j++)
                 {
                     var c = children[j];
-                    var edge = FindEdge(i, c);
+                    var edge = GetEdge(i, c);
                     if (edge == null) continue;
                     edges.Add(edge);
                 }
@@ -227,7 +238,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 for (int j = 0; j < children.Count; j++)
                 {
                     var c = children[j];
-                    var edge = FindEdge(i, c);
+                    var edge = GetEdge(i, c);
 
                     sum += edge.Weight;
                 }
@@ -246,7 +257,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             {
                 int i0 = path[i + 0];
                 int i1 = path[i + 1];
-                sum += FindEdge(i0, i1).Weight;
+                sum += GetEdge(i0, i1).Weight;
             }
                 
             return sum;

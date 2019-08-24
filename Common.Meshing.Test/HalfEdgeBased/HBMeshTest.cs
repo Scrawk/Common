@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
@@ -56,17 +57,20 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var mesh = new HBMesh2f();
 
-            var v0 = mesh.NewVertex();
-            var v1 = mesh.NewVertex();
-            var v2 = mesh.NewVertex();
+            var v0 = new HBVertex2f();
+            var v1 = new HBVertex2f();
+            var v2 = new HBVertex2f();
+            mesh.Vertices.Add(v0, v1, v2);
 
-            var e0 = mesh.NewEdge();
-            var e1 = mesh.NewEdge();
-            var e2 = mesh.NewEdge();
+            var e0 = new HBEdge();
+            var e1 = new HBEdge();
+            var e2 = new HBEdge();
+            mesh.Edges.Add(e0, e1, e2);
 
-            var f0 = mesh.NewFace();
-            var f1 = mesh.NewFace();
-            var f2 = mesh.NewFace();
+            var f0 = new HBFace();
+            var f1 = new HBFace();
+            var f2 = new HBFace();
+            mesh.Faces.Add(f0, f1, f2);
 
             Assert.AreEqual(0, mesh.IndexOf(v0));
             Assert.AreEqual(1, mesh.IndexOf(v1));
@@ -86,13 +90,15 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var mesh = new HBMesh2f();
 
-            var v0 = mesh.NewVertex();
-            var v1 = mesh.NewVertex();
-            var v2 = mesh.NewVertex();
-            var v3 = mesh.NewVertex();
+            var v0 = new HBVertex2f();
+            var v1 = new HBVertex2f();
+            var v2 = new HBVertex2f();
+            var v3 = new HBVertex2f();
+            mesh.Vertices.Add(v0, v1, v2, v3);
 
-            var e0 = mesh.NewEdge();
-            var e1 = mesh.NewEdge();
+            var e0 = new HBEdge();
+            var e1 = new HBEdge();
+            mesh.Edges.Add(e0, e1);
 
             e0.Opposite = e1;
             e1.Opposite = e0;

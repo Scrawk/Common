@@ -7,7 +7,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// A half edge based face. Presumes face is CCW.
     /// </summary>
-    public class HBFace
+    public sealed class HBFace
     {
         public int Tag;
 
@@ -26,10 +26,8 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Face as string</returns>
-        public virtual string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public string ToString<VERTEX>(HBMesh<VERTEX> mesh)
             where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
         {
             return string.Format("[HBFace: Id={0}, Edge={1}]", mesh.IndexOf(this), mesh.IndexOf(Edge));
         }
@@ -49,7 +47,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Clear face of all connections.
         /// </summary>
-        public virtual void Clear()
+        public void Clear()
         {
             Edge = null;
         }
@@ -58,10 +56,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Check the face is valid.
         /// </summary>
         /// <returns>A list of errors</returns>
-        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, bool quick)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public string Check()
         {
             var builder = new StringBuilder();
 
@@ -71,9 +66,6 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 if (Edge.Face != this)
                     builder.AppendLine("Edge is not part of this face.");
-
-                if (!quick && mesh.IndexOf(Edge) == -1)
-                    builder.AppendLine("Edge is not found in mesh.");
             }
 
             return builder.ToString();

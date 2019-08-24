@@ -6,39 +6,34 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
 
-        public static void ToEdgeMesh<MESH, VERTEX, EDGE, FACE>(IEdgeMeshConstructor<MESH> constructor, HBMesh<VERTEX, EDGE, FACE> mesh)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public void ToEdgeMesh<MESH>(IEdgeMeshConstructor<MESH> constructor)
         {
-            mesh.TagAll();
-            constructor.PushEdgeMesh(mesh.Vertices.Count, mesh.Edges.Count);
+            TagAll();
+            constructor.PushEdgeMesh(Vertices.Count, Edges.Count);
 
-            foreach (var v in mesh.Vertices)
+            foreach (var v in Vertices)
                 constructor.AddVertex(v.GetPosition());
 
-            foreach (var edge in mesh.Edges)
+            foreach (var edge in Edges)
                 constructor.AddEdge(edge.Tag, edge.Opposite.Tag);
         }
 
-        public static void ToTriangularMesh<MESH, VERTEX, EDGE, FACE>(ITriangleMeshConstructor<MESH> constructor, HBMesh<VERTEX, EDGE, FACE> mesh)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public void ToTriangularMesh<MESH>(ITriangleMeshConstructor<MESH> constructor)
         {
-            mesh.TagAll();
-            constructor.PushTriangleMesh(mesh.Vertices.Count, mesh.Faces.Count);
+            TagAll();
+            constructor.PushTriangleMesh(Vertices.Count, Faces.Count);
 
-            foreach (var vertex in mesh.Vertices)
+            foreach (var vertex in Vertices)
                 constructor.AddVertex(vertex.GetPosition());
 
             var vertices = new List<HBVertex>(3);
             var neighbours = new List<HBFace>(3);
 
-            foreach (var face in mesh.Faces)
+            foreach (var face in Faces)
             {
                 vertices.Clear();
                 face.Edge.GetVertices(vertices);
@@ -50,7 +45,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             if (constructor.SupportsFaceConnections)
             {
-                foreach (var face in mesh.Faces)
+                foreach (var face in Faces)
                 {
                     neighbours.Clear();
                     face.Edge.GetNeighbours(neighbours, true, true);

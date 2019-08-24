@@ -10,7 +10,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// Constructor for HBMesh2f
     /// </summary>
-    public class HBMeshConstructor2f : HBMeshConstructor<HBMesh2f, HBVertex2f, HBEdge, HBFace>
+    public class HBMeshConstructor2f : HBMeshConstructor<HBMesh2f, HBVertex2f>
     {
 
     }
@@ -18,7 +18,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// Constructor for HBMesh3f
     /// </summary>
-    public class HBMeshConstructor3f : HBMeshConstructor<HBMesh3f, HBVertex3f, HBEdge, HBFace>
+    public class HBMeshConstructor3f : HBMeshConstructor<HBMesh3f, HBVertex3f>
     {
 
     }
@@ -26,7 +26,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// Constructor for HBMesh2f
     /// </summary>
-    public class HBMeshConstructor2d : HBMeshConstructor<HBMesh2d, HBVertex2d, HBEdge, HBFace>
+    public class HBMeshConstructor2d : HBMeshConstructor<HBMesh2d, HBVertex2d>
     {
 
     }
@@ -34,7 +34,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// Constructor for HBMesh3f
     /// </summary>
-    public class HBMeshConstructor3d : HBMeshConstructor<HBMesh3d, HBVertex3d, HBEdge, HBFace>
+    public class HBMeshConstructor3d : HBMeshConstructor<HBMesh3d, HBVertex3d>
     {
 
     }
@@ -43,13 +43,11 @@ namespace Common.Meshing.HalfEdgeBased
     /// Half edge based mesh constructor.
     /// Supports triangle or polygon meshes.
     /// </summary>
-    public class HBMeshConstructor<MESH, VERTEX, EDGE, FACE> : 
+    public class HBMeshConstructor<MESH, VERTEX> : 
             ITriangleMeshConstructor<MESH>,
             IPolygonMeshConstructor<MESH>
-            where MESH : HBMesh<VERTEX, EDGE, FACE>, new()
+            where MESH : HBMesh<VERTEX>, new()
             where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
     {
 
         private MESH Mesh;
@@ -102,7 +100,7 @@ namespace Common.Meshing.HalfEdgeBased
         public MESH PopMesh()
         {
             if (AddBoundary)
-                HBMeshOp.AddBoundaryEdges(Mesh);
+                Mesh.AddBoundaryEdges();
 
             var tmp = Mesh;
             Mesh = null;
@@ -146,15 +144,15 @@ namespace Common.Meshing.HalfEdgeBased
             var v1 = Mesh.Vertices[i1];
             var v2 = Mesh.Vertices[i2];
 
-            var e0 = new EDGE();
-            var e1 = new EDGE();
-            var e2 = new EDGE();
+            var e0 = new HBEdge();
+            var e1 = new HBEdge();
+            var e2 = new HBEdge();
 
             v0.Edge = e0;
             v1.Edge = e1;
             v2.Edge = e2;
 
-            var face = new FACE();
+            var face = new HBFace();
             face.Edge = e0;
 
             e0.Set(v0, face, e2, e1, null);
@@ -175,13 +173,13 @@ namespace Common.Meshing.HalfEdgeBased
         {
             CheckMeshIsPushed();
             int count = vertList.Count;
-            var face = new FACE();
-            var edges = new List<EDGE>(vertList.Count);
+            var face = new HBFace();
+            var edges = new List<HBEdge>(vertList.Count);
 
             for (int i = 0; i < count; i++)
             {
                 var v = Mesh.Vertices[vertList[i]];
-                var e = new EDGE();
+                var e = new HBEdge();
                 v.Edge = e;
                 edges.Add(e);
             }
@@ -212,13 +210,13 @@ namespace Common.Meshing.HalfEdgeBased
         {
             CheckMeshIsPushed();
             int count = numVertices;
-            var face = new FACE();
-            var edges = new List<EDGE>(numVertices);
+            var face = new HBFace();
+            var edges = new List<HBEdge>(numVertices);
 
             for (int i = 0; i < count; i++)
             {
                 var v = Mesh.Vertices[vertStart + i];
-                var e = new EDGE();
+                var e = new HBEdge();
                 v.Edge = e;
                 edges.Add(e);
             }

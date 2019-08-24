@@ -36,10 +36,8 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Vertex as string</returns>
-        public virtual string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public virtual string ToString<VERTEX>(HBMesh<VERTEX> mesh)
             where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
         {
             return string.Format("[HBVertex: Id={0}, Edge={1}]", mesh.IndexOf(this), mesh.IndexOf(Edge));
         }
@@ -182,10 +180,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Check the vertex is valid.
         /// </summary>
         /// <returns>A list of errors</returns>
-        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, bool quick)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public virtual string Check()
         {
             var builder = new StringBuilder();
 
@@ -195,9 +190,6 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 if (Edge.From != this)
                     builder.AppendLine("Edge is not from this vertex.");
-
-                if (!quick && mesh.IndexOf(Edge) == -1)
-                    builder.AppendLine("Edge is not found in mesh.");
             }
 
             return builder.ToString();

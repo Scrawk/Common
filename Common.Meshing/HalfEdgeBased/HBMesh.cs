@@ -10,24 +10,22 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// A half edge based mesh.
     /// </summary>
-    public class HBMesh<VERTEX, EDGE, FACE>
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+    public partial class HBMesh<VERTEX> 
+        where VERTEX : HBVertex, new()
     {
 
         public HBMesh()
         {
             Vertices = new List<VERTEX>();
-            Edges = new List<EDGE>();
-            Faces = new List<FACE>();
+            Edges = new List<HBEdge>();
+            Faces = new List<HBFace>();
         }
 
         public HBMesh(int numVertices, int numEdges, int numFaces)
         {
             Vertices = new List<VERTEX>(numVertices);
-            Edges = new List<EDGE>(numEdges);
-            Faces = new List<FACE>(numFaces);
+            Edges = new List<HBEdge>(numEdges);
+            Faces = new List<HBFace>(numFaces);
         }
 
         /// <summary>
@@ -38,12 +36,12 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// All the edges in the mesh.
         /// </summary>
-        public List<EDGE> Edges { get; private set; }
+        public List<HBEdge> Edges { get; private set; }
 
         /// <summary>
         /// All the faces in the mesh.
         /// </summary>
-        public List<FACE> Faces { get; private set; }
+        public List<HBFace> Faces { get; private set; }
 
         /// <summary>
         /// Convert mesh to string.
@@ -90,10 +88,10 @@ namespace Common.Meshing.HalfEdgeBased
                 Vertices.Add(new VERTEX());
 
             for (int i = 0; i < numEdges; i++)
-                Edges.Add(new EDGE());
+                Edges.Add(new HBEdge());
 
             for (int i = 0; i < numFaces; i++)
-                Faces.Add(new FACE());
+                Faces.Add(new HBFace());
         }
 
         /// <summary>
@@ -113,7 +111,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <returns>The edge index or -1 if not found.</returns>
         public int IndexOf(HBEdge edge)
         {
-            EDGE e = edge as EDGE;
+            HBEdge e = edge as HBEdge;
             if (e == null) return -1;
             return Edges.IndexOf(e);
         }
@@ -124,45 +122,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// <returns>The face index or -1 if not found.</returns>
         public int IndexOf(HBFace face)
         {
-            FACE f = face as FACE;
+            HBFace f = face as HBFace;
             if (f == null) return -1;
             return Faces.IndexOf(f);
-        }
-
-        /// <summary>
-        /// Creates a new vertex, adds it to 
-        /// vertex list add returns.
-        /// </summary>
-        /// <returns>The new vertex</returns>
-        public VERTEX NewVertex()
-        {
-            var v = new VERTEX();
-            Vertices.Add(v);
-            return v;
-        }
-
-        /// <summary>
-        /// Creates a new edge, adds it to 
-        /// edge list add returns.
-        /// </summary>
-        /// <returns>The new edge</returns>
-        public EDGE NewEdge()
-        {
-            var e = new EDGE();
-            Edges.Add(e);
-            return e;
-        }
-
-        /// <summary>
-        /// Creates a new face, adds it to 
-        /// face list add returns.
-        /// </summary>
-        /// <returns>The new face</returns>
-        public FACE NewFace()
-        {
-            var f = new FACE();
-            Faces.Add(f);
-            return f;
         }
 
         /// <summary>
@@ -320,7 +282,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="from">The from vertex</param>
         /// <param name="to">The to vertex</param>
         /// <returns>The edge index or null if not found</returns>
-        public EDGE FindEdge(HBVertex from, HBVertex to)
+        public HBEdge FindEdge(HBVertex from, HBVertex to)
         {
             for (int i = 0; i < Edges.Count; i++)
             {
@@ -329,7 +291,7 @@ namespace Common.Meshing.HalfEdgeBased
                 if (edge.To == null) continue;
 
                 if (ReferenceEquals(edge.From, from) &&
-                   ReferenceEquals(edge.To, to))
+                    ReferenceEquals(edge.To, to))
                     return edge;
             }
 
@@ -360,7 +322,7 @@ namespace Common.Meshing.HalfEdgeBased
                 throw new ArgumentException("faceVertices can not be less than 3.");
 
             TagVertices();
-            List<VERTEX> vertices = new List<VERTEX>(faceVertices);
+            var vertices = new List<HBVertex>(faceVertices);
 
             int count = Faces.Count;
             for (int i = 0; i < count; i++)
@@ -475,14 +437,14 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Check the mesh for debugging.
         /// </summary>
-        public string Check(bool quick = true)
+        public string Check()
         {
             int count = 0;
             var builder = new StringBuilder();
 
             for (int i = 0; i < Vertices.Count; i++)
             {
-                var errors = Vertices[i].Check(this, quick);
+                var errors = Vertices[i].Check();
 
                 if (!string.IsNullOrEmpty(errors))
                 {
@@ -494,7 +456,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             for (int i = 0; i < Edges.Count; i++)
             {
-                var errors = Edges[i].Check(this, quick);
+                var errors = Edges[i].Check();
                 if (!string.IsNullOrEmpty(errors))
                 {
                     builder.AppendLine("Edge " + i + " contains errors:");
@@ -505,7 +467,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             for (int i = 0; i < Faces.Count; i++)
             {
-                var errors = Faces[i].Check(this, quick);
+                var errors = Faces[i].Check();
                 if (!string.IsNullOrEmpty(errors))
                 {
                     builder.AppendLine("Face " + i + " contains errors:");
@@ -520,49 +482,6 @@ namespace Common.Meshing.HalfEdgeBased
                 msg = "Mesh contains no errors";
 
             return msg;
-        }
-
-        /// <summary>
-        /// Returns true if any edge references this vertex.
-        /// </summary>
-        public bool References(HBVertex vert)
-        {
-            foreach(var edge in Edges)
-                if (edge.From == vert) return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true if any vertex, edge or face references this edge.
-        /// </summary>
-        public bool References(HBEdge edge)
-        {
-            foreach (var vert in Vertices)
-                if (vert.Edge == edge) return true;
-
-            foreach (var face in Faces)
-                if (face.Edge == edge) return true;
-
-            foreach (var e in Edges)
-            {
-                if (e.Opposite == edge) return true;
-                if (e.Next == edge) return true;
-                if (e.Previous == edge) return true;
-            }
-                
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true if any edge references this face.
-        /// </summary>
-        public bool References(HBFace face)
-        {
-            foreach (var edge in Edges)
-                if (edge.Face == face) return true;
-
-            return false;
         }
 
     }

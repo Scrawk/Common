@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
         /// <summary>
         /// Splits a edge at its mid point and adds 
@@ -12,10 +13,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">A triangle mesh the edge belongs to.</param>
         /// <param name="edge">The edge to splits.</param>
-        public static VERTEX SplitEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public VERTEX SplitEdge(HBEdge edge)
         {
             //Dont collapse boundary edges
             if (edge.IsBoundary) return null;
@@ -30,7 +28,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Add new vertex at mid point.
             //edge now goes to this vertex and the new edge from it.
-            var v = PokeEdge(mesh, edge, 0.5);
+            var v = PokeEdge(edge, 0.5);
 
             //Get the new edge and its opposite.
             var nedge = v.Edge;
@@ -38,8 +36,8 @@ namespace Common.Meshing.HalfEdgeBased
 
             //The faces are now quads.
             //Need two new edges (4 half edges) to make four triangles
-            NewEdge(out EDGE e0, out EDGE e1);
-            NewEdge(out EDGE e2, out EDGE e3);
+            NewEdge(out HBEdge e0, out HBEdge e1);
+            NewEdge(out HBEdge e2, out HBEdge e3);
 
             //Connect the new edges previous and next edges.
             InsertBetween(e0, edge, edge.Previous);
@@ -57,8 +55,8 @@ namespace Common.Meshing.HalfEdgeBased
             //Create two new faces.
             var f0 = edge.Face;
             var f1 = opp.Face;
-            var f2 = new FACE();
-            var f3 = new FACE();
+            var f2 = new HBFace();
+            var f3 = new HBFace();
 
             //Iterate all edges in each face and
             //set the correct face for all edges.
@@ -68,8 +66,8 @@ namespace Common.Meshing.HalfEdgeBased
             SetFaces(nopp, f3);
 
             //Add newly created objects to mesh.
-            mesh.Edges.Add(e0, e1, e2, e3);
-            mesh.Faces.Add(f2, f3);
+            Edges.Add(e0, e1, e2, e3);
+            Faces.Add(f2, f3);
 
             //return the new vertex.
             return v;

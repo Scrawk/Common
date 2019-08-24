@@ -4,23 +4,18 @@ using System.Text;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX> 
+        where VERTEX : HBVertex, new()
     {
         /// <summary>
         /// Add opposite edges to all edges that dont have one.
         /// These edges would be considered to be the boundary edges.
         /// Presumes all edges are closed.
         /// </summary>
-        public static void AddBoundaryEdges<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public void AddBoundaryEdges()
         {
-            var Vertices = mesh.Vertices;
-            var Edges = mesh.Edges;
-            var Faces = mesh.Faces;
 
-            List<EDGE> edges = null;
+            List<HBEdge> edges = null;
             for (int i = 0; i < Edges.Count; i++)
             {
                 var edge = Edges[i];
@@ -30,13 +25,13 @@ namespace Common.Meshing.HalfEdgeBased
                     if (edge.Next == null)
                         throw new InvalidOperationException("Edge not closed.");
 
-                    var opp = new EDGE();
+                    var opp = new HBEdge();
                     opp.Opposite = edge;
                     edge.Opposite = opp;
                     opp.From = edge.Next.From;
 
                     if (edges == null)
-                        edges = new List<EDGE>();
+                        edges = new List<HBEdge>();
 
                     edges.Add(opp);
                 }
@@ -50,8 +45,8 @@ namespace Common.Meshing.HalfEdgeBased
                 var from = edge.From;
                 var to = edge.To;
 
-                EDGE next = null;
-                EDGE previous = null;
+                HBEdge next = null;
+                HBEdge previous = null;
 
                 foreach (var e in edges)
                 {
@@ -90,14 +85,8 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="source">mesh that get appended to</param>
         /// <param name="dest">mesh that gets appended from</param>
         /// <param name="incudeFaces">should the mesh faces also be appended</param>
-        public static void Append<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> source, HBMesh<VERTEX, EDGE, FACE> dest, bool incudeFaces)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public void Append(HBMesh<VERTEX> source, bool incudeFaces)
         {
-            var Vertices = dest.Vertices;
-            var Edges = dest.Edges;
-            var Faces = dest.Faces;
 
             int vStart = Vertices.Count;
             int eStart = Edges.Count;
@@ -114,7 +103,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             for (int i = 0; i < source.Edges.Count; i++)
             {
-                var e = new EDGE();
+                var e = new HBEdge();
                 Edges.Add(e);
             }
 
@@ -122,7 +111,7 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 for (int i = 0; i < source.Faces.Count; i++)
                 {
-                    var f = new FACE();
+                    var f = new HBFace();
                     Faces.Add(f);
                 }
             }
@@ -162,5 +151,6 @@ namespace Common.Meshing.HalfEdgeBased
                 }
             }
         }
+
     }
 }

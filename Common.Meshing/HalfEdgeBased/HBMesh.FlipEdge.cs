@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
         /// <summary>
         /// Takes a edge that connects 2 triangle faces making a quad
@@ -11,10 +12,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Mesh that contains the edge.</param>
         /// <param name="edge">The edge to flip.</param>
-        public static void FlipEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public void FlipEdge(HBEdge edge)
         {
             //Dont collapse boundary edges
             if (edge.IsBoundary) return;

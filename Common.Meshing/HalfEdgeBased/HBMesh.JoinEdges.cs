@@ -5,7 +5,8 @@ using Common.Core.Numerics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
         /// <summary>
         /// Joins two edges where they intersect.
@@ -14,12 +15,9 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="e0">A edge intersecting e1.</param>
         /// <param name="e1">A edge intersecting e0.</param>
         /// <param name="t">The length along e0 and e1 where the intersection occurs.</param>
-        public static void JoinEdges<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE e0, EDGE e1, double t)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public void JoinEdges(HBEdge e0, HBEdge e1, double t)
         {
-            JoinEdges(mesh, e0, e1, t, t);
+            JoinEdges(e0, e1, t, t);
         }
 
         /// <summary>
@@ -30,10 +28,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="e1">A edge intersecting e0.</param>
         /// <param name="s">The length along e0 where the intersection occurs.</param>
         /// <param name="t">The length along e1 where the intersection occurs.</param>
-        public static void JoinEdges<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE e0, EDGE e1, double s, double t)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public void JoinEdges(HBEdge e0, HBEdge e1, double s, double t)
         {
             if (e0.Face != null || e1.Face != null)
                 throw new NotImplementedException("Edges with faces not implemented.");
@@ -43,8 +38,8 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Split both edges at intersection point.
             //Presumes v0 and v1 end up at same position.
-            var v0 = HBMeshOp.PokeEdge(mesh, e0, s);
-            var v1 = HBMeshOp.PokeEdge(mesh, e1, t);
+            var v0 = PokeEdge(e0, s);
+            var v1 = PokeEdge(e1, t);
 
             //Say the horizontal edge is the half edge starting at v0.
             //Say the vertical edge is the half edge starting at v1.
@@ -103,7 +98,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Should not be in use by any edge at this point;
             v1.Edge = null;
-            mesh.Vertices.Remove(v1);
+            Vertices.Remove(v1);
         }
 
     }

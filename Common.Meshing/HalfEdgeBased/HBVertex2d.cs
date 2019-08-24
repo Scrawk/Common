@@ -10,7 +10,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// A half edge vertex with 2D position.
     /// Presumes edges are connected in CCW order.
     /// </summary>
-    public class HBVertex2d : HBVertex
+    public sealed class HBVertex2d : HBVertex
     {
         /// <summary>
         /// The dimension of the vertex, ie 2D, 3D.
@@ -34,7 +34,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Vertex as string</returns>
-        public override string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public override string ToString<VERTEX>(HBMesh<VERTEX> mesh)
         {
             return string.Format("[HBVertex2d: Id={0}, Edge={1}, Position={2}]",
                 mesh.IndexOf(this), mesh.IndexOf(Edge), Position);

@@ -4,17 +4,17 @@ using System.Text;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
 
         /// <summary>
         /// Create a new edge from two half edges.
         /// </summary>
-        public static void NewEdge<EDGE>(out EDGE e1, out EDGE e2)
-            where EDGE : HBEdge, new()
+        private static void NewEdge(out HBEdge e1, out HBEdge e2)
         {
-            e1 = new EDGE();
-            e2 = new EDGE();
+            e1 = new HBEdge();
+            e2 = new HBEdge();
             e1.Opposite = e2;
             e2.Opposite = e1;
         }
@@ -22,7 +22,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Inserts edge between previous and next.
         /// </summary>
-        public static void InsertBetween(HBEdge edge, HBEdge previous, HBEdge next)
+        private static void InsertBetween(HBEdge edge, HBEdge previous, HBEdge next)
         {
             edge.Previous = previous;
             previous.Next = edge;
@@ -33,7 +33,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Sets the edges vertex and vertex edge.
         /// </summary>
-        public static void SetFrom(HBEdge edge, HBVertex vert)
+        private static void SetFrom(HBEdge edge, HBVertex vert)
         {
             edge.From = vert;
             vert.Edge = edge;
@@ -42,7 +42,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// 
         /// </summary>
-        public static void SetNext(HBEdge edge, HBEdge next)
+        private static void SetNext(HBEdge edge, HBEdge next)
         {
             edge.Next = next;
             next.Previous = edge;
@@ -51,7 +51,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// 
         /// </summary>
-        public static void SetPrevious(HBEdge edge, HBEdge previous)
+        private static void SetPrevious(HBEdge edge, HBEdge previous)
         {
             edge.Previous = previous;
             previous.Next = edge;
@@ -60,7 +60,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// 
         /// </summary>
-        public static void SetFace(HBEdge edge, HBFace face)
+        private static void SetFace(HBEdge edge, HBFace face)
         {
             edge.Face = face;
             face.Edge = edge;
@@ -69,7 +69,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// 
         /// </summary>
-        public static void SetFaces(HBEdge edge, HBFace face)
+        private static void SetFaces(HBEdge edge, HBFace face)
         {
             foreach (var e in edge.EnumerateEdges())
                 SetFace(e, face);
@@ -78,7 +78,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Sets the tag for the edge and its opposite.
         /// </summary>
-        public static void TagEdgeAndOpposite(HBEdge edge, int tag)
+        private static void TagEdgeAndOpposite(HBEdge edge, int tag)
         {
             if (edge == null) return;
 

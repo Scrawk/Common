@@ -9,7 +9,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// Half edge. Presumes edges are connected in CCW order.
     /// </summary>
-    public class HBEdge
+    public sealed class HBEdge
     {
         public int Tag;
 
@@ -74,10 +74,8 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Edge as string</returns>
-        public virtual string ToString<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh)
+        public string ToString<VERTEX>(HBMesh<VERTEX> mesh)
             where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
         {
             return string.Format("[HBEdge: Id={0}, From={1}, To={2}, Face={3}, Previous={4}, Next={5}, Opposite={6}]",
                 mesh.IndexOf(this), mesh.IndexOf(From), mesh.IndexOf(To), mesh.IndexOf(Face), 
@@ -205,7 +203,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Clear edge of all connections.
         /// </summary>
-        public virtual void Clear()
+        public void Clear()
         {
             From = null;
             Face = null;
@@ -258,28 +256,25 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Add all edges in face to list.
         /// </summary>
-        public void GetEdges<EDGE>(List<EDGE> edges, bool forwards = true)
-            where EDGE : HBEdge
+        public void GetEdges(List<HBEdge> edges, bool forwards = true)
         {
             foreach (var e in EnumerateEdges(forwards))
-                edges.Add(e as EDGE);
+                edges.Add(e);
         }
 
         /// <summary>
         /// Add all vertices in face to list.
         /// </summary>
-        public void GetVertices<VERTEX>(List<VERTEX> vertices, bool forwards = true)
-            where VERTEX : HBVertex
+        public void GetVertices(List<HBVertex> vertices, bool forwards = true)
         {
             foreach (var v in EnumerateVertices(forwards))
-                vertices.Add(v as VERTEX);
+                vertices.Add(v);
         }
 
         /// <summary>
         /// Add all neighbours of face to list.
         /// </summary>
-        public void GetNeighbours<FACE>(List<FACE> faces, bool forwards = true, bool incudeNull = false)
-            where FACE : HBFace
+        public void GetNeighbours(List<HBFace> faces, bool forwards = true, bool incudeNull = false)
         {
             foreach (var e in EnumerateEdges(forwards))
             {
@@ -288,7 +283,7 @@ namespace Common.Meshing.HalfEdgeBased
                     if (incudeNull) faces.Add(null);
                 }
                 else
-                    faces.Add(e.Opposite.Face as FACE);
+                    faces.Add(e.Opposite.Face);
             }
         }
 
@@ -306,31 +301,15 @@ namespace Common.Meshing.HalfEdgeBased
         /// Check the edge is valid.
         /// </summary>
         /// <returns>A list of errors</returns>
-        public virtual string Check<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, bool quick)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public string Check()
         {
             var builder = new StringBuilder();
 
             if (From == null)
                 builder.AppendLine("From is null.");
-            else
-            {
-                if (!quick && mesh.IndexOf(From) == -1)
-                    builder.AppendLine("From is not found in mesh.");
-            }
 
             if (Opposite == null)
                 builder.AppendLine("Opposite is null.");
-            else
-            {
-                if (Opposite.Opposite != this)
-                    builder.AppendLine("Opposite is not opposite to this edge.");
-
-                if (!quick && mesh.IndexOf(Opposite) == -1)
-                    builder.AppendLine("Opposite is not found in mesh.");
-            }
 
             if (Next == null)
                 builder.AppendLine("Next is null.");
@@ -338,9 +317,6 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 if (Next.Previous != this)
                     builder.AppendLine("Next is not previous to this edge.");
-
-                if (!quick && mesh.IndexOf(Next) == -1)
-                    builder.AppendLine("Next is not found in mesh.");
             }
 
             if (Previous == null)
@@ -349,9 +325,6 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 if (Previous.Next != this)
                     builder.AppendLine("Previous is not next to this edge.");
-
-                if (!quick && mesh.IndexOf(Previous) == -1)
-                    builder.AppendLine("Previous is not found in mesh.");
             }
 
             return builder.ToString();

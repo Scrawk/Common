@@ -5,7 +5,8 @@ using Common.Core.Numerics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
 
         /// <summary>
@@ -16,10 +17,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="edge">the edge to split</param>
         /// <param name="t">the point to split at</param> 
         /// <returns>The new vertex added at the position</returns>
-        public static VERTEX PokeEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, double t = 0.5)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public VERTEX PokeEdge(HBEdge edge, double t = 0.5)
         {
             if (edge.Opposite == null)
                 throw new NullReferenceException("Edge does not have a opposite edge.");
@@ -40,7 +38,7 @@ namespace Common.Meshing.HalfEdgeBased
             mid.SetPosition(pos);
 
             //Create a new half edge.
-            EDGE right1, left1;
+            HBEdge right1, left1;
             NewEdge(out right1, out left1);
 
             //right1 starts at the new vertex above right0.
@@ -60,9 +58,9 @@ namespace Common.Meshing.HalfEdgeBased
 
             VERTEX v = mid as VERTEX;
 
-            mesh.Edges.Add(right1);
-            mesh.Edges.Add(left1);
-            mesh.Vertices.Add(v);
+            Edges.Add(right1);
+            Edges.Add(left1);
+            Vertices.Add(v);
 
             //return new vertex. 
             //The new edge starts from this 

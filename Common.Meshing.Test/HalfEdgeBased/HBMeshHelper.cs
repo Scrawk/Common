@@ -103,15 +103,15 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
         public static void CheckAllTrianglesCCW(HBMesh2d mesh)
         {
-            var list = new List<HBVertex2d>();
+            var list = new List<HBVertex>();
             foreach (var f in mesh.Faces)
             {
                 list.Clear();
                 f.Edge.GetVertices(list);
 
-                var a = list[0].Position;
-                var b = list[1].Position;
-                var c = list[2].Position;
+                var a = list[0].GetPosition().xy;
+                var b = list[1].GetPosition().xy;
+                var c = list[2].GetPosition().xy;
 
                 Assert.AreEqual(3, list.Count);
                 var tri = new Triangle2d(a, b, c);

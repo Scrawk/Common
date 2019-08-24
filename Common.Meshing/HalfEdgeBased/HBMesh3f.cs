@@ -8,7 +8,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// HBMesh with Vector3f as vertices.
     /// </summary>
-    public class HBMesh3f : HBMesh<HBVertex3f, HBEdge, HBFace>
+    public class HBMesh3f : HBMesh<HBVertex3f>
     {
         public HBMesh3f() { }
 

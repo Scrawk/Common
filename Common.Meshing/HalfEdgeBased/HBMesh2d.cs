@@ -9,7 +9,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// HBMesh with Vector2d as vertices.
     /// </summary>
-    public class HBMesh2d : HBMesh<HBVertex2d, HBEdge, HBFace>
+    public class HBMesh2d : HBMesh<HBVertex2d>
     {
         public HBMesh2d() { }
 

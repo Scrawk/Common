@@ -5,7 +5,8 @@ using Common.Core.Numerics;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
 
         /// <summary>
@@ -93,10 +94,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="mesh">A triangle mesh the edge belongs to.</param>
         /// <param name="edge">The edge to collapse</param>
         /// <param name="remove">Should the objects be removed or tagged with -1</param>
-        public static VERTEX CollapseEdge<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, EDGE edge, Vector3d pos, bool remove)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public VERTEX CollapseEdge(HBEdge edge, Vector3d pos, bool remove)
         {
             //Dont collapse boundary edges
             if (edge.IsBoundary) return null;
@@ -121,8 +119,8 @@ namespace Common.Meshing.HalfEdgeBased
             var f1 = opp.Face;
 
             //Check for some degenerate cases.
-            if (mesh.Vertices.Count <= 3) return null;
-            if (mesh.Faces.Count == 1) return null;
+            if (Vertices.Count <= 3) return null;
+            if (Faces.Count == 1) return null;
             if (v0 == v1) return null;
             if (v2 == v3) return null;
             if (e0.Opposite == e2) return null;
@@ -167,15 +165,15 @@ namespace Common.Meshing.HalfEdgeBased
 
             if (remove)
             {
-                mesh.Vertices.Remove(v1 as VERTEX);
-                mesh.Edges.Remove(edge as EDGE);
-                mesh.Edges.Remove(opp as EDGE);
-                mesh.Edges.Remove(e0 as EDGE);
-                mesh.Edges.Remove(e1 as EDGE);
-                mesh.Edges.Remove(e2 as EDGE);
-                mesh.Edges.Remove(e3 as EDGE);
-                mesh.Faces.Remove(f0 as FACE);
-                mesh.Faces.Remove(f1 as FACE);
+                Vertices.Remove(v1 as VERTEX);
+                Edges.Remove(edge);
+                Edges.Remove(opp);
+                Edges.Remove(e0);
+                Edges.Remove(e1);
+                Edges.Remove(e2);
+                Edges.Remove(e3);
+                Faces.Remove(f0);
+                Faces.Remove(f1);
             }
             else
             {

@@ -3,17 +3,15 @@ using System.Collections.Generic;
 
 namespace Common.Meshing.HalfEdgeBased
 {
-    public static partial class HBMeshOp
+    public partial class HBMesh<VERTEX>
+        where VERTEX : HBVertex, new()
     {
         /// <summary>
         /// Remove a vertex and replace the hole with a new face.
         /// Vertex must be closed ie surrounded by faces.
         /// Removing a vertex on a boundary not supported.
         /// </summary>
-        public static FACE RemoveVertex<VERTEX, EDGE, FACE>(HBMesh<VERTEX, EDGE, FACE> mesh, VERTEX vertex, bool remove)
-            where VERTEX : HBVertex, new()
-            where EDGE : HBEdge, new()
-            where FACE : HBFace, new()
+        public HBFace RemoveVertex(VERTEX vertex, bool remove)
         {
             if (!vertex.IsClosed)
                 throw new NotSupportedException("Can only remove closed vertices.");
@@ -42,7 +40,7 @@ namespace Common.Meshing.HalfEdgeBased
                 faces.Add(edge.Face);
             }
 
-            var newFace = new FACE();
+            var newFace = new HBFace();
             newFace.Edge = sideEdge;
 
             foreach (var edge in sideEdge.EnumerateEdges())
@@ -52,7 +50,7 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 face.Clear();
                 if (remove)
-                    mesh.Faces.Remove(face as FACE);
+                    Faces.Remove(face);
                 else
                     face.Tag = -1;
             }
@@ -61,7 +59,7 @@ namespace Common.Meshing.HalfEdgeBased
             {
                 edge.Clear();
                 if (remove)
-                    mesh.Edges.Remove(edge as EDGE);
+                    Edges.Remove(edge);
                 else
                     edge.Tag = -1;
             }
@@ -69,11 +67,11 @@ namespace Common.Meshing.HalfEdgeBased
             vertex.Clear();
 
             if (remove)
-                mesh.Vertices.Remove(vertex);
+                Vertices.Remove(vertex);
             else
                 vertex.Tag = -1;
 
-            mesh.Faces.Add(newFace);
+            Faces.Add(newFace);
             return newFace;
         }
     }
