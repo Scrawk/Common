@@ -42,9 +42,8 @@ namespace Common.Meshing.FaceBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Vertex as string</returns>
-        public virtual string ToString<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
+        public virtual string ToString<VERTEX>(FBMesh<VERTEX> mesh)
             where VERTEX : FBVertex, new()
-            where FACE : FBFace, new()
         {
             return string.Format("[FBVertex: Id={0}, Faces={1}]", mesh.IndexOf(this), NumFaces);
         }

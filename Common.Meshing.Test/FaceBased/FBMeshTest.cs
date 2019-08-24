@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
@@ -38,13 +39,15 @@ namespace Common.Meshing.Test.FaceBased
         {
             var mesh = new FBMesh2f();
 
-            var v0 = mesh.NewVertex();
-            var v1 = mesh.NewVertex();
-            var v2 = mesh.NewVertex();
+            var v0 = new FBVertex2f();
+            var v1 = new FBVertex2f();
+            var v2 = new FBVertex2f();
+            mesh.Vertices.Add(v0, v1, v2);
 
-            var f0 = mesh.NewFace();
-            var f1 = mesh.NewFace();
-            var f2 = mesh.NewFace();
+            var f0 = new FBFace();
+            var f1 = new FBFace();
+            var f2 = new FBFace();
+            mesh.Faces.Add(f0, f1, f2);
 
             Assert.AreEqual(0, mesh.IndexOf(v0));
             Assert.AreEqual(1, mesh.IndexOf(v1));

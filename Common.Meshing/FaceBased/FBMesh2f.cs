@@ -11,7 +11,7 @@ namespace Common.Meshing.FaceBased
     /// <summary>
     /// FBMesh with Vector2f as vertices.
     /// </summary>
-    public class FBMesh2f : FBMesh<FBVertex2f, FBFace>
+    public class FBMesh2f : FBMesh<FBVertex2f>
     {
         public FBMesh2f() { }
 

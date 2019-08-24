@@ -10,7 +10,7 @@ namespace Common.Meshing.FaceBased
     /// <summary>
     /// Constructor for HBMesh2f
     /// </summary>
-    public class FBMeshConstructor2f : FBMeshConstructor<FBMesh2f, FBVertex2f, FBFace>
+    public class FBMeshConstructor2f : FBMeshConstructor<FBMesh2f, FBVertex2f>
     {
 
     }
@@ -18,7 +18,7 @@ namespace Common.Meshing.FaceBased
     /// <summary>
     /// Constructor for HBMesh3f
     /// </summary>
-    public class FBMeshConstructor3f : FBMeshConstructor<FBMesh3f, FBVertex3f, FBFace>
+    public class FBMeshConstructor3f : FBMeshConstructor<FBMesh3f, FBVertex3f>
     {
 
     }
@@ -26,7 +26,7 @@ namespace Common.Meshing.FaceBased
     /// <summary>
     /// Constructor for HBMesh2f
     /// </summary>
-    public class FBMeshConstructor2d : FBMeshConstructor<FBMesh2d, FBVertex2d, FBFace>
+    public class FBMeshConstructor2d : FBMeshConstructor<FBMesh2d, FBVertex2d>
     {
 
     }
@@ -34,7 +34,7 @@ namespace Common.Meshing.FaceBased
     /// <summary>
     /// Constructor for HBMesh3f
     /// </summary>
-    public class FBMeshConstructor3d : FBMeshConstructor<FBMesh3d, FBVertex3d, FBFace>
+    public class FBMeshConstructor3d : FBMeshConstructor<FBMesh3d, FBVertex3d>
     {
 
     }
@@ -43,13 +43,12 @@ namespace Common.Meshing.FaceBased
     /// Face based mesh constructor.
     /// Supports triangle or polygon meshes.
     /// </summary>
-    public class FBMeshConstructor<MESH, VERTEX, FACE> :
+    public class FBMeshConstructor<MESH, VERTEX> :
            ITriangleMeshConstructor<MESH>,
            IPolygonMeshConstructor<MESH>,
            ITetrahedronMeshConstructor<MESH>
-           where MESH : FBMesh<VERTEX, FACE>, new()
+           where MESH : FBMesh<VERTEX>, new()
            where VERTEX : FBVertex, new()
-           where FACE : FBFace, new()
     {
 
         private MESH Mesh;
@@ -152,7 +151,7 @@ namespace Common.Meshing.FaceBased
             var v1 = Mesh.Vertices[i1];
             var v2 = Mesh.Vertices[i2];
 
-            FACE face = new FACE();
+            var face = new FBFace();
             face.SetVerticesSize(3);
 
             v0.AddFace(face);
@@ -181,7 +180,7 @@ namespace Common.Meshing.FaceBased
             var v2 = Mesh.Vertices[i2];
             var v3 = Mesh.Vertices[i3];
 
-            FACE face = new FACE();
+            var face = new FBFace();
             face.SetVerticesSize(4);
 
             v0.AddFace(face);
@@ -205,7 +204,7 @@ namespace Common.Meshing.FaceBased
         {
             CheckMeshIsPushed();
             int count = vertList.Count;
-            FACE face = new FACE();
+            var face = new FBFace();
             face.SetVerticesSize(count);
 
             for(int i = 0; i < count; i++)
@@ -228,7 +227,7 @@ namespace Common.Meshing.FaceBased
         {
             CheckMeshIsPushed();
             int count = numVertices;
-            FACE face = new FACE();
+            var face = new FBFace();
             face.SetVerticesSize(count);
 
             for (int i = 0; i < count; i++)

@@ -39,11 +39,10 @@ namespace Common.Meshing.Test.FaceBased
             {
                 Assert.AreEqual(3, f.NumVertices);
 
-                var a =  f.GetVertex<FBVertex2d>(0).Position;
-                var b = f.GetVertex<FBVertex2d>(1).Position;
-                var c = f.GetVertex<FBVertex2d>(2).Position;
+                var a =  f.Vertices[0].GetPosition().xy;
+                var b = f.Vertices[1].GetPosition().xy;
+                var c = f.Vertices[2].GetPosition().xy;
 
-                
                 var tri = new Triangle2d(a, b, c);
                 Assert.IsTrue(tri.IsCCW);
             }
@@ -52,12 +51,14 @@ namespace Common.Meshing.Test.FaceBased
         public static FBMesh2d CreateTriangle()
         {
             var mesh = new FBMesh2d();
- 
-            var v0 = mesh.NewVertex();
-            var v1 = mesh.NewVertex();
-            var v2 = mesh.NewVertex();
 
-            var f = mesh.NewFace();
+            var v0 = new FBVertex2d();
+            var v1 = new FBVertex2d();
+            var v2 = new FBVertex2d();
+            mesh.Vertices.Add(v0, v1, v2);
+
+            var f = new FBFace();
+            mesh.Faces.Add(f);
 
             v0.AddFace(f);
             v1.AddFace(f);
@@ -75,11 +76,13 @@ namespace Common.Meshing.Test.FaceBased
         {
             var mesh = new FBMesh2d();
 
-            var v0 = mesh.NewVertex();
-            var v1 = mesh.NewVertex();
-            var v2 = mesh.NewVertex();
+            var v0 = new FBVertex2d();
+            var v1 = new FBVertex2d();
+            var v2 = new FBVertex2d();
+            mesh.Vertices.Add(v0, v1, v2);
 
-            var f = mesh.NewFace();
+            var f = new FBFace();
+            mesh.Faces.Add(f);
 
             v0.AddFace(f);
             v0.Position = A;
@@ -100,16 +103,19 @@ namespace Common.Meshing.Test.FaceBased
         {
             var mesh = new FBMesh2d();
 
-            var v0 = mesh.NewVertex();
-            var v1 = mesh.NewVertex();
-            var v2 = mesh.NewVertex();
-            var v3 = mesh.NewVertex();
-            var v4 = mesh.NewVertex();
+            var v0 = new FBVertex2d();
+            var v1 = new FBVertex2d();
+            var v2 = new FBVertex2d();
+            var v3 = new FBVertex2d();
+            var v4 = new FBVertex2d();
+            mesh.Vertices.Add(v0, v1, v2, v3);
+            mesh.Vertices.Add(v4);
 
-            var f0 = mesh.NewFace();
-            var f1 = mesh.NewFace();
-            var f2 = mesh.NewFace();
-            var f3 = mesh.NewFace();
+            var f0 = new FBFace();
+            var f1 = new FBFace();
+            var f2 = new FBFace();
+            var f3 = new FBFace();
+            mesh.Faces.Add(f0, f1, f2, f3);
 
             v0.AddFace(f0, f1, f2, f3);
             v1.AddFace(f0, f3);

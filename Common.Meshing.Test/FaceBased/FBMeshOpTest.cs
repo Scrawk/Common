@@ -24,7 +24,7 @@ namespace Common.Meshing.Test.FaceBased
             var source = constructor1.PopMesh();
 
             var mesh = new FBMesh2d();
-            FBMeshOp.Append(source, mesh);
+            mesh.Append(source);
 
             source.Clear();
 
@@ -52,7 +52,7 @@ namespace Common.Meshing.Test.FaceBased
             var tmp = constructor1.PopMesh();
 
             var constructor2 = new HBMeshConstructor2d();
-            FBMeshOp.ToTriangularMesh(constructor2, tmp);
+            tmp.ToTriangleMesh(constructor2);
             var mesh = constructor2.PopMesh();
 
             Assert.AreEqual(4, mesh.Vertices.Count);

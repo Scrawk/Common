@@ -22,7 +22,7 @@ namespace Common.Meshing.HalfEdgeBased
                 constructor.AddEdge(edge.Tag, edge.Opposite.Tag);
         }
 
-        public void ToTriangularMesh<MESH>(ITriangleMeshConstructor<MESH> constructor)
+        public void ToTriangleMesh<MESH>(ITriangleMeshConstructor<MESH> constructor)
         {
             TagAll();
             constructor.PushTriangleMesh(Vertices.Count, Faces.Count);

@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Common.Meshing.FaceBased
 {
-    public static partial class FBMeshOp
+    public partial class FBMesh<VERTEX>
+           where VERTEX : FBVertex, new()
     {
 
         /// <summary>
@@ -13,13 +14,8 @@ namespace Common.Meshing.FaceBased
         /// <param name="source">mesh that get appended to</param>
         /// <param name="dest">mesh that gets appended from</param>
         /// <param name="incudeFaces">should the mesh faces also be appended</param>
-        public static void Append<VERTEX, FACE>(FBMesh<VERTEX, FACE> source, FBMesh<VERTEX, FACE> dest)
-            where VERTEX : FBVertex, new()
-            where FACE : FBFace, new()
+        public void Append(FBMesh<VERTEX> source)
         {
-            var Vertices = dest.Vertices;
-            var Faces = dest.Faces;
-
             int vStart = Vertices.Count;
             int fStart = Faces.Count;
 
@@ -34,7 +30,7 @@ namespace Common.Meshing.FaceBased
 
             for (int i = 0; i < source.Faces.Count; i++)
             {
-                var f = new FACE();
+                var f = new FBFace();
                 Faces.Add(f);
             }
 

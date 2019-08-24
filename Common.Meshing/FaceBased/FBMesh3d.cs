@@ -9,7 +9,7 @@ namespace Common.Meshing.FaceBased
     /// <summary>
     /// FBMesh with Vector3d as vertices.
     /// </summary>
-    public class FBMesh3d : FBMesh<FBVertex3d, FBFace>
+    public class FBMesh3d : FBMesh<FBVertex3d>
     {
         public FBMesh3d() { }
 

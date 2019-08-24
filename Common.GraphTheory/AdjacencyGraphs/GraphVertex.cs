@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Common.GraphTheory.AdjacencyGraphs
 {
 
-    public class GraphVertex : IComparable<GraphVertex>
+    public sealed class GraphVertex : IComparable<GraphVertex>
     {
 
         public GraphVertex()

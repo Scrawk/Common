@@ -69,37 +69,5 @@ namespace Common.Meshing.Test.FaceBased
             Assert.AreEqual(1, face.IndexOf(v1));
             Assert.AreEqual(-1, face.IndexOf(v2));
         }
-
-        [TestMethod]
-        public void GetVertex()
-        {
-            var face = new FBFace();
-
-            face.SetVerticesSize(2);
-            var v0 = new FBVertex2f();
-            var v1 = new FBVertex2f();
-
-            face.Vertices[0] = v0;
-            face.Vertices[1] = v1;
-
-            Assert.AreEqual(v0, face.GetVertex<FBVertex2f>(0));
-            Assert.AreEqual(v1, face.GetVertex<FBVertex2f>(1));
-        }
-
-        [TestMethod]
-        public void GetNeighbour()
-        {
-            var face = new FBFace();
-
-            face.SetVerticesSize(2);
-            var f0 = new FBFace();
-            var f1 = new FBFace();
-
-            face.Neighbours[0] = f0;
-            face.Neighbours[1] = f1;
-
-            Assert.AreEqual(f0, face.GetNeighbour<FBFace>(0));
-            Assert.AreEqual(f1, face.GetNeighbour<FBFace>(1));
-        }
     }
 }

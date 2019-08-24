@@ -12,10 +12,8 @@ namespace Common.Meshing.FaceBased
     /// A faced based mesh.
     /// </summary>
     /// <typeparam name="VERTEX">The element type for the vertices</typeparam>
-    /// <typeparam name="FACE">The element type for the faces</typeparam>
-    public class FBMesh<VERTEX, FACE>
+    public partial class FBMesh<VERTEX>
            where VERTEX : FBVertex, new()
-           where FACE : FBFace, new()
     {
 
         /// <summary>
@@ -24,7 +22,7 @@ namespace Common.Meshing.FaceBased
         public FBMesh()
         {
             Vertices = new List<VERTEX>();
-            Faces = new List<FACE>();
+            Faces = new List<FBFace>();
         }
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace Common.Meshing.FaceBased
         public FBMesh(int numVertices, int numFaces)
         {
             Vertices = new List<VERTEX>(numVertices);
-            Faces = new List<FACE>(numFaces);
+            Faces = new List<FBFace>(numFaces);
         }
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// All the faces in the mesh.
         /// </summary>
-        public List<FACE> Faces { get; private set; }
+        public List<FBFace> Faces { get; private set; }
 
         /// <summary>
         /// Convert mesh to string.
@@ -90,33 +88,9 @@ namespace Common.Meshing.FaceBased
         /// <returns>The face index or -1 if not found.</returns>
         public int IndexOf(FBFace face)
         {
-            FACE f = face as FACE;
+            FBFace f = face as FBFace;
             if (f == null) return -1;
             return Faces.IndexOf(f);
-        }
-
-        /// <summary>
-        /// Creates a new vertex, adds it to 
-        /// vertex list add returns.
-        /// </summary>
-        /// <returns>The new vertex</returns>
-        public VERTEX NewVertex()
-        {
-            var v = new VERTEX();
-            Vertices.Add(v);
-            return v;
-        }
-
-        /// <summary>
-        /// Creates a new face, adds it to 
-        /// face list add returns.
-        /// </summary>
-        /// <returns>The new face</returns>
-        public FACE NewFace()
-        {
-            var f = new FACE();
-            Faces.Add(f);
-            return f;
         }
 
         /// <summary>
@@ -214,7 +188,7 @@ namespace Common.Meshing.FaceBased
                 Vertices.Add(new VERTEX());
 
             for (int i = 0; i < numFaces; i++)
-                Faces.Add(new FACE());
+                Faces.Add(new FBFace());
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// <summary>
     /// A adjacency graphs edge.
     /// </summary>
-    public class GraphEdge : IComparable<GraphEdge>
+    public sealed class GraphEdge : IComparable<GraphEdge>
     {
 
         public GraphEdge()

@@ -3,24 +3,22 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 using Common.Meshing.Constructors;
-using Common.Meshing.HalfEdgeBased;
 
 namespace Common.Meshing.FaceBased
 {
-    public static partial class FBMeshOp
+    public partial class FBMesh<VERTEX>
+           where VERTEX : FBVertex, new()
     {
-        public static void ToTriangularMesh<MESH, VERTEX, FACE>(ITriangleMeshConstructor<MESH> constructor, FBMesh<VERTEX, FACE> mesh)
-            where VERTEX : FBVertex, new()
-            where FACE : FBFace, new()
+        public void ToTriangleMesh<MESH>(ITriangleMeshConstructor<MESH> constructor)
         {
-            mesh.TagAll();
+            TagAll();
 
-            constructor.PushTriangleMesh(mesh.Vertices.Count, mesh.Faces.Count);
+            constructor.PushTriangleMesh(Vertices.Count, Faces.Count);
 
-            foreach (var vertex in mesh.Vertices)
+            foreach (var vertex in Vertices)
                 constructor.AddVertex(vertex.GetPosition());
 
-            foreach (var face in mesh.Faces)
+            foreach (var face in Faces)
             {
                 var v = face.Vertices;
                 if (v.Length != 3)
@@ -31,7 +29,7 @@ namespace Common.Meshing.FaceBased
 
             if (constructor.SupportsFaceConnections)
             {
-                foreach (var face in mesh.Faces)
+                foreach (var face in Faces)
                 {
                     var n = face.Neighbours;
                     if (n.Length != 3)

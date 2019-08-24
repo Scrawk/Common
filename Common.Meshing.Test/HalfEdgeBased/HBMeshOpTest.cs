@@ -404,7 +404,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var tmp = HBCreateTriangleMesh2.FromBox(min, max);
 
             var constructor = new FBMeshConstructor2d();
-            tmp.ToTriangularMesh(constructor);
+            tmp.ToTriangleMesh(constructor);
             var mesh = constructor.PopMesh();
 
             Assert.AreEqual(4, mesh.Vertices.Count);

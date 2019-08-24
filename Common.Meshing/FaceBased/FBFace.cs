@@ -5,7 +5,7 @@ using Common.Core.Numerics;
 
 namespace Common.Meshing.FaceBased
 {
-    public class FBFace
+    public sealed class FBFace
     {
 
         public int Tag;
@@ -89,9 +89,8 @@ namespace Common.Meshing.FaceBased
         /// </summary>
         /// <param name="mesh">Parent mesh</param>
         /// <returns>Face as string</returns>
-        public virtual string ToString<VERTEX, FACE>(FBMesh<VERTEX, FACE> mesh)
+        public string ToString<VERTEX>(FBMesh<VERTEX> mesh)
             where VERTEX : FBVertex, new()
-            where FACE : FBFace, new()
         {
             return string.Format("[FBFace: Id={0}, NumVertices={1}, NumNeighbours={2}]", 
                 mesh.IndexOf(this), NumVertices, NumNeighbours);
@@ -121,7 +120,7 @@ namespace Common.Meshing.FaceBased
         /// Returns the index of vertex in faces array.
         /// </summary>
         /// <returns>The index of the vertex or -1 if not found.</returns>
-        public int IndexOf<VERTEX>(VERTEX v)
+        public int IndexOf(FBVertex v)
         {
             if (Vertices == null) return -1;
             for (int i = 0; i < NumVertices; i++)
@@ -131,30 +130,6 @@ namespace Common.Meshing.FaceBased
             }
 
             return -1;
-        }
-
-        public VERTEX GetVertex<VERTEX>(int i) where VERTEX : FBVertex
-        {
-            if (Vertices == null) return null;
-            if (Vertices[i] == null) return null;
-
-            VERTEX vert = Vertices[i] as VERTEX;
-            if (vert == null)
-                throw new InvalidCastException("Vertex is not a " + typeof(VERTEX));
-
-            return vert;
-        }
-
-        public FACE GetNeighbour<FACE>(int i) where FACE : FBFace
-        {
-            if (Neighbours == null) return null;
-            if (Neighbours[i] == null) return null;
-
-            FACE face = Neighbours[i] as FACE;
-            if (face == null)
-                throw new InvalidCastException("Neighbor is not a " + typeof(FACE));
-
-            return face;
         }
 
         public void SetVertex(FBVertex v0, FBVertex v1, FBVertex v2)
@@ -187,7 +162,7 @@ namespace Common.Meshing.FaceBased
             Neighbours[3] = f3;
         }
 
-        public virtual void Clear()
+        public void Clear()
         {
             Vertices = null;
             Neighbours = null;
