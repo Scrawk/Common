@@ -9,7 +9,7 @@ namespace Common.Meshing.HalfEdgeBased
     /// <summary>
     /// Half edge. Presumes edges are connected in CCW order.
     /// </summary>
-    public sealed class HBEdge
+    public sealed partial class HBEdge
     {
         public int Tag;
 

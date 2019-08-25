@@ -72,6 +72,28 @@ namespace Common.Meshing.FaceBased
         }
 
         /// <summary>
+        /// Create a new vertex, add to mesh and return.
+        /// </summary>
+        /// <returns></returns>
+        public VERTEX NewVertex()
+        {
+            var v = new VERTEX();
+            Vertices.Add(v);
+            return v;
+        }
+
+        /// <summary>
+        /// Create a new face, add to mesh and return.
+        /// </summary>
+        /// <returns></returns>
+        public FBFace NewFace()
+        {
+            var f = new FBFace();
+            Faces.Add(f);
+            return f;
+        }
+
+        /// <summary>
         /// Find the index of this vertex.
         /// </summary>
         /// <returns>The vertex index or -1 if not found.</returns>

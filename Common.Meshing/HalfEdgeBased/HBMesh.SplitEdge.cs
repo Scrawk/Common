@@ -36,20 +36,20 @@ namespace Common.Meshing.HalfEdgeBased
 
             //The faces are now quads.
             //Need two new edges (4 half edges) to make four triangles
-            NewEdge(out HBEdge e0, out HBEdge e1);
-            NewEdge(out HBEdge e2, out HBEdge e3);
+            HBEdge.NewEdge(out HBEdge e0, out HBEdge e1);
+            HBEdge.NewEdge(out HBEdge e2, out HBEdge e3);
 
             //Connect the new edges previous and next edges.
-            InsertBetween(e0, edge, edge.Previous);
-            InsertBetween(e1, nedge.Next, nedge);
-            InsertBetween(e2, opp.Next, opp);
-            InsertBetween(e3, nopp, nopp.Previous);
+            HBEdge.InsertBetween(e0, edge, edge.Previous);
+            HBEdge.InsertBetween(e1, nedge.Next, nedge);
+            HBEdge.InsertBetween(e2, opp.Next, opp);
+            HBEdge.InsertBetween(e3, nopp, nopp.Previous);
 
             //Connect the new edges vertices.
-            SetFrom(e0, v);
-            SetFrom(e1, edge.Previous.From);
-            SetFrom(e2, nopp.Previous.From);
-            SetFrom(e3, v);
+            HBEdge.SetFrom(e0, v);
+            HBEdge.SetFrom(e1, edge.Previous.From);
+            HBEdge.SetFrom(e2, nopp.Previous.From);
+            HBEdge.SetFrom(e3, v);
 
             //The are two existing faces but need four.
             //Create two new faces.
@@ -60,10 +60,10 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Iterate all edges in each face and
             //set the correct face for all edges.
-            SetFaces(edge, f0);
-            SetFaces(opp, f1);
-            SetFaces(nedge, f2);
-            SetFaces(nopp, f3);
+            HBEdge.SetFaces(edge, f0);
+            HBEdge.SetFaces(opp, f1);
+            HBEdge.SetFaces(nedge, f2);
+            HBEdge.SetFaces(nopp, f3);
 
             //Add newly created objects to mesh.
             Edges.Add(e0, e1, e2, e3);

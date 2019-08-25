@@ -135,9 +135,9 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Make sure all the verts that get kept dont
             //point to a edge that gets removed.
-            SetFrom(e0.Opposite, v0);
-            SetFrom(e1.Opposite, v2);
-            SetFrom(e2.Opposite, v3);
+            HBEdge.SetFrom(e0.Opposite, v0);
+            HBEdge.SetFrom(e1.Opposite, v2);
+            HBEdge.SetFrom(e2.Opposite, v3);
 
             //v1 is being removed and replaced by v0.
             //All edges that go from v1 now go from v0.

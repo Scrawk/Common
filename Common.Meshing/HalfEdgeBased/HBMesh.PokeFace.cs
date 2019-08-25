@@ -55,7 +55,7 @@ namespace Common.Meshing.HalfEdgeBased
             foreach (var edge in face.Edge.EnumerateEdges())
             {
                 //Create a new edge. e0 and e1 are the half edges.
-                NewEdge(out HBEdge e0, out HBEdge e1);
+                HBEdge.NewEdge(out HBEdge e0, out HBEdge e1);
                 Edges.Add(e0);
                 Edges.Add(e1);
 

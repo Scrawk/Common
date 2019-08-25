@@ -39,18 +39,18 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Create a new half edge.
             HBEdge right1, left1;
-            NewEdge(out right1, out left1);
+            HBEdge.NewEdge(out right1, out left1);
 
             //right1 starts at the new vertex above right0.
             //Which means right1 goes between right0 and righ0's next edge.
-            SetFrom(right1, mid);
-            InsertBetween(right1, right0, rightNext);
+            HBEdge.SetFrom(right1, mid);
+            HBEdge.InsertBetween(right1, right0, rightNext);
             right1.Face = right0.Face;
 
             //left1 starts at left0 from vertex.
             //Which means left1 goes between left0 and left0's previous edge.
-            SetFrom(left1, to);
-            InsertBetween(left1, leftPrevious, left0);
+            HBEdge.SetFrom(left1, to);
+            HBEdge.InsertBetween(left1, leftPrevious, left0);
             left1.Face = left0.Face;
 
             //left0 new starts at new vertex.

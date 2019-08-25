@@ -95,6 +95,39 @@ namespace Common.Meshing.HalfEdgeBased
         }
 
         /// <summary>
+        /// Create a new vertex, add to mesh and return.
+        /// </summary>
+        /// <returns></returns>
+        public VERTEX NewVertex()
+        {
+            var v = new VERTEX();
+            Vertices.Add(v);
+            return v;
+        }
+
+        /// <summary>
+        /// Create a new edge, add to mesh and return.
+        /// </summary>
+        /// <returns></returns>
+        public HBEdge NewEdge()
+        {
+            var e = new HBEdge();
+            Edges.Add(e);
+            return e;
+        }
+
+        /// <summary>
+        /// Create a new face, add to mesh and return.
+        /// </summary>
+        /// <returns></returns>
+        public HBFace NewFace()
+        {
+            var f = new HBFace();
+            Faces.Add(f);
+            return f;
+        }
+
+        /// <summary>
         /// Find the index of this vertex.
         /// </summary>
         /// <returns>The vertex index or -1 if not found.</returns>
