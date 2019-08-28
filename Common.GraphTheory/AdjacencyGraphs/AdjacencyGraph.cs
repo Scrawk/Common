@@ -205,65 +205,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Get a flattened list of all edges in the tree.
-        /// </summary>
-        public void GetAllEdges(List<GraphEdge> edges, GraphTree tree)
-        {
-            for (int i = 0; i < tree.Count; i++)
-            {
-                var children = tree.Children[i];
-                if (children == null) continue;
-
-                for (int j = 0; j < children.Count; j++)
-                {
-                    var c = children[j];
-                    var edge = GetEdge(i, c);
-                    if (edge == null) continue;
-                    edges.Add(edge);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Find the sum of the weights from this tree.
-        /// </summary>
-        public float FindWeightSum(GraphTree tree)
-        {
-            float sum = 0;
-            for (int i = 0; i < tree.Count; i++)
-            {
-                var children = tree.Children[i];
-                if (children == null) continue;
-
-                for (int j = 0; j < children.Count; j++)
-                {
-                    var c = children[j];
-                    var edge = GetEdge(i, c);
-
-                    sum += edge.Weight;
-                }
-            }
-
-            return sum;
-        }
-
-        /// <summary>
-        /// Find the sum of the weights from this path.
-        /// </summary>
-        public float FindWeightSum(IList<int> path)
-        {
-            float sum = 0;
-            for (int i = 0; i < path.Count-1; i++)
-            {
-                int i0 = path[i + 0];
-                int i1 = path[i + 1];
-                sum += GetEdge(i0, i1).Weight;
-            }
-                
-            return sum;
-        }
-
-        /// <summary>
         /// Add a edge to the graph.
         /// Used as a short cut when adding multiple 
         /// edges in derived classes.

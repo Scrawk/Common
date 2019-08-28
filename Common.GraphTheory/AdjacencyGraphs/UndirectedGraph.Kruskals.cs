@@ -78,7 +78,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             var isVisited = new bool[count];
             isVisited[root] = true;
 
-            var tree = new GraphTree(root, count);
+            var tree = new GraphTree(this, root, count);
             tree.Parent[root] = root;
 
             while (queue.Count != 0)

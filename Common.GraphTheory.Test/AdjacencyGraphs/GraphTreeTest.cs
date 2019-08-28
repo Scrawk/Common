@@ -34,7 +34,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             var graph = AdjacencyGraphTest.CreateCitiesDirectedGraph();
 
             //create tree manually
-            var tree = new GraphTree(5, 12);
+            var tree = new GraphTree(graph, 5, 12);
 
             tree.SetParent(0, 5);
             tree.SetParent(1, 3);

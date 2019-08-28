@@ -20,8 +20,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="root">The trees root.</param>
         /// <param name="size">The size of the tree and graph</param>
-        public GraphTree(int root, int size)
+        public GraphTree(AdjacencyGraph graph, int root, int size)
         {
+            Graph = graph;
             Root = root;
             Parent = new int[size];
             Children = new List<int>[size];
@@ -32,6 +33,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
             //The root is its own parent.
             Parent[root] = root;
         }
+
+        public AdjacencyGraph Graph { get; private set; }
 
         /// <summary>
         /// The number of verices in the tree.
@@ -291,6 +294,65 @@ namespace Common.GraphTheory.AdjacencyGraphs
             }
 
             return ordering;
+        }
+
+        /// <summary>
+        /// Get a flattened list of all edges in the tree.
+        /// </summary>
+        public void GetAllEdges(List<GraphEdge> edges)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                var children = Children[i];
+                if (children == null) continue;
+
+                for (int j = 0; j < children.Count; j++)
+                {
+                    var c = children[j];
+                    var edge = Graph.GetEdge(i, c);
+                    if (edge == null) continue;
+                    edges.Add(edge);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Find the sum of the weights from this tree.
+        /// </summary>
+        public float FindWeightSum()
+        {
+            float sum = 0;
+            for (int i = 0; i < Count; i++)
+            {
+                var children = Children[i];
+                if (children == null) continue;
+
+                for (int j = 0; j < children.Count; j++)
+                {
+                    var c = children[j];
+                    var edge = Graph.GetEdge(i, c);
+
+                    sum += edge.Weight;
+                }
+            }
+
+            return sum;
+        }
+
+        /// <summary>
+        /// Find the sum of the weights from this path.
+        /// </summary>
+        public float FindWeightSum(IList<int> path)
+        {
+            float sum = 0;
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                int i0 = path[i + 0];
+                int i1 = path[i + 1];
+                sum += Graph.GetEdge(i0, i1).Weight;
+            }
+
+            return sum;
         }
 
     }

@@ -17,7 +17,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             Vertices[root].Cost = 0;
             Vertices[root].Tag = IS_VISITED_TAG;
 
-            var tree = new GraphTree(root, count);
+            var tree = new GraphTree(this, root, count);
             var queue = new List<GraphVertex>(Vertices);
 
             while (queue.Count != 0)

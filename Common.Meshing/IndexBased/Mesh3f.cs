@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
+using Common.Meshing.Constructors;
 
 using VECTOR3 = Common.Core.Numerics.Vector3f;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
@@ -244,6 +245,16 @@ namespace Common.Meshing.IndexBased
 
             for (int i = 0; i < NormalCount; i++)
                 Normals[i] = Normals[i].Normalized;
+        }
+
+
+        /// <summary>
+        /// Convert to another type of triangle mesh
+        /// using a constructor.
+        /// </summary>
+        public void ToTriangleMesh<MESH>(ITriangleMeshConstructor<MESH> constructor)
+        {
+            CreateTriangleMesh3.FromMesh(constructor, Positions, GetPositionIndices(), true);
         }
 
     }

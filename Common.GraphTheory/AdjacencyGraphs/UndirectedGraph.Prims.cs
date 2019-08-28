@@ -14,7 +14,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             Vertices[root].Tag = IS_VISITED_TAG;
 
-            var tree = new GraphTree(root, count);
+            var tree = new GraphTree(this, root, count);
             var queue = new BinaryHeap<GraphEdge>();
 
             if (Edges[root] != null)

@@ -373,6 +373,34 @@ namespace Common.Geometry.Shapes
             return A + ab * v + ac * w;
         }
 
+        public REAL SignedDistance(VECTOR2 p)
+        {
+            VECTOR2 center = Center;
+            p = p - center;
+            VECTOR2 a = A - center;
+            VECTOR2 b = B - center;
+            VECTOR2 c = C - center;
+
+            VECTOR2 e0 = b - a, e1 = c - b, e2 = a - c;
+            VECTOR2 v0 = p - a, v1 = p - b, v2 = p - c;
+
+            VECTOR2 pq0 = v0 - e0 * FMath.Clamp01(VECTOR2.Dot(v0, e0) / VECTOR2.Dot(e0, e0));
+            VECTOR2 pq1 = v1 - e1 * FMath.Clamp01(VECTOR2.Dot(v1, e1) / VECTOR2.Dot(e1, e1));
+            VECTOR2 pq2 = v2 - e2 * FMath.Clamp01(VECTOR2.Dot(v2, e2) / VECTOR2.Dot(e2, e2));
+
+            REAL s = Math.Sign(e0.x * e2.y - e0.y * e2.x);
+
+            VECTOR2 d0 = new VECTOR2(VECTOR2.Dot(pq0, pq0), s * (v0.x * e0.y - v0.y * e0.x));
+            VECTOR2 d1 = new VECTOR2(VECTOR2.Dot(pq1, pq1), s * (v1.x * e1.y - v1.y * e1.x));
+            VECTOR2 d2 = new VECTOR2(VECTOR2.Dot(pq2, pq2), s * (v2.x * e2.y - v2.y * e2.x));
+
+            VECTOR2 d = new VECTOR2();
+            d.x = FMath.Min(d0.x, d1.x, d2.x);
+            d.y = FMath.Min(d0.y, d1.y, d2.y);
+
+            return -FMath.Sqrt(d.x) * Math.Sign(d.y);
+        }
+
         /// <summary>
         /// Does triangle contain point.
         /// </summary>
