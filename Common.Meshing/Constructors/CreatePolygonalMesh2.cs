@@ -12,33 +12,33 @@ namespace Common.Meshing.Constructors
     public static class CreatePolygonMesh2
     {
 
-        public static void FromBox<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
+        public static void FromBox<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
         {
             constructor.PushPolygonMesh(4, 1);
 
             constructor.AddVertex(min);
-            constructor.AddVertex(new Vector2d(max.x, min.y));
+            constructor.AddVertex(new Vector2f(max.x, min.y));
             constructor.AddVertex(max);
-            constructor.AddVertex(new Vector2d(min.x, max.y));
+            constructor.AddVertex(new Vector2f(min.x, max.y));
 
             constructor.AddFace(0, 4);
         }
 
-        public static void FromCircle<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
+        public static void FromCircle<MESH>(IPolygonMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
         {
             constructor.PushPolygonMesh(segments, 1);
 
-            double pi = Math.PI;
-            double fseg = segments;
+            float pi = FMath.PI;
+            float fseg = segments;
 
             for (int i = 0; i < segments; i++)
             {
-                double theta = 2.0f * pi * i / fseg;
+                float theta = 2.0f * pi * i / fseg;
 
-                double x = -radius * Math.Cos(theta);
-                double y = -radius * Math.Sin(theta);
+                float x = -radius * FMath.Cos(theta);
+                float y = -radius * FMath.Sin(theta);
 
-                constructor.AddVertex(center + new Vector2d(x, y));
+                constructor.AddVertex(center + new Vector2f(x, y));
             }
 
             constructor.AddFace(0, segments);

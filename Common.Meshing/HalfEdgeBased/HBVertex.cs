@@ -95,12 +95,12 @@ namespace Common.Meshing.HalfEdgeBased
         /// Compute the vertices centroid from the 
         /// edges to vertex surrounding it.
         /// </summary>
-        public Vector3d Centriod
+        public Vector3f Centriod
         {
             get
             {
                 int count = 0;
-                Vector3d centroid = Vector3d.Zero;
+                Vector3f centroid = Vector3f.Zero;
                 foreach (var edge in EnumerateEdges())
                 {
                     centroid += edge.To.GetPosition();
@@ -117,17 +117,17 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Compute the vertices area weighted normal. 
         /// </summary>
-        public Vector3d Normal
+        public Vector3f Normal
         {
             get
             {
-                var n = Vector3d.Zero;
+                var n = Vector3f.Zero;
                 foreach (var e in EnumerateEdges())
                 {
                     var p0 = e.From.GetPosition();
                     var p1 = e.To.GetPosition();
                     var p2 = e.Previous.From.GetPosition();
-                    n = Vector3d.Cross(p1 - p0, p2 - p0);
+                    n = Vector3f.Cross(p1 - p0, p2 - p0);
                 }
 
                 return n.Normalized;
@@ -172,9 +172,9 @@ namespace Common.Meshing.HalfEdgeBased
 
         public abstract void SetPosition(HBVertex vertex);
 
-        public abstract void SetPosition(Vector3d pos);
+        public abstract void SetPosition(Vector3f pos);
 
-        public abstract Vector3d GetPosition();
+        public abstract Vector3f GetPosition();
 
         /// <summary>
         /// Check the vertex is valid.

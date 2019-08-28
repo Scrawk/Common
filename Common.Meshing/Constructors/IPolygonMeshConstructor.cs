@@ -14,9 +14,9 @@ namespace Common.Meshing.Constructors
 
         MESH PopMesh();
 
-        void AddVertex(Vector2d pos);
+        void AddVertex(Vector2f pos);
 
-        void AddVertex(Vector3d pos);
+        void AddVertex(Vector3f pos);
 
         void AddFace(IList<int> vertList);
 

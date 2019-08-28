@@ -16,7 +16,7 @@ namespace Common.Meshing.Constructors
         /// Create a triangle were a,b,c are ccw vertices.
         /// </summary>
         public static void FromTriangle<MESH>(ITriangleMeshConstructor<MESH> constructor,
-            Vector3d A, Vector3d B, Vector3d C)
+            Vector3f A, Vector3f B, Vector3f C)
         {
             constructor.PushTriangleMesh(3, 1);
 
@@ -27,7 +27,7 @@ namespace Common.Meshing.Constructors
         }
 
         public static void FromTertahedron<MESH>(ITriangleMeshConstructor<MESH> constructor,
-            Vector3d A, Vector3d B, Vector3d C, Vector3d D)
+            Vector3f A, Vector3f B, Vector3f C, Vector3f D)
         {
             constructor.PushTriangleMesh(4, 1);
 
@@ -50,18 +50,18 @@ namespace Common.Meshing.Constructors
             }
         }
 
-        public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector3d min, Vector3d max)
+        public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector3f min, Vector3f max)
         {
             constructor.PushTriangleMesh(8, 12);
 
-            constructor.AddVertex(new Vector3d(min.x, min.y, min.z));
-            constructor.AddVertex(new Vector3d(max.x, min.y, min.z));
-            constructor.AddVertex(new Vector3d(max.x, min.y, max.z));
-            constructor.AddVertex(new Vector3d(min.x, min.y, max.z));
-            constructor.AddVertex(new Vector3d(min.x, max.y, min.z));
-            constructor.AddVertex(new Vector3d(max.x, max.y, min.z));
-            constructor.AddVertex(new Vector3d(max.x, max.y, max.z));
-            constructor.AddVertex(new Vector3d(min.x, max.y, max.z));
+            constructor.AddVertex(new Vector3f(min.x, min.y, min.z));
+            constructor.AddVertex(new Vector3f(max.x, min.y, min.z));
+            constructor.AddVertex(new Vector3f(max.x, min.y, max.z));
+            constructor.AddVertex(new Vector3f(min.x, min.y, max.z));
+            constructor.AddVertex(new Vector3f(min.x, max.y, min.z));
+            constructor.AddVertex(new Vector3f(max.x, max.y, min.z));
+            constructor.AddVertex(new Vector3f(max.x, max.y, max.z));
+            constructor.AddVertex(new Vector3f(min.x, max.y, max.z));
 
             constructor.AddFace(0, 1, 2);
             constructor.AddFace(2, 3, 0);
@@ -103,19 +103,26 @@ namespace Common.Meshing.Constructors
             }
         }
 
-        public static void FromMesh<MESH>(ITriangleMeshConstructor<MESH> constructor, IList<Vector3d> positions, IList<int> indices, bool ccw)
+        public static void FromMesh<MESH>(ITriangleMeshConstructor<MESH> constructor, IList<Vector3f> positions, IList<int> indices, bool ccw)
         {
             int numPositions = positions.Count;
             int numTriangles = indices.Count / 3;
 
             constructor.PushTriangleMesh(numPositions, numTriangles);
 
+            for (int i = 0; i < numPositions; i++)
+                constructor.AddVertex(positions[i]);
+
+            FromMesh(constructor, indices, ccw);
+        }
+
+        private static void FromMesh<MESH>(ITriangleMeshConstructor<MESH> constructor, IList<int> indices, bool ccw)
+        {
+            int numTriangles = indices.Count / 3;
+
             Dictionary<Vector2i, int> edges = null;
             if (constructor.SupportsFaceConnections)
                 edges = new Dictionary<Vector2i, int>(numTriangles * 3);
-
-            for (int i = 0; i < numPositions; i++)
-                constructor.AddVertex(positions[i]);
 
             for (int i = 0; i < numTriangles; i++)
             {
@@ -163,30 +170,29 @@ namespace Common.Meshing.Constructors
                     constructor.AddFaceConnection(i, n0, n1, n2);
                 }
             }
-
         }
 
-        public static void FromIcosahedron<MESH>(ITriangleMeshConstructor<MESH> constructor, double scale)
+        public static void FromIcosahedron<MESH>(ITriangleMeshConstructor<MESH> constructor, float scale)
         {
             constructor.PushTriangleMesh(12, 20);
 
             var s = scale;
-            var t = (1.0 + Math.Sqrt(5.0)) / 2.0 * scale;
+            var t = (1.0f + FMath.Sqrt(5.0f)) / 2.0f * scale;
 
-            constructor.AddVertex(new Vector3d(-s, t, 0));
-            constructor.AddVertex(new Vector3d(s, t, 0));
-            constructor.AddVertex(new Vector3d(-s, -t, 0));
-            constructor.AddVertex(new Vector3d(s, -t, 0));
+            constructor.AddVertex(new Vector3f(-s, t, 0));
+            constructor.AddVertex(new Vector3f(s, t, 0));
+            constructor.AddVertex(new Vector3f(-s, -t, 0));
+            constructor.AddVertex(new Vector3f(s, -t, 0));
 
-            constructor.AddVertex(new Vector3d(0, -s, t));
-            constructor.AddVertex(new Vector3d(0, s, t));
-            constructor.AddVertex(new Vector3d(0, -s, -t));
-            constructor.AddVertex(new Vector3d(0, s, -t));
+            constructor.AddVertex(new Vector3f(0, -s, t));
+            constructor.AddVertex(new Vector3f(0, s, t));
+            constructor.AddVertex(new Vector3f(0, -s, -t));
+            constructor.AddVertex(new Vector3f(0, s, -t));
 
-            constructor.AddVertex(new Vector3d(t, 0, -s));
-            constructor.AddVertex(new Vector3d(t, 0, s));
-            constructor.AddVertex(new Vector3d(-t, 0, -s));
-            constructor.AddVertex(new Vector3d(-t, 0, s));
+            constructor.AddVertex(new Vector3f(t, 0, -s));
+            constructor.AddVertex(new Vector3f(t, 0, s));
+            constructor.AddVertex(new Vector3f(-t, 0, -s));
+            constructor.AddVertex(new Vector3f(-t, 0, s));
 
 
             // 5 faces around point 0

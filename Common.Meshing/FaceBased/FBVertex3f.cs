@@ -29,12 +29,12 @@ namespace Common.Meshing.FaceBased
             Position = (vert as FBVertex3f).Position;
         }
 
-        public override void SetPosition(Vector3d pos)
+        public override void SetPosition(Vector3f pos)
         {
-            Position = (Vector3f)pos;
+            Position = pos;
         }
 
-        public override Vector3d GetPosition()
+        public override Vector3f GetPosition()
         {
             return Position;
         }

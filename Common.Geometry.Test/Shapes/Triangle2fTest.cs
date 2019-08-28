@@ -7,14 +7,14 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Test.Shapes
 {
     [TestClass]
-    public class Triangle2dTest
+    public class Triangle2fTest
     {
         [TestMethod]
         public void Closest()
         {
-            var tri = new Triangle2d(new Vector2d(-1,0), new Vector2d(1,0), new Vector2d(0, 1));
+            var tri = new Triangle2f(new Vector2f(-1,0), new Vector2f(1,0), new Vector2f(0, 1));
 
-            var p = new Vector2d(0, 0);
+            var p = new Vector2f(0, 0);
             var c = tri.Closest(p);
 
             Console.Write(c);

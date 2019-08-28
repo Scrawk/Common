@@ -13,9 +13,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void FromTriangle()
         {
-            var a = new Vector3d(-1, -1, 0);
-            var b = new Vector3d(1, -1, 0);
-            var c = new Vector3d(0, 1, 0);
+            var a = new Vector3f(-1, -1, 0);
+            var b = new Vector3f(1, -1, 0);
+            var c = new Vector3f(0, 1, 0);
             var mesh = HBCreateTriangleMesh3.FromTriangle(a, b, c);
 
             Assert.AreEqual(3, mesh.Vertices.Count);
@@ -42,10 +42,10 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void FromTetrahedron()
         {
-            var a = new Vector3d(-1, -1, 0);
-            var b = new Vector3d(1, -1, 0);
-            var c = new Vector3d(0, 1, 0);
-            var d = new Vector3d(0, 0, 1);
+            var a = new Vector3f(-1, -1, 0);
+            var b = new Vector3f(1, -1, 0);
+            var c = new Vector3f(0, 1, 0);
+            var d = new Vector3f(0, 0, 1);
             var mesh = HBCreateTriangleMesh3.FromTetrahedron(a, b, c, d);
 
             Assert.AreEqual(4, mesh.Vertices.Count);
@@ -58,8 +58,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void FromBox()
         {
-            var min = new Vector3d(-1);
-            var max = new Vector3d(1);
+            var min = new Vector3f(-1);
+            var max = new Vector3f(1);
             var mesh = HBCreateTriangleMesh3.FromBox(min, max);
 
             Assert.AreEqual(8, mesh.Vertices.Count);

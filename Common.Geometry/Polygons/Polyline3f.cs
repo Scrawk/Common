@@ -9,35 +9,35 @@ namespace Common.Geometry.Polygons
     /// <summary>
     /// 
     /// </summary>
-    public class Polyline3d
+    public class Polyline3f
     {
 
-        public Polyline3d(int count)
+        public Polyline3f(int count)
         {
             SetPositions(count);
         }
 
-        public Polyline3d(IList<Vector3d> positions)
+        public Polyline3f(IList<Vector3f> positions)
         {
             SetPositions(positions);
         }
 
         public int Count => Positions.Length;
 
-        public Vector3d[] Positions { get; private set; }
+        public Vector3f[] Positions { get; private set; }
 
-        public double[] Params { get; private set; }
+        public float[] Params { get; private set; }
 
         public int[] Indices { get; private set; }
 
-        public double Length { get; private set; }
+        public float Length { get; private set; }
 
-        public Box3d Bounds { get; private set; }
+        public Box3f Bounds { get; private set; }
 
 
         public override string ToString()
         {
-            return string.Format("[Polyline3d: Count={0}, Length={1}]", Count, Length);
+            return string.Format("[Polyline3f: Count={0}, Length={1}]", Count, Length);
         }
 
         /// <summary>
@@ -47,14 +47,14 @@ namespace Common.Geometry.Polygons
         public void SetPositions(int size)
         {
             if (Positions == null || Positions.Length != size)
-                Positions = new Vector3d[size];
+                Positions = new Vector3f[size];
         }
 
         /// <summary>
         /// Create the position array.
         /// </summary>
         /// <param name="positions">Array to copy from.</param>
-        public void SetPositions(IList<Vector3d> positions)
+        public void SetPositions(IList<Vector3f> positions)
         {
             SetPositions(positions.Count);
             positions.CopyTo(Positions, 0);
@@ -65,15 +65,15 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public void CreateParams()
         {
-            Params = new double[Count];
+            Params = new float[Count];
         }
 
         /// <summary>
         /// Create the param array.
         /// </summary>
-        public void SetParams(IList<double> _params)
+        public void SetParams(IList<float> _params)
         {
-            if (Params == null) Params = new double[Count];
+            if (Params == null) Params = new float[Count];
 	        _params.CopyTo(Params, 0);
         }
 
@@ -103,9 +103,9 @@ namespace Common.Geometry.Polygons
         /// Copy the polyline.
         /// No need to recalculate the copy.
         /// </summary>
-        public Polyline3d Copy()
+        public Polyline3f Copy()
         {
-            var copy = new Polyline3d(Positions);
+            var copy = new Polyline3f(Positions);
             copy.Length = Length;
             copy.Bounds = Bounds;
 
@@ -129,16 +129,16 @@ namespace Common.Geometry.Polygons
             if (Count == 0) return;
 
             for (int i = 0; i < Count - 1; i++)
-                Length += Vector3d.Distance(Positions[i], Positions[i + 1]);
+                Length += Vector3f.Distance(Positions[i], Positions[i + 1]);
         }
 
         public void CalculateBounds()
         {
-            Bounds = new Box3d();
+            Bounds = new Box3f();
             if (Count == 0) return;
 
-            var min = Vector3d.PositiveInfinity;
-            var max = Vector3d.NegativeInfinity;
+            var min = Vector3f.PositiveInfinity;
+            var max = Vector3f.NegativeInfinity;
 
             for (int i = 0; i < Count; i++)
             {
@@ -152,7 +152,7 @@ namespace Common.Geometry.Polygons
                 if (p.z > max.z) max.z = p.z;
             }
 
-            Bounds = new Box3d(min, max);
+            Bounds = new Box3f(min, max);
         }
 
     }

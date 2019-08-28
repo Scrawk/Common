@@ -3,28 +3,28 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Double;
-using VECTOR3 = Common.Core.Numerics.Vector3d;
-using MATRIX3 = Common.Core.Numerics.Matrix3x3d;
+using REAL = System.Single;
+using VECTOR3 = Common.Core.Numerics.Vector3f;
+using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
 
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Segment3d : IEquatable<Segment3d>
+    public struct Segment3f : IEquatable<Segment3f>
     {
 
         public VECTOR3 A;
 
         public VECTOR3 B;
 
-        public Segment3d(VECTOR3 a, VECTOR3 b)
+        public Segment3f(VECTOR3 a, VECTOR3 b)
         {
             A = a;
             B = b;
         }
 
-        public Segment3d(REAL ax, REAL ay, REAL az, REAL bx, REAL by, REAL bz)
+        public Segment3f(REAL ax, REAL ay, REAL az, REAL bx, REAL by, REAL bz)
         {
             A = new VECTOR3(ax, ay, az);
             B = new VECTOR3(bx, by, bz);
@@ -32,7 +32,7 @@ namespace Common.Geometry.Shapes
 
         public VECTOR3 Center
         {
-            get { return (A + B) * 0.5; }
+            get { return (A + B) * 0.5f; }
         }
 
         public REAL Length
@@ -45,7 +45,7 @@ namespace Common.Geometry.Shapes
             get { return VECTOR3.SqrDistance(A, B); }
         }
 
-        public Box3d Bounds
+        public Box3f Bounds
         {
             get
             {
@@ -56,7 +56,7 @@ namespace Common.Geometry.Shapes
                 REAL zmin = Math.Min(A.z, B.z);
                 REAL zmax = Math.Max(A.z, B.z);
 
-                return new Box3d(xmin, xmax, ymin, ymax, zmin, zmax);
+                return new Box3f(xmin, xmax, ymin, ymax, zmin, zmax);
             }
         }
 
@@ -65,87 +65,82 @@ namespace Common.Geometry.Shapes
             get
             {
                 if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Segment3d index out of range.");
+                    throw new IndexOutOfRangeException("Segment3f index out of range.");
 
-                fixed (Segment3d* array = &this) { return ((VECTOR3*)array)[i]; }
+                fixed (Segment3f* array = &this) { return ((VECTOR3*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Segment3d index out of range.");
+                    throw new IndexOutOfRangeException("Segment3f index out of range.");
 
                 fixed (VECTOR3* array = &A) { array[i] = value; }
             }
         }
 
-        public static Segment3d operator +(Segment3d seg, REAL s)
+        public static Segment3f operator +(Segment3f seg, REAL s)
         {
-            return new Segment3d(seg.A + s, seg.B + s);
+            return new Segment3f(seg.A + s, seg.B + s);
         }
 
-        public static Segment3d operator +(Segment3d seg, VECTOR3 v)
+        public static Segment3f operator +(Segment3f seg, VECTOR3 v)
         {
-            return new Segment3d(seg.A + v, seg.B + v);
+            return new Segment3f(seg.A + v, seg.B + v);
         }
 
-        public static Segment3d operator -(Segment3d seg, REAL s)
+        public static Segment3f operator -(Segment3f seg, REAL s)
         {
-            return new Segment3d(seg.A - s, seg.B - s);
+            return new Segment3f(seg.A - s, seg.B - s);
         }
 
-        public static Segment3d operator -(Segment3d seg, VECTOR3 v)
+        public static Segment3f operator -(Segment3f seg, VECTOR3 v)
         {
-            return new Segment3d(seg.A - v, seg.B - v);
+            return new Segment3f(seg.A - v, seg.B - v);
         }
 
-        public static Segment3d operator *(Segment3d seg, REAL s)
+        public static Segment3f operator *(Segment3f seg, REAL s)
         {
-            return new Segment3d(seg.A * s, seg.B * s);
+            return new Segment3f(seg.A * s, seg.B * s);
         }
 
-        public static Segment3d operator *(Segment3d seg, VECTOR3 v)
+        public static Segment3f operator *(Segment3f seg, VECTOR3 v)
         {
-            return new Segment3d(seg.A * v, seg.B * v);
+            return new Segment3f(seg.A * v, seg.B * v);
         }
 
-        public static Segment3d operator /(Segment3d seg, REAL s)
+        public static Segment3f operator /(Segment3f seg, REAL s)
         {
-            return new Segment3d(seg.A / s, seg.B / s);
+            return new Segment3f(seg.A / s, seg.B / s);
         }
 
-        public static Segment3d operator /(Segment3d seg, VECTOR3 v)
+        public static Segment3f operator /(Segment3f seg, VECTOR3 v)
         {
-            return new Segment3d(seg.A / v, seg.B / v);
+            return new Segment3f(seg.A / v, seg.B / v);
         }
 
-        public static Segment3d operator *(Segment3d seg, MATRIX3 m)
+        public static Segment3f operator *(Segment3f seg, MATRIX3 m)
         {
-            return new Segment3d(m * seg.A, m * seg.B);
+            return new Segment3f(m * seg.A, m * seg.B);
         }
 
-        //public static implicit operator Segment3d(Segment3f seg)
-        //{
-        //    return new Segment3d(seg.A, seg.B);
-        //}
-
-        public static bool operator ==(Segment3d s1, Segment3d s2)
+        public static bool operator ==(Segment3f s1, Segment3f s2)
         {
             return s1.A == s2.A && s1.B == s2.B;
         }
 
-        public static bool operator !=(Segment3d s1, Segment3d s2)
+        public static bool operator !=(Segment3f s1, Segment3f s2)
         {
             return s1.A != s2.A || s1.B != s2.B;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Segment3d)) return false;
-            Segment3d seg = (Segment3d)obj;
+            if (!(obj is Segment3f)) return false;
+            Segment3f seg = (Segment3f)obj;
             return this == seg;
         }
 
-        public bool Equals(Segment3d seg)
+        public bool Equals(Segment3f seg)
         {
             return this == seg;
         }
@@ -163,7 +158,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Segment3d: A={0}, B={1}]", A, B);
+            return string.Format("[Segment3f: A={0}, B={1}]", A, B);
         }
 
         /// <summary>
@@ -184,15 +179,15 @@ namespace Common.Geometry.Shapes
         /// <param name="t">closest point = A + t * (B - A)</param>
         public void Closest(VECTOR3 p, out REAL t)
         {
-            t = 0.0;
+            t = 0.0f;
             VECTOR3 ab = B - A;
             VECTOR3 ap = p - A;
 
             REAL len = ab.x * ab.x + ab.y * ab.y;
-            if (len < DMath.EPS) return;
+            if (len < FMath.EPS) return;
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
-            t = DMath.Clamp01(t);
+            t = FMath.Clamp01(t);
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace Common.Meshing.Constructors
     public static class CreateTriangleMesh2
     {
 
-        public static void FromTriangle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2d A, Vector2d B, Vector2d C)
+        public static void FromTriangle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f A, Vector2f B, Vector2f C)
         {
             constructor.PushTriangleMesh(3, 1);
 
@@ -23,14 +23,14 @@ namespace Common.Meshing.Constructors
             constructor.AddFace(0, 1, 2);
         }
 
-        public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2d min, Vector2d max)
+        public static void FromBox<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f min, Vector2f max)
         {
             constructor.PushTriangleMesh(4, 2);
 
             constructor.AddVertex(min);
-            constructor.AddVertex(new Vector2d(max.x, min.y));
+            constructor.AddVertex(new Vector2f(max.x, min.y));
             constructor.AddVertex(max);
-            constructor.AddVertex(new Vector2d(min.x, max.y));
+            constructor.AddVertex(new Vector2f(min.x, max.y));
 
             constructor.AddFace(0, 1, 2);
             constructor.AddFace(2, 3, 0);
@@ -42,21 +42,21 @@ namespace Common.Meshing.Constructors
             }
         }
 
-        public static void FromCircle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2d center, double radius, int segments)
+        public static void FromCircle<MESH>(ITriangleMeshConstructor<MESH> constructor, Vector2f center, float radius, int segments)
         {
             constructor.PushTriangleMesh(segments + 1, segments * 3);
             constructor.AddVertex(center);
 
-            double pi = Math.PI;
-            double fseg = segments;
+            float pi = FMath.PI;
+            float fseg = segments;
 
             for (int i = 0; i < segments; i++)
             {
-                double theta = 2.0f * pi * i / fseg;
+                float theta = 2.0f * pi * i / fseg;
 
-                double x = -radius * Math.Cos(theta);
-                double y = -radius * Math.Sin(theta);
-                constructor.AddVertex(center + new Vector2d(x, y));
+                float x = -radius * FMath.Cos(theta);
+                float y = -radius * FMath.Sin(theta);
+                constructor.AddVertex(center + new Vector2f(x, y));
             }
 
             for (int i = 0; i < segments; i++)
@@ -80,7 +80,7 @@ namespace Common.Meshing.Constructors
 
         }
 
-        public static void FromGrid<MESH>(ITriangleMeshConstructor<MESH> constructor, int width, int height, double scale)
+        public static void FromGrid<MESH>(ITriangleMeshConstructor<MESH> constructor, int width, int height, float scale)
         {
 
             int numVerts = width * height;
@@ -93,7 +93,7 @@ namespace Common.Meshing.Constructors
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
-                    constructor.AddVertex(new Vector2d(x, y) * scale);
+                    constructor.AddVertex(new Vector2f(x, y) * scale);
             }
 
             int idx = 0;

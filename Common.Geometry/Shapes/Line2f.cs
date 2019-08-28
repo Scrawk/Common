@@ -117,11 +117,6 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        public static implicit operator Line2f(Line2d line)
-        {
-            return new Line2f((REAL)line.A, (REAL)line.B, (REAL)line.C);
-        }
-
         public static bool operator ==(Line2f i1, Line2f i2)
         {
             return i1.A == i2.A && i1.B == i2.B && i1.C == i2.C;

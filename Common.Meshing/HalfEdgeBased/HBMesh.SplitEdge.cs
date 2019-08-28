@@ -28,7 +28,7 @@ namespace Common.Meshing.HalfEdgeBased
 
             //Add new vertex at mid point.
             //edge now goes to this vertex and the new edge from it.
-            var v = PokeEdge(edge, 0.5);
+            var v = PokeEdge(edge, 0.5f);
 
             //Get the new edge and its opposite.
             var nedge = v.Edge;

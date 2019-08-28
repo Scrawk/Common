@@ -8,22 +8,22 @@ namespace Common.Geometry.Curves
     /// <summary>
     /// A bezier curve of quadratic degree using a polynominal.
     /// </summary>
-    public class QuadraticBezier2d
+    public class QuadraticBezier2f
     {
 
         /// <summary>
         /// The control points.
         /// </summary>
-        public Vector2d C0 { get; set; }
-        public Vector2d C1 { get; set; }
-        public Vector2d C2 { get; set; }
+        public Vector2f C0 { get; set; }
+        public Vector2f C1 { get; set; }
+        public Vector2f C2 { get; set; }
 
-        public QuadraticBezier2d()
+        public QuadraticBezier2f()
         {
 
         }
 
-        public QuadraticBezier2d(Vector2d c0, Vector2d c1, Vector2d c2)
+        public QuadraticBezier2f(Vector2f c0, Vector2f c1, Vector2f c2)
         {
             C0 = c0;
             C1 = c1;
@@ -33,26 +33,26 @@ namespace Common.Geometry.Curves
         /// <summary>
         /// The length of the curve.
         /// </summary>
-        public double Length
+        public float Length
         {
             get
             {
-                double ax = C0.x - 2.0 * C1.x + C2.x;
-                double az = C0.y - 2.0 * C1.y + C2.y;
-                double bx = 2.0 * (C1.x - C0.x);
-                double bz = 2.0 * (C1.y - C0.y);
+                float ax = C0.x - 2.0f * C1.x + C2.x;
+                float az = C0.y - 2.0f * C1.y + C2.y;
+                float bx = 2.0f * (C1.x - C0.x);
+                float bz = 2.0f * (C1.y - C0.y);
 
-                double A = 4.0 * (ax * ax + az * az);
-                double B = 4.0 * (ax * bx + az * bz);
-                double C = bx * bx + bz * bz;
+                float A = 4.0f * (ax * ax + az * az);
+                float B = 4.0f * (ax * bx + az * bz);
+                float C = bx * bx + bz * bz;
 
-                double Sabc = 2.0 * Math.Sqrt(A + B + C);
-                double A2 = Math.Sqrt(A);
-                double A32 = 2.0 * A * A2;
-                double CSQ = 2.0 * Math.Sqrt(C);
-                double BA = B / A2;
+                float Sabc = 2.0f * FMath.Sqrt(A + B + C);
+                float A2 = FMath.Sqrt(A);
+                float A32 = 2.0f * A * A2;
+                float CSQ = 2.0f * FMath.Sqrt(C);
+                float BA = B / A2;
 
-                return (A32 * Sabc + A2 * B * (Sabc - CSQ) + (4 * C * A - B * B) * Math.Log((2 * A2 + BA + Sabc) / (BA + CSQ))) / (4 * A32);
+                return (A32 * Sabc + A2 * B * (Sabc - CSQ) + (4 * C * A - B * B) * FMath.Log((2 * A2 + BA + Sabc) / (BA + CSQ))) / (4 * A32);
             }
         }
 
@@ -60,14 +60,14 @@ namespace Common.Geometry.Curves
         /// The position on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2d Position(double t)
+        public Vector2f Position(float t)
         {
-            if (t < 0.0) t = 0.0;
-            if (t > 1.0) t = 1.0;
+            if (t < 0.0f) t = 0.0f;
+            if (t > 1.0f) t = 1.0f;
 
-            double t1 = 1.0 - t;
+            float t1 = 1.0f - t;
 
-            Vector2d p = new Vector2d();
+            Vector2f p = new Vector2f();
             p.x = t1 * (t1 * C0.x + t * C1.x) + t * (t1 * C1.x + t * C2.x);
             p.y = t1 * (t1 * C0.y + t * C1.y) + t * (t1 * C1.y + t * C2.y);
 
@@ -78,9 +78,9 @@ namespace Common.Geometry.Curves
         /// The tangent on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2d Tangent(double t)
+        public Vector2f Tangent(float t)
         {
-            Vector2d d = FirstDerivative(t);
+            Vector2f d = FirstDerivative(t);
             return d.Normalized;
         }
 
@@ -88,9 +88,9 @@ namespace Common.Geometry.Curves
         /// The normal on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2d Normal(double t)
+        public Vector2f Normal(float t)
         {
-            Vector2d d = FirstDerivative(t);
+            Vector2f d = FirstDerivative(t);
             return d.Normalized.PerpendicularCW;
         }
 
@@ -98,16 +98,16 @@ namespace Common.Geometry.Curves
         /// The first derivative on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2d FirstDerivative(double t)
+        public Vector2f FirstDerivative(float t)
         {
-            if (t < 0.0) t = 0.0;
-            if (t > 1.0) t = 1.0;
+            if (t < 0.0) t = 0.0f;
+            if (t > 1.0) t = 1.0f;
 
-            double t1 = 1.0 - t;
+            float t1 = 1.0f - t;
 
-            Vector2d p = new Vector2d();
-            p.x = 2.0 * t1 * (C1.x - C0.x) + 2.0 * t * (C2.x - C1.x);
-            p.y = 2.0 * t1 * (C1.y - C0.y) + 2.0 * t * (C2.y - C1.y);
+            Vector2f p = new Vector2f();
+            p.x = 2.0f * t1 * (C1.x - C0.x) + 2.0f * t * (C2.x - C1.x);
+            p.y = 2.0f * t1 * (C1.y - C0.y) + 2.0f * t * (C2.y - C1.y);
 
             return p;
         }
@@ -115,31 +115,31 @@ namespace Common.Geometry.Curves
         /// <summary>
         /// The closest point on the curve to the point p.
         /// </summary>
-        public Vector2d Closest(Vector2d p)
+        public Vector2f Closest(Vector2f p)
         {
-            double px = C0.x - p.x;
-            double pz = C0.y - p.y;
-            double ax = C1.x - C0.x;
-            double az = C1.y - C0.y;
-            double bx = C0.x - 2.0 * C1.x + C2.x;
-            double bz = C0.y - 2.0 * C1.y + C2.y;
+            float px = C0.x - p.x;
+            float pz = C0.y - p.y;
+            float ax = C1.x - C0.x;
+            float az = C1.y - C0.y;
+            float bx = C0.x - 2.0f * C1.x + C2.x;
+            float bz = C0.y - 2.0f * C1.y + C2.y;
 
-            double a = bx * bx + bz * bz;
-            double b = 3 * (ax * bx + az * bz);
-            double c = 2 * (ax * ax + az * az) + px * bx + pz * bz;
-            double d = px * ax + pz * az;
+            float a = bx * bx + bz * bz;
+            float b = 3 * (ax * bx + az * bz);
+            float c = 2 * (ax * ax + az * az) + px * bx + pz * bz;
+            float d = px * ax + pz * az;
 
-            var roots = Polynomial3d.Solve(a, b, c, d);
+            var roots = Polynomial3f.Solve(a, b, c, d);
 
-            double min = double.PositiveInfinity;
-            Vector2d closest = new Vector2d(min, min);
+            float min = float.PositiveInfinity;
+            Vector2f closest = new Vector2f(min, min);
 
             for(int i = 0; i < roots.real; i++)
             {
-                double t = roots[i];
+                float t = roots[i];
 
-                Vector2d v = Position(t);
-                double dist = Vector2d.SqrDistance(v, p);
+                Vector2f v = Position(t);
+                float dist = Vector2f.SqrDistance(v, p);
                 if (dist < min)
                 {
                     min = dist;
@@ -153,23 +153,23 @@ namespace Common.Geometry.Curves
         /// <summary>
         /// If the segment ab intersects the curve.
         /// </summary>
-        public bool Intersects(Vector2d a, Vector2d b)
+        public bool Intersects(Vector2f a, Vector2f b)
         {
             //coefficients of quadratic
-            Vector2d c2 = C0 + C1 * -2.0 + C2;
-            Vector2d c1 = C0 * -2.0 + C1 * 2.0;
+            Vector2f c2 = C0 + C1 * -2.0f + C2;
+            Vector2f c1 = C0 * -2.0f + C1 * 2.0f;
 
             //Convert line to normal form: ax + by + c = 0
             //Find normal to line: negative inverse of original line's slope
-            Vector2d n = new Vector2d(a.y - b.y, b.x - a.x);
+            Vector2f n = new Vector2f(a.y - b.y, b.x - a.x);
 
             //c coefficient for normal form of line
-            double c = a.x * b.y - b.x * a.y;
+            float c = a.x * b.y - b.x * a.y;
 
             //Transform coefficients to line's coordinate system and find roots of cubic
-            var roots = Polynomial3d.Solve(1, Vector2d.Dot(n, c2), Vector2d.Dot(n, c1), Vector2d.Dot(n, C0) + c);
+            var roots = Polynomial3f.Solve(1, Vector2f.Dot(n, c2), Vector2f.Dot(n, c1), Vector2f.Dot(n, C0) + c);
 
-            Vector2d min, max;
+            Vector2f min, max;
             min.x = Math.Min(a.x, b.x);
             min.y = Math.Min(a.y, b.y);
 
@@ -178,10 +178,10 @@ namespace Common.Geometry.Curves
 
             for (int i = 0; i < roots.real; i++)
             {
-                double t = roots[i];
+                float t = roots[i];
                 if (t < 0.0 || t > 1.0) continue;
 
-                Vector2d v0 = Position(t);
+                Vector2f v0 = Position(t);
 
                 if (a.x == b.x)
                 {

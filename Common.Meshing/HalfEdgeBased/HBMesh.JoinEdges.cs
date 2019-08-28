@@ -15,7 +15,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="e0">A edge intersecting e1.</param>
         /// <param name="e1">A edge intersecting e0.</param>
         /// <param name="t">The length along e0 and e1 where the intersection occurs.</param>
-        public void JoinEdges(HBEdge e0, HBEdge e1, double t)
+        public void JoinEdges(HBEdge e0, HBEdge e1, float t)
         {
             JoinEdges(e0, e1, t, t);
         }
@@ -28,7 +28,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="e1">A edge intersecting e0.</param>
         /// <param name="s">The length along e0 where the intersection occurs.</param>
         /// <param name="t">The length along e1 where the intersection occurs.</param>
-        public void JoinEdges(HBEdge e0, HBEdge e1, double s, double t)
+        public void JoinEdges(HBEdge e0, HBEdge e1, float s, float t)
         {
             if (e0.Face != null || e1.Face != null)
                 throw new NotImplementedException("Edges with faces not implemented.");
@@ -56,7 +56,7 @@ namespace Common.Meshing.HalfEdgeBased
             //then we want to check if the vertical edge
             //goes bottom to top. If not take the previous
             //opposite which will be in the opposite direction.
-            var dp = Vector2d.Dot(vp.xy.PerpendicularCCW, hp.xy);
+            var dp = Vector2f.Dot(vp.xy.PerpendicularCCW, hp.xy);
             if (dp > 0)
                 vertical = vertical.Previous.Opposite;
 

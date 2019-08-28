@@ -15,7 +15,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="edge">The edge to be collapsed</param>
         /// <returns>true if triangle will be flipped.</returns>
-        public static bool FlipsTriangleIfCollapsed(HBEdge edge, Vector3d pos)
+        public bool FlipsTriangleIfCollapsed(HBEdge edge, Vector3f pos)
         {
             var opp = edge.Opposite;
             if (opp == null)
@@ -31,9 +31,9 @@ namespace Common.Meshing.HalfEdgeBased
                 var p0 = e.From.GetPosition();
                 var p1 = e.Next.From.GetPosition();
                 var p2 = e.Previous.From.GetPosition();
-                var n0 = Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
-                var n1 = Vector3d.Cross(p1 - pos, p2 - pos).Normalized;
-                var dp = Vector3d.Dot(n0, n1);
+                var n0 = Vector3f.Cross(p1 - p0, p2 - p0).Normalized;
+                var n1 = Vector3f.Cross(p1 - pos, p2 - pos).Normalized;
+                var dp = Vector3f.Dot(n0, n1);
 
                 if (dp < 0) return true;
             }
@@ -45,9 +45,9 @@ namespace Common.Meshing.HalfEdgeBased
                 var p0 = e.From.GetPosition();
                 var p1 = e.Next.From.GetPosition();
                 var p2 = e.Previous.From.GetPosition();
-                var n0 = Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
-                var n1 = Vector3d.Cross(p1 - pos, p2 - pos).Normalized;
-                var dp = Vector3d.Dot(n0, n1);
+                var n0 = Vector3f.Cross(p1 - p0, p2 - p0).Normalized;
+                var n1 = Vector3f.Cross(p1 - pos, p2 - pos).Normalized;
+                var dp = Vector3f.Dot(n0, n1);
 
                 if (dp < 0) return true;
             }
@@ -61,7 +61,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// </summary>
         /// <param name="edge">The edge to be collapsed</param>
         /// <returns>The longest edge that would occur if collapsed</returns>
-        public static double LongestCollapsedEdge(HBEdge edge, Vector3d pos)
+        public float LongestCollapsedEdge(HBEdge edge, Vector3f pos)
         {
             var opp = edge.Opposite;
             if (opp == null)
@@ -69,23 +69,23 @@ namespace Common.Meshing.HalfEdgeBased
 
             var v0 = edge.From;
             var v1 = opp.From;
-            double max = double.NegativeInfinity;
+            float max = float.NegativeInfinity;
 
             foreach (var e in v0.EnumerateEdges())
             {
                 if (e == edge) continue;
-                var len = Vector3d.SqrDistance(e.To.GetPosition(), pos);
+                var len = Vector3f.SqrDistance(e.To.GetPosition(), pos);
                 if (len > max) max = len;
             }
 
             foreach (var e in v1.EnumerateEdges())
             {
                 if (e == edge) continue;
-                var len = Vector3d.SqrDistance(e.To.GetPosition(), pos);
+                var len = Vector3f.SqrDistance(e.To.GetPosition(), pos);
                 if (len > max) max = len;
             }
 
-            return Math.Sqrt(max);
+            return FMath.Sqrt(max);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="mesh">A triangle mesh the edge belongs to.</param>
         /// <param name="edge">The edge to collapse</param>
         /// <param name="remove">Should the objects be removed or tagged with -1</param>
-        public VERTEX CollapseEdge(HBEdge edge, Vector3d pos, bool remove)
+        public VERTEX CollapseEdge(HBEdge edge, Vector3f pos, bool remove)
         {
             //Dont collapse boundary edges
             if (edge.IsBoundary) return null;

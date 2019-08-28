@@ -62,15 +62,15 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Calculate the average position of the vertices.
         /// </summary>
-        public Vector3d Centriod
+        public Vector3f Centriod
         {
             get
             {
                 if (Vertices == null)
-                    return Vector3d.Zero;
+                    return Vector3f.Zero;
 
                 int count = 0;
-                Vector3d centroid = Vector3d.Zero;
+                Vector3f centroid = Vector3f.Zero;
                 foreach (var v in Vertices)
                 {
                     centroid += v.GetPosition();

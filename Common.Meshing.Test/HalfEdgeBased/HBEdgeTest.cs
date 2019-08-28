@@ -156,9 +156,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void FaceCentriod()
         {
-            var a = new Vector3d(-1, 0, 1);
-            var b = new Vector3d(1, 0, 2);
-            var c = new Vector3d(0, 1, 3);
+            var a = new Vector3f(-1, 0, 1);
+            var b = new Vector3f(1, 0, 2);
+            var c = new Vector3f(0, 1, 3);
 
             var mesh = HBMeshHelper.CreateTriangle(a, b, c);
             var edge = mesh.Edges[0];

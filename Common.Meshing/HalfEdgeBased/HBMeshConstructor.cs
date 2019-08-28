@@ -24,22 +24,6 @@ namespace Common.Meshing.HalfEdgeBased
     }
 
     /// <summary>
-    /// Constructor for HBMesh2f
-    /// </summary>
-    public class HBMeshConstructor2d : HBMeshConstructor<HBMesh2d, HBVertex2d>
-    {
-
-    }
-
-    /// <summary>
-    /// Constructor for HBMesh3f
-    /// </summary>
-    public class HBMeshConstructor3d : HBMeshConstructor<HBMesh3d, HBVertex3d>
-    {
-
-    }
-
-    /// <summary>
     /// Half edge based mesh constructor.
     /// Supports triangle or polygon meshes.
     /// </summary>
@@ -111,7 +95,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Add a vertex to the mesh with this position.
         /// </summary>
         /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector2d pos)
+        public void AddVertex(Vector2f pos)
         {
             CheckMeshIsPushed();
             VERTEX v = new VERTEX();
@@ -123,7 +107,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// Add a vertex to the mesh with this position.
         /// </summary>
         /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector3d pos)
+        public void AddVertex(Vector3f pos)
         {
             CheckMeshIsPushed();
             VERTEX v = new VERTEX();

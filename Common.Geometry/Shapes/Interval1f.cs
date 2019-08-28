@@ -66,11 +66,6 @@ namespace Common.Geometry.Shapes
             return new Interval1f(a.Min * f, a.Max * f);
         }
 
-        public static explicit operator Interval1f(Interval1d i)
-        {
-            return new Interval1f((REAL)i.Min, (REAL)i.Max);
-        }
-
         public static implicit operator Interval1f(Interval1i i)
         {
             return new Interval1f(i.Min, i.Max);

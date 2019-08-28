@@ -141,12 +141,12 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Calculate the average position of the vertices.
         /// </summary>
-        public Vector3d FaceCentriod
+        public Vector3f FaceCentriod
         {
             get
             {
                 int count = 0;
-                Vector3d centroid = Vector3d.Zero;
+                Vector3f centroid = Vector3f.Zero;
                 foreach (var v in EnumerateVertices())
                 {
                     centroid += v.GetPosition();
@@ -163,40 +163,40 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Compute the face normal. 
         /// </summary>
-        public Vector3d FaceNormal
+        public Vector3f FaceNormal
         {
             get
             {
                 var p0 = From.GetPosition();
                 var p1 = To.GetPosition();
                 var p2 = Previous.From.GetPosition();
-                return Vector3d.Cross(p1 - p0, p2 - p0).Normalized;
+                return Vector3f.Cross(p1 - p0, p2 - p0).Normalized;
             }
         }
 
         /// <summary>
         /// Get the length of the edge. 
         /// </summary>
-        public double Length
+        public float Length
         {
             get
             {
                 var p0 = From.GetPosition();
                 var p1 = To.GetPosition();
-                return Vector3d.Distance(p0, p1);
+                return Vector3f.Distance(p0, p1);
             }
         }
 
         /// <summary>
         /// Get the sqr length of the edge. 
         /// </summary>
-        public double SqrLength
+        public float SqrLength
         {
             get
             {
                 var p0 = From.GetPosition();
                 var p1 = To.GetPosition();
-                return Vector3d.SqrDistance(p0, p1);
+                return Vector3f.SqrDistance(p0, p1);
             }
         }
 
@@ -290,7 +290,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <summary>
         /// Get the position on edge. 
         /// </summary>
-        public Vector3d GetPosition(double t)
+        public Vector3f GetPosition(float t)
         {
             var p0 = From.GetPosition();
             var p1 = To.GetPosition();

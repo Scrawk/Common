@@ -6,17 +6,8 @@ using Common.Meshing.Constructors;
 
 namespace Common.Meshing.IndexBased
 {
-    public class MeshConstructor2d : IndexableMeshConstructor<Mesh2d>
-    {
-
-    }
 
     public class MeshConstructor2f : IndexableMeshConstructor<Mesh2f>
-    {
-
-    }
-
-    public class MeshConstructor3d : IndexableMeshConstructor<Mesh3d>
     {
 
     }
@@ -154,7 +145,7 @@ namespace Common.Meshing.IndexBased
         /// Add a vertex to the mesh with this position.
         /// </summary>
         /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector2d pos)
+        public void AddVertex(Vector2f pos)
         {
             CheckMeshIsPushed();
             m_mesh.SetPosition(m_vertexIndex, pos.xy0);
@@ -165,7 +156,7 @@ namespace Common.Meshing.IndexBased
         /// Add a vertex to the mesh with this position.
         /// </summary>
         /// <param name="pos">The vertex position</param>
-        public void AddVertex(Vector3d pos)
+        public void AddVertex(Vector3f pos)
         {
             CheckMeshIsPushed();
             m_mesh.SetPosition(m_vertexIndex, pos);

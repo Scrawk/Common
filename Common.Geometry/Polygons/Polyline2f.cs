@@ -9,35 +9,35 @@ namespace Common.Geometry.Polygons
     /// <summary>
     /// 
     /// </summary>
-    public class Polyline2d
+    public class Polyline2f
     {
 
-        public Polyline2d(int count)
+        public Polyline2f(int count)
         {
             SetPositions(count);
         }
 
-        public Polyline2d(IList<Vector2d> positions)
+        public Polyline2f(IList<Vector2f> positions)
         {
             SetPositions(positions);
         }
 
         public int Count => Positions.Length;
 
-        public Vector2d[] Positions { get; private set; }
+        public Vector2f[] Positions { get; private set; }
 
-        public double[] Params { get; private set; }
+        public float[] Params { get; private set; }
 
         public int[] Indices { get; private set; }
 
-        public double Length { get; private set; }
+        public float Length { get; private set; }
 
-        public Box2d Bounds { get; private set; }
+        public Box2f Bounds { get; private set; }
 
 
         public override string ToString()
         {
-            return string.Format("[Polyline2d: Count={0}, Length={1}]", Count, Length);
+            return string.Format("[Polyline2f: Count={0}, Length={1}]", Count, Length);
         }
 
         /// <summary>
@@ -47,14 +47,14 @@ namespace Common.Geometry.Polygons
         public void SetPositions(int size)
         {
             if (Positions == null || Positions.Length != size)
-                Positions = new Vector2d[size];
+                Positions = new Vector2f[size];
         }
 
         /// <summary>
         /// Create the position array.
         /// </summary>
         /// <param name="positions">Array to copy from.</param>
-        public void SetPositions(IList<Vector2d> positions)
+        public void SetPositions(IList<Vector2f> positions)
         {
             SetPositions(positions.Count);
             positions.CopyTo(Positions, 0);
@@ -65,15 +65,15 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public void CreateParams()
         {
-            Params = new double[Count];
+            Params = new float[Count];
         }
 
         /// <summary>
         /// Create the param array.
         /// </summary>
-        public void SetParams(IList<double> _params)
+        public void SetParams(IList<float> _params)
         {
-            if (Params == null) Params = new double[Count];
+            if (Params == null) Params = new float[Count];
 	        _params.CopyTo(Params, 0);
         }
 
@@ -103,9 +103,9 @@ namespace Common.Geometry.Polygons
         /// Copy the polyline.
         /// No need to recalculate the copy.
         /// </summary>
-        public Polyline2d Copy()
+        public Polyline2f Copy()
         {
-            var copy = new Polyline2d(Positions);
+            var copy = new Polyline2f(Positions);
             copy.Length = Length;
             copy.Bounds = Bounds;
 
@@ -129,16 +129,16 @@ namespace Common.Geometry.Polygons
             if (Count == 0) return;
 
             for (int i = 0; i < Count - 1; i++)
-                Length += Vector2d.Distance(Positions[i], Positions[i + 1]);
+                Length += Vector2f.Distance(Positions[i], Positions[i + 1]);
         }
 
         public void CalculateBounds()
         {
-            Bounds = new Box2d();
+            Bounds = new Box2f();
             if (Count == 0) return;
 
-            var min = Vector2d.PositiveInfinity;
-            var max = Vector2d.NegativeInfinity;
+            var min = Vector2f.PositiveInfinity;
+            var max = Vector2f.NegativeInfinity;
 
             for (int i = 0; i < Count; i++)
             {
@@ -150,24 +150,24 @@ namespace Common.Geometry.Polygons
                 if (p.y > max.y) max.y = p.y;
             }
 
-            Bounds = new Box2d(min, max);
+            Bounds = new Box2f(min, max);
         }
 
-        public bool ContainsPoint(Vector2d point, double width)
+        public bool ContainsPoint(Vector2f point, float width)
         {
             if (Count == 0) return false;
             if (!Bounds.Contains(point)) return false;
 
-            double w2 = width * width;
+            float w2 = width * width;
 
             for (int i = 0; i < Count - 1; i++)
             {
                 var a = Positions[i];
                 var b = Positions[i + 1];
-                var seg = new Segment2d(a, b);
+                var seg = new Segment2f(a, b);
                 var c = seg.Closest(point);
 
-                if (Vector2d.SqrDistance(c, point) < w2) return true;
+                if (Vector2f.SqrDistance(c, point) < w2) return true;
             }
 
             return false;

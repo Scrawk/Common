@@ -10,34 +10,34 @@ namespace Common.Geometry.Polygons
     /// A simple polygon with no holes.
     /// Maybe CCW or CW.
     /// </summary>
-    public class Polygon2d
+    public class Polygon2f
     {
 
-        public Polygon2d(int count)
+        public Polygon2f(int count)
         {
             SetPositions(count);
         }
 
-        public Polygon2d(IList<Vector2d> positions)
+        public Polygon2f(IList<Vector2f> positions)
         {
             SetPositions(positions);
         }
 
         public int Count => Positions.Length;
 
-        public Vector2d[] Positions { get; private set; }
+        public Vector2f[] Positions { get; private set; }
 
-        public double[] Params { get; private set; }
+        public float[] Params { get; private set; }
 
         public int[] Indices { get; private set; }
 
-        public double SignedArea { get; private set; }
+        public float SignedArea { get; private set; }
 
-        public double Area => Math.Abs(SignedArea);
+        public float Area => Math.Abs(SignedArea);
 
-        public Vector2d Centroid { get; private set; }
+        public Vector2f Centroid { get; private set; }
 
-        public Box2d Bounds { get; private set; }
+        public Box2f Bounds { get; private set; }
 
         public bool IsCW => SignedArea < 0.0;
 
@@ -47,15 +47,15 @@ namespace Common.Geometry.Polygons
 
         public override string ToString()
         {
-            return string.Format("[Polygon2d: Count={0}, Area={1}, IsCCW={2}]", Count, Area, IsCCW);
+            return string.Format("[Polygon2f: Count={0}, Area={1}, IsCCW={2}]", Count, Area, IsCCW);
         }
 
-        public Vector2d GetPosition(int i)
+        public Vector2f GetPosition(int i)
         {
             return Positions[IMath.Wrap(i + 1, Count)];
         }
 
-        public double GetParam(int i)
+        public float GetParam(int i)
         {
             if (Params == null)
                 throw new InvalidOperationException("Polygon does not have any params.");
@@ -70,14 +70,14 @@ namespace Common.Geometry.Polygons
         public void SetPositions(int size)
         {
             if (Positions == null || Positions.Length != size)
-                Positions = new Vector2d[size];
+                Positions = new Vector2f[size];
         }
 
         /// <summary>
         /// Create the position array.
         /// </summary>
         /// <param name="positions">Array to copy from.</param>
-        public void SetPositions(IList<Vector2d> positions)
+        public void SetPositions(IList<Vector2f> positions)
         {
             SetPositions(positions.Count);
             positions.CopyTo(Positions, 0);
@@ -88,15 +88,15 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public void CreateParams()
         {
-            Params = new double[Count];
+            Params = new float[Count];
         }
 
         /// <summary>
         /// Create the param array.
         /// </summary>
-        public void SetParams(IList<double> _params)
+        public void SetParams(IList<float> _params)
         {
-            if (Params == null) Params = new double[Count];
+            if (Params == null) Params = new float[Count];
 	        _params.CopyTo(Params, 0);
         }
 
@@ -129,9 +129,9 @@ namespace Common.Geometry.Polygons
         /// Copy the polygon.
         /// No need to recalculate the copy.
         /// </summary>
-        public Polygon2d Copy()
+        public Polygon2f Copy()
         {
-            var copy = new Polygon2d(Positions);
+            var copy = new Polygon2f(Positions);
             copy.SignedArea = SignedArea;
             copy.Centroid = Centroid;
             copy.Bounds = Bounds;
@@ -153,7 +153,7 @@ namespace Common.Geometry.Polygons
 
         public void CalculateCentroid()
         {
-            Centroid = Vector2d.Zero;
+            Centroid = Vector2f.Zero;
             if (Count == 0) return;
 
             for (int i = 0; i < Count; i++)
@@ -164,11 +164,11 @@ namespace Common.Geometry.Polygons
 
         public void CalculateBounds()
         {
-            Bounds = new Box2d();
+            Bounds = new Box2f();
             if (Count == 0) return;
 
-            var min = Vector2d.PositiveInfinity;
-            var max = Vector2d.NegativeInfinity;
+            var min = Vector2f.PositiveInfinity;
+            var max = Vector2f.NegativeInfinity;
 
             for (int i = 0; i < Count; i++)
             {
@@ -180,7 +180,7 @@ namespace Common.Geometry.Polygons
                 if (p.y > max.y) max.y = p.y;
             }
 
-            Bounds = new Box2d(min, max);
+            Bounds = new Box2f(min, max);
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace Common.Geometry.Polygons
             SignedArea = 0;
             if (Count == 0) return;
 
-            double firstProducts = 0.0;
-            double secondProducts = 0.0;
+            float firstProducts = 0.0f;
+            float secondProducts = 0.0f;
 
             for (int i = 0; i < Count; i++)
             {
@@ -203,16 +203,16 @@ namespace Common.Geometry.Polygons
                 secondProducts += p0.y * p1.x;
             }
 
-            SignedArea = (firstProducts - secondProducts) / 2.0;
+            SignedArea = (firstProducts - secondProducts) / 2.0f;
         }
 
-        public bool ContainsPoint(Vector2d point)
+        public bool ContainsPoint(Vector2f point)
         {
             if (Count == 0) return false;
             if (!Bounds.Contains(point)) return false;
 
-            var ab = new Segment2d();
-            ab.A = new Vector2d(Bounds.Min.x - Bounds.Width, point.y);
+            var ab = new Segment2f();
+            ab.A = new Vector2f(Bounds.Min.x - Bounds.Width, point.y);
             ab.B = point;
 
             int windingNumber = 0;
@@ -220,7 +220,7 @@ namespace Common.Geometry.Polygons
             {
                 var c = GetPosition(i);
                 var d = GetPosition(i + 1);
-                var cd = new Segment2d(c, d);
+                var cd = new Segment2f(c, d);
 
                 if (ab.Intersects(cd)) windingNumber++;
             }
@@ -228,33 +228,33 @@ namespace Common.Geometry.Polygons
             return (windingNumber % 2 != 0);
         }
 
-        public static Polygon2d FromBox(Vector2d min, Vector2d max)
+        public static Polygon2f FromBox(Vector2f min, Vector2f max)
         {
-            var polygon = new Polygon2d(4);
+            var polygon = new Polygon2f(4);
 
             polygon.Positions[0] = min;
-            polygon.Positions[1] = new Vector2d(max.x, min.y);
+            polygon.Positions[1] = new Vector2f(max.x, min.y);
             polygon.Positions[2] = max;
-            polygon.Positions[3] = new Vector2d(min.x, max.y);
+            polygon.Positions[3] = new Vector2f(min.x, max.y);
 
             return polygon;
         }
 
-        public static Polygon2d FromCircle(Vector2d center, double radius, int segments)
+        public static Polygon2f FromCircle(Vector2f center, float radius, int segments)
         {
-            var polygon = new Polygon2d(segments);
+            var polygon = new Polygon2f(segments);
 
-            double pi = Math.PI;
-            double fseg = segments;
+            float pi = FMath.PI;
+            float fseg = segments;
 
             for (int i = 0; i < segments; i++)
             {
-                double theta = 2.0f * pi * i / fseg;
+                float theta = 2.0f * pi * i / fseg;
 
-                double x = -radius * Math.Cos(theta);
-                double y = -radius * Math.Sin(theta);
+                float x = -radius * FMath.Cos(theta);
+                float y = -radius * FMath.Sin(theta);
 
-                polygon.Positions[i] = center + new Vector2d(x, y);
+                polygon.Positions[i] = center + new Vector2f(x, y);
             }
 
             return polygon;

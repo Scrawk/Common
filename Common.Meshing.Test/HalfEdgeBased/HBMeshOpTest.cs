@@ -17,11 +17,11 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void RemoveVertex()
         {
-            var a = new Vector2d(0, 1);
-            var b = new Vector2d(-1, -1);
-            var c = new Vector2d(1, -1);
+            var a = new Vector2f(0, 1);
+            var b = new Vector2f(-1, -1);
+            var c = new Vector2f(1, -1);
 
-            HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
+            HBMesh2f mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
             mesh.PokeFace(mesh.Faces[0]);
 
             mesh.RemoveVertex(mesh.Vertices[3], true);
@@ -46,19 +46,19 @@ namespace Common.Meshing.Test.HalfEdgeBased
         public void CollapseEdge()
         {
 
-            var constructor = new HBMeshConstructor2d();
+            var constructor = new HBMeshConstructor2f();
             constructor.PushTriangleMesh(10, 10);
 
-            constructor.AddVertex(new Vector2d(-3, 0));
-            constructor.AddVertex(new Vector2d(-2, 1));
-            constructor.AddVertex(new Vector2d(0, 1));
-            constructor.AddVertex(new Vector2d(2, 1));
-            constructor.AddVertex(new Vector2d(3, 0));
-            constructor.AddVertex(new Vector2d(2, -1));
-            constructor.AddVertex(new Vector2d(0, -1));
-            constructor.AddVertex(new Vector2d(-2, -1));
-            constructor.AddVertex(new Vector2d(-1, 0));
-            constructor.AddVertex(new Vector2d(1, 0));
+            constructor.AddVertex(new Vector2f(-3, 0));
+            constructor.AddVertex(new Vector2f(-2, 1));
+            constructor.AddVertex(new Vector2f(0, 1));
+            constructor.AddVertex(new Vector2f(2, 1));
+            constructor.AddVertex(new Vector2f(3, 0));
+            constructor.AddVertex(new Vector2f(2, -1));
+            constructor.AddVertex(new Vector2f(0, -1));
+            constructor.AddVertex(new Vector2f(-2, -1));
+            constructor.AddVertex(new Vector2f(-1, 0));
+            constructor.AddVertex(new Vector2f(1, 0));
 
             constructor.AddFace(8, 1, 0);
             constructor.AddFace(1, 8, 2);
@@ -84,7 +84,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
 
             var mesh = constructor.PopMesh();
             var edge = mesh.Edges[7];
-            mesh.CollapseEdge(edge, edge.GetPosition(0.5), true);
+            mesh.CollapseEdge(edge, edge.GetPosition(0.5f), true);
 
             Assert.AreEqual(9, mesh.Vertices.Count);
             Assert.AreEqual(32, mesh.Edges.Count);
@@ -144,8 +144,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void SplitEdge()
         {
-            var max = new Vector2d(1, 1);
-            var min = new Vector2d(-1, -1);
+            var max = new Vector2f(1, 1);
+            var min = new Vector2f(-1, -1);
 
             var mesh = HBCreateTriangleMesh2.FromBox(min, max);
 
@@ -187,8 +187,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void flipEdge()
         {
-            var max = new Vector2d(1, 1);
-            var min = new Vector2d(-1, -1);
+            var max = new Vector2f(1, 1);
+            var min = new Vector2f(-1, -1);
 
             var mesh = HBCreateTriangleMesh2.FromBox(min, max);
 
@@ -222,12 +222,12 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void PokeFace()
         {
-            var a = new Vector2d(0, 1);
-            var b = new Vector2d(-1, -1);
-            var c = new Vector2d(1, -1);
+            var a = new Vector2f(0, 1);
+            var b = new Vector2f(-1, -1);
+            var c = new Vector2f(1, -1);
             var d = (a + b + c) / 3;
 
-            HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
+            HBMesh2f mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
 
             mesh.PokeFace(mesh.Faces[0]);
 
@@ -259,8 +259,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void JoinEdges()
         {
-            var max = new Vector2d(1, 1);
-            var min = new Vector2d(-1, -1);
+            var max = new Vector2f(1, 1);
+            var min = new Vector2f(-1, -1);
 
             var mesh = HBCreatePolygonMesh2.FromBox(min, max);
             var mesh2 = HBCreatePolygonMesh2.FromBox(min + 1, max + 1);
@@ -275,8 +275,8 @@ namespace Common.Meshing.Test.HalfEdgeBased
             var edge1 = mesh.Edges[1];
             var edge8 = mesh.Edges[8];
 
-            mesh.JoinEdges(edge2, edge15, 0.5);
-            mesh.JoinEdges(edge1, edge8, 0.5);
+            mesh.JoinEdges(edge2, edge15, 0.5f);
+            mesh.JoinEdges(edge1, edge8, 0.5f);
 
             Assert.AreEqual(10, mesh.Vertices.Count);
             Assert.AreEqual(24, mesh.Edges.Count);
@@ -322,13 +322,13 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void PokeEdge()
         {
-            var a = new Vector2d(0, 1);
-            var b = new Vector2d(-1, -1);
-            var c = new Vector2d(1, -1);
+            var a = new Vector2f(0, 1);
+            var b = new Vector2f(-1, -1);
+            var c = new Vector2f(1, -1);
 
-            HBMesh2d mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
+            HBMesh2f mesh = HBCreateTriangleMesh2.FromTriangle(a, b, c);
 
-            mesh.PokeEdge(mesh.Edges[0], 0.5);
+            mesh.PokeEdge(mesh.Edges[0], 0.5f);
 
             HBMeshHelper.CheckVertex(mesh, vertex: 0, edge: 0);
             HBMeshHelper.CheckVertex(mesh, vertex: 1, edge: 7);
@@ -350,7 +350,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
         {
             var mesh0 = HBMeshHelper.CreateTriangle();
             var mesh1 = HBMeshHelper.CreateTriangle();
-            var mesh = new HBMesh2d();
+            var mesh = new HBMesh2f();
 
             mesh.Append(mesh0, true);
             mesh.Append(mesh1, true);
@@ -398,21 +398,21 @@ namespace Common.Meshing.Test.HalfEdgeBased
         [TestMethod]
         public void ToFBTriangleMesh()
         {
-            var min = new Vector2d(-1, -1);
-            var max = new Vector2d(1, 1);
+            var min = new Vector2f(-1, -1);
+            var max = new Vector2f(1, 1);
 
             var tmp = HBCreateTriangleMesh2.FromBox(min, max);
 
-            var constructor = new FBMeshConstructor2d();
+            var constructor = new FBMeshConstructor2f();
             tmp.ToTriangleMesh(constructor);
             var mesh = constructor.PopMesh();
 
             Assert.AreEqual(4, mesh.Vertices.Count);
             Assert.AreEqual(2, mesh.Faces.Count);
             Assert.AreEqual(min, mesh.Vertices[0].Position);
-            Assert.AreEqual(new Vector2d(max.x, min.y), mesh.Vertices[1].Position);
+            Assert.AreEqual(new Vector2f(max.x, min.y), mesh.Vertices[1].Position);
             Assert.AreEqual(max, mesh.Vertices[2].Position);
-            Assert.AreEqual(new Vector2d(min.x, max.y), mesh.Vertices[3].Position);
+            Assert.AreEqual(new Vector2f(min.x, max.y), mesh.Vertices[3].Position);
 
             FBMeshHelper.CheckFace(mesh, face: 0, v0: 0, v1: 1, v2: 2);
             FBMeshHelper.CheckFace(mesh, face: 1, v0: 2, v1: 3, v2: 0);

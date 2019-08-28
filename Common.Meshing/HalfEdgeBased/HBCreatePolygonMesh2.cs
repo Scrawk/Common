@@ -8,16 +8,16 @@ namespace Common.Meshing.HalfEdgeBased
 {
     public static class HBCreatePolygonMesh2
     {
-        public static HBMesh2d FromBox(Vector2d min, Vector2d max)
+        public static HBMesh2f FromBox(Vector2f min, Vector2f max)
         {
-            var constructor = new HBMeshConstructor2d();
+            var constructor = new HBMeshConstructor2f();
             CreatePolygonMesh2.FromBox(constructor, min, max);
             return constructor.PopMesh();
         }
 
-        public static HBMesh2d FromCircle(Vector2d center, double radius, int segments)
+        public static HBMesh2f FromCircle(Vector2f center, float radius, int segments)
         {
-            var constructor = new HBMeshConstructor2d();
+            var constructor = new HBMeshConstructor2f();
             CreatePolygonMesh2.FromCircle(constructor, center, radius, segments);
             return constructor.PopMesh();
         }

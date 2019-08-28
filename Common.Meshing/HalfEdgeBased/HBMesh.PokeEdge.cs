@@ -17,7 +17,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="edge">the edge to split</param>
         /// <param name="t">the point to split at</param> 
         /// <returns>The new vertex added at the position</returns>
-        public VERTEX PokeEdge(HBEdge edge, double t = 0.5)
+        public VERTEX PokeEdge(HBEdge edge, float t = 0.5f)
         {
             if (edge.Opposite == null)
                 throw new NullReferenceException("Edge does not have a opposite edge.");
@@ -33,7 +33,7 @@ namespace Common.Meshing.HalfEdgeBased
             //Create a new vertex at t dist starting at from.
             var from = right0.From;
             var to = left0.From;
-            var pos = Vector3d.Lerp(from.GetPosition(), to.GetPosition(), t);
+            var pos = Vector3f.Lerp(from.GetPosition(), to.GetPosition(), t);
             var mid = new VERTEX();
             mid.SetPosition(pos);
 

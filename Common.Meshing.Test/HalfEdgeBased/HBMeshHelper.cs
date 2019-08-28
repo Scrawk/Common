@@ -15,7 +15,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
     public static class HBMeshHelper
     {
 
-        public static void PrintMesh(HBMesh2d mesh)
+        public static void PrintMesh(HBMesh2f mesh)
         {
             Console.WriteLine(mesh);
 
@@ -29,7 +29,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
                 Console.WriteLine(f.ToString(mesh));
         }
 
-        public static void PrintMesh(HBMesh3d mesh)
+        public static void PrintMesh(HBMesh3f mesh)
         {
             Console.WriteLine(mesh);
 
@@ -43,33 +43,33 @@ namespace Common.Meshing.Test.HalfEdgeBased
                 Console.WriteLine(f.ToString(mesh));
         }
 
-        public static void CheckVertex(HBMesh2d mesh, int vertex, int edge)
+        public static void CheckVertex(HBMesh2f mesh, int vertex, int edge)
         {
             var v = mesh.Vertices[vertex];
             Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
         }
 
-        public static void CheckVertex(HBMesh3d mesh, int vertex, int edge)
+        public static void CheckVertex(HBMesh3f mesh, int vertex, int edge)
         {
             var v = mesh.Vertices[vertex];
             Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
         }
 
-        public static void CheckVertex(HBMesh2d mesh, int vertex, int edge, Vector2d pos)
-        {
-            var v = mesh.Vertices[vertex];
-            Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
-            Assert.AreEqual(v.Position, pos);
-        }
-
-        public static void CheckVertex(HBMesh3d mesh, int vertex, int edge, Vector2d pos)
+        public static void CheckVertex(HBMesh2f mesh, int vertex, int edge, Vector2f pos)
         {
             var v = mesh.Vertices[vertex];
             Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
             Assert.AreEqual(v.Position, pos);
         }
 
-        public static void CheckEdge(HBMesh2d mesh, int edge, int from, int face, int previous, int next, int opposite)
+        public static void CheckVertex(HBMesh3f mesh, int vertex, int edge, Vector2f pos)
+        {
+            var v = mesh.Vertices[vertex];
+            Assert.AreEqual(mesh.IndexOf(v.Edge), edge);
+            Assert.AreEqual(v.Position, pos);
+        }
+
+        public static void CheckEdge(HBMesh2f mesh, int edge, int from, int face, int previous, int next, int opposite)
         {
             var e = mesh.Edges[edge];
             Assert.AreEqual(mesh.IndexOf(e.From), from);
@@ -79,7 +79,7 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(mesh.IndexOf(e.Opposite), opposite);
         }
 
-        public static void CheckEdge(HBMesh3d mesh, int edge, int from, int face, int previous, int next, int opposite)
+        public static void CheckEdge(HBMesh3f mesh, int edge, int from, int face, int previous, int next, int opposite)
         {
             var e = mesh.Edges[edge];
             Assert.AreEqual(mesh.IndexOf(e.From), from);
@@ -89,19 +89,19 @@ namespace Common.Meshing.Test.HalfEdgeBased
             Assert.AreEqual(mesh.IndexOf(e.Opposite), opposite);
         }
 
-        public static void CheckFace(HBMesh2d mesh, int face, int edge)
+        public static void CheckFace(HBMesh2f mesh, int face, int edge)
         {
             var f = mesh.Faces[face];
             Assert.AreEqual(mesh.IndexOf(f.Edge), edge);
         }
 
-        public static void CheckFace(HBMesh3d mesh, int face, int edge)
+        public static void CheckFace(HBMesh3f mesh, int face, int edge)
         {
             var f = mesh.Faces[face];
             Assert.AreEqual(mesh.IndexOf(f.Edge), edge);
         }
 
-        public static void CheckAllTrianglesCCW(HBMesh2d mesh)
+        public static void CheckAllTrianglesCCW(HBMesh2f mesh)
         {
             var list = new List<HBVertex>();
             foreach (var f in mesh.Faces)
@@ -114,14 +114,14 @@ namespace Common.Meshing.Test.HalfEdgeBased
                 var c = list[2].GetPosition().xy;
 
                 Assert.AreEqual(3, list.Count);
-                var tri = new Triangle2d(a, b, c);
+                var tri = new Triangle2f(a, b, c);
                 Assert.IsTrue(tri.IsCCW);
             }
         }
 
-        public static HBMesh2d CreateTriangle()
+        public static HBMesh2f CreateTriangle()
         {
-            var mesh = new HBMesh2d();
+            var mesh = new HBMesh2f();
             mesh.Fill(3, 3, 1);
 
             var E = mesh.Edges;
@@ -141,9 +141,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
             return mesh;
         }
 
-        public static HBMesh2d CreateTriangle(Vector2d A, Vector2d B, Vector2d C)
+        public static HBMesh2f CreateTriangle(Vector2f A, Vector2f B, Vector2f C)
         {
-            var mesh = new HBMesh2d();
+            var mesh = new HBMesh2f();
             mesh.Fill(3, 3, 1);
 
             var E = mesh.Edges;
@@ -167,9 +167,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
             return mesh;
         }
 
-        public static HBMesh3d CreateTriangle(Vector3d A, Vector3d B, Vector3d C)
+        public static HBMesh3f CreateTriangle(Vector3f A, Vector3f B, Vector3f C)
         {
-            var mesh = new HBMesh3d();
+            var mesh = new HBMesh3f();
             mesh.Fill(3, 3, 1);
 
             var E = mesh.Edges;
@@ -197,9 +197,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         /// See CGALCSharp.Test/Meshes/HalfEdgeBased/Cross.png
         /// </summary>
         /// <returns></returns>
-        public static HBMesh2d CreateCross()
+        public static HBMesh2f CreateCross()
         {
-            var mesh = new HBMesh2d();
+            var mesh = new HBMesh2f();
             mesh.Fill(5, 8, 0);
 
             var E = mesh.Edges;
@@ -227,9 +227,9 @@ namespace Common.Meshing.Test.HalfEdgeBased
         /// See CGALCSharp.Test/Meshes/HalfEdgeBased/SquareWithCenter.png
         /// </summary>
         /// <returns></returns>
-        public static HBMesh2d CreateSquareWithCenter()
+        public static HBMesh2f CreateSquareWithCenter()
         {
-            var mesh = new HBMesh2d();
+            var mesh = new HBMesh2f();
             mesh.Fill(5, 12, 4);
 
             var E = mesh.Edges;

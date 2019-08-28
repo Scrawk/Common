@@ -172,7 +172,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Get the position at index i.
         /// </summary>
-        public Vector3d GetPosition(int i)
+        public Vector3f GetPosition(int i)
         {
             return Vertices[i].GetPosition();
         }
@@ -180,7 +180,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Get the position at index i.
         /// </summary>
-        public void SetPosition(int i, Vector3d p)
+        public void SetPosition(int i, Vector3f p)
         {
             Vertices[i].SetPosition(p);
         }
@@ -188,7 +188,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Copy all vertex positions into list.
         /// </summary>
-        public void GetPositions(List<Vector3d> positions)
+        public void GetPositions(List<Vector3f> positions)
         {
             for (int i = 0; i < Vertices.Count; i++)
                 positions.Add(Vertices[i].GetPosition());
@@ -281,7 +281,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Translate all vertices.
         /// </summary>
-        public void Translate(Vector3d translate)
+        public void Translate(Vector3f translate)
         {
             for (int i = 0; i < Vertices.Count; i++)
             {
@@ -293,9 +293,9 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Rotate all vertices.
         /// </summary>
-        public void Rotate(Vector3d rotate)
+        public void Rotate(Vector3f rotate)
         {
-            var q = Quaternion3d.FromEuler(rotate);
+            var q = Quaternion3f.FromEuler(rotate);
             for (int i = 0; i < Vertices.Count; i++)
             {
                 var p = Vertices[i].GetPosition();
@@ -306,7 +306,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Scale all vertices.
         /// </summary>
-        public void Scale(Vector3d scale)
+        public void Scale(Vector3f scale)
         {
             for (int i = 0; i < Vertices.Count; i++)
             {
@@ -318,7 +318,7 @@ namespace Common.Meshing.FaceBased
         /// <summary>
         /// Transform all vertices.
         /// </summary>
-        public void Transform(Matrix4x4d matrix)
+        public void Transform(Matrix4x4f matrix)
         {
             for (int i = 0; i < Vertices.Count; i++)
             {

@@ -36,7 +36,7 @@ namespace Common.Meshing.HalfEdgeBased
         /// <param name="face">Th face to be poked. Must have at least 3 vertices.</param>
         /// <param name="pos">The position of the new vertex.</param>
         /// <returns>The created vertex.</returns>
-        public VERTEX PokeFace(HBFace face, Vector3d pos)
+        public VERTEX PokeFace(HBFace face, Vector3f pos)
         {
             int count = face.EdgeCount;
             if (count < 3)

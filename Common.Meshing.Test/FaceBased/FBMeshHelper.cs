@@ -14,7 +14,7 @@ namespace Common.Meshing.Test.FaceBased
     public static class FBMeshHelper
     {
 
-        public static void PrintMesh(FBMesh2d mesh)
+        public static void PrintMesh(FBMesh2f mesh)
         {
             Console.WriteLine(mesh);
 
@@ -25,7 +25,7 @@ namespace Common.Meshing.Test.FaceBased
                 Console.WriteLine(f.ToString(mesh));
         }
 
-        public static void CheckFace(FBMesh2d mesh, int face, int v0, int v1, int v2)
+        public static void CheckFace(FBMesh2f mesh, int face, int v0, int v1, int v2)
         {
             var f = mesh.Faces[face];
             Assert.AreEqual(mesh.IndexOf(f.Vertices[0]), v0);
@@ -33,7 +33,7 @@ namespace Common.Meshing.Test.FaceBased
             Assert.AreEqual(mesh.IndexOf(f.Vertices[2]), v2);
         }
 
-        public static void CheckAllTrianglesCCW(FBMesh2d mesh)
+        public static void CheckAllTrianglesCCW(FBMesh2f mesh)
         {
             foreach (var f in mesh.Faces)
             {
@@ -43,18 +43,18 @@ namespace Common.Meshing.Test.FaceBased
                 var b = f.Vertices[1].GetPosition().xy;
                 var c = f.Vertices[2].GetPosition().xy;
 
-                var tri = new Triangle2d(a, b, c);
+                var tri = new Triangle2f(a, b, c);
                 Assert.IsTrue(tri.IsCCW);
             }
         }
 
-        public static FBMesh2d CreateTriangle()
+        public static FBMesh2f CreateTriangle()
         {
-            var mesh = new FBMesh2d();
+            var mesh = new FBMesh2f();
 
-            var v0 = new FBVertex2d();
-            var v1 = new FBVertex2d();
-            var v2 = new FBVertex2d();
+            var v0 = new FBVertex2f();
+            var v1 = new FBVertex2f();
+            var v2 = new FBVertex2f();
             mesh.Vertices.Add(v0, v1, v2);
 
             var f = new FBFace();
@@ -72,13 +72,13 @@ namespace Common.Meshing.Test.FaceBased
             return mesh;
         }
 
-        public static FBMesh2d CreateTriangle(Vector2d A, Vector2d B, Vector2d C)
+        public static FBMesh2f CreateTriangle(Vector2f A, Vector2f B, Vector2f C)
         {
-            var mesh = new FBMesh2d();
+            var mesh = new FBMesh2f();
 
-            var v0 = new FBVertex2d();
-            var v1 = new FBVertex2d();
-            var v2 = new FBVertex2d();
+            var v0 = new FBVertex2f();
+            var v1 = new FBVertex2f();
+            var v2 = new FBVertex2f();
             mesh.Vertices.Add(v0, v1, v2);
 
             var f = new FBFace();
@@ -99,15 +99,15 @@ namespace Common.Meshing.Test.FaceBased
             return mesh;
         }
 
-        public static FBMesh2d CreateSquareWithCenter()
+        public static FBMesh2f CreateSquareWithCenter()
         {
-            var mesh = new FBMesh2d();
+            var mesh = new FBMesh2f();
 
-            var v0 = new FBVertex2d();
-            var v1 = new FBVertex2d();
-            var v2 = new FBVertex2d();
-            var v3 = new FBVertex2d();
-            var v4 = new FBVertex2d();
+            var v0 = new FBVertex2f();
+            var v1 = new FBVertex2f();
+            var v2 = new FBVertex2f();
+            var v3 = new FBVertex2f();
+            var v4 = new FBVertex2f();
             mesh.Vertices.Add(v0, v1, v2, v3);
             mesh.Vertices.Add(v4);
 

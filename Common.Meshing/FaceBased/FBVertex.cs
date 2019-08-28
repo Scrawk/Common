@@ -50,9 +50,9 @@ namespace Common.Meshing.FaceBased
 
         public abstract void SetPosition(FBVertex vert);
 
-        public abstract void SetPosition(Vector3d pos);
+        public abstract void SetPosition(Vector3f pos);
 
-        public abstract Vector3d GetPosition();
+        public abstract Vector3f GetPosition();
 
         public void AddFace(FBFace face)
         {

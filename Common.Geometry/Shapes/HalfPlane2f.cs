@@ -65,11 +65,6 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        public static explicit operator HalfPlane2f(HalfPlane2d hp)
-        {
-            return new HalfPlane2f((LINE2)hp.Line, hp.RightSide);
-        }
-
         public static bool operator ==(HalfPlane2f h1, HalfPlane2f h2)
         {
             return h1.RightSide == h2.RightSide && h1.Line == h2.Line;

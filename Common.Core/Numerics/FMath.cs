@@ -76,6 +76,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Log(float d)
+        {
+            return (float)Math.Log(d);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeAcos(float r)
         {
             return (float)Math.Acos(Math.Min(1.0f, Math.Max(-1.0f, r)));

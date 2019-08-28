@@ -29,14 +29,6 @@ namespace Common.Meshing.HalfEdgeBased
             return Vertices[i].Position;
         }
 
-        /// <summary>
-        /// Copy all vertex positions into list.
-        /// </summary>
-        public void GetPositions(List<Vector3f> positions)
-        {
-            for (int i = 0; i < Vertices.Count; i++)
-                positions.Add(Vertices[i].Position);
-        }
     }
 }
 
