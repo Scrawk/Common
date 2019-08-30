@@ -82,6 +82,18 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Floor(float d)
+        {
+            return (float)Math.Floor(d);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Ceilling(float d)
+        {
+            return (float)Math.Ceiling(d);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeAcos(float r)
         {
             return (float)Math.Acos(Math.Min(1.0f, Math.Max(-1.0f, r)));

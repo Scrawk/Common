@@ -66,6 +66,18 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Tag all the vertices in the tree.
+        /// </summary>
+        public void TagAll(int tag)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (InTree(i))
+                    Graph.Vertices[i].Tag = tag;
+            }
+        }
+
+        /// <summary>
         /// Get a path from the vertex to the root.
         /// The path is made up of the vertices index 
         /// in the graph the tree was created from.
@@ -227,16 +239,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Returns the vertices of the tree in depth first order.
         /// </summary>
-        public GraphOrdering DepthFirstOrder()
+        public GraphOrder DepthFirstOrder()
         {
             int count = Parent.Length;
             var queue = new Stack<int>(count);
             queue.Push(Root);
 
-            var isVisited = new bool[count];
-            isVisited[Root] = true;
+            TagAll(0);
+            Graph.Vertices[Root].Tag = 1;
 
-            var ordering = new GraphOrdering(count);
+            var ordering = new GraphOrder(count);
 
             while (queue.Count != 0)
             {
@@ -250,10 +262,10 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 {
                     int to = edges[i];
 
-                    if (isVisited[to]) continue;
+                    if (Graph.Vertices[to].Tag == 1) continue;
 
                     queue.Push(to);
-                    isVisited[to] = true;
+                    Graph.Vertices[to].Tag = 1;
                 }
             }
 
@@ -263,16 +275,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Returns the vertices of the tree in breadth first order.
         /// </summary>
-        public GraphOrdering BreadthFirstOrder()
+        public GraphOrder BreadthFirstOrder()
         {
             int count = Parent.Length;
             var queue = new Queue<int>(count);
             queue.Enqueue(Root);
 
-            var isVisited = new bool[count];
-            isVisited[Root] = true;
+            TagAll(0);
+            Graph.Vertices[Root].Tag = 1;
 
-            var ordering = new GraphOrdering(count);
+            var ordering = new GraphOrder(count);
 
             while (queue.Count != 0)
             {
@@ -286,14 +298,42 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 {
                     int to = edges[i];
 
-                    if (isVisited[to]) continue;
+                    if (Graph.Vertices[to].Tag == 1) continue;
 
                     queue.Enqueue(to);
-                    isVisited[to] = true;
+                    Graph.Vertices[to].Tag = 1;
                 }
             }
 
             return ordering;
+        }
+
+        /// <summary>
+        /// Get the index of all leaf vertices.
+        /// </summary>
+        public void GetLeaves(List<int> leaves)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (!InTree(i)) continue;
+                if (!IsLeaf(i)) continue;
+
+                leaves.Add(i);
+            }
+        }
+
+        /// <summary>
+        /// Get the data of all leaf vertices.
+        /// </summary>
+        public void GetLeavesData<T>(List<T> leaves)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (!InTree(i)) continue;
+                if (!IsLeaf(i)) continue;
+
+                leaves.Add(Graph.GetVertexData<T>(i));
+            }
         }
 
         /// <summary>

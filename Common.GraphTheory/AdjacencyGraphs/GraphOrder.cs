@@ -6,15 +6,15 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// <summary>
     /// 
     /// </summary>
-    public class GraphOrdering
+    public class GraphOrder
     {
 
-        public GraphOrdering()
+        public GraphOrder()
         {
             Vertices = new List<int>();
         }
 
-        public GraphOrdering(int size)
+        public GraphOrder(int size)
         {
             Vertices = new List<int>(size);
         }
@@ -44,7 +44,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
     	/// </summary>
         public override string ToString()
         {
-            return string.Format("[GraphOrdering: Count={0}, First={1}]", Count, First);
+            return string.Format("[GraphOrder: Count={0}, First={1}]", Count, First);
+        }
+
+        public void Reverse()
+        {
+            Vertices.Reverse();
         }
 
     }
