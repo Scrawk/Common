@@ -97,7 +97,7 @@ namespace Common.Core.IO
                     return ReadFloat(i, bytes);
 
                 default:
-                    throw new ArgumentException("Unhandled bit depth");
+                    throw new ArgumentException("Unhandled bit depth " + properties.BitDepth);
             }
         }
 
@@ -114,8 +114,12 @@ namespace Common.Core.IO
                     WriteShort(c, i, bytes, properties.BigEndian);
                     break;
 
+                case 32:
+                    WriteFloat(c, i, bytes);
+                    break;
+
                 default:
-                    throw new ArgumentException("Unhandled bit depth");
+                    throw new ArgumentException("Unhandled bit depth " + properties.BitDepth);
             }
         }
 

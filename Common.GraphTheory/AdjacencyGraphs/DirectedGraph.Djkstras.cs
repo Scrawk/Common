@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+
+using Common.Core.Numerics;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
@@ -38,6 +39,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
                         if (Vertices[v].Tag == IS_VISITED_TAG) continue;
 
                         float alt = Vertices[u].Cost + e.Weight;
+
+                        if (!FMath.IsFinite(alt))
+                            throw new ArithmeticException("Cost is not finite.");
 
                         if (alt < Vertices[v].Cost)
                         {

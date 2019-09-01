@@ -54,6 +54,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 var list = kvp.Value;
 
                 graph.ClearEdges();
+                graph.TagVertices(NOT_VISITED_TAG);
                 foreach(var edge in list)
                 {
                     int from = edge.From;
@@ -75,8 +76,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             var queue = new Stack<int>(count);
             queue.Push(root);
 
-            var isVisited = new bool[count];
-            isVisited[root] = true;
+            graph.Vertices[root].Tag = IS_VISITED_TAG;
 
             var tree = new GraphTree(this, root, count);
             tree.Parent[root] = root;
@@ -91,11 +91,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 for (int i = 0; i < edges.Count; i++)
                 {
                     int to = edges[i].To;
-                    if (isVisited[to]) continue;
+                    if (graph.Vertices[to].Tag == IS_VISITED_TAG) continue;
 
                     tree.Parent[to] = u;
                     queue.Push(to);
-                    isVisited[to] = true;
+                    graph.Vertices[to].Tag = IS_VISITED_TAG;
                 }
             }
 
