@@ -80,7 +80,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
             Assert.AreEqual(1, forest.Count);
 
-            float sum = 0;
+            double sum = 0;
             foreach(var tree in forest.Trees)
             {
                 int[] order = new int[] { 9, 8, 10, 11, 4, 5, 7, 6, 3, 2, 1, 0 };

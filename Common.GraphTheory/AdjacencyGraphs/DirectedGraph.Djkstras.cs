@@ -40,11 +40,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
                         float alt = Vertices[u].Cost + e.Weight;
 
-                        if (!FMath.IsFinite(alt))
-                            throw new ArithmeticException("Cost is not finite.");
-
                         if (alt < Vertices[v].Cost)
                         {
+                            if (!FMath.IsFinite(alt))
+                                throw new ArithmeticException("Cost is not finite.");
+
                             Vertices[v].Cost = alt;
                             tree.Parent[v] = u;
                         }

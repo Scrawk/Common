@@ -63,6 +63,9 @@ namespace Common.GraphTheory.GridGraphs
 
                         if (alt < v.Cost)
                         {
+                            if (!FMath.IsFinite(alt))
+                                throw new ArithmeticException("Cost is not finite.");
+
                             v.Cost = alt;
                             search.Parent[xi, yi] = u;
                         }
