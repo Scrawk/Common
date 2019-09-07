@@ -155,6 +155,57 @@ namespace Common.Geometry.Polygons
             Bounds = new Box3f(min, max);
         }
 
+        /// <summary>
+        /// Translate the positions.
+        /// </summary>
+        public void Translate(Vector3f translate)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] += translate;
+        }
+
+        /// <summary>
+        /// Rotate allpositions.
+        /// </summary>
+        public void Rotate(Vector3f rotate)
+        {
+            var q = Quaternion3f.FromEuler(rotate);
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] *= q;
+        }
+
+        /// <summary>
+        /// Scale the positions.
+        /// </summary>
+        public void Scale(Vector3f scale)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] *= scale;
+        }
+
+        /// <summary>
+        /// Transform the positions.
+        /// </summary>
+        public void Transform(Matrix4x4f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = (m * Positions[i].xyz1).xyz;
+        }
+
+        /// <summary>
+        /// Transform the positions.
+        /// </summary>
+        public void Transform(Matrix3x3f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = m * Positions[i];
+        }
+
     }
 }
 

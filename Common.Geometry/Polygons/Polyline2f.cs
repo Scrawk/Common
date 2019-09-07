@@ -173,6 +173,46 @@ namespace Common.Geometry.Polygons
             return false;
         }
 
+        /// <summary>
+        /// Translate the positions.
+        /// </summary>
+        public void Translate(Vector2f translate)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] += translate;
+        }
+
+        /// <summary>
+        /// Scale the positions.
+        /// </summary>
+        public void Scale(Vector2f scale)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] *= scale;
+        }
+
+        /// <summary>
+        /// Transform the positions.
+        /// </summary>
+        public void Transform(Matrix4x4f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = (m * Positions[i].xy01).xy;
+        }
+
+        /// <summary>
+        /// Transform the positions.
+        /// </summary>
+        public void Transform(Matrix2x2f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = m * Positions[i];
+        }
+
     }
 }
 

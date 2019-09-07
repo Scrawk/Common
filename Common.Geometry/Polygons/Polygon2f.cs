@@ -228,6 +228,46 @@ namespace Common.Geometry.Polygons
             return (windingNumber % 2 != 0);
         }
 
+        /// <summary>
+        /// Translate the positions.
+        /// </summary>
+        public void Translate(Vector2f translate)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] += translate;
+        }
+
+        /// <summary>
+        /// Scale the positions.
+        /// </summary>
+        public void Scale(Vector2f scale)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] *= scale;
+        }
+
+        /// <summary>
+        /// Transform the positions.
+        /// </summary>
+        public void Transform(Matrix4x4f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = (m * Positions[i].xy01).xy;
+        }
+
+        /// <summary>
+        /// Transform the positions.
+        /// </summary>
+        public void Transform(Matrix2x2f m)
+        {
+            int numVerts = Positions.Length;
+            for (int i = 0; i < numVerts; i++)
+                Positions[i] = m * Positions[i];
+        }
+
         public static Polygon2f FromBox(Vector2f min, Vector2f max)
         {
             var polygon = new Polygon2f(4);

@@ -60,6 +60,9 @@ namespace Common.Collections.Sets
         {
             Vector2i p = m_parent[x, y];
 
+            if (p.x == -1 || p.y == -1)
+                return new Vector2i(-1);
+
             if (p != m_parent[p.x, p.y])
                 m_parent[x, y] = FindParent(p.x, p.y);
 

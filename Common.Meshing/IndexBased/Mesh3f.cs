@@ -199,11 +199,11 @@ namespace Common.Meshing.IndexBased
         /// <summary>
         /// Transform the positions.
         /// </summary>
-        public void Transform(Matrix4x4d m)
+        public void Transform(Matrix4x4f m)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
-                Positions[i] = (VECTOR3)(m * Positions[i].xyz1).xyz;
+                Positions[i] = (m * Positions[i].xyz1).xyz;
         }
 
         /// <summary>
