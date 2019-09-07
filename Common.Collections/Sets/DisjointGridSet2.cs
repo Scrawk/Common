@@ -6,9 +6,25 @@ using Common.Core.Numerics;
 namespace Common.Collections.Sets
 {
 
+    /// <summary>
+    /// a disjoint-set data structure is a data
+    /// structure that tracks a set of elements
+    /// partitioned into a number of disjoint 
+    /// (non-overlapping) subsets.
+    /// Elements in the set represent a index
+    /// in to a 2D grid.
+    /// </summary>
     public class DisjointGridSet2
     {
 
+        /// <summary>
+        /// The parents of the element at each index.
+        /// All elements with the same parent belong 
+        /// to the same set. A element may have its parent
+        /// set to -1 to indicate this element has 
+        /// been deleted. If a elements parent is itsself
+        /// then this is a root element.
+        /// </summary>
         private Vector2i[,] m_parent;
 
         private int[,] m_rank;
@@ -21,8 +37,14 @@ namespace Common.Collections.Sets
             m_rank = new int[width, height];
         }
 
+        /// <summary>
+        /// The width of the grid.
+        /// </summary>
         public int Width { get; private set; }
 
+        /// <summary>
+        /// The height of the grid.
+        /// </summary>
         public int Height { get; private set; }
 
         /// <summary>
@@ -34,28 +56,49 @@ namespace Common.Collections.Sets
             return string.Format("[DisjointGridSet2: Width={0}, Height={1}]", Width, Height);
         }
 
+        /// <summary>
+        /// Clear the set.
+        /// </summary>
         public void Clear()
         {
             Array.Clear(m_parent, 0, m_parent.Length);
             Array.Clear(m_rank, 0, m_rank.Length);
         }
 
-        public void Add(Vector2i i, Vector2i p)
+        /// <summary>
+        /// Added a new element and set what 
+        /// the elements parent is.
+        /// </summary>
+        public void Add(Vector2i idx, Vector2i p)
         {
-            Add(i.x, i.y, p.x, p.y);
+            Add(idx.x, idx.y, p.x, p.y);
         }
 
+        /// <summary>
+        /// Added a new element and set what 
+        /// the elements parent is.
+        /// </summary>
         public void Add(int x, int y, int px, int py)
         {
             m_parent[x, y] = new Vector2i(px, py);
             m_rank[x, y] = 1;
         }
 
-        public Vector2i FindParent(Vector2i i)
+        /// <summary>
+        /// Find the elements parent. 
+        /// If the element has been deleted its parent is -1.
+        /// If the elements parent is itself it is the root element.
+        /// </summary>
+        public Vector2i FindParent(Vector2i idx)
         {
-            return FindParent(i.x, i.y);
+            return FindParent(idx.x, idx.y);
         }
 
+        /// <summary>
+        /// Find the elements parent. 
+        /// If the element has been deleted its parent is -1.
+        /// If the elements parent is itself it is the root element.
+        /// </summary>
         public Vector2i FindParent(int x, int y)
         {
             Vector2i p = m_parent[x, y];
@@ -69,11 +112,17 @@ namespace Common.Collections.Sets
             return m_parent[x, y];
         }
 
-        public bool Union(Vector2i f, Vector2i t)
+        /// <summary>
+        /// Merge the two sets.
+        /// </summary>
+        public bool Union(Vector2i from, Vector2i to)
         {
-            return Union(f.x, f.y, t.x, t.y);
+            return Union(from.x, from.y, to.x, to.y);
         }
 
+        /// <summary>
+        /// Merge the two sets.
+        /// </summary>
         public bool Union(int fx, int fy, int tx, int ty)
         {
 
