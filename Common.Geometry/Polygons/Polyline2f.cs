@@ -9,78 +9,31 @@ namespace Common.Geometry.Polygons
     /// <summary>
     /// 
     /// </summary>
-    public class Polyline2f
+    public class Polyline2f : Polyshape2f
     {
 
-        public Polyline2f(int count)
+        public Polyline2f(int count) : base(count)
         {
-            SetPositions(count);
+     
         }
 
-        public Polyline2f(IList<Vector2f> positions)
+        public Polyline2f(IList<Vector2f> positions) : base(positions)
         {
-            SetPositions(positions);
+
         }
-
-        public int Count => Positions.Length;
-
-        public Vector2f[] Positions { get; private set; }
-
-        public float[] Params { get; private set; }
-
-        public int[] Indices { get; private set; }
 
         public float Length { get; private set; }
-
-        public Box2f Bounds { get; private set; }
-
 
         public override string ToString()
         {
             return string.Format("[Polyline2f: Count={0}, Length={1}]", Count, Length);
         }
 
-        /// <summary>
-        /// Creates the position array.
-        /// </summary>
-        /// <param name="size">The size of the array.</param>
-        public void SetPositions(int size)
-        {
-            if (Positions == null || Positions.Length != size)
-                Positions = new Vector2f[size];
-        }
-
-        /// <summary>
-        /// Create the position array.
-        /// </summary>
-        /// <param name="positions">Array to copy from.</param>
-        public void SetPositions(IList<Vector2f> positions)
-        {
-            SetPositions(positions.Count);
-            positions.CopyTo(Positions, 0);
-        }
-
-        /// <summary>
-        /// Create the param array.
-        /// </summary>
-        public void CreateParams()
-        {
-            Params = new float[Count];
-        }
-
-        /// <summary>
-        /// Create the param array.
-        /// </summary>
-        public void SetParams(IList<float> _params)
-        {
-            if (Params == null) Params = new float[Count];
-	        _params.CopyTo(Params, 0);
-        }
 
         /// <summary>
         /// Create the index array.
         /// </summary>
-        public void CreateIndices()
+        public override void CreateIndices()
         {
             Indices = new int[(Count - 1) * 2];
             for (int i = 0; i < Count - 1; i++)
@@ -132,27 +85,6 @@ namespace Common.Geometry.Polygons
                 Length += Vector2f.Distance(Positions[i], Positions[i + 1]);
         }
 
-        public void CalculateBounds()
-        {
-            Bounds = new Box2f();
-            if (Count == 0) return;
-
-            var min = Vector2f.PositiveInfinity;
-            var max = Vector2f.NegativeInfinity;
-
-            for (int i = 0; i < Count; i++)
-            {
-                var p = Positions[i];
-
-                if (p.x < min.x) min.x = p.x;
-                if (p.x > max.x) max.x = p.x;
-                if (p.y < min.y) min.y = p.y;
-                if (p.y > max.y) max.y = p.y;
-            }
-
-            Bounds = new Box2f(min, max);
-        }
-
         public bool ContainsPoint(Vector2f point, float width)
         {
             if (Count == 0) return false;
@@ -171,46 +103,6 @@ namespace Common.Geometry.Polygons
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Translate the positions.
-        /// </summary>
-        public void Translate(Vector2f translate)
-        {
-            int numVerts = Positions.Length;
-            for (int i = 0; i < numVerts; i++)
-                Positions[i] += translate;
-        }
-
-        /// <summary>
-        /// Scale the positions.
-        /// </summary>
-        public void Scale(Vector2f scale)
-        {
-            int numVerts = Positions.Length;
-            for (int i = 0; i < numVerts; i++)
-                Positions[i] *= scale;
-        }
-
-        /// <summary>
-        /// Transform the positions.
-        /// </summary>
-        public void Transform(Matrix4x4f m)
-        {
-            int numVerts = Positions.Length;
-            for (int i = 0; i < numVerts; i++)
-                Positions[i] = (m * Positions[i].xy01).xy;
-        }
-
-        /// <summary>
-        /// Transform the positions.
-        /// </summary>
-        public void Transform(Matrix2x2f m)
-        {
-            int numVerts = Positions.Length;
-            for (int i = 0; i < numVerts; i++)
-                Positions[i] = m * Positions[i];
         }
 
     }
