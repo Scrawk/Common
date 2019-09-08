@@ -10,7 +10,7 @@ namespace Common.Geometry.Polygons
     /// A simple polygon with no holes.
     /// Maybe CCW or CW.
     /// </summary>
-    public class Polygon2f : Polyshape2f
+    public class Polygon2f : Polyobject2f
     {
 
         public Polygon2f(int count) : base(count)

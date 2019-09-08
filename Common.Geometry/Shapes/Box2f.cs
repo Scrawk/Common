@@ -33,12 +33,6 @@ namespace Common.Geometry.Shapes
             Max = max;
         }
 
-        public Box2f(Vector2i min, Vector2i max)
-        {
-            Min = new Vector2f(min.x, min.y);
-            Max = new Vector2f(max.x, max.y);
-        }
-
         public Vector2f Corner00
         {
             get { return Min; }

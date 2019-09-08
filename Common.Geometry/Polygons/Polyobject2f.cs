@@ -7,15 +7,18 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Polygons
 {
 
-    public abstract class Polyshape2f
+    /// <summary>
+    /// Base class for polygon and polyline.
+    /// </summary>
+    public abstract class Polyobject2f
     {
 
-        public Polyshape2f(int count)
+        public Polyobject2f(int count)
         {
             SetPositions(count);
         }
 
-        public Polyshape2f(IList<Vector2f> positions)
+        public Polyobject2f(IList<Vector2f> positions)
         {
             SetPositions(positions);
         }

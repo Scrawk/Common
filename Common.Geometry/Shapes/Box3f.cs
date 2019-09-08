@@ -33,12 +33,6 @@ namespace Common.Geometry.Shapes
             Max = max;
         }
 
-        public Box3f(Vector3i min, Vector3i max)
-        {
-            Min = new Vector3f(min.x, min.y, min.z);
-            Max = new Vector3f(max.x, max.y, max.z);
-        }
-
         public Vector3f Center
         {
             get { return (Min + Max) * 0.5f; }

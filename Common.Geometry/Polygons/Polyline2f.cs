@@ -9,7 +9,7 @@ namespace Common.Geometry.Polygons
     /// <summary>
     /// 
     /// </summary>
-    public class Polyline2f : Polyshape2f
+    public class Polyline2f : Polyobject2f
     {
 
         public Polyline2f(float width, int count) : base(count)
