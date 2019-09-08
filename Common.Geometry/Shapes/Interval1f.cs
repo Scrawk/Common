@@ -5,9 +5,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-
 namespace Common.Geometry.Shapes
 {
 
@@ -15,33 +12,33 @@ namespace Common.Geometry.Shapes
     [StructLayout(LayoutKind.Sequential)]
     public struct Interval1f : IEquatable<Interval1f>
     {
-        public REAL Min;
+        public float Min;
 
-        public REAL Max;
+        public float Max;
 
-        public Interval1f(REAL min, REAL max)
+        public Interval1f(float min, float max)
         {
             Min = min;
             Max = max;
         }
 
-        public Interval1f(VECTOR2 v)
+        public Interval1f(Vector2f v)
         {
             Min = v.x;
             Max = v.y;
         }
 
-        public REAL Length
+        public float Length
         {
             get { return Max - Min; }
         }
 
-        public REAL SqrLength
+        public float SqrLength
         {
             get { return (Min - Max) * (Min - Max); }
         }
 
-        public REAL Center
+        public float Center
         {
             get { return (Max + Min) * 0.5f; }
         }
@@ -51,17 +48,17 @@ namespace Common.Geometry.Shapes
             get { return Max == Min; }
         }
 
-        public static Interval1f operator +(Interval1f a, REAL f)
+        public static Interval1f operator +(Interval1f a, float f)
         {
             return new Interval1f(a.Min + f, a.Max + f);
         }
 
-        public static Interval1f operator -(Interval1f a, REAL f)
+        public static Interval1f operator -(Interval1f a, float f)
         {
             return new Interval1f(a.Min - f, a.Max - f);
         }
 
-        public static Interval1f operator *(Interval1f a, REAL f)
+        public static Interval1f operator *(Interval1f a, float f)
         {
             return new Interval1f(a.Min * f, a.Max * f);
         }
@@ -109,19 +106,19 @@ namespace Common.Geometry.Shapes
             return string.Format("[Interval1f: a={0}, b={1}]", Min, Max);
         }
 
-        public REAL Clamp(REAL f)
+        public float Clamp(float f)
         {
             return (f < Min) ? Min : (f > Max) ? Max : f;
         }
 
-        public REAL Interpolate(REAL t)
+        public float Interpolate(float t)
         {
             if (t < 0.0f) t = 0.0f;
             if (t > 1.0f) t = 1.0f;
             return (1 - t) * Min + (t) * Max;
         }
 
-        public void Enlarge(REAL d)
+        public void Enlarge(float d)
         {
             if (d < Min) Min = d;
             if (d > Max) Max = d;
@@ -138,7 +135,7 @@ namespace Common.Geometry.Shapes
             return !(i.Min > Max || i.Max < Min);
         }
 
-        public bool Contains(REAL d)
+        public bool Contains(float d)
         {
             return d >= Min && d <= Max;
         }
@@ -157,7 +154,7 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        public static REAL Distance(Interval1f i1, Interval1f i2)
+        public static float Distance(Interval1f i1, Interval1f i2)
         {
             if (i1.Max < i2.Min)
                 return i2.Min - i1.Max;
@@ -167,7 +164,7 @@ namespace Common.Geometry.Shapes
                 return 0;
         }
 
-        public static REAL SqrDistance(Interval1f i1, Interval1f i2)
+        public static float SqrDistance(Interval1f i1, Interval1f i2)
         {
             if (i1.Max < i2.Min)
                 return (i2.Min - i1.Max) * (i2.Min - i1.Max);
@@ -177,10 +174,10 @@ namespace Common.Geometry.Shapes
                 return 0;
         }
 
-        public static Interval1f CalculateInterval(IEnumerable<REAL> indices)
+        public static Interval1f CalculateInterval(IEnumerable<float> indices)
         {
-            REAL min = REAL.PositiveInfinity;
-            REAL max = REAL.NegativeInfinity;
+            float min = float.PositiveInfinity;
+            float max = float.NegativeInfinity;
 
             foreach (var i in indices)
             {

@@ -12,15 +12,17 @@ namespace Common.Geometry.Polygons
     public class Polyline2f : Polyshape2f
     {
 
-        public Polyline2f(int count) : base(count)
+        public Polyline2f(float width, int count) : base(count)
         {
-     
+            Width = width;
         }
 
-        public Polyline2f(IList<Vector2f> positions) : base(positions)
+        public Polyline2f(float width, IList<Vector2f> positions) : base(positions)
         {
-
+            Width = width;
         }
+
+        public float Width { get; set; }
 
         public float Length { get; private set; }
 
@@ -28,7 +30,6 @@ namespace Common.Geometry.Polygons
         {
             return string.Format("[Polyline2f: Count={0}, Length={1}]", Count, Length);
         }
-
 
         /// <summary>
         /// Create the index array.
@@ -46,7 +47,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Will reverse the polyline.
         /// </summary>
-        public void Reverse()
+        public override void Reverse()
         {
             Array.Reverse(Positions);
             if (Params != null) Array.Reverse(Params);
@@ -58,7 +59,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public Polyline2f Copy()
         {
-            var copy = new Polyline2f(Positions);
+            var copy = new Polyline2f(Width, Positions);
             copy.Length = Length;
             copy.Bounds = Bounds;
 
@@ -85,12 +86,12 @@ namespace Common.Geometry.Polygons
                 Length += Vector2f.Distance(Positions[i], Positions[i + 1]);
         }
 
-        public bool ContainsPoint(Vector2f point, float width)
+        public override bool ContainsPoint(Vector2f point)
         {
             if (Count == 0) return false;
             if (!Bounds.Contains(point)) return false;
 
-            float w2 = width * width;
+            float w2 = Width * Width;
 
             for (int i = 0; i < Count - 1; i++)
             {

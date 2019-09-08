@@ -4,12 +4,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
-using VECTOR4 = Common.Core.Numerics.Vector4f;
-using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -17,23 +11,23 @@ namespace Common.Geometry.Shapes
     public struct Box3f : IEquatable<Box3f>
     {
 
-        public VECTOR3 Min;
+        public Vector3f Min;
 
-        public VECTOR3 Max;
+        public Vector3f Max;
 
-        public Box3f(REAL min, REAL max)
+        public Box3f(float min, float max)
         {
-            Min = new VECTOR3(min);
-            Max = new VECTOR3(max);
+            Min = new Vector3f(min);
+            Max = new Vector3f(max);
         }
 
-        public Box3f(REAL minX, REAL maxX, REAL minY, REAL maxY, REAL minZ, REAL maxZ)
+        public Box3f(float minX, float maxX, float minY, float maxY, float minZ, float maxZ)
         {
-            Min = new VECTOR3(minX, minY, minZ);
-            Max = new VECTOR3(maxX, maxY, maxZ);
+            Min = new Vector3f(minX, minY, minZ);
+            Max = new Vector3f(maxX, maxY, maxZ);
         }
 
-        public Box3f(VECTOR3 min, VECTOR3 max)
+        public Box3f(Vector3f min, Vector3f max)
         {
             Min = min;
             Max = max;
@@ -41,36 +35,36 @@ namespace Common.Geometry.Shapes
 
         public Box3f(Vector3i min, Vector3i max)
         {
-            Min = new VECTOR3(min.x, min.y, min.z);
-            Max = new VECTOR3(max.x, max.y, max.z);
+            Min = new Vector3f(min.x, min.y, min.z);
+            Max = new Vector3f(max.x, max.y, max.z);
         }
 
-        public VECTOR3 Center
+        public Vector3f Center
         {
             get { return (Min + Max) * 0.5f; }
         }
 
-        public VECTOR3 Size
+        public Vector3f Size
         {
-            get { return new VECTOR3(Width, Height, Depth); }
+            get { return new Vector3f(Width, Height, Depth); }
         }
 
-        public REAL Width
+        public float Width
         {
             get { return Max.x - Min.x; }
         }
 
-        public REAL Height
+        public float Height
         {
             get { return Max.y - Min.y; }
         }
 
-        public REAL Depth
+        public float Depth
         {
             get { return Max.z - Min.z; }
         }
 
-        public REAL Area
+        public float Area
         {
             get
             {
@@ -78,56 +72,56 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        public REAL SurfaceArea
+        public float SurfaceArea
         {
             get
             {
-                VECTOR3 d = Max - Min;
+                Vector3f d = Max - Min;
                 return 2.0f * (d.x * d.y + d.x * d.z + d.y * d.z);
             }
         }
 
-        public static Box3f operator +(Box3f box, REAL s)
+        public static Box3f operator +(Box3f box, float s)
         {
             return new Box3f(box.Min + s, box.Max + s);
         }
 
-        public static Box3f operator +(Box3f box, VECTOR3 v)
+        public static Box3f operator +(Box3f box, Vector3f v)
         {
             return new Box3f(box.Min + v, box.Max + v);
         }
 
-        public static Box3f operator -(Box3f box, REAL s)
+        public static Box3f operator -(Box3f box, float s)
         {
             return new Box3f(box.Min - s, box.Max - s);
         }
 
-        public static Box3f operator -(Box3f box, VECTOR3 v)
+        public static Box3f operator -(Box3f box, Vector3f v)
         {
             return new Box3f(box.Min - v, box.Max - v);
         }
 
-        public static Box3f operator *(Box3f box, REAL s)
+        public static Box3f operator *(Box3f box, float s)
         {
             return new Box3f(box.Min * s, box.Max * s);
         }
 
-        public static Box3f operator *(Box3f box, VECTOR3 v)
+        public static Box3f operator *(Box3f box, Vector3f v)
         {
             return new Box3f(box.Min * v, box.Max * v);
         }
 
-        public static Box3f operator /(Box3f box, REAL s)
+        public static Box3f operator /(Box3f box, float s)
         {
             return new Box3f(box.Min / s, box.Max / s);
         }
 
-        public static Box3f operator /(Box3f box, VECTOR3 v)
+        public static Box3f operator /(Box3f box, Vector3f v)
         {
             return new Box3f(box.Min / v, box.Max / v);
         }
 
-        public static Box3f operator *(Box3f box, MATRIX3 m)
+        public static Box3f operator *(Box3f box, Matrix3x3f m)
         {
             return new Box3f(m * box.Min, m * box.Max);
         }
@@ -175,36 +169,36 @@ namespace Common.Geometry.Shapes
             return string.Format("[Box3f: Min={0}, Max={1}, Width={2}, Height={3}, Depth={4}]", Min, Max, Width, Height, Depth);
         }
 
-        public void GetCorners(IList<VECTOR3> corners)
+        public void GetCorners(IList<Vector3f> corners)
         {
-            corners[0] = new VECTOR3(Min.x, Min.y, Min.z);
-            corners[1] = new VECTOR3(Max.x, Min.y, Min.z);
-            corners[2] = new VECTOR3(Max.x, Min.y, Max.z);
-            corners[3] = new VECTOR3(Min.x, Min.y, Max.z);
+            corners[0] = new Vector3f(Min.x, Min.y, Min.z);
+            corners[1] = new Vector3f(Max.x, Min.y, Min.z);
+            corners[2] = new Vector3f(Max.x, Min.y, Max.z);
+            corners[3] = new Vector3f(Min.x, Min.y, Max.z);
 
-            corners[4] = new VECTOR3(Min.x, Max.y, Min.z);
-            corners[5] = new VECTOR3(Max.x, Max.y, Min.z);
-            corners[6] = new VECTOR3(Max.x, Max.y, Max.z);
-            corners[7] = new VECTOR3(Min.x, Max.y, Max.z);
+            corners[4] = new Vector3f(Min.x, Max.y, Min.z);
+            corners[5] = new Vector3f(Max.x, Max.y, Min.z);
+            corners[6] = new Vector3f(Max.x, Max.y, Max.z);
+            corners[7] = new Vector3f(Min.x, Max.y, Max.z);
         }
 
-        public void GetCorners(IList<VECTOR4> corners)
+        public void GetCorners(IList<Vector4f> corners)
         {
-            corners[0] = new VECTOR4(Min.x, Min.y, Min.z, 1);
-            corners[1] = new VECTOR4(Max.x, Min.y, Min.z, 1);
-            corners[2] = new VECTOR4(Max.x, Min.y, Max.z, 1);
-            corners[3] = new VECTOR4(Min.x, Min.y, Max.z, 1);
+            corners[0] = new Vector4f(Min.x, Min.y, Min.z, 1);
+            corners[1] = new Vector4f(Max.x, Min.y, Min.z, 1);
+            corners[2] = new Vector4f(Max.x, Min.y, Max.z, 1);
+            corners[3] = new Vector4f(Min.x, Min.y, Max.z, 1);
 
-            corners[4] = new VECTOR4(Min.x, Max.y, Min.z, 1);
-            corners[5] = new VECTOR4(Max.x, Max.y, Min.z, 1);
-            corners[6] = new VECTOR4(Max.x, Max.y, Max.z, 1);
-            corners[7] = new VECTOR4(Min.x, Max.y, Max.z, 1);
+            corners[4] = new Vector4f(Min.x, Max.y, Min.z, 1);
+            corners[5] = new Vector4f(Max.x, Max.y, Min.z, 1);
+            corners[6] = new Vector4f(Max.x, Max.y, Max.z, 1);
+            corners[7] = new Vector4f(Min.x, Max.y, Max.z, 1);
         }
 
         /// <summary>
         /// Returns the bounding box containing this box and the given point.
         /// </summary>
-        public static Box3f Enlarge(Box3f box, VECTOR3 p)
+        public static Box3f Enlarge(Box3f box, Vector3f p)
         {
             var b = new Box3f();
             b.Min.x = Math.Min(box.Min.x, p.x);
@@ -234,7 +228,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the box by a given percent.
         /// </summary>
-        public static Box3f Enlarge(Box3f box, REAL percent)
+        public static Box3f Enlarge(Box3f box, float percent)
         {
             var amount = box.Size * percent * 0.5f;
             return new Box3f(box.Min - amount, box.Max + amount);
@@ -265,7 +259,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns true if this bounding box contains the given point.
         /// </summary>
-        public bool Contains(VECTOR3 p)
+        public bool Contains(Vector3f p)
         {
             if (p.x > Max.x || p.x < Min.x) return false;
             if (p.y > Max.y || p.y < Min.y) return false;
@@ -277,9 +271,9 @@ namespace Common.Geometry.Shapes
         /// Find the closest point to the box.
         /// If point inside box return point.
         /// </summary>
-        public VECTOR3 Closest(VECTOR3 p)
+        public Vector3f Closest(Vector3f p)
         {
-            VECTOR3 c;
+            Vector3f c;
 
             if (p.x < Min.x)
                 c.x = Min.x;
@@ -310,17 +304,17 @@ namespace Common.Geometry.Shapes
         /// If point is outside box field is positive.
         /// If point is inside box field is negative.
         /// </summary>
-        public REAL SignedDistance(VECTOR3 p)
+        public float SignedDistance(Vector3f p)
         {
-            VECTOR3 d = (p - Center).Absolute - Size * 0.5f;
-            VECTOR3 max = VECTOR3.Max(d, 0);
+            Vector3f d = (p - Center).Absolute - Size * 0.5f;
+            Vector3f max = Vector3f.Max(d, 0);
             return max.Magnitude + Math.Min(FMath.Max(d.x, d.y, d.z), 0.0f);
         }
 
-        public static Box3f CalculateBounds(IList<VECTOR3> vertices)
+        public static Box3f CalculateBounds(IList<Vector3f> vertices)
         {
-            VECTOR3 min = VECTOR3.PositiveInfinity;
-            VECTOR3 max = VECTOR3.NegativeInfinity;
+            Vector3f min = Vector3f.PositiveInfinity;
+            Vector3f max = Vector3f.NegativeInfinity;
 
             int count = vertices.Count;
             for (int i = 0; i < count; i++)
@@ -338,14 +332,14 @@ namespace Common.Geometry.Shapes
             return new Box3f(min, max);
         }
 
-        public static Box3f CalculateBounds(VECTOR3 a, VECTOR3 b)
+        public static Box3f CalculateBounds(Vector3f a, Vector3f b)
         {
-            REAL xmin = Math.Min(a.x, b.x);
-            REAL xmax = Math.Max(a.x, b.x);
-            REAL ymin = Math.Min(a.y, b.y);
-            REAL ymax = Math.Max(a.y, b.y);
-            REAL zmin = Math.Min(a.z, b.z);
-            REAL zmax = Math.Max(a.z, b.z);
+            float xmin = Math.Min(a.x, b.x);
+            float xmax = Math.Max(a.x, b.x);
+            float ymin = Math.Min(a.y, b.y);
+            float ymax = Math.Max(a.y, b.y);
+            float zmin = Math.Min(a.z, b.z);
+            float zmax = Math.Max(a.z, b.z);
 
             return new Box3f(xmin, xmax, ymin, ymax, zmin, zmax);
         }

@@ -4,10 +4,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2d;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -15,17 +11,17 @@ namespace Common.Geometry.Shapes
     public struct Plane3f : IEquatable<Plane3f>
     {
 
-        public VECTOR3 Normal;
+        public Vector3f Normal;
 
-        public VECTOR3 Position;
+        public Vector3f Position;
 
-        public Plane3f(VECTOR3 position, VECTOR3 normal)
+        public Plane3f(Vector3f position, Vector3f normal)
         {
             Normal = normal;
             Position = position;
         }
 
-        public Plane3f(VECTOR3 normal, REAL distance)
+        public Plane3f(Vector3f normal, float distance)
         {
             Normal = normal;
             Position = Normal * distance;
@@ -34,19 +30,19 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// From three noncollinear points (ordered ccw).
         /// </summary>
-        public Plane3f(VECTOR3 a, VECTOR3 b, VECTOR3 c)
+        public Plane3f(Vector3f a, Vector3f b, Vector3f c)
         {
-            Normal = VECTOR3.Cross(b - a, c - a);
+            Normal = Vector3f.Cross(b - a, c - a);
             Normal.Normalize();
-            Position = Normal * VECTOR3.Dot(Normal, a);
+            Position = Normal * Vector3f.Dot(Normal, a);
         }
 
-        public REAL Distance
+        public float Distance
         {
             get { return Position.Magnitude; }
         }
 
-        public REAL SqrDistance
+        public float SqrDistance
         {
             get { return Position.SqrMagnitude; }
         }
@@ -89,9 +85,9 @@ namespace Common.Geometry.Shapes
             return string.Format("[Plane3f: Positions{0}, Normal={1}]", Position, Normal);
         }
 
-        public VECTOR3 Closest(VECTOR3 p)
+        public Vector3f Closest(Vector3f p)
         {
-            REAL t = VECTOR3.Dot(Normal, p) - Distance;
+            float t = Vector3f.Dot(Normal, p) - Distance;
             return p - t * Normal;
         }
 

@@ -3,10 +3,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
-using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -14,111 +10,111 @@ namespace Common.Geometry.Shapes
     public struct Segment3f : IEquatable<Segment3f>
     {
 
-        public VECTOR3 A;
+        public Vector3f A;
 
-        public VECTOR3 B;
+        public Vector3f B;
 
-        public Segment3f(VECTOR3 a, VECTOR3 b)
+        public Segment3f(Vector3f a, Vector3f b)
         {
             A = a;
             B = b;
         }
 
-        public Segment3f(REAL ax, REAL ay, REAL az, REAL bx, REAL by, REAL bz)
+        public Segment3f(float ax, float ay, float az, float bx, float by, float bz)
         {
-            A = new VECTOR3(ax, ay, az);
-            B = new VECTOR3(bx, by, bz);
+            A = new Vector3f(ax, ay, az);
+            B = new Vector3f(bx, by, bz);
         }
 
-        public VECTOR3 Center
+        public Vector3f Center
         {
             get { return (A + B) * 0.5f; }
         }
 
-        public REAL Length
+        public float Length
         {
-            get { return VECTOR3.Distance(A, B); }
+            get { return Vector3f.Distance(A, B); }
         }
 
-        public REAL SqrLength
+        public float SqrLength
         {
-            get { return VECTOR3.SqrDistance(A, B); }
+            get { return Vector3f.SqrDistance(A, B); }
         }
 
         public Box3f Bounds
         {
             get
             {
-                REAL xmin = Math.Min(A.x, B.x);
-                REAL xmax = Math.Max(A.x, B.x);
-                REAL ymin = Math.Min(A.y, B.y);
-                REAL ymax = Math.Max(A.y, B.y);
-                REAL zmin = Math.Min(A.z, B.z);
-                REAL zmax = Math.Max(A.z, B.z);
+                float xmin = Math.Min(A.x, B.x);
+                float xmax = Math.Max(A.x, B.x);
+                float ymin = Math.Min(A.y, B.y);
+                float ymax = Math.Max(A.y, B.y);
+                float zmin = Math.Min(A.z, B.z);
+                float zmax = Math.Max(A.z, B.z);
 
                 return new Box3f(xmin, xmax, ymin, ymax, zmin, zmax);
             }
         }
 
-        unsafe public VECTOR3 this[int i]
+        unsafe public Vector3f this[int i]
         {
             get
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment3f index out of range.");
 
-                fixed (Segment3f* array = &this) { return ((VECTOR3*)array)[i]; }
+                fixed (Segment3f* array = &this) { return ((Vector3f*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment3f index out of range.");
 
-                fixed (VECTOR3* array = &A) { array[i] = value; }
+                fixed (Vector3f* array = &A) { array[i] = value; }
             }
         }
 
-        public static Segment3f operator +(Segment3f seg, REAL s)
+        public static Segment3f operator +(Segment3f seg, float s)
         {
             return new Segment3f(seg.A + s, seg.B + s);
         }
 
-        public static Segment3f operator +(Segment3f seg, VECTOR3 v)
+        public static Segment3f operator +(Segment3f seg, Vector3f v)
         {
             return new Segment3f(seg.A + v, seg.B + v);
         }
 
-        public static Segment3f operator -(Segment3f seg, REAL s)
+        public static Segment3f operator -(Segment3f seg, float s)
         {
             return new Segment3f(seg.A - s, seg.B - s);
         }
 
-        public static Segment3f operator -(Segment3f seg, VECTOR3 v)
+        public static Segment3f operator -(Segment3f seg, Vector3f v)
         {
             return new Segment3f(seg.A - v, seg.B - v);
         }
 
-        public static Segment3f operator *(Segment3f seg, REAL s)
+        public static Segment3f operator *(Segment3f seg, float s)
         {
             return new Segment3f(seg.A * s, seg.B * s);
         }
 
-        public static Segment3f operator *(Segment3f seg, VECTOR3 v)
+        public static Segment3f operator *(Segment3f seg, Vector3f v)
         {
             return new Segment3f(seg.A * v, seg.B * v);
         }
 
-        public static Segment3f operator /(Segment3f seg, REAL s)
+        public static Segment3f operator /(Segment3f seg, float s)
         {
             return new Segment3f(seg.A / s, seg.B / s);
         }
 
-        public static Segment3f operator /(Segment3f seg, VECTOR3 v)
+        public static Segment3f operator /(Segment3f seg, Vector3f v)
         {
             return new Segment3f(seg.A / v, seg.B / v);
         }
 
-        public static Segment3f operator *(Segment3f seg, MATRIX3 m)
+        public static Segment3f operator *(Segment3f seg, Matrix3x3f m)
         {
             return new Segment3f(m * seg.A, m * seg.B);
         }
@@ -165,9 +161,9 @@ namespace Common.Geometry.Shapes
         /// The closest point on segment to point.
         /// </summary>
         /// <param name="p">point</param>
-        public VECTOR3 Closest(VECTOR3 p)
+        public Vector3f Closest(Vector3f p)
         {
-            REAL t;
+            float t;
             Closest(p, out t);
             return A + (B - A) * t;
         }
@@ -177,13 +173,13 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <param name="t">closest point = A + t * (B - A)</param>
-        public void Closest(VECTOR3 p, out REAL t)
+        public void Closest(Vector3f p, out float t)
         {
             t = 0.0f;
-            VECTOR3 ab = B - A;
-            VECTOR3 ap = p - A;
+            Vector3f ab = B - A;
+            Vector3f ap = p - A;
 
-            REAL len = ab.x * ab.x + ab.y * ab.y;
+            float len = ab.x * ab.x + ab.y * ab.y;
             if (len < FMath.EPS) return;
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
@@ -194,9 +190,9 @@ namespace Common.Geometry.Shapes
         /// Return the signed distance to the point. 
         /// Always positive.
         /// </summary>
-        public REAL SignedDistance(VECTOR3 p)
+        public float SignedDistance(Vector3f p)
         {
-            return VECTOR3.Distance(Closest(p), p);
+            return Vector3f.Distance(Closest(p), p);
         }
 
     }

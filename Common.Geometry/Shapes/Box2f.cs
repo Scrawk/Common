@@ -4,11 +4,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
-using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -16,23 +11,23 @@ namespace Common.Geometry.Shapes
     public struct Box2f : IEquatable<Box2f>
     {
 
-        public VECTOR2 Min;
+        public Vector2f Min;
 
-        public VECTOR2 Max;
+        public Vector2f Max;
 
-        public Box2f(REAL min, REAL max)
+        public Box2f(float min, float max)
         {
-            Min = new VECTOR2(min);
-            Max = new VECTOR2(max);
+            Min = new Vector2f(min);
+            Max = new Vector2f(max);
         }
 
-        public Box2f(REAL minX, REAL maxX, REAL minY, REAL maxY)
+        public Box2f(float minX, float maxX, float minY, float maxY)
         {
-            Min = new VECTOR2(minX, minY);
-            Max = new VECTOR2(maxX, maxY);
+            Min = new Vector2f(minX, minY);
+            Max = new Vector2f(maxX, maxY);
         }
 
-        public Box2f(VECTOR2 min, VECTOR2 max)
+        public Box2f(Vector2f min, Vector2f max)
         {
             Min = min;
             Max = max;
@@ -40,96 +35,96 @@ namespace Common.Geometry.Shapes
 
         public Box2f(Vector2i min, Vector2i max)
         {
-            Min = new VECTOR2(min.x, min.y);
-            Max = new VECTOR2(max.x, max.y);
+            Min = new Vector2f(min.x, min.y);
+            Max = new Vector2f(max.x, max.y);
         }
 
-        public VECTOR2 Corner00
+        public Vector2f Corner00
         {
             get { return Min; }
         }
 
-        public VECTOR2 Corner10
+        public Vector2f Corner10
         {
-            get { return new VECTOR2(Max.x, Min.y); }
+            get { return new Vector2f(Max.x, Min.y); }
         }
 
-        public VECTOR2 Corner11
+        public Vector2f Corner11
         {
             get { return Max; }
         }
 
-        public VECTOR2 Corner01
+        public Vector2f Corner01
         {
-            get { return new VECTOR2(Min.x, Max.y); }
+            get { return new Vector2f(Min.x, Max.y); }
         }
 
-        public VECTOR2 Center
+        public Vector2f Center
         {
             get { return (Min + Max) * 0.5f; }
         }
 
-        public VECTOR2 Size
+        public Vector2f Size
         {
-            get { return new VECTOR2(Width, Height); }
+            get { return new Vector2f(Width, Height); }
         }
 
-        public REAL Width
+        public float Width
         {
             get { return Max.x - Min.x; }
         }
 
-        public REAL Height
+        public float Height
         {
             get { return Max.y - Min.y; }
         }
 
-        public REAL Area
+        public float Area
         {
             get { return (Max.x - Min.x) * (Max.y - Min.y); }
         }
 
-        public static Box2f operator +(Box2f box, REAL s)
+        public static Box2f operator +(Box2f box, float s)
         {
             return new Box2f(box.Min + s, box.Max + s);
         }
 
-        public static Box2f operator +(Box2f box, VECTOR2 v)
+        public static Box2f operator +(Box2f box, Vector2f v)
         {
             return new Box2f(box.Min + v, box.Max + v);
         }
 
-        public static Box2f operator -(Box2f box, REAL s)
+        public static Box2f operator -(Box2f box, float s)
         {
             return new Box2f(box.Min - s, box.Max - s);
         }
 
-        public static Box2f operator -(Box2f box, VECTOR2 v)
+        public static Box2f operator -(Box2f box, Vector2f v)
         {
             return new Box2f(box.Min - v, box.Max - v);
         }
 
-        public static Box2f operator *(Box2f box, REAL s)
+        public static Box2f operator *(Box2f box, float s)
         {
             return new Box2f(box.Min * s, box.Max * s);
         }
 
-        public static Box2f operator *(Box2f box, VECTOR2 v)
+        public static Box2f operator *(Box2f box, Vector2f v)
         {
             return new Box2f(box.Min * v, box.Max * v);
         }
 
-        public static Box2f operator /(Box2f box, REAL s)
+        public static Box2f operator /(Box2f box, float s)
         {
             return new Box2f(box.Min / s, box.Max / s);
         }
 
-        public static Box2f operator /(Box2f box, VECTOR2 v)
+        public static Box2f operator /(Box2f box, Vector2f v)
         {
             return new Box2f(box.Min / v, box.Max / v);
         }
 
-        public static Box2f operator *(Box2f box, MATRIX2 m)
+        public static Box2f operator *(Box2f box, Matrix2x2f m)
         {
             return new Box2f(m * box.Min, m * box.Max);
         }
@@ -177,26 +172,26 @@ namespace Common.Geometry.Shapes
             return string.Format("[Box2f: Min={0}, Max={1}, Width={2}, Height={3}]", Min, Max, Width, Height);
         }
 
-        public void GetCorners(IList<VECTOR2> corners)
+        public void GetCorners(IList<Vector2f> corners)
         {
-            corners[0] = new VECTOR2(Min.x, Min.y);
-            corners[1] = new VECTOR2(Max.x, Min.y);
-            corners[2] = new VECTOR2(Max.x, Max.y);
-            corners[3] = new VECTOR2(Min.x, Max.y);
+            corners[0] = new Vector2f(Min.x, Min.y);
+            corners[1] = new Vector2f(Max.x, Min.y);
+            corners[2] = new Vector2f(Max.x, Max.y);
+            corners[3] = new Vector2f(Min.x, Max.y);
         }
 
-        public void GetCornersXZ(IList<VECTOR3> corners, REAL y = 0)
+        public void GetCornersXZ(IList<Vector3f> corners, float y = 0)
         {
-            corners[0] = new VECTOR3(Min.x, y, Min.y);
-            corners[1] = new VECTOR3(Max.x, y, Min.y);
-            corners[2] = new VECTOR3(Max.x, y, Max.y);
-            corners[3] = new VECTOR3(Min.x, y, Max.y);
+            corners[0] = new Vector3f(Min.x, y, Min.y);
+            corners[1] = new Vector3f(Max.x, y, Min.y);
+            corners[2] = new Vector3f(Max.x, y, Max.y);
+            corners[3] = new Vector3f(Min.x, y, Max.y);
         }
 
         /// <summary>
         /// Returns the bounding box containing this box and the given point.
         /// </summary>
-        public static Box2f Enlarge(Box2f box, VECTOR2 p)
+        public static Box2f Enlarge(Box2f box, Vector2f p)
         {
             var b = new Box2f();
             b.Min.x = Math.Min(box.Min.x, p.x);
@@ -222,7 +217,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the box by a given percent.
         /// </summary>
-        public static Box2f Enlarge(Box2f box, REAL percent)
+        public static Box2f Enlarge(Box2f box, float percent)
         {
             var amount = box.Size * percent * 0.5f;
             return new Box2f(box.Min - amount, box.Max + amount);
@@ -251,7 +246,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Does the box contain the point.
         /// </summary>
-        public bool Contains(VECTOR2 p)
+        public bool Contains(Vector2f p)
         {
             if (p.x > Max.x || p.x < Min.x) return false;
             if (p.y > Max.y || p.y < Min.y) return false;
@@ -262,9 +257,9 @@ namespace Common.Geometry.Shapes
         /// Find the closest point to the box.
         /// If point inside box return point.
         /// </summary>
-        public VECTOR2 Closest(VECTOR2 p)
+        public Vector2f Closest(Vector2f p)
         {
-            VECTOR2 c;
+            Vector2f c;
 
             if (p.x < Min.x)
                 c.x = Min.x;
@@ -288,17 +283,17 @@ namespace Common.Geometry.Shapes
         /// If point is outside box field is positive.
         /// If point is inside box field is negative.
         /// </summary>
-        public REAL SignedDistance(VECTOR2 p)
+        public float SignedDistance(Vector2f p)
         {
-            VECTOR2 d = (p - Center).Absolute - Size * 0.5f;
-            VECTOR2 max = VECTOR2.Max(d, 0);
+            Vector2f d = (p - Center).Absolute - Size * 0.5f;
+            Vector2f max = Vector2f.Max(d, 0);
             return max.Magnitude + Math.Min(Math.Max(d.x, d.y), 0.0f);
         }
 
-        public static Box2f CalculateBounds(IList<VECTOR2> vertices)
+        public static Box2f CalculateBounds(IList<Vector2f> vertices)
         {
-            VECTOR2 min = VECTOR2.PositiveInfinity;
-            VECTOR2 max = VECTOR2.NegativeInfinity;
+            Vector2f min = Vector2f.PositiveInfinity;
+            Vector2f max = Vector2f.NegativeInfinity;
 
             int count = vertices.Count;
             for (int i = 0; i < count; i++)
@@ -314,12 +309,12 @@ namespace Common.Geometry.Shapes
             return new Box2f(min, max);
         }
 
-        public static Box2f CalculateBounds(VECTOR2 a, VECTOR2 b)
+        public static Box2f CalculateBounds(Vector2f a, Vector2f b)
         {
-            REAL xmin = Math.Min(a.x, b.x);
-            REAL xmax = Math.Max(a.x, b.x);
-            REAL ymin = Math.Min(a.y, b.y);
-            REAL ymax = Math.Max(a.y, b.y);
+            float xmin = Math.Min(a.x, b.x);
+            float xmax = Math.Max(a.x, b.x);
+            float ymin = Math.Min(a.y, b.y);
+            float ymax = Math.Max(a.y, b.y);
 
             return new Box2f(xmin, xmax, ymin, ymax);
         }

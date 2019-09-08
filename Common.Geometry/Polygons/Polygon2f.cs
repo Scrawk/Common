@@ -70,7 +70,7 @@ namespace Common.Geometry.Polygons
         /// A CCW polygon will be come a CW polygon.
         /// No need to recalculate.
         /// </summary>
-        public void Reverse()
+        public override void Reverse()
         {
             Array.Reverse(Positions);
             if (Params != null) Array.Reverse(Params);
@@ -137,7 +137,7 @@ namespace Common.Geometry.Polygons
             SignedArea = (firstProducts - secondProducts) / 2.0f;
         }
 
-        public bool ContainsPoint(Vector2f point)
+        public override bool ContainsPoint(Vector2f point)
         {
             if (Count == 0) return false;
             if (!Bounds.Contains(point)) return false;

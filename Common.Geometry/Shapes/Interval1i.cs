@@ -5,9 +5,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Int32;
-using VECTOR2 = Common.Core.Numerics.Vector2i;
-
 namespace Common.Geometry.Shapes
 {
 
@@ -15,35 +12,35 @@ namespace Common.Geometry.Shapes
     [StructLayout(LayoutKind.Sequential)]
     public struct Interval1i : IEquatable<Interval1i>
     {
-        public REAL Min;
+        public int Min;
 
-        public REAL Max;
+        public int Max;
 
-        public Interval1i(REAL min, REAL max)
+        public Interval1i(int min, int max)
         {
             Min = min;
             Max = max;
         }
 
-        public Interval1i(VECTOR2 v)
+        public Interval1i(Vector2i v)
         {
             Min = v.x;
             Max = v.y;
         }
 
-        public REAL Length
+        public int Length
         {
             get { return Max - Min; }
         }
 
-        public REAL SqrLength
+        public int SqrLength
         {
             get { return (Min - Max) * (Min - Max); }
         }
 
-        public double Center
+        public float Center
         {
-            get { return (Max + Min) * 0.5; }
+            get { return (Max + Min) * 0.5f; }
         }
 
         public bool IsConstant
@@ -51,24 +48,24 @@ namespace Common.Geometry.Shapes
             get { return Max == Min; }
         }
 
-        public static Interval1i operator +(Interval1i a, REAL f)
+        public static Interval1i operator +(Interval1i a, int f)
         {
             return new Interval1i(a.Min + f, a.Max + f);
         }
 
-        public static Interval1i operator -(Interval1i a, REAL f)
+        public static Interval1i operator -(Interval1i a, int f)
         {
             return new Interval1i(a.Min - f, a.Max - f);
         }
 
-        public static Interval1i operator *(Interval1i a, REAL f)
+        public static Interval1i operator *(Interval1i a, int f)
         {
             return new Interval1i(a.Min * f, a.Max * f);
         }
 
         public static explicit operator Interval1i(Interval1f i)
         {
-            return new Interval1i((REAL)i.Min, (REAL)i.Max);
+            return new Interval1i((int)i.Min, (int)i.Max);
         }
 
         public static bool operator ==(Interval1i i1, Interval1i i2)
@@ -109,19 +106,19 @@ namespace Common.Geometry.Shapes
             return string.Format("[Interval1i: a={0}, b={1}]", Min, Max);
         }
 
-        public REAL Clamp(REAL f)
+        public int Clamp(int f)
         {
             return (f < Min) ? Min : (f > Max) ? Max : f;
         }
 
-        public double Interpolate(double t)
+        public float Interpolate(float t)
         {
-            if (t < 0.0f) t = 0.0;
-            if (t > 1.0f) t = 1.0;
-            return (1 - t) * Min + (t) * Max;
+            if (t < 0.0f) t = 0.0f;
+            if (t > 1.0f) t = 1.0f;
+            return (1 - t) * Min + t * Max;
         }
 
-        public void Enlarge(REAL d)
+        public void Enlarge(int d)
         {
             if (d < Min) Min = d;
             if (d > Max) Max = d;
@@ -138,7 +135,7 @@ namespace Common.Geometry.Shapes
             return !(i.Min > Max || i.Max < Min);
         }
 
-        public bool Contains(REAL d)
+        public bool Contains(int d)
         {
             return d >= Min && d <= Max;
         }
@@ -157,7 +154,7 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        public static REAL Distance(Interval1i i1, Interval1i i2)
+        public static int Distance(Interval1i i1, Interval1i i2)
         {
             if (i1.Max < i2.Min)
                 return i2.Min - i1.Max;
@@ -167,7 +164,7 @@ namespace Common.Geometry.Shapes
                 return 0;
         }
 
-        public static REAL SqrDistance(Interval1i i1, Interval1i i2)
+        public static int SqrDistance(Interval1i i1, Interval1i i2)
         {
             if (i1.Max < i2.Min)
                 return (i2.Min - i1.Max) * (i2.Min - i1.Max);
@@ -177,10 +174,10 @@ namespace Common.Geometry.Shapes
                 return 0;
         }
 
-        public static Interval1i CalculateInterval(IEnumerable<REAL> indices)
+        public static Interval1i CalculateInterval(IEnumerable<int> indices)
         {
-            REAL min = REAL.MaxValue;
-            REAL max = REAL.MinValue;
+            int min = int.MaxValue;
+            int max = int.MinValue;
 
             foreach (var i in indices)
             {

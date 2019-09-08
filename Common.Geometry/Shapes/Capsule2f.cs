@@ -3,36 +3,33 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Capsule2f : IEquatable<Capsule2f>
     {
-        public VECTOR2 A;
+        public Vector2f A;
 
-        public VECTOR2 B;
+        public Vector2f B;
 
-        public REAL Radius;
+        public float Radius;
 
-        public Capsule2f(VECTOR2 a, VECTOR2 b, REAL radius)
+        public Capsule2f(Vector2f a, Vector2f b, float radius)
         {
             A = a;
             B = b;
             Radius = radius;
         }
 
-        public Capsule2f(REAL ax, REAL ay, REAL bx, REAL by, REAL radius)
+        public Capsule2f(float ax, float ay, float bx, float by, float radius)
         {
-            A = new VECTOR2(ax, ay);
-            B = new VECTOR2(bx, by);
+            A = new Vector2f(ax, ay);
+            B = new Vector2f(bx, by);
             Radius = radius;
         }
 
-        public VECTOR2 Center
+        public Vector2f Center
         {
             get { return (A + B) * 0.5f; }
         }
@@ -44,10 +41,10 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                REAL xmin = Math.Min(A.x, B.x) - Radius;
-                REAL xmax = Math.Max(A.x, B.x) + Radius;
-                REAL ymin = Math.Min(A.y, B.y) - Radius;
-                REAL ymax = Math.Max(A.y, B.y) + Radius;
+                float xmin = Math.Min(A.x, B.x) - Radius;
+                float xmax = Math.Max(A.x, B.x) + Radius;
+                float ymin = Math.Min(A.y, B.y) - Radius;
+                float ymax = Math.Max(A.y, B.y) + Radius;
 
                 return new Box2f(xmin, xmax, ymin, ymax);
             }
@@ -92,21 +89,21 @@ namespace Common.Geometry.Shapes
             return string.Format("[Capsule2f: A={0}, B={1}, Radius={2}]", A, B, Radius);
         }
 
-        public bool Contains(VECTOR2 p)
+        public bool Contains(Vector2f p)
         {
-            REAL r2 = Radius * Radius;
+            float r2 = Radius * Radius;
 
-            VECTOR2 ap = p - A;
+            Vector2f ap = p - A;
 
             if (ap.x * ap.x + ap.y * ap.y <= r2) return true;
 
-            VECTOR2 bp = p - B.x;
+            Vector2f bp = p - B.x;
 
             if (bp.x * bp.x + bp.y * bp.y <= r2) return true;
 
-            VECTOR2 ab = B - A;
+            Vector2f ab = B - A;
 
-            REAL t = (ab.x * A.x + ab.y * A.y) / (ab.x * ab.x + ab.y * ab.y);
+            float t = (ab.x * A.x + ab.y * A.y) / (ab.x * ab.x + ab.y * ab.y);
 
             if (t < 0.0) t = 0.0f;
             if (t > 1.0) t = 1.0f;

@@ -3,9 +3,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -13,11 +10,11 @@ namespace Common.Geometry.Shapes
     public struct Ray2f : IEquatable<Ray2f>
     {
 
-        public VECTOR2 Position;
+        public Vector2f Position;
 
-        public VECTOR2 Direction;
+        public Vector2f Direction;
 
-        public Ray2f(VECTOR2 position, VECTOR2 direction)
+        public Ray2f(Vector2f position, Vector2f direction)
         {
             Position = position;
             Direction = direction;
@@ -68,14 +65,14 @@ namespace Common.Geometry.Shapes
         /// <param name="s">Intersection point = Position + s * Direction</param>
         /// <param name="t">Intersection point = ray.Position + t * ray.Direction</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Ray2f ray, out REAL s, out REAL t)
+        public bool Intersects(Ray2f ray, out float s, out float t)
         {
             s = 0;
             t = 0;
-            REAL dx = ray.Position.x - Position.x;
-            REAL dy = ray.Position.y - Position.y;
+            float dx = ray.Position.x - Position.x;
+            float dy = ray.Position.y - Position.y;
 
-            REAL det = Direction.x * Direction.y - ray.Direction.y * ray.Direction.x;
+            float det = Direction.x * Direction.y - ray.Direction.y * ray.Direction.x;
             if (DMath.IsZero(det)) return false;
 
             s = (dy * ray.Direction.x - dx * ray.Direction.y) / det;
@@ -91,21 +88,21 @@ namespace Common.Geometry.Shapes
         /// <param name="s">Intersection point = Position + s * Direction</param>
         /// <param name="t">Intersection point = A + t * (B - A)</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Segment2f seg, out REAL s, out REAL t)
+        public bool Intersects(Segment2f seg, out float s, out float t)
         {
             s = t = 0;
 
-            REAL dx = seg.A.x - Position.x;
-            REAL dy = seg.A.y - Position.y;
+            float dx = seg.A.x - Position.x;
+            float dy = seg.A.y - Position.y;
 
-            REAL len = VECTOR2.Distance(seg.A, seg.B);
+            float len = Vector2f.Distance(seg.A, seg.B);
             if (DMath.IsZero(len)) return false;
 
-            VECTOR2 n1;
+            Vector2f n1;
             n1.x = (seg.B.x - seg.A.x) / len;
             n1.y = (seg.B.y - seg.A.y) / len;
 
-            REAL det = n1.x * Direction.y - n1.y * Direction.x;
+            float det = n1.x * Direction.y - n1.y * Direction.x;
             if (DMath.IsZero(det)) return false;
 
             s = (dy * n1.x - dx * n1.y) / det;
@@ -121,16 +118,16 @@ namespace Common.Geometry.Shapes
         /// <param name="circle">the circle</param>
         /// <param name="t">Intersection point = Position + t * Direction</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Circle2f circle, out REAL t)
+        public bool Intersects(Circle2f circle, out float t)
         {
             t = 0;
-            VECTOR2 m = Position - circle.Center;
-            REAL b = VECTOR2.Dot(m, Direction);
-            REAL c = VECTOR2.Dot(m, m) - circle.Radius2;
+            Vector2f m = Position - circle.Center;
+            float b = Vector2f.Dot(m, Direction);
+            float c = Vector2f.Dot(m, m) - circle.Radius2;
 
             if (c > 0.0 && b > 0.0) return false;
 
-            REAL discr = b * b - c;
+            float discr = b * b - c;
             if (discr < 0.0) return false;
 
             t = -b - FMath.Sqrt(discr);
@@ -145,11 +142,11 @@ namespace Common.Geometry.Shapes
         /// <param name="box">the box</param>
         /// <param name="t">Intersection point = Position + t * Direction</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Box2f box, out REAL t)
+        public bool Intersects(Box2f box, out float t)
         {
             t = 0;
-            REAL tmin = 0;
-            REAL tmax = REAL.PositiveInfinity;
+            float tmin = 0;
+            float tmax = float.PositiveInfinity;
 
             for (int i = 0; i < 2; i++)
             {
@@ -160,13 +157,13 @@ namespace Common.Geometry.Shapes
                 }
                 else
                 {
-                    REAL ood = 1.0f / Direction[i];
-                    REAL t1 = (box.Min[i] - Position[i]) * ood;
-                    REAL t2 = (box.Max[i] - Position[i]) * ood;
+                    float ood = 1.0f / Direction[i];
+                    float t1 = (box.Min[i] - Position[i]) * ood;
+                    float t2 = (box.Max[i] - Position[i]) * ood;
 
                     if (t1 > t2)
                     {
-                        REAL tmp = t1;
+                        float tmp = t1;
                         t1 = t2;
                         t2 = tmp;
                     }

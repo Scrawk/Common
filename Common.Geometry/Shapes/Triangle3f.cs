@@ -3,10 +3,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
-using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -14,27 +10,27 @@ namespace Common.Geometry.Shapes
     public struct Triangle3f : IEquatable<Triangle3f>
     {
 
-        public VECTOR3 A;
+        public Vector3f A;
 
-        public VECTOR3 B;
+        public Vector3f B;
 
-        public VECTOR3 C;
+        public Vector3f C;
 
-        public Triangle3f(VECTOR3 a, VECTOR3 b, VECTOR3 c)
+        public Triangle3f(Vector3f a, Vector3f b, Vector3f c)
         {
             A = a;
             B = b;
             C = c;
         }
 
-        public Triangle3f(REAL ax, REAL ay, REAL az, REAL bx, REAL by, REAL bz, REAL cx, REAL cy, REAL cz)
+        public Triangle3f(float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz)
         {
-            A = new VECTOR3(ax, ay, az);
-            B = new VECTOR3(bx, by, bz);
-            C = new VECTOR3(cx, cy, cz);
+            A = new Vector3f(ax, ay, az);
+            B = new Vector3f(bx, by, bz);
+            C = new Vector3f(cx, cy, cz);
         }
 
-        public VECTOR3 Center
+        public Vector3f Center
         {
             get { return (A + B + C) / 3.0f; }
         }
@@ -58,65 +54,65 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        unsafe public VECTOR3 this[int i]
+        unsafe public Vector3f this[int i]
         {
             get
             {
                 if ((uint)i >= 3)
                     throw new IndexOutOfRangeException("Triangle3f index out of range.");
 
-                fixed (Triangle3f* array = &this) { return ((VECTOR3*)array)[i]; }
+                fixed (Triangle3f* array = &this) { return ((Vector3f*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 3)
                     throw new IndexOutOfRangeException("Triangle3f index out of range.");
 
-                fixed (VECTOR3* array = &A) { array[i] = value; }
+                fixed (Vector3f* array = &A) { array[i] = value; }
             }
         }
 
-        public static Triangle3f operator +(Triangle3f tri, REAL s)
+        public static Triangle3f operator +(Triangle3f tri, float s)
         {
             return new Triangle3f(tri.A + s, tri.B + s, tri.C + s);
         }
 
-        public static Triangle3f operator +(Triangle3f tri, VECTOR3 v)
+        public static Triangle3f operator +(Triangle3f tri, Vector3f v)
         {
             return new Triangle3f(tri.A + v, tri.B + v, tri.C + v);
         }
 
-        public static Triangle3f operator -(Triangle3f tri, REAL s)
+        public static Triangle3f operator -(Triangle3f tri, float s)
         {
             return new Triangle3f(tri.A - s, tri.B - s, tri.C - s);
         }
 
-        public static Triangle3f operator -(Triangle3f tri, VECTOR3 v)
+        public static Triangle3f operator -(Triangle3f tri, Vector3f v)
         {
             return new Triangle3f(tri.A - v, tri.B - v, tri.C - v);
         }
 
-        public static Triangle3f operator *(Triangle3f tri, REAL s)
+        public static Triangle3f operator *(Triangle3f tri, float s)
         {
             return new Triangle3f(tri.A * s, tri.B * s, tri.C * s);
         }
 
-        public static Triangle3f operator *(Triangle3f tri, VECTOR3 v)
+        public static Triangle3f operator *(Triangle3f tri, Vector3f v)
         {
             return new Triangle3f(tri.A * v, tri.B * v, tri.C * v);
         }
 
-        public static Triangle3f operator /(Triangle3f tri, REAL s)
+        public static Triangle3f operator /(Triangle3f tri, float s)
         {
             return new Triangle3f(tri.A / s, tri.B / s, tri.C / s);
         }
 
-        public static Triangle3f operator /(Triangle3f tri, VECTOR3 v)
+        public static Triangle3f operator /(Triangle3f tri, Vector3f v)
         {
             return new Triangle3f(tri.A / v, tri.B / v, tri.C / v);
         }
 
-        public static Triangle3f operator *(Triangle3f tri, MATRIX3 m)
+        public static Triangle3f operator *(Triangle3f tri, Matrix3x3f m)
         {
             return new Triangle3f(m * tri.A, m * tri.B, m * tri.C);
         }

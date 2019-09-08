@@ -4,12 +4,6 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
-using VECTOR4 = Common.Core.Numerics.Vector4f;
-using MATRIX4 = Common.Core.Numerics.Matrix4x4f;
-
 namespace Common.Geometry.Shapes
 {
     [Serializable]
@@ -17,11 +11,11 @@ namespace Common.Geometry.Shapes
     public struct Sphere3f : IEquatable<Sphere3f>
     {
 
-        public VECTOR3 Center;
+        public Vector3f Center;
 
-        public REAL Radius;
+        public float Radius;
 
-        public Sphere3f(VECTOR3 center, REAL radius)
+        public Sphere3f(Vector3f center, float radius)
         {
             Center = center;
             Radius = radius;
@@ -30,7 +24,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The squared radius.
         /// </summary>
-        public REAL Radius2
+        public float Radius2
         {
             get { return Radius * Radius; }
         }
@@ -38,7 +32,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The spheres diameter.
         /// </summary>
-        public REAL Diameter
+        public float Diameter
         {
             get { return Radius * 2.0f; }
         }
@@ -46,7 +40,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The spheres area.
         /// </summary>
-        public REAL Area
+        public float Area
         {
             get { return 4.0f / 3.0f * FMath.PI * Radius * Radius * Radius; }
         }
@@ -54,7 +48,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The spheres surface area.
         /// </summary>
-        public REAL SurfaceArea
+        public float SurfaceArea
         {
             get { return 4.0f * FMath.PI * Radius2; }
         }
@@ -66,12 +60,12 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                REAL xmin = Center.x - Radius;
-                REAL xmax = Center.x + Radius;
-                REAL ymin = Center.y - Radius;
-                REAL ymax = Center.y + Radius;
-                REAL zmin = Center.z - Radius;
-                REAL zmax = Center.z + Radius;
+                float xmin = Center.x - Radius;
+                float xmax = Center.x + Radius;
+                float ymin = Center.y - Radius;
+                float ymax = Center.y + Radius;
+                float zmin = Center.z - Radius;
+                float zmax = Center.z + Radius;
 
                 return new Box3f(xmin, xmax, ymin, ymax, zmin, zmax);
             }
@@ -118,16 +112,16 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the sphere so it contains the point p.
         /// </summary>
-        public void Enlarge(VECTOR3 p)
+        public void Enlarge(Vector3f p)
         {
-            VECTOR3 d = p - Center;
-            REAL dist2 = d.SqrMagnitude;
+            Vector3f d = p - Center;
+            float dist2 = d.SqrMagnitude;
 
             if (dist2 > Radius2)
             {
-                REAL dist = FMath.Sqrt(dist2);
-                REAL radius = (Radius + dist) * 0.5f;
-                REAL k = (radius - Radius) / dist;
+                float dist = FMath.Sqrt(dist2);
+                float radius = (Radius + dist) * 0.5f;
+                float k = (radius - Radius) / dist;
 
                 Center += d * k;
                 Radius = radius;
@@ -138,9 +132,9 @@ namespace Common.Geometry.Shapes
         /// Find the closest point to the sphere.
         /// If point inside sphere return point.
         /// </summary>
-        public VECTOR3 Closest(VECTOR3 p)
+        public Vector3f Closest(Vector3f p)
         {
-            VECTOR3 d = Center - p;
+            Vector3f d = Center - p;
             if (d.SqrMagnitude <= Radius2) return p;
             return Center + Radius * d.Normalized;
         }
@@ -150,7 +144,7 @@ namespace Common.Geometry.Shapes
         /// If point is outside sphere field is positive.
         /// If point is inside spher field is negative.
         /// </summary>
-        public REAL SignedDistance(VECTOR3 p)
+        public float SignedDistance(Vector3f p)
         {
             p = p - Center;
             return p.Magnitude - Radius;
@@ -161,9 +155,9 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">The point</param>
         /// <returns>true if sphere contains point</returns>
-        public bool Contains(VECTOR3 p)
+        public bool Contains(Vector3f p)
         {
-            return VECTOR3.SqrDistance(Center, p) <= Radius2;
+            return Vector3f.SqrDistance(Center, p) <= Radius2;
         }
 
         /// <summary>
@@ -171,14 +165,14 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool Contains(Box3f box)
         {
-            if (!Contains(new VECTOR3(box.Min.x, box.Min.y, box.Min.z))) return false;
-            if (!Contains(new VECTOR3(box.Max.x, box.Min.y, box.Min.z))) return false;
-            if (!Contains(new VECTOR3(box.Max.x, box.Min.y, box.Max.z))) return false;
-            if (!Contains(new VECTOR3(box.Min.x, box.Min.y, box.Max.z))) return false;
-            if (!Contains(new VECTOR3(box.Min.x, box.Max.y, box.Min.z))) return false;
-            if (!Contains(new VECTOR3(box.Max.x, box.Max.y, box.Min.z))) return false;
-            if (!Contains(new VECTOR3(box.Max.x, box.Max.y, box.Max.z))) return false;
-            if (!Contains(new VECTOR3(box.Min.x, box.Max.y, box.Max.z))) return false;
+            if (!Contains(new Vector3f(box.Min.x, box.Min.y, box.Min.z))) return false;
+            if (!Contains(new Vector3f(box.Max.x, box.Min.y, box.Min.z))) return false;
+            if (!Contains(new Vector3f(box.Max.x, box.Min.y, box.Max.z))) return false;
+            if (!Contains(new Vector3f(box.Min.x, box.Min.y, box.Max.z))) return false;
+            if (!Contains(new Vector3f(box.Min.x, box.Max.y, box.Min.z))) return false;
+            if (!Contains(new Vector3f(box.Max.x, box.Max.y, box.Min.z))) return false;
+            if (!Contains(new Vector3f(box.Max.x, box.Max.y, box.Max.z))) return false;
+            if (!Contains(new Vector3f(box.Min.x, box.Max.y, box.Max.z))) return false;
             return true;
         }
 
@@ -189,8 +183,8 @@ namespace Common.Geometry.Shapes
         /// <returns>True if the spheres intersect</returns>
         public bool Intersects(Sphere3f sphere)
         {
-            REAL r = Radius + sphere.Radius;
-            return VECTOR3.SqrDistance(Center, sphere.Center) <= r * r;
+            float r = Radius + sphere.Radius;
+            return Vector3f.SqrDistance(Center, sphere.Center) <= r * r;
         }
 
         /// <summary>
@@ -199,16 +193,16 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Box3f box)
         {
             var p = box.Closest(Center);
-            return VECTOR3.SqrDistance(p, Center) <= Radius2;
+            return Vector3f.SqrDistance(p, Center) <= Radius2;
         }
 
         /// <summary>
         /// Creates a sphere that has both points on its surface.
         /// </summary>
-        public static Sphere3f CircumSphere(VECTOR3 p0, VECTOR3 p1)
+        public static Sphere3f CircumSphere(Vector3f p0, Vector3f p1)
         {
             var centre = (p0 + p1) * 0.5f;
-            var radius = VECTOR3.Distance(p0, p1) * 0.5f;
+            var radius = Vector3f.Distance(p0, p1) * 0.5f;
             var bounds = new Sphere3f(centre, radius);
             return bounds;
         }
@@ -218,37 +212,37 @@ namespace Common.Geometry.Shapes
         /// From MathWorld: http://mathworld.wolfram.com/Circumsphere.html.
         /// Fails if the points are colinear.
         /// </summary>
-        public static Sphere3f CircumSphere(VECTOR3 p0, VECTOR3 p1, VECTOR3 p2, VECTOR3 p3)
+        public static Sphere3f CircumSphere(Vector3f p0, Vector3f p1, Vector3f p2, Vector3f p3)
         {
-            var m = new MATRIX4();
+            var m = new Matrix4x4f();
 
             // x, y, z, 1
-            m.SetRow(0, new VECTOR4(p0, 1));
-            m.SetRow(1, new VECTOR4(p1, 1));
-            m.SetRow(2, new VECTOR4(p2, 1));
-            m.SetRow(3, new VECTOR4(p3, 1));
-            REAL a = m.Determinant;
+            m.SetRow(0, new Vector4f(p0, 1));
+            m.SetRow(1, new Vector4f(p1, 1));
+            m.SetRow(2, new Vector4f(p2, 1));
+            m.SetRow(3, new Vector4f(p3, 1));
+            float a = m.Determinant;
 
             // size, y, z, 1
-            m.SetColumn(0, new VECTOR4(p0.SqrMagnitude, p1.SqrMagnitude, p2.SqrMagnitude, p3.SqrMagnitude));
-            REAL dx = m.Determinant;
+            m.SetColumn(0, new Vector4f(p0.SqrMagnitude, p1.SqrMagnitude, p2.SqrMagnitude, p3.SqrMagnitude));
+            float dx = m.Determinant;
 
             // size, x, z, 1
-            m.SetColumn(1, new VECTOR4(p0.x, p1.x, p2.x, p3.x));
-            REAL dy = -m.Determinant;
+            m.SetColumn(1, new Vector4f(p0.x, p1.x, p2.x, p3.x));
+            float dy = -m.Determinant;
 
             // size, x, y, 1
-            m.SetColumn(2, new VECTOR4(p0.y, p1.y, p2.y, p3.y));
-            REAL dz = m.Determinant;
+            m.SetColumn(2, new Vector4f(p0.y, p1.y, p2.y, p3.y));
+            float dz = m.Determinant;
 
             // size, x, y, z
-            m.SetColumn(3, new VECTOR4(p0.z, p1.z, p2.z, p3.z));
-            REAL c = m.Determinant;
+            m.SetColumn(3, new Vector4f(p0.z, p1.z, p2.z, p3.z));
+            float c = m.Determinant;
 
-            REAL s = -1.0f / (2.0f * a);
+            float s = -1.0f / (2.0f * a);
 
-            var circumCenter = new VECTOR3(s * dx, s * dy, s * dz);
-            REAL radius = Math.Abs(s) * FMath.Sqrt(dx * dx + dy * dy + dz * dz - 4.0f * a * c);
+            var circumCenter = new Vector3f(s * dx, s * dy, s * dz);
+            float radius = Math.Abs(s) * FMath.Sqrt(dx * dx + dy * dy + dz * dz - 4.0f * a * c);
 
             return new Sphere3f(circumCenter, radius);
         }
@@ -256,7 +250,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Creates a sphere that contains all three points.
         /// </summary>
-        public static Sphere3f CalculateBounds(VECTOR3 p0, VECTOR3 p1, VECTOR3 p2)
+        public static Sphere3f CalculateBounds(Vector3f p0, Vector3f p1, Vector3f p2)
         {
             var bounds = CircumSphere(p0, p1);
             bounds.Enlarge(p2);
@@ -267,7 +261,7 @@ namespace Common.Geometry.Shapes
         /// Calculate the minimum bounding sphere that contains 
         /// all the points in the list.
         /// </summary>
-        public static Sphere3f CalculateBounds(IList<VECTOR3> points)
+        public static Sphere3f CalculateBounds(IList<Vector3f> points)
         {
             var idx = ExtremePoints(points);
 
@@ -283,7 +277,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Finds which axis contains the two most extreme points
         /// </summary>
-        private static Vector2i ExtremePoints(IList<VECTOR3> points)
+        private static Vector2i ExtremePoints(IList<Vector3f> points)
         {
             Vector3i min = new Vector3i();
             Vector3i max = new Vector3i();
@@ -301,9 +295,9 @@ namespace Common.Geometry.Shapes
                 if (v.z > points[max.z].z) max.z = i;
             }
 
-            var d2x = VECTOR3.SqrDistance(points[max.x], points[min.x]);
-            var d2y = VECTOR3.SqrDistance(points[max.y], points[min.y]);
-            var d2z = VECTOR3.SqrDistance(points[max.z], points[min.z]);
+            var d2x = Vector3f.SqrDistance(points[max.x], points[min.x]);
+            var d2y = Vector3f.SqrDistance(points[max.y], points[min.y]);
+            var d2z = Vector3f.SqrDistance(points[max.z], points[min.z]);
 
             if (d2x > d2y && d2x > d2z)
                 return new Vector2i(min.x, max.x);

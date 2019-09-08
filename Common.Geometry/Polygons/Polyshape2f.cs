@@ -68,11 +68,6 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
-        /// Create the index array.
-        /// </summary>
-        public abstract void CreateIndices();
-
-        /// <summary>
         /// Find the shapes bounding box.
         /// </summary>
         public void CalculateBounds()
@@ -95,6 +90,21 @@ namespace Common.Geometry.Polygons
 
             Bounds = new Box2f(min, max);
         }
+
+        /// <summary>
+        /// Will reverse the polyshape.
+        /// </summary>
+        public abstract void Reverse();
+
+        /// <summary>
+        /// Create the index array.
+        /// </summary>
+        public abstract void CreateIndices();
+
+        /// <summary>
+        /// Does the shape contain the points.
+        /// </summary>
+        public abstract bool ContainsPoint(Vector2f point);
 
         /// <summary>
         /// Translate the positions.
