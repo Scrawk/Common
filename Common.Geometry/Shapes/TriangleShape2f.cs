@@ -31,6 +31,11 @@ namespace Common.Geometry.Shapes
             return Triangle.Contains(p);
         }
 
+        public bool Intersects(Box2f box)
+        {
+            return Triangle.Intersects(box);
+        }
+
         public Vector2f Closest(Vector2f p)
         {
             return Triangle.Closest(p);

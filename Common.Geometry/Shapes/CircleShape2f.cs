@@ -31,6 +31,11 @@ namespace Common.Geometry.Shapes
             return Circle.Contains(p);
         }
 
+        public bool Intersects(Box2f box)
+        {
+            return Circle.Intersects(box);
+        }
+
         public Vector2f Closest(Vector2f p)
         {
             return Circle.Closest(p);

@@ -49,10 +49,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Points\KdTree2dTest.cs" />
+    <Compile Include="Points\KdTree3dTest.cs" />
+    <Compile Include="Points\PointCollection2dTest.cs" />
+    <Compile Include="Points\PointCollection3dTest.cs" />
+    <Compile Include="Points\PointGrid2dTest.cs" />
+    <Compile Include="Points\PointGrid3dTest.cs" />
     <Compile Include="Curves\Bezier2fTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shapes\Box2fTest.cs" />
     <Compile Include="Shapes\Circle2fTest.cs" />
+    <Compile Include="Shapes\Segment2fTest.cs" />
     <Compile Include="Shapes\Triangle2fTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +74,9 @@
       <Project>{cec1c462-d7b0-4c37-b462-9f55950a1785}</Project>
       <Name>Common.Geometry</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Collections\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

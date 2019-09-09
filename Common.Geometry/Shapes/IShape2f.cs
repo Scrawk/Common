@@ -11,6 +11,8 @@ namespace Common.Geometry.Shapes
 
         bool Contains(Vector2f p);
 
+        bool Intersects(Box2f box);
+
         Vector2f Closest(Vector2f p);
 
         float SignedDistance(Vector2f p);

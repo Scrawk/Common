@@ -10,14 +10,9 @@ namespace Common.Geometry.Test.Shapes
     public class Circle2fTest
     {
         [TestMethod]
-        public void Closest()
+        public void Test()
         {
-            var circle = new Circle2f(new Vector2f(0, 0), 1);
 
-            var p = new Vector2f(0, 0);
-            var c = circle.Closest(p);
-
-            Console.Write(c);
         }
     }
 }

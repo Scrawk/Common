@@ -31,6 +31,11 @@ namespace Common.Geometry.Shapes
             return false;
         }
 
+        public bool Intersects(Box2f box)
+        {
+            return Segment.Intersects(box);
+        }
+
         public Vector2f Closest(Vector2f p)
         {
             return Segment.Closest(p);

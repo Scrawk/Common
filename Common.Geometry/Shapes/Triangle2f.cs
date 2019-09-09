@@ -368,6 +368,10 @@ namespace Common.Geometry.Shapes
             return A + ab * v + ac * w;
         }
 
+        /// <summary>
+        /// Returns the signed distance to surface of triangle.
+        /// </summary>
+        /// <returns>positive if outside triangle, negative if inside and 0 on boundary</returns>
         public float SignedDistance(Vector2f p)
         {
             Vector2f center = Center;
@@ -428,6 +432,14 @@ namespace Common.Geometry.Shapes
             if (Vector2f.Cross(p - C, A - C) > 0.0) return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Does the triangle intersect this box.
+        /// </summary>
+        public bool Intersects(Box2f box)
+        {
+            throw new NotImplementedException();
         }
 
     }

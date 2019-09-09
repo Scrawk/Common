@@ -10,14 +10,21 @@ namespace Common.Geometry.Test.Shapes
     public class Triangle2fTest
     {
         [TestMethod]
-        public void Closest()
+        public void IntersectsBox()
         {
-            var tri = new Triangle2f(new Vector2f(-1,0), new Vector2f(1,0), new Vector2f(0, 1));
+            var a = new Vector2f(-2, -1);
+            var b = new Vector2f(1, -1);
+            var c = new Vector2f(1, 1);
+            var triangle = new Triangle2f(a, b, c);
 
-            var p = new Vector2f(0, 0);
-            var c = tri.Closest(p);
+            var box = new Box2f(new Vector2f(-3, -3), new Vector2f(-2,-2));
+            //Assert.IsFalse(triangle.Intersects(box));
 
-            Console.Write(c);
+            box = new Box2f(new Vector2f(-2, -1), new Vector2f(1, 2));
+            //Assert.IsFalse(triangle.Intersects(box));
+
+            box = new Box2f(new Vector2f(1, -3), new Vector2f(2, -2));
+            //Assert.IsFalse(triangle.Intersects(box));
         }
     }
 }
