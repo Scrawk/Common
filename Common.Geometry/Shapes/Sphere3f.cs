@@ -15,6 +15,12 @@ namespace Common.Geometry.Shapes
 
         public float Radius;
 
+        public Sphere3f(float x, float y, float z, float radius)
+        {
+            Center = new Vector3f(x,y,z);
+            Radius = radius;
+        }
+
         public Sphere3f(Vector3f center, float radius)
         {
             Center = center;

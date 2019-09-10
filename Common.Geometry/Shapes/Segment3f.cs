@@ -158,6 +158,38 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Does the segment intersect this box.
+        /// </summary>
+        public bool Intersects(Box3f box)
+        {
+            Vector3f c = box.Center;
+            Vector3f e = box.Max - c; //Box half length extents
+            Vector3f m = Center;
+            Vector3f d = B - m; //Segment halflength vector.
+            m = m - c; //translate box and segment to origin.
+
+            //try world coordinate axes as seperating axes.
+            float adx = Math.Abs(d.x);
+            if (Math.Abs(m.x) > e.x + adx) return false;
+            float ady = Math.Abs(d.y);
+            if (Math.Abs(m.y) > e.y + ady) return false;
+            float adz = Math.Abs(d.z);
+            if (Math.Abs(m.z) > e.z + adz) return false;
+
+            //add in an epsilon term to counteract arithmetic errors 
+            //when segment is near parallel to a coordinate axis.
+            adx += FMath.EPS;
+            ady += FMath.EPS;
+            adz += FMath.EPS;
+
+            if (Math.Abs(m.y * d.z - m.z * d.y) > e.y * adz + e.z * ady) return false;
+            if (Math.Abs(m.z * d.x - m.x * d.z) > e.x * adz + e.z * adx) return false;
+            if (Math.Abs(m.x * d.y - m.y * d.x) > e.x * ady + e.y * adx) return false;
+
+            return true;
+        }
+
+        /// <summary>
         /// The closest point on segment to point.
         /// </summary>
         /// <param name="p">point</param>
