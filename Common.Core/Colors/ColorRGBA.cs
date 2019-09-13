@@ -13,11 +13,20 @@ namespace Common.Core.Colors
     {
 
         public readonly static ColorRGBA Red = new ColorRGBA(1, 0, 0, 1);
+        public readonly static ColorRGBA Orange = new ColorRGBA(1, 0.5, 0, 1);
+        public readonly static ColorRGBA Olive = new ColorRGBA(0.5, 0.5, 0, 1);
+        public readonly static ColorRGBA VividGreen = new ColorRGBA(0.5, 1, 0, 1);
         public readonly static ColorRGBA Yellow = new ColorRGBA(1, 1, 0, 1);
         public readonly static ColorRGBA Green = new ColorRGBA(0, 1, 0, 1);
+        public readonly static ColorRGBA SpringGreen = new ColorRGBA(0, 1, 0.5, 1);
         public readonly static ColorRGBA Cyan = new ColorRGBA(0, 1, 1, 1);
+        public readonly static ColorRGBA Azure = new ColorRGBA(0, 0.5, 1, 1);
+        public readonly static ColorRGBA Teal = new ColorRGBA(0, 0.5, 0.5, 1);
         public readonly static ColorRGBA Blue = new ColorRGBA(0, 0, 1, 1);
+        public readonly static ColorRGBA Violet = new ColorRGBA(0.5, 0, 1, 1);
+        public readonly static ColorRGBA Purple = new ColorRGBA(0.5, 0, 0.5, 1);
         public readonly static ColorRGBA Magenta = new ColorRGBA(1, 0, 1, 1);
+
         public readonly static ColorRGBA Black = new ColorRGBA(0, 0, 0, 1);
         public readonly static ColorRGBA White = new ColorRGBA(1, 1, 1, 1);
         public readonly static ColorRGBA Clear = new ColorRGBA(0, 0, 0, 0);

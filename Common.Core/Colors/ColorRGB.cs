@@ -13,11 +13,20 @@ namespace Common.Core.Colors
     {
 
         public readonly static ColorRGB Red = new ColorRGB(1, 0, 0);
+        public readonly static ColorRGB Orange = new ColorRGB(1, 0.5, 0);
+        public readonly static ColorRGB Olive = new ColorRGB(0.5, 0.5, 0);
+        public readonly static ColorRGB VividGreen = new ColorRGB(0.5, 1, 0);
         public readonly static ColorRGB Yellow = new ColorRGB(1, 1, 0);
         public readonly static ColorRGB Green = new ColorRGB(0, 1, 0);
+        public readonly static ColorRGB SpringGreen = new ColorRGB(0, 1, 0.5);
         public readonly static ColorRGB Cyan = new ColorRGB(0, 1, 1);
+        public readonly static ColorRGB Azure = new ColorRGB(0, 0.5, 1);
+        public readonly static ColorRGB Teal = new ColorRGB(0, 0.5, 0.5);
         public readonly static ColorRGB Blue = new ColorRGB(0, 0, 1);
+        public readonly static ColorRGB Violet = new ColorRGB(0.5, 0, 1);
+        public readonly static ColorRGB Purple = new ColorRGB(0.5, 0, 0.5);
         public readonly static ColorRGB Magenta = new ColorRGB(1, 0, 1);
+
         public readonly static ColorRGB Black = new ColorRGB(0, 0, 0);
         public readonly static ColorRGB White = new ColorRGB(1, 1, 1);
 
