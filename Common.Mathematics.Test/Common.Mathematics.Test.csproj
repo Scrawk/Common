@@ -51,6 +51,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Functions\ChainFuncTest.cs" />
+    <Compile Include="Functions\CosFuncTest.cs" />
+    <Compile Include="Functions\ExpFuncTest.cs" />
+    <Compile Include="Functions\LogFuncTest.cs" />
+    <Compile Include="Functions\PolynominalFuncTest.cs" />
+    <Compile Include="Functions\PowFuncTest.cs" />
+    <Compile Include="Functions\ProductFuncTest.cs" />
+    <Compile Include="Functions\QuotientFuncTest.cs" />
+    <Compile Include="Functions\SinFuncTest.cs" />
+    <Compile Include="Functions\TanFuncTest.cs" />
     <Compile Include="Polynomials\Polynomial2dTest.cs" />
     <Compile Include="Polynomials\Polynomial3dTest.cs" />
     <Compile Include="Probability\NormalDistribution1Test.cs" />
