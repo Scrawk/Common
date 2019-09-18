@@ -64,8 +64,6 @@
     <Compile Include="Polynomials\Polynomial2dTest.cs" />
     <Compile Include="Polynomials\Polynomial3dTest.cs" />
     <Compile Include="Probability\NormalDistribution1Test.cs" />
-    <Compile Include="Probability\NormalDistribution2Test.cs" />
-    <Compile Include="Probability\NormalDistributionNTest.cs" />
     <Compile Include="Probability\StatisticsTest.cs" />
     <Compile Include="Probability\Probability1iTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

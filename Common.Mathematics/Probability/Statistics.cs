@@ -208,26 +208,5 @@ namespace Common.Mathematics.Probability
 
             return cv;
         }
-
-        public static double[,] CovarianceToCorrelation(double[,] covariance)
-        {
-            int dimensions = covariance.GetLength(0);
-
-            double[,] correlation = new double[dimensions, dimensions];
-
-            for (int j = 0; j < dimensions; j++)
-            {
-                for (int i = 0; i < dimensions; i++)
-                {
-                    if (i != j) continue;
-                    correlation[i, j] = Math.Sqrt(covariance[i, j]);
-                }
-            }
-
-            double[,] inverse = MatrixMxN.Inverse(correlation);
-
-            return MatrixMxN.MultiplyMatrix(MatrixMxN.MultiplyMatrix(inverse, covariance), inverse);
-
-        }
     }
 }

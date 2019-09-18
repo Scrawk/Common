@@ -87,34 +87,5 @@ namespace Common.Mathematics.Test.Probability
             CollectionAssert.AreEqual(expected, covariance);
         }
 
-        [TestMethod]
-        public void CovarianceToCorrelation()
-        {
-
-            double[,] covariance = new double[,]
-            {
-                {1.0, 1.0, 8.1},
-                {1.0, 16.0, 18.0},
-                {8.1, 18.0, 81.0}
-            };
-
-            double[,] correlation = Statistics.CovarianceToCorrelation(covariance);
-
-            double[,] expected = new double[,]
-            {
-                {1.0, 0.25, 0.9},
-                {0.25, 1.0, 0.5},
-                {0.9, 0.5, 1.0}
-            };
-
-            for (int j = 0; j < 3; j++)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    Assert.AreEqual(expected[i, j], Math.Round(correlation[i, j], 4));
-                }
-            }
-
-        }
     }
 }
