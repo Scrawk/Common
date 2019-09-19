@@ -159,6 +159,17 @@ namespace Common.Core.Numerics
             this.z = z;
         }
 
+        /// <summary>
+        /// A vector from the varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3f(double x, double y, double z)
+        {
+            this.x = (float)x;
+            this.y = (float)y;
+            this.z = (float)z;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3f(REAL x, REAL y)
         {

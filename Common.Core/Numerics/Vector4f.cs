@@ -128,6 +128,18 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// A vector from the varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector4f(double x, double y, double z, double w)
+        {
+            this.x = (float)x;
+            this.y = (float)y;
+            this.z = (float)z;
+            this.w = (float)w;
+        }
+
+        /// <summary>
         /// A vector from a 2d vector and the z and w varibles.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

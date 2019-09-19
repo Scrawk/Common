@@ -5,6 +5,9 @@ using Common.Core.Numerics;
 
 namespace Common.Core.Numerics
 {
+    /// <summary>
+    /// A general matrix class of arbitary rows and columns.
+    /// </summary>
     public class Matrix
     {
 
@@ -17,26 +20,13 @@ namespace Common.Core.Numerics
 
         public Matrix(double[,] mat)
         {
-            array = mat;
+            int rows = mat.GetLength(0);
+            int columns = mat.GetLength(1);
+            array = new double[rows, columns];
+            Array.Copy(mat, array, mat.Length);
         }
 
         public Matrix(List<List<double>> mat)
-        {
-            int rows = mat.Count;
-            int columns = mat[0].Count;
-
-            array = new double[rows, columns];
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < columns; j++)
-                {
-                    array[i, j] = mat[i][j];
-                }
-            }
-        }
-
-        public Matrix(List<List<float>> mat)
         {
             int rows = mat.Count;
             int columns = mat[0].Count;
@@ -62,6 +52,9 @@ namespace Common.Core.Numerics
             set => array[i, j] = value;
         }
 
+        /// <summary>
+        /// Multiply the matrix with a vector.
+        /// </summary>
         public static Vector operator *(Matrix m, Vector v)
         {
             int M = m.Rows;
@@ -86,6 +79,9 @@ namespace Common.Core.Numerics
             return vec;
         }
 
+        /// <summary>
+        /// Multiply two matrices.
+        /// </summary>
         public static Matrix operator *(Matrix m1, Matrix m2)
         {
             int M = m1.Rows;
@@ -113,6 +109,9 @@ namespace Common.Core.Numerics
             return mat;
         }
 
+        /// <summary>
+        /// Multiply a matrix and a scalar..
+        /// </summary>
         public static Matrix operator *(Matrix m, double s)
         {
             int M = m.Rows;
@@ -129,6 +128,9 @@ namespace Common.Core.Numerics
             return mat;
         }
 
+        /// <summary>
+        /// Add two matrices.
+        /// </summary>
         public static Matrix operator +(Matrix m1, Matrix m2)
         {
             int M = m1.Rows;
@@ -148,6 +150,9 @@ namespace Common.Core.Numerics
             return mat;
         }
 
+        /// <summary>
+        /// Subtract two matrices.
+        /// </summary>
         public static Matrix operator -(Matrix m1, Matrix m2)
         {
             int M = m1.Rows;
@@ -167,6 +172,9 @@ namespace Common.Core.Numerics
             return mat;
         }
 
+        /// <summary>
+        /// Transpose the matrix.
+        /// </summary>
         public Matrix Transpose
         {
             get
@@ -187,6 +195,9 @@ namespace Common.Core.Numerics
             }
         }
 
+        /// <summary>
+        /// Inverse the matrix.
+        /// </summary>
         public Matrix Inverse
         {
             get
@@ -195,6 +206,9 @@ namespace Common.Core.Numerics
             }
         }
 
+        /// <summary>
+        /// Find the matrix determinant.
+        /// </summary>
         public double Determinant
         {
             get
@@ -219,6 +233,9 @@ namespace Common.Core.Numerics
             }
         }
 
+        /// <summary>
+        /// Find the matrix cofactor.
+        /// </summary>
         public Matrix Cofactor
         {
             get
@@ -240,6 +257,10 @@ namespace Common.Core.Numerics
             }
         }
 
+        /// <summary>
+        /// Returns a new matrix that is one row and column
+        /// smaller than the original.
+        /// </summary>
         public Matrix SubMatrix(int excluding_row, int excluding_col)
         {
             int M = Rows;
@@ -250,14 +271,14 @@ namespace Common.Core.Numerics
             int r = -1;
             for (int i = 0; i < M; i++)
             {
-                if (i == excluding_row)
-                    continue;
+                if (i == excluding_row) continue;
+
                 r++;
                 int c = -1;
                 for (int j = 0; j < N; j++)
                 {
-                    if (j == excluding_col)
-                        continue;
+                    if (j == excluding_col) continue;
+
                     mat[r, ++c] = array[i, j];
                 }
             }
@@ -302,7 +323,7 @@ namespace Common.Core.Numerics
             array[i, 3] = w;
         }
 
-        public void SetRow(int i, double[] row)
+        public void SetRow(int i, IList<double> row)
         {
             for (int j = 0; j < Columns; j++)
                 array[i, j] = row[j];
@@ -344,7 +365,7 @@ namespace Common.Core.Numerics
             array[3, j] = w;
         }
 
-        public void SetColumn(int j, double[] col)
+        public void SetColumn(int j, IList<double> col)
         {
             for (int i = 0; i < Rows; i++)
                 array[i, j] = col[i];
@@ -356,6 +377,9 @@ namespace Common.Core.Numerics
                 array[i, j] = col[i];
         }
 
+        /// <summary>
+        /// Return a copy of the matrix.
+        /// </summary>
         public Matrix Copy()
         {
             var copy = new double[Rows, Columns];
@@ -363,35 +387,77 @@ namespace Common.Core.Numerics
             return new Matrix(copy);
         }
 
-        public List<Vector> ToVectors()
+        /// <summary>
+        /// Return a copy of the matrix as a array.
+        /// </summary>
+        public double[,] ToArray()
         {
-            int M = Rows;
-            int N = Columns;
+            var copy = new double[Rows, Columns];
+            Array.Copy(array, copy, array.Length);
+            return copy;
+        }
 
-            var vectors = new List<Vector>(N);
+        /// <summary>
+        /// Return a copy of the matrix as a list of lists.
+        /// </summary>
+        /// <returns></returns>
+        public List<List<double>> ToList()
+        {
+            var mat = new List<List<double>>();
 
-            for (int i = 0; i < M; i++)
+            for (int i = 0; i < Rows; i++)
             {
-                var vec = new Vector(M);
+                var row = new List<double>();
 
-                for (int j = 0; j < N; j++)
+                for (int j = 0; j < Columns; j++)
                 {
-                    vec[j] = array[i, j];
+                    row.Add(array[i, j]);
                 }
 
-                vectors.Add(vec);
+                mat.Add(row);
             }
+
+            return mat;
+        }
+
+        /// <summary>
+        /// Return a list where each row in matrix is a vector.
+        /// </summary>
+        public List<Vector> GetRowVectors()
+        {
+            var vectors = new List<Vector>(Rows);
+
+            for (int i = 0; i < Rows; i++)
+                vectors.Add(GetRow(i));
 
             return vectors;
         }
 
-        // Solve a system of equations
+        /// <summary>
+        /// Return a list where each column in matrix is a vector.
+        /// </summary>
+        public List<Vector> GetColumnVectors()
+        {
+            var vectors = new List<Vector>(Columns);
+
+            for (int i = 0; i < Columns; i++)
+                vectors.Add(GetColumn(i));
+
+            return vectors;
+        }
+
+        /// <summary>
+        /// Solve a system of equations.
+        /// </summary>
         public static Vector Solve(Matrix A, Vector b)
         {
             return LUsolve(LU(A.Copy()), b);
         }
 
-        // Based on methods from numeric.js
+        /// <summary>
+        /// Solve a system of equations.
+        /// Based on methods from numeric.js
+        /// </summary>
         private static Vector LUsolve(LUDecomp LUP, Vector b)
         {
             int i, j;
@@ -445,7 +511,10 @@ namespace Common.Core.Numerics
             return x;
         }
 
-        // Based on methods from numeric.js
+        /// <summary>
+        /// Solve a system of equations.
+        /// Based on methods from numeric.js
+        /// </summary>
         private static LUDecomp LU(Matrix A)
         {
             int n = A.Rows, n1 = n - 1;

@@ -112,6 +112,16 @@ namespace Common.Core.Numerics
             this.y = y;
         }
 
+        /// <summary>
+        /// A vector from the varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector2f(double x, double y)
+        {
+            this.x = (float)x;
+            this.y = (float)y;
+        }
+
         unsafe public REAL this[int i]
         {
             get
