@@ -36,20 +36,38 @@ namespace Common.Geometry.Polygons
 
         public override string ToString()
         {
-            return string.Format("[Polygon2f: Count={0}, Area={1}, IsCCW={2}]", Count, Area, IsCCW);
+            return string.Format("[Polygon2f: Count={0}, Length={1}, Area={2}, IsCCW={3}]", 
+                Count, Length, Area, IsCCW);
         }
 
+        /// <summary>
+        /// Get the position with a circular index.
+        /// </summary>
         public Vector2f GetPosition(int i)
         {
-            return Positions[IMath.Wrap(i + 1, Count)];
+            return Positions.GetCircular(i);
         }
 
+        /// <summary>
+        /// Get the param with a circular index.
+        /// </summary>
         public float GetParam(int i)
         {
             if (Params == null)
                 throw new InvalidOperationException("Polygon does not have any params.");
 
-            return Params[IMath.Wrap(i + 1, Count)];
+            return Params.GetCircular(i);
+        }
+
+        /// <summary>
+        /// Get the length with a circular index.
+        /// </summary>
+        public float GetLength(int i)
+        {
+            if (Lengths == null)
+                throw new InvalidOperationException("Polygon does not have any lengths.");
+
+            return Lengths.GetCircular(i);
         }
 
         /// <summary>
@@ -74,6 +92,7 @@ namespace Common.Geometry.Polygons
         {
             Array.Reverse(Positions);
             if (Params != null) Array.Reverse(Params);
+            if (Lengths != null) Array.Reverse(Lengths);
             SignedArea *= -1;
         }
 
@@ -88,6 +107,12 @@ namespace Common.Geometry.Polygons
             copy.Centroid = Centroid;
             copy.Bounds = Bounds;
 
+            if (Params != null)
+                copy.SetParams(Params);
+
+            if (Lengths != null)
+                copy.SetLengths(Lengths);
+
             return copy;
         }
 
@@ -101,6 +126,7 @@ namespace Common.Geometry.Polygons
             CalculateCentroid();
             CalculateBounds();
             CalculateArea();
+            CalculateLengths();
         }
 
         public void CalculateCentroid()
@@ -137,6 +163,30 @@ namespace Common.Geometry.Polygons
             SignedArea = (firstProducts - secondProducts) / 2.0f;
         }
 
+        /// <summary>
+        /// Calculate the total length of the polygons
+        /// boundary and the length of each segment in polygon.
+        /// Lengths represents the length of that segment plus
+        /// previous segment length.
+        /// </summary>
+        public override void CalculateLengths()
+        {
+            Length = 0;
+            Lengths = null;
+            if (Count == 0) return;
+
+            Lengths = new float[Count];
+
+            for (int i = 0; i < Count; i++)
+            {
+                var p0 = GetPosition(i);
+                var p1 = GetPosition(i + 1);
+
+                Lengths[i] = Length + Vector2f.Distance(p0, p1);
+                Length = Lengths[i];
+            }
+        }
+
         public override bool ContainsPoint(Vector2f point)
         {
             if (Count == 0) return false;
@@ -157,6 +207,52 @@ namespace Common.Geometry.Polygons
             }
 
             return (windingNumber % 2 != 0);
+        }
+
+        /// <summary>
+        /// Given the number (0 >= t <= 1) find this length on the 
+        /// polygon and return the index before this point and the 
+        /// distance (0 >= s <= 1) from this point to the next.
+        /// </summary>
+        protected override void FindInterpolationPoint(float t, out int idx, out float s)
+        {
+            t = FMath.Clamp01(t) * Length;
+
+            if (t == 0)
+            {
+                s = 0;
+                idx = 0;
+            }
+            else if (t == Length)
+            {
+                s = 1;
+                idx = Count - 1;
+            }
+            else
+            {
+                s = 0;
+                idx = -1;
+                float len0 = 0;
+
+                for (int i = 0; i < Count; i++)
+                {
+                    float len1 = GetLength(i);
+
+                    if (t >= len0 && t < len1)
+                    {
+                        float len = len1 - len0;
+
+                        if (len <= 0)
+                            s = 0;
+                        else
+                            s = (t - len0) / len;
+
+                        idx = i;
+                    }
+
+                    len0 = len1;
+                }
+            }
         }
 
         public static Polygon2f FromBox(Vector2f min, Vector2f max)

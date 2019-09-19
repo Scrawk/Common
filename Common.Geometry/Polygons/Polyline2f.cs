@@ -24,11 +24,39 @@ namespace Common.Geometry.Polygons
 
         public float Width { get; set; }
 
-        public float Length { get; private set; }
-
         public override string ToString()
         {
             return string.Format("[Polyline2f: Count={0}, Length={1}]", Count, Length);
+        }
+
+        /// <summary>
+        /// Get the position with a clamped index.
+        /// </summary>
+        public Vector2f GetPosition(int i)
+        {
+            return Positions.GetClamped(i);
+        }
+
+        /// <summary>
+        /// Get the param with a clamped index.
+        /// </summary>
+        public float GetParam(int i)
+        {
+            if (Params == null)
+                throw new InvalidOperationException("Polyline does not have any params.");
+
+            return Params.GetClamped(i);
+        }
+
+        /// <summary>
+        /// Get the length with a clamped index.
+        /// </summary>
+        public float GetLength(int i)
+        {
+            if (Lengths == null)
+                throw new InvalidOperationException("Polyline does not have any lengths.");
+
+            return Lengths.GetClamped(i);
         }
 
         /// <summary>
@@ -51,6 +79,7 @@ namespace Common.Geometry.Polygons
         {
             Array.Reverse(Positions);
             if (Params != null) Array.Reverse(Params);
+            if (Lengths != null) Array.Reverse(Lengths);
         }
 
         /// <summary>
@@ -63,6 +92,12 @@ namespace Common.Geometry.Polygons
             copy.Length = Length;
             copy.Bounds = Bounds;
 
+            if (Params != null)
+                copy.SetParams(Params);
+
+            if (Lengths != null)
+                copy.SetLengths(Lengths);
+
             return copy;
         }
 
@@ -73,17 +108,30 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public void Calculate()
         {
-            CalculateLength();
+            CalculateLengths();
             CalculateBounds();
         }
 
-        public void CalculateLength()
+        /// <summary>
+        /// Calculate the total length of the line
+        /// and the length of each segment in line.
+        /// Lengths represents the length of line 
+        /// up to that point.
+        /// </summary>
+        public override void CalculateLengths()
         {
             Length = 0;
+            Lengths = null;
             if (Count == 0) return;
 
-            for (int i = 0; i < Count - 1; i++)
-                Length += Vector2f.Distance(Positions[i], Positions[i + 1]);
+            Lengths = new float[Count];
+            Lengths[0] = 0;
+
+            for (int i = 1; i < Count; i++)
+            {
+                Lengths[i] = Length + Vector2f.Distance(Positions[i-1], Positions[i]);
+                Length = Lengths[i];
+            }
         }
 
         public override bool ContainsPoint(Vector2f point)
@@ -104,6 +152,50 @@ namespace Common.Geometry.Polygons
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Given the number (0 >= t <= 1) find this length on the 
+        /// line and return the index before this point and the 
+        /// distance (0 >= s <= 1) from this point to the next.
+        /// </summary>
+        protected override void FindInterpolationPoint(float t, out int idx, out float s)
+        {
+            t = FMath.Clamp01(t) * Length;
+
+            if (t == 0)
+            {
+                s = 0;
+                idx = 0;
+            }
+            else if (t == Length)
+            {
+                s = 1;
+                idx = Count - 2;
+            }
+            else
+            {
+                s = 0;
+                idx = -1;
+
+                for (int i = 0; i < Count - 1; i++)
+                {
+                    float len0 = Lengths[i + 0];
+                    float len1 = Lengths[i + 1];
+
+                    if (t >= len0 && t < len1)
+                    {
+                        float len = len1 - len0;
+
+                        if (len <= 0)
+                            s = 0;
+                        else
+                            s = (t - len0) / len;
+
+                        idx = i;
+                    }
+                }
+            }
         }
 
     }

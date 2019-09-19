@@ -40,5 +40,12 @@ namespace System.Collections.Generic
             return list[IMath.Wrap(i, list.Count)];
         }
 
+        public static T GetClamped<T>(this IList<T> list, int i)
+        {
+            if (i < 0) i = 0;
+            if (i > list.Count - 1) i = list.Count - 1;
+            return list[i];
+        }
+
     }
 }

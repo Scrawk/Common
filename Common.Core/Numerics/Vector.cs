@@ -242,6 +242,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Vector: Length={0}]", Length);
+        }
+
+        /// <summary>
         /// Normalize the vector.
         /// </summary>
         public void Normalize()

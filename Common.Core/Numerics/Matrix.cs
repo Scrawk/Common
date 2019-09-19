@@ -293,6 +293,15 @@ namespace Common.Core.Numerics
             return -1;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Matrix: Rows={0}, Columns={1}]", Rows, Columns);
+        }
+
         public Vector GetRow(int i)
         {
             var vec = new Vector(Columns);

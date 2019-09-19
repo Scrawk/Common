@@ -27,11 +27,34 @@ namespace Common.Geometry.Polygons
 
         public Box2f Bounds { get; protected set; }
 
+        public float Length { get; protected set; }
+
         public Vector2f[] Positions { get; private set; }
 
         public float[] Params { get; private set; }
 
+        public float[] Lengths { get; protected set; }
+
         public int[] Indices { get; protected set; }
+
+        /// <summary>
+        /// Get the position with a interpolated index.
+        /// </summary>
+        public Vector2f GetPosition(float t)
+        {
+            return Interpolate(t, Positions);
+        }
+
+        /// <summary>
+        /// Get the param with a interpolated index.
+        /// </summary>
+        public float GetParam(float t)
+        {
+            if (Params == null)
+                throw new InvalidOperationException("Polyobject does not have any params.");
+
+            return Interpolate(t, Params);
+        }
 
         /// <summary>
         /// Creates the position array.
@@ -71,6 +94,15 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
+        /// Create the length array.
+        /// </summary>
+        protected void SetLengths(IList<float> lengths)
+        {
+            if (Lengths == null) Lengths = new float[Count];
+            lengths.CopyTo(Lengths, 0);
+        }
+
+        /// <summary>
         /// Find the shapes bounding box.
         /// </summary>
         public void CalculateBounds()
@@ -95,6 +127,11 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
+        /// Create the lengths array.
+        /// </summary>
+        public abstract void CalculateLengths();
+
+        /// <summary>
         /// Will reverse the polyshape.
         /// </summary>
         public abstract void Reverse();
@@ -108,6 +145,26 @@ namespace Common.Geometry.Polygons
         /// Does the shape contain the points.
         /// </summary>
         public abstract bool ContainsPoint(Vector2f point);
+
+        /// <summary>
+        /// Given the number (0 >= t <= 1) interpolate 
+        /// along the object to find the value in the array.
+        /// </summary>
+        public Vector2f Interpolate(float t, IList<Vector2f> array)
+        {
+            FindInterpolationPoint(t, out int idx, out float s);
+            return Vector2f.Lerp(array[idx], array.GetCircular(idx + 1), s);
+        }
+
+        /// <summary>
+        /// Given the number (0 >= t <= 1) interpolate 
+        /// along the object to find the value in the array.
+        /// </summary>
+        public float Interpolate(float t, IList<float> array)
+        {
+            FindInterpolationPoint(t, out int idx, out float s);
+            return FMath.Lerp(array[idx], array.GetCircular(idx + 1), s);
+        }
 
         /// <summary>
         /// Translate the positions.
@@ -148,5 +205,12 @@ namespace Common.Geometry.Polygons
             for (int i = 0; i < numVerts; i++)
                 Positions[i] = m * Positions[i];
         }
+
+        /// <summary>
+        /// Given the number (0 >= t <= 1) find this length on the 
+        /// object and return the index before this point and the 
+        /// distance (0 >= s <= 1) from this point to the next.
+        /// </summary>
+        protected abstract void FindInterpolationPoint(float t, out int idx, out float s);
     }
 }
