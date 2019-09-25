@@ -27,16 +27,18 @@ namespace Common.Mathematics.Functions
             this.n = n;
         }
 
-        public override string ToString()
+        public override string ToString(bool outerBrackects)
         {
+            string A = VaribleToString(a);
+
             if (a == 1 && n == 1)
                 return string.Format("x");
             else if (a == 1)
                 return string.Format("x^{0}", n);
             else if (n == 1)
-                return string.Format("{0}x", a);
+                return string.Format("{0}x", A);
             else
-                return string.Format("{0}x^{1}", a, n);
+                return string.Format("{0}x^{1}", A, n);
         }
 
         public override Function Copy()

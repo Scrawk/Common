@@ -44,10 +44,13 @@ namespace Common.Mathematics.Functions
 
         public int Degree => Functions.Count-1;
 
-		public override string ToString()
+		public override string ToString(bool outerBrackects)
 		{
 			string str = "";
             bool first = true;
+
+            if (outerBrackects)
+                str += "(";
 
             for (int i = 0; i <= Degree; i++)
             {
@@ -55,14 +58,17 @@ namespace Common.Mathematics.Functions
 
                 if (first)
                 {
-                    str += Functions[i].ToString();
+                    str += Functions[i].ToString(true);
                     first = false;
                 }
                 else
-                    str += " + " + Functions[i].ToString();
+                    str += " + " + Functions[i].ToString(true);
             }
 
-			return str;
+            if (outerBrackects)
+                str += ")";
+
+            return str;
 		}
 
 		public override Function Copy()

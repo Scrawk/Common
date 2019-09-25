@@ -23,6 +23,23 @@ namespace Common.Mathematics.Functions
             return a == 0;
         }
 
+        protected string VaribleToString(double x)
+        {
+            if (x == Math.PI)
+                return "PI";
+            else if (x == Math.E)
+                return "E";
+            else
+                return x.ToString();
+        }
+
+        public override string ToString()
+        {
+            return ToString(false);
+        }
+
+        public abstract string ToString(bool outerBrackects);
+
         public abstract Function Copy();
 
         public abstract bool IsUndefined(double x);

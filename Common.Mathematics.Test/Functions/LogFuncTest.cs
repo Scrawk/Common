@@ -15,15 +15,15 @@ namespace Common.Mathematics.Test.Functions
         {
             var func = new LogFunc(1, 10);
             var derivtive = func.Derivative();
-            Assert.AreEqual("g(1) / h(2.30258509299405x)", derivtive.ToString());
+            Assert.AreEqual("1 / 2.30258509299405x", derivtive.ToString());
 
             func = new LogFunc(3, 2);
             derivtive = func.Derivative();
-            Assert.AreEqual("g(3) / h(0.693147180559945x)", derivtive.ToString());
+            Assert.AreEqual("3 / 0.693147180559945x", derivtive.ToString());
 
             func = new LogFunc(12);
             derivtive = func.Derivative();
-            Assert.AreEqual("g(12) / h(x)", derivtive.ToString());
+            Assert.AreEqual("12 / x", derivtive.ToString());
         }
 
     }

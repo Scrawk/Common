@@ -54,6 +54,16 @@ namespace Common.Mathematics.Functions
             return false;
         }
 
+        public List<Function> ToList()
+        {
+            var list = new List<Function>();
+
+            foreach (var func in Functions)
+                list.Add(func.Copy());
+
+            return list;
+        }
+
     }
 
 }

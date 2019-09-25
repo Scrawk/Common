@@ -31,14 +31,15 @@ namespace Common.Mathematics.Functions
 			this.b = b;
 		}
 
-		public override string ToString()
+		public override string ToString(bool outerBrackects)
 		{
-            string B = b == Math.E ? "E" : b.ToString();
+            string A = VaribleToString(a);
+            string B = VaribleToString(b);
 
-            if(a == 1)
+            if (a == 1)
 			    return string.Format("log{0}(x)", B);
             else
-                return string.Format("{0}log{1}(x)", a, B);
+                return string.Format("{0}log{1}(x)", A, B);
         }
 
 		public override Function Copy()

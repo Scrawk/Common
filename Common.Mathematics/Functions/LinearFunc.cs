@@ -14,12 +14,14 @@ namespace Common.Mathematics.Functions
 
 		}
 
-		public override string ToString()
+		public override string ToString(bool outerBrackects)
 		{
-            if(a == 1)
+            string A = VaribleToString(a);
+
+            if (a == 1)
 			    return string.Format("x");
             else
-                return string.Format("{0}x", a);
+                return string.Format("{0}x", A);
         }
 
 		public override Function Copy()

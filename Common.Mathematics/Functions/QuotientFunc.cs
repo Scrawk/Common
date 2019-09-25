@@ -17,10 +17,13 @@ namespace Common.Mathematics.Functions
 			this.h = h;
 		}
 
-		public override string ToString()
+		public override string ToString(bool outerBrackects)
 		{
-			return string.Format("g({0}) / h({1})", g.ToString(), h.ToString());
-		}
+            if(outerBrackects)
+			    return string.Format("({0} / {1})", g.ToString(true), h.ToString(true));
+            else
+                return string.Format("{0} / {1}", g.ToString(true), h.ToString(true));
+        }
 
 		public override Function Copy()
 		{

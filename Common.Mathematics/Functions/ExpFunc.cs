@@ -32,12 +32,15 @@ namespace Common.Mathematics.Functions
 			this.c = c;
 		}
 
-		public override string ToString()
+		public override string ToString(bool outerBrackects)
 		{
-            if(a == 1)
-			    return string.Format("e^{0}x", c);
+            string A = VaribleToString(a);
+            string C = VaribleToString(c);
+
+            if (a == 1)
+			    return string.Format("e^{0}x", C);
             else
-                return string.Format("{0}e^{1}x", a, c);
+                return string.Format("{0}e^{1}x", A, C);
         }
 
 		public override Function Copy()

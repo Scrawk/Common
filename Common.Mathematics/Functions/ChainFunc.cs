@@ -16,9 +16,9 @@ namespace Common.Mathematics.Functions
 			this.h = h;
 		}
 
-		public override string ToString()
+		public override string ToString(bool outerBrackets)
 		{
-			return string.Format("{0}({1})", g.ToString(), h.ToString());
+			return string.Format("g({0}, h({1}))", g.ToString(true), h.ToString(false));
 		}
 
 		public override Function Copy()
@@ -28,8 +28,8 @@ namespace Common.Mathematics.Functions
 
         public override bool IsUndefined(double x)
         {
-            if (g.IsUndefined(x)) return true;
             if (h.IsUndefined(x)) return true;
+            if (g.IsUndefined(h.Evalulate(x))) return true;
 
             return false;
         }

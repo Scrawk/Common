@@ -14,7 +14,7 @@ namespace Common.Mathematics.Test.Functions
         {
             var func = new TanFunc(3);
             var derivative = func.Derivative();
-            Assert.AreEqual("g(3) / h(cos(3x) * cos(3x))", derivative.ToString());
+            Assert.AreEqual("3 / (cos(3x) * cos(3x))", derivative.ToString());
         }
     }
 }

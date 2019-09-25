@@ -32,10 +32,10 @@ namespace Common.Mathematics.Functions
             this.b = b;
         }
 
-        public override string ToString()
+        public override string ToString(bool outerBrackects)
         {
-            string A = a == Math.PI ? "PI" : a.ToString();
-            string B = b == Math.PI ? "PI" : b.ToString();
+            string A = VaribleToString(a);
+            string B = VaribleToString(b);
 
             if (a == 1 && b == 1)
                 return string.Format("tan(x)");

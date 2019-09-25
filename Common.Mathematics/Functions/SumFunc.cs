@@ -23,19 +23,25 @@ namespace Common.Mathematics.Functions
 
 		}
 
-		public override string ToString()
+		public override string ToString(bool outerBrackects)
 		{
 			string str = "";
-	
-			for(int i = 0; i < Count; i++)
+
+            if (outerBrackects)
+                str += "(";
+
+            for (int i = 0; i < Count; i++)
 			{
 				if(i == 0)
-					str += Functions[i].ToString();
+					str += Functions[i].ToString(true);
 				else
-					str += " + " + Functions[i].ToString();
+					str += " + " + Functions[i].ToString(true);
 			}
 
-			return str;
+            if (outerBrackects)
+                str += ")";
+
+            return str;
 		}
 
 		public override Function Copy()

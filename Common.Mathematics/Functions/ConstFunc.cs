@@ -14,9 +14,11 @@ namespace Common.Mathematics.Functions
 
         }
 
-        public override string ToString()
+        public override string ToString(bool outerBrackects)
         {
-            return string.Format("{0}", a);
+            string A = VaribleToString(a);
+
+            return string.Format("{0}", A);
         }
         public override Function Copy()
         {
