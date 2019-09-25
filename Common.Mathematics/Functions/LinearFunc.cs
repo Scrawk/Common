@@ -9,12 +9,17 @@ namespace Common.Mathematics.Functions
 	public class LinearFunc : Function
 	{
 
-		public LinearFunc(double a) : base(a)
+        public LinearFunc() : base(1)
+        {
+
+        }
+
+        public LinearFunc(double a) : base(a)
 		{
 
 		}
 
-		public override string ToString(string varibleName, bool addBrackets)
+		public override string ToString(string varibleName)
 		{
             string A = ConstantToString(a);
 

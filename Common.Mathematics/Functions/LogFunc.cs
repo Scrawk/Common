@@ -31,10 +31,11 @@ namespace Common.Mathematics.Functions
 			this.b = b;
 		}
 
-		public override string ToString(string varibleName, bool addBrackets)
+		public override string ToString(string varibleName)
 		{
             string A = ConstantToString(a);
             string B = ConstantToString(b);
+            varibleName = RemoveOuterBrackets(varibleName);
 
             if (b == Math.E)
             {

@@ -14,7 +14,7 @@ namespace Common.Mathematics.Functions
 
         }
 
-        public override string ToString(string varibleName, bool addBrackets)
+        public override string ToString(string varibleName)
         {
             string A = ConstantToString(a);
 

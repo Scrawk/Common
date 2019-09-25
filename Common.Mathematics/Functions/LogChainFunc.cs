@@ -12,18 +12,63 @@ namespace Common.Mathematics.Functions
 
         public LogChainFunc(ProductFunc product) : base(1)
         {
-            var functions = product.ToList();
-            var chain = new List<Function>();
-
-            foreach (var h in functions)
-                chain.Add(new ChainFunc(new LogFunc(), h.Copy()));
-
-            m_func = new SumFunc(chain);
+            m_func = Simplify(product);
         }
 
-        public override string ToString(string varibleName, bool addBrackets)
+        public LogChainFunc(QuotientFunc quotient) : base(1)
         {
-            return m_func.ToString(varibleName, addBrackets);
+            m_func = Simplify(quotient);
+        } 
+
+        public LogChainFunc(PowFunc pow) : base(1)
+        {
+            m_func = Simplify(pow);
+        }
+
+        private Function Simplify(Function func)
+        {
+            if(func is PowFunc)
+            {
+                var pow = func as PowFunc;
+                var g = new ConstFunc(pow.n);
+                var h = new ChainFunc(new LogFunc(), new LinearFunc());
+
+                if (pow.a == 1)
+                    return new ProductFunc(g, h);
+                else
+                {
+                    var chain = new ChainFunc(new LogFunc(), new ConstFunc(pow.a));
+                    return new SumFunc(chain, new ProductFunc(g, h));
+                }
+            }
+            else if(func is QuotientFunc)
+            {
+                var quotient = func as QuotientFunc;
+                var g = Simplify(quotient.G);
+                var h = Simplify(quotient.H);
+
+                return new SubFunc(g, h);
+            }
+            else if (func is ProductFunc)
+            {
+                var prod = func as ProductFunc;
+                var functions = prod.ToList();
+                var chain = new List<Function>();
+
+                foreach (var h in functions)
+                    chain.Add(Simplify(h.Copy()));
+
+                return new SumFunc(chain);
+            }
+            else
+            {
+                return new ChainFunc(new LogFunc(), func.Copy());
+            }
+        }
+
+        public override string ToString(string varibleName)
+        {
+            return m_func.ToString(varibleName);
         }
 
         public override Function Copy()

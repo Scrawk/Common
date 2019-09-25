@@ -32,17 +32,17 @@ namespace Common.Mathematics.Functions
             this.b = b;
         }
 
-        public override string ToString(string varibleName, bool addBrackets)
+        public override string ToString(string varibleName)
         {
             string A = ConstantToString(a);
             string B = ConstantToString(b);
 
             if (a == 1 && b == 1)
-                return string.Format("tan({0})", varibleName);
+                return string.Format("tan({0})", RemoveOuterBrackets(varibleName));
             else if (a == 1)
                 return string.Format("tan({0}{1})", B, varibleName);
             else if (b == 1)
-                return string.Format("{0}tan({1})", A, varibleName);
+                return string.Format("{0}tan({1})", A, RemoveOuterBrackets(varibleName));
             else
                 return string.Format("{0}tan({1}{2})", A, B, varibleName);
         }

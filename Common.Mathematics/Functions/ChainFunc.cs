@@ -16,12 +16,16 @@ namespace Common.Mathematics.Functions
 			this.h = h;
 		}
 
-		public override string ToString(string varibleName, bool addBrackets)
+		public override string ToString(string varibleName)
 		{
-			return string.Format("{0}", g.ToString(h.ToString("x", true), addBrackets));
+			return string.Format("{0}", g.ToString(h.ToString("x")));
 		}
 
-		public override Function Copy()
+        public Function G => g.Copy();
+
+        public Function H => h.Copy();
+
+        public override Function Copy()
 		{
 			return new ChainFunc(g.Copy(), h.Copy());
 		}

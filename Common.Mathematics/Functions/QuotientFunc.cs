@@ -17,15 +17,16 @@ namespace Common.Mathematics.Functions
 			this.h = h;
 		}
 
-		public override string ToString(string varibleName, bool addBrackets)
+		public override string ToString(string varibleName)
 		{
-            if(addBrackets)
-			    return string.Format("({0} / {1})", g.ToString(varibleName, true), h.ToString(varibleName, true));
-            else
-                return string.Format("{0} / {1}", g.ToString(varibleName, true), h.ToString(varibleName, true));
+	        return string.Format("({0} / {1})", g.ToString(varibleName), h.ToString(varibleName));
         }
 
-		public override Function Copy()
+        public Function G => g.Copy();
+
+        public Function H => h.Copy();
+
+        public override Function Copy()
 		{
 			return new QuotientFunc(g.Copy(), h.Copy());
 		}

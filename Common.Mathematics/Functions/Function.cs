@@ -33,12 +33,23 @@ namespace Common.Mathematics.Functions
                 return x.ToString();
         }
 
-        public override string ToString()
+        protected string RemoveOuterBrackets(string name)
         {
-            return ToString("x", false);
+            int count = name.Length;
+            if (name.Length < count) return name;
+
+            if (name[0] == '(' && name[count - 1] == ')')
+                return name.Substring(1, count - 2);
+            else
+                return name;
         }
 
-        public abstract string ToString(string varibleName, bool addBrackets);
+        public override string ToString()
+        {
+            return RemoveOuterBrackets(ToString("x"));
+        }
+
+        public abstract string ToString(string varibleName);
 
         public abstract Function Copy();
 

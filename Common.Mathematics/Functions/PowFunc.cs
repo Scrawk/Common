@@ -27,7 +27,7 @@ namespace Common.Mathematics.Functions
             this.n = n;
         }
 
-        public override string ToString(string varibleName, bool addBrackets)
+        public override string ToString(string varibleName)
         {
             string A = ConstantToString(a);
 

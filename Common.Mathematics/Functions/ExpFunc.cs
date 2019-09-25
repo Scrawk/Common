@@ -32,7 +32,7 @@ namespace Common.Mathematics.Functions
 			this.c = c;
 		}
 
-		public override string ToString(string varibleName, bool addBrackets)
+		public override string ToString(string varibleName)
 		{
             string A = ConstantToString(a);
             string C = ConstantToString(c);

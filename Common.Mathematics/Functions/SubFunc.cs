@@ -28,25 +28,19 @@ namespace Common.Mathematics.Functions
             Functions = new List<Function>(functions);
         }
 
-        public override string ToString(string varibleName, bool addBrackets)
+        public override string ToString(string varibleName)
         {
-            string str = "";
-
-            if (addBrackets)
-                str += "(";
+            string str = "(";
 
             for (int i = 0; i < Count; i++)
             {
                 if (i == 0)
-                    str += Functions[i].ToString(varibleName, true);
+                    str += RemoveOuterBrackets(Functions[i].ToString(varibleName));
                 else
-                    str += " - " + Functions[i].ToString(varibleName, true);
+                    str += " - " + RemoveOuterBrackets(Functions[i].ToString(varibleName));
             }
 
-            if (addBrackets)
-                str += ")";
-
-            return str;
+            return str + ")";
         }
 
         public override Function Copy()
