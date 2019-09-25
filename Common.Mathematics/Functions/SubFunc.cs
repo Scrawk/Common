@@ -28,22 +28,22 @@ namespace Common.Mathematics.Functions
             Functions = new List<Function>(functions);
         }
 
-        public override string ToString(bool outerBrackects)
+        public override string ToString(string varibleName, bool addBrackets)
         {
             string str = "";
 
-            if (outerBrackects)
+            if (addBrackets)
                 str += "(";
 
             for (int i = 0; i < Count; i++)
             {
                 if (i == 0)
-                    str += Functions[i].ToString(true);
+                    str += Functions[i].ToString(varibleName, true);
                 else
-                    str += " - " + Functions[i].ToString(true);
+                    str += " - " + Functions[i].ToString(varibleName, true);
             }
 
-            if (outerBrackects)
+            if (addBrackets)
                 str += ")";
 
             return str;

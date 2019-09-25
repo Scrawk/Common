@@ -28,7 +28,7 @@ namespace Common.Mathematics.Test.Functions
             func2 = new LogFunc();
             func = new ProductFunc(func1, func2);
             derivative = func.Derivative();
-            Assert.AreEqual("(2x * logE(x)) + (x^2 * (1 / x))", derivative.ToString());
+            Assert.AreEqual("(2x * ln(x)) + (x^2 * (1 / x))", derivative.ToString());
 
             func1 = new PowFunc(3);
             func2 = new SinFunc(Math.PI);

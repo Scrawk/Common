@@ -17,12 +17,12 @@ namespace Common.Mathematics.Functions
 			this.h = h;
 		}
 
-		public override string ToString(bool outerBrackects)
+		public override string ToString(string varibleName, bool addBrackets)
 		{
-            if(outerBrackects)
-			    return string.Format("({0} / {1})", g.ToString(true), h.ToString(true));
+            if(addBrackets)
+			    return string.Format("({0} / {1})", g.ToString(varibleName, true), h.ToString(varibleName, true));
             else
-                return string.Format("{0} / {1}", g.ToString(true), h.ToString(true));
+                return string.Format("{0} / {1}", g.ToString(varibleName, true), h.ToString(varibleName, true));
         }
 
 		public override Function Copy()

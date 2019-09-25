@@ -32,19 +32,19 @@ namespace Common.Mathematics.Functions
             this.b = b;
         }
 
-        public override string ToString(bool outerBrackects)
+        public override string ToString(string varibleName, bool addBrackets)
         {
-            string A = VaribleToString(a);
-            string B = VaribleToString(b);
+            string A = ConstantToString(a);
+            string B = ConstantToString(b);
 
             if (a == 1 && b == 1)
-                return string.Format("cos(x)");
+                return string.Format("cos({0})", varibleName);
             else if (a == 1)
-                return string.Format("cos({0}x)", B);
+                return string.Format("cos({0}{1})", B, varibleName);
             else if (b == 1)
-                return string.Format("{0}cos(x)", A);
+                return string.Format("{0}cos({1})", A, varibleName);
             else
-                return string.Format("{0}cos({1}x)", A, B);
+                return string.Format("{0}cos({1}{2})", A, B, varibleName);
         }
 
         public override Function Copy()

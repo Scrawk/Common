@@ -31,15 +31,25 @@ namespace Common.Mathematics.Functions
 			this.b = b;
 		}
 
-		public override string ToString(bool outerBrackects)
+		public override string ToString(string varibleName, bool addBrackets)
 		{
-            string A = VaribleToString(a);
-            string B = VaribleToString(b);
+            string A = ConstantToString(a);
+            string B = ConstantToString(b);
 
-            if (a == 1)
-			    return string.Format("log{0}(x)", B);
+            if (b == Math.E)
+            {
+                if (a == 1)
+                    return string.Format("ln({0})", varibleName);
+                else
+                    return string.Format("{0}ln({1})", A, varibleName);
+            }
             else
-                return string.Format("{0}log{1}(x)", A, B);
+            {
+                if (a == 1)
+                    return string.Format("log{0}({1})", B, varibleName);
+                else
+                    return string.Format("{0}log{1}({2})", A, B, varibleName);
+            }
         }
 
 		public override Function Copy()

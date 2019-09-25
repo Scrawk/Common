@@ -44,12 +44,12 @@ namespace Common.Mathematics.Functions
 
         public int Degree => Functions.Count-1;
 
-		public override string ToString(bool outerBrackects)
+		public override string ToString(string varibleName, bool addBrackets)
 		{
 			string str = "";
             bool first = true;
 
-            if (outerBrackects)
+            if (addBrackets)
                 str += "(";
 
             for (int i = 0; i <= Degree; i++)
@@ -58,14 +58,14 @@ namespace Common.Mathematics.Functions
 
                 if (first)
                 {
-                    str += Functions[i].ToString(true);
+                    str += Functions[i].ToString(varibleName, true);
                     first = false;
                 }
                 else
-                    str += " + " + Functions[i].ToString(true);
+                    str += " + " + Functions[i].ToString(varibleName, true);
             }
 
-            if (outerBrackects)
+            if (addBrackets)
                 str += ")";
 
             return str;

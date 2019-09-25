@@ -14,14 +14,14 @@ namespace Common.Mathematics.Functions
 
 		}
 
-		public override string ToString(bool outerBrackects)
+		public override string ToString(string varibleName, bool addBrackets)
 		{
-            string A = VaribleToString(a);
+            string A = ConstantToString(a);
 
             if (a == 1)
-			    return string.Format("x");
+			    return string.Format("{0}", varibleName);
             else
-                return string.Format("{0}x", A);
+                return string.Format("{0}{1}", A, varibleName);
         }
 
 		public override Function Copy()

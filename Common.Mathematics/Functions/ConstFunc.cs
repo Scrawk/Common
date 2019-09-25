@@ -14,9 +14,9 @@ namespace Common.Mathematics.Functions
 
         }
 
-        public override string ToString(bool outerBrackects)
+        public override string ToString(string varibleName, bool addBrackets)
         {
-            string A = VaribleToString(a);
+            string A = ConstantToString(a);
 
             return string.Format("{0}", A);
         }

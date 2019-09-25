@@ -16,9 +16,9 @@ namespace Common.Mathematics.Functions
 			this.h = h;
 		}
 
-		public override string ToString(bool outerBrackets)
+		public override string ToString(string varibleName, bool addBrackets)
 		{
-			return string.Format("g({0}, h({1}))", g.ToString(true), h.ToString(false));
+			return string.Format("{0}", g.ToString(h.ToString("x", true), addBrackets));
 		}
 
 		public override Function Copy()

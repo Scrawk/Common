@@ -23,7 +23,7 @@ namespace Common.Mathematics.Functions
             return a == 0;
         }
 
-        protected string VaribleToString(double x)
+        protected string ConstantToString(double x)
         {
             if (x == Math.PI)
                 return "PI";
@@ -35,10 +35,10 @@ namespace Common.Mathematics.Functions
 
         public override string ToString()
         {
-            return ToString(false);
+            return ToString("x", false);
         }
 
-        public abstract string ToString(bool outerBrackects);
+        public abstract string ToString(string varibleName, bool addBrackets);
 
         public abstract Function Copy();
 
