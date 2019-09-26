@@ -11,6 +11,18 @@ namespace Common.Mathematics.Test.Functions
     {
 
         [TestMethod]
+        public new void ToString()
+        {
+            Assert.AreEqual("e^x", new ExpFunc().ToString());
+            Assert.AreEqual("e^x", new ExpFunc(1,1).ToString());
+            Assert.AreEqual("-e^x", new ExpFunc(-1,1).ToString());
+            Assert.AreEqual("e^-x", new ExpFunc(1,-1).ToString());
+            Assert.AreEqual("e^2x", new ExpFunc(2).ToString());
+            Assert.AreEqual("2e^3x", new ExpFunc(2, 3).ToString());
+            Assert.AreEqual("-2e^-3x", new ExpFunc(-2, -3).ToString());
+        }
+
+        [TestMethod]
         public void Derivative()
         {
             var func = new ExpFunc(100, 0.1);

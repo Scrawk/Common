@@ -37,12 +37,12 @@ namespace Common.Mathematics.Functions
             string A = ConstantToString(a);
             string B = ConstantToString(b);
 
-            if (a == 1 && b == 1)
-                return string.Format("cos({0})", RemoveOuterBrackets(varibleName));
-            else if (a == 1)
-                return string.Format("cos({0}{1})", B, varibleName);
-            else if (b == 1)
-                return string.Format("{0}cos({1})", A, RemoveOuterBrackets(varibleName));
+            if (Math.Abs(a) == 1 && Math.Abs(b) == 1)
+                return string.Format("{0}cos({1}{2})", SignToString(a), SignToString(b), RemoveOuterBrackets(varibleName));
+            else if (Math.Abs(a) == 1)
+                return string.Format("{0}cos({1}{2})", SignToString(a), B, varibleName);
+            else if (Math.Abs(b) == 1)
+                return string.Format("{0}cos({1}{2})", A, SignToString(b), RemoveOuterBrackets(varibleName));
             else
                 return string.Format("{0}cos({1}{2})", A, B, varibleName);
         }

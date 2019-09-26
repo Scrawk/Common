@@ -10,6 +10,20 @@ namespace Common.Mathematics.Test.Functions
     public class SinFuncTest
     {
         [TestMethod]
+        public new void ToString()
+        {
+            Assert.AreEqual("sin(x)", new SinFunc().ToString());
+            Assert.AreEqual("sin(x)", new SinFunc(1, 1).ToString());
+            Assert.AreEqual("sin(-x)", new SinFunc(1, -1).ToString());
+            Assert.AreEqual("-sin(x)", new SinFunc(-1, 1).ToString());
+            Assert.AreEqual("-sin(-x)", new SinFunc(-1, -1).ToString());
+            Assert.AreEqual("sin(2x)", new SinFunc(2).ToString());
+            Assert.AreEqual("-sin(2x)", new SinFunc(-1, 2).ToString());
+            Assert.AreEqual("-2sin(3x)", new SinFunc(-2, 3).ToString());
+            Assert.AreEqual("-2sin(-x)", new SinFunc(-2, -1).ToString());
+        }
+
+        [TestMethod]
         public void Derivative()
         {
             var func = new SinFunc(0.25, 2);

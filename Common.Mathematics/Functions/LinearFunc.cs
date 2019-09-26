@@ -23,8 +23,8 @@ namespace Common.Mathematics.Functions
 		{
             string A = ConstantToString(a);
 
-            if (a == 1)
-			    return string.Format("{0}", varibleName);
+            if (Math.Abs(a ) == 1)
+			    return string.Format("{0}{1}", SignToString(a), varibleName);
             else
                 return string.Format("{0}{1}", A, varibleName);
         }

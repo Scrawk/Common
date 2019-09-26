@@ -39,15 +39,15 @@ namespace Common.Mathematics.Functions
 
             if (b == Math.E)
             {
-                if (a == 1)
-                    return string.Format("ln({0})", varibleName);
+                if (Math.Abs(a) == 1)
+                    return string.Format("{0}ln({1})", SignToString(a), varibleName);
                 else
                     return string.Format("{0}ln({1})", A, varibleName);
             }
             else
             {
-                if (a == 1)
-                    return string.Format("log{0}({1})", B, varibleName);
+                if (Math.Abs(a) == 1)
+                    return string.Format("{0}log{1}({2})", SignToString(a), B, varibleName);
                 else
                     return string.Format("{0}log{1}({2})", A, B, varibleName);
             }

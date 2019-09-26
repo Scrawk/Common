@@ -26,7 +26,7 @@ namespace Common.Mathematics.Test.Functions
             func = new ChainFunc(new PowFunc(5), h);
             derivative = func.Derivative();
             //Console.WriteLine(derivative.ToString());
-            Assert.AreEqual("(3x^2 + -1) * 5(x^3 + -1x + 1)^4", derivative.ToString());
+            Assert.AreEqual("(3x^2 - 1) * 5(x^3 - x + 1)^4", derivative.ToString());
 
             pow = new PowFunc(2);
             con = new ConstFunc(1);

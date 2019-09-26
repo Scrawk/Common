@@ -32,7 +32,15 @@ namespace Common.Mathematics.Functions
 				if(i == 0)
 					str += RemoveOuterBrackets(Functions[i].ToString(varibleName));
 				else
-					str += " + " + RemoveOuterBrackets(Functions[i].ToString(varibleName));
+                {
+                    var name = RemoveOuterBrackets(Functions[i].ToString(varibleName));
+
+                    if(name.Length > 1 && name[0] == '-')
+                        str += " - " + name.Substring(1);
+                    else
+                        str += " + " + RemoveOuterBrackets(Functions[i].ToString(varibleName));
+                }
+					
 			}
 
             return str + ")";

@@ -37,8 +37,12 @@ namespace Common.Mathematics.Functions
             string A = ConstantToString(a);
             string C = ConstantToString(c);
 
-            if (a == 1)
-			    return string.Format("e^{0}{1}", C, varibleName);
+            if (Math.Abs(a) == 1 && Math.Abs(c) == 1)
+                return string.Format("{0}e^{1}{2}", SignToString(a), SignToString(c), varibleName);
+            else if (Math.Abs(a) == 1)
+                return string.Format("{0}e^{1}{2}", SignToString(a), C, varibleName);
+            else if (Math.Abs(c) == 1)
+                return string.Format("{0}e^{1}{2}", A, SignToString(c), varibleName);
             else
                 return string.Format("{0}e^{1}{2}", A, C, varibleName);
         }

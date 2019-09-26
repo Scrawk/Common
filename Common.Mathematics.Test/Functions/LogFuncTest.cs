@@ -11,6 +11,20 @@ namespace Common.Mathematics.Test.Functions
     {
 
         [TestMethod]
+        public new void ToString()
+        {
+            Assert.AreEqual("ln(x)", new LogFunc().ToString());
+            Assert.AreEqual("ln(x)", new LogFunc(1).ToString());
+            Assert.AreEqual("-ln(x)", new LogFunc(-1).ToString());
+            Assert.AreEqual("2ln(x)", new LogFunc(2).ToString());
+
+            Assert.AreEqual("log10(x)", new LogFunc(1, 10).ToString());
+            Assert.AreEqual("log2(x)", new LogFunc(1, 2).ToString());
+            Assert.AreEqual("-log3(x)", new LogFunc(-1, 3).ToString());
+            Assert.AreEqual("2log4(x)", new LogFunc(2, 4).ToString());
+        }
+
+        [TestMethod]
         public void Derivative()
         {
             var func = new LogFunc(1, 10);

@@ -12,57 +12,69 @@ namespace Common.Mathematics.Functions
 
         public LogChainFunc(ProductFunc product) : base(1)
         {
-            m_func = Simplify(product);
+            var functions = new List<Function>();
+            Simplify(product, functions, 1);
+            m_func = new SumFunc(functions);
         }
 
         public LogChainFunc(QuotientFunc quotient) : base(1)
         {
-            m_func = Simplify(quotient);
+            var functions = new List<Function>();
+            Simplify(quotient, functions, 1);
+            m_func = new SumFunc(functions);
         } 
 
         public LogChainFunc(PowFunc pow) : base(1)
         {
-            m_func = Simplify(pow);
+            var functions = new List<Function>();
+            Simplify(pow, functions, 1);
+            m_func = new SumFunc(functions);
         }
 
-        private Function Simplify(Function func)
+        private void Simplify(Function func, List<Function> functions, int sign)
         {
-            if(func is PowFunc)
-            {
-                var pow = func as PowFunc;
-                var g = new ConstFunc(pow.n);
-                var h = new ChainFunc(new LogFunc(), new LinearFunc());
-
-                if (pow.a == 1)
-                    return new ProductFunc(g, h);
-                else
-                {
-                    var chain = new ChainFunc(new LogFunc(), new ConstFunc(pow.a));
-                    return new SumFunc(chain, new ProductFunc(g, h));
-                }
-            }
-            else if(func is QuotientFunc)
-            {
-                var quotient = func as QuotientFunc;
-                var g = Simplify(quotient.G);
-                var h = Simplify(quotient.H);
-
-                return new SubFunc(g, h);
-            }
-            else if (func is ProductFunc)
+            if (func is ProductFunc)
             {
                 var prod = func as ProductFunc;
-                var functions = prod.ToList();
-                var chain = new List<Function>();
+                foreach (var h in prod.ToList())
+                    Simplify(h, functions, sign);
+            }
+            else if (func is QuotientFunc)
+            {
+                var quotient = func as QuotientFunc;
+                Simplify(quotient.G, functions, sign);
+                Simplify(quotient.H, functions, sign * -1);
+            }
+            else if(func is PowFunc)
+            {
+                var pow = func as PowFunc;
 
-                foreach (var h in functions)
-                    chain.Add(Simplify(h.Copy()));
+                if (pow.a != 1)
+                    Simplify(new ConstFunc(pow.a), functions, 1);
 
-                return new SumFunc(chain);
+                var chain = new ChainFunc(new LogFunc(), new LinearFunc());
+                functions.Add(new ProductFunc(new ConstFunc(pow.n), chain));
+            }
+            else if(func is ChainFunc)
+            {
+                var chain = func as ChainFunc;
+                var g = chain.G;
+                var h = chain.H;
+
+                if(g is PowFunc)
+                {
+                    var pow = g as PowFunc;
+
+                    if (pow.a != 1)
+                        Simplify(new ConstFunc(pow.a), functions, 1);
+
+                    var chain2 = new ChainFunc(new LogFunc(), h);
+                    functions.Add(new ProductFunc(new ConstFunc(pow.n), chain2));
+                }
             }
             else
             {
-                return new ChainFunc(new LogFunc(), func.Copy());
+                functions.Add(new ChainFunc(new LogFunc(sign), func));
             }
         }
 

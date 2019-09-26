@@ -17,7 +17,6 @@ namespace Common.Mathematics.Functions
         public override string ToString(string varibleName)
         {
             string A = ConstantToString(a);
-
             return string.Format("{0}", A);
         }
         public override Function Copy()

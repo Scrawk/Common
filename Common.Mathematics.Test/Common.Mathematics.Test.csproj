@@ -54,6 +54,7 @@
     <Compile Include="Functions\ChainFuncTest.cs" />
     <Compile Include="Functions\CosFuncTest.cs" />
     <Compile Include="Functions\ExpFuncTest.cs" />
+    <Compile Include="Functions\LinearFuncTest.cs" />
     <Compile Include="Functions\LogChainTest.cs" />
     <Compile Include="Functions\LogFuncTest.cs" />
     <Compile Include="Functions\PolynominalFuncTest.cs" />

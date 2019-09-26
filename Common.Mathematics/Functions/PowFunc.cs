@@ -31,10 +31,10 @@ namespace Common.Mathematics.Functions
         {
             string A = ConstantToString(a);
 
-            if (a == 1 && n == 1)
-                return string.Format("{0}", varibleName);
-            else if (a == 1)
-                return string.Format("{1}^{0}", n, varibleName);
+            if (Math.Abs(a) == 1 && n == 1)
+                return string.Format("{0}{1}", SignToString(a), varibleName);
+            else if (Math.Abs(a) == 1)
+                return string.Format("{0}{2}^{1}", SignToString(a), n, varibleName);
             else if (n == 1)
                 return string.Format("{0}{1}", A, varibleName);
             else

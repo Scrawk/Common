@@ -33,6 +33,14 @@ namespace Common.Mathematics.Functions
                 return x.ToString();
         }
 
+        protected string SignToString(double x)
+        {
+            if (x < 0)
+                return "-";
+            else
+                return "";
+        }
+
         protected string RemoveOuterBrackets(string name)
         {
             int count = name.Length;

@@ -11,6 +11,19 @@ namespace Common.Mathematics.Test.Functions
     {
 
         [TestMethod]
+        public new void ToString()
+        {
+            Assert.AreEqual("x", new PowFunc(1).ToString());
+            Assert.AreEqual("x", new PowFunc(1, 1).ToString());
+            Assert.AreEqual("-x", new PowFunc(-1, 1).ToString());
+            Assert.AreEqual("x^2", new PowFunc(1, 2).ToString());
+            Assert.AreEqual("x^-2", new PowFunc(1, -2).ToString());
+            Assert.AreEqual("-x^-2", new PowFunc(-1, -2).ToString());
+            Assert.AreEqual("2x^2", new PowFunc(2, 2).ToString());
+            Assert.AreEqual("-2x^-2", new PowFunc(-2, -2).ToString());
+        }
+
+        [TestMethod]
         public void Derivative()
         {
             var func = new PowFunc(2, 4);
@@ -51,7 +64,7 @@ namespace Common.Mathematics.Test.Functions
 
             func = new PowFunc(-1);
             derivtive = func.Derivative();
-            Assert.AreEqual("-1x^-2", derivtive.ToString());
+            Assert.AreEqual("-x^-2", derivtive.ToString());
 
             func = new PowFunc(3, 0.5);
             derivtive = func.Derivative();
