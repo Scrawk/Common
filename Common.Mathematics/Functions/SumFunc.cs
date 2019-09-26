@@ -38,7 +38,7 @@ namespace Common.Mathematics.Functions
                     if(name.Length > 1 && name[0] == '-')
                         str += " - " + name.Substring(1);
                     else
-                        str += " + " + RemoveOuterBrackets(Functions[i].ToString(varibleName));
+                        str += " + " + name;
                 }
 					
 			}

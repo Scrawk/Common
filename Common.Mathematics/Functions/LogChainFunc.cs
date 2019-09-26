@@ -7,28 +7,41 @@ namespace Common.Mathematics.Functions
 
     public class LogChainFunc : Function
     {
-
         private Function m_func;
 
-        public LogChainFunc(ProductFunc product) : base(1)
+        private SumFunc m_logChain;
+
+        public LogChainFunc(ProductFunc product) 
+            : this(product as Function)
         {
-            var functions = new List<Function>();
-            Simplify(product, functions, 1);
-            m_func = new SumFunc(functions);
+
         }
 
-        public LogChainFunc(QuotientFunc quotient) : base(1)
+        public LogChainFunc(QuotientFunc quotient) 
+            : this(quotient as Function)
         {
-            var functions = new List<Function>();
-            Simplify(quotient, functions, 1);
-            m_func = new SumFunc(functions);
-        } 
 
-        public LogChainFunc(PowFunc pow) : base(1)
+        }
+
+        public LogChainFunc(PowFunc pow)
+            : this(pow as Function)
         {
+
+        }
+
+        private LogChainFunc(Function func) : base(1)
+        {
+            m_func = func;
+
             var functions = new List<Function>();
-            Simplify(pow, functions, 1);
-            m_func = new SumFunc(functions);
+            Simplify(m_func, functions, 1);
+            m_logChain = new SumFunc(functions);
+        }
+
+        private LogChainFunc(Function func, SumFunc logChain) : base(1)
+        {
+            m_func = func;
+            m_logChain = logChain;
         }
 
         private void Simplify(Function func, List<Function> functions, int sign)
@@ -43,17 +56,17 @@ namespace Common.Mathematics.Functions
             {
                 var quotient = func as QuotientFunc;
                 Simplify(quotient.G, functions, sign);
-                Simplify(quotient.H, functions, sign * -1);
+                Simplify(quotient.H, functions, -1);
             }
             else if(func is PowFunc)
             {
                 var pow = func as PowFunc;
 
                 if (pow.a != 1)
-                    Simplify(new ConstFunc(pow.a), functions, 1);
+                    Simplify(new ConstFunc(pow.a), functions, sign);
 
                 var chain = new ChainFunc(new LogFunc(), new LinearFunc());
-                functions.Add(new ProductFunc(new ConstFunc(pow.n), chain));
+                functions.Add(new ProductFunc(new ConstFunc(pow.n * sign), chain));
             }
             else if(func is ChainFunc)
             {
@@ -66,11 +79,17 @@ namespace Common.Mathematics.Functions
                     var pow = g as PowFunc;
 
                     if (pow.a != 1)
-                        Simplify(new ConstFunc(pow.a), functions, 1);
+                        Simplify(new ConstFunc(pow.a), functions, sign);
 
                     var chain2 = new ChainFunc(new LogFunc(), h);
-                    functions.Add(new ProductFunc(new ConstFunc(pow.n), chain2));
+                    functions.Add(new ProductFunc(new ConstFunc(pow.n * sign), chain2));
+
                 }
+            }
+            else if(func is ExpFunc)
+            {
+                var exp = func as ExpFunc;
+                functions.Add(new LinearFunc(exp.a * exp.c));
             }
             else
             {
@@ -80,17 +99,17 @@ namespace Common.Mathematics.Functions
 
         public override string ToString(string varibleName)
         {
-            return m_func.ToString(varibleName);
+            return m_logChain.ToString(varibleName);
         }
 
         public override Function Copy()
         {
-            return m_func.Copy();
+            return new LogChainFunc(m_func.Copy(), m_logChain.Copy() as SumFunc);
         }
 
         public override bool IsUndefined(double x)
         {
-            if (m_func.IsUndefined(x)) return true;
+            if (m_logChain.IsUndefined(x)) return true;
 
             return false;
         }
@@ -100,12 +119,16 @@ namespace Common.Mathematics.Functions
             if (IsUndefined(x))
                 throw new ArgumentException("Evalulate is undefined for x = " + x);
 
-            return m_func.Evalulate(x);
+            return m_logChain.Evalulate(x);
         }
 
         public override Function Derivative()
         {
-            return m_func.Derivative();
+            var functions = new List<Function>();
+            foreach (var func in m_logChain.ToList())
+                functions.Add(func.Derivative());
+
+            return new ProductFunc(m_func.Copy(), new SumFunc(functions));
         }
 
         public override Function AntiDerivative()

@@ -48,8 +48,13 @@ namespace Common.Mathematics.Functions
 
 		public override Function Derivative()
 		{
-			var chain = new ChainFunc(g.Derivative(), h.Copy());
-			return new ProductFunc(h.Derivative(), chain);
+            var func1 = h.Derivative();
+            var func2 = new ChainFunc(g.Derivative(), h.Copy());
+
+            if (func1 is ConstFunc && func1.a == 1)
+                return func2;
+            else
+			    return new ProductFunc(func1, func2);
 		}
 
         public override Function AntiDerivative()

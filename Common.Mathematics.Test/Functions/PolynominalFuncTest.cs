@@ -15,7 +15,7 @@ namespace Common.Mathematics.Test.Functions
         {
             var func = new PolynominalFunc(2, -1, 0, 0, 2);
             var derivtive = func.Derivative();
-            Assert.AreEqual("8x^3 + -3x^2", derivtive.ToString());
+            Assert.AreEqual("8x^3 - 3x^2", derivtive.ToString());
 
             func = new PolynominalFunc(0.5, 3, -8);
             derivtive = func.Derivative();
@@ -23,7 +23,7 @@ namespace Common.Mathematics.Test.Functions
 
             func = new PolynominalFunc(new double[] {-1, 3, 0, 0, -2, 1});
             derivtive = func.Derivative();
-            Assert.AreEqual("-5x^4 + 12x^3 + -2", derivtive.ToString());
+            Assert.AreEqual("-5x^4 + 12x^3 - 2", derivtive.ToString());
         }
 
     }

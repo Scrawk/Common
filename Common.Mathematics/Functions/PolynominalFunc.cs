@@ -51,7 +51,7 @@ namespace Common.Mathematics.Functions
 
             for (int i = 0; i <= Degree; i++)
             {
-                if (Functions[i].a == 0) continue;
+                if (Functions[i].IsZero()) continue;
 
                 if (first)
                 {
@@ -59,7 +59,14 @@ namespace Common.Mathematics.Functions
                     first = false;
                 }
                 else
-                    str += " + " + Functions[i].ToString(varibleName);
+                {
+                    var name = Functions[i].ToString(varibleName);
+
+                    if (name.Length > 1 && name[0] == '-')
+                        str += " - " + name.Substring(1);
+                    else
+                        str += " + " + name;
+                }
             }
 
             return str + ")";
