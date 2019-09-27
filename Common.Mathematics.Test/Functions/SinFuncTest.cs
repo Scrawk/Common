@@ -30,5 +30,22 @@ namespace Common.Mathematics.Test.Functions
             var derivative = func.Derivative();
             Assert.AreEqual("0.5cos(2x)", derivative.ToString());
         }
+
+        [TestMethod]
+        public void HigherOrderDerivative()
+        {
+            var func = new SinFunc(6, Math.PI);
+            var derivtive0 = func.Derivative(0);
+            var derivtive1 = func.Derivative(1);
+            var derivtive2 = func.Derivative(2);
+            var derivtive3 = func.Derivative(3);
+            var derivtive4 = func.Derivative(4);
+
+            Assert.AreEqual("6sin(PIx)", derivtive0.ToString());
+            Assert.AreEqual("18.8495559215388cos(PIx)", derivtive1.ToString());
+            Assert.AreEqual("-59.2176264065361sin(PIx)", derivtive2.ToString());
+            Assert.AreEqual("-186.037660081799cos(PIx)", derivtive3.ToString());
+            Assert.AreEqual("584.454546204014sin(PIx)", derivtive4.ToString());
+        }
     }
 }

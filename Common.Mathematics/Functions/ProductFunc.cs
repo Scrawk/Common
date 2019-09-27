@@ -9,24 +9,53 @@ namespace Common.Mathematics.Functions
 	public class ProductFunc : CompositeFunc
 	{
 
-
-		public ProductFunc(Function g, Function h) : base(g, h)
-		{
-
-		}
-
-        public ProductFunc(Function g, Function h, Function i) : base(g, h, i)
+        public ProductFunc(Function g, Function h)
+            : this(new Function[] { g, h })
         {
 
         }
 
-        public ProductFunc(IList<Function> functions) : base(functions)
+        public ProductFunc(Function g, Function h, Function i)
+            : this(new Function[] { g, h, i })
         {
 
-		}
+        }
 
-		public override string ToString(string varibleName)
+        public ProductFunc(Function g, Function h, Function i, Function j)
+            : this(new Function[] { g, h, i, j })
+        {
+
+        }
+
+        public ProductFunc(IList<Function> functions)
+        {
+            Functions = new List<Function>();
+
+            bool isZero = false;
+
+            foreach (var func in functions)
+            {
+                if(func.IsZero())
+                {
+                    isZero = true;
+                    break;
+                }
+            }
+
+            if(!isZero && functions.Count != 0)
+            {
+                foreach (var func in functions)
+                    if (!func.IsOne()) Functions.Add(func);
+
+                if (Count == 0)
+                    Functions.Add(new ConstFunc(1));
+            }
+        }
+
+        public override string ToString(string varibleName)
 		{
+            if (Count == 0) return "0";
+
             string str = "(";
 
 			for(int i = 0; i < Count; i++)
@@ -51,6 +80,8 @@ namespace Common.Mathematics.Functions
 
         public override double Evalulate(double x)
 		{
+            if (Count == 0) return 0;
+
 			double result = 1;
 
 			for(int i = 0; i < Count; i++)

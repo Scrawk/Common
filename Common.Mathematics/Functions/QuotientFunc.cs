@@ -56,13 +56,16 @@ namespace Common.Mathematics.Functions
 			var a = new ProductFunc(g.Derivative(), h.Copy());
 			var b = new ProductFunc(g.Copy(), h.Derivative());
 
-			var com = new SubFunc(a, b);
+			var sub = new SubFunc(a, b);
 			var prod = new ProductFunc(h.Copy(), h.Copy());
 
-            if (prod.IsZero())
-                throw new DivideByZeroException("denominator is zero");
+            //if (prod.IsZero())
+            //    throw new DivideByZeroException("denominator is zero");
 
-            return new QuotientFunc(com, prod);
+            if (prod.IsOne())
+                return sub;
+            else
+                return new QuotientFunc(sub, prod);
 		}
 
         public override Function AntiDerivative()

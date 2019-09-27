@@ -8,23 +8,36 @@ namespace Common.Mathematics.Functions
 	public class SumFunc : CompositeFunc
 	{
 
-        public SumFunc(Function g, Function h) : base(g, h)
-        {
-
-		}
-
-        public SumFunc(Function g, Function h, Function i) : base(g, h, i)
+        public SumFunc(Function g, Function h)
+            : this(new Function[] { g, h })
         {
 
         }
 
-        public SumFunc(IList<Function> functions) : base(functions)
+        public SumFunc(Function g, Function h, Function i)
+            : this(new Function[] { g, h, i })
         {
 
-		}
+        }
 
-		public override string ToString(string varibleName)
+        public SumFunc(Function g, Function h, Function i, Function j)
+            : this(new Function[] { g, h, i, j })
+        {
+
+        }
+
+        public SumFunc(IList<Function> functions)
+        {
+            Functions = new List<Function>();
+
+            foreach (var func in functions)
+                if (!func.IsZero()) Functions.Add(func);
+        }
+
+        public override string ToString(string varibleName)
 		{
+            if (Count == 0) return "0";
+
 			string str = "(";
 
             for (int i = 0; i < Count; i++)

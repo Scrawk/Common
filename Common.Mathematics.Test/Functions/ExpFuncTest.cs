@@ -34,5 +34,22 @@ namespace Common.Mathematics.Test.Functions
             Assert.AreEqual("-8e^-2x", derivtive.ToString());
         }
 
+        [TestMethod]
+        public void HigherOrderDerivative()
+        {
+            var func = new ExpFunc(100, 0.1);
+            var derivtive0 = func.Derivative(0);
+            var derivtive1 = func.Derivative(1);
+            var derivtive2 = func.Derivative(2);
+            var derivtive3 = func.Derivative(3);
+            var derivtive4 = func.Derivative(4);
+
+            Assert.AreEqual("100e^0.1x", derivtive0.ToString());
+            Assert.AreEqual("10e^0.1x", derivtive1.ToString());
+            Assert.AreEqual("e^0.1x", derivtive2.ToString());
+            Assert.AreEqual("0.1e^0.1x", derivtive3.ToString());
+            Assert.AreEqual("0.01e^0.1x", derivtive4.ToString());
+        }
+
     }
 }

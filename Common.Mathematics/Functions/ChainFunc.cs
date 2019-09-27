@@ -18,12 +18,25 @@ namespace Common.Mathematics.Functions
 
 		public override string ToString(string varibleName)
 		{
-			return string.Format("{0}", g.ToString(h.ToString("x")));
+            var x = RemoveOuterBrackets(h.ToString("x"));
+            if (x != "x") x = "(" + x + ")";
+
+            return string.Format("{0}", g.ToString(x));
 		}
 
         public Function G => g.Copy();
 
         public Function H => h.Copy();
+
+        public override bool IsZero()
+        {
+            return g.IsZero();
+        }
+
+        public override bool IsOne()
+        {
+            return g.IsOne();
+        }
 
         public override Function Copy()
 		{
@@ -51,7 +64,7 @@ namespace Common.Mathematics.Functions
             var func1 = h.Derivative();
             var func2 = new ChainFunc(g.Derivative(), h.Copy());
 
-            if (func1 is ConstFunc && func1.a == 1)
+            if (func1.IsOne())
                 return func2;
             else
 			    return new ProductFunc(func1, func2);

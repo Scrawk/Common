@@ -70,9 +70,30 @@ namespace Common.Mathematics.Test.Functions
             derivtive = func.Derivative();
             Assert.AreEqual("1.5x^-0.5", derivtive.ToString());
 
-            func = new PowFunc(1, 5.0/2.0);
+            func = new PowFunc(1, 5.0 / 2.0);
             derivtive = func.Derivative();
             Assert.AreEqual("2.5x^1.5", derivtive.ToString());
+        }
+
+        [TestMethod]
+        public void HigherOrderDerivative()
+        {
+            var func = new PowFunc(2, 4);
+            var derivtive0 = func.Derivative(0);
+            var derivtive1 = func.Derivative(1);
+            var derivtive2 = func.Derivative(2);
+            var derivtive3 = func.Derivative(3);
+            var derivtive4 = func.Derivative(4);
+            var derivtive5 = func.Derivative(5);
+            var derivtive6 = func.Derivative(6);
+
+            Assert.AreEqual("2x^4", derivtive0.ToString());
+            Assert.AreEqual("8x^3", derivtive1.ToString());
+            Assert.AreEqual("24x^2", derivtive2.ToString());
+            Assert.AreEqual("48x", derivtive3.ToString());
+            Assert.AreEqual("48", derivtive4.ToString());
+            Assert.AreEqual("0", derivtive5.ToString());
+            Assert.AreEqual("0", derivtive6.ToString());
         }
 
     }

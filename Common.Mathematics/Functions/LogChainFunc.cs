@@ -102,6 +102,16 @@ namespace Common.Mathematics.Functions
             return m_logChain.ToString(varibleName);
         }
 
+        public override bool IsZero()
+        {
+            return m_logChain.IsZero();
+        }
+
+        public override bool IsOne()
+        {
+            return m_logChain.IsOne();
+        }
+
         public override Function Copy()
         {
             return new LogChainFunc(m_func.Copy(), m_logChain.Copy() as SumFunc);
@@ -109,9 +119,7 @@ namespace Common.Mathematics.Functions
 
         public override bool IsUndefined(double x)
         {
-            if (m_logChain.IsUndefined(x)) return true;
-
-            return false;
+            return m_logChain.IsUndefined(x);
         }
 
         public override double Evalulate(double x)

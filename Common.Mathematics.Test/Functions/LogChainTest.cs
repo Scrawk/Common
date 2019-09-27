@@ -117,6 +117,8 @@ namespace Common.Mathematics.Test.Functions
 
                 //Console.WriteLine(func.Derivative());
                 Assert.AreEqual("(x / ((x - 1) * (x^2 - 1)^3)) * (1 / x - 1 / (x - 1) - 3 * (2x * (1 / (x^2 - 1))))", derivative.ToString());
+
+                // (x / ((x - 1) * (x ^ 2 - 1) ^ 3)) * ((1 / x) + (-1 / (x - 1)) - 3 * (2x * (1 / (x ^ 2 - 1))))>.
             }
 
             //example 2

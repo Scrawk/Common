@@ -9,6 +9,38 @@ namespace Common.Mathematics.Test.Functions
     [TestClass]
     public class PoductFuncTest
     {
+
+        [TestMethod]
+        public new void ToString()
+        {
+            Function func, func1, func2;
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(0);
+            func = new ProductFunc(func1, func2);
+            Assert.AreEqual("0", func.ToString());
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(1);
+            func = new ProductFunc(func1, func2);
+            Assert.AreEqual("0", func.ToString());
+
+            func1 = new ConstFunc(1);
+            func2 = new ConstFunc(1);
+            func = new ProductFunc(func1, func2);
+            Assert.AreEqual("1", func.ToString());
+
+            func1 = new ConstFunc(-1);
+            func2 = new ConstFunc(-1);
+            func = new ProductFunc(func1, func2);
+            Assert.AreEqual("-1 * -1", func.ToString());
+
+            func1 = new ConstFunc(-1);
+            func2 = new ConstFunc(1);
+            func = new ProductFunc(func1, func2);
+            Assert.AreEqual("-1", func.ToString());
+        }
+
         [TestMethod]
         public void Derivative()
         {

@@ -19,6 +19,12 @@ namespace Common.Mathematics.Functions
             string A = ConstantToString(a);
             return string.Format("{0}", A);
         }
+
+        public override bool IsOne()
+        {
+            return a == 1;
+        }
+
         public override Function Copy()
         {
             return new ConstFunc(a);

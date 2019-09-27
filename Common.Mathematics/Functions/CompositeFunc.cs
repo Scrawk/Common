@@ -12,27 +12,7 @@ namespace Common.Mathematics.Functions
 
         public CompositeFunc() : base(1)
         {
-            Functions = new List<Function>();
-        }
 
-        public CompositeFunc(Function g, Function h) : base(1)
-        {
-            Functions = new List<Function>(2);
-            Functions.Add(g, h);
-        }
-
-        public CompositeFunc(Function g, Function h, Function i) : base(1)
-        {
-            Functions = new List<Function>(3);
-            Functions.Add(g, h, i);
-        }
-
-        public CompositeFunc(IList<Function> functions) : base(1)
-        {
-            if (functions.Count < 2)
-                throw new ArgumentException("Composite function must be made from at less 2 functions.");
-
-            Functions = new List<Function>(functions);
         }
 
         public int Count => Functions.Count;
@@ -44,6 +24,16 @@ namespace Common.Mathematics.Functions
                 if (Functions[i].IsZero()) count++;
 
             return Count == count;
+        }
+
+        public override bool IsOne()
+        {
+            if (Count == 0) return false;
+
+            for (int i = 0; i < Count; i++)
+                if (!Functions[i].IsOne()) return false;
+
+            return true;
         }
 
         public override bool IsUndefined(double x)

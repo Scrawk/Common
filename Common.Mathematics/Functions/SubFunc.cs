@@ -9,27 +9,35 @@ namespace Common.Mathematics.Functions
     {
 
         public SubFunc(Function g, Function h)
+            : this(new Function[] { g, h })
         {
-            Functions = new List<Function>(2);
-            Functions.Add(g, h);
+
         }
 
         public SubFunc(Function g, Function h, Function i)
+            : this(new Function[] { g, h, i })
         {
-            Functions = new List<Function>(3);
-            Functions.Add(g, h, i);
+
+        }
+
+        public SubFunc(Function g, Function h, Function i, Function j)
+            : this(new Function[] { g, h, i, j })
+        {
+
         }
 
         public SubFunc(IList<Function> functions)
         {
-            if (functions.Count < 2)
-                throw new ArgumentException("Sub function must be made from at less 2 functions.");
+            Functions = new List<Function>();
 
-            Functions = new List<Function>(functions);
+            foreach (var func in functions)
+                if (!func.IsZero()) Functions.Add(func);
         }
 
         public override string ToString(string varibleName)
         {
+            if (Count == 0) return "0";
+
             string str = "(";
 
             for (int i = 0; i < Count; i++)
@@ -37,7 +45,15 @@ namespace Common.Mathematics.Functions
                 if (i == 0)
                     str += RemoveOuterBrackets(Functions[i].ToString(varibleName));
                 else
-                    str += " - " + RemoveOuterBrackets(Functions[i].ToString(varibleName));
+                {
+                    var name = RemoveOuterBrackets(Functions[i].ToString(varibleName));
+
+                    if (name.Length > 1 && name[0] == '-')
+                        str += " + " + name.Substring(1);
+                    else
+                        str += " - " + name;
+                }
+
             }
 
             return str + ")";

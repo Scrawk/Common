@@ -62,6 +62,8 @@
     <Compile Include="Functions\ProductFuncTest.cs" />
     <Compile Include="Functions\QuotientFuncTest.cs" />
     <Compile Include="Functions\SinFuncTest.cs" />
+    <Compile Include="Functions\SubFuncTest.cs" />
+    <Compile Include="Functions\SumFuncTest.cs" />
     <Compile Include="Functions\TanFuncTest.cs" />
     <Compile Include="Polynomials\Polynomial2dTest.cs" />
     <Compile Include="Polynomials\Polynomial3dTest.cs" />

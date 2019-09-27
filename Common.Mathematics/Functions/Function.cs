@@ -23,6 +23,11 @@ namespace Common.Mathematics.Functions
             return a == 0;
         }
 
+        public virtual bool IsOne()
+        {
+            return false;
+        }
+
         protected string ConstantToString(double x)
         {
             if (x == Math.PI)
@@ -44,7 +49,7 @@ namespace Common.Mathematics.Functions
         protected string RemoveOuterBrackets(string name)
         {
             int count = name.Length;
-            if (name.Length < count) return name;
+            if (name.Length < 2) return name;
 
             if (name[0] == '(' && name[count - 1] == ')')
                 return name.Substring(1, count - 2);
@@ -64,6 +69,15 @@ namespace Common.Mathematics.Functions
         public abstract bool IsUndefined(double x);
 
         public abstract double Evalulate(double x);
+
+        public Function Derivative(int order)
+        {
+            Function func = Copy();
+            for (int i = 0; i < order; i++)
+                func = func.Derivative();
+
+            return func;
+        }
 
         public abstract Function Derivative();
 
