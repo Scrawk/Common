@@ -5,12 +5,18 @@ using Common.Core.Numerics;
 
 namespace Common.Mathematics.Functions
 {
-
+    /// <summary>
+    /// Function in the form a*sin(bx).
+    /// </summary>
 	public class SinFunc : Function
 	{
 
 		public readonly double b;
 
+
+        /// <summary>
+        /// Constructors.
+        /// </summary>
         public SinFunc() : this(1, 1)
         {
 
@@ -32,7 +38,10 @@ namespace Common.Mathematics.Functions
 			this.b = b;
 		}
 
-		public override string ToString(string varibleName)
+        /// <summary>
+        /// Convert to string where the varible name is x.
+        /// </summary>
+        public override string ToString(string varibleName)
 		{
             string A = ConstantToString(a);
             string B = ConstantToString(b);
@@ -47,16 +56,25 @@ namespace Common.Mathematics.Functions
                 return string.Format("{0}sin({1}{2})", A, B, varibleName);
         }
 
-		public override Function Copy()
+        /// <summary>
+        /// Copy the function.
+        /// </summary>
+        public override Function Copy()
 		{
 			return new SinFunc(a, b);
 		}
 
+        /// <summary>
+        /// Is the function undefined for the value x.
+        /// </summary>
         public override bool IsUndefined(double x)
         {
             return !DMath.IsFinite(x);
         }
 
+        /// <summary>
+        /// Evalulate for the value x.
+        /// </summary>
         public override double Evalulate(double x)
 		{
             if (IsUndefined(x))
@@ -65,14 +83,20 @@ namespace Common.Mathematics.Functions
             return a * Math.Sin(b * x);
 		}
 
-		public override Function Derivative()
+        /// <summary>
+        /// Create the derivative function.
+        /// </summary>
+        public override Function Derivative()
 		{
 			return new CosFunc(a*b, b);
 		}
 
-		public override Function AntiDerivative()
+        /// <summary>
+        /// Create the anti-derivative function.
+        /// </summary>
+        public override Function AntiDerivative()
 		{
-			return new CosFunc(-a * (1.0-b), b);
+            return new CosFunc(-a/b, b);
 		}
 
 	}

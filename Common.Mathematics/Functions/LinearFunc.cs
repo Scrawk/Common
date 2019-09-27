@@ -5,10 +5,15 @@ using Common.Core.Numerics;
 
 namespace Common.Mathematics.Functions
 {
-
+    /// <summary>
+    /// A function of the form ax.
+    /// </summary>
 	public class LinearFunc : Function
 	{
 
+        /// <summary>
+        /// Constructors.
+        /// </summary>
         public LinearFunc() : base(1)
         {
 
@@ -19,7 +24,10 @@ namespace Common.Mathematics.Functions
 
 		}
 
-		public override string ToString(string varibleName)
+        /// <summary>
+        /// Convert to string where the varible name is x.
+        /// </summary>
+        public override string ToString(string varibleName)
 		{
             string A = ConstantToString(a);
 
@@ -29,16 +37,25 @@ namespace Common.Mathematics.Functions
                 return string.Format("{0}{1}", A, varibleName);
         }
 
-		public override Function Copy()
+        /// <summary>
+        /// Copy the function.
+        /// </summary>
+        public override Function Copy()
 		{
 			return new LinearFunc(a);
 		}
 
+        /// <summary>
+        /// Is the function undefined for the value x.
+        /// </summary>
         public override bool IsUndefined(double x)
         {
             return !DMath.IsFinite(x);
         }
 
+        /// <summary>
+        /// Evalulate for the value x.
+        /// </summary>
         public override double Evalulate(double x)
 		{
             if (IsUndefined(x))
@@ -47,14 +64,20 @@ namespace Common.Mathematics.Functions
             return a * x;
 		}
 
-		public override Function Derivative()
+        /// <summary>
+        /// Create the derivative function.
+        /// </summary>
+        public override Function Derivative()
 		{
 			return new ConstFunc(a);
 		}
 
-		public override Function AntiDerivative()
+        /// <summary>
+        /// Create the anti-derivative function.
+        /// </summary>
+        public override Function AntiDerivative()
 		{
-			return new PowFunc(0.5, 2);
+			return new PowFunc(0.5 * a, 2);
 		}
 
 	}

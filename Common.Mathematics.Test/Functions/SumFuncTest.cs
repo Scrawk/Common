@@ -96,5 +96,30 @@ namespace Common.Mathematics.Test.Functions
             Assert.AreEqual("0", derivtive5.ToString());
         }
 
+        [TestMethod]
+        public void AntiDerivative()
+        {
+            Function func, func1, func2, func3, antiderivative;
+
+            func1 = new PowFunc(-3, 2);
+            func2 = new LinearFunc();
+            func = new SumFunc(func1, func2);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("-x^3 + 0.5x^2", antiderivative.ToString());
+
+            func1 = new ConstFunc(15);
+            func2 = new LinearFunc(4);
+            func3 = new PowFunc(-2, -2);
+            func = new SumFunc(func1, func2, func3);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("15x + 2x^2 + 2x^-1", antiderivative.ToString());
+
+            func1 = new PowFunc(6, 0.5);
+            func2 = new PowFunc(-8, 3);
+            func = new SumFunc(func1, func2);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("4x^1.5 - 2x^4", antiderivative.ToString());
+        }
+
     }
 }

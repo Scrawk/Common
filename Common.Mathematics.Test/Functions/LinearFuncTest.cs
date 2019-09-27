@@ -26,5 +26,13 @@ namespace Common.Mathematics.Test.Functions
             var derivative = func.Derivative();
             Assert.AreEqual("3", derivative.ToString());
         }
+
+        [TestMethod]
+        public void AntiDerivative()
+        {
+            var func = new LinearFunc(3);
+            var antiderivative = func.AntiDerivative();
+            Assert.AreEqual("1.5x^2", antiderivative.ToString());
+        }
     }
 }

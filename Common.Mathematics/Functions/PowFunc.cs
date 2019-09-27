@@ -5,12 +5,19 @@ using Common.Core.Numerics;
 
 namespace Common.Mathematics.Functions
 {
-
+    /// <summary>
+    /// A function of the form ax^n.
+    /// </summary>
     public class PowFunc : Function
     {
-
+        /// <summary>
+        /// The power of the function.
+        /// </summary>
         public readonly double n;
 
+        /// <summary>
+        /// Constructors.
+        /// </summary>
         public PowFunc(double n) : this(1, n)
         {
 
@@ -27,6 +34,9 @@ namespace Common.Mathematics.Functions
             this.n = n;
         }
 
+        /// <summary>
+        /// Convert to string where the varible name is x.
+        /// </summary>
         public override string ToString(string varibleName)
         {
             string A = ConstantToString(a);
@@ -41,11 +51,17 @@ namespace Common.Mathematics.Functions
                 return string.Format("{0}{2}^{1}", A, n, varibleName);
         }
 
+        /// <summary>
+        /// Copy the function.
+        /// </summary>
         public override Function Copy()
         {
             return new PowFunc(a, n);
         }
 
+        /// <summary>
+        /// Is the function undefined for the value x.
+        /// </summary>
         public override bool IsUndefined(double x)
         {
             if (x == 0 && n < 0) return true;
@@ -55,6 +71,9 @@ namespace Common.Mathematics.Functions
             return false;
         }
 
+        /// <summary>
+        /// Evalulate for the value x.
+        /// </summary>
         public override double Evalulate(double x)
         {
             if (IsUndefined(x))
@@ -63,6 +82,9 @@ namespace Common.Mathematics.Functions
             return a * Math.Pow(x, n);
         }
 
+        /// <summary>
+        /// Create the derivative function.
+        /// </summary>
         public override Function Derivative()
         {
             if (n == 1)
@@ -73,12 +95,15 @@ namespace Common.Mathematics.Functions
                 return new PowFunc(a * n, n - 1);
         }
 
+        /// <summary>
+        /// Create the anti-derivative function.
+        /// </summary>
         public override Function AntiDerivative()
         {
             if (n == -1)
-                return new LogFunc();
+                return new LogFunc(a);
             else
-                return new PowFunc(1.0 / (n + 1), n + 1);
+                return new PowFunc(1.0 / (n + 1) * a, n + 1);
         }
 
     }

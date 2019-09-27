@@ -30,5 +30,21 @@ namespace Common.Mathematics.Test.Functions
             var derivative = func.Derivative();
             Assert.AreEqual("-8sin(4x)", derivative.ToString());
         }
+
+        [TestMethod]
+        public void AntiDerivative()
+        {
+            Function func, antiderivative;
+
+            func = new CosFunc(5, Math.PI);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("1.59154943091895sin(PIx)", antiderivative.ToString());
+
+            func = new SubFunc(new CosFunc(2, 1.0/3.0), new PowFunc(-2));
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("6sin(0.333333333333333x) + x^-1", antiderivative.ToString());
+
+            //Console.WriteLine(antiderivative);
+        }
     }
 }

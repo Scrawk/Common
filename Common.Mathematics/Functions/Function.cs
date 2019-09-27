@@ -5,12 +5,20 @@ using Common.Core.Numerics;
 
 namespace Common.Mathematics.Functions
 {
-
+    /// <summary>
+    /// Abstract function.
+    /// </summary>
     public abstract class Function
     {
+        /// <summary>
+        /// The factor, ie ax.
+        /// </summary>
         public readonly double a;
 
-        private Function m_derivative;
+        /// <summary>
+        /// If the derivative is needed keep a copy to reuse.
+        /// </summary>
+        private Function m_derivative, m_antiderivative;
 
         public Function(double a)
         {
@@ -20,16 +28,25 @@ namespace Common.Mathematics.Functions
             this.a = a;
         }
 
+        /// <summary>
+        /// If the function always evalulates to 0.
+        /// </summary>
         public virtual bool IsZero()
         {
             return a == 0;
         }
 
+        /// <summary>
+        /// If the function always evalulates to 1.
+        /// </summary>
         public virtual bool IsOne()
         {
             return false;
         }
 
+        /// <summary>
+        /// Represent know constants with their symbol.
+        /// </summary>
         protected string ConstantToString(double x)
         {
             if (x == Math.PI)
@@ -40,6 +57,9 @@ namespace Common.Mathematics.Functions
                 return x.ToString();
         }
 
+        /// <summary>
+        /// If varible is negative return its sign.
+        /// </summary>
         protected string SignToString(double x)
         {
             if (x < 0)
@@ -48,6 +68,9 @@ namespace Common.Mathematics.Functions
                 return "";
         }
 
+        /// <summary>
+        /// Remove the outer brackets from this string if present.
+        /// </summary>
         protected string RemoveOuterBrackets(string name)
         {
             int count = name.Length;
@@ -59,32 +82,59 @@ namespace Common.Mathematics.Functions
                 return name;
         }
 
+        /// <summary>
+        /// Return as string.
+        /// </summary>
         public override string ToString()
         {
             return RemoveOuterBrackets(ToString("x"));
         }
 
+        /// <summary>
+        /// Convert to string where the varible name is x.
+        /// </summary>
         public abstract string ToString(string varibleName);
 
+        /// <summary>
+        /// Copy the function.
+        /// </summary>
         public abstract Function Copy();
 
+        /// <summary>
+        /// Is the function undefined for the value x.
+        /// </summary>
         public abstract bool IsUndefined(double x);
 
+        /// <summary>
+        /// Evalulate for the value x.
+        /// </summary>
         public abstract double Evalulate(double x);
 
-        public Function Derivative(int order)
+        /// <summary>
+        /// Create the derivative function of order n.
+        /// </summary>
+        public Function Derivative(int n)
         {
             Function func = Copy();
-            for (int i = 0; i < order; i++)
+            for (int i = 0; i < n; i++)
                 func = func.Derivative();
 
             return func;
         }
 
+        /// <summary>
+        /// Create the derivative function.
+        /// </summary>
         public abstract Function Derivative();
 
+        /// <summary>
+        /// Create the anti-derivative function.
+        /// </summary>
         public abstract Function AntiDerivative();
 
+        /// <summary>
+        /// Create the tangent function.
+        /// </summary>
         public Function Tangent(double x)
         {
             if (IsUndefined(x))
@@ -101,6 +151,9 @@ namespace Common.Mathematics.Functions
             return new SumFunc(prod, new ConstFunc(b));
         }
 
+        /// <summary>
+        /// Create the normal function.
+        /// </summary>
         public Function Normal(double x)
         {
             if (IsUndefined(x))
@@ -116,6 +169,20 @@ namespace Common.Mathematics.Functions
             var quot = new QuotientFunc(new ConstFunc(-1), new ConstFunc(a));
             var prod = new ProductFunc(quot, sub);
             return new SumFunc(prod, new ConstFunc(b));
+        }
+
+        public double Integrate(double a, double b)
+        {
+            if (m_antiderivative == null)
+                m_antiderivative = AntiDerivative();
+
+            if (m_antiderivative.IsUndefined(a))
+                throw new ArgumentException("Antiderivative is undefined for a = " + a);
+
+            if (m_antiderivative.IsUndefined(b))
+                throw new ArgumentException("Antiderivative is undefined for b = " + b);
+
+            return m_antiderivative.Evalulate(b) - m_antiderivative.Evalulate(a);
         }
 
     }

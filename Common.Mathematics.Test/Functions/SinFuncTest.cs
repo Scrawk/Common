@@ -47,5 +47,15 @@ namespace Common.Mathematics.Test.Functions
             Assert.AreEqual("-186.037660081799cos(PIx)", derivtive3.ToString());
             Assert.AreEqual("584.454546204014sin(PIx)", derivtive4.ToString());
         }
+
+        [TestMethod]
+        public void AntiDerivative()
+        {
+            Function func, antiderivative;
+
+            func = new SubFunc(new SinFunc(5, 0.1), new ConstFunc(1));
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("-50cos(0.1x) - x", antiderivative.ToString());
+        }
     }
 }

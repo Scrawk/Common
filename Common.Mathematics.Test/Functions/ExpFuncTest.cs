@@ -51,5 +51,45 @@ namespace Common.Mathematics.Test.Functions
             Assert.AreEqual("0.01e^0.1x", derivtive4.ToString());
         }
 
+        [TestMethod]
+        public void AntiDerivative()
+        {
+            Function func, antiderivtive;
+
+            func = new ExpFunc(10, 2);
+            antiderivtive = func.AntiDerivative();
+            Assert.AreEqual("5e^2x", antiderivtive.ToString());
+
+            func = new ExpFunc(0.25, -5);
+            antiderivtive = func.AntiDerivative();
+            Assert.AreEqual("-0.05e^-5x", antiderivtive.ToString());
+
+            func = new SumFunc(new LinearFunc(), new ExpFunc());
+            antiderivtive = func.AntiDerivative();
+            Assert.AreEqual("0.5x^2 + e^x", antiderivtive.ToString());
+
+        }
+
+        [TestMethod]
+        public void Base()
+        {
+            var func = new ExpFunc(0.2, 0.05);
+            Assert.AreEqual(1.05, Math.Round(func.b, 2));
+
+            func = ExpFunc.FromBase(15, 0.86);
+            Assert.AreEqual(15, Math.Round(func.a, 2));
+            Assert.AreEqual(-0.15, Math.Round(func.c, 2));
+        }
+
+        [TestMethod]
+        public void Life()
+        {
+            var func = ExpFunc.FromBase(10000, 1.04);
+            Assert.AreEqual(17.67, Math.Round(func.Life(2), 2));
+
+            func = ExpFunc.FromBase(10, 0.88);
+            Assert.AreEqual(5.42, Math.Round(func.Life(2), 2));
+        }
+
     }
 }

@@ -6,11 +6,17 @@ using Common.Core.Numerics;
 namespace Common.Mathematics.Functions
 {
 
+    /// <summary>
+    /// Function in the form a*tan(bx).
+    /// </summary>
     public class TanFunc : Function
     {
 
         public readonly double b;
 
+        /// <summary>
+        /// Constructors.
+        /// </summary>
         public TanFunc() : this(1, 1)
         {
 
@@ -32,6 +38,9 @@ namespace Common.Mathematics.Functions
             this.b = b;
         }
 
+        /// <summary>
+        /// Convert to string where the varible name is x.
+        /// </summary>
         public override string ToString(string varibleName)
         {
             string A = ConstantToString(a);
@@ -47,16 +56,25 @@ namespace Common.Mathematics.Functions
                 return string.Format("{0}tan({1}{2})", A, B, varibleName);
         }
 
+        /// <summary>
+        /// Copy the function.
+        /// </summary>
         public override Function Copy()
         {
             return new TanFunc(a, b);
         }
 
+        /// <summary>
+        /// Is the function undefined for the value x.
+        /// </summary>
         public override bool IsUndefined(double x)
         {
             return !DMath.IsFinite(x);
         }
 
+        /// <summary>
+        /// Evalulate for the value x.
+        /// </summary>
         public override double Evalulate(double x)
         {
             if (IsUndefined(x))
@@ -65,6 +83,9 @@ namespace Common.Mathematics.Functions
             return a * Math.Tan(b * x);
         }
 
+        /// <summary>
+        /// Create the derivative function.
+        /// </summary>
         public override Function Derivative()
         {
             var con = new ConstFunc(a * b);
@@ -75,6 +96,9 @@ namespace Common.Mathematics.Functions
             return new QuotientFunc(con, prod);
         }
 
+        /// <summary>
+        /// Create the anti-derivative function.
+        /// </summary>
         public override Function AntiDerivative()
         {
             throw new NotImplementedException();

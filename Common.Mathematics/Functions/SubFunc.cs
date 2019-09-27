@@ -4,10 +4,15 @@ using System.Collections.Generic;
 
 namespace Common.Mathematics.Functions
 {
-
+    /// <summary>
+    /// Function of the form f(x) = g(x) - h(x)...
+    /// </summary>
     public class SubFunc : CompositeFunc
     {
 
+        /// <summary>
+        /// Constructors.
+        /// </summary>
         public SubFunc(Function g, Function h)
             : this(new Function[] { g, h })
         {
@@ -33,11 +38,16 @@ namespace Common.Mathematics.Functions
             for (int i = 0; i < functions.Count; i++)
             {
                 var func = functions[i];
+                //Dont include any functions that evalulate to 0
+                //unless its the first.
                 if (i == 0 || !func.IsZero()) Functions.Add(func);
             }
                 
         }
 
+        /// <summary>
+        /// Convert to string where the varible name is x.
+        /// </summary>
         public override string ToString(string varibleName)
         {
             if (Count == 0) return "0";
@@ -63,6 +73,9 @@ namespace Common.Mathematics.Functions
             return str + ")";
         }
 
+        /// <summary>
+        /// Copy the function.
+        /// </summary>
         public override Function Copy()
         {
             var functions = new List<Function>(Count);
@@ -72,6 +85,9 @@ namespace Common.Mathematics.Functions
             return new SubFunc(functions);
         }
 
+        /// <summary>
+        /// Evalulate for the value x.
+        /// </summary>
         public override double Evalulate(double x)
         {
             if (IsUndefined(x))
@@ -90,12 +106,17 @@ namespace Common.Mathematics.Functions
             return result;
         }
 
+        /// <summary>
+        /// Create the derivative function.
+        /// </summary>
         public override Function Derivative()
         {
             var functions = new List<Function>(Count);
             for (int i = 0; i < Count; i++)
             {
                 var func = Functions[i].Derivative();
+                //Dont include any functions that evalulate to 0
+                //unless its the first.
                 if (i == 0 || !func.IsZero())
                     functions.Add(func);
             }
@@ -108,13 +129,27 @@ namespace Common.Mathematics.Functions
                 return new SubFunc(functions);
         }
 
+        /// <summary>
+        /// Create the anti-derivative function.
+        /// </summary>
         public override Function AntiDerivative()
         {
             var functions = new List<Function>(Count);
             for (int i = 0; i < Count; i++)
-                functions.Add(Functions[i].AntiDerivative());
+            {
+                var func = Functions[i].AntiDerivative();
+                //Dont include any functions that evalulate to 0 
+                //unless its the first.
+                if (i == 0 || !func.IsZero())
+                    functions.Add(func);
+            }
 
-            return new SubFunc(functions);
+            if (functions.Count == 0)
+                return new ConstFunc(0);
+            else if (functions.Count == 1)
+                return functions[0];
+            else
+                return new SubFunc(functions);
         }
 
     }

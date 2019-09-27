@@ -96,5 +96,45 @@ namespace Common.Mathematics.Test.Functions
             Assert.AreEqual("0", derivtive6.ToString());
         }
 
+        [TestMethod]
+        public void AntiDerivative()
+        {
+            var func = new PowFunc(10, 4);
+            var antiderivative = func.AntiDerivative();
+            Assert.AreEqual("2x^5", antiderivative.ToString());
+
+            func = new PowFunc(0.12, 2);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("0.04x^3", antiderivative.ToString());
+
+            func = new PowFunc(-7, 6);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("-x^7", antiderivative.ToString());
+
+            func = new PowFunc(1.0/4.0, 1);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("0.125x^2", antiderivative.ToString());
+
+            func = new PowFunc(-5);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("-0.25x^-4", antiderivative.ToString());
+
+            func = new PowFunc(-2);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("-x^-1", antiderivative.ToString());
+
+            func = new PowFunc(0.5);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("0.666666666666667x^1.5", antiderivative.ToString());
+
+            func = new PowFunc(9, 0.5);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("6x^1.5", antiderivative.ToString());
+
+            func = new PowFunc(4, -1);
+            antiderivative = func.AntiDerivative();
+            Assert.AreEqual("4ln(x)", antiderivative.ToString());
+        }
+
     }
 }
