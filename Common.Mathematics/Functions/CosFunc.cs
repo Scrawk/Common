@@ -66,12 +66,12 @@ namespace Common.Mathematics.Functions
         }
 
         public override Function Derivative()
-		{
+        {
 			return new SinFunc(-a*b, b);
 		}
 
-		public override Function AntiDerivative()
-		{
+        public override Function AntiDerivative()
+        {
 			return new SinFunc(a * (1.0-b), b);
 		}
 

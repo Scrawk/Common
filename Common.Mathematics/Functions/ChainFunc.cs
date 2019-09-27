@@ -59,7 +59,7 @@ namespace Common.Mathematics.Functions
             return g.Evalulate(h.Evalulate(x));
 		}
 
-		public override Function Derivative()
+        public override Function Derivative()
 		{
             var func1 = h.Derivative();
             var func2 = new ChainFunc(g.Derivative(), h.Copy());

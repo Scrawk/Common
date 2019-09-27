@@ -10,6 +10,8 @@ namespace Common.Mathematics.Functions
     {
         public readonly double a;
 
+        private Function m_derivative;
+
         public Function(double a)
         {
             if (!DMath.IsFinite(a))
@@ -82,6 +84,39 @@ namespace Common.Mathematics.Functions
         public abstract Function Derivative();
 
         public abstract Function AntiDerivative();
+
+        public Function Tangent(double x)
+        {
+            if (IsUndefined(x))
+                throw new ArgumentException("Evalulate is undefined for x = " + x);
+
+            if (m_derivative == null)
+                m_derivative = Derivative();
+
+            var a = m_derivative.Evalulate(x);
+            var b = Evalulate(x);
+
+            var sub = new SubFunc(new LinearFunc(), new ConstFunc(x));
+            var prod = new ProductFunc(new ConstFunc(a), sub);
+            return new SumFunc(prod, new ConstFunc(b));
+        }
+
+        public Function Normal(double x)
+        {
+            if (IsUndefined(x))
+                throw new ArgumentException("Evalulate is undefined for x = " + x);
+
+            if (m_derivative == null)
+                m_derivative = Derivative();
+
+            var a = m_derivative.Evalulate(x);
+            var b = Evalulate(x);
+
+            var sub = new SubFunc(new LinearFunc(), new ConstFunc(x));
+            var quot = new QuotientFunc(new ConstFunc(-1), new ConstFunc(a));
+            var prod = new ProductFunc(quot, sub);
+            return new SumFunc(prod, new ConstFunc(b));
+        }
 
     }
 
