@@ -13,7 +13,7 @@ namespace Common.Mathematics.Test.Functions
         [TestMethod]
         public new void ToString()
         {
-            Function func, func1, func2;
+            Function func, func1, func2, func3;
 
             func1 = new ConstFunc(0);
             func2 = new ConstFunc(0);
@@ -22,6 +22,11 @@ namespace Common.Mathematics.Test.Functions
 
             func1 = new ConstFunc(0);
             func2 = new ConstFunc(1);
+            func = new SubFunc(func1, func2);
+            Assert.AreEqual("0 - 1", func.ToString());
+
+            func1 = new ConstFunc(1);
+            func2 = new ConstFunc(0);
             func = new SubFunc(func1, func2);
             Assert.AreEqual("1", func.ToString());
 
@@ -34,6 +39,111 @@ namespace Common.Mathematics.Test.Functions
             func2 = new ConstFunc(-1);
             func = new SubFunc(func1, func2);
             Assert.AreEqual("-1 + 1", func.ToString());
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(0);
+            func3 = new ConstFunc(1);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual("0 - 1", func.ToString());
+
+            func1 = new ConstFunc(1);
+            func2 = new ConstFunc(0);
+            func3 = new ConstFunc(1);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual("1 - 1", func.ToString());
+
+            func1 = new ConstFunc(1);
+            func2 = new ConstFunc(0);
+            func3 = new ConstFunc(-1);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual("1 + 1", func.ToString());
+        }
+
+        [TestMethod]
+        public void Evalulate()
+        {
+            Function func, func1, func2, func3;
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(0);
+            func3 = new ConstFunc(0);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual(0, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(1);
+            func3 = new ConstFunc(0);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual(-1, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(-1);
+            func3 = new ConstFunc(0);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual(1, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(1);
+            func3 = new ConstFunc(1);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual(-2, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(-1);
+            func3 = new ConstFunc(-1);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual(2, func.Evalulate(1));
+
+            func1 = new ConstFunc(1);
+            func2 = new ConstFunc(0);
+            func3 = new ConstFunc(-1);
+            func = new SubFunc(func1, func2, func3);
+            Assert.AreEqual(2, func.Evalulate(1));
+        }
+
+        [TestMethod]
+        public void Derivative()
+        {
+            Function func, func1, func2, func3, derivative;
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(0);
+            func = new SubFunc(func1, func2);
+            derivative = func.Derivative();
+            Assert.AreEqual("0", derivative.ToString());
+
+            func1 = new ConstFunc(0);
+            func2 = new LinearFunc(2);
+            func = new SubFunc(func1, func2);
+            derivative = func.Derivative();
+            Assert.AreEqual("0 - 2", derivative.ToString());
+
+            func1 = new LinearFunc(2);
+            func2 = new ConstFunc(0);
+            func = new SubFunc(func1, func2);
+            derivative = func.Derivative();
+            Assert.AreEqual("2", derivative.ToString());
+
+            func1 = new ConstFunc(0);
+            func2 = new LinearFunc(2);
+            func3 = new ConstFunc(0);
+            func = new SubFunc(func1, func2, func3);
+            derivative = func.Derivative();
+            Assert.AreEqual("0 - 2", derivative.ToString());
+
+            func1 = new LinearFunc(2);
+            func2 = new ConstFunc(0);
+            func3 = new ConstFunc(0);
+            func = new SubFunc(func1, func2, func3);
+            derivative = func.Derivative();
+            Assert.AreEqual("2", derivative.ToString());
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(0);
+            func3 = new LinearFunc(2);
+            func = new SubFunc(func1, func2, func3);
+            derivative = func.Derivative();
+            Assert.AreEqual("0 - 2", derivative.ToString());
         }
 
         [TestMethod]

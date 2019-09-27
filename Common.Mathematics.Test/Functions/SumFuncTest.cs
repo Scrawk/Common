@@ -37,6 +37,42 @@ namespace Common.Mathematics.Test.Functions
         }
 
         [TestMethod]
+        public void Evalulate()
+        {
+            Function func, func1, func2, func3;
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(0);
+            func3 = new ConstFunc(0);
+            func = new SumFunc(func1, func2, func3);
+            Assert.AreEqual(0, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(1);
+            func3 = new ConstFunc(0);
+            func = new SumFunc(func1, func2, func3);
+            Assert.AreEqual(1, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(-1);
+            func3 = new ConstFunc(0);
+            func = new SumFunc(func1, func2, func3);
+            Assert.AreEqual(-1, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(1);
+            func3 = new ConstFunc(1);
+            func = new SumFunc(func1, func2, func3);
+            Assert.AreEqual(2, func.Evalulate(1));
+
+            func1 = new ConstFunc(0);
+            func2 = new ConstFunc(-1);
+            func3 = new ConstFunc(-1);
+            func = new SumFunc(func1, func2, func3);
+            Assert.AreEqual(-2, func.Evalulate(1));
+        }
+
+        [TestMethod]
         public void HigherOrderDerivative()
         {
             var func1 = new PowFunc(1.0 / 5.0, 3);

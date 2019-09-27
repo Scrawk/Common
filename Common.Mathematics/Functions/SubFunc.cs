@@ -30,8 +30,12 @@ namespace Common.Mathematics.Functions
         {
             Functions = new List<Function>();
 
-            foreach (var func in functions)
-                if (!func.IsZero()) Functions.Add(func);
+            for (int i = 0; i < functions.Count; i++)
+            {
+                var func = functions[i];
+                if (i == 0 || !func.IsZero()) Functions.Add(func);
+            }
+                
         }
 
         public override string ToString(string varibleName)
@@ -92,7 +96,7 @@ namespace Common.Mathematics.Functions
             for (int i = 0; i < Count; i++)
             {
                 var func = Functions[i].Derivative();
-                if (func.a != 0)
+                if (i == 0 || !func.IsZero())
                     functions.Add(func);
             }
 
