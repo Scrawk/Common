@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 
-namespace Common.Geometry.Curves
+namespace Common.Geometry.Bezier
 {
     /// <summary>
     /// A bezier curve of quadratic degree using a polynominal.

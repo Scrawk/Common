@@ -2,9 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
-using Common.Geometry.Curves;
+using Common.Geometry.Bezier;
 
-namespace Common.Geometry.Test.Curves
+namespace Common.Geometry.Test.Bezier
 {
     [TestClass]
     public class Bezier2fTest

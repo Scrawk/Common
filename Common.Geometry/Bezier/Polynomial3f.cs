@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-namespace Common.Geometry.Curves
+namespace Common.Geometry.Bezier
 {
 
     /// <summary>

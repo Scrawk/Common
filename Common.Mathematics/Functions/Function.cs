@@ -171,6 +171,9 @@ namespace Common.Mathematics.Functions
             return new SumFunc(prod, new ConstFunc(b));
         }
 
+        /// <summary>
+        /// Integrate a definite integral from a to b.
+        /// </summary>
         public double Integrate(double a, double b)
         {
             if (m_antiderivative == null)

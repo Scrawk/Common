@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Common.Geometry.Curves
+namespace Common.Geometry.Bezier
 {
 
     public enum BEZIER_DEGREE {  LINEAR = 1, QUADRATIC = 2, CUBIC = 3, QUARTIC = 4, QUINTIC = 5 };

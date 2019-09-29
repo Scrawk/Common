@@ -49,13 +49,15 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Nurbs\NurbsCurve2fTest.cs" />
+    <Compile Include="Nurbs\NurbsFunctionsTest.cs" />
     <Compile Include="Points\KdTree2dTest.cs" />
     <Compile Include="Points\KdTree3dTest.cs" />
     <Compile Include="Points\PointCollection2dTest.cs" />
     <Compile Include="Points\PointCollection3dTest.cs" />
     <Compile Include="Points\PointGrid2dTest.cs" />
     <Compile Include="Points\PointGrid3dTest.cs" />
-    <Compile Include="Curves\Bezier2fTest.cs" />
+    <Compile Include="Bezier\Bezier2fTest.cs" />
     <Compile Include="Polygons\Polygon2fTest.cs" />
     <Compile Include="Polygons\Polyline2fTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
