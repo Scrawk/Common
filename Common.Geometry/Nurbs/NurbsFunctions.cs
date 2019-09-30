@@ -8,7 +8,8 @@ namespace Common.Geometry.Nurbs
     {
 
         /// <summary>
-        /// Confirm the relations between degree (p), number of control points(n+1), and the number of knots (m+1).
+        /// Confirm the relations between degree (p), number of control points(n+1),
+        /// and the number of knots (m+1).
         /// </summary>
         /// <param name="p">The degree</param>
         /// <param name="n">Number of control points</param>
@@ -17,6 +18,18 @@ namespace Common.Geometry.Nurbs
         public static bool AreValidRelations(int p, int n, int m)
         {
             return n + p + 1 - m == 0;
+        }
+
+        /// <summary>
+        /// Given the degree (p) and number of control points how 
+        /// many knots are required to make a valid curve.
+        /// </summary>
+        /// <param name="p">The degree</param>
+        /// <param name="n">Number of control points</param>
+        /// <returns></returns>
+        public static int RequiredKnots(int p, int n)
+        {
+            return n + p + 1;
         }
 
         /// <summary>

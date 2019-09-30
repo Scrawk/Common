@@ -43,7 +43,7 @@ namespace Common.Geometry.Bezier
 
             int count = control.Count;
             Control = new Vector3f[count];
-            control.CopyTo(Control, count);
+            control.CopyTo(Control, 0);
         }
 
         /// <summary>
