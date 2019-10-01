@@ -162,6 +162,17 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Return the Binomial coefficients.
+        /// </summary>
+        /// <param name="k">N</param>
+        /// <param name="i">n</param>
+        /// <returns></returns>
+        public static double Binomial(int k, int i)
+        {
+            return Factorial(k) / (double)(Factorial(i) * Factorial(k - i));
+        }
+
+        /// <summary>
         /// Returns the factorial of number.
         /// Must be less than or equal MAX_FACTORIAL or overflow will occur.
         /// </summary>

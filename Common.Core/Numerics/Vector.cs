@@ -50,6 +50,12 @@ namespace Common.Core.Numerics
 
         public double w => array[3];
 
+        public Vector2d xy => new Vector2d(x, y);
+
+        public Vector3d xyz => new Vector3d(x, y, z);
+
+        public Vector4d xyzw => new Vector4d(x, y, z, w);
+
         public double this[int i]
         {
             get => array[i];

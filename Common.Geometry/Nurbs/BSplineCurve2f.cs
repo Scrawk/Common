@@ -107,10 +107,6 @@ namespace Common.Geometry.Nurbs
             var span = NurbsFunctions.FindSpan(u, Degree, Knots);
             var nders = NurbsFunctions.DerivativeBasisFunctions(u, Degree, span, numDerivs, Knots);
 
-            //var w = nders.GetLength(0);
-            //var h = nders.GetLength(1);
-            //Console.WriteLine(w + " " + h);
-
             var CK = new Vector2f[numDerivs + 1];
 
             for (int k = 0; k <= numDerivs; k++)

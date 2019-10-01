@@ -47,18 +47,22 @@ namespace Common.Geometry.Test.Nurbs
             for (double u = 0; u <= 1; u += 0.1f)
             {
                 float t = (float)u;
-                Vector2f p, d;
+                Vector2d p, d;
 
-                p = bezier.Position(t);
-                d = bezier.Tangent(t);
-                Console.WriteLine("Bezier = " + p + " " + d);
+                //p = bezier.Position(t);
+                //d = bezier.Tangent(t);
+                //Console.WriteLine("Bezier = " + p + " " + d);
 
                 p = spline.Position(t);
-                d = spline.Tangent(t);
+                d = spline.Derivatives(t, 1)[1];
+                p.Round(2);
+                d.Round(2);
                 Console.WriteLine("Spline = " + p + " " + d);
 
                 p = nurbs.Position(t);
-                d = nurbs.Tangent(t);
+                d = nurbs.Derivatives(t, 1)[1];
+                p.Round(2);
+                d.Round(2);
                 Console.WriteLine("nurbs = " + p + " " + d);
             }
 
