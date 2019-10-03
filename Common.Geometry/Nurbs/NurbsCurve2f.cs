@@ -10,52 +10,47 @@ namespace Common.Geometry.Nurbs
     /// </summary>
     public class NurbsCurve2f
     {
+        private NurbsCurveData2f m_data;
 
-        public NurbsCurve2f(int degree, IList<Vector3f> control, IList<int> knots)
+        public NurbsCurve2f(int degree, IList<Vector2f> control, IList<float> knots, IList<float> weights = null)
         {
-            if (!NurbsFunctions.AreValidRelations(degree, control.Count, knots.Count))
-                throw new ArgumentException("Not a valid curve.");
+            m_data = new NurbsCurveData2f(degree, control, knots, weights);
+        }
 
-            Degree = degree;
+        public NurbsCurve2f(int degree, IList<Vector3f> control, IList<float> knots)
+        {
+            m_data = new NurbsCurveData2f(degree, control, knots);
+        }
 
-            int count = control.Count;
-            Control = new Vector3f[count];
-            control.CopyTo(Control, 0);
+        private NurbsCurve2f(NurbsCurveData2f data)
+        {
+            m_data = data;
+        }
 
-            //homogenise control points.
-            for (int i = 0; i < count; i++)
-            {
-                var c = Control[i].xy;
-                var w = Control[i].z;
-                Control[i] = new Vector3f(c * w, w);
-            }
-
-            count = knots.Count;
-            Knots = new int[count];
-            knots.CopyTo(Knots, 0);
-
-            NumberOfBasisFunctions = Knots.Length - Degree - 2;
+        public static NurbsCurve2f FromPoints(int degree, IList<Vector2f> points)
+        {
+            return new NurbsCurve2f(NurbsFunctions.RationalInterpCurve(degree, points));
         }
 
         /// <summary>
         /// The curves degree.
         /// </summary>
-        public readonly int Degree;
+        public int Degree => m_data.Degree;
 
         /// <summary>
         /// The number of basis functions in curve, ie n.
         /// </summary>
-        public readonly int NumberOfBasisFunctions;
+        public int NumberOfBasisFunctions => m_data.NumberOfBasisFunctions;
 
         /// <summary>
         /// The control points.
         /// </summary>
-        public Vector3f[] Control { get; private set; }
+        public Vector3f[] Control => m_data.Control;
 
         /// <summary>
         /// The knot vector.
         /// </summary>
-        public int[] Knots { get; private set; }
+        public float[] Knots => m_data.Knots;
 
         /// <summary>
         /// Compute a point on a non-uniform, rational b-spline curve.
@@ -126,6 +121,11 @@ namespace Common.Geometry.Nurbs
             return CK;
         }
 
+        /// <summary>
+        /// Find the derivative in homongenise space.
+        /// </summary>
+        /// <param name="u">Parameter 0 <= u <= 1</param>
+        /// <param name="numDerivs">The number of derivatives to compute.</param>
         private Vector3f[] HomogeniseDerivatives(float u, int numDerivs)
         {
             numDerivs = Math.Min(Degree, numDerivs);

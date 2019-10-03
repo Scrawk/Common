@@ -14,20 +14,12 @@ namespace Common.Geometry.Test.Nurbs
         public void Constructor()
         {
 
-            var control2 = new Vector2f[]
+            var control = new Vector2f[]
             {
                 new Vector2f(0,0),
                 new Vector2f(0,1),
                 new Vector2f(1,1),
                 new Vector2f(1,0)
-            };
-
-            var control3 = new Vector3f[]
-            {
-                new Vector3f(0,0,1),
-                new Vector3f(0,1,1),
-                new Vector3f(1,1,1),
-                new Vector3f(1,0,1)
             };
 
             var knots = new int[]
@@ -36,13 +28,17 @@ namespace Common.Geometry.Test.Nurbs
                 1,1,1,1
             };
 
+            var weights = new float[]
+            {
+                1,1,1,1
+            };
+
             int degree = 3;
 
-            Console.WriteLine("Required knots = " + NurbsFunctions.RequiredKnots(degree, control2.Length));
+            Console.WriteLine("Required knots = " + NurbsFunctions.RequiredKnots(degree, control.Length));
 
-            var bezier = new Bezier2f(control2);
-            var spline = new BSplineCurve2f(degree, control2, knots);
-            var nurbs = new NurbsCurve2f(degree, control3, knots);
+            var bezier = new Bezier2f(control);
+            var nurbs = new NurbsCurve2f(degree, control, knots);
 
             for (double u = 0; u <= 1; u += 0.1f)
             {
@@ -52,12 +48,6 @@ namespace Common.Geometry.Test.Nurbs
                 //p = bezier.Position(t);
                 //d = bezier.Tangent(t);
                 //Console.WriteLine("Bezier = " + p + " " + d);
-
-                p = spline.Position(t);
-                d = spline.Derivatives(t, 1)[1];
-                p.Round(2);
-                d.Round(2);
-                Console.WriteLine("Spline = " + p + " " + d);
 
                 p = nurbs.Position(t);
                 d = nurbs.Derivatives(t, 1)[1];

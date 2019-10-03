@@ -18,12 +18,36 @@ namespace Common.Core.Numerics
             array = new double[rows, columns];
         }
 
+        public Matrix(float[,] mat)
+        {
+            int rows = mat.GetLength(0);
+            int columns = mat.GetLength(1);
+            array = new double[rows, columns];
+            Array.Copy(mat, array, mat.Length);
+        }
+
         public Matrix(double[,] mat)
         {
             int rows = mat.GetLength(0);
             int columns = mat.GetLength(1);
             array = new double[rows, columns];
             Array.Copy(mat, array, mat.Length);
+        }
+
+        public Matrix(List<List<float>> mat)
+        {
+            int rows = mat.Count;
+            int columns = mat[0].Count;
+
+            array = new double[rows, columns];
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    array[i, j] = mat[i][j];
+                }
+            }
         }
 
         public Matrix(List<List<double>> mat)
