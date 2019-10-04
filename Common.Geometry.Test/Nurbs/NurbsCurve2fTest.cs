@@ -22,7 +22,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector2f(1,0)
             };
 
-            var knots = new int[]
+            var knots = new float[]
             {
                 0,0,0,0,
                 1,1,1,1

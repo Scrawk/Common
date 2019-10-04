@@ -81,5 +81,29 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         public float[] Knots { get; private set; }
 
+        /// <summary>
+        /// The control points from homogenise space to world space.
+        /// </summary>
+        public List<Vector2f> DehomogenisedControlPoints()
+        {
+            var points = new List<Vector2f>();
+            for (int i = 0; i < Control.Length; i++)
+                points.Add(Control[i].xy / Control[i].z);
+
+            return points;
+        }
+
+        /// <summary>
+        /// The control point weights.
+        /// </summary>
+        public List<float> Weights()
+        {
+            var weights = new List<float>();
+            for (int i = 0; i < Control.Length; i++)
+                weights.Add(Control[i].z);
+
+            return weights;
+        }
+
     }
 }

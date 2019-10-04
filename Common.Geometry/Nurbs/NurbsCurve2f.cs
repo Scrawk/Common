@@ -53,6 +53,16 @@ namespace Common.Geometry.Nurbs
         public float[] Knots => m_data.Knots;
 
         /// <summary>
+        /// The control points from homogenise space to world space.
+        /// </summary>
+        public List<Vector2f> DehomogenisedControlPoints => m_data.DehomogenisedControlPoints();
+
+        /// <summary>
+        /// The control point weights.
+        /// </summary>
+        public List<float> Weights => m_data.Weights();
+
+        /// <summary>
         /// Compute a point on a non-uniform, rational b-spline curve.
         /// Corresponds to algorithm 4.1 from The NURBS book, Piegl & Tiller 2nd edition
         /// </summary>
