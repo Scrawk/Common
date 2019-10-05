@@ -94,6 +94,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Round(float d, int n)
+        {
+            return (float)Math.Round(d, n);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeAcos(float r)
         {
             return (float)Math.Acos(Math.Min(1.0f, Math.Max(-1.0f, r)));
@@ -219,6 +225,14 @@ namespace Common.Core.Numerics
         public static float Max(float a, float b, float c)
         {
             return Math.Max(a, Math.Max(b, c));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Normalize(float a, float min, float max)
+        {
+            float len = max - min;
+            if (len <= 0) return 0;
+            return (a - min) / len;
         }
 
     }

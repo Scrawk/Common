@@ -29,8 +29,8 @@ namespace Common.Geometry.Test.Nurbs
 
             var N = NurbsFunctions.BasisFunctions(u, p, U);
 
-            foreach (var n in N)
-                Console.WriteLine(n);
+            //foreach (var n in N)
+            //    Console.WriteLine(n);
         }
 
         [TestMethod]
@@ -42,8 +42,9 @@ namespace Common.Geometry.Test.Nurbs
 
             var der = NurbsFunctions.DerivativeBasisFunctions(u, p, U);
 
-            foreach (var d in der)
-                Console.WriteLine(d);
+            //foreach (var d in der)
+            //    Console.WriteLine(d);
         }
+
     }
 }

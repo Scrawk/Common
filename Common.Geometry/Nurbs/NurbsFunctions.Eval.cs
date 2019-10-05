@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Common.Core.Numerics;
 
@@ -7,6 +8,44 @@ namespace Common.Geometry.Nurbs
 {
     public  static partial class NurbsFunctions
     {
+
+        /// <summary>
+        /// Validate the nurbs data.
+        /// </summary>
+        public static void IsValidNurbsCurveData(int degree, IList<Vector2f> control, IList<float> knots)
+        {
+            if (control == null) throw new ArgumentException("Control points array cannot be null!");
+            if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
+            if (knots == null) throw new ArgumentException("Knots cannot be null!");
+
+            if (knots.Count != control.Count + degree + 1)
+                throw new ArgumentException("controlPoints.length + degree + 1 must equal knots.length.");
+
+            if (!IsValidKnotVector(degree, knots))
+                throw new ArgumentException("Invalid knot vector format.");
+
+            if (!AreValidRelations(degree, control.Count, knots.Count))
+                throw new ArgumentException("Invalid curve relations.");
+        }
+
+        /// <summary>
+        /// Validate the nurbs data.
+        /// </summary>
+        public static void IsValidNurbsCurveData(int degree, IList<Vector3f> control, IList<float> knots)
+        {
+            if (control == null) throw new ArgumentException("Control points array cannot be null!");
+            if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
+            if (knots == null) throw new ArgumentException("Knots cannot be null!");
+
+            if (knots.Count != control.Count + degree + 1)
+                throw new ArgumentException("controlPoints.length + degree + 1 must equal knots.length.");
+
+            if (!IsValidKnotVector(degree, knots))
+                throw new ArgumentException("Invalid knot vector format.");
+
+            if (!AreValidRelations(degree, control.Count, knots.Count))
+                throw new ArgumentException("Invalid curve relations.");
+        }
 
         /// <summary>
         /// Confirm the relations between degree (p), number of control points(n+1),
@@ -31,6 +70,49 @@ namespace Common.Geometry.Nurbs
         public static int RequiredKnots(int p, int n)
         {
             return n + p + 1;
+        }
+
+        /// <summary>
+        /// Check whether a given array is a valid NURBS knot vector. This also checks the validity of the end points.
+        /// More specifically, this method checks if the knot vector is of the following structure:
+        /// 
+        /// The knot vector must be non-decreasing and of length (degree + 1) * 2 or greater
+        /// 
+        /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
+        /// 
+        /// </summary>
+        public static bool IsValidKnotVector(int degree, IList<float> knots)
+        {
+            if (knots.Count == 0) return false;
+            if (knots.Count < (degree + 1) * 2) return false;
+
+            var rep = knots.First();
+
+            for (int i = 0; i < degree + 1; i++)
+                if (Math.Abs(knots[i] - rep) > FMath.EPS) return false;
+
+            rep = knots.Last();
+
+            for (int i = knots.Count - degree - 1; i < knots.Count; i++)
+            {
+                if (Math.Abs(knots[i] - rep) > FMath.EPS) return false;
+            }
+
+            return IsNonDecreasing(knots);
+        }
+
+        /// <summary>
+        /// Check if an array of floating point numbers is non-decreasing, although there may be repeats. 
+        /// </summary>
+        public static bool IsNonDecreasing(IList<float> knots)
+        {
+            var rep = knots.First();
+            for (int i = 0; i < knots.Count; i++)
+            {
+                if (knots[i] < rep - FMath.EPS) return false;
+                rep = knots[i];
+            }
+            return true;
         }
 
         /// <summary>
@@ -60,6 +142,12 @@ namespace Common.Geometry.Nurbs
         {
             //Special case.
             if (u == U[n + 1]) return n;
+
+            if (u < U.First())
+                throw new ArgumentException("u < U.First()");
+
+            if (u > U.Last())
+                throw new ArgumentException("u > U.Last()");
 
             //Do binary search.
             int low = p;
@@ -257,6 +345,30 @@ namespace Common.Geometry.Nurbs
             }
 
             return ders;
+        }
+
+        /// <summary>
+        /// Determine the derivatives of a NURBS curve at a given parameter.
+        /// </summary>
+        /// <param name="curve">The curve data with control points in homogenise space.</param>
+        /// <param name="u">Parameter 0 <= u <= 1</param>
+        /// <param name="numDerivs">The number of derivatives to compute.</param>
+        public static Vector3f[] RationalDerivatives(NurbsCurveData2f curve, float u, int numDerivs)
+        {
+            int degree = curve.Degree;
+            numDerivs = Math.Min(degree, numDerivs);
+            var span = FindSpan(u, degree, curve.Knots);
+            var nders = DerivativeBasisFunctions(u, degree, span, numDerivs, curve.Knots);
+
+            var CK = new Vector3f[numDerivs + 1];
+
+            for (int k = 0; k <= numDerivs; k++)
+            {
+                for (int j = 0; j <= degree; j++)
+                    CK[k] = CK[k] + nders[k, j] * curve.Control[span - degree + j];
+            }
+
+            return CK;
         }
 
     }

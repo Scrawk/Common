@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
@@ -11,51 +12,70 @@ namespace Common.Geometry.Test.Nurbs
     public class NurbsCurve2fTest
     {
         [TestMethod]
-        public void Constructor()
+        public void Positions()
         {
-
-            var control = new Vector2f[]
+            var points = new Vector2f[]
             {
-                new Vector2f(0,0),
-                new Vector2f(0,1),
-                new Vector2f(1,1),
-                new Vector2f(1,0)
+                new Vector2f(-10,0),
+                new Vector2f(10,0),
+                new Vector2f(10,10),
+                new Vector2f(0,10),
+                new Vector2f(5,5)
             };
 
-            var knots = new float[]
+            var curve = NurbsCurve2f.FromPoints(3, points);
+
+            var positions = new List<Vector2f>();
+
+            for (double t = 0; t <= 1; t += 0.01)
             {
-                0,0,0,0,
-                1,1,1,1
-            };
-
-            var weights = new float[]
-            {
-                1,1,1,1
-            };
-
-            int degree = 3;
-
-            Console.WriteLine("Required knots = " + NurbsFunctions.RequiredKnots(degree, control.Length));
-
-            var bezier = new Bezier2f(control);
-            var nurbs = new NurbsCurve2f(degree, control, knots);
-
-            for (double u = 0; u <= 1; u += 0.1f)
-            {
-                float t = (float)u;
-                Vector2d p, d;
-
-                //p = bezier.Position(t);
-                //d = bezier.Tangent(t);
-                //Console.WriteLine("Bezier = " + p + " " + d);
-
-                p = nurbs.Position(t);
-                d = nurbs.Derivatives(t, 1)[1];
-                p.Round(2);
-                d.Round(2);
-                Console.WriteLine("nurbs = " + p + " " + d);
+                t = Math.Round(t, 2);
+                var p = curve.Position((float)t);
+                positions.Add(p);
             }
 
         }
+
+        [TestMethod]
+        public void Split()
+        {
+            var points = new Vector2f[]
+            {
+                new Vector2f(-10,0),
+                new Vector2f(10,0),
+                new Vector2f(10,10),
+                new Vector2f(0,10),
+                new Vector2f(5,5)
+            };
+
+            var curve = NurbsCurve2f.FromPoints(3, points);
+            var curves = curve.Split(0.4f);
+
+            for (double t = 0; t <= 1; t += 0.01)
+            {
+                t = Math.Round(t, 2);
+                var p = curves[1].Position((float)t);
+            }
+        }
+
+        [TestMethod]
+        public void Length()
+        {
+            var points = new Vector2f[]
+            {
+                new Vector2f(-10,0),
+                new Vector2f(10,0),
+                new Vector2f(10,10),
+                new Vector2f(0,10),
+                new Vector2f(5,5)
+            };
+
+            var curve = NurbsCurve2f.FromPoints(3, points);
+
+            var length = curve.Length(0.5f);
+
+            Console.WriteLine(length);
+        }
+
     }
 }

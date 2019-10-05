@@ -144,6 +144,13 @@ namespace Common.Core.Numerics
             return Math.Max(a, Math.Max(b, c));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Normalize(double a, double min, double max)
+        {
+            double len = max - min;
+            if (len <= 0) return 0;
+            return (a - min) / len;
+        }
 
     }
 }

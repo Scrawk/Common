@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Common.Core.Numerics;
 
@@ -13,8 +14,7 @@ namespace Common.Geometry.Nurbs
         
         public NurbsCurveData2f(int degree, IList<Vector2f> control, IList<float> knots, IList<float> weights = null)
         {
-            if (!NurbsFunctions.AreValidRelations(degree, control.Count, knots.Count))
-                throw new ArgumentException("Not a valid curve.");
+            NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
             Degree = degree;
 
@@ -32,14 +32,14 @@ namespace Common.Geometry.Nurbs
             count = knots.Count;
             Knots = new float[count];
             knots.CopyTo(Knots, 0);
+            NormalizeKnots();
 
             NumberOfBasisFunctions = Knots.Length - Degree - 2;
         }
 
         public NurbsCurveData2f(int degree, IList<Vector3f> control, IList<float> knots)
         {
-            if (!NurbsFunctions.AreValidRelations(degree, control.Count, knots.Count))
-                throw new ArgumentException("Not a valid curve.");
+            NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
             Degree = degree;
 
@@ -57,6 +57,7 @@ namespace Common.Geometry.Nurbs
             count = knots.Count;
             Knots = new float[count];
             knots.CopyTo(Knots, 0);
+            NormalizeKnots();
 
             NumberOfBasisFunctions = Knots.Length - Degree - 2;
         }
@@ -84,7 +85,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points from homogenise space to world space.
         /// </summary>
-        public List<Vector2f> DehomogenisedControlPoints()
+        public List<Vector2f> DehomogenisedControl()
         {
             var points = new List<Vector2f>();
             for (int i = 0; i < Control.Length; i++)
@@ -103,6 +104,25 @@ namespace Common.Geometry.Nurbs
                 weights.Add(Control[i].z);
 
             return weights;
+        }
+
+        /// <summary>
+        /// Copy data.
+        /// </summary>
+        public NurbsCurveData2f Copy()
+        {
+            return new NurbsCurveData2f(Degree, Control, Knots);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void NormalizeKnots()
+        {
+            float min = Knots.First();
+            float max = Knots.Last();
+            for (int i = 0; i < Knots.Length; i++)
+                Knots[i] = FMath.Round(FMath.Normalize(Knots[i], min, max), 4);
         }
 
     }

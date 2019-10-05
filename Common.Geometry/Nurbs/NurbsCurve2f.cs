@@ -27,11 +27,6 @@ namespace Common.Geometry.Nurbs
             m_data = data;
         }
 
-        public static NurbsCurve2f FromPoints(int degree, IList<Vector2f> points)
-        {
-            return new NurbsCurve2f(NurbsFunctions.RationalInterpCurve(degree, points));
-        }
-
         /// <summary>
         /// The curves degree.
         /// </summary>
@@ -55,12 +50,30 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points from homogenise space to world space.
         /// </summary>
-        public List<Vector2f> DehomogenisedControlPoints => m_data.DehomogenisedControlPoints();
+        public List<Vector2f> DehomogenisedControl => m_data.DehomogenisedControl();
 
         /// <summary>
         /// The control point weights.
         /// </summary>
         public List<float> Weights => m_data.Weights();
+
+        /// <summary>
+        /// Copy curve.
+        /// </summary>
+        public NurbsCurve2f Copy()
+        {
+            return new NurbsCurve2f(m_data.Copy());
+        }
+
+        /// <summary>
+        /// Determine the arc length of the curve at the given parameter.
+        /// </summary>
+        /// <param name="u">Parameter 0 <= u <= 1</param>
+        public float Length(float u)
+        {
+            u = FMath.Clamp01(u);
+            return NurbsFunctions.RationalArcLength(m_data, u);
+        }
 
         /// <summary>
         /// Compute a point on a non-uniform, rational b-spline curve.
@@ -69,8 +82,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">Parameter 0 <= u <= 1</param>
         public Vector2f Position(float u)
         {
-            if (u < 0) u = 0;
-            if (u > 1) u = 1;
+            u = FMath.Clamp01(u);
 
             int n = NumberOfBasisFunctions;
             var span = NurbsFunctions.FindSpan(u, Degree, n, Knots);
@@ -111,10 +123,9 @@ namespace Common.Geometry.Nurbs
         /// <param name="numDerivs">The number of derivatives to compute.</param>
     	public Vector2f[] Derivatives(float u, int numDerivs)
         {
-            if (u < 0) u = 0;
-            if (u > 1) u = 1;
+            u = FMath.Clamp01(u);
 
-            var ders = HomogeniseDerivatives(u, numDerivs);
+            var ders = NurbsFunctions.RationalDerivatives(m_data, u, numDerivs);
 
             var CK = new Vector2f[numDerivs + 1];
 
@@ -132,25 +143,33 @@ namespace Common.Geometry.Nurbs
         }
 
         /// <summary>
-        /// Find the derivative in homongenise space.
+        /// Create a curve that passes through the provided points.
+        /// </summary>
+        /// <param name="degree">The degree of the curve.</param>
+        /// <param name="points">The points the curve must pass through.</param>
+        /// <returns></returns>
+        public static NurbsCurve2f FromPoints(int degree, IList<Vector2f> points)
+        {
+            var data = NurbsFunctions.Interpolate(degree, points);
+            return new NurbsCurve2f(data);
+        }
+
+        /// <summary>
+        /// Split the curve.
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
-        /// <param name="numDerivs">The number of derivatives to compute.</param>
-        private Vector3f[] HomogeniseDerivatives(float u, int numDerivs)
+        /// <returns>Two new curves.</returns>
+        public NurbsCurve2f[] Split(float u)
         {
-            numDerivs = Math.Min(Degree, numDerivs);
-            var span = NurbsFunctions.FindSpan(u, Degree, Knots);
-            var nders = NurbsFunctions.DerivativeBasisFunctions(u, Degree, span, numDerivs, Knots);
+            u = FMath.Clamp01(u);
 
-            var CK = new Vector3f[numDerivs + 1];
+            var data = NurbsFunctions.Split(m_data, u);
 
-            for (int k = 0; k <= numDerivs; k++)
+            return new NurbsCurve2f[]
             {
-                for (int j = 0; j <= Degree; j++)
-                    CK[k] = CK[k] + nders[k, j] * Control[span - Degree + j];
-            }
-
-            return CK;
+                new NurbsCurve2f(data[0]),
+                new NurbsCurve2f(data[1])
+            };
         }
 
     }

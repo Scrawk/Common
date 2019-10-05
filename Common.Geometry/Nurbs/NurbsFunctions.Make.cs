@@ -17,7 +17,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points to interp curve from.</param>
         /// <returns></returns>
-        public static NurbsCurveData2f RationalInterpCurve(int degree, IList<Vector2f> points)
+        public static NurbsCurveData2f Interpolate(int degree, IList<Vector2f> points)
         {
 
             if (points.Count < degree + 1)
