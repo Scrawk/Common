@@ -46,6 +46,17 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
+        /// Get the length with a interpolated index.
+        /// </summary>
+        public float GetLength(float t)
+        {
+            if (Lengths == null)
+                throw new InvalidOperationException("Polyobject does not have any lengths.");
+
+            return Interpolate(t, Lengths);
+        }
+
+        /// <summary>
         /// Get the param with a interpolated index.
         /// </summary>
         public float GetParam(float t)
