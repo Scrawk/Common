@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
@@ -17,7 +17,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points to interp curve from.</param>
         /// <returns></returns>
-        public static NurbsCurveData2f Interpolate(int degree, IList<Vector2f> points)
+        public static NurbsCurveData2f RationalInterpolate(int degree, IList<Vector2f> points)
         {
 
             if (points.Count < degree + 1)
@@ -106,5 +106,39 @@ namespace Common.Geometry.Nurbs
 
             return new NurbsCurveData2f(degree, controlPts, knots, null);
         }
+
+        /// <summary>
+        /// Generate the control points, weights, and knots for a bezier curve of any degree.
+        /// </summary>
+        /// <param name="controlPoints">Points in counter-clockwise form.</param>
+        /// <returns></returns>
+    	public static NurbsCurveData2f RationalBezierCurve(IList<Vector2f> controlPoints, IList<float> weights = null)
+        {
+            int count = controlPoints.Count;
+            int degree = count - 1;
+
+            var knots = new List<float>(count * 2);
+            knots.AddRange(degree + 1, 0);
+            knots.AddRange(degree + 1, 1);
+
+            //if weights aren't provided, build uniform weights
+            if (weights == null)
+            {
+                var w = new List<float>(count);
+                w.AddRange(count, 1);
+                weights = w;
+            }
+
+            return new NurbsCurveData2f(degree, controlPoints, knots, weights);
+        }
+
     }
 }
+
+
+
+
+
+
+
+

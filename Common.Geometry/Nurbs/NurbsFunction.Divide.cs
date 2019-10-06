@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +6,18 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Nurbs
 {
+    public struct CurveLengthSample
+    {
+        public float u;
+        public float len;
+
+        public CurveLengthSample(float u, float len)
+        {
+            this.u = u;
+            this.len = len;
+        }
+    }
+
     public static partial class NurbsFunctions
     {
         /// <summary>
@@ -40,5 +52,72 @@ namespace Common.Geometry.Nurbs
             };
 
         }
+
+        /// <summary>
+        /// Divide a NURBS curve given a given number of times, including the end points. The result is not split curves
+    	/// but a collection of `CurveLengthSample` objects that can be used for splitting. As with all arc length methods,
+    	/// the result is an approximation.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object representing the curve</param>
+        /// <param name="num">The number of parts to split the curve into</param>
+        /// <returns>An array of `CurveLengthSample` objects</returns>
+    	public static List<CurveLengthSample> RationalByEqualArcLength(NurbsCurveData2f curve, int num)
+        {
+            var tlen = RationalArcLength(curve);
+            var inc = tlen / num;
+
+            return RationalByArcLength(curve, inc);
+        }
+
+        /// <summary>
+        /// Divide a NURBS curve given a given number of times, including the end points.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object representing the curve</param>
+        /// <param name="len">The arc length separating the resultant samples</param>
+        /// <returns>An array of `CurveLengthSample` objects</returns>
+    	public static List<CurveLengthSample> RationalByArcLength(NurbsCurveData2f curve, float len)
+        {
+            var crvs = DecomposeIntoBeziers(curve);
+            var crvlens = new List<float>();
+            float totlen = 0;
+
+            for (int j = 0; j < crvs.Count; j++)
+            {
+                var crvLen = RationalBezierArcLength(crvs[j]);
+                crvlens.Add(crvLen);
+                totlen += crvLen;
+            }
+
+            var pts = new List<CurveLengthSample>();
+            pts.Add(new CurveLengthSample(curve.Knots[0], 0.0f));
+
+            if (len > totlen) return pts;
+
+            float inc = len;
+            int i = 0;
+            float lc = inc;
+            float runsum = 0.0f;
+            float runsum1 = 0.0f;
+            float u;
+
+            while (i < crvs.Count)
+            {
+                runsum += crvlens[i];
+
+                while (lc < runsum + FMath.EPS)
+                {
+                    u = RationalBezierParamAtArcLength(crvs[i], lc - runsum1, 1e-3f, crvlens[i]);
+                    pts.Add(new CurveLengthSample(u, lc));
+                    lc += inc;
+                }
+                
+                runsum1 += crvlens[i];
+
+                i++;
+            }
+
+            return pts;
+        }
+
     }
 }

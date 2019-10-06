@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Common.Core.Numerics;
 using Common.Geometry.Nurbs;
 using Common.Geometry.Bezier;
+using Common.Geometry.Polygons;
 
 namespace Common.Geometry.Test.Nurbs
 {
@@ -71,11 +72,60 @@ namespace Common.Geometry.Test.Nurbs
             };
 
             var curve = NurbsCurve2f.FromPoints(3, points);
+            var line = CreatePolyline(curve);
 
-            var length = curve.Length(0.5f);
+            var len = curve.Length(0.5f);
+            var u = curve.ParamAtLength(len);
 
-            Console.WriteLine(length);
+            Console.WriteLine(u);
+            //Console.WriteLine(line.GetLength(0.5f));
         }
 
+        [TestMethod]
+        public void Divide()
+        {
+            var points = new Vector2f[]
+            {
+                new Vector2f(-10,0),
+                new Vector2f(10,0),
+                new Vector2f(10,10),
+                new Vector2f(0,10),
+                new Vector2f(5,5)
+            };
+
+            var curve = NurbsCurve2f.FromPoints(3, points);
+
+            var samples = curve.DivideByEqualArcLength(20);
+
+            Console.WriteLine(samples.Count);
+
+            foreach (var sample in samples)
+            {
+                Console.WriteLine(sample.u);
+            }
+        }
+
+        private List<Vector2f> CreateLine(NurbsCurve2f curve)
+        {
+            var points = new List<Vector2f>();
+
+            for (double t = 0; t <= 1; t += 0.01)
+            {
+                t = Math.Round(t, 2);
+                var p = curve.Position((float)t);
+                points.Add(p);
+            }
+
+            return points;
+        }
+
+        private Polyline2f CreatePolyline(NurbsCurve2f curve)
+        {
+            var points = CreateLine(curve);
+            var line = new Polyline2f(0, points);
+            line.Calculate();
+
+            return line;
+        }
     }
 }

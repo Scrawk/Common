@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,6 +57,88 @@ namespace Common.Geometry.Nurbs
         }
 
         /// <summary>
+        /// Approximate the parameter at a given arc length on a NURBS curve.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object representing the curve.</param>
+        /// <param name="len">The arc length for which to do the procedure.</param>
+        /// <param name="tol">The tolerance - increasing the tolerance can make this computation quite expensive.</param>
+        public static float RationalParamAtArcLength(NurbsCurveData2f curve, float len, float tol = 1e-3f)
+        {
+
+            if (len < FMath.EPS) return curve.Knots[0];
+
+            var crvs = DecomposeIntoBeziers(curve);
+            int i = 0;
+            float cl = -FMath.EPS;
+
+            var lengths = new List<float>();
+            foreach (var cc in crvs)
+                lengths.Add(RationalBezierArcLength(cc));
+
+            //iterate through the curves consuming the bezier's, summing their length along the way
+            while (cl < len && i < crvs.Count)
+            {
+                var bezierlen = lengths[i];
+                cl += bezierlen;
+
+                if (len < cl + FMath.EPS)
+                    return RationalBezierParamAtArcLength(curve, len, tol, bezierlen);
+
+                i++;
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Get the curve parameter at an arc length.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object representing the curve.</param>
+        /// <param name="len">The arc length to find the parameter.</param>
+        public static float RationalBezierParamAtArcLength(NurbsCurveData2f curve, float len, float tol, float totalLen)
+        {
+            if (len < 0) return curve.Knots[0];
+            if (len > totalLen) return curve.Knots.Last();
+
+            //divide & conquer
+            //TODO: can we use derivative?
+            var start = new float[] { curve.Knots[0], 0.0f };
+            var end = new float[] { curve.Knots.Last(), totalLen };
+            var mid = new float[] { 0.0f, 0.0f };
+
+            while (end[1] - start[1] > tol)
+            {
+                mid[0] = (start[0] + end[0]) / 2.0f;
+                mid[1] = RationalBezierArcLength(curve, mid[0]);
+
+                if (mid[1] > len)
+                {
+                    end[0] = mid[0];
+                    end[1] = mid[1];
+                }
+                else
+                {
+                    start[0] = mid[0];
+                    start[1] = mid[1];
+                }
+            }
+
+            return (start[0] + end[0]) / 2.0f;
+        }
+
+        /// <summary>
+        /// Approximate the length of a rational curve by gaussian quadrature - assumes a smooth curve.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object representing the curve.</param>
+        /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform - a higher number yields a more exact result</param>
+        /// <returns>The approximate length</returns>
+        public static float RationalArcLength(NurbsCurveData2f curve, int gaussDegIncrease = 16)
+        {
+            float u = curve.Knots.Last();
+            return RationalArcLength(curve, u, gaussDegIncrease);
+        }
+
+        /// <summary>
         /// Approximate the length of a rational curve by gaussian quadrature - assumes a smooth curve.
         /// </summary>
         /// <param name="curve">NurbsCurveData object representing the curve.</param>
@@ -68,17 +150,30 @@ namespace Common.Geometry.Nurbs
             if (u <= 0) return 0;
 
             var beziers = DecomposeIntoBeziers(curve);
-            double sum = 0.0;
+            float sum = 0.0f;
 
             for (int i = 0; i < beziers.Count; i++)
             {
                 var bezier = beziers[i];
+                if (bezier.Knots[0] + FMath.EPS >= u) break;
 
                 var param = Math.Min(bezier.Knots.Last(), u);
                 sum += RationalBezierArcLength(bezier, param, gaussDegIncrease);
             }
 
-            return (float)sum;
+            return sum;
+        }
+
+        /// <summary>
+        /// Approximate the length of a rational bezier curve by gaussian quadrature - assumes a smooth curve.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object representing the curve</param>
+        /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform - a higher number yields a more exact result</param>
+        /// <returns>The approximate length</returns>
+        public static float RationalBezierArcLength(NurbsCurveData2f curve, int gaussDegIncrease = 16)
+        {
+            float u = curve.Knots.Last();
+            return RationalBezierArcLength(curve, u, gaussDegIncrease);
         }
 
         /// <summary>
@@ -88,11 +183,11 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">The parameter at which to approximate the length</param>
         /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform - a higher number yields a more exact result</param>
         /// <returns>The approximate length</returns>
-        public static double RationalBezierArcLength(NurbsCurveData2f curve, float u, int gaussDegIncrease = 16)
+        public static float RationalBezierArcLength(NurbsCurveData2f curve, float u, int gaussDegIncrease = 16)
         {
-            double z = (u - curve.Knots[0]) / 2;
+            float z = (u - curve.Knots[0]) / 2;
             double sum = 0.0;
-            int gaussDeg = curve.Degree + gaussDegIncrease;
+            int gaussDeg = Math.Min(24, curve.Degree + gaussDegIncrease);
 
             for (int i = 0; i < gaussDeg; i++)
             {
@@ -102,7 +197,7 @@ namespace Common.Geometry.Nurbs
                 sum += Cvalues[gaussDeg][i] * tan[1].Magnitude;
             }
 
-            return z * sum;
+            return (float)(z * sum);
         }
 
         //Legendre-Gauss abscissae (xi values, defined at i=n as the roots of the nth order Legendre polynomial Pn(x))

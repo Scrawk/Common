@@ -76,6 +76,15 @@ namespace Common.Geometry.Nurbs
         }
 
         /// <summary>
+        /// Determine the parameter of the curve at the given arc length.
+        /// </summary>
+        /// <param name="len">The arc length at which to determine the parameter</param>
+        public float ParamAtLength(float len)
+        {
+            return NurbsFunctions.RationalParamAtArcLength(m_data, len);
+        }
+
+        /// <summary>
         /// Compute a point on a non-uniform, rational b-spline curve.
         /// Corresponds to algorithm 4.1 from The NURBS book, Piegl & Tiller 2nd edition
         /// </summary>
@@ -150,7 +159,7 @@ namespace Common.Geometry.Nurbs
         /// <returns></returns>
         public static NurbsCurve2f FromPoints(int degree, IList<Vector2f> points)
         {
-            var data = NurbsFunctions.Interpolate(degree, points);
+            var data = NurbsFunctions.RationalInterpolate(degree, points);
             return new NurbsCurve2f(data);
         }
 
@@ -170,6 +179,16 @@ namespace Common.Geometry.Nurbs
                 new NurbsCurve2f(data[0]),
                 new NurbsCurve2f(data[1])
             };
+        }
+
+        /// <summary>
+        /// Determine the parameters necessary to divide the curve into equal arc length segments.
+        /// </summary>
+        /// <param name="divisions">Number of divisions of the curve</param>
+        /// <returns>A collection of parameters</returns>
+        public List<CurveLengthSample> DivideByEqualArcLength(int divisions)
+        {
+            return NurbsFunctions.RationalByEqualArcLength(m_data, divisions);
         }
 
     }
