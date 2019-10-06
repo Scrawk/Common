@@ -13,7 +13,7 @@ namespace Common.Geometry.Nurbs
         /// Insert a collection of knots on a curve.
         /// Corresponds to Algorithm A5.4 (Piegl & Tiller).
         /// </summary>
-        public static NurbsCurveData2f KnotRefine(NurbsCurveData2f curve, IList<float> knotsToInsert)
+        public static NurbsCurveData2f KnotRefine(NurbsCurveData2f curve, IList<double> knotsToInsert)
         {
             if (knotsToInsert.Count == 0) return curve.Copy();
 
@@ -31,8 +31,8 @@ namespace Common.Geometry.Nurbs
             int controlLen = n + r + 2;
             int knotLen = m + r + 2;
 
-            var controlPoints_post = new Vector3f[controlLen];
-            var knots_post = new float[knotLen];
+            var controlPoints_post = new Vector3d[controlLen];
+            var knots_post = new double[knotLen];
 
             for (i = 0; i < a - degree + 1; i++)
                 controlPoints_post[i] = controlPoints[i];
@@ -110,7 +110,7 @@ namespace Common.Geometry.Nurbs
                 if (knotmult.mult < reqMult)
                 {
                     int num = reqMult - knotmult.mult;
-                    var knotsInsert = new List<float>(num);
+                    var knotsInsert = new List<double>(num);
                     knotsInsert.AddRange(num, knotmult.knot);
                     var res = KnotRefine(new NurbsCurveData2f(degree, controlPoints, knots), knotsInsert);
 

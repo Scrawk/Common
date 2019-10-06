@@ -12,7 +12,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// Validate the nurbs data.
         /// </summary>
-        public static void IsValidNurbsCurveData(int degree, IList<Vector2f> control, IList<float> knots)
+        public static void IsValidNurbsCurveData(int degree, IList<Vector2d> control, IList<double> knots)
         {
             if (control == null) throw new ArgumentException("Control points array cannot be null!");
             if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
@@ -31,7 +31,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// Validate the nurbs data.
         /// </summary>
-        public static void IsValidNurbsCurveData(int degree, IList<Vector3f> control, IList<float> knots)
+        public static void IsValidNurbsCurveData(int degree, IList<Vector3d> control, IList<double> knots)
         {
             if (control == null) throw new ArgumentException("Control points array cannot be null!");
             if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
@@ -81,7 +81,7 @@ namespace Common.Geometry.Nurbs
         /// [ (degree + 1 copies of the first knot), internal non-decreasing knots, (degree + 1 copies of the last knot) ]
         /// 
         /// </summary>
-        public static bool IsValidKnotVector(int degree, IList<float> knots)
+        public static bool IsValidKnotVector(int degree, IList<double> knots)
         {
             if (knots.Count == 0) return false;
             if (knots.Count < (degree + 1) * 2) return false;
@@ -102,9 +102,9 @@ namespace Common.Geometry.Nurbs
         }
 
         /// <summary>
-        /// Check if an array of floating point numbers is non-decreasing, although there may be repeats. 
+        /// Check if an array of doubleing point numbers is non-decreasing, although there may be repeats. 
         /// </summary>
-        public static bool IsNonDecreasing(IList<float> knots)
+        public static bool IsNonDecreasing(IList<double> knots)
         {
             var rep = knots.First();
             for (int i = 0; i < knots.Count; i++)
@@ -123,7 +123,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">The parameter</param>
         /// <param name="U">The knot vector</param>
         /// <returns>The knot span index</returns>
-        public static int FindSpan(float u, int p, IList<float> U)
+        public static int FindSpan(double u, int p, IList<double> U)
         {
             int n = U.Count - p - 2;
             return FindSpan(u, p, n, U);
@@ -138,7 +138,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">The parameter</param>
         /// <param name="U">The knot vector</param>
         /// <returns>The knot span index</returns>
-        public static int FindSpan(float u, int p, int n, IList<float> U)
+        public static int FindSpan(double u, int p, int n, IList<double> U)
         {
             //Special case.
             if (u == U[n + 1]) return n;
@@ -175,7 +175,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="p">Degree of function</param>
         /// <param name="U">The knot vector</param>
         /// <returns></returns>
-        public static float[] BasisFunctions(float u, int p, IList<float> U)
+        public static double[] BasisFunctions(double u, int p, IList<double> U)
         {
             int i = FindSpan(u, p, U);
             return BasisFunctions(u, p, i, U);
@@ -190,11 +190,11 @@ namespace Common.Geometry.Nurbs
         /// <param name="p">Degree of function</param>
         /// <param name="U">The knot vector</param>
         /// <returns></returns>
-        public static float[] BasisFunctions(float u, int p, int i, IList<float> U)
+        public static double[] BasisFunctions(double u, int p, int i, IList<double> U)
         {
-            var N = new float[p + 1];
-            var left = new float[p + 1];
-            var right = new float[p + 1];
+            var N = new double[p + 1];
+            var left = new double[p + 1];
+            var right = new double[p + 1];
 
             N[0] = 1.0f;
 
@@ -203,11 +203,11 @@ namespace Common.Geometry.Nurbs
                 left[j] = u - U[i + 1 - j];
                 right[j] = U[i + j] - u;
 
-                float saved = 0;
+                double saved = 0;
 
                 for (int r = 0; r < j; r++)
                 {
-                    float temp = N[r] / (right[r + 1] + left[j - r]);
+                    double temp = N[r] / (right[r + 1] + left[j - r]);
 
                     N[r] = saved + right[r + 1] * temp;
                     saved = left[j - r] * temp;
@@ -228,7 +228,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="U">The knot vector</param>
         /// <returns>d array of basis and derivative values of size (n+1, p+1) The nth row is
         /// the nth derivative and the first row is made up of the basis function values.</returns>
-        public static float[,] DerivativeBasisFunctions(float u, int p, IList<float> U)
+        public static double[,] DerivativeBasisFunctions(double u, int p, IList<double> U)
         {
             int n = U.Count - p - 2;
             int i = FindSpan(u, p, n, U);
@@ -246,12 +246,12 @@ namespace Common.Geometry.Nurbs
         /// <param name="U">The knot vector</param>
         /// <returns>d array of basis and derivative values of size (n+1, p+1) The nth row is
         /// the nth derivative and the first row is made up of the basis function values.</returns>
-        public static float[,] DerivativeBasisFunctions(float u, int p, int i, int n, IList<float> U)
+        public static double[,] DerivativeBasisFunctions(double u, int p, int i, int n, IList<double> U)
         {
-            var ndu = new float[p + 1, p + 1];
-            var left = new float[p + 1];
-            var right = new float[p + 1];
-            float saved, temp;
+            var ndu = new double[p + 1, p + 1];
+            var left = new double[p + 1];
+            var right = new double[p + 1];
+            double saved, temp;
 
             ndu[0, 0] = 1.0f;
 
@@ -275,8 +275,8 @@ namespace Common.Geometry.Nurbs
                 ndu[j, j] = saved;
             }
 
-            var ders = new float[n + 1, p + 1];
-            var a = new float[2, p + 1];
+            var ders = new double[n + 1, p + 1];
+            var a = new double[2, p + 1];
 
             //Load the basis functions.
             for (int j = 0; j <= p; j++)
@@ -293,7 +293,7 @@ namespace Common.Geometry.Nurbs
                 for (int k = 1; k <= n; k++)
                 {
                     int j1, j2;
-                    float d = 0.0f;
+                    double d = 0.0f;
                     int rk = r - k;
                     int pk = p - k;
 
@@ -353,14 +353,14 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">The curve data with control points in homogenise space.</param>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <param name="numDerivs">The number of derivatives to compute.</param>
-        public static Vector3f[] RationalDerivatives(NurbsCurveData2f curve, float u, int numDerivs)
+        public static Vector3d[] RationalDerivatives(NurbsCurveData2f curve, double u, int numDerivs)
         {
             int degree = curve.Degree;
             numDerivs = Math.Min(degree, numDerivs);
             var span = FindSpan(u, degree, curve.Knots);
             var nders = DerivativeBasisFunctions(u, degree, span, numDerivs, curve.Knots);
 
-            var CK = new Vector3f[numDerivs + 1];
+            var CK = new Vector3d[numDerivs + 1];
 
             for (int k = 0; k <= numDerivs; k++)
             {

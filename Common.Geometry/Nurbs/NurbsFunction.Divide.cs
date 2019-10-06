@@ -8,10 +8,10 @@ namespace Common.Geometry.Nurbs
 {
     public struct CurveLengthSample
     {
-        public float u;
-        public float len;
+        public double u;
+        public double len;
 
-        public CurveLengthSample(float u, float len)
+        public CurveLengthSample(double u, double len)
         {
             this.u = u;
             this.len = len;
@@ -26,12 +26,12 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve</param>
         /// <param name="u">location to split the curve</param>
         /// <returns>two new curves, defined by degree, knots, and control points</returns>
-        public static NurbsCurveData2f[] Split(NurbsCurveData2f curve, float u)
+        public static NurbsCurveData2f[] Split(NurbsCurveData2f curve, double u)
         {
             int degree = curve.Degree;
             var knots = curve.Knots;
 
-            var knots_to_insert = new float[degree + 1];
+            var knots_to_insert = new double[degree + 1];
 
             for (int i = 0; i < degree + 1; i++)
                 knots_to_insert[i] = u;
@@ -75,11 +75,11 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve</param>
         /// <param name="len">The arc length separating the resultant samples</param>
         /// <returns>An array of `CurveLengthSample` objects</returns>
-    	public static List<CurveLengthSample> RationalByArcLength(NurbsCurveData2f curve, float len)
+    	public static List<CurveLengthSample> RationalByArcLength(NurbsCurveData2f curve, double len)
         {
             var crvs = DecomposeIntoBeziers(curve);
-            var crvlens = new List<float>();
-            float totlen = 0;
+            var crvlens = new List<double>();
+            double totlen = 0;
 
             for (int j = 0; j < crvs.Count; j++)
             {
@@ -93,12 +93,12 @@ namespace Common.Geometry.Nurbs
 
             if (len > totlen) return pts;
 
-            float inc = len;
+            double inc = len;
             int i = 0;
-            float lc = inc;
-            float runsum = 0.0f;
-            float runsum1 = 0.0f;
-            float u;
+            double lc = inc;
+            double runsum = 0.0f;
+            double runsum1 = 0.0f;
+            double u;
 
             while (i < crvs.Count)
             {
@@ -106,7 +106,7 @@ namespace Common.Geometry.Nurbs
 
                 while (lc < runsum + FMath.EPS)
                 {
-                    u = RationalBezierParamAtArcLength(crvs[i], lc - runsum1, 1e-3f, crvlens[i]);
+                    u = RationalBezierParamAtArcLength(crvs[i], lc - runsum1, 1e-6f, crvlens[i]);
                     pts.Add(new CurveLengthSample(u, lc));
                     lc += inc;
                 }

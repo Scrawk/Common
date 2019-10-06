@@ -12,8 +12,8 @@ namespace Common.Geometry.Test.Nurbs
         public void FindSpan()
         {
             int p = 2;
-            float u = 5.0f / 2.0f;
-            float[] U = new float[] { 0, 0, 0, 1, 2, 3, 4, 5, 5, 5 };
+            double u = 5.0 / 2.0;
+            double[] U = new double[] { 0, 0, 0, 1, 2, 3, 4, 5, 5, 5 };
 
             int i = NurbsFunctions.FindSpan(u, p, U);
 
@@ -24,8 +24,8 @@ namespace Common.Geometry.Test.Nurbs
         public void BasisFunction()
         {
             int p = 2;
-            float u = 5.0f / 2.0f;
-            float[] U = new float[] { 0, 0, 0, 1, 2, 3, 4, 5, 5, 5 };
+            double u = 5.0 / 2.0;
+            double[] U = new double[] { 0, 0, 0, 1, 2, 3, 4, 5, 5, 5 };
 
             var N = NurbsFunctions.BasisFunctions(u, p, U);
 
@@ -37,8 +37,8 @@ namespace Common.Geometry.Test.Nurbs
         public void DerivativeBasisFunction()
         {
             int p = 2;
-            float u = 5.0f / 2.0f;
-            float[] U = new float[] { 0, 0, 0, 1, 2, 3, 4, 5, 5, 5 };
+            double u = 5.0 / 2.0;
+            double[] U = new double[] { 0, 0, 0, 1, 2, 3, 4, 5, 5, 5 };
 
             var der = NurbsFunctions.DerivativeBasisFunctions(u, p, U);
 

@@ -17,19 +17,19 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points to interp curve from.</param>
         /// <returns></returns>
-        public static NurbsCurveData2f RationalInterpolate(int degree, IList<Vector2f> points)
+        public static NurbsCurveData2f RationalInterpolate(int degree, IList<Vector2d> points)
         {
 
             if (points.Count < degree + 1)
                 throw new ArgumentException("You need to supply at least degree + 1 points.");
 
-            var us = new List<float>();
+            var us = new List<double>();
             us.Add(0);
 
             for (int i = 1; i < points.Count; i++)
             {
-                float chord = (points[i] - points[i - 1]).Magnitude;
-                float last = us[us.Count - 1];
+                double chord = (points[i] - points[i - 1]).Magnitude;
+                double last = us[us.Count - 1];
                 us.Add(last + chord);
             }
 
@@ -38,7 +38,7 @@ namespace Common.Geometry.Nurbs
             for (int i = 1; i < us.Count; i++)
                 us[i] = us[i] / max;
 
-            var knotsStart = new List<float>(degree);
+            var knotsStart = new List<double>(degree);
             knotsStart.AddRange(degree + 1, 0);
 
             //we need two more control points, two more knots
@@ -47,7 +47,7 @@ namespace Common.Geometry.Nurbs
 
             for (int i = start; i < end; i++)
             {
-                float weightSums = 0.0f;
+                double weightSums = 0.0f;
                 for (int j = 0; j < degree; j++)
                 {
                     weightSums += us[i + j];
@@ -56,11 +56,11 @@ namespace Common.Geometry.Nurbs
                 knotsStart.Add((1.0f / degree) * weightSums);
             }
 
-            var knots = new List<float>(knotsStart);
+            var knots = new List<double>(knotsStart);
             knots.AddRange(degree + 1, 1.0f);
 
             //build matrix of basis function coeffs (TODO: use sparse rep)
-            var A = new List<List<float>>();
+            var A = new List<List<double>>();
             var n = points.Count - 1;
             var ld = points.Count - (degree + 1);
 
@@ -71,7 +71,7 @@ namespace Common.Geometry.Nurbs
 
                 int ls = span - degree;
 
-                var row = new List<float>();
+                var row = new List<double>();
                 row.AddRange(ls, 0);
                 row.AddRange(basisFuncs);
                 row.AddRange(ld - ls, 0);
@@ -97,10 +97,10 @@ namespace Common.Geometry.Nurbs
                 xs.SetRow(i, x);
             }
 
-            var controlPts = new List<Vector2f>();
+            var controlPts = new List<Vector2d>();
             for (int i = 0; i < columns; i++)
             {
-                var v = new Vector2f((float)xs[0, i], (float)xs[1, i]);
+                var v = new Vector2d((double)xs[0, i], (double)xs[1, i]);
                 controlPts.Add(v);
             }
 
@@ -112,19 +112,19 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="controlPoints">Points in counter-clockwise form.</param>
         /// <returns></returns>
-    	public static NurbsCurveData2f RationalBezierCurve(IList<Vector2f> controlPoints, IList<float> weights = null)
+    	public static NurbsCurveData2f RationalBezierCurve(IList<Vector2d> controlPoints, IList<double> weights = null)
         {
             int count = controlPoints.Count;
             int degree = count - 1;
 
-            var knots = new List<float>(count * 2);
+            var knots = new List<double>(count * 2);
             knots.AddRange(degree + 1, 0);
             knots.AddRange(degree + 1, 1);
 
             //if weights aren't provided, build uniform weights
             if (weights == null)
             {
-                var w = new List<float>(count);
+                var w = new List<double>(count);
                 w.AddRange(count, 1);
                 weights = w;
             }

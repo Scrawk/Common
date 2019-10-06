@@ -10,28 +10,28 @@ using Common.Geometry.Polygons;
 namespace Common.Geometry.Test.Nurbs
 {
     [TestClass]
-    public class NurbsCurve2fTest
+    public class NurbsCurve2dTest
     {
         [TestMethod]
         public void Positions()
         {
-            var points = new Vector2f[]
+            var points = new Vector2d[]
             {
-                new Vector2f(-10,0),
-                new Vector2f(10,0),
-                new Vector2f(10,10),
-                new Vector2f(0,10),
-                new Vector2f(5,5)
+                new Vector2d(-10,0),
+                new Vector2d(10,0),
+                new Vector2d(10,10),
+                new Vector2d(0,10),
+                new Vector2d(5,5)
             };
 
             var curve = NurbsCurve2f.FromPoints(3, points);
 
-            var positions = new List<Vector2f>();
+            var positions = new List<Vector2d>();
 
             for (double t = 0; t <= 1; t += 0.01)
             {
                 t = Math.Round(t, 2);
-                var p = curve.Position((float)t);
+                var p = curve.Position((double)t);
                 positions.Add(p);
             }
 
@@ -40,13 +40,13 @@ namespace Common.Geometry.Test.Nurbs
         [TestMethod]
         public void Split()
         {
-            var points = new Vector2f[]
+            var points = new Vector2d[]
             {
-                new Vector2f(-10,0),
-                new Vector2f(10,0),
-                new Vector2f(10,10),
-                new Vector2f(0,10),
-                new Vector2f(5,5)
+                new Vector2d(-10,0),
+                new Vector2d(10,0),
+                new Vector2d(10,10),
+                new Vector2d(0,10),
+                new Vector2d(5,5)
             };
 
             var curve = NurbsCurve2f.FromPoints(3, points);
@@ -55,20 +55,20 @@ namespace Common.Geometry.Test.Nurbs
             for (double t = 0; t <= 1; t += 0.01)
             {
                 t = Math.Round(t, 2);
-                var p = curves[1].Position((float)t);
+                var p = curves[1].Position(t);
             }
         }
 
         [TestMethod]
         public void Length()
         {
-            var points = new Vector2f[]
+            var points = new Vector2d[]
             {
-                new Vector2f(-10,0),
-                new Vector2f(10,0),
-                new Vector2f(10,10),
-                new Vector2f(0,10),
-                new Vector2f(5,5)
+                new Vector2d(-10,0),
+                new Vector2d(10,0),
+                new Vector2d(10,10),
+                new Vector2d(0,10),
+                new Vector2d(5,5)
             };
 
             var curve = NurbsCurve2f.FromPoints(3, points);
@@ -78,19 +78,19 @@ namespace Common.Geometry.Test.Nurbs
             var u = curve.ParamAtLength(len);
 
             Console.WriteLine(u);
-            //Console.WriteLine(line.GetLength(0.5f));
+            Console.WriteLine(len);
         }
 
         [TestMethod]
         public void Divide()
         {
-            var points = new Vector2f[]
+            var points = new Vector2d[]
             {
-                new Vector2f(-10,0),
-                new Vector2f(10,0),
-                new Vector2f(10,10),
-                new Vector2f(0,10),
-                new Vector2f(5,5)
+                new Vector2d(-10,0),
+                new Vector2d(10,0),
+                new Vector2d(10,10),
+                new Vector2d(0,10),
+                new Vector2d(5,5)
             };
 
             var curve = NurbsCurve2f.FromPoints(3, points);
@@ -101,7 +101,7 @@ namespace Common.Geometry.Test.Nurbs
 
             foreach (var sample in samples)
             {
-                Console.WriteLine(sample.u);
+                Console.WriteLine(sample.u + " " + sample.len);
             }
         }
 
@@ -112,8 +112,8 @@ namespace Common.Geometry.Test.Nurbs
             for (double t = 0; t <= 1; t += 0.01)
             {
                 t = Math.Round(t, 2);
-                var p = curve.Position((float)t);
-                points.Add(p);
+                var p = curve.Position(t);
+                points.Add((Vector2f)p);
             }
 
             return points;

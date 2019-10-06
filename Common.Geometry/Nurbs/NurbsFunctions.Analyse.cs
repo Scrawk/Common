@@ -11,7 +11,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// Determine the multiplicities of the values in a knot vector.
         /// </summary>
-        public static List<KnotMultiplicity> KnotMultiplicities(IList<float> knots)
+        public static List<KnotMultiplicity> KnotMultiplicities(IList<double> knots)
         {
             var mults = new List<KnotMultiplicity>();
             mults.Add(new KnotMultiplicity(knots[0], 0));
@@ -41,7 +41,7 @@ namespace Common.Geometry.Nurbs
             /// <summary>
             /// The parameter of the knot
             /// </summary>
-            public float knot;
+            public double knot;
 
             /// <summary>
             /// The multiplicity (i.e. the number of repeated occurrences) 
@@ -49,7 +49,7 @@ namespace Common.Geometry.Nurbs
             /// </summary>
             public int mult;
 
-            public KnotMultiplicity(float knot, int mult)
+            public KnotMultiplicity(double knot, int mult)
             {
                 this.knot = knot;
                 this.mult = mult;
@@ -62,23 +62,22 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve.</param>
         /// <param name="len">The arc length for which to do the procedure.</param>
         /// <param name="tol">The tolerance - increasing the tolerance can make this computation quite expensive.</param>
-        public static float RationalParamAtArcLength(NurbsCurveData2f curve, float len, float tol = 1e-3f)
+        public static double RationalParamAtArcLength(NurbsCurveData2f curve, double len, double tol = 1e-3f)
         {
-
             if (len < FMath.EPS) return curve.Knots[0];
 
             var crvs = DecomposeIntoBeziers(curve);
             int i = 0;
-            float cl = -FMath.EPS;
+            double cl = -FMath.EPS;
 
-            var lengths = new List<float>();
-            foreach (var cc in crvs)
-                lengths.Add(RationalBezierArcLength(cc));
+            //var lengths = new List<double>();
+            //foreach (var cc in crvs)
+            //    lengths.Add(RationalBezierArcLength(cc));
 
             //iterate through the curves consuming the bezier's, summing their length along the way
             while (cl < len && i < crvs.Count)
             {
-                var bezierlen = lengths[i];
+                var bezierlen = RationalBezierArcLength(curve);
                 cl += bezierlen;
 
                 if (len < cl + FMath.EPS)
@@ -87,7 +86,7 @@ namespace Common.Geometry.Nurbs
                 i++;
             }
 
-            return -1;
+            throw new Exception();
         }
 
         /// <summary>
@@ -95,16 +94,16 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="curve">NurbsCurveData object representing the curve.</param>
         /// <param name="len">The arc length to find the parameter.</param>
-        public static float RationalBezierParamAtArcLength(NurbsCurveData2f curve, float len, float tol, float totalLen)
+        public static double RationalBezierParamAtArcLength(NurbsCurveData2f curve, double len, double tol, double totalLen)
         {
             if (len < 0) return curve.Knots[0];
             if (len > totalLen) return curve.Knots.Last();
 
             //divide & conquer
             //TODO: can we use derivative?
-            var start = new float[] { curve.Knots[0], 0.0f };
-            var end = new float[] { curve.Knots.Last(), totalLen };
-            var mid = new float[] { 0.0f, 0.0f };
+            var start = new double[] { curve.Knots[0], 0.0f };
+            var end = new double[] { curve.Knots.Last(), totalLen };
+            var mid = new double[] { 0.0f, 0.0f };
 
             while (end[1] - start[1] > tol)
             {
@@ -132,9 +131,9 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve.</param>
         /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform - a higher number yields a more exact result</param>
         /// <returns>The approximate length</returns>
-        public static float RationalArcLength(NurbsCurveData2f curve, int gaussDegIncrease = 16)
+        public static double RationalArcLength(NurbsCurveData2f curve, int gaussDegIncrease = 16)
         {
-            float u = curve.Knots.Last();
+            double u = curve.Knots.Last();
             return RationalArcLength(curve, u, gaussDegIncrease);
         }
 
@@ -145,12 +144,12 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">The parameter at which to approximate the length.</param>
         /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform - a higher number yields a more exact result</param>
         /// <returns>The approximate length</returns>
-        public static float RationalArcLength(NurbsCurveData2f curve, float u, int gaussDegIncrease = 16)
+        public static double RationalArcLength(NurbsCurveData2f curve, double u, int gaussDegIncrease = 16)
         {
             if (u <= 0) return 0;
 
             var beziers = DecomposeIntoBeziers(curve);
-            float sum = 0.0f;
+            double sum = 0.0f;
 
             for (int i = 0; i < beziers.Count; i++)
             {
@@ -170,9 +169,9 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve</param>
         /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform - a higher number yields a more exact result</param>
         /// <returns>The approximate length</returns>
-        public static float RationalBezierArcLength(NurbsCurveData2f curve, int gaussDegIncrease = 16)
+        public static double RationalBezierArcLength(NurbsCurveData2f curve, int gaussDegIncrease = 16)
         {
-            float u = curve.Knots.Last();
+            double u = curve.Knots.Last();
             return RationalBezierArcLength(curve, u, gaussDegIncrease);
         }
 
@@ -183,21 +182,21 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">The parameter at which to approximate the length</param>
         /// <param name="gaussDegIncrease">The degree of gaussian quadrature to perform - a higher number yields a more exact result</param>
         /// <returns>The approximate length</returns>
-        public static float RationalBezierArcLength(NurbsCurveData2f curve, float u, int gaussDegIncrease = 16)
+        public static double RationalBezierArcLength(NurbsCurveData2f curve, double u, int gaussDegIncrease = 16)
         {
-            float z = (u - curve.Knots[0]) / 2;
+            double z = (u - curve.Knots[0]) / 2;
             double sum = 0.0;
             int gaussDeg = Math.Min(24, curve.Degree + gaussDegIncrease);
 
             for (int i = 0; i < gaussDeg; i++)
             {
                 double cu = z * Tvalues[gaussDeg][i] + z + curve.Knots[0];
-                var tan = RationalDerivatives(curve, (float)cu, 1);
+                var tan = RationalDerivatives(curve, cu, 1);
 
                 sum += Cvalues[gaussDeg][i] * tan[1].Magnitude;
             }
 
-            return (float)(z * sum);
+            return (double)(z * sum);
         }
 
         //Legendre-Gauss abscissae (xi values, defined at i=n as the roots of the nth order Legendre polynomial Pn(x))

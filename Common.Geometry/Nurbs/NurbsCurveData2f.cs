@@ -12,50 +12,50 @@ namespace Common.Geometry.Nurbs
     public class NurbsCurveData2f
     {
         
-        public NurbsCurveData2f(int degree, IList<Vector2f> control, IList<float> knots, IList<float> weights = null)
+        public NurbsCurveData2f(int degree, IList<Vector2d> control, IList<double> knots, IList<double> weights = null)
         {
             NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
             Degree = degree;
 
             int count = control.Count;
-            Control = new Vector3f[count];
+            Control = new Vector3d[count];
 
             //homogenise control points.
             for (int i = 0; i < count; i++)
             {
                 var c = control[i];
                 var w = (weights != null) ? weights[i] : 1;
-                Control[i] = new Vector3f(c * w, w);
+                Control[i] = new Vector3d(c * w, w);
             }
 
             count = knots.Count;
-            Knots = new float[count];
+            Knots = new double[count];
             knots.CopyTo(Knots, 0);
             NormalizeKnots();
 
             NumberOfBasisFunctions = Knots.Length - Degree - 2;
         }
 
-        public NurbsCurveData2f(int degree, IList<Vector3f> control, IList<float> knots)
+        public NurbsCurveData2f(int degree, IList<Vector3d> control, IList<double> knots)
         {
             NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
             Degree = degree;
 
             int count = control.Count;
-            Control = new Vector3f[count];
+            Control = new Vector3d[count];
 
             //homogenise control points.
             for (int i = 0; i < count; i++)
             {
                 var c = control[i].xy;
                 var w = control[i].z;
-                Control[i] = new Vector3f(c * w, w);
+                Control[i] = new Vector3d(c * w, w);
             }
 
             count = knots.Count;
-            Knots = new float[count];
+            Knots = new double[count];
             knots.CopyTo(Knots, 0);
             NormalizeKnots();
 
@@ -75,19 +75,19 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points.
         /// </summary>
-        public Vector3f[] Control { get; private set; }
+        public Vector3d[] Control { get; private set; }
 
         /// <summary>
         /// The knot vector.
         /// </summary>
-        public float[] Knots { get; private set; }
+        public double[] Knots { get; private set; }
 
         /// <summary>
         /// The control points from homogenise space to world space.
         /// </summary>
-        public List<Vector2f> DehomogenisedControl()
+        public List<Vector2d> DehomogenisedControl()
         {
-            var points = new List<Vector2f>();
+            var points = new List<Vector2d>();
             for (int i = 0; i < Control.Length; i++)
                 points.Add(Control[i].xy / Control[i].z);
 
@@ -97,9 +97,9 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control point weights.
         /// </summary>
-        public List<float> Weights()
+        public List<double> Weights()
         {
-            var weights = new List<float>();
+            var weights = new List<double>();
             for (int i = 0; i < Control.Length; i++)
                 weights.Add(Control[i].z);
 
@@ -119,10 +119,10 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         private void NormalizeKnots()
         {
-            float min = Knots.First();
-            float max = Knots.Last();
+            double min = Knots.First();
+            double max = Knots.Last();
             for (int i = 0; i < Knots.Length; i++)
-                Knots[i] = FMath.Round(FMath.Normalize(Knots[i], min, max), 4);
+                Knots[i] = Math.Round(DMath.Normalize(Knots[i], min, max), 4);
         }
 
     }

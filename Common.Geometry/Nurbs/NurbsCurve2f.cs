@@ -12,12 +12,12 @@ namespace Common.Geometry.Nurbs
     {
         private NurbsCurveData2f m_data;
 
-        public NurbsCurve2f(int degree, IList<Vector2f> control, IList<float> knots, IList<float> weights = null)
+        public NurbsCurve2f(int degree, IList<Vector2d> control, IList<double> knots, IList<double> weights = null)
         {
             m_data = new NurbsCurveData2f(degree, control, knots, weights);
         }
 
-        public NurbsCurve2f(int degree, IList<Vector3f> control, IList<float> knots)
+        public NurbsCurve2f(int degree, IList<Vector3d> control, IList<double> knots)
         {
             m_data = new NurbsCurveData2f(degree, control, knots);
         }
@@ -40,22 +40,22 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points.
         /// </summary>
-        public Vector3f[] Control => m_data.Control;
+        public Vector3d[] Control => m_data.Control;
 
         /// <summary>
         /// The knot vector.
         /// </summary>
-        public float[] Knots => m_data.Knots;
+        public double[] Knots => m_data.Knots;
 
         /// <summary>
         /// The control points from homogenise space to world space.
         /// </summary>
-        public List<Vector2f> DehomogenisedControl => m_data.DehomogenisedControl();
+        public List<Vector2d> DehomogenisedControl => m_data.DehomogenisedControl();
 
         /// <summary>
         /// The control point weights.
         /// </summary>
-        public List<float> Weights => m_data.Weights();
+        public List<double> Weights => m_data.Weights();
 
         /// <summary>
         /// Copy curve.
@@ -69,9 +69,9 @@ namespace Common.Geometry.Nurbs
         /// Determine the arc length of the curve at the given parameter.
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
-        public float Length(float u)
+        public double Length(double u)
         {
-            u = FMath.Clamp01(u);
+            u = DMath.Clamp01(u);
             return NurbsFunctions.RationalArcLength(m_data, u);
         }
 
@@ -79,7 +79,7 @@ namespace Common.Geometry.Nurbs
         /// Determine the parameter of the curve at the given arc length.
         /// </summary>
         /// <param name="len">The arc length at which to determine the parameter</param>
-        public float ParamAtLength(float len)
+        public double ParamAtLength(double len)
         {
             return NurbsFunctions.RationalParamAtArcLength(m_data, len);
         }
@@ -89,15 +89,15 @@ namespace Common.Geometry.Nurbs
         /// Corresponds to algorithm 4.1 from The NURBS book, Piegl & Tiller 2nd edition
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
-        public Vector2f Position(float u)
+        public Vector2d Position(double u)
         {
-            u = FMath.Clamp01(u);
+            u = DMath.Clamp01(u);
 
             int n = NumberOfBasisFunctions;
             var span = NurbsFunctions.FindSpan(u, Degree, n, Knots);
             var basis = NurbsFunctions.BasisFunctions(u, Degree, span, Knots);
 
-            Vector3f p = new Vector3f();
+            Vector3d p = new Vector3d();
             for (int i = 0; i <= Degree; i++)
                 p = p + basis[i] * Control[span - Degree + i];
 
@@ -108,9 +108,9 @@ namespace Common.Geometry.Nurbs
         /// The tangent on the curve at u.
         /// </summary>
         /// <param name="u">Number between 0 and 1.</param>
-        public Vector2f Tangent(float u)
+        public Vector2d Tangent(double u)
         {
-            Vector2f d = Derivatives(u, 1)[1];
+            Vector2d d = Derivatives(u, 1)[1];
             return d.Normalized;
         }
 
@@ -118,9 +118,9 @@ namespace Common.Geometry.Nurbs
         /// The normal on the curve at u.
         /// </summary>
         /// <param name="u">Number between 0 and 1.</param>
-        public Vector2f Normal(float u)
+        public Vector2d Normal(double u)
         {
-            Vector2f d = Derivatives(u, 1)[1];
+            Vector2d d = Derivatives(u, 1)[1];
             return d.Normalized.PerpendicularCW;
         }
 
@@ -130,20 +130,20 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <param name="numDerivs">The number of derivatives to compute.</param>
-    	public Vector2f[] Derivatives(float u, int numDerivs)
+    	public Vector2d[] Derivatives(double u, int numDerivs)
         {
-            u = FMath.Clamp01(u);
+            u = DMath.Clamp01(u);
 
             var ders = NurbsFunctions.RationalDerivatives(m_data, u, numDerivs);
 
-            var CK = new Vector2f[numDerivs + 1];
+            var CK = new Vector2d[numDerivs + 1];
 
             for (int k = 0; k <= numDerivs; k++)
             {
                 var v = ders[k].xy;
 
                 for (int i = 1; i <= k; i++)
-                    v = v - (float)IMath.Binomial(k, i) * ders[i].z * CK[k - i];
+                    v = v - (double)IMath.Binomial(k, i) * ders[i].z * CK[k - i];
 
                 CK[k] = v / ders[0].z;
             }
@@ -157,7 +157,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points the curve must pass through.</param>
         /// <returns></returns>
-        public static NurbsCurve2f FromPoints(int degree, IList<Vector2f> points)
+        public static NurbsCurve2f FromPoints(int degree, IList<Vector2d> points)
         {
             var data = NurbsFunctions.RationalInterpolate(degree, points);
             return new NurbsCurve2f(data);
@@ -168,9 +168,9 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <returns>Two new curves.</returns>
-        public NurbsCurve2f[] Split(float u)
+        public NurbsCurve2f[] Split(double u)
         {
-            u = FMath.Clamp01(u);
+            u = DMath.Clamp01(u);
 
             var data = NurbsFunctions.Split(m_data, u);
 
