@@ -1,28 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Common.Core.Numerics;
+using Common.Geometry.Shapes;
 
 namespace Common.Geometry.Nurbs
 {
     /// <summary>
     /// A non-uniform rational basis spline curve in 2D space with control points in 3D homogeneous space.
     /// </summary>
-    public class NurbsCurve2f
+    public class NurbsCurve2d
     {
-        private NurbsCurveData2f m_data;
+        private NurbsCurveData2d m_data;
 
-        public NurbsCurve2f(int degree, IList<Vector2d> control, IList<double> knots, IList<double> weights = null)
+        public NurbsCurve2d(int degree, IList<Vector2d> control, IList<double> knots, IList<double> weights = null)
         {
-            m_data = new NurbsCurveData2f(degree, control, knots, weights);
+            m_data = new NurbsCurveData2d(degree, control, knots, weights);
         }
 
-        public NurbsCurve2f(int degree, IList<Vector3d> control, IList<double> knots)
+        public NurbsCurve2d(int degree, IList<Vector3d> control, IList<double> knots)
         {
-            m_data = new NurbsCurveData2f(degree, control, knots);
+            m_data = new NurbsCurveData2d(degree, control, knots);
         }
 
-        private NurbsCurve2f(NurbsCurveData2f data)
+        internal NurbsCurve2d(NurbsCurveData2d data)
         {
             m_data = data;
         }
@@ -40,12 +42,12 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points.
         /// </summary>
-        public Vector3d[] Control => m_data.Control;
+        public List<Vector3d> Control => new List<Vector3d>(m_data.Control);
 
         /// <summary>
         /// The knot vector.
         /// </summary>
-        public double[] Knots => m_data.Knots;
+        public List<double> Knots => new List<double>(m_data.Knots);
 
         /// <summary>
         /// The control points from homogenise space to world space.
@@ -58,11 +60,51 @@ namespace Common.Geometry.Nurbs
         public List<double> Weights => m_data.Weights();
 
         /// <summary>
+        /// The domain of the curve parameter.
+        /// </summary>
+        public Interval1f Domain => m_data.Domain;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string PrintControl()
+        {
+            return m_data.PrintControl();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string PrintKnots()
+        {
+            return m_data.PrintKnots();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string PrintWeights()
+        {
+            return m_data.PrintWeights();
+        }
+
+        /// <summary>
         /// Copy curve.
         /// </summary>
-        public NurbsCurve2f Copy()
+        public NurbsCurve2d Copy()
         {
-            return new NurbsCurve2f(m_data.Copy());
+            return new NurbsCurve2d(m_data.Copy());
+        }
+
+        /// <summary>
+        /// Reverse curve.
+        /// </summary>
+        public NurbsCurve2d Reverse()
+        {
+            return new NurbsCurve2d(m_data.Reverse());
         }
 
         /// <summary>
@@ -72,6 +114,8 @@ namespace Common.Geometry.Nurbs
         public double Length(double u)
         {
             u = DMath.Clamp01(u);
+            u = Domain.Min + u * Domain.Length;
+
             return NurbsFunctions.RationalArcLength(m_data, u);
         }
 
@@ -85,23 +129,15 @@ namespace Common.Geometry.Nurbs
         }
 
         /// <summary>
-        /// Compute a point on a non-uniform, rational b-spline curve.
-        /// Corresponds to algorithm 4.1 from The NURBS book, Piegl & Tiller 2nd edition
+        /// 
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         public Vector2d Position(double u)
         {
             u = DMath.Clamp01(u);
+            u = Domain.Min + u * Domain.Length;
 
-            int n = NumberOfBasisFunctions;
-            var span = NurbsFunctions.FindSpan(u, Degree, n, Knots);
-            var basis = NurbsFunctions.BasisFunctions(u, Degree, span, Knots);
-
-            Vector3d p = new Vector3d();
-            for (int i = 0; i <= Degree; i++)
-                p = p + basis[i] * Control[span - Degree + i];
-
-            return p.xy / p.z;
+            return NurbsFunctions.RationalPoint(m_data, u);
         }
 
         /// <summary>
@@ -125,30 +161,16 @@ namespace Common.Geometry.Nurbs
         }
 
         /// <summary>
-        /// Determine the derivatives of a non-uniform, rational B-spline curve at a given parameter.
-        /// Corresponds to algorithm 4.2 from The NURBS book, Piegl & Tiller 2nd edition.
+        /// 
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <param name="numDerivs">The number of derivatives to compute.</param>
     	public Vector2d[] Derivatives(double u, int numDerivs)
         {
             u = DMath.Clamp01(u);
+            u = Domain.Min + u * Domain.Length;
 
-            var ders = NurbsFunctions.RationalDerivatives(m_data, u, numDerivs);
-
-            var CK = new Vector2d[numDerivs + 1];
-
-            for (int k = 0; k <= numDerivs; k++)
-            {
-                var v = ders[k].xy;
-
-                for (int i = 1; i <= k; i++)
-                    v = v - (double)IMath.Binomial(k, i) * ders[i].z * CK[k - i];
-
-                CK[k] = v / ders[0].z;
-            }
-
-            return CK;
+            return NurbsFunctions.RationalDerivatives(m_data, u, numDerivs);
         }
 
         /// <summary>
@@ -157,10 +179,10 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points the curve must pass through.</param>
         /// <returns></returns>
-        public static NurbsCurve2f FromPoints(int degree, IList<Vector2d> points)
+        public static NurbsCurve2d FromPoints(int degree, IList<Vector2d> points)
         {
             var data = NurbsFunctions.RationalInterpolate(degree, points);
-            return new NurbsCurve2f(data);
+            return new NurbsCurve2d(data);
         }
 
         /// <summary>
@@ -168,16 +190,17 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <returns>Two new curves.</returns>
-        public NurbsCurve2f[] Split(double u)
+        public NurbsCurve2d[] Split(double u)
         {
             u = DMath.Clamp01(u);
+            u = Domain.Min + u * Domain.Length;
 
             var data = NurbsFunctions.Split(m_data, u);
 
-            return new NurbsCurve2f[]
+            return new NurbsCurve2d[]
             {
-                new NurbsCurve2f(data[0]),
-                new NurbsCurve2f(data[1])
+                new NurbsCurve2d(data[0]),
+                new NurbsCurve2d(data[1])
             };
         }
 
@@ -191,5 +214,34 @@ namespace Common.Geometry.Nurbs
             return NurbsFunctions.RationalByEqualArcLength(m_data, divisions);
         }
 
+        /// <summary>
+        /// Tessellate a curve.
+        /// </summary>
+        /// <param name="numSamples">integer number of samples</param>
+        /// <returns></returns>
+        public List<Vector2d> Tessellate(int numSamples)
+        {
+            return NurbsFunctions.RationalRegularSampleRange(m_data, numSamples);
+        }
+
+        /// <summary>
+        /// Transform the curve.
+        /// </summary>
+        /// <param name="mat"></param>
+        /// <returns></returns>
+        public NurbsCurve2d Transform(Matrix4x4d mat)
+        {
+            int count = m_data.Control.Length;
+            var control = new List<Vector2d>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                var p = (Control[i].xy / Control[i].z).xy01;
+                p = mat * p;
+                control.Add(p.xy);
+            }
+
+            return new NurbsCurve2d(Degree, control, Knots, Weights);
+        }
     }
 }

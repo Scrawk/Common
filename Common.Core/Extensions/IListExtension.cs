@@ -39,21 +39,33 @@ namespace System.Collections.Generic
             return list[i];
         }
 
-        public static T[] Slice<T>(this IList<T> list, int index)
+        public static T[] Slice<T>(this IList<T> list, int pos)
         {
-            int count = list.Count - index;
-            var array = new T[count];
-            for (int i = 0; i < count; i++)
-                array[i] = list[index + i];
-
-            return array;
+            return Slice(list, pos, list.Count);
         }
 
-        public static T[] Slice<T>(this IList<T> list, int index, int count)
+        public static T[] Slice<T>(this IList<T> list, int pos, int end)
         {
-            var array = new T[count];
-            for (int i = 0; i < count; i++)
-                array[i] = list[index + i];
+            if (pos < 0)
+            {
+                pos = list.Count + pos;
+                if (pos < 0)
+                    pos = 0;
+            }
+
+            if (end < 0)
+                end = list.Count + end;
+
+            if (end > list.Count)
+                end = list.Count;
+
+            int len = end - pos;
+            if (len < 0)
+                return new T[0];
+
+            var array = new T[len];
+            for (int i = 0; i < len; i++)
+                array[i] = list[pos + i];
 
             return array;
         }

@@ -24,16 +24,11 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector2d(5,5)
             };
 
-            var curve = NurbsCurve2f.FromPoints(3, points);
+            var curve = NurbsCurve2d.FromPoints(3, points);
 
-            var positions = new List<Vector2d>();
-
-            for (double t = 0; t <= 1; t += 0.01)
-            {
-                t = Math.Round(t, 2);
-                var p = curve.Position((double)t);
-                positions.Add(p);
-            }
+            Console.WriteLine(curve.PrintControl());
+            Console.WriteLine(curve.PrintKnots());
+            Console.WriteLine(curve.PrintWeights());
 
         }
 
@@ -49,14 +44,12 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector2d(5,5)
             };
 
-            var curve = NurbsCurve2f.FromPoints(3, points);
+            var curve = NurbsCurve2d.FromPoints(3, points);
             var curves = curve.Split(0.4f);
 
-            for (double t = 0; t <= 1; t += 0.01)
-            {
-                t = Math.Round(t, 2);
-                var p = curves[1].Position(t);
-            }
+            Console.WriteLine(curves[0].PrintKnots());
+            Console.WriteLine(curves[1].PrintKnots());
+
         }
 
         [TestMethod]
@@ -71,7 +64,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector2d(5,5)
             };
 
-            var curve = NurbsCurve2f.FromPoints(3, points);
+            var curve = NurbsCurve2d.FromPoints(3, points);
             var line = CreatePolyline(curve);
 
             var len = curve.Length(0.5f);
@@ -79,6 +72,7 @@ namespace Common.Geometry.Test.Nurbs
 
             Console.WriteLine(u);
             Console.WriteLine(len);
+            Console.WriteLine(line.GetLength(0.5f));
         }
 
         [TestMethod]
@@ -93,19 +87,39 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector2d(5,5)
             };
 
-            var curve = NurbsCurve2f.FromPoints(3, points);
-
+            var curve = NurbsCurve2d.FromPoints(3, points);
             var samples = curve.DivideByEqualArcLength(20);
 
-            Console.WriteLine(samples.Count);
-
-            foreach (var sample in samples)
+            for (int i = 0; i < samples.Count-1; i++)
             {
-                Console.WriteLine(sample.u + " " + sample.len);
+                var s0 = samples[i];
+                var s1 = samples[i+1];
+
+                Console.WriteLine(s0.u + " " + s0.len + " " + (s1.len - s0.len));
             }
         }
 
-        private List<Vector2f> CreateLine(NurbsCurve2f curve)
+        [TestMethod]
+        public void Tessellate()
+        {
+            var points = new Vector2d[]
+            {
+                new Vector2d(-10,0),
+                new Vector2d(10,0),
+                new Vector2d(10,10),
+                new Vector2d(0,10),
+                new Vector2d(5,5)
+            };
+
+            var curve = NurbsCurve2d.FromPoints(3, points);
+
+            var tess = curve.Tessellate(100);
+
+            Console.WriteLine(tess.Count);
+
+        }
+
+        private List<Vector2f> CreateLine(NurbsCurve2d curve)
         {
             var points = new List<Vector2f>();
 
@@ -119,7 +133,7 @@ namespace Common.Geometry.Test.Nurbs
             return points;
         }
 
-        private Polyline2f CreatePolyline(NurbsCurve2f curve)
+        private Polyline2f CreatePolyline(NurbsCurve2d curve)
         {
             var points = CreateLine(curve);
             var line = new Polyline2f(0, points);

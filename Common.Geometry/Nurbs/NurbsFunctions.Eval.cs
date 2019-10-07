@@ -138,30 +138,25 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">The parameter</param>
         /// <param name="U">The knot vector</param>
         /// <returns>The knot span index</returns>
-        public static int FindSpan(double u, int p, int n, IList<double> U)
+        public static int FindSpan(double u, int degree, int n, IList<double> knots)
         {
-            //Special case.
-            if (u == U[n + 1]) return n;
+            if (u > knots[n + 1] - FMath.EPS)
+                return n;
 
-            if (u < U.First())
-                throw new ArgumentException("u < U.First()");
+            if (u < knots[degree] + FMath.EPS)
+                return degree;
 
-            if (u > U.Last())
-                throw new ArgumentException("u > U.Last()");
-
-            //Do binary search.
-            int low = p;
+            int low = degree;
             int high = n + 1;
-            int mid = (low + high) / 2;
-
-            while (u < U[mid] || u >= U[mid + 1])
+            int mid = (int)Math.Floor((low + high) / 2.0);
+            while (u < knots[mid] || u >= knots[mid + 1])
             {
-                if (u < U[mid])
+                if (u < knots[mid])
                     high = mid;
                 else
                     low = mid;
 
-                mid = (low + high) / 2;
+                mid = (int)Math.Floor((low + high) / 2.0);
             }
 
             return mid;
@@ -348,12 +343,14 @@ namespace Common.Geometry.Nurbs
         }
 
         /// <summary>
-        /// Determine the derivatives of a NURBS curve at a given parameter.
+        /// Determine the derivatives of a non-uniform, non-rational B-spline curve at a given parameter
+        /// (corresponds to algorithm 3.1 from The NURBS book, Piegl & Tiller 2nd edition)
         /// </summary>
-        /// <param name="curve">The curve data with control points in homogenise space.</param>
-        /// <param name="u">Parameter 0 <= u <= 1</param>
-        /// <param name="numDerivs">The number of derivatives to compute.</param>
-        public static Vector3d[] RationalDerivatives(NurbsCurveData2f curve, double u, int numDerivs)
+        /// <param name="curve">NurbsCurveData object representing the curve</param>
+        /// <param name="u">parameter on the curve at which the point is to be evaluated</param>
+        /// <param name="numDerivs">integer number of basis functions - 1 = knots.length - degree - 2</param>
+        /// <returns></returns>
+        public static Vector3d[] Derivatives(NurbsCurveData2d curve, double u, int numDerivs)
         {
             int degree = curve.Degree;
             numDerivs = Math.Min(degree, numDerivs);
@@ -371,5 +368,47 @@ namespace Common.Geometry.Nurbs
             return CK;
         }
 
+        /// <summary>
+        /// Compute a point on a non-uniform, rational b-spline curve.
+        /// Corresponds to algorithm 4.1 from The NURBS book, Piegl & Tiller 2nd edition
+        /// </summary>
+        /// <param name="u">Parameter 0 <= u <= 1</param>
+        public static Vector2d RationalPoint(NurbsCurveData2d curve, double u)
+        {
+            int degree = curve.Degree;
+            int n = curve.NumberOfBasisFunctions;
+            var span = FindSpan(u, degree, n, curve.Knots);
+            var basis = BasisFunctions(u, degree, span, curve.Knots);
+
+            Vector3d p = new Vector3d();
+            for (int i = 0; i <= degree; i++)
+                p = p + basis[i] * curve.Control[span - degree + i];
+
+            return p.xy / p.z;
+        }
+
+        /// <summary>
+        /// Determine the derivatives of a non-uniform, rational B-spline curve at a given parameter.
+        /// Corresponds to algorithm 4.2 from The NURBS book, Piegl & Tiller 2nd edition.
+        /// </summary>
+        /// <param name="u">Parameter 0 <= u <= 1</param>
+        /// <param name="numDerivs">The number of derivatives to compute.</param>
+        public static Vector2d[] RationalDerivatives(NurbsCurveData2d curve, double u, int numDerivs)
+        {
+            var ders = Derivatives(curve, u, numDerivs);
+            var CK = new Vector2d[numDerivs + 1];
+
+            for (int k = 0; k <= numDerivs; k++)
+            {
+                var v = ders[k].xy;
+
+                for (int i = 1; i <= k; i++)
+                    v = v - IMath.Binomial(k, i) * ders[i].z * CK[k - i];
+
+                CK[k] = v / ders[0].z;
+            }
+
+            return CK;
+        }
     }
 }
