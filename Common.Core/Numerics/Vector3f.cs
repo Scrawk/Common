@@ -640,6 +640,22 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Create a set of orthonormal vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Orthonormal(ref Vector3f a, ref Vector3f b, out Vector3f c)
+        {
+            a.Normalize();
+            c = Cross(a, b);
+
+            if (c.SqrMagnitude == 0)
+                throw new ArgumentException("a and b are parallel");
+
+            c.Normalize();
+            b = Cross(c, a);
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -174,6 +174,18 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Pow3(float v)
+        {
+            return v * v * v;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Pow4(float v)
+        {
+            return v * v * v * v;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Clamp(float v, float min, float max)
         {
             if (v < min) v = min;

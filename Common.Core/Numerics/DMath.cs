@@ -91,6 +91,18 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Pow3(double v)
+        {
+            return v * v * v;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Pow4(double v)
+        {
+            return v * v * v * v;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Clamp(double v, double min, double max)
         {
             if (v < min) v = min;
