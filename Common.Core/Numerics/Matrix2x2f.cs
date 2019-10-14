@@ -6,6 +6,12 @@ using Common.Core.Numerics;
 
 namespace Common.Core.Numerics
 {
+    /// <summary>
+    /// Matrix is column major. Data is accessed as: row + (column*2). 
+    /// Matrices can be indexed like 2D arrays but in an expression like mat[a, b], 
+    /// a refers to the row index, while b refers to the column index 
+    /// (note that this is the opposite way round to Cartesian coordinates).
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Matrix2x2f
@@ -13,7 +19,8 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The matrix
         /// </summary>
-        public float m00, m10, m01, m11;
+        public float m00, m10;
+        public float m01, m11;
 
         /// <summary>
         /// The Matrix Idenity.
@@ -56,42 +63,34 @@ namespace Common.Core.Numerics
             m10 = m[1,0]; m11 = m[1,1];
         }
 
-		/// <summary>
-		/// A matrix copied from a array of varibles.
-		/// </summary>
-		public Matrix2x2f(float[] m)
-		{
-            m00 = m[0 + 0 * 2]; m01 = m[0 + 1 * 2];
-            m10 = m[1 + 0 * 2]; m11 = m[1 + 1 * 2];
-		}
-
         /// <summary>
         /// Access the varible at index i
         /// </summary>
-        public float this[int i]
+        unsafe public float this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return m00;
-                    case 1: return m10;
-                    case 2: return m01;
-                    case 3: return m11;
-                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + i);
-                }
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("Matrix2x2f index out of range.");
+
+                fixed (Matrix2x2f* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: m00 = value; break;
-                    case 1: m10 = value; break;
-                    case 2: m01 = value; break;
-                    case 3: m11 = value; break;
-                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + i);
-                }
+                if ((uint)i >= 4)
+                    throw new IndexOutOfRangeException("Matrix2x2f index out of range.");
+
+                fixed (float* array = &m00) { array[i] = value; }
             }
+        }
+
+        /// <summary>
+        /// Access the varible at index ij
+        /// </summary>
+        public float this[int i, int j]
+        {
+            get => this[i + j * 2];
+            set => this[i + j * 2] = value;
         }
 
         /// <summary>
@@ -141,37 +140,6 @@ namespace Common.Core.Numerics
             get
             {
                 return m00 + m11;
-            }
-        }
-
-        /// <summary>
-        /// Access the varible at index i,j.
-        /// </summary>
-        public float this[int i, int j]
-        {
-            get
-            {
-                int k = i + j * 2;
-                switch (k)
-                {
-                    case 0: return m00;
-                    case 1: return m10;
-                    case 2: return m01;
-                    case 3: return m11;
-                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + k);
-                }
-            }
-            set
-            {
-                int k = i + j * 2;
-                switch (k)
-                {
-                    case 0: m00 = value; break;
-                    case 1: m10 = value; break;
-                    case 2: m01 = value; break;
-                    case 3: m11 = value; break;
-                    default: throw new IndexOutOfRangeException("Matrix2x2f index out of range: " + k);
-                }
             }
         }
 

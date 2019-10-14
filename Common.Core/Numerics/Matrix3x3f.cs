@@ -6,6 +6,12 @@ using Common.Core.Numerics;
 
 namespace Common.Core.Numerics
 {
+    /// <summary>
+    /// Matrix is column major. Data is accessed as: row + (column*3). 
+    /// Matrices can be indexed like 2D arrays but in an expression like mat[a, b], 
+    /// a refers to the row index, while b refers to the column index 
+    /// (note that this is the opposite way round to Cartesian coordinates).
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Matrix3x3f
@@ -13,9 +19,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The matrix
         /// </summary>
-        public float m00, m01, m02;
-        public float m10, m11, m12;
-        public float m20, m21, m22;
+        public float m00, m10, m20;
+        public float m01, m11, m21;
+        public float m02, m12, m22;
 
         /// <summary>
         /// The Matrix Idenity.
@@ -64,16 +70,6 @@ namespace Common.Core.Numerics
             m20 = m[2, 0]; m21 = m[2, 1]; m22 = m[2, 2];
         }
 
-		/// <summary>
-		/// A matrix copied from a array of varibles.
-		/// </summary>
-		public Matrix3x3f(float[] m)
-		{
-            m00 = m[0 + 0 * 3]; m01 = m[0 + 1 * 3]; m02 = m[0 + 2 * 3];
-            m10 = m[1 + 0 * 3]; m11 = m[1 + 1 * 3]; m12 = m[1 + 2 * 3];
-            m20 = m[2 + 0 * 3]; m21 = m[2 + 1 * 3]; m22 = m[2 + 2 * 3];
-		}
-
         public float Trace
         {
             get
@@ -85,39 +81,21 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Access the varible at index i
         /// </summary>
-        public float this[int i]
+        unsafe public float this[int i]
         {
             get
             {
-                switch (i)
-                {
-                    case 0: return m00;
-                    case 1: return m10;
-                    case 2: return m20;
-                    case 3: return m01;
-                    case 4: return m11;
-                    case 5: return m21;
-                    case 6: return m02;
-                    case 7: return m12;
-                    case 8: return m22;
-                    default: throw new IndexOutOfRangeException("Matrix3x3f index out of range: " + i);
-                }
+                if ((uint)i >= 9)
+                    throw new IndexOutOfRangeException("Matrix3x3f index out of range.");
+
+                fixed (Matrix3x3f* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                switch (i)
-                {
-                    case 0: m00 = value; break;
-                    case 1: m10 = value; break;
-                    case 2: m20 = value; break;
-                    case 3: m01 = value; break;
-                    case 4: m11 = value; break;
-                    case 5: m21 = value; break;
-                    case 6: m02 = value; break;
-                    case 7: m12 = value; break;
-                    case 8: m22 = value; break;
-                    default: throw new IndexOutOfRangeException("Matrix3x3f index out of range: " + i);
-                }
+                if ((uint)i >= 9)
+                    throw new IndexOutOfRangeException("Matrix3x3f index out of range.");
+
+                fixed (float* array = &m00) { array[i] = value; }
             }
         }
 
@@ -126,40 +104,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public float this[int i, int j]
         {
-            get
-            {
-                int k = i + j * 3;
-                switch (k)
-                {
-                    case 0: return m00;
-                    case 1: return m10;
-                    case 2: return m20;
-                    case 3: return m01;
-                    case 4: return m11;
-                    case 5: return m21;
-                    case 6: return m02;
-                    case 7: return m12;
-                    case 8: return m22;
-                    default: throw new IndexOutOfRangeException("Matrix3x3f index out of range: " + k);
-                }
-            }
-            set
-            {
-                int k = i + j * 3;
-                switch (k)
-                {
-                    case 0: m00 = value; break;
-                    case 1: m10 = value; break;
-                    case 2: m20 = value; break;
-                    case 3: m01 = value; break;
-                    case 4: m11 = value; break;
-                    case 5: m21 = value; break;
-                    case 6: m02 = value; break;
-                    case 7: m12 = value; break;
-                    case 8: m22 = value; break;
-                    default: throw new IndexOutOfRangeException("Matrix3x3f index out of range: " + k);
-                }
-            }
+            get => this[i + j * 3];
+            set => this[i + j * 3] = value;
         }
 
         /// <summary>

@@ -33,17 +33,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void CreatedFromArray()
-        {
-            float[] d = new float[] { 0, 1, 2, 3 };
-
-            Matrix2x2f m = new Matrix2x2f(d);
-
-            for (int i = 0; i < SIZE; i++)
-                Assert.AreEqual(i, m[i]);
-        }
-
-        [TestMethod]
         public void CreatedFromArray2()
         {
             float[,] d = new float[,]{{0, 2},

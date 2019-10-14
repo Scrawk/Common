@@ -433,7 +433,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion3f RotateX(float angle)
         {
-            float a = FMath.Deg2Rad * 0.5f;
+            float a = angle * FMath.Deg2Rad * 0.5f;
             float sina = (float)Math.Sin(a);
             float cosa = (float)Math.Cos(a);
             return new Quaternion3f(sina, 0.0f, 0.0f, cosa);
@@ -448,7 +448,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion3f RotateY(float angle)
         {
-            float a = FMath.Deg2Rad * 0.5f;
+            float a = angle * FMath.Deg2Rad * 0.5f;
             float sina = (float)Math.Sin(a);
             float cosa = (float)Math.Cos(a);
             return new Quaternion3f(0.0f, sina, 0.0f, cosa);
@@ -463,7 +463,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion3f RotateZ(float angle)
         {
-            float a = FMath.Deg2Rad * 0.5f;
+            float a = angle * FMath.Deg2Rad * 0.5f;
             float sina = (float)Math.Sin(a);
             float cosa = (float)Math.Cos(a);
             return new Quaternion3f(0.0f, 0.0f, sina, cosa);

@@ -37,17 +37,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void CreatedFromArray()
-        {
-            double[] d = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-
-            Matrix4x4d m = new Matrix4x4d(d);
-
-            for (int i = 0; i < SIZE; i++)
-                Assert.AreEqual(i, m[i]);
-        }
-
-        [TestMethod]
         public void CreatedFromArray2()
         {
             double[,] d = new double[,]{{0, 4, 8, 12},
