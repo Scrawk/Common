@@ -13,21 +13,21 @@ namespace Common.Geometry.Nurbs
     public class NurbsCurveData2d
     {
         
-        public NurbsCurveData2d(int degree, IList<Vector2d> control, IList<double> knots, IList<double> weights = null)
+        public NurbsCurveData2d(int degree, IList<Vector3d> control, IList<double> knots, IList<double> weights = null)
         {
             NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
             Degree = degree;
 
             int count = control.Count;
-            Control = new Vector3d[count];
+            Control = new Vector4d[count];
 
             //homogenise control points.
             for (int i = 0; i < count; i++)
             {
                 var c = control[i];
                 var w = (weights != null) ? weights[i] : 1;
-                Control[i] = new Vector3d(c * w, w);
+                Control[i] = new Vector4d(c * w, w);
             }
 
             count = knots.Count;
@@ -41,21 +41,21 @@ namespace Common.Geometry.Nurbs
             NumberOfBasisFunctions = Knots.Length - Degree - 2;
         }
 
-        public NurbsCurveData2d(int degree, IList<Vector3d> control, IList<double> knots)
+        public NurbsCurveData2d(int degree, IList<Vector4d> control, IList<double> knots)
         {
             NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
             Degree = degree;
 
             int count = control.Count;
-            Control = new Vector3d[count];
+            Control = new Vector4d[count];
 
             //homogenise control points.
             for (int i = 0; i < count; i++)
             {
-                var c = control[i].xy;
-                var w = control[i].z;
-                Control[i] = new Vector3d(c * w, w);
+                var c = control[i].xyz;
+                var w = control[i].w;
+                Control[i] = new Vector4d(c * w, w);
             }
 
             count = knots.Count;
@@ -87,7 +87,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points.
         /// </summary>
-        internal Vector3d[] Control { get; private set; }
+        internal Vector4d[] Control { get; private set; }
 
         /// <summary>
         /// The knot vector.
@@ -104,9 +104,9 @@ namespace Common.Geometry.Nurbs
             for (int i = 0; i < Control.Length; i++)
             {
                 if (i == 0)
-                    str += Control[i].xy / Control[i].z;
+                    str += DehomogenisedControl(i);
                 else
-                    str += ", " + Control[i].xy / Control[i].z;
+                    str += ", " + DehomogenisedControl(i);
             }
 
             return str + "]";
@@ -140,9 +140,9 @@ namespace Common.Geometry.Nurbs
             for (int i = 0; i < Control.Length; i++)
             {
                 if (i == 0)
-                    str += Control[i].z;
+                    str += Weight(i);
                 else
-                    str += ", " + Control[i].z;
+                    str += ", " + Weight(i);
             }
 
             return str + "]";
@@ -151,13 +151,21 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points from homogenise space to world space.
         /// </summary>
-        public List<Vector2d> DehomogenisedControl()
+        public List<Vector3d> DehomogenisedControl()
         {
-            var points = new List<Vector2d>();
+            var points = new List<Vector3d>();
             for (int i = 0; i < Control.Length; i++)
-                points.Add(Control[i].xy / Control[i].z);
+                points.Add(DehomogenisedControl(i));
 
             return points;
+        }
+
+        /// <summary>
+        /// The control point from homogenise space to world space.
+        /// </summary>
+        public Vector3d DehomogenisedControl(int i)
+        {
+            return Control[i].xyz / Control[i].w;
         }
 
         /// <summary>
@@ -167,9 +175,17 @@ namespace Common.Geometry.Nurbs
         {
             var weights = new List<double>();
             for (int i = 0; i < Control.Length; i++)
-                weights.Add(Control[i].z);
+                weights.Add(Control[i].w);
 
             return weights;
+        }
+
+        /// <summary>
+        /// The control point weights.
+        /// </summary>
+        public double Weight(int i)
+        {
+            return Control[i].w;
         }
 
         /// <summary>
@@ -185,7 +201,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         public NurbsCurveData2d Reverse()
         {
-            var control = new List<Vector3d>(Control);
+            var control = new List<Vector4d>(Control);
             control.Reverse();
             return new NurbsCurveData2d(Degree, control, KnotsReverse());
         }

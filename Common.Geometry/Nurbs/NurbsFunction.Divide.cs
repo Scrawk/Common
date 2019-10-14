@@ -89,7 +89,7 @@ namespace Common.Geometry.Nurbs
             }
 
             var pts = new List<CurveLengthSample>();
-            pts.Add(new CurveLengthSample(curve.Knots[0], 0.0f));
+            pts.Add(new CurveLengthSample(curve.Knots[0], 0.0));
 
             if (len > totlen) return pts;
 
@@ -106,7 +106,7 @@ namespace Common.Geometry.Nurbs
 
                 while (lc < runsum + FMath.EPS)
                 {
-                    u = RationalBezierParamAtArcLength(crvs[i], lc - runsum1, 1e-6f, crvlens[i]);
+                    u = RationalBezierParamAtArcLength(crvs[i], lc - runsum1, 1e-6, crvlens[i]);
                     pts.Add(new CurveLengthSample(u, lc));
                     lc += inc;
                 }

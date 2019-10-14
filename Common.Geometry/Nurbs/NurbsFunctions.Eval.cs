@@ -12,7 +12,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// Validate the nurbs data.
         /// </summary>
-        public static void IsValidNurbsCurveData(int degree, IList<Vector2d> control, IList<double> knots)
+        public static void IsValidNurbsCurveData(int degree, IList<Vector3d> control, IList<double> knots)
         {
             if (control == null) throw new ArgumentException("Control points array cannot be null!");
             if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
@@ -31,7 +31,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// Validate the nurbs data.
         /// </summary>
-        public static void IsValidNurbsCurveData(int degree, IList<Vector3d> control, IList<double> knots)
+        public static void IsValidNurbsCurveData(int degree, IList<Vector4d> control, IList<double> knots)
         {
             if (control == null) throw new ArgumentException("Control points array cannot be null!");
             if (degree < 1) throw new ArgumentException("Degree must be greater than 1!");
@@ -350,14 +350,14 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">parameter on the curve at which the point is to be evaluated</param>
         /// <param name="numDerivs">integer number of basis functions - 1 = knots.length - degree - 2</param>
         /// <returns></returns>
-        public static Vector3d[] Derivatives(NurbsCurveData2d curve, double u, int numDerivs)
+        public static Vector4d[] Derivatives(NurbsCurveData2d curve, double u, int numDerivs)
         {
             int degree = curve.Degree;
             numDerivs = Math.Min(degree, numDerivs);
             var span = FindSpan(u, degree, curve.Knots);
             var nders = DerivativeBasisFunctions(u, degree, span, numDerivs, curve.Knots);
 
-            var CK = new Vector3d[numDerivs + 1];
+            var CK = new Vector4d[numDerivs + 1];
 
             for (int k = 0; k <= numDerivs; k++)
             {
@@ -373,18 +373,18 @@ namespace Common.Geometry.Nurbs
         /// Corresponds to algorithm 4.1 from The NURBS book, Piegl & Tiller 2nd edition
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
-        public static Vector2d RationalPoint(NurbsCurveData2d curve, double u)
+        public static Vector3d RationalPoint(NurbsCurveData2d curve, double u)
         {
             int degree = curve.Degree;
             int n = curve.NumberOfBasisFunctions;
             var span = FindSpan(u, degree, n, curve.Knots);
             var basis = BasisFunctions(u, degree, span, curve.Knots);
 
-            Vector3d p = new Vector3d();
+            Vector4d p = new Vector4d();
             for (int i = 0; i <= degree; i++)
                 p = p + basis[i] * curve.Control[span - degree + i];
 
-            return p.xy / p.z;
+            return p.xyz / p.w;
         }
 
         /// <summary>
@@ -393,19 +393,19 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <param name="numDerivs">The number of derivatives to compute.</param>
-        public static Vector2d[] RationalDerivatives(NurbsCurveData2d curve, double u, int numDerivs)
+        public static Vector3d[] RationalDerivatives(NurbsCurveData2d curve, double u, int numDerivs)
         {
             var ders = Derivatives(curve, u, numDerivs);
-            var CK = new Vector2d[numDerivs + 1];
+            var CK = new Vector3d[numDerivs + 1];
 
             for (int k = 0; k <= numDerivs; k++)
             {
-                var v = ders[k].xy;
+                var v = ders[k].xyz;
 
                 for (int i = 1; i <= k; i++)
-                    v = v - IMath.Binomial(k, i) * ders[i].z * CK[k - i];
+                    v = v - IMath.Binomial(k, i) * ders[i].w * CK[k - i];
 
-                CK[k] = v / ders[0].z;
+                CK[k] = v / ders[0].w;
             }
 
             return CK;

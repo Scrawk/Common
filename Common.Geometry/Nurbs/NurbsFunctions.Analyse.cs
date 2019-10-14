@@ -62,7 +62,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve.</param>
         /// <param name="len">The arc length for which to do the procedure.</param>
         /// <param name="tol">The tolerance - increasing the tolerance can make this computation quite expensive.</param>
-        public static double RationalParamAtArcLength(NurbsCurveData2d curve, double len, double tol = 1e-3f)
+        public static double RationalParamAtArcLength(NurbsCurveData2d curve, double len, double tol = 1e-3)
         {
             if (len < FMath.EPS) return curve.Knots[0];
 
@@ -101,13 +101,13 @@ namespace Common.Geometry.Nurbs
 
             //divide & conquer
             //TODO: can we use derivative?
-            var start = new double[] { curve.Knots[0], 0.0f };
-            var end = new double[] { curve.Knots.Last(), totalLen };
-            var mid = new double[] { 0.0f, 0.0f };
+            var start = new Vector2d(curve.Knots[0], 0.0f);
+            var end = new Vector2d(curve.Knots.Last(), totalLen);
+            var mid = new Vector2d(0.0, 0.0);
 
             while (end[1] - start[1] > tol)
             {
-                mid[0] = (start[0] + end[0]) / 2.0f;
+                mid[0] = (start[0] + end[0]) / 2.0;
                 mid[1] = RationalBezierArcLength(curve, mid[0]);
 
                 if (mid[1] > len)
@@ -122,7 +122,7 @@ namespace Common.Geometry.Nurbs
                 }
             }
 
-            return (start[0] + end[0]) / 2.0f;
+            return (start[0] + end[0]) / 2.0;
         }
 
         /// <summary>

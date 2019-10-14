@@ -17,7 +17,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points to interp curve from.</param>
         /// <returns></returns>
-        public static NurbsCurveData2d RationalInterpolate(int degree, IList<Vector2d> points)
+        public static NurbsCurveData2d RationalInterpolate(int degree, IList<Vector3d> points)
         {
             if (points.Count < degree + 1)
                 throw new ArgumentException("You need to supply at least degree + 1 points.");
@@ -46,13 +46,13 @@ namespace Common.Geometry.Nurbs
 
             for (int i = start; i < end; i++)
             {
-                double weightSums = 0.0f;
+                double weightSums = 0.0;
                 for (int j = 0; j < degree; j++)
                 {
                     weightSums += us[i + j];
                 }
 
-                knotsStart.Add((1.0f / degree) * weightSums);
+                knotsStart.Add((1.0 / degree) * weightSums);
             }
 
             var knots = new List<double>(knotsStart);
@@ -79,7 +79,7 @@ namespace Common.Geometry.Nurbs
             }
 
             //for each dimension, solve
-            var rows = 2;
+            var rows = 3;
             var columns = points.Count;
             var xs = new Matrix(rows, columns);
             var M = new Matrix(A);
@@ -96,10 +96,10 @@ namespace Common.Geometry.Nurbs
                 xs.SetRow(i, x);
             }
 
-            var controlPts = new List<Vector2d>();
+            var controlPts = new List<Vector3d>();
             for (int i = 0; i < columns; i++)
             {
-                var v = new Vector2d(xs[0, i], xs[1, i]);
+                var v = new Vector3d(xs[0, i], xs[1, i], xs[2, i]);
                 controlPts.Add(v);
             }
 
@@ -111,7 +111,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="controlPoints">Points in counter-clockwise form.</param>
         /// <returns></returns>
-    	public static NurbsCurveData2d RationalBezierCurve(IList<Vector2d> controlPoints, IList<double> weights = null)
+    	public static NurbsCurveData2d RationalBezierCurve(IList<Vector3d> controlPoints, IList<double> weights = null)
         {
             int count = controlPoints.Count;
             int degree = count - 1;
@@ -142,7 +142,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="startAngle">start angle of the arc, between 0 and 2pi</param>
         /// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
         /// <returns></returns>
-        public static NurbsCurveData2d Arc(Vector2d center, Vector2d xaxis, Vector2d yaxis, double radius, double startAngle, double endAngle)
+        public static NurbsCurveData2d Arc(Vector3d center, Vector3d xaxis, Vector3d yaxis, double radius, double startAngle, double endAngle)
         {
             return EllipseArc(center, xaxis.Normalized * radius, yaxis.Normalized * radius, startAngle, endAngle);
         }
@@ -156,7 +156,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
         /// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
         /// <returns></returns>
-        public static NurbsCurveData2d EllipseArc(Vector2d center, Vector2d xaxis, Vector2d yaxis, double startAngle, double endAngle)
+        public static NurbsCurveData2d EllipseArc(Vector3d center, Vector3d xaxis, Vector3d yaxis, double startAngle, double endAngle)
         {
             var xradius = xaxis.Magnitude;
             var yradius = yaxis.Magnitude;
@@ -191,8 +191,8 @@ namespace Common.Geometry.Nurbs
             var P0 = center + (xradius * Math.Cos(startAngle) * xaxis) + (yradius * Math.Sin(startAngle) * yaxis);
             var T0 = (Math.Cos(startAngle) * yaxis) - (Math.Sin(startAngle) * xaxis);
 
-            var controlPoints = new List<Vector2d>(numArcs * 2 + 1);
-            controlPoints.AddRange(numArcs * 2 + 1, Vector2d.Zero);
+            var controlPoints = new List<Vector3d>(numArcs * 2 + 1);
+            controlPoints.AddRange(numArcs * 2 + 1, Vector3d.Zero);
 
             var knots = new List<double>(2 * numArcs + 3 + 1);
             knots.AddRange(2 * numArcs + 3 + 1, 0);

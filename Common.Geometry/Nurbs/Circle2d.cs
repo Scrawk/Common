@@ -15,7 +15,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="xaxis">Vector representing the xaxis</param>
         /// <param name="yaxis">Vector representing the perpendicular yaxis</param>
         /// <param name="radius">Radius of the circle</param>
-        public Circle2d(Vector2d center, Vector2d xaxis, Vector2d yaxis, double radius)
+        public Circle2d(Vector3d center, Vector3d xaxis, Vector3d yaxis, double radius)
             : base(center, xaxis, yaxis, radius, 0, Math.PI * 2)
         {
 

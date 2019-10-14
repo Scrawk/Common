@@ -14,12 +14,12 @@ namespace Common.Geometry.Nurbs
     {
         private NurbsCurveData2d m_data;
 
-        public NurbsCurve2d(int degree, IList<Vector2d> control, IList<double> knots, IList<double> weights = null)
+        public NurbsCurve2d(int degree, IList<Vector3d> control, IList<double> knots, IList<double> weights = null)
         {
             m_data = new NurbsCurveData2d(degree, control, knots, weights);
         }
 
-        public NurbsCurve2d(int degree, IList<Vector3d> control, IList<double> knots)
+        public NurbsCurve2d(int degree, IList<Vector4d> control, IList<double> knots)
         {
             m_data = new NurbsCurveData2d(degree, control, knots);
         }
@@ -42,7 +42,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points.
         /// </summary>
-        public List<Vector3d> Control => new List<Vector3d>(m_data.Control);
+        public List<Vector4d> Control => new List<Vector4d>(m_data.Control);
 
         /// <summary>
         /// The knot vector.
@@ -52,7 +52,7 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// The control points from homogenise space to world space.
         /// </summary>
-        public List<Vector2d> DehomogenisedControl => m_data.DehomogenisedControl();
+        public List<Vector3d> DehomogenisedControl => m_data.DehomogenisedControl();
 
         /// <summary>
         /// The control point weights.
@@ -132,7 +132,7 @@ namespace Common.Geometry.Nurbs
         /// 
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
-        public Vector2d Position(double u)
+        public Vector3d Position(double u)
         {
             u = DMath.Clamp01(u);
             u = Domain.Min + u * Domain.Length;
@@ -144,28 +144,30 @@ namespace Common.Geometry.Nurbs
         /// The tangent on the curve at u.
         /// </summary>
         /// <param name="u">Number between 0 and 1.</param>
-        public Vector2d Tangent(double u)
+        public Vector3d Tangent(double u)
         {
-            Vector2d d = Derivatives(u, 1)[1];
+            Vector3d d = Derivatives(u, 1)[1];
             return d.Normalized;
         }
 
+        /*
         /// <summary>
         /// The normal on the curve at u.
         /// </summary>
         /// <param name="u">Number between 0 and 1.</param>
-        public Vector2d Normal(double u)
+        public Vector3d Normal(double u)
         {
-            Vector2d d = Derivatives(u, 1)[1];
+            Vector3d d = Derivatives(u, 1)[1];
             return d.Normalized.PerpendicularCW;
         }
+        */
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <param name="numDerivs">The number of derivatives to compute.</param>
-    	public Vector2d[] Derivatives(double u, int numDerivs)
+    	public Vector3d[] Derivatives(double u, int numDerivs)
         {
             u = DMath.Clamp01(u);
             u = Domain.Min + u * Domain.Length;
@@ -179,7 +181,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points the curve must pass through.</param>
         /// <returns></returns>
-        public static NurbsCurve2d FromPoints(int degree, IList<Vector2d> points)
+        public static NurbsCurve2d FromPoints(int degree, IList<Vector3d> points)
         {
             var data = NurbsFunctions.RationalInterpolate(degree, points);
             return new NurbsCurve2d(data);
@@ -219,7 +221,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="numSamples">integer number of samples</param>
         /// <returns></returns>
-        public List<Vector2d> Tessellate(int numSamples)
+        public List<Vector3d> Tessellate(int numSamples)
         {
             return NurbsFunctions.RationalRegularSampleRange(m_data, numSamples);
         }
@@ -232,13 +234,13 @@ namespace Common.Geometry.Nurbs
         public NurbsCurve2d Transform(Matrix4x4d mat)
         {
             int count = m_data.Control.Length;
-            var control = new List<Vector2d>(count);
+            var control = new List<Vector3d>(count);
 
             for (int i = 0; i < count; i++)
             {
-                var p = (Control[i].xy / Control[i].z).xy01;
+                var p = (Control[i].xyz / Control[i].w).xyz1;
                 p = mat * p;
-                control.Add(p.xy);
+                control.Add(p.xyz);
             }
 
             return new NurbsCurve2d(Degree, control, Knots, Weights);

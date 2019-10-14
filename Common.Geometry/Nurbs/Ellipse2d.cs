@@ -13,7 +13,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="center">Vector representing the center of the circle</param>
         /// <param name="xaxis">Vector representing the xaxis</param>
         /// <param name="yaxis">Vector representing the perpendicular yaxis</param>
-        public Ellipse2d(Vector2d center, Vector2d xaxis, Vector2d yaxis)
+        public Ellipse2d(Vector3d center, Vector3d xaxis, Vector3d yaxis)
             : base(center, xaxis, yaxis, 0, Math.PI * 2)
         {
 

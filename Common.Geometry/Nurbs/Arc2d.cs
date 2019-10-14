@@ -21,7 +21,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="radius">Radius of the arc</param>
         /// <param name="minAngle">Start angle in radians</param>
         /// <param name="maxAngle">End angle in radians</param>
-        public Arc2d(Vector2d center, Vector2d xaxis, Vector2d yaxis, double radius, double minAngle, double maxAngle)
+        public Arc2d(Vector3d center, Vector3d xaxis, Vector3d yaxis, double radius, double minAngle, double maxAngle)
             : base(NurbsFunctions.Arc(center, xaxis, yaxis, radius, minAngle, maxAngle))
         {
             Center = center;
@@ -32,11 +32,11 @@ namespace Common.Geometry.Nurbs
             MaxAngle = maxAngle;
         }
 
-        public Vector2d Center { get; private set; }
+        public Vector3d Center { get; private set; }
 
-        public Vector2d XAxis { get; private set; }
+        public Vector3d XAxis { get; private set; }
 
-        public Vector2d YAxis { get; private set; }
+        public Vector3d YAxis { get; private set; }
 
         public double Radius { get; private set; }
 

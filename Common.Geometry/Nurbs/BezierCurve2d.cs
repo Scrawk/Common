@@ -16,7 +16,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="points">Array of control points</param>
         /// <param name="weights">Array of control point weights (optional)</param>
-        public BezierCurve2d(IList<Vector2d> points, IList<double> weights = null)
+        public BezierCurve2d(IList<Vector3d> points, IList<double> weights = null)
             : base(NurbsFunctions.RationalBezierCurve(points, weights))
         {
 

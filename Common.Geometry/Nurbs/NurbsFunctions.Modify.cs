@@ -31,7 +31,7 @@ namespace Common.Geometry.Nurbs
             int controlLen = n + r + 2;
             int knotLen = m + r + 2;
 
-            var controlPoints_post = new Vector3d[controlLen];
+            var controlPoints_post = new Vector4d[controlLen];
             var knots_post = new double[knotLen];
 
             for (i = 0; i < a - degree + 1; i++)
