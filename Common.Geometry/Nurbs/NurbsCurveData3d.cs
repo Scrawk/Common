@@ -8,12 +8,12 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Nurbs
 {
     /// <summary>
-    /// A non-uniform rational basis spline curve in 2D space with control points in 3D homogeneous space.
+    /// A non-uniform rational basis spline curve in 3D space with control points in 4D homogeneous space.
     /// </summary>
-    public class NurbsCurveData2d
+    public class NurbsCurveData3d
     {
         
-        public NurbsCurveData2d(int degree, IList<Vector3d> control, IList<double> knots, IList<double> weights = null)
+        public NurbsCurveData3d(int degree, IList<Vector3d> control, IList<double> knots, IList<double> weights = null)
         {
             NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
@@ -41,7 +41,7 @@ namespace Common.Geometry.Nurbs
             NumberOfBasisFunctions = Knots.Length - Degree - 2;
         }
 
-        public NurbsCurveData2d(int degree, IList<Vector4d> control, IList<double> knots)
+        public NurbsCurveData3d(int degree, IList<Vector4d> control, IList<double> knots)
         {
             NurbsFunctions.IsValidNurbsCurveData(degree, control, knots);
 
@@ -191,19 +191,19 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// Copy data.
         /// </summary>
-        public NurbsCurveData2d Copy()
+        public NurbsCurveData3d Copy()
         {
-            return new NurbsCurveData2d(Degree, Control, Knots);
+            return new NurbsCurveData3d(Degree, Control, Knots);
         }
 
         /// <summary>
         /// Reverse the data.
         /// </summary>
-        public NurbsCurveData2d Reverse()
+        public NurbsCurveData3d Reverse()
         {
             var control = new List<Vector4d>(Control);
             control.Reverse();
-            return new NurbsCurveData2d(Degree, control, KnotsReverse());
+            return new NurbsCurveData3d(Degree, control, KnotsReverse());
         }
 
         /// <summary>

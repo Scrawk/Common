@@ -8,7 +8,7 @@ namespace Common.Geometry.Nurbs
     /// <summary>
     /// A Bezier curve is a common spline curve
     /// </summary>
-    public class BezierCurve2d : NurbsCurve2d
+    public class BezierCurve3d : NurbsCurve3d
     {
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="points">Array of control points</param>
         /// <param name="weights">Array of control point weights (optional)</param>
-        public BezierCurve2d(IList<Vector3d> points, IList<double> weights = null)
+        public BezierCurve3d(IList<Vector3d> points, IList<double> weights = null)
             : base(NurbsFunctions.RationalBezierCurve(points, weights))
         {
 

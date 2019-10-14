@@ -13,7 +13,7 @@ namespace Common.Geometry.Nurbs
         /// Insert a collection of knots on a curve.
         /// Corresponds to Algorithm A5.4 (Piegl & Tiller).
         /// </summary>
-        public static NurbsCurveData2d KnotRefine(NurbsCurveData2d curve, IList<double> knotsToInsert)
+        public static NurbsCurveData3d KnotRefine(NurbsCurveData3d curve, IList<double> knotsToInsert)
         {
             if (knotsToInsert.Count == 0) return curve.Copy();
 
@@ -82,7 +82,7 @@ namespace Common.Geometry.Nurbs
                 j--;
             }
 
-            return new NurbsCurveData2d(degree, controlPoints_post, knots_post);
+            return new NurbsCurveData3d(degree, controlPoints_post, knots_post);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="curve">NurbsCurveData object representing the curve</param>
         /// <returns>Array of NurbsCurveData objects, defined by degree, knots, and control points</returns>
-        public static List<NurbsCurveData2d> DecomposeIntoBeziers(NurbsCurveData2d curve)
+        public static List<NurbsCurveData3d> DecomposeIntoBeziers(NurbsCurveData3d curve)
         {
             var degree = curve.Degree;
             var controlPoints = curve.Control;
@@ -112,7 +112,7 @@ namespace Common.Geometry.Nurbs
                     int num = reqMult - knotmult.mult;
                     var knotsInsert = new List<double>(num);
                     knotsInsert.AddRange(num, knotmult.knot);
-                    var res = KnotRefine(new NurbsCurveData2d(degree, controlPoints, knots), knotsInsert);
+                    var res = KnotRefine(new NurbsCurveData3d(degree, controlPoints, knots), knotsInsert);
 
                     knots = res.Knots;
                     controlPoints = res.Control;
@@ -121,7 +121,7 @@ namespace Common.Geometry.Nurbs
 
             var numCrvs = knots.Length / reqMult - 1;
             var crvKnotLength = reqMult * 2;
-            var crvs = new List<NurbsCurveData2d>(numCrvs);
+            var crvs = new List<NurbsCurveData3d>(numCrvs);
 
             var i = 0;
             while (i < controlPoints.Length)
@@ -129,7 +129,7 @@ namespace Common.Geometry.Nurbs
                 var kts = knots.Slice(i, i + crvKnotLength);
                 var pts = controlPoints.Slice(i, i + reqMult);
 
-                crvs.Add(new NurbsCurveData2d(degree, pts, kts));
+                crvs.Add(new NurbsCurveData3d(degree, pts, kts));
 
                 i += reqMult;
             }

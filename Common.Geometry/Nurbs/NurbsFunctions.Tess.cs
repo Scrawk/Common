@@ -15,7 +15,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object</param>
         /// <param name="numSamples">integer number of samples</param>
         /// <returns></returns>
-        public static List<Vector3d> RationalRegularSampleRange(NurbsCurveData2d curve, int numSamples)
+        public static List<Vector3d> RationalRegularSampleRange(NurbsCurveData3d curve, int numSamples)
         {
             var start = curve.Knots[0];
             var end = curve.Knots.Last();
@@ -30,7 +30,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="end">end parameter for sampling</param>
         /// <param name="numSamples">integer number of samples</param>
         /// <returns></returns>
-        public static List<Vector3d> RationalRegularSampleRange(NurbsCurveData2d curve, double start, double end, int numSamples)
+        public static List<Vector3d> RationalRegularSampleRange(NurbsCurveData3d curve, double start, double end, int numSamples)
         {
             if (numSamples < 1)
                 numSamples = 2;
@@ -53,7 +53,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object</param>
         /// <param name="tol">tol for the adaptive scheme</param>
         /// <returns>an array of dim + 1 length where the first element is the param where it was sampled and the remaining the pt</returns>
-        public static List<Vector3d> RationalAdaptiveSample(NurbsCurveData2d curve, double tol = 1e-6)
+        public static List<Vector3d> RationalAdaptiveSample(NurbsCurveData3d curve, double tol = 1e-6)
         {
             //if degree is 1, just return the dehomogenized control points
             if (curve.Degree == 1)
@@ -70,7 +70,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="end">end parameter for sampling</param>
         /// <param name="tol">tol for the adaptive scheme</param>
         /// <returns>an array of dim + 1 length where the first element is the param where it was sampled and the remaining the pt</returns>
-        public static List<Vector3d> RationalAdaptiveSampleRange(NurbsCurveData2d curve, double start, double end, double tol)
+        public static List<Vector3d> RationalAdaptiveSampleRange(NurbsCurveData3d curve, double start, double end, double tol)
         {
 
             //sample curve at three pts

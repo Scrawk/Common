@@ -26,7 +26,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve</param>
         /// <param name="u">location to split the curve</param>
         /// <returns>two new curves, defined by degree, knots, and control points</returns>
-        public static NurbsCurveData2d[] Split(NurbsCurveData2d curve, double u)
+        public static NurbsCurveData3d[] Split(NurbsCurveData3d curve, double u)
         {
             int degree = curve.Degree;
             var knots = curve.Knots;
@@ -45,10 +45,10 @@ namespace Common.Geometry.Nurbs
             var cpts0 = res.Control.Slice(0, s + 1);
             var cpts1 = res.Control.Slice(s + 1);
 
-            return new NurbsCurveData2d[]
+            return new NurbsCurveData3d[]
             {
-                new NurbsCurveData2d(degree, cpts0, knots0),
-                new NurbsCurveData2d(degree, cpts1, knots1)
+                new NurbsCurveData3d(degree, cpts0, knots0),
+                new NurbsCurveData3d(degree, cpts1, knots1)
             };
 
         }
@@ -61,7 +61,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve</param>
         /// <param name="num">The number of parts to split the curve into</param>
         /// <returns>An array of `CurveLengthSample` objects</returns>
-    	public static List<CurveLengthSample> RationalByEqualArcLength(NurbsCurveData2d curve, int num)
+    	public static List<CurveLengthSample> RationalByEqualArcLength(NurbsCurveData3d curve, int num)
         {
             var tlen = RationalArcLength(curve);
             var inc = tlen / num;
@@ -75,7 +75,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="curve">NurbsCurveData object representing the curve</param>
         /// <param name="len">The arc length separating the resultant samples</param>
         /// <returns>An array of `CurveLengthSample` objects</returns>
-    	public static List<CurveLengthSample> RationalByArcLength(NurbsCurveData2d curve, double len)
+    	public static List<CurveLengthSample> RationalByArcLength(NurbsCurveData3d curve, double len)
         {
             var crvs = DecomposeIntoBeziers(curve);
             var crvlens = new List<double>();

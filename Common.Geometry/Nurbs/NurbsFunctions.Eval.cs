@@ -350,7 +350,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">parameter on the curve at which the point is to be evaluated</param>
         /// <param name="numDerivs">integer number of basis functions - 1 = knots.length - degree - 2</param>
         /// <returns></returns>
-        public static Vector4d[] Derivatives(NurbsCurveData2d curve, double u, int numDerivs)
+        public static Vector4d[] Derivatives(NurbsCurveData3d curve, double u, int numDerivs)
         {
             int degree = curve.Degree;
             numDerivs = Math.Min(degree, numDerivs);
@@ -373,7 +373,7 @@ namespace Common.Geometry.Nurbs
         /// Corresponds to algorithm 4.1 from The NURBS book, Piegl & Tiller 2nd edition
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
-        public static Vector3d RationalPoint(NurbsCurveData2d curve, double u)
+        public static Vector3d RationalPoint(NurbsCurveData3d curve, double u)
         {
             int degree = curve.Degree;
             int n = curve.NumberOfBasisFunctions;
@@ -393,7 +393,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <param name="numDerivs">The number of derivatives to compute.</param>
-        public static Vector3d[] RationalDerivatives(NurbsCurveData2d curve, double u, int numDerivs)
+        public static Vector3d[] RationalDerivatives(NurbsCurveData3d curve, double u, int numDerivs)
         {
             var ders = Derivatives(curve, u, numDerivs);
             var CK = new Vector3d[numDerivs + 1];

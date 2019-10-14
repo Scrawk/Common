@@ -8,23 +8,23 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Nurbs
 {
     /// <summary>
-    /// A non-uniform rational basis spline curve in 2D space with control points in 3D homogeneous space.
+    /// A non-uniform rational basis spline curve in 3D space with control points in 4D homogeneous space.
     /// </summary>
-    public class NurbsCurve2d
+    public class NurbsCurve3d
     {
-        private NurbsCurveData2d m_data;
+        private NurbsCurveData3d m_data;
 
-        public NurbsCurve2d(int degree, IList<Vector3d> control, IList<double> knots, IList<double> weights = null)
+        public NurbsCurve3d(int degree, IList<Vector3d> control, IList<double> knots, IList<double> weights = null)
         {
-            m_data = new NurbsCurveData2d(degree, control, knots, weights);
+            m_data = new NurbsCurveData3d(degree, control, knots, weights);
         }
 
-        public NurbsCurve2d(int degree, IList<Vector4d> control, IList<double> knots)
+        public NurbsCurve3d(int degree, IList<Vector4d> control, IList<double> knots)
         {
-            m_data = new NurbsCurveData2d(degree, control, knots);
+            m_data = new NurbsCurveData3d(degree, control, knots);
         }
 
-        internal NurbsCurve2d(NurbsCurveData2d data)
+        internal NurbsCurve3d(NurbsCurveData3d data)
         {
             m_data = data;
         }
@@ -94,17 +94,17 @@ namespace Common.Geometry.Nurbs
         /// <summary>
         /// Copy curve.
         /// </summary>
-        public NurbsCurve2d Copy()
+        public NurbsCurve3d Copy()
         {
-            return new NurbsCurve2d(m_data.Copy());
+            return new NurbsCurve3d(m_data.Copy());
         }
 
         /// <summary>
         /// Reverse curve.
         /// </summary>
-        public NurbsCurve2d Reverse()
+        public NurbsCurve3d Reverse()
         {
-            return new NurbsCurve2d(m_data.Reverse());
+            return new NurbsCurve3d(m_data.Reverse());
         }
 
         /// <summary>
@@ -181,10 +181,10 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points the curve must pass through.</param>
         /// <returns></returns>
-        public static NurbsCurve2d FromPoints(int degree, IList<Vector3d> points)
+        public static NurbsCurve3d FromPoints(int degree, IList<Vector3d> points)
         {
             var data = NurbsFunctions.RationalInterpolate(degree, points);
-            return new NurbsCurve2d(data);
+            return new NurbsCurve3d(data);
         }
 
         /// <summary>
@@ -192,17 +192,17 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="u">Parameter 0 <= u <= 1</param>
         /// <returns>Two new curves.</returns>
-        public NurbsCurve2d[] Split(double u)
+        public NurbsCurve3d[] Split(double u)
         {
             u = DMath.Clamp01(u);
             u = Domain.Min + u * Domain.Length;
 
             var data = NurbsFunctions.Split(m_data, u);
 
-            return new NurbsCurve2d[]
+            return new NurbsCurve3d[]
             {
-                new NurbsCurve2d(data[0]),
-                new NurbsCurve2d(data[1])
+                new NurbsCurve3d(data[0]),
+                new NurbsCurve3d(data[1])
             };
         }
 
@@ -231,7 +231,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="mat"></param>
         /// <returns></returns>
-        public NurbsCurve2d Transform(Matrix4x4d mat)
+        public NurbsCurve3d Transform(Matrix4x4d mat)
         {
             int count = m_data.Control.Length;
             var control = new List<Vector3d>(count);
@@ -243,7 +243,7 @@ namespace Common.Geometry.Nurbs
                 control.Add(p.xyz);
             }
 
-            return new NurbsCurve2d(Degree, control, Knots, Weights);
+            return new NurbsCurve3d(Degree, control, Knots, Weights);
         }
     }
 }

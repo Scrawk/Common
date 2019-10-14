@@ -24,7 +24,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector3d(5,5)
             };
 
-            var curve = NurbsCurve2d.FromPoints(3, points);
+            var curve = NurbsCurve3d.FromPoints(3, points);
 
             Console.WriteLine(curve.PrintControl());
             Console.WriteLine(curve.PrintKnots());
@@ -44,7 +44,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector3d(5,5)
             };
 
-            var curve = NurbsCurve2d.FromPoints(3, points);
+            var curve = NurbsCurve3d.FromPoints(3, points);
             var curves = curve.Split(0.4f);
 
             Console.WriteLine(curves[0].PrintKnots());
@@ -64,7 +64,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector3d(5,5)
             };
 
-            var curve = NurbsCurve2d.FromPoints(3, points);
+            var curve = NurbsCurve3d.FromPoints(3, points);
 
             var len = curve.Length(0.5f);
             var u = curve.ParamAtLength(len);
@@ -85,7 +85,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector3d(5,5)
             };
 
-            var curve = NurbsCurve2d.FromPoints(3, points);
+            var curve = NurbsCurve3d.FromPoints(3, points);
             var samples = curve.DivideByEqualArcLength(20);
 
             for (int i = 0; i < samples.Count-1; i++)
@@ -109,7 +109,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector3d(5,5)
             };
 
-            var curve = NurbsCurve2d.FromPoints(3, points);
+            var curve = NurbsCurve3d.FromPoints(3, points);
 
             var tess = curve.Tessellate(100);
 

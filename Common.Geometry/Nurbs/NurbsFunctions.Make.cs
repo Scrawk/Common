@@ -17,7 +17,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="degree">The degree of the curve.</param>
         /// <param name="points">The points to interp curve from.</param>
         /// <returns></returns>
-        public static NurbsCurveData2d RationalInterpolate(int degree, IList<Vector3d> points)
+        public static NurbsCurveData3d RationalInterpolate(int degree, IList<Vector3d> points)
         {
             if (points.Count < degree + 1)
                 throw new ArgumentException("You need to supply at least degree + 1 points.");
@@ -103,7 +103,7 @@ namespace Common.Geometry.Nurbs
                 controlPts.Add(v);
             }
 
-            return new NurbsCurveData2d(degree, controlPts, knots, null);
+            return new NurbsCurveData3d(degree, controlPts, knots, null);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Common.Geometry.Nurbs
         /// </summary>
         /// <param name="controlPoints">Points in counter-clockwise form.</param>
         /// <returns></returns>
-    	public static NurbsCurveData2d RationalBezierCurve(IList<Vector3d> controlPoints, IList<double> weights = null)
+    	public static NurbsCurveData3d RationalBezierCurve(IList<Vector3d> controlPoints, IList<double> weights = null)
         {
             int count = controlPoints.Count;
             int degree = count - 1;
@@ -128,39 +128,23 @@ namespace Common.Geometry.Nurbs
                 weights = w;
             }
 
-            return new NurbsCurveData2d(degree, controlPoints, knots, weights);
-        }
-
-        /// <summary>
-        /// Generate the control points, weights, and knots of an arbitrary arc.
-        /// (Corresponds to Algorithm A7.1 from Piegl & Tiller)
-        /// </summary>
-        /// <param name="center"></param>
-        /// <param name="xaxis">the xaxis of the arc</param>
-        /// <param name="yaxis">orthogonal yaxis of the arc</param>
-        /// <param name="radius">radius of the arc</param>
-        /// <param name="startAngle">start angle of the arc, between 0 and 2pi</param>
-        /// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
-        /// <returns></returns>
-        public static NurbsCurveData2d Arc(Vector3d center, Vector3d xaxis, Vector3d yaxis, double radius, double startAngle, double endAngle)
-        {
-            return EllipseArc(center, xaxis.Normalized * radius, yaxis.Normalized * radius, startAngle, endAngle);
+            return new NurbsCurveData3d(degree, controlPoints, knots, weights);
         }
 
         /// <summary>
         /// Generate the control points, weights, and knots of an elliptical arc.
+        /// (Corresponds to Algorithm A7.1 from Piegl & Tiller)
         /// </summary>
         /// <param name="center"></param>
-        /// <param name="xaxis">the scaled x axis</param>
-        /// <param name="yaxis">the scaled y axis</param>
+        /// <param name="xradius">the x radius</param>
+        /// <param name="yradius">the y radius</param>
         /// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
         /// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
+        /// <param name="xaxis">the x axis</param>
+        /// <param name="yaxis">the y axis</param>
         /// <returns></returns>
-        public static NurbsCurveData2d EllipseArc(Vector3d center, Vector3d xaxis, Vector3d yaxis, double startAngle, double endAngle)
+        public static NurbsCurveData3d EllipseArc(Vector3d center, double xradius, double yradius, double startAngle, double endAngle, Vector3d xaxis, Vector3d yaxis)
         {
-            var xradius = xaxis.Magnitude;
-            var yradius = yaxis.Magnitude;
-
             xaxis = xaxis.Normalized;
             yaxis = yaxis.Normalized;
 
@@ -256,7 +240,7 @@ namespace Common.Geometry.Nurbs
                     break;
             }
 
-            return new NurbsCurveData2d(2, controlPoints, knots, weights);
+            return new NurbsCurveData3d(2, controlPoints, knots, weights);
         }
     }
 }
