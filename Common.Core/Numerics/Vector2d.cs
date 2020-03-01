@@ -472,6 +472,15 @@ namespace Common.Core.Numerics
 		}
 
         /// <summary>
+        /// The abs dot product of two vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static REAL AbsDot(Vector2d v0, Vector2d v1)
+        {
+            return Math.Abs(v0.x * v1.x + v0.y * v1.y);
+        }
+
+        /// <summary>
         /// Normalize the vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

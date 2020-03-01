@@ -508,6 +508,15 @@ namespace Common.Core.Numerics
 		}
 
         /// <summary>
+        /// The abs dot product of two vectors.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static REAL AbsDot(Vector4f v0, Vector4f v1)
+        {
+            return Math.Abs(v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
+        }
+
+        /// <summary>
         /// Distance between two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
