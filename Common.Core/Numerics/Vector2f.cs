@@ -574,11 +574,11 @@ namespace Common.Core.Numerics
         {
             REAL angle = FMath.Atan2(a.y, a.x) - FMath.Atan2(b.y, b.x);
 
-            if (angle <= 0.0)
+            if (angle <= 0.0f)
                 angle = FMath.PI * 2.0f + angle;
 
             angle = 360.0f - angle * FMath.Rad2Deg;
-            return angle >= 360.0 ? 0 : angle;
+            return angle >= 360.0f ? 0 : angle;
         }
 
         /// <summary>

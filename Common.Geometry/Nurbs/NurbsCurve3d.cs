@@ -157,6 +157,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="u">Number between 0 and 1.</param>
         public Vector3d Normal(double u)
         {
+            //TODO make work in 3D, this is 2D.
             Vector3d d = Derivatives(u, 1)[1];
             return d.Normalized.PerpendicularCW;
         }
