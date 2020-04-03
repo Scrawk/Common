@@ -28,7 +28,7 @@ namespace Common.GraphTheory.GridGraphs
             int height = graph.Height;
 
             if (GetWeight == null)
-                GetWeight = Distance;
+                GetWeight = ManhattanDistance;
 
             search.Parent[start.x, start.y] = start;
 
@@ -87,9 +87,19 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
-        private static float Distance(Vector2i a, Vector2i b)
+        public static float EuclideanDistance(Vector2i a, Vector2i b)
+        {
+            return (float)Vector2i.Distance(a, b);
+        }
+
+        public static float ManhattanDistance(Vector2i a, Vector2i b)
         {
             return Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
+        }
+
+        public static float ChebyshevDistance(Vector2i a, Vector2i b)
+        {
+            return Math.Max(Math.Abs(a.x - b.x), Math.Abs(a.y - b.y));
         }
 
         private static int Contains(int x, int y, List<AStarNode> open)

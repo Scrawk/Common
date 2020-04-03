@@ -38,6 +38,26 @@ namespace Common.Geometry.Shapes
             get { return (Min + Max) * 0.5f; }
         }
 
+        public Vector3f TopCenter
+        {
+            get 
+            {
+                var center = Center;
+                center.y = Max.y;
+                return center; 
+            }
+        }
+
+        public Vector3f BottomCenter
+        {
+            get
+            {
+                var center = Center;
+                center.y = Min.y;
+                return center;
+            }
+        }
+
         public Vector3f Size
         {
             get { return new Vector3f(Width, Height, Depth); }
