@@ -19,20 +19,27 @@ namespace Common.Collections.Sets
         /// All elements with the same parent belong 
         /// to the same set. A element may have its parent
         /// set to -1 to indicate this element has 
-        /// been deleted. If a elements parent is itsself
+        /// been deleted. If a elements parent is its self
         /// then this is a root element.
         /// </summary>
-        private int[] m_parent;
+        private List<int> m_parent;
 
-        private int[] m_rank;
+        private List<int> m_rank;
+
+        public DisjointSet()
+        {
+            m_parent = new List<int>();
+            m_rank = new List<int>();
+        }
 
         public DisjointSet(int size)
         {
-            m_parent = new int[size];
-            m_rank = new int[size];
+            m_parent = new List<int>(size);
+            m_rank = new List<int>(size);
+            AddRange(size);
         }
 
-        public int Count => m_rank.Length;
+        public int Count => m_rank.Count;
 
         /// <summary>
         /// 
@@ -48,18 +55,30 @@ namespace Common.Collections.Sets
         /// </summary>
         public void Clear()
         {
-            Array.Clear(m_parent, 0, m_parent.Length);
-            Array.Clear(m_rank, 0, m_rank.Length);
+            m_parent.Clear();
+            m_rank.Clear();
         }
 
         /// <summary>
-        /// Added a new element and set what 
-        /// the elements parent is.
+        /// Added a new elements and set there
+        /// parent to its self.
         /// </summary>
-        public void Add(int idx, int parent)
+        public void AddRange(int count)
         {
-            m_parent[idx] = parent;
-            m_rank[idx] = 1;
+            for (int i = 0; i < count; i++)
+                AddNext();
+        }
+
+        /// <summary>
+        /// Added a new element and set its
+        /// parent to its self.
+        /// </summary>
+        public int AddNext()
+        {
+            int parent = Count;
+            m_parent.Add(parent);
+            m_rank.Add(1);
+            return parent;
         }
 
         /// <summary>

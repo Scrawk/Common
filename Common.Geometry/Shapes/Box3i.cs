@@ -34,7 +34,7 @@ namespace Common.Geometry.Shapes
 
         public Vector3f Center 
         { 
-            get { return new Vector3f(Width * 0.5f, Height * 0.5f, Depth * 0.5f); } 
+            get { return (Vector3f)(Min + Max) * 0.5f; } 
         }
 
         public Vector3i Size 

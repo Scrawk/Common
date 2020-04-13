@@ -58,6 +58,7 @@
     <Compile Include="Queues\BinaryHeapTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queues\PriorityQueueTest.cs" />
+    <Compile Include="Sets\ConnectedGridSet2Test.cs" />
     <Compile Include="Textures\Mipmap2DTest.cs" />
     <Compile Include="Textures\Texture1DTest.cs" />
     <Compile Include="Textures\Texture2DTest.cs" />

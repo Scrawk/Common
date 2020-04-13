@@ -55,7 +55,7 @@ namespace Common.Geometry.Shapes
 
         public Vector2f Center 
         { 
-            get { return new Vector2f(Width * 0.5f, Height * 0.5f); } 
+            get { return (Vector2f)(Min + Max) * 0.5f; } 
         }
 
         public Vector2i Size 
@@ -131,6 +131,21 @@ namespace Common.Geometry.Shapes
         public static bool operator !=(Box2i b1, Box2i b2)
         {
             return b1.Min != b2.Min || b1.Max != b2.Max;
+        }
+
+        public IEnumerable<Vector2i> EnumeratePerimeter()
+        {
+            for(int x = Min.x; x < Max.x; x++)
+                yield return new Vector2i(x, Min.y);
+
+            for (int y = Min.y; y < Max.y; y++)
+                yield return new Vector2i(Max.x, y);
+
+            for (int x = Max.x; x > Min.x; x--)
+                yield return new Vector2i(x, Max.y);
+
+            for (int y = Max.y; y > Min.y; y--)
+                yield return new Vector2i(Min.x, y);
         }
 
         public override bool Equals(object obj)

@@ -12,10 +12,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public GraphForest KruskalsMinimumSpanningForest()
         {
             var set = new DisjointSet(VertexCount);
-
-            for (int i = 0; i < VertexCount; i++)
-                set.Add(i, i);
-
+    
             var sorted = new List<GraphEdge>();
             GetAllEdges(sorted);
             sorted.Sort();

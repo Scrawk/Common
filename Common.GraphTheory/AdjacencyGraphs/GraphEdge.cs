@@ -39,7 +39,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public int To { get; set; }
 
         /// <summary>
-        /// The edges weight. Used in some seaarch algorithms.
+        /// The edges weight. Used in some search algorithms.
         /// ie spanning trees.
         /// </summary>
         public float Weight { get; set; }
