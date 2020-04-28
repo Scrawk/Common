@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Box3f : IEquatable<Box3f>
+    public struct Box3f : IEquatable<Box3f>, IShape3f
     {
 
         public Vector3f Min;
@@ -94,6 +94,8 @@ namespace Common.Geometry.Shapes
                 return 2.0f * (d.x * d.y + d.x * d.z + d.y * d.z);
             }
         }
+
+        public Box3f Bounds => this;
 
         public static Box3f operator +(Box3f box, float s)
         {

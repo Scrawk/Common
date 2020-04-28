@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Box2f : IEquatable<Box2f>
+    public struct Box2f : IEquatable<Box2f>, IShape2f
     {
 
         public Vector2f Min;
@@ -77,6 +77,8 @@ namespace Common.Geometry.Shapes
         {
             get { return (Max.x - Min.x) * (Max.y - Min.y); }
         }
+
+        public Box2f Bounds => this;
 
         public static Box2f operator +(Box2f box, float s)
         {

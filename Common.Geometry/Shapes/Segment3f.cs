@@ -7,7 +7,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Segment3f : IEquatable<Segment3f>
+    public struct Segment3f : IEquatable<Segment3f>, IShape3f
     {
 
         public Vector3f A;
@@ -155,6 +155,16 @@ namespace Common.Geometry.Shapes
         public override string ToString()
         {
             return string.Format("[Segment3f: A={0}, B={1}]", A, B);
+        }
+
+        /// <summary>
+        /// Does the point line on the segemnts.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public bool Contains(Vector3f p)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

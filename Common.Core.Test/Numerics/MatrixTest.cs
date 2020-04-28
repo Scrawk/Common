@@ -126,7 +126,7 @@ namespace Common.Core.Test.Numerics
 
             var multiplied = mat * vec;
 
-            Assert.AreEqual(4, multiplied.Length);
+            Assert.AreEqual(4, multiplied.Dimension);
 
             double[] expected = new double[]
             {

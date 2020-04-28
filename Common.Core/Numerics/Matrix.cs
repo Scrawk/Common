@@ -84,7 +84,7 @@ namespace Common.Core.Numerics
             int M = m.Rows;
             int N = m.Columns;
 
-            if (v.Length != N)
+            if (v.Dimension != N)
                 throw new ArgumentException("Matrix must have same number of columns as vectors length.");
 
             var vec = new Vector(M);

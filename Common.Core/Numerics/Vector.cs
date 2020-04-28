@@ -13,34 +13,93 @@ namespace Common.Core.Numerics
 
         private double[] array;
 
+        /// <summary>
+        /// Create a 2D vector.
+        /// </summary>
         public Vector(double x, double y)
         {
             array = new double[] { x, y };
         }
 
+        /// <summary>
+        /// Create a 3D vector.
+        /// </summary>
         public Vector(double x, double y, double z)
         {
             array = new double[] { x, y, z };
         }
 
+        /// <summary>
+        /// Create a 4D vector.
+        /// </summary>
         public Vector(double x, double y, double z, double w)
         {
             array = new double[] { x, y, z, w };
         }
 
-        public Vector(int length)
+        /// <summary>
+        /// Create a vector of dimension.
+        /// </summary>
+        public Vector(int dimension)
         {
-            array = new double[length];
+            array = new double[dimension];
         }
 
+        /// <summary>
+        /// Create a vector from a list.
+        /// </summary>
         public Vector(IList<double> list)
         {
             array = new double[list.Count];
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] = list[i];
         }
 
-        public int Length => array.Length;
+        /// <summary>
+        /// Create a vector of dimension and
+        /// copy the other vector v into this.
+        /// Presumes v has the same or larger dimension.
+        /// </summary>
+        public Vector(int dimension, Vector v)
+        {
+            array = new double[dimension];
+
+            for (int i = 0; i < Dimension; i++)
+                array[i] = v[i];
+        }
+
+        /// <summary>
+        /// Create a vector of other vector v's dimension + 1
+        /// and copy the other vector v into this.
+        /// Then set the last value to w.
+        /// </summary>
+        public Vector(Vector v, double w)
+        {
+            array = new double[v.Dimension + 1];
+
+            for (int i = 0; i < Dimension - 1; i++)
+                array[i] = v[i];
+
+            array[Dimension - 1] = w;
+        }
+
+        /// <summary>
+        /// Create a vector of dimension and
+        /// copy the other vector v into this then 
+        /// set the last value to w.
+        /// Presumes v is the same or larger as dimension - 1.
+        /// </summary>
+        public Vector(int dimension, Vector v, double w)
+        {
+            array = new double[dimension];
+
+            for (int i = 0; i < Dimension - 1; i++)
+                array[i] = v[i];
+
+            array[Dimension - 1] = w;
+        }
+
+        public int Dimension => array.Length;
 
         public double x => array[0];
 
@@ -56,6 +115,27 @@ namespace Common.Core.Numerics
 
         public Vector4d xyzw => new Vector4d(x, y, z, w);
 
+        public static Vector UnitX(int dimension)
+        {
+            var v = new Vector(dimension);
+            v[0] = 1;
+            return v;
+        }
+
+        public static Vector UnitY(int dimension)
+        {
+            var v = new Vector(dimension);
+            v[1] = 1;
+            return v;
+        }
+
+        public static Vector UnitZ(int dimension)
+        {
+            var v = new Vector(dimension);
+            v[2] = 1;
+            return v;
+        }
+
         public double this[int i]
         {
             get => array[i];
@@ -67,8 +147,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator +(Vector v1, Vector v2)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v1[i] + v2[i];
 
             return vec;
@@ -79,8 +159,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator +(Vector v1, double s)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v1[i] + s;
 
             return vec;
@@ -91,8 +171,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator +(double s, Vector v1)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v1[i] + s;
 
             return vec;
@@ -103,8 +183,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator -(Vector v)
         {
-            var vec = new Vector(v.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = -v[i];
 
             return vec;
@@ -115,8 +195,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator -(Vector v1, Vector v2)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v1[i] - v2[i];
 
             return vec;
@@ -127,8 +207,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator -(Vector v1, double s)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v1[i] - s;
 
             return vec;
@@ -139,8 +219,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator -(double s, Vector v1)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = s - v1[i];
 
             return vec;
@@ -151,8 +231,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator *(Vector v1, Vector v2)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v1[i] * v2[i];
 
             return vec;
@@ -163,8 +243,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator *(Vector v, double s)
         {
-            var vec = new Vector(v.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v[i] * s;
 
             return vec;
@@ -175,8 +255,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator *(double s, Vector v)
         {
-            var vec = new Vector(v.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = s * v[i];
 
             return vec;
@@ -187,8 +267,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator /(Vector v1, Vector v2)
         {
-            var vec = new Vector(v1.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v1.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v1[i] * v2[i];
 
             return vec;
@@ -199,11 +279,19 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector operator /(Vector v, double s)
         {
-            var vec = new Vector(v.Length);
-            for (int i = 0; i < vec.Length; i++)
+            var vec = new Vector(v.Dimension);
+            for (int i = 0; i < vec.Dimension; i++)
                 vec[i] = v[i] / s;
 
             return vec;
+        }
+
+        /// <summary>
+        /// The last value in the vector.
+        /// </summary>
+        public double Last
+        {
+            get => array[Dimension-1];
         }
 
         /// <summary>
@@ -222,7 +310,7 @@ namespace Common.Core.Numerics
             get
             {
                 double sum = 0;
-                for (int i = 0; i < Length; i++)
+                for (int i = 0; i < Dimension; i++)
                     sum += array[i] * array[i];
 
                 return sum;
@@ -239,8 +327,8 @@ namespace Common.Core.Numerics
             {
                 double invLength = DMath.SafeInvSqrt(1.0, SqrMagnitude);
 
-                var vec = new Vector(Length);
-                for (int i = 0; i < Length; i++)
+                var vec = new Vector(Dimension);
+                for (int i = 0; i < Dimension; i++)
                     vec[i] = array[i] * invLength;
 
                 return vec;
@@ -253,7 +341,21 @@ namespace Common.Core.Numerics
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Vector: Length={0}]", Length);
+            switch(Dimension)
+            {
+                case 2:
+                    return string.Format("[Vector: x={0}, y={1}]", x, y);
+
+                case 3:
+                    return string.Format("[Vector: x={0}, y={1}, z={2}]", x, y, z);
+
+                case 4:
+                    return string.Format("[Vector: x={0}, y={1}, z={2}, w={3}]", x, y, z, w);
+
+                default:
+                    return string.Format("[Vector: Dimension={0}]", Dimension);
+            }
+            
         }
 
         /// <summary>
@@ -263,7 +365,7 @@ namespace Common.Core.Numerics
         {
             double invLength = DMath.SafeInvSqrt(1.0, SqrMagnitude);
 
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] *= invLength;
         }
 
@@ -273,7 +375,7 @@ namespace Common.Core.Numerics
         public static double Dot(Vector v0, Vector v1)
         {
             double sum = 0;
-            for (int i = 0; i < v0.Length; i++)
+            for (int i = 0; i < v0.Dimension; i++)
                 sum += v0[i] * v1[i];
 
             return sum;
@@ -311,7 +413,7 @@ namespace Common.Core.Numerics
         public static double SqrDistance(Vector v0, Vector v1)
         {
             double sum = 0;
-            for (int i = 0; i < v0.Length; i++)
+            for (int i = 0; i < v0.Dimension; i++)
             {
                 double diff = v0[i] - v1[i];
                 sum += diff * diff;
@@ -325,7 +427,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void Mul(double s)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] *= s;
         }
 
@@ -334,7 +436,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void Mul(Vector v)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] *= v[i];
         }
 
@@ -343,7 +445,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void Add(double s)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] += s;
         }
 
@@ -352,7 +454,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void Add(Vector v)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] += v[i];
         }
 
@@ -361,7 +463,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void Sub(double s)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] -= s;
         }
 
@@ -370,7 +472,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void Sub(Vector v)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] -= v[i];
         }
 
@@ -379,7 +481,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void AddMul(double s, Vector v)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] += s * v[i];
         }
 
@@ -388,7 +490,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void SubMul(double s, Vector v)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 array[i] -= s * v[i];
         }
 
@@ -397,7 +499,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public Vector Copy()
         {
-            var copy = new double[Length];
+            var copy = new double[Dimension];
             Array.Copy(array, copy, array.Length);
             return new Vector(copy);
         }
@@ -407,7 +509,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public double[] ToArray()
         {
-            var copy = new double[Length];
+            var copy = new double[Dimension];
             Array.Copy(array, copy, array.Length);
             return copy;
         }
@@ -418,7 +520,7 @@ namespace Common.Core.Numerics
         public List<double> ToList()
         {
             var list = new List<double>();
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Dimension; i++)
                 list.Add(array[i]);
 
             return list;

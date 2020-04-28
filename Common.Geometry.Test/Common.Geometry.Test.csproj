@@ -49,8 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Nurbs\NurbsCurve2fTest.cs" />
-    <Compile Include="Nurbs\NurbsFunctionsTest.cs" />
+    <Compile Include="Nurbs\NurbsCurveTest.cs" />
     <Compile Include="Points\KdTree2dTest.cs" />
     <Compile Include="Points\KdTree3dTest.cs" />
     <Compile Include="Points\PointCollection2dTest.cs" />

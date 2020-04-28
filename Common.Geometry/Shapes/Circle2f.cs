@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Circle2f : IEquatable<Circle2f>
+    public struct Circle2f : IEquatable<Circle2f>, IShape2f
     {
         public Vector2f Center;
 

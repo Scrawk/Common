@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Sphere3f : IEquatable<Sphere3f>
+    public struct Sphere3f : IEquatable<Sphere3f>, IShape3f
     {
 
         public Vector3f Center;
