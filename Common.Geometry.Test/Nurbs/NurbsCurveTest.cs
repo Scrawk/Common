@@ -22,7 +22,7 @@ namespace Common.Geometry.Test.Nurbs
                 new Vector2d(5,5)
             };
 
-            var curve = Make.FromPoints(3, Util.ToVectors(points));
+            var curve = NurbsMake.FromPoints(3, NurbsUtil.ToVectors(points));
 
             foreach(var v in curve.ControlPoints)
                 Console.WriteLine(v);

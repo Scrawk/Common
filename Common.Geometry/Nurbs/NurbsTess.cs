@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	internal static class Tess
+	internal static class NurbsTess
 	{
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="end">end parameter for sampling</param>
         /// <param name="numSamples">integer number of samples</param>
         /// <returns></returns>
-        internal static List<Vector> Regular(Curve curve, double start, double end, int numSamples)
+        internal static List<Vector> Regular(NurbsCurve curve, double start, double end, int numSamples)
         {
             if (numSamples < 1)
                 numSamples = 2;
@@ -28,7 +28,7 @@ namespace Common.Geometry.Nurbs
             for (int i = 0; i < numSamples; i++)
             {
                 double u = start + span * i;
-                points.Add(Eval.CurvePoint(curve, u));
+                points.Add(NurbsEval.CurvePoint(curve, u));
             }
 
             return points;
@@ -42,7 +42,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="end">end parameter for sampling</param>
         /// <param name="numSamples">integer number of samples</param>
         /// <returns></returns>
-        internal static List<Vector> Regular(RationalCurve curve, double start, double end, int numSamples)
+        internal static List<Vector> Regular(RationalNurbsCurve curve, double start, double end, int numSamples)
         {
             if (numSamples < 1)
                 numSamples = 2;
@@ -53,7 +53,7 @@ namespace Common.Geometry.Nurbs
             for (int i = 0; i < numSamples; i++)
             {
                 double u = start + span * i;
-                points.Add(Eval.CurvePoint(curve, u));
+                points.Add(NurbsEval.CurvePoint(curve, u));
             }
 
             return points;

@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	internal static class Eval
+	internal static class NurbsEval
 	{
 
 		/**
@@ -15,7 +15,7 @@ namespace Common.Geometry.Nurbs
 		@param[in] u Parameter to evaluate the curve at.
 		@return point Resulting point on the curve at parameter u.
 		*/
-		internal static Vector CurvePoint(Curve crv, double u)
+		internal static Vector CurvePoint(NurbsCurve crv, double u)
 		{
 			return CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
 		}
@@ -26,21 +26,21 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] u Parameter to evaluate the curve at.
 		 * @return point Resulting point on the curve.
 		 */
-		internal static Vector CurvePoint(RationalCurve crv, double u)
+		internal static Vector CurvePoint(RationalNurbsCurve crv, double u)
 		{
 			// Compute homogenous coordinates of control points
 			var Cw = new List<Vector>(crv.ControlPoints.Count);
 
 			for (int i = 0; i < crv.ControlPoints.Count; i++)
 			{
-				Cw.Add(Util.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
+				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
 			}
 
 			// Compute point using homogenous coordinates
 			Vector pointw = CurvePoint(crv.Degree, crv.Knots, Cw, u);
 
 			// Convert back to cartesian coordinates
-			return Util.HomogenousToCartesian(pointw);
+			return NurbsUtil.HomogenousToCartesian(pointw);
 		}
 
 		/**
@@ -51,7 +51,7 @@ namespace Common.Geometry.Nurbs
 		 * @return curve_ders Derivatives of the curve at u.
 		 * E.g. curve_ders[n] is the nth derivative at u, where 0 <= n <= num_ders.
 		 */
-		internal static Vector[] CurveDerivatives(Curve crv, int num_ders, double u)
+		internal static Vector[] CurveDerivatives(NurbsCurve crv, int num_ders, double u)
 		{
 			return CurveDerivatives(crv.Degree, crv.Knots, crv.ControlPoints, num_ders, u);
 		}
@@ -67,7 +67,7 @@ namespace Common.Geometry.Nurbs
 		 * E.g. curve_ders[n] is the nth derivative at u, where n is between 0 and
 		 * num_ders-1.
 		 */
-		internal static List<Vector> CurveDerivatives(RationalCurve crv, int num_ders, double u)
+		internal static List<Vector> CurveDerivatives(RationalNurbsCurve crv, int num_ders, double u)
 		{
 			var curve_ders = new List<Vector>(num_ders + 1);
 
@@ -76,7 +76,7 @@ namespace Common.Geometry.Nurbs
 
 			for (int i = 0; i < crv.ControlPoints.Count; i++)
 			{
-				Cw.Add(Util.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
+				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
 			}
 
 			// Derivatives of Cw
@@ -88,7 +88,7 @@ namespace Common.Geometry.Nurbs
 
 			foreach (var val in Cwders)
 			{
-				Aders.Add(Util.TruncateHomogenous(val));
+				Aders.Add(NurbsUtil.TruncateHomogenous(val));
 				wders.Add(val.Last);
 			}
 
@@ -98,7 +98,7 @@ namespace Common.Geometry.Nurbs
 				var v = Aders[k];
 				for (int i = 1; i <= k; i++)
 				{
-					v -= curve_ders[k - i] * Util.Binomial(k, i) * wders[i];
+					v -= curve_ders[k - i] * NurbsUtil.Binomial(k, i) * wders[i];
 				}
 
 				curve_ders.Add(v / wders[0]);
@@ -113,13 +113,13 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] crv Curve object
 		 * @return Unit tangent of the curve at u.
 		 */
-		internal static Vector CurveTangent(Curve crv, double u)
+		internal static Vector CurveTangent(NurbsCurve crv, double u)
 		{
 			var ders = CurveDerivatives(crv, 1, u);
 			var du = ders[1];
 			var du_len = du.Magnitude;
 
-			if (!Util.Close(du_len, 0))
+			if (!NurbsUtil.Close(du_len, 0))
 			{
 				du /= du_len;
 			}
@@ -132,13 +132,13 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] crv RationalCurve object
 		 * @return Unit tangent of the curve at u.
 		 */
-		internal static Vector CurveTangent(RationalCurve crv, double u)
+		internal static Vector CurveTangent(RationalNurbsCurve crv, double u)
 		{
 			var ders = CurveDerivatives(crv, 1, u);
 			var du = ders[1];
 			var du_len = du.Magnitude;
 
-			if (!Util.Close(du_len, 0))
+			if (!NurbsUtil.Close(du_len, 0))
 			{
 				du /= du_len;
 			}
@@ -153,7 +153,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] v Parameter to evaluate the surface at.
 		 * @return Resulting point on the surface at (u, v).
 		 */
-		internal static Vector SurfacePoint(Surface srf, double u, double v)
+		internal static Vector SurfacePoint(NurbsSurface srf, double u, double v)
 		{
 			return SurfacePoint(srf.degree_u, srf.degree_v, srf.knots_u, srf.knots_v, srf.control_points, u, v);
 		}
@@ -165,7 +165,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] v Parameter to evaluate the surface at.
 		 * @return Resulting point on the surface at (u, v).
 		 */
-		internal static Vector SurfacePoint(RationalSurface srf, double u, double v)
+		internal static Vector SurfacePoint(RationalNurbsSurface srf, double u, double v)
 		{
 			int width = srf.control_points.GetLength(0);
 			int height = srf.control_points.GetLength(1);
@@ -177,7 +177,7 @@ namespace Common.Geometry.Nurbs
 			{
 				for (int j = 0; j < height; j++)
 				{
-					Cw[i, j] = Util.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
+					Cw[i, j] = NurbsUtil.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
 				}
 			}
 
@@ -185,7 +185,7 @@ namespace Common.Geometry.Nurbs
 			var pointw = SurfacePoint(srf.degree_u, srf.degree_v, srf.knots_u, srf.knots_v, Cw, u, v);
 
 			// Convert back to cartesian coordinates
-			return Util.HomogenousToCartesian(pointw);
+			return NurbsUtil.HomogenousToCartesian(pointw);
 		}
 
 		/**
@@ -200,7 +200,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] v Parameter to evaluate the surface at.
 		 * @return surf_ders Derivatives of the surface at (u, v).
 		 */
-		internal static Vector[,] SurfaceDerivatives(Surface srf, int num_ders, double u, double v)
+		internal static Vector[,] SurfaceDerivatives(NurbsSurface srf, int num_ders, double u, double v)
 		{
 			return SurfaceDerivatives(srf.degree_u, srf.degree_v, srf.knots_u, srf.knots_v,
 				srf.control_points, num_ders, u, v);
@@ -214,7 +214,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] num_ders Number of times to differentiate
 		 * @return Derivatives on the surface at parameter (u, v).
 		 */
-		internal static Vector[,] SurfaceDerivatives(RationalSurface srf, int num_ders, double u, double v)
+		internal static Vector[,] SurfaceDerivatives(RationalNurbsSurface srf, int num_ders, double u, double v)
 		{
 			int width = srf.control_points.GetLength(0);
 			int height = srf.control_points.GetLength(1);
@@ -224,7 +224,7 @@ namespace Common.Geometry.Nurbs
 			{
 				for (int j = 0; j < height; ++j)
 				{
-					homo_cp[i, j] = Util.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
+					homo_cp[i, j] = NurbsUtil.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
 				}
 			}
 
@@ -236,7 +236,7 @@ namespace Common.Geometry.Nurbs
 			{
 				for (int j = 0; j < homo_ders.GetLength(1); ++j)
 				{
-					Aders[i, j] = Util.TruncateHomogenous(homo_ders[i, j]);
+					Aders[i, j] = NurbsUtil.TruncateHomogenous(homo_ders[i, j]);
 				}
 			}
 
@@ -250,20 +250,20 @@ namespace Common.Geometry.Nurbs
 
 					for (int j = 1; j < l + 1; ++j)
 					{
-						der -= surf_ders[k, l - j] * (homo_ders[0, j].Last * Util.Binomial(l, j));
+						der -= surf_ders[k, l - j] * (homo_ders[0, j].Last * NurbsUtil.Binomial(l, j));
 					}
 
 					for (int i = 1; i < k + 1; ++i)
 					{
-						der -= surf_ders[k - i, l] * (homo_ders[i, 0].Last * Util.Binomial(k, i));
+						der -= surf_ders[k - i, l] * (homo_ders[i, 0].Last * NurbsUtil.Binomial(k, i));
 
 						Vector tmp = new Vector(der.Dimension);
 						for (int j = 1; j < l + 1; ++j)
 						{
-							tmp -= surf_ders[k - 1, l - j] * (homo_ders[i, j].Last * Util.Binomial(l, j));
+							tmp -= surf_ders[k - 1, l - j] * (homo_ders[i, j].Last * NurbsUtil.Binomial(l, j));
 						}
 
-						der -= tmp * Util.Binomial(k, i);
+						der -= tmp * NurbsUtil.Binomial(k, i);
 					}
 
 					der *= 1 / homo_ders[0, 0].Last;
@@ -281,7 +281,7 @@ namespace Common.Geometry.Nurbs
 		 * @param v Parameter in the v-direction
 		 * @return Tuple with unit tangents along u- and v-directions
 		 */
-		internal static (Vector, Vector) SurfaceTangent(Surface srf, double u, double v)
+		internal static (Vector, Vector) SurfaceTangent(NurbsSurface srf, double u, double v)
 		{
 			var ptder = SurfaceDerivatives(srf, 1, u, v);
 			var du = ptder[1, 0];
@@ -289,11 +289,11 @@ namespace Common.Geometry.Nurbs
 
 			var du_len = du.Magnitude;
 			var dv_len = dv.Magnitude;
-			if (!Util.Close(du_len, 0))
+			if (!NurbsUtil.Close(du_len, 0))
 			{
 				du /= du_len;
 			}
-			if (!Util.Close(dv_len, 0))
+			if (!NurbsUtil.Close(dv_len, 0))
 			{
 				dv /= dv_len;
 			}
@@ -309,7 +309,7 @@ namespace Common.Geometry.Nurbs
 		 * @param v Parameter in the v-direction
 		 * @return Tuple with unit tangents along u- and v-directions
 		 */
-		internal static (Vector, Vector) SurfaceTangent(RationalSurface srf, double u, double v)
+		internal static (Vector, Vector) SurfaceTangent(RationalNurbsSurface srf, double u, double v)
 		{
 			var ptder = SurfaceDerivatives(srf, 1, u, v);
 			var du = ptder[1, 0];
@@ -317,11 +317,11 @@ namespace Common.Geometry.Nurbs
 
 			var du_len = du.Magnitude;
 			var dv_len = dv.Magnitude;
-			if (!Util.Close(du_len, 0))
+			if (!NurbsUtil.Close(du_len, 0))
 			{
 				du /= du_len;
 			}
-			if (!Util.Close(dv_len, 0))
+			if (!NurbsUtil.Close(dv_len, 0))
 			{
 				dv /= dv_len;
 			}
@@ -336,7 +336,7 @@ namespace Common.Geometry.Nurbs
 		 * @param v Parameter in the v-direction
 		 * @param[inout] normal Unit normal at of the surface at (u, v)
 		 */
-		internal static Vector SurfaceNormal(Surface srf, double u, double v)
+		internal static Vector SurfaceNormal(NurbsSurface srf, double u, double v)
 		{
 			var ptder = SurfaceDerivatives(srf, 1, u, v);
 
@@ -344,7 +344,7 @@ namespace Common.Geometry.Nurbs
 			var n = Vector.Cross3(ptder[0, 1], ptder[1, 0]);
 
 			var n_len = n.Magnitude;
-			if (!Util.Close(n_len, 0))
+			if (!NurbsUtil.Close(n_len, 0))
 			{
 				n /= n_len;
 			}
@@ -359,7 +359,7 @@ namespace Common.Geometry.Nurbs
 		 * @param v Parameter in the v-direction
 		 * @return Unit normal at of the surface at (u, v)
 		 */
-		internal static Vector SurfaceNormal(RationalSurface srf, double u, double v)
+		internal static Vector SurfaceNormal(RationalNurbsSurface srf, double u, double v)
 		{
 			var ptder = SurfaceDerivatives(srf, 1, u, v);
 
@@ -367,7 +367,7 @@ namespace Common.Geometry.Nurbs
 			var n = Vector.Cross3(ptder[0, 1], ptder[1, 0]);
 
 			var n_len = n.Magnitude;
-			if (!Util.Close(n_len, 0))
+			if (!NurbsUtil.Close(n_len, 0))
 			{
 				n /= n_len;
 			}
@@ -388,8 +388,8 @@ namespace Common.Geometry.Nurbs
 			var point = new Vector(nd);
 
 			// Find span and corresponding non-zero basis functions
-			int span = Basis.FindSpan(degree, knots, u);
-			var N = Basis.BSplineBasis(degree, span, knots, u);
+			int span = NurbsBasis.FindSpan(degree, knots, u);
+			var N = NurbsBasis.BSplineBasis(degree, span, knots, u);
 
 			// Compute point
 			for (int j = 0; j <= degree; j++)
@@ -422,8 +422,8 @@ namespace Common.Geometry.Nurbs
 			}
 
 			// Find the span and corresponding non-zero basis functions & derivatives
-			int span = Basis.FindSpan(degree, knots, u);
-			var ders = Basis.BSplineDerBasis(degree, span, knots, u, num_ders);
+			int span = NurbsBasis.FindSpan(degree, knots, u);
+			var ders = NurbsBasis.BSplineDerBasis(degree, span, knots, u, num_ders);
 
 			// Compute first num_ders derivatives
 			int du = num_ders < degree ? num_ders : degree;
@@ -458,10 +458,10 @@ namespace Common.Geometry.Nurbs
 			var point = new Vector(nd);
 
 			// Find span and non-zero basis functions
-			int span_u = Basis.FindSpan(degree_u, knots_u, u);
-			int span_v = Basis.FindSpan(degree_v, knots_v, v);
-			var Nu = Basis.BSplineBasis(degree_u, span_u, knots_u, u);
-			var Nv = Basis.BSplineBasis(degree_v, span_v, knots_v, v);
+			int span_u = NurbsBasis.FindSpan(degree_u, knots_u, u);
+			int span_v = NurbsBasis.FindSpan(degree_v, knots_v, v);
+			var Nu = NurbsBasis.BSplineBasis(degree_u, span_u, knots_u, u);
+			var Nv = NurbsBasis.BSplineBasis(degree_v, span_v, knots_v, v);
 
 			for (int l = 0; l <= degree_v; l++)
 			{
@@ -506,10 +506,10 @@ namespace Common.Geometry.Nurbs
 			}
 
 			// Find span and basis function derivatives
-			int span_u = Basis.FindSpan(degree_u, knots_u, u);
-			int span_v = Basis.FindSpan(degree_v, knots_v, v);
-			var ders_u = Basis.BSplineDerBasis(degree_u, span_u, knots_u, u, num_ders);
-			var ders_v = Basis.BSplineDerBasis(degree_v, span_v, knots_v, v, num_ders);
+			int span_u = NurbsBasis.FindSpan(degree_u, knots_u, u);
+			int span_v = NurbsBasis.FindSpan(degree_v, knots_v, v);
+			var ders_u = NurbsBasis.BSplineDerBasis(degree_u, span_u, knots_u, u, num_ders);
+			var ders_v = NurbsBasis.BSplineDerBasis(degree_v, span_v, knots_v, v, num_ders);
 
 			// Number of non-zero derivatives is <= degree
 			int du = Math.Min(num_ders, degree_u);

@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	internal static class Modify
+	internal static class NurbsModify
 	{
 
 		/**
@@ -16,9 +16,9 @@ namespace Common.Geometry.Nurbs
 		* @param[in] repeat Number of times to insert
 		* @return New curve with #repeat knots inserted at u
 		*/
-		internal static Curve CurveKnotInsert(Curve crv, double u, int repeat = 1)
+		internal static NurbsCurve CurveKnotInsert(NurbsCurve crv, double u, int repeat = 1)
 		{
-			var new_crv = new Curve();
+			var new_crv = new NurbsCurve();
 			new_crv.Degree = crv.Degree;
 			CurveKnotInsert(crv.Degree, crv.Knots, crv.ControlPoints, u, repeat, out new_crv.Knots, out new_crv.ControlPoints);
 			return new_crv;
@@ -31,9 +31,9 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] repeat Number of times to insert
 		 * @return New RationalCurve object with #repeat knots inserted at u
 		 */
-		internal static RationalCurve CurveKnotInsert(RationalCurve crv, double u, int repeat = 1)
+		internal static RationalNurbsCurve CurveKnotInsert(RationalNurbsCurve crv, double u, int repeat = 1)
 		{
-			var new_crv = new RationalCurve();
+			var new_crv = new RationalNurbsCurve();
 			new_crv.Degree = crv.Degree;
 
 			// Convert to homogenous coordinates
@@ -41,7 +41,7 @@ namespace Common.Geometry.Nurbs
 
 			for (int i = 0; i < crv.ControlPoints.Count; ++i)
 			{
-				Cw.Add(Util.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
+				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
 			}
 
 			// Perform knot insertion and get new knots and control points
@@ -57,7 +57,7 @@ namespace Common.Geometry.Nurbs
 			
 			for (int i = 0; i < new_Cw.Count; ++i)
 			{
-				new_crv.ControlPoints.Add(Util.HomogenousToCartesian(new_Cw[i]));
+				new_crv.ControlPoints.Add(NurbsUtil.HomogenousToCartesian(new_Cw[i]));
 				new_crv.Weights.Add(new_Cw[i].Last);
 			}
 			
@@ -71,9 +71,9 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] repeat Number of times to insert
 		 * @return New Surface object after knot insertion
 		 */
-		internal static Surface SurfaceKnotInsertU(Surface srf, double u, int repeat = 1)
+		internal static NurbsSurface SurfaceKnotInsertU(NurbsSurface srf, double u, int repeat = 1)
 		{
-			var new_srf = new Surface();
+			var new_srf = new NurbsSurface();
 			new_srf.degree_u = srf.degree_u;
 			new_srf.degree_v = srf.degree_v;
 			new_srf.knots_v = srf.knots_v;
@@ -91,9 +91,9 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] repeat Number of times to insert
 		 * @return New RationalSurface object after knot insertion
 		 */
-		internal static RationalSurface SurfaceKnotInsertU(RationalSurface srf, double u, int repeat = 1)
+		internal static RationalNurbsSurface SurfaceKnotInsertU(RationalNurbsSurface srf, double u, int repeat = 1)
 		{
-			var new_srf = new RationalSurface();
+			var new_srf = new RationalNurbsSurface();
 			new_srf.degree_u = srf.degree_u;
 			new_srf.degree_v = srf.degree_v;
 			new_srf.knots_v = srf.knots_v;
@@ -108,7 +108,7 @@ namespace Common.Geometry.Nurbs
 			{
 				for (int j = 0; j < height; ++j)
 				{
-					Cw[i, j] = Util.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
+					Cw[i, j] = NurbsUtil.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
 				}
 			}
 
@@ -127,7 +127,7 @@ namespace Common.Geometry.Nurbs
 			{
 				for (int j = 0; j < height; ++j)
 				{
-					new_srf.control_points[i, j] = Util.HomogenousToCartesian(new_Cw[i, j]);
+					new_srf.control_points[i, j] = NurbsUtil.HomogenousToCartesian(new_Cw[i, j]);
 					new_srf.weights[i, j] = new_Cw[i, j].Last;
 				}
 			}
@@ -142,9 +142,9 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] repeat Number of times to insert
 		 * @return New Surface object after knot insertion
 		 */
-		internal static Surface SurfaceKnotInsertV(Surface srf, double v, int repeat = 1)
+		internal static NurbsSurface SurfaceKnotInsertV(NurbsSurface srf, double v, int repeat = 1)
 		{
-			var new_srf = new Surface();
+			var new_srf = new NurbsSurface();
 			new_srf.degree_u = srf.degree_u;
 			new_srf.degree_v = srf.degree_v;
 			new_srf.knots_u = srf.knots_u;
@@ -163,9 +163,9 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] repeat Number of times to insert
 		 * @return New RationalSurface object after knot insertion
 		 */
-		internal static RationalSurface SurfaceKnotInsertV(RationalSurface srf, double v, int repeat = 1)
+		internal static RationalNurbsSurface SurfaceKnotInsertV(RationalNurbsSurface srf, double v, int repeat = 1)
 		{
-			var new_srf = new RationalSurface();
+			var new_srf = new RationalNurbsSurface();
 			new_srf.degree_u = srf.degree_u;
 			new_srf.degree_v = srf.degree_v;
 			new_srf.knots_u = srf.knots_u;
@@ -180,7 +180,7 @@ namespace Common.Geometry.Nurbs
 			{
 				for (int j = 0; j < height; ++j)
 				{
-					Cw[i, j] = Util.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
+					Cw[i, j] = NurbsUtil.CartesianToHomogenous(srf.control_points[i, j], srf.weights[i, j]);
 				}
 			}
 
@@ -199,7 +199,7 @@ namespace Common.Geometry.Nurbs
 			{
 				for (int j = 0; j < height; ++j)
 				{
-					new_srf.control_points[i, j] = Util.HomogenousToCartesian(new_Cw[i, j]);
+					new_srf.control_points[i, j] = NurbsUtil.HomogenousToCartesian(new_Cw[i, j]);
 					new_srf.weights[i, j] = new_Cw[i, j].Last;
 				}
 			}
@@ -213,10 +213,10 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] u Parameter to split at
 		 * @return Tuple with first half and second half of the curve
 		 */
-		internal static (Curve, Curve) CurveSplit(Curve crv, double u)
+		internal static (NurbsCurve, NurbsCurve) CurveSplit(NurbsCurve crv, double u)
 		{
-			var left = new Curve();
-			var right = new Curve();
+			var left = new NurbsCurve();
+			var right = new NurbsCurve();
 			left.Degree = crv.Degree;
 			right.Degree = crv.Degree;
 
@@ -233,10 +233,10 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] u Parameter to split at
 		 * @return Tuple with first half and second half of the curve
 		 */
-		internal static (RationalCurve, RationalCurve) CurveSplit(RationalCurve crv, double u)
+		internal static (RationalNurbsCurve, RationalNurbsCurve) CurveSplit(RationalNurbsCurve crv, double u)
 		{
-			var left = new RationalCurve();
-			var right = new RationalCurve();
+			var left = new RationalNurbsCurve();
+			var right = new RationalNurbsCurve();
 			left.Degree = crv.Degree;
 			right.Degree = crv.Degree;
 
@@ -246,7 +246,7 @@ namespace Common.Geometry.Nurbs
 
 			for (int i = 0; i < crv.ControlPoints.Count; ++i)
 			{
-				Cw.Add(Util.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
+				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
 			}
 
 			CurveSplit(crv.Degree, crv.Knots, Cw, u, out left.Knots, out left_Cw, out right.Knots, out right_Cw);
@@ -263,12 +263,12 @@ namespace Common.Geometry.Nurbs
 
 			for (int i = 0; i < left_Cw.Count; ++i)
 			{
-				left.ControlPoints.Add(Util.HomogenousToCartesian(left_Cw[i]));
+				left.ControlPoints.Add(NurbsUtil.HomogenousToCartesian(left_Cw[i]));
 				left.Weights.Add(left_Cw[i].Last);
 			}
 			for (int i = 0; i < right_Cw.Count; ++i)
 			{
-				right.ControlPoints.Add(Util.HomogenousToCartesian(right_Cw[i]));
+				right.ControlPoints.Add(NurbsUtil.HomogenousToCartesian(right_Cw[i]));
 				right.Weights.Add(right_Cw[i].Last);
 			}
 
@@ -281,10 +281,10 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] u Parameter along u-direction to split the surface
 		 * @return Tuple with first and second half of the surfaces
 		 */
-		internal static (Surface, Surface) SurfaceSplitU(Surface srf, double u)
+		internal static (NurbsSurface, NurbsSurface) SurfaceSplitU(NurbsSurface srf, double u)
 		{
-			var left = new Surface();
-			var right = new Surface();
+			var left = new NurbsSurface();
+			var right = new NurbsSurface();
 			left.degree_u = srf.degree_u;
 			left.degree_v = srf.degree_v;
 			left.knots_v = srf.knots_v;
@@ -305,10 +305,10 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] u Parameter along u-direction to split the surface
 		 * @return Tuple with first and second half of the surfaces
 		 */
-		internal static (RationalSurface, RationalSurface) SurfaceSplitU(RationalSurface srf, double u)
+		internal static (RationalNurbsSurface, RationalNurbsSurface) SurfaceSplitU(RationalNurbsSurface srf, double u)
 		{
-			var left = new RationalSurface();
-			var right = new RationalSurface();
+			var left = new RationalNurbsSurface();
+			var right = new RationalNurbsSurface();
 			left.degree_u = srf.degree_u;
 			left.degree_v = srf.degree_v;
 			left.knots_v = srf.knots_v;
@@ -317,7 +317,7 @@ namespace Common.Geometry.Nurbs
 			right.knots_v = srf.knots_v;
 
 			// Compute homogenous coordinates of control points and weights
-			var Cw = Util.CartesianToHomogenous(srf.control_points, srf.weights);
+			var Cw = NurbsUtil.CartesianToHomogenous(srf.control_points, srf.weights);
 
 			// Split surface with homogenous coordinates
 			Vector[,] left_Cw, right_Cw;
@@ -325,8 +325,8 @@ namespace Common.Geometry.Nurbs
 				out left.knots_u, out left_Cw, out right.knots_u, out right_Cw);
 
 			// Convert back to cartesian coordinates
-			Util.HomogenousToCartesian(left_Cw, out left.control_points, out left.weights);
-			Util.HomogenousToCartesian(right_Cw, out right.control_points, out right.weights);
+			NurbsUtil.HomogenousToCartesian(left_Cw, out left.control_points, out left.weights);
+			NurbsUtil.HomogenousToCartesian(right_Cw, out right.control_points, out right.weights);
 
 			return (left, right);
 		}
@@ -337,10 +337,10 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] v Parameter along v-direction to split the surface
 		 * @return Tuple with first and second half of the surfaces
 		 */
-		static (Surface, Surface) SurfaceSplitV(Surface srf, double v)
+		static (NurbsSurface, NurbsSurface) SurfaceSplitV(NurbsSurface srf, double v)
 		{
-			var left = new Surface();
-			var right = new Surface();
+			var left = new NurbsSurface();
+			var right = new NurbsSurface();
 			left.degree_u = srf.degree_u;
 			left.degree_v = srf.degree_v;
 			left.knots_u = srf.knots_u;
@@ -361,10 +361,10 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] v Parameter along v-direction to split the surface
 		 * @return Tuple with first and second half of the surfaces
 		 */
-		internal static (RationalSurface, RationalSurface) SurfaceSplitV(RationalSurface srf, double v)
+		internal static (RationalNurbsSurface, RationalNurbsSurface) SurfaceSplitV(RationalNurbsSurface srf, double v)
 		{
-			var left = new RationalSurface();
-			var right = new RationalSurface();
+			var left = new RationalNurbsSurface();
+			var right = new RationalNurbsSurface();
 			left.degree_u = srf.degree_u;
 			left.degree_v = srf.degree_v;
 			left.knots_u = srf.knots_u;
@@ -373,7 +373,7 @@ namespace Common.Geometry.Nurbs
 			right.knots_u = srf.knots_u;
 
 			// Compute homogenous coordinates of control points and weights
-			var Cw = Util.CartesianToHomogenous(srf.control_points, srf.weights);
+			var Cw = NurbsUtil.CartesianToHomogenous(srf.control_points, srf.weights);
 
 			// Split surface with homogenous coordinates
 			Vector[,] left_Cw, right_Cw;
@@ -382,8 +382,8 @@ namespace Common.Geometry.Nurbs
 				out right.knots_v, out right_Cw);
 
 			// Convert back to cartesian coordinates
-			Util.HomogenousToCartesian(left_Cw, out left.control_points, out left.weights);
-			Util.HomogenousToCartesian(right_Cw, out right.control_points, out right.weights);
+			NurbsUtil.HomogenousToCartesian(left_Cw, out left.control_points, out left.weights);
+			NurbsUtil.HomogenousToCartesian(right_Cw, out right.control_points, out right.weights);
 
 			return (left, right);
 		}
@@ -401,8 +401,8 @@ namespace Common.Geometry.Nurbs
 		private static void CurveKnotInsert(int deg, List<double> knots, List<Vector> cp, double u, int r,
 			out List<double> new_knots, out List<Vector> new_cp)
 		{
-			int k = Basis.FindSpan(deg, knots, u);
-			int s = Check.KnotMultiplicity(knots, k);
+			int k = NurbsBasis.FindSpan(deg, knots, u);
+			int s = NurbsCheck.KnotMultiplicity(knots, k);
 			int L;
 			
 			if (s == deg)
@@ -489,8 +489,8 @@ namespace Common.Geometry.Nurbs
 			Vector[,] cp, double knot, int r, bool along_u,
 			out List<double> new_knots, out Vector[,] new_cp)
 		{
-			int span = Basis.FindSpan(degree, knots, knot);
-			int s = Check.KnotMultiplicity(knots, span);
+			int span = NurbsBasis.FindSpan(degree, knots, knot);
+			int s = NurbsCheck.KnotMultiplicity(knots, span);
 			int L;
 			
 			if (s == degree)
@@ -652,8 +652,8 @@ namespace Common.Geometry.Nurbs
 			List<double> tmp_knots;
 			List<Vector> tmp_cp;
 
-			int span = Basis.FindSpan(degree, knots, u);
-			int r = degree - Check.KnotMultiplicity(knots, span);
+			int span = NurbsBasis.FindSpan(degree, knots, u);
+			int r = degree - NurbsCheck.KnotMultiplicity(knots, span);
 
 			CurveKnotInsert(degree, knots, control_points, u, r, out tmp_knots, out tmp_cp);
 
@@ -662,7 +662,7 @@ namespace Common.Geometry.Nurbs
 			left_control_points = new List<Vector>();
 			right_control_points = new List<Vector>();
 
-			int span_l = Basis.FindSpan(degree, tmp_knots, u) + 1;
+			int span_l = NurbsBasis.FindSpan(degree, tmp_knots, u) + 1;
 			for (int i = 0; i < span_l; ++i)
 			{
 				left_knots.Add(tmp_knots[i]);
@@ -708,15 +708,15 @@ namespace Common.Geometry.Nurbs
 			List<double> tmp_knots;
 			Vector[,] tmp_cp;
 
-			int span = Basis.FindSpan(degree, knots, param);
-			int r = degree - Check.KnotMultiplicity(knots, span);
+			int span = NurbsBasis.FindSpan(degree, knots, param);
+			int r = degree - NurbsCheck.KnotMultiplicity(knots, span);
 			
 			SurfaceKnotInsert(degree, knots, control_points, param, r, along_u, out tmp_knots, out tmp_cp);
 
 			left_knots = new List<double>();
 			right_knots = new List<double>();
 
-			int span_l = Basis.FindSpan(degree, tmp_knots, param) + 1;
+			int span_l = NurbsBasis.FindSpan(degree, tmp_knots, param) + 1;
 			for (int i = 0; i < span_l; ++i)
 			{
 				left_knots.Add(tmp_knots[i]);

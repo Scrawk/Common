@@ -5,7 +5,7 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Nurbs
 {
-	public static class Util
+	public static class NurbsUtil
 	{
 
 		public static Vector[] ToVectors(IList<Vector2f> points)
@@ -44,11 +44,38 @@ namespace Common.Geometry.Nurbs
 			return copy;
 		}
 
+		public static Vector2f[] ToVectors2f(IList<Vector> points)
+		{
+			var copy = new Vector2f[points.Count];
+			for (int i = 0; i < points.Count; i++)
+				copy[i] = new Vector2f(points[i].x, points[i].y);
+
+			return copy;
+		}
+
+		public static Vector3f[] ToVectors3f(IList<Vector> points)
+		{
+			var copy = new Vector3f[points.Count];
+			for (int i = 0; i < points.Count; i++)
+				copy[i] = new Vector3f(points[i].x, points[i].y, points[i].z);
+
+			return copy;
+		}
+
 		public static Vector2d[] ToVectors2d(IList<Vector> points)
 		{
 			var copy = new Vector2d[points.Count];
 			for (int i = 0; i < points.Count; i++)
 				copy[i] = new Vector2d(points[i].x, points[i].y);
+
+			return copy;
+		}
+
+		public static Vector3d[] ToVectors3d(IList<Vector> points)
+		{
+			var copy = new Vector3d[points.Count];
+			for (int i = 0; i < points.Count; i++)
+				copy[i] = new Vector3d(points[i].x, points[i].y, points[i].z);
 
 			return copy;
 		}
@@ -104,7 +131,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[out] pts Points in cartesian coordinates
 		 * @param[out] ws Homogenous weights
 		 */
-		internal static void HomogenousToCartesian(List<Vector> ptsws, out List<Vector> pts, out List<double> ws)
+		internal static void HomogenousToCartesian(IList<Vector> ptsws, out List<Vector> pts, out List<double> ws)
 		{
 			pts = new List<Vector>(ptsws.Count);
 			ws = new List<double>(ptsws.Count);
@@ -125,7 +152,7 @@ namespace Common.Geometry.Nurbs
 		* @param[in] ptsws Points in homogenous coordinates
 		* @param[out] pts Points in cartesian coordinates
 		*/
-		internal static List<Vector> HomogenousToCartesian(List<Vector> ptsws)
+		internal static List<Vector> HomogenousToCartesian(IList<Vector> ptsws)
 		{
 			var pts = new List<Vector>(ptsws.Count);
 
@@ -187,7 +214,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] ws Weights
 		 * @return Points in homogenous coordinates
 		 */
-		internal static List<Vector> CartesianToHomogenous(List<Vector> pts, List<double> ws)
+		internal static List<Vector> CartesianToHomogenous(IList<Vector> pts, List<double> ws)
 		{
 			var Cw = new List<Vector>(pts.Count);
 	

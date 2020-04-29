@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	internal static class Basis
+	internal static class NurbsBasis
 	{
 		/**
 		 * Find the span of the given parameter in the knot vector.
@@ -64,7 +64,7 @@ namespace Common.Geometry.Nurbs
 		{
 			int m = U.Count - 1;
 			// Special case
-			if ((i == 0 && Util.Close(u, U[0])) || (i == m - deg - 1 && Util.Close(u, U[m])))
+			if ((i == 0 && NurbsUtil.Close(u, U[0])) || (i == m - deg - 1 && NurbsUtil.Close(u, U[m])))
 			{
 				return 1.0;
 			}
@@ -85,12 +85,12 @@ namespace Common.Geometry.Nurbs
 			// Compute triangular table
 			for (int k = 1; k <= deg; k++)
 			{
-				var saved = Util.Close(N[0], 0.0) ? 0.0 : ((u - U[i]) * N[0]) / (U[i + k] - U[i]);
+				var saved = NurbsUtil.Close(N[0], 0.0) ? 0.0 : ((u - U[i]) * N[0]) / (U[i + k] - U[i]);
 				for (int j = 0; j < deg - k + 1; j++)
 				{
 					var Uleft = U[i + j + 1];
 					var Uright = U[i + j + k + 1];
-					if (Util.Close(N[j + 1], 0.0))
+					if (NurbsUtil.Close(N[j + 1], 0.0))
 					{
 						N[j] = saved;
 						saved = 0.0;

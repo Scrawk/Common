@@ -7,7 +7,7 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	public static class Make
+	public static class NurbsMake
 	{
 
 		/// <summary>
@@ -20,7 +20,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="degree">The degree of the curve.</param>
 		/// <param name="points">The points to interp curve from.</param>
 		/// <returns></returns>
-		public static Curve FromPoints(int degree, IList<Vector> points)
+		public static NurbsCurve FromPoints(int degree, IList<Vector> points)
 		{
 			if (points.Count < degree + 1)
 				throw new Exception("You need to supply at least degree + 1 points.");
@@ -68,8 +68,8 @@ namespace Common.Geometry.Nurbs
 
 			foreach (var u in us)
 			{
-				int span = Basis.FindSpan(degree, knots, u);
-				var basisFuncs = Basis.BSplineBasis(degree, span, knots, u);
+				int span = NurbsBasis.FindSpan(degree, knots, u);
+				var basisFuncs = NurbsBasis.BSplineBasis(degree, span, knots, u);
 
 				int ls = span - degree;
 
@@ -112,15 +112,15 @@ namespace Common.Geometry.Nurbs
 				controlPts.Add(v);
 			}
 
-			return new Curve(degree, knots, controlPts);
+			return new NurbsCurve(degree, knots, controlPts);
 		}
 
 		/// <summary>
-		/// Create a bezier curve from the control points and weights.
+		/// Create a bezier curve from the control points.
 		/// </summary>
 		/// <param name="controlPoints">Points in counter-clockwise form.</param>
 		/// <returns></returns>
-		public static Curve BezierCurve(IList<Vector> controlPoints)
+		public static NurbsCurve BezierCurve(IList<Vector> controlPoints)
 		{
 			int count = controlPoints.Count;
 			int degree = count - 1;
@@ -132,7 +132,7 @@ namespace Common.Geometry.Nurbs
 				knots[count + i] = 1;
 			}
 
-			return new Curve(degree, knots, controlPoints);
+			return new NurbsCurve(degree, knots, controlPoints);
 		}
 
 		/// <summary>
@@ -140,7 +140,7 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="controlPoints">Points in counter-clockwise form.</param>
 		/// <returns></returns>
-		public static RationalCurve RationalBezierCurve(IList<Vector> controlPoints, IList<double> weights)
+		public static RationalNurbsCurve RationalBezierCurve(IList<Vector> controlPoints, IList<double> weights)
 		{
 			int count = controlPoints.Count;
 			int degree = count - 1;
@@ -152,7 +152,7 @@ namespace Common.Geometry.Nurbs
 				knots[count + i] = 1;
 			}
 
-			return new RationalCurve(degree, knots, controlPoints, weights);
+			return new RationalNurbsCurve(degree, knots, controlPoints, weights);
 		}
 
 		/// <summary>
@@ -160,7 +160,7 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="center"></param>
 		/// <param name="radius">the radius</param>
-		public static RationalCurve Circle(Vector center, double radius)
+		public static RationalNurbsCurve Circle(Vector center, double radius)
 		{
 			var unitX = Vector.UnitX(center.Dimension);
 			var unitY = Vector.UnitY(center.Dimension);
@@ -174,7 +174,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="radius">the radius</param>
 		/// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
 		/// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
-		public static RationalCurve Arc(Vector center, double radius, double minAngle, double maxAngle)
+		public static RationalNurbsCurve Arc(Vector center, double radius, double minAngle, double maxAngle)
 		{
 			var unitX = Vector.UnitX(center.Dimension);
 			var unitY = Vector.UnitY(center.Dimension);
@@ -187,7 +187,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="center"></param>
 		/// <param name="xradius">the x radius</param>
 		/// <param name="yradius">the y radius</param>
-		public static RationalCurve Ellipse(Vector center, double xradius, double yradius)
+		public static RationalNurbsCurve Ellipse(Vector center, double xradius, double yradius)
 		{
 			var unitX = Vector.UnitX(center.Dimension);
 			var unitY = Vector.UnitY(center.Dimension);
@@ -202,7 +202,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="yradius">the y radius</param>
 		/// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
 		/// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
-		public static RationalCurve EllipseArc(Vector center, double xradius, double yradius, double minAngle, double maxAngle)
+		public static RationalNurbsCurve EllipseArc(Vector center, double xradius, double yradius, double minAngle, double maxAngle)
 		{
 			var unitX = Vector.UnitX(center.Dimension);
 			var unitY = Vector.UnitY(center.Dimension);
@@ -221,7 +221,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="xaxis">the x axis</param>
 		/// <param name="yaxis">the y axis</param>
 		/// <returns></returns>
-		public static RationalCurve EllipseArc(Vector center, double xradius, double yradius, double startAngle, double endAngle, Vector xaxis, Vector yaxis)
+		public static RationalNurbsCurve EllipseArc(Vector center, double xradius, double yradius, double startAngle, double endAngle, Vector xaxis, Vector yaxis)
 		{
 			//if the end angle is less than the start angle, do a circle
 			if (endAngle < startAngle)
@@ -311,7 +311,7 @@ namespace Common.Geometry.Nurbs
 					break;
 			}
 
-			return new RationalCurve(2, knots, controlPoints, weights);
+			return new RationalNurbsCurve(2, knots, controlPoints, weights);
 		}
 
 

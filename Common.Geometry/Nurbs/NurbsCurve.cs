@@ -7,7 +7,7 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	public interface ICurve
+	public interface INurbsCurve
 	{
 		List<Vector> Tessellate(int samples);
 
@@ -17,7 +17,7 @@ namespace Common.Geometry.Nurbs
 	/// <summary>
 	/// Class for holding a polynomial B-spline curve
 	/// </summary>
-	public class Curve : ICurve
+	public class NurbsCurve : INurbsCurve
 	{
 
 		public int Degree;
@@ -26,32 +26,32 @@ namespace Common.Geometry.Nurbs
 
 		public List<Vector> ControlPoints;
 
-		public Curve()
+		public NurbsCurve()
 		{
 			
 		}
 
-		public Curve(RationalCurve crv) : 
+		public NurbsCurve(RationalNurbsCurve crv) : 
 			this(crv.Degree, crv.Knots, crv.ControlPoints) 
 		{
 			
 		}
 
-		public Curve(int degree, IList<double> knots, IList<Vector> control_points)
+		public NurbsCurve(int degree, IList<double> knots, IList<Vector> control_points)
 		{
 			this.Degree = degree;
 			this.Knots = knots.ToList();
-			this.ControlPoints = Util.ToList(control_points);
+			this.ControlPoints = NurbsUtil.ToList(control_points);
 		}
 
 		public List<Vector> Tessellate(int samples)
 		{
-			return Tess.Regular(this, 0, 1, samples);
+			return NurbsTess.Regular(this, 0, 1, samples);
 		}
 
 		public List<Vector> CartesianControlPoints()
 		{
-			return Util.HomogenousToCartesian(ControlPoints);
+			return NurbsUtil.HomogenousToCartesian(ControlPoints);
 		}
 
 	}
@@ -59,7 +59,7 @@ namespace Common.Geometry.Nurbs
 	/// <summary>
 	/// Class for holding a rational B-spline curve
 	/// </summary>
-	public class RationalCurve : ICurve
+	public class RationalNurbsCurve : INurbsCurve
 	{
 		public int Degree;
 
@@ -69,46 +69,46 @@ namespace Common.Geometry.Nurbs
 
 		public List<double> Weights;
 
-		public RationalCurve()
+		public RationalNurbsCurve()
 		{
 			
 		}
 
-		public RationalCurve(Curve crv) :
+		public RationalNurbsCurve(NurbsCurve crv) :
 			this(crv, null)
 		{
 		}
 
-		public RationalCurve(Curve crv, IList<double> weights) :
+		public RationalNurbsCurve(NurbsCurve crv, IList<double> weights) :
 			this(crv.Degree, crv.Knots, crv.ControlPoints, weights)
 		{
 		}
 
-		public RationalCurve(int degree, IList<double> knots, IList<Vector> control_points, IList<double> weights)
+		public RationalNurbsCurve(int degree, IList<double> knots, IList<Vector> control_points, IList<double> weights)
 		{
-			this.Degree = degree;
-			this.Knots = knots.ToList();
-			this.ControlPoints = Util.ToList(control_points);
+			Degree = degree;
+			Knots = knots.ToList();
+			ControlPoints = NurbsUtil.ToList(control_points);
 
 			if(weights == null)
 			{
-				this.Weights = new List<double>(control_points.Count);
-				this.Weights.AddRange(control_points.Count, 1);
+				Weights = new List<double>(control_points.Count);
+				Weights.AddRange(control_points.Count, 1);
 			}
 			else
 			{
-				this.Weights = weights.ToList();
+				Weights = weights.ToList();
 			}
 		}
 
 		public List<Vector> Tessellate(int samples)
 		{
-			return Tess.Regular(this, 0, 1, samples);
+			return NurbsTess.Regular(this, 0, 1, samples);
 		}
 
 		public List<Vector> CartesianControlPoints()
 		{
-			return Util.HomogenousToCartesian(ControlPoints);
+			return NurbsUtil.HomogenousToCartesian(ControlPoints);
 		}
 	}
 

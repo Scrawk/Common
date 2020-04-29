@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	internal static class Check
+	internal static class NurbsCheck
 	{
 		/**
 		 * Returns the mulitplicity of the knot at index
@@ -37,7 +37,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] crv Curve object
 		 * @return Whether valid
 		 */
-		internal static bool CurveIsValid(Curve crv)
+		internal static bool CurveIsValid(NurbsCurve crv)
 		{
 			return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints);
 		}
@@ -48,7 +48,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] crv RationalCurve object
 		 * @return Whether valid
 		 */
-		internal static bool CurveIsValid(RationalCurve crv)
+		internal static bool CurveIsValid(RationalNurbsCurve crv)
 		{
 			return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints, crv.Weights);
 		}
@@ -59,7 +59,7 @@ namespace Common.Geometry.Nurbs
 		 * @param srf Surface object
 		 * @return Whether valid
 		 */
-		internal static bool SurfaceIsValid(Surface srf)
+		internal static bool SurfaceIsValid(NurbsSurface srf)
 		{
 			return SurfaceIsValid(srf.degree_u, srf.degree_v, srf.knots_u, srf.knots_v,
 				srf.control_points);
@@ -71,7 +71,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] srf RationalSurface object
 		 * @return Whether valid
 		 */
-		internal static bool SurfaceIsValid(RationalSurface srf)
+		internal static bool SurfaceIsValid(RationalNurbsSurface srf)
 		{
 			return SurfaceIsValid(srf.degree_u, srf.degree_v, srf.knots_u, srf.knots_v,
 				srf.control_points, srf.weights);
@@ -82,7 +82,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] crv Curve object
 		 * @return  Whether closed
 		 */
-		internal static bool CurveIsClosed(Curve crv)
+		internal static bool CurveIsClosed(NurbsCurve crv)
 		{
 			return IsArray1Closed(crv.Degree, crv.ControlPoints) &&
 				IsKnotVectorClosed(crv.Degree, crv.Knots);
@@ -93,7 +93,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] crv RationalCurve object
 		 * @return  Whether closed
 		 */
-		internal static bool CurveIsClosed(RationalCurve crv)
+		internal static bool CurveIsClosed(RationalNurbsCurve crv)
 		{
 			return IsArray1Closed(crv.Degree, crv.ControlPoints) &&
 				IsArray1Closed(crv.Degree, crv.Weights) &&
@@ -105,7 +105,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] srf Surface object
 		 * @return  Whether closed along u-direction
 		 */
-		internal static bool SurfaceIsClosedU(Surface srf)
+		internal static bool SurfaceIsClosedU(NurbsSurface srf)
 		{
 			return IsArray2ClosedU(srf.degree_u, srf.control_points) &&
 				IsKnotVectorClosed(srf.degree_u, srf.knots_u);
@@ -116,7 +116,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] srf Surface object
 		 * @return  Whether closed along v-direction
 		 */
-		internal static bool SurfaceIsClosedV(Surface srf)
+		internal static bool SurfaceIsClosedV(NurbsSurface srf)
 		{
 			return IsArray2ClosedV(srf.degree_v, srf.control_points) &&
 				IsKnotVectorClosed(srf.degree_v, srf.knots_v);
@@ -127,7 +127,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] srf RationalSurface object
 		 * @return  Whether closed along u-direction
 		 */
-		internal static bool SurfaceIsClosedU(RationalSurface srf)
+		internal static bool SurfaceIsClosedU(RationalNurbsSurface srf)
 		{
 			return IsArray2ClosedU(srf.degree_u, srf.control_points) &&
 				IsKnotVectorClosed(srf.degree_u, srf.knots_u) &&
@@ -139,7 +139,7 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] srf RationalSurface object
 		 * @return  Whether closed along v-direction
 		 */
-		internal static bool SurfaceIsClosedV(RationalSurface srf)
+		internal static bool SurfaceIsClosedV(RationalNurbsSurface srf)
 		{
 			return IsArray2ClosedV(srf.degree_v, srf.control_points) &&
 				IsKnotVectorClosed(srf.degree_v, srf.knots_v) &&
@@ -265,7 +265,7 @@ namespace Common.Geometry.Nurbs
 		private static bool SurfaceIsValid(int degree_u, int degree_v, List<double> knots_u,
 			List<double> knots_v, Vector[,] control_points, double[,] weights)
 		{
-			if (!Check.SurfaceIsValid(degree_u, degree_v, knots_u, knots_v, control_points))
+			if (!NurbsCheck.SurfaceIsValid(degree_u, degree_v, knots_u, knots_v, control_points))
 			{
 				return false;
 			}

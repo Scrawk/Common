@@ -315,6 +315,30 @@ namespace Common.Geometry.Shapes
             return new Box2f(xmin, xmax, ymin, ymax);
         }
 
+        public static Box2f CalculateBounds(IList<Segment2f> segments)
+        {
+            Vector2f min = Vector2f.PositiveInfinity;
+            Vector2f max = Vector2f.NegativeInfinity;
+
+            int count = segments.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var seg = segments[i];
+
+                if (seg.A.x < min.x) min.x = seg.A.x;
+                if (seg.A.y < min.y) min.y = seg.A.y;
+                if (seg.B.x < min.x) min.x = seg.B.x;
+                if (seg.B.y < min.y) min.y = seg.B.y;
+
+                if (seg.A.x > max.x) max.x = seg.A.x;
+                if (seg.A.y > max.y) max.y = seg.A.y;
+                if (seg.B.x > max.x) max.x = seg.B.x;
+                if (seg.B.y > max.y) max.y = seg.B.y;
+            }
+
+            return new Box2f(min, max);
+        }
+
     }
 
 }
