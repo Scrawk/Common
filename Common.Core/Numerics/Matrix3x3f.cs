@@ -347,27 +347,27 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public bool AlmostEqual(Matrix3x3f m, float eps)
+        public static bool AlmostEqual(Matrix3x3f m0, Matrix3x3f m1, float eps = FMath.EPS)
         {
-            if (Math.Abs(m00 - m.m00) > eps) return false;
-            if (Math.Abs(m10 - m.m10) > eps) return false;
-            if (Math.Abs(m20 - m.m20) > eps) return false;
+            if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
+            if (Math.Abs(m0.m10 - m1.m10) > eps) return false;
+            if (Math.Abs(m0.m20 - m1.m20) > eps) return false;
 
-            if (Math.Abs(m01 - m.m01) > eps) return false;
-            if (Math.Abs(m11 - m.m11) > eps) return false;
-            if (Math.Abs(m21 - m.m21) > eps) return false;
+            if (Math.Abs(m0.m01 - m1.m01) > eps) return false;
+            if (Math.Abs(m0.m11 - m1.m11) > eps) return false;
+            if (Math.Abs(m0.m21 - m1.m21) > eps) return false;
 
-            if (Math.Abs(m02 - m.m02) > eps) return false;
-            if (Math.Abs(m12 - m.m12) > eps) return false;
-            if (Math.Abs(m22 - m.m22) > eps) return false;
+            if (Math.Abs(m0.m02 - m1.m02) > eps) return false;
+            if (Math.Abs(m0.m12 - m1.m12) > eps) return false;
+            if (Math.Abs(m0.m22 - m1.m22) > eps) return false;
 
             return true;
         }
-		
-		/// <summary>
-		/// Matrices hash code. 
-		/// </summary>
-		public override int GetHashCode()
+
+        /// <summary>
+        /// Matrices hash code. 
+        /// </summary>
+        public override int GetHashCode()
 		{
             unchecked
             {

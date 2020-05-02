@@ -390,12 +390,12 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool AlmostEqual(Vector2f v, REAL eps)
-		{
-			if(Math.Abs(x-v.x)> eps) return false;
-			if(Math.Abs(y-v.y)> eps) return false;
-			return true;
-		}
+        public static bool AlmostEqual(Vector2f v0, Vector2f v1, REAL eps = FMath.EPS)
+        {
+            if (Math.Abs(v0.x - v1.x) > eps) return false;
+            if (Math.Abs(v0.y - v1.y) > eps) return false;
+            return true;
+        }
 
         /// <summary>
         /// Are these vectors equal.

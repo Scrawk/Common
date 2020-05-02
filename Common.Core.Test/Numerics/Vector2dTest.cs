@@ -27,12 +27,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void AreEqualWithError()
-        {
-            Assert.IsTrue(Random2(0).AlmostEqual(Random2(0), 1e-6));
-        }
-
-        [TestMethod]
         public void Add()
         {
             Assert.AreEqual(VECTOR.One + VECTOR.One, new VECTOR(2, 2));

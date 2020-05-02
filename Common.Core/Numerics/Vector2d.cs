@@ -380,10 +380,10 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool AlmostEqual(Vector2d v, REAL eps)
+        public static bool AlmostEqual(Vector2d v0, Vector2d v1, REAL eps = DMath.EPS)
 		{
-			if(Math.Abs(x-v.x)> eps) return false;
-			if(Math.Abs(y-v.y)> eps) return false;
+			if(Math.Abs(v0.x - v1.x)> eps) return false;
+			if(Math.Abs(v0.y - v1.y)> eps) return false;
 			return true;
 		}
 

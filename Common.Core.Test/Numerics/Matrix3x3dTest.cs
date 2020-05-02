@@ -88,12 +88,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void AreEqualWithError()
-        {
-            Assert.IsTrue(Random3x3(0).AlmostEqual(Random3x3(0), 1e-6));
-        }
-
-        [TestMethod]
         public void Add()
         {
             Assert.AreEqual(new Matrix3x3d(2), (new Matrix3x3d(1)) + (new Matrix3x3d(1)));
@@ -130,7 +124,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void Inverse()
         {
-            Assert.IsTrue((Random3x3(0).Inverse * Random3x3(0)).AlmostEqual(Matrix3x3d.Identity, 1e-6));
+            Assert.IsTrue(Matrix3x3d.AlmostEqual(Random3x3(0).Inverse * Random3x3(0), Matrix3x3d.Identity, 1e-6));
         }
 
         [TestMethod]
@@ -140,7 +134,7 @@ namespace Common.Core.Test.Numerics
             Matrix3x3d inverse = Matrix3x3d.Identity;
             m.TryInverse(ref inverse);
 
-            Assert.IsTrue((inverse * Random3x3(0)).AlmostEqual(Matrix3x3d.Identity, 1e-6));
+            Assert.IsTrue(Matrix3x3d.AlmostEqual(inverse * Random3x3(0), Matrix3x3d.Identity, 1e-6));
         }
 
         [TestMethod]

@@ -84,12 +84,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void AlmostEqual()
-        {
-            Assert.IsTrue(Random2x2(0).AlmostEqual(Random2x2(0), 1e-6f));
-        }
-
-        [TestMethod]
         public void Add()
         {
             Assert.AreEqual(new Matrix2x2f(2), (new Matrix2x2f(1)) + (new Matrix2x2f(1)));
@@ -132,7 +126,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void Inverse()
         {
-            Assert.IsTrue((Random2x2(0).Inverse * Random2x2(0)).AlmostEqual(Matrix2x2f.Identity, 1e-6f));
+            Assert.IsTrue(Matrix2x2f.AlmostEqual(Random2x2(0).Inverse * Random2x2(0), Matrix2x2f.Identity, 1e-6f));
         }
 
         [TestMethod]
@@ -142,7 +136,7 @@ namespace Common.Core.Test.Numerics
             Matrix2x2f inverse = Matrix2x2f.Identity;
             m.TryInverse(ref inverse);
 
-            Assert.IsTrue((inverse * Random2x2(0)).AlmostEqual(Matrix2x2f.Identity, 1e-6f));
+            Assert.IsTrue(Matrix2x2f.AlmostEqual(inverse * Random2x2(0), Matrix2x2f.Identity, 1e-6f));
         }
 
         [TestMethod]

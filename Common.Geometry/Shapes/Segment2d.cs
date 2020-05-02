@@ -54,6 +54,26 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        public REAL LeftMost
+        {
+            get { return Math.Min(A.x, B.x); }
+        }
+
+        public REAL RightMost
+        {
+            get { return Math.Max(A.x, B.x); }
+        }
+
+        public REAL BottomMost
+        {
+            get { return Math.Min(A.y, B.y); }
+        }
+
+        public REAL TopMost
+        {
+            get { return Math.Max(A.y, B.y); }
+        }
+
         public BOX2 Bounds
         {
             get

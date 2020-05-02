@@ -449,13 +449,13 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool AlmostEqual(Vector3f v, REAL eps)
-		{
-			if(Math.Abs(x-v.x)> eps) return false;
-			if(Math.Abs(y-v.y)> eps) return false;
-			if(Math.Abs(z-v.z)> eps) return false;
-			return true;
-		}
+        public static bool AlmostEqual(Vector3f v0, Vector3f v1, REAL eps = FMath.EPS)
+        {
+            if (Math.Abs(v0.x - v1.x) > eps) return false;
+            if (Math.Abs(v0.y - v1.y) > eps) return false;
+            if (Math.Abs(v0.z - v1.z) > eps) return false;
+            return true;
+        }
 
         /// <summary>
         /// Are these vectors equal.

@@ -79,6 +79,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AlmostEqual(double v0, double v1, double eps = EPS)
+        {
+            return Math.Abs(v0 - v1) < eps;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsFinite(double f)
         {
             return !(double.IsInfinity(f) || double.IsNaN(f));
