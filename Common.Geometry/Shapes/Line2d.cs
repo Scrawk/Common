@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
 
 namespace Common.Geometry.Shapes
 {
@@ -16,19 +16,19 @@ namespace Common.Geometry.Shapes
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Line2f : IEquatable<Line2f>
+    public struct Line2d : IEquatable<Line2d>
     {
 
         public REAL A, B, C;
 
-        public Line2f(REAL a, REAL b, REAL c)
+        public Line2d(REAL a, REAL b, REAL c)
         {
             A = a;
             B = b;
             C = c;
         }
 
-        public Line2f(VECTOR2 p1, VECTOR2 p2)
+        public Line2d(VECTOR2 p1, VECTOR2 p2)
         {
             A = p1.y - p2.y;
             B = p2.x - p1.x;
@@ -108,33 +108,33 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                if (IsVertical) return FMath.PI / 2.0f;
+                if (IsVertical) return DMath.PI / 2.0;
 
-                REAL atan = FMath.Atan(-A / B);
-                if (atan < 0) atan += FMath.PI;
+                REAL atan = Math.Atan(-A / B);
+                if (atan < 0) atan += DMath.PI;
 
                 return atan;
             }
         }
 
-        public static bool operator ==(Line2f i1, Line2f i2)
+        public static bool operator ==(Line2d i1, Line2d i2)
         {
             return i1.A == i2.A && i1.B == i2.B && i1.C == i2.C;
         }
 
-        public static bool operator !=(Line2f i1, Line2f i2)
+        public static bool operator !=(Line2d i1, Line2d i2)
         {
             return i1.A != i2.A || i1.B != i2.B || i1.C != i2.C;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Line2f)) return false;
-            Line2f line = (Line2f)obj;
+            if (!(obj is Line2d)) return false;
+            Line2d line = (Line2d)obj;
             return this == line;
         }
 
-        public bool Equals(Line2f line)
+        public bool Equals(Line2d line)
         {
             return this == line;
         }
@@ -153,7 +153,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Line2f: A={0}, B={1}, C={2}]", A, B, C);
+            return string.Format("[Line2d: A={0}, B={1}, C={2}]", A, B, C);
         }
 
         /// <summary>
@@ -179,16 +179,16 @@ namespace Common.Geometry.Shapes
         /// <returns>if the point lies on the line</returns>
         public bool PointOnLine(VECTOR2 p)
         {
-            return Math.Abs(A * p.x + B * p.y + C) < FMath.EPS;
+            return Math.Abs(A * p.x + B * p.y + C) < DMath.EPS;
         }
 
         /// <summary>
         /// Calculates the perpendicular line that
         /// passes through the given point.
         /// </summary>
-        public Line2f PerpendicularLine(VECTOR2 p)
+        public Line2d PerpendicularLine(VECTOR2 p)
         {
-            return new Line2f(B, -A, -B * p.x + A * p.y);
+            return new Line2d(B, -A, -B * p.x + A * p.y);
         }
 
         /// <summary>
@@ -215,13 +215,13 @@ namespace Common.Geometry.Shapes
         /// <param name="line">the other line</param>
         /// <param name="p">intersection point</param>
         /// <returns>if lines intersect</returns>
-        public bool Intersects(Line2f line, out VECTOR2 p)
+        public bool Intersects(Line2d line, out VECTOR2 p)
         {
 
             if (B != 0)
             {
                 REAL f = line.A - line.B * A / B;
-                if (FMath.IsZero(f))
+                if (DMath.IsZero(f))
                 {
                     p = VECTOR2.Zero;
                     return false;
@@ -245,7 +245,7 @@ namespace Common.Geometry.Shapes
                 else
                 {
                     REAL f = line.B - line.A * B / A;
-                    if (FMath.IsZero(f))
+                    if (DMath.IsZero(f))
                     {
                         p = VECTOR2.Zero;
                         return false;

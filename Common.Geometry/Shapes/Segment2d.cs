@@ -3,29 +3,29 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
-using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
+using MATRIX2 = Common.Core.Numerics.Matrix2x2d;
 
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Segment2f : IEquatable<Segment2f>, IShape2f
+    public struct Segment2d : IEquatable<Segment2d>
     {
 
         public VECTOR2 A;
 
         public VECTOR2 B;
 
-        public Segment2f(VECTOR2 a, VECTOR2 b)
+        public Segment2d(VECTOR2 a, VECTOR2 b)
         {
             A = a;
             B = b;
         }
 
-        public Segment2f(REAL ax, REAL ay, REAL bx, REAL by)
+        public Segment2d(REAL ax, REAL ay, REAL bx, REAL by)
         {
             A = new VECTOR2(ax, ay);
             B = new VECTOR2(bx, by);
@@ -33,7 +33,7 @@ namespace Common.Geometry.Shapes
 
         public VECTOR2 Center
         {
-            get { return (A + B) * 0.5f; }
+            get { return (A + B) * 0.5; }
         }
 
         public REAL Length
@@ -72,83 +72,83 @@ namespace Common.Geometry.Shapes
             get
             {
                 if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Segment2f index out of range.");
+                    throw new IndexOutOfRangeException("Segment2d index out of range.");
 
-                fixed (Segment2f* array = &this) { return ((VECTOR2*)array)[i]; }
+                fixed (Segment2d* array = &this) { return ((VECTOR2*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Segment2f index out of range.");
+                    throw new IndexOutOfRangeException("Segment2d index out of range.");
 
                 fixed (VECTOR2* array = &A) { array[i] = value; }
             }
         }
 
 
-        public static Segment2f operator +(Segment2f seg, REAL s)
+        public static Segment2d operator +(Segment2d seg, REAL s)
         {
-            return new Segment2f(seg.A + s, seg.B + s);
+            return new Segment2d(seg.A + s, seg.B + s);
         }
 
-        public static Segment2f operator +(Segment2f seg, VECTOR2 v)
+        public static Segment2d operator +(Segment2d seg, VECTOR2 v)
         {
-            return new Segment2f(seg.A + v, seg.B + v);
+            return new Segment2d(seg.A + v, seg.B + v);
         }
 
-        public static Segment2f operator -(Segment2f seg, REAL s)
+        public static Segment2d operator -(Segment2d seg, REAL s)
         {
-            return new Segment2f(seg.A - s, seg.B - s);
+            return new Segment2d(seg.A - s, seg.B - s);
         }
 
-        public static Segment2f operator -(Segment2f seg, VECTOR2 v)
+        public static Segment2d operator -(Segment2d seg, VECTOR2 v)
         {
-            return new Segment2f(seg.A - v, seg.B - v);
+            return new Segment2d(seg.A - v, seg.B - v);
         }
 
-        public static Segment2f operator *(Segment2f seg, REAL s)
+        public static Segment2d operator *(Segment2d seg, REAL s)
         {
-            return new Segment2f(seg.A * s, seg.B * s);
+            return new Segment2d(seg.A * s, seg.B * s);
         }
 
-        public static Segment2f operator *(Segment2f seg, VECTOR2 v)
+        public static Segment2d operator *(Segment2d seg, VECTOR2 v)
         {
-            return new Segment2f(seg.A * v, seg.B * v);
+            return new Segment2d(seg.A * v, seg.B * v);
         }
 
-        public static Segment2f operator /(Segment2f seg, REAL s)
+        public static Segment2d operator /(Segment2d seg, REAL s)
         {
-            return new Segment2f(seg.A / s, seg.B / s);
+            return new Segment2d(seg.A / s, seg.B / s);
         }
 
-        public static Segment2f operator /(Segment2f seg, VECTOR2 v)
+        public static Segment2d operator /(Segment2d seg, VECTOR2 v)
         {
-            return new Segment2f(seg.A / v, seg.B / v);
+            return new Segment2d(seg.A / v, seg.B / v);
         }
 
-        public static Segment2f operator *(Segment2f seg, MATRIX2 m)
+        public static Segment2d operator *(Segment2d seg, MATRIX2 m)
         {
-            return new Segment2f(m * seg.A, m * seg.B);
+            return new Segment2d(m * seg.A, m * seg.B);
         }
 
-        public static bool operator ==(Segment2f s1, Segment2f s2)
+        public static bool operator ==(Segment2d s1, Segment2d s2)
         {
             return s1.A == s2.A && s1.B == s2.B;
         }
 
-        public static bool operator !=(Segment2f s1, Segment2f s2)
+        public static bool operator !=(Segment2d s1, Segment2d s2)
         {
             return s1.A != s2.A || s1.B != s2.B;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Segment2f)) return false;
-            Segment2f seg = (Segment2f)obj;
+            if (!(obj is Segment2d)) return false;
+            Segment2d seg = (Segment2d)obj;
             return this == seg;
         }
 
-        public bool Equals(Segment2f seg)
+        public bool Equals(Segment2d seg)
         {
             return this == seg;
         }
@@ -166,7 +166,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Segment2f: A={0}, B={1}]", A, B);
+            return string.Format("[Segment2d: A={0}, B={1}]", A, B);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Common.Geometry.Shapes
         /// Does the two segments intersect.
         /// </summary>
         /// <param name="seg">other segment</param>
-        public bool Intersects(Segment2f seg)
+        public bool Intersects(Segment2d seg)
         {
             return Intersects(seg, out REAL t);
         }
@@ -194,18 +194,18 @@ namespace Common.Geometry.Shapes
         /// <param name="seg">other segment</param>
         /// <param name="t">Intersection point = A + t * (B - A)</param>
         /// <returns>If they intersect</returns>
-        public bool Intersects(Segment2f seg, out REAL t)
+        public bool Intersects(Segment2d seg, out REAL t)
         {
             REAL area1 = SignedTriArea(A, B, seg.B);
             REAL area2 = SignedTriArea(A, B, seg.A);
-            t = 0.0f;
+            t = 0.0;
 
-            if (area1 * area2 < 0.0f)
+            if (area1 * area2 < 0.0)
             {
                 REAL area3 = SignedTriArea(seg.A, seg.B, A);
                 REAL area4 = area3 + area2 - area1;
 
-                if (area3 * area4 < 0.0f)
+                if (area3 * area4 < 0.0)
                 {
                     t = area3 / (area3 - area4);
                     return true;
@@ -222,20 +222,20 @@ namespace Common.Geometry.Shapes
         /// <param name="s">Intersection point = A + s * (B - A)</param>
         /// <param name="t">Intersection point = seg.A + t * (seg.B - seg.A)</param>
         /// <returns>If they intersect</returns>
-        public bool Intersects(Segment2f seg, out REAL s, out REAL t)
+        public bool Intersects(Segment2d seg, out REAL s, out REAL t)
         {
 
             REAL area1 = SignedTriArea(A, B, seg.B);
             REAL area2 = SignedTriArea(A, B, seg.A);
-            s = 0.0f;
-            t = 0.0f;
+            s = 0.0;
+            t = 0.0;
 
-            if (area1 * area2 < 0.0f)
+            if (area1 * area2 < 0.0)
             {
                 REAL area3 = SignedTriArea(seg.A, seg.B, A);
                 REAL area4 = area3 + area2 - area1;
 
-                if (area3 * area4 < 0.0f)
+                if (area3 * area4 < 0.0)
                 {
                     s = area3 / (area3 - area4);
 
@@ -273,8 +273,8 @@ namespace Common.Geometry.Shapes
 
             //add in an epsilon term to counteract arithmetic errors 
             //when segment is near parallel to a coordinate axis.
-            adx += FMath.EPS;
-            ady += FMath.EPS;
+            adx += DMath.EPS;
+            ady += DMath.EPS;
 
             if (Math.Abs(m.x * d.y - m.y * d.x) > e.x * ady + e.y * adx) return false;
 
@@ -304,10 +304,10 @@ namespace Common.Geometry.Shapes
             VECTOR2 ap = p - A;
 
             REAL len = ab.x * ab.x + ab.y * ab.y;
-            if (len < FMath.EPS) return;
+            if (len < DMath.EPS) return;
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
-            t = FMath.Clamp01(t);
+            t = DMath.Clamp01(t);
         }
 
         /// <summary>
@@ -323,11 +323,11 @@ namespace Common.Geometry.Shapes
         /// The closest segment spanning two other segments.
         /// </summary>
         /// <param name="seg">the other segment</param>
-        public Segment2f Closest(Segment2f seg)
+        public Segment2d Closest(Segment2d seg)
         {
             REAL s, t;
             Closest(seg, out s, out t);
-            return new Segment2f(A + (B - A) * s, seg.A + (seg.B - seg.A) * t);
+            return new Segment2d(A + (B - A) * s, seg.A + (seg.B - seg.A) * t);
         }
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace Common.Geometry.Shapes
         /// <param name="seg">the other segment</param>
         /// <param name="s">closest point = A + s * (B - A)</param>
         /// <param name="t">other closest point = seg.A + t * (seg.B - seg.A)</param>
-        public void Closest(Segment2f seg, out REAL s, out REAL t)
+        public void Closest(Segment2d seg, out REAL s, out REAL t)
         {
 
             VECTOR2 ab0 = B - A;
@@ -351,23 +351,23 @@ namespace Common.Geometry.Shapes
             t = 0;
 
             //Check if either or both segments degenerate into points.
-            if (d00 < FMath.EPS && d11 < FMath.EPS)
+            if (d00 < DMath.EPS && d11 < DMath.EPS)
                 return;
 
-            if (d00 < FMath.EPS)
+            if (d00 < DMath.EPS)
             {
                 //First segment degenerates into a point.
                 s = 0;
-                t = FMath.Clamp01(d1 / d11);
+                t = DMath.Clamp01(d1 / d11);
             }
             else
             {
                 REAL c = VECTOR2.Dot(ab0, a01);
 
-                if (d11 < FMath.EPS)
+                if (d11 < DMath.EPS)
                 {
                     //Second segment degenerates into a point.
-                    s = FMath.Clamp01(-c / d00);
+                    s = DMath.Clamp01(-c / d00);
                     t = 0;
                 }
                 else
@@ -377,8 +377,8 @@ namespace Common.Geometry.Shapes
                     REAL denom = d00 * d11 - d2 * d2;
 
                     //if segments not parallel compute closest point and clamp to segment.
-                    if (!FMath.IsZero(denom))
-                        s = FMath.Clamp01((d2 * d1 - c * d11) / denom);
+                    if (!DMath.IsZero(denom))
+                        s = DMath.Clamp01((d2 * d1 - c * d11) / denom);
                     else
                         s = 0;
 
@@ -387,12 +387,12 @@ namespace Common.Geometry.Shapes
                     if (t < 0.0f)
                     {
                         t = 0.0f;
-                        s = FMath.Clamp01(-c / d00);
+                        s = DMath.Clamp01(-c / d00);
                     }
                     else if (t > 1.0f)
                     {
                         t = 1.0f;
-                        s = FMath.Clamp01((d2 - c) / d00);
+                        s = DMath.Clamp01((d2 - c) / d00);
                     }
                 }
             }
