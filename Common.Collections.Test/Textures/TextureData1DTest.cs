@@ -65,7 +65,7 @@ namespace Common.Collections.Test.Textures
                 }
             }
 
-            EqualsWithError(arr, data, 1e-4f);
+            AlmostEqual(arr, data, 1e-4f);
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace Common.Collections.Test.Textures
                 }
             }
 
-            EqualsWithError(arr, data, 1e-4f);
+            AlmostEqual(arr, data, 1e-4f);
         }
 
         [TestMethod]
@@ -114,10 +114,10 @@ namespace Common.Collections.Test.Textures
                 }
             }
 
-            EqualsWithError(arr, data, 0);
+            AlmostEqual(arr, data, 0);
         }
 
-        void EqualsWithError(float[,] arr, TextureData1D data, float error)
+        void AlmostEqual(float[,] arr, TextureData1D data, float error)
         {
 
             for (int x = 0; x < data.GetWidth(); x++)

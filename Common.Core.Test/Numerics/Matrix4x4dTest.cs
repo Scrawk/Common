@@ -92,7 +92,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void AreEqualWithError()
         {
-            Assert.IsTrue(Random4x4(0).EqualsWithError(Random4x4(0), 1e-6));
+            Assert.IsTrue(Random4x4(0).AlmostEqual(Random4x4(0), 1e-6));
         }
 
         [TestMethod]
@@ -138,7 +138,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void Inverse()
         {
-            Assert.IsTrue((Random4x4(0).Inverse * Random4x4(0)).EqualsWithError(Matrix4x4d.Identity, 1e-6f));
+            Assert.IsTrue((Random4x4(0).Inverse * Random4x4(0)).AlmostEqual(Matrix4x4d.Identity, 1e-6f));
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace Common.Core.Test.Numerics
             Matrix4x4d inverse = Matrix4x4d.Identity;
             m.TryInverse(ref inverse);
 
-            Assert.IsTrue((inverse * Random4x4(0)).EqualsWithError(Matrix4x4d.Identity, 1e-6f));
+            Assert.IsTrue((inverse * Random4x4(0)).AlmostEqual(Matrix4x4d.Identity, 1e-6f));
         }
 
         [TestMethod]

@@ -299,7 +299,7 @@ namespace Common.Core.Colors
         /// Are these colors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool EqualsWithError(ColorRGBA v, float eps)
+        public bool AlmostEqual(ColorRGBA v, float eps)
         {
             if (Math.Abs(r - v.r) > eps) return false;
             if (Math.Abs(g - v.g) > eps) return false;

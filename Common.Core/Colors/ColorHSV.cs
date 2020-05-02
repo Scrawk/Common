@@ -200,7 +200,7 @@ namespace Common.Core.Colors
         /// Are these colors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool EqualsWithError(ColorHSV hsv, float eps)
+        public bool AlmostEqual(ColorHSV hsv, float eps)
         {
             if (Math.Abs(h - hsv.h) > eps) return false;
             if (Math.Abs(s - hsv.s) > eps) return false;

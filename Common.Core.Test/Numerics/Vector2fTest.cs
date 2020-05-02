@@ -29,7 +29,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void AreEqualWithError()
         {
-            Assert.IsTrue(Random2(0).EqualsWithError(Random2(0), 1e-6f));
+            Assert.IsTrue(Random2(0).AlmostEqual(Random2(0), 1e-6f));
         }
 
         [TestMethod]

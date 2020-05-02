@@ -28,7 +28,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void AreEqualWithError()
         {
-            Assert.IsTrue(Random4(0).EqualsWithError(Random4(0), 1e-6f));
+            Assert.IsTrue(Random4(0).AlmostEqual(Random4(0), 1e-6f));
         }
 
         [TestMethod]

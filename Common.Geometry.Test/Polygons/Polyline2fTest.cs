@@ -26,11 +26,11 @@ namespace Common.Geometry.Test.Polygons
             float eps = 1e-4f;
             float len = polyline.Length;
 
-            Assert.IsTrue(polyline.GetPosition(0.0f).EqualsWithError(new Vector2f(1, 2), eps));
-            Assert.IsTrue(polyline.GetPosition(1.0f).EqualsWithError(new Vector2f(-1, 2), eps));
-            Assert.IsTrue(polyline.GetPosition(3.0f / len).EqualsWithError(new Vector2f(2, 0), eps));
-            Assert.IsTrue(polyline.GetPosition(5.2f / len).EqualsWithError(new Vector2f(1, -1.2), eps));
-            Assert.IsTrue(polyline.GetPosition(9.8f / len).EqualsWithError(new Vector2f(-1.8, -1), eps));
+            Assert.IsTrue(polyline.GetPosition(0.0f).AlmostEqual(new Vector2f(1, 2), eps));
+            Assert.IsTrue(polyline.GetPosition(1.0f).AlmostEqual(new Vector2f(-1, 2), eps));
+            Assert.IsTrue(polyline.GetPosition(3.0f / len).AlmostEqual(new Vector2f(2, 0), eps));
+            Assert.IsTrue(polyline.GetPosition(5.2f / len).AlmostEqual(new Vector2f(1, -1.2), eps));
+            Assert.IsTrue(polyline.GetPosition(9.8f / len).AlmostEqual(new Vector2f(-1.8, -1), eps));
         }
 
         private Polyline2f CreatePolyline()

@@ -407,12 +407,12 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool EqualsWithError(Vector4f v, REAL eps)
+        public bool AlmostEqual(Vector4f v, REAL eps)
 		{
-			if(Math.Abs(x-v.x)> eps) return false;
-			if(Math.Abs(y-v.y)> eps) return false;
-			if(Math.Abs(z-v.z)> eps) return false;
-			if(Math.Abs(w-v.w)> eps) return false;
+			if(Math.Abs(x-v.x) > eps) return false;
+			if(Math.Abs(y-v.y) > eps) return false;
+			if(Math.Abs(z-v.z) > eps) return false;
+			if(Math.Abs(w-v.w) > eps) return false;
 			return true;
 		}
 

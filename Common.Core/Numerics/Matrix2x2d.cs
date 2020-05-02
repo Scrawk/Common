@@ -274,7 +274,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public bool EqualsWithError(Matrix2x2d m, double eps)
+        public bool AlmostEqual(Matrix2x2d m, double eps)
         {
             if (Math.Abs(m00 - m.m00) > eps) return false;
             if (Math.Abs(m10 - m.m10) > eps) return false;
