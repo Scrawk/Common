@@ -15,7 +15,7 @@ namespace Common.Geometry.Polygons
 
         public Polyobject2f(int count)
         {
-            SetPositions(count);
+            CreatePositions(count);
         }
 
         public Polyobject2f(IList<Vector2f> positions)
@@ -33,9 +33,9 @@ namespace Common.Geometry.Polygons
 
         public float[] Params { get; private set; }
 
-        public float[] Lengths { get; protected set; }
+        public float[] Lengths { get; private set; }
 
-        public int[] Indices { get; protected set; }
+        public int[] Indices { get; private set; }
 
         /// <summary>
         /// Get the position with a interpolated index.
@@ -71,7 +71,7 @@ namespace Common.Geometry.Polygons
         /// Creates the position array.
         /// </summary>
         /// <param name="size">The size of the array.</param>
-        public void SetPositions(int size)
+        public void CreatePositions(int size)
         {
             if (Positions == null || Positions.Length != size)
                 Positions = new Vector2f[size];
@@ -83,7 +83,7 @@ namespace Common.Geometry.Polygons
         /// <param name="positions">Array to copy from.</param>
         public void SetPositions(IList<Vector2f> positions)
         {
-            SetPositions(positions.Count);
+            CreatePositions(positions.Count);
             positions.CopyTo(Positions, 0);
         }
 
@@ -92,7 +92,8 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public void CreateParams()
         {
-            Params = new float[Count];
+            if (Params == null || Params.Length != Count)
+                Params = new float[Count];
         }
 
         /// <summary>
@@ -100,17 +101,36 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public void SetParams(IList<float> _params)
         {
-            if (Params == null) Params = new float[Count];
+            CreateParams();
             _params.CopyTo(Params, 0);
         }
 
         /// <summary>
         /// Create the length array.
         /// </summary>
+        protected void CreateLengths(int size)
+        {
+            if (Lengths == null || Lengths.Length != size)
+                Lengths = new float[size];
+        }
+
+        /// <summary>
+        /// Create the lengths array.
+        /// </summary>
+        /// <param name="lengths">Array to copy from.</param>
         protected void SetLengths(IList<float> lengths)
         {
-            if (Lengths == null) Lengths = new float[Count];
+            CreateLengths(lengths.Count);
             lengths.CopyTo(Lengths, 0);
+        }
+
+        /// <summary>
+        /// Create the indices array.
+        /// </summary>
+        protected void CreateIndices(int size)
+        {
+            if (Indices == null || Indices.Length != size)
+                Indices = new int[size];
         }
 
         /// <summary>
@@ -222,6 +242,44 @@ namespace Common.Geometry.Polygons
         /// object and return the index before this point and the 
         /// distance (0 >= s <= 1) from this point to the next.
         /// </summary>
-        protected abstract void FindInterpolationPoint(float t, out int idx, out float s);
+        private void FindInterpolationPoint(float t, out int idx, out float s)
+        {
+            t = FMath.Clamp01(t) * Length;
+            int size = Lengths.Length;
+
+            if (t == 0)
+            {
+                s = 0;
+                idx = 0;
+            }
+            else if (t == Length)
+            {
+                s = 1;
+                idx = size - 2;
+            }
+            else
+            {
+                s = 0;
+                idx = 0;
+
+                for (int i = 0; i < size - 1; i++)
+                {
+                    var len0 = Lengths[i + 0];
+                    var len1 = Lengths.GetClamped(i + 1);
+
+                    if (t >= len0 && t < len1)
+                    {
+                        var len = len1 - len0;
+
+                        if (len <= 0)
+                            s = 0;
+                        else
+                            s = (t - len0) / len;
+
+                        idx = i;
+                    }
+                }
+            }
+        }
     }
 }

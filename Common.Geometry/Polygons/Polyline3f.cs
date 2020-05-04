@@ -14,7 +14,7 @@ namespace Common.Geometry.Polygons
 
         public Polyline3f(int count)
         {
-            SetPositions(count);
+            CreatePositions(count);
         }
 
         public Polyline3f(IList<Vector3f> positions)
@@ -44,7 +44,7 @@ namespace Common.Geometry.Polygons
         /// Creates the position array.
         /// </summary>
         /// <param name="size">The size of the array.</param>
-        public void SetPositions(int size)
+        public void CreatePositions(int size)
         {
             if (Positions == null || Positions.Length != size)
                 Positions = new Vector3f[size];
@@ -56,7 +56,7 @@ namespace Common.Geometry.Polygons
         /// <param name="positions">Array to copy from.</param>
         public void SetPositions(IList<Vector3f> positions)
         {
-            SetPositions(positions.Count);
+            CreatePositions(positions.Count);
             positions.CopyTo(Positions, 0);
         }
 
@@ -74,7 +74,7 @@ namespace Common.Geometry.Polygons
         public void SetParams(IList<float> _params)
         {
             if (Params == null) Params = new float[Count];
-	        _params.CopyTo(Params, 0);
+            _params.CopyTo(Params, 0);
         }
 
         /// <summary>

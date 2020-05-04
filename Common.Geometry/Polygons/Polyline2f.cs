@@ -64,7 +64,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public override void CreateIndices()
         {
-            Indices = new int[(Count - 1) * 2];
+            CreateIndices((Count - 1) * 2);
             for (int i = 0; i < Count - 1; i++)
             {
                 Indices[i * 2 + 0] = i;
@@ -121,15 +121,19 @@ namespace Common.Geometry.Polygons
         public override void CalculateLengths()
         {
             Length = 0;
-            Lengths = null;
-            if (Count == 0) return;
 
-            Lengths = new float[Count];
+            int size = Count;
+            if (size == 0) return;
+
+            CreateLengths(size);
             Lengths[0] = 0;
 
-            for (int i = 1; i < Count; i++)
+            for (int i = 1; i < size; i++)
             {
-                Lengths[i] = Length + Vector2f.Distance(Positions[i-1], Positions[i]);
+                var p0 = GetPosition(i - 1);
+                var p1 = GetPosition(i);
+
+                Lengths[i] = Length + Vector2f.Distance(p0, p1);
                 Length = Lengths[i];
             }
         }
@@ -152,50 +156,6 @@ namespace Common.Geometry.Polygons
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Given the number (0 >= t <= 1) find this length on the 
-        /// line and return the index before this point and the 
-        /// distance (0 >= s <= 1) from this point to the next.
-        /// </summary>
-        protected override void FindInterpolationPoint(float t, out int idx, out float s)
-        {
-            t = FMath.Clamp01(t) * Length;
-
-            if (t == 0)
-            {
-                s = 0;
-                idx = 0;
-            }
-            else if (t == Length)
-            {
-                s = 1;
-                idx = Count - 2;
-            }
-            else
-            {
-                s = 0;
-                idx = -1;
-
-                for (int i = 0; i < Count - 1; i++)
-                {
-                    float len0 = Lengths[i + 0];
-                    float len1 = Lengths[i + 1];
-
-                    if (t >= len0 && t < len1)
-                    {
-                        float len = len1 - len0;
-
-                        if (len <= 0)
-                            s = 0;
-                        else
-                            s = (t - len0) / len;
-
-                        idx = i;
-                    }
-                }
-            }
         }
 
     }

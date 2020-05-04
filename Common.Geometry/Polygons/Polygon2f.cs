@@ -36,7 +36,7 @@ namespace Common.Geometry.Polygons
 
         public override string ToString()
         {
-            return string.Format("[Polygon2f: Count={0}, Length={1}, Area={2}, IsCCW={3}]", 
+            return string.Format("[Polygon2f: Count={0}, Length={1}, Area={2}, IsCCW={3}]",
                 Count, Length, Area, IsCCW);
         }
 
@@ -75,7 +75,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public override void CreateIndices()
         {
-            Indices = new int[Count * 2];
+            CreateIndices(Count * 2);
             for (int i = 0; i < Count; i++)
             {
                 Indices[i * 2 + 0] = i;
@@ -164,23 +164,26 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
-        /// Calculate the total length of the polygons
-        /// boundary and the length of each segment in polygon.
-        /// Lengths represents the length of that segment plus
-        /// previous segment length.
+        /// Create the lengths array.
         /// </summary>
         public override void CalculateLengths()
         {
             Length = 0;
-            Lengths = null;
-            if (Count == 0) return;
 
-            Lengths = new float[Count];
+            int size = Count;
+            if (size == 0) return;
 
-            for (int i = 0; i < Count; i++)
+            //polygons need a extra length to wrap
+            //back to start position.
+            size++;
+
+            CreateLengths(size);
+            Lengths[0] = 0;
+
+            for (int i = 1; i < size; i++)
             {
-                var p0 = GetPosition(i);
-                var p1 = GetPosition(i + 1);
+                var p0 = GetPosition(i - 1);
+                var p1 = GetPosition(i);
 
                 Lengths[i] = Length + Vector2f.Distance(p0, p1);
                 Length = Lengths[i];
@@ -207,52 +210,6 @@ namespace Common.Geometry.Polygons
             }
 
             return (windingNumber % 2 != 0);
-        }
-
-        /// <summary>
-        /// Given the number (0 >= t <= 1) find this length on the 
-        /// polygon and return the index before this point and the 
-        /// distance (0 >= s <= 1) from this point to the next.
-        /// </summary>
-        protected override void FindInterpolationPoint(float t, out int idx, out float s)
-        {
-            t = FMath.Clamp01(t) * Length;
-
-            if (t == 0)
-            {
-                s = 0;
-                idx = 0;
-            }
-            else if (t == Length)
-            {
-                s = 1;
-                idx = Count - 1;
-            }
-            else
-            {
-                s = 0;
-                idx = -1;
-                float len0 = 0;
-
-                for (int i = 0; i < Count; i++)
-                {
-                    float len1 = GetLength(i);
-
-                    if (t >= len0 && t < len1)
-                    {
-                        float len = len1 - len0;
-
-                        if (len <= 0)
-                            s = 0;
-                        else
-                            s = (t - len0) / len;
-
-                        idx = i;
-                    }
-
-                    len0 = len1;
-                }
-            }
         }
 
         public static Polygon2f FromBox(Vector2f min, Vector2f max)
