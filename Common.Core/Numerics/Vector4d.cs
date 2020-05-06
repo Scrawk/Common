@@ -362,6 +362,12 @@ namespace Common.Core.Numerics
             return new Vector4d(v.x, v.y, v.z, v.w);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector4d(ValueTuple<REAL, REAL, REAL, REAL> v)
+        {
+            return new Vector4d(v.Item1, v.Item2, v.Item3, v.Item4);
+        }
+
         /// <summary>
         /// Are these vectors equal.
         /// </summary>

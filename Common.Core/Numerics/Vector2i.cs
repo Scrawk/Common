@@ -299,6 +299,12 @@ namespace Common.Core.Numerics
             return new Vector2i((REAL)v.x, (REAL)v.y);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector2i(ValueTuple<REAL, REAL> v)
+        {
+            return new Vector2i(v.Item1, v.Item2);
+        }
+
         /// <summary>
         /// Are these vectors equal.
         /// </summary>

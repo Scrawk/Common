@@ -286,6 +286,21 @@ namespace Common.Core.Numerics
             return vec;
         }
 
+        public static implicit operator Vector(ValueTuple<double, double> v)
+        {
+            return new Vector(v.Item1, v.Item2);
+        }
+
+        public static implicit operator Vector(ValueTuple<double, double, double> v)
+        {
+            return new Vector(v.Item1, v.Item2, v.Item3);
+        }
+
+        public static implicit operator Vector(ValueTuple<double, double, double, double> v)
+        {
+            return new Vector(v.Item1, v.Item2, v.Item3, v.Item4);
+        }
+
         /// <summary>
         /// The last value in the vector.
         /// </summary>
