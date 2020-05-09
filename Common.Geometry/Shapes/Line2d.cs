@@ -36,6 +36,18 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Find the slope of the line.
+        /// </summary>
+        public REAL Slope
+        {
+            get
+            {
+                if (DMath.IsZero(B)) return 0;
+                return -A / B;
+            }
+        }
+
+        /// <summary>
         /// Determines whether the line is ascending
         /// (that is, makes an angle with the positive
         /// direction of the X axis that lies in (0, pi/2).
@@ -44,7 +56,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (B == 0 || (-A / B) >= 0);
+                return (DMath.IsZero(B) || (-A / B) >= 0);
             }
         }
 
@@ -57,7 +69,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return B == 0 && A != 0;
+                return DMath.IsZero(B) && !DMath.IsZero(A);
             }
         }
 
@@ -70,7 +82,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (B == 0 || (-A / B) < 0);
+                return (DMath.IsZero(B) || (-A / B) < 0);
             }
         }
 
@@ -83,7 +95,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (A == 0 && B != 0);
+                return (DMath.IsZero(A) && !DMath.IsZero(B));
             }
         }
 
@@ -95,7 +107,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (A == 0 && B == 0 && C == 0);
+                return (DMath.IsZero(A) && DMath.IsZero(B) && DMath.IsZero(C));
             }
         }
 
@@ -161,6 +173,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL XforY(REAL y)
         {
+            if (DMath.IsZero(A)) return 0;
             return (-C - B * y) / A;
         }
 
@@ -169,6 +182,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL YforX(REAL x)
         {
+            if (DMath.IsZero(B)) return 0;
             return (-C - A * x) / B;
         }
 
@@ -210,6 +224,16 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Determine if the two lines are parallel.
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        public bool IsParallel(Line2d line)
+        {
+            return DMath.AlmostEqual(C, line.C) && DMath.AlmostEqual(Slope, line.Slope);
+        }
+
+        /// <summary>
         /// Calculates the intersection of two lines.
         /// </summary>
         /// <param name="line">the other line</param>
@@ -218,7 +242,7 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Line2d line, out VECTOR2 p)
         {
 
-            if (B != 0)
+            if (!DMath.IsZero(B))
             {
                 REAL f = line.A - line.B * A / B;
                 if (DMath.IsZero(f))
@@ -237,7 +261,7 @@ namespace Common.Geometry.Shapes
             }
             else
             {
-                if (A == 0)
+                if (DMath.IsZero(A))
                 {
                     p = VECTOR2.Zero;
                     return false;

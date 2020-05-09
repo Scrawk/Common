@@ -96,7 +96,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[HalfSpace2f: Line={0}, RightSide={1}]", Line, RightSide);
+            return string.Format("[HalfPlane2f: Line={0}, RightSide={1}]", Line, RightSide);
         }
 
         /// <summary>

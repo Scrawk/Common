@@ -388,8 +388,8 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AlmostEqual(Vector2d v0, Vector2d v1, REAL eps = DMath.EPS)
 		{
-			if(Math.Abs(v0.x - v1.x)> eps) return false;
-			if(Math.Abs(v0.y - v1.y)> eps) return false;
+			if(Math.Abs(v0.x - v1.x) > eps) return false;
+			if(Math.Abs(v0.y - v1.y) > eps) return false;
 			return true;
 		}
 

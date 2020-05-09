@@ -65,6 +65,7 @@
     <Compile Include="Shapes\Segment2fTest.cs" />
     <Compile Include="Shapes\Triangle2fTest.cs" />
     <Compile Include="Shapes\Box2iTest.cs" />
+    <Compile Include="Shapes\Line2fTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
