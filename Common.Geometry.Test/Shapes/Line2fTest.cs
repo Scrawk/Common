@@ -42,6 +42,11 @@ namespace Common.Geometry.Test.Shapes
 
             Assert.IsFalse(ab.IsParallel(cd));
 
+            ab = new Line2f((-2, -2), (2, -2));
+            cd = new Line2f((-2, 0), (-2, -4));
+
+            Assert.IsFalse(ab.IsParallel(cd));
+
         }
     }
 }

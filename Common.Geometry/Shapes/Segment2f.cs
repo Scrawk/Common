@@ -196,7 +196,8 @@ namespace Common.Geometry.Shapes
         /// <returns></returns>
         public bool Contains(VECTOR2 p)
         {
-            throw new NotImplementedException();
+            var c = Closest(p);
+            return VECTOR2.AlmostEqual(c, p);
         }
 
         /// <summary>

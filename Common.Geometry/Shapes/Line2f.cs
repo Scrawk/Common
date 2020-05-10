@@ -230,7 +230,11 @@ namespace Common.Geometry.Shapes
         /// <returns></returns>
         public bool IsParallel(Line2f line)
         {
-            return FMath.AlmostEqual(C, line.C) && FMath.AlmostEqual(Slope, line.Slope);
+            REAL slope = Slope;
+            if (FMath.IsZero(slope))
+                return IsVertical && line.IsVertical;
+            else
+                return FMath.AlmostEqual(C, line.C) && FMath.AlmostEqual(slope, line.Slope);
         }
 
         /// <summary>

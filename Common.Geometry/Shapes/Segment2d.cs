@@ -194,9 +194,10 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public bool Contains(VECTOR2 p)
+        public bool Contains(VECTOR2 p, REAL eps = DMath.Deg2Rad)
         {
-            throw new NotImplementedException();
+            var c = Closest(p);
+            return VECTOR2.AlmostEqual(c, p, eps);
         }
 
         /// <summary>
