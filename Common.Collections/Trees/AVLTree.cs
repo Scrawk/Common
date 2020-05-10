@@ -8,7 +8,7 @@ namespace Common.Collections.Trees
     /// AVL is a balanced binary tree.
     /// This optimizes searches on the tree.
     /// Does not support duplicates.
-    /// Shamelessly stolen from https://github.com/bitlush/avl-tree-c-sharp
+    /// https://github.com/bitlush/avl-tree-c-sharp
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class AVLTree<T> : BinaryTree<T> where T : IComparable<T>

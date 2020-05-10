@@ -64,6 +64,11 @@ namespace Common.Collections.Trees
         public BinaryTreeNode<T> Root { get; protected set; }
 
         /// <summary>
+        /// Optional comparer to use.
+        /// </summary>
+        public IComparer<T> Comparer { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -101,7 +106,7 @@ namespace Common.Collections.Trees
 
             while(current != null)
             {
-                int c = item.CompareTo(current.Item);
+                int c = Compare(item, current.Item);
                 if (c < 0)
                     current = current.Left;
                 else if (c > 0)
@@ -139,7 +144,7 @@ namespace Common.Collections.Trees
 
                 while (current != null)
                 {
-                    c = item.CompareTo(current.Item);
+                    c = Compare(item, current.Item);
                     if (c < 0)
                     {
                         parent = current;
@@ -152,7 +157,7 @@ namespace Common.Collections.Trees
                     }
                 }
 
-                c = item.CompareTo(parent.Item);
+                c = Compare(item, parent.Item);
                 if (c < 0)
                     parent.Left = new BinaryTreeNode<T>(parent, item);
                 else if (c > 0)
@@ -177,7 +182,7 @@ namespace Common.Collections.Trees
 
             while (current != null)
             {
-                int c = item.CompareTo(current.Item);
+                int c = Compare(item, current.Item);
                 if (c < 0)
                 {
                     parent = current;
@@ -203,7 +208,7 @@ namespace Common.Collections.Trees
                 }
                 else
                 {
-                    if (item.CompareTo(parent.Item) < 0)
+                    if (Compare(item, parent.Item) < 0)
                     {
                         parent.Left = current.Right;
                         SetParent(parent, parent.Left);
@@ -254,33 +259,6 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// FInds the item by a key which is just another item
-        /// that compares to the same value.
-        /// </summary>
-        /// <returns>True if item found</returns>
-        public bool Find(T key, out T item)
-        {
-            BinaryTreeNode<T> current = Root;
-
-            while (current != null)
-            {
-                int c = key.CompareTo(current.Item);
-                if (c < 0)
-                    current = current.Left;
-                else if (c > 0)
-                    current = current.Right;
-                else
-                {
-                    item = current.Item;
-                    return true;
-                }
-            }
-
-            item = default(T);
-            return false;
-        }
-
-        /// <summary>
         /// Finds the node which item belongs to.
         /// </summary>
         /// <param name="item"></param>
@@ -290,7 +268,7 @@ namespace Common.Collections.Trees
             BinaryTreeNode<T> current = Root;
             while (current != null)
             {
-                int c = item.CompareTo(current.Item);
+                int c = Compare(item, current.Item);
                 if (c < 0)
                     current = current.Left;
                 else if (c > 0)
@@ -469,6 +447,20 @@ namespace Common.Collections.Trees
             }
         }
 
+        /// <summary>
+        /// Compare two objects.
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
+        /// <returns></returns>
+        protected int Compare(T item1, T item2)
+        {
+            if (Comparer != null)
+                return Comparer.Compare(item1, item2);
+            else
+                return item1.CompareTo(item2);
+        }
+
         protected void SetParent(BinaryTreeNode<T> parent, BinaryTreeNode<T> node)
         {
             if (node == null) return;
@@ -498,7 +490,6 @@ namespace Common.Collections.Trees
             if (node == null || node.IsLeaf) return depth;
             return Math.Max(MaxDepth(node.Left, depth + 1), MaxDepth(node.Right, depth + 1));
         }
-
     }
 
 }

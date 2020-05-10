@@ -131,20 +131,6 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
-        public void Find()
-        {
-            var tree = TestTree();
-
-            string key = "Daniel";
-            string item;
-            Assert.IsTrue(tree.Find(key, out item));
-            Assert.AreEqual("Daniel", item);
-
-            key = "Dave";
-            Assert.IsFalse(tree.Find(key, out item));
-        }
-
-        [TestMethod]
         public void ParentSet()
         {
             var tree = TestTree();

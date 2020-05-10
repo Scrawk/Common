@@ -6,7 +6,7 @@ using Common.Collections.Queues;
 namespace Common.Collections.Test.Queues
 {
     [TestClass]
-    public class PriorityQueueTest
+    public class PriorityListTest
     {
 
         [TestMethod]
@@ -89,18 +89,6 @@ namespace Common.Collections.Test.Queues
         }
 
         [TestMethod]
-        public void Find()
-        {
-            var list = TestQueue();
-
-            float v = 0;
-            Assert.IsTrue(list.Find(1, out v));
-            Assert.AreEqual(1, v);
-
-            Assert.IsFalse(list.Find(0, out v));
-        }
-
-        [TestMethod]
         public void Contains()
         {
             var list = TestQueue();
@@ -159,6 +147,29 @@ namespace Common.Collections.Test.Queues
             Assert.AreEqual(0, list.Count);
         }
 
+        [TestMethod]
+        public void Order()
+        {
+            int num = 1000;
+            Random rnd = new Random(0);
+
+            var list = new PriorityList<double>();
+
+            for (int i = 0; i < num; i++)
+                list.Add(rnd.NextDouble());
+
+            double v = list.Peek();
+            list.Remove(v);
+
+            while (list.Count != 0)
+            {
+                double next = list.Peek();
+                list.Remove(next);
+                Assert.IsTrue(v <= next);
+                v = next;
+            }
+        }
+
         private PriorityList<float> TestQueue()
         {
             var list = new PriorityList<float>();
@@ -169,5 +180,6 @@ namespace Common.Collections.Test.Queues
 
             return list;
         }
+
     }
 }

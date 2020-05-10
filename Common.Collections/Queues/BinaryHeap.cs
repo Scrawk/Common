@@ -44,6 +44,11 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
+        /// Optional comparer to use.
+        /// </summary>
+        public IComparer<T> Comparer { get; set; }
+
+        /// <summary>
         /// Creates a new binary heap.
         /// </summary>
         public BinaryHeap()
@@ -149,14 +154,15 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Removes an item from the binary heap. This utilizes the type T's Comparer and will not remove duplicates.
+        /// Removes an item from the binary heap. 
+        /// This utilizes the type T's Comparer and will not remove duplicates.
         /// </summary>
         /// <param name="item">The item to be removed.</param>
         /// <returns>Boolean true if the item was removed.</returns>
         public bool Remove(T item)
         {
             EnsureSort();
-            int i = Array.BinarySearch<T>(m_data, 0, Count, item);
+            int i = IndexOf(item);
             if (i < 0) return false;
             Array.Copy(m_data, i + 1, m_data, i, Count - i - 1);
             Count--;
@@ -184,29 +190,30 @@ namespace Common.Collections.Queues
 
         /// <summary>
         /// Checks to see if the binary heap contains the specified item.
+        /// This utilizes the type T's Comparer and will consider items the 
+        /// same order the same object.
         /// </summary>
         /// <param name="item">The item to search the binary heap for.</param>
         /// <returns>A boolean, true if binary heap contains item.</returns>
         public bool Contains(T item)
         {
             EnsureSort();
-            return Array.BinarySearch<T>(m_data, 0, Count, item) >= 0;
+            return IndexOf(item) >= 0;
         }
 
         /// <summary>
-        /// Find a item by its key, which is just another object with same value.
+        /// Find the index of the item in the list.
+        /// This utilizes the type T's Comparer and will consider items 
+        /// the same order the same object.
         /// </summary>
-        /// <param name="item">The item to search the binary heap for.</param>
-        /// <returns>A boolean, true if binary heap contains item.</returns>
-        public bool Find(T key, out T item)
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private int IndexOf(T item)
         {
-            item = default(T);
-            EnsureSort();
-            int i = Array.BinarySearch<T>(m_data, 0, Count, key);
-            if (i < 0) return false;
-
-            item = m_data[i];
-            return true;
+            if (Comparer != null)
+                return Array.BinarySearch<T>(m_data, 0, Count, item, Comparer);
+            else
+                return Array.BinarySearch<T>(m_data, 0, Count, item);
         }
 
         /// <summary>
@@ -232,7 +239,7 @@ namespace Common.Collections.Queues
             int p = Count;
             T item = m_data[p];
             int par = Parent(p);
-            while (par > -1 && item.CompareTo(m_data[par]) < 0)
+            while (par > -1 && Compare(item, m_data[par]) < 0)
             {
                 m_data[p] = m_data[par]; //Swap nodes
                 p = par;
@@ -261,9 +268,9 @@ namespace Common.Collections.Queues
                 }
                 else
                 {
-                    n = m_data[ch1].CompareTo(m_data[ch2]) < 0 ? ch1 : ch2;
+                    n = Compare(m_data[ch1], m_data[ch2]) < 0 ? ch1 : ch2;
                 }
-                if (item.CompareTo(m_data[n]) > 0)
+                if (Compare(item, m_data[n]) > 0)
                 {
                     m_data[p] = m_data[n]; //Swap nodes
                     p = n;
@@ -279,7 +286,12 @@ namespace Common.Collections.Queues
         private void EnsureSort()
         {
             if (m_sorted) return;
-            Array.Sort(m_data, 0, Count);
+
+            if(Comparer != null)
+                Array.Sort(m_data, 0, Count, Comparer);
+            else
+                Array.Sort(m_data, 0, Count);
+
             m_sorted = true;
         }
 
@@ -305,6 +317,20 @@ namespace Common.Collections.Queues
         private static int Child2(int index)
         {
             return (index << 1) + 2;
+        }
+
+        /// <summary>
+        /// Compare two objects.
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
+        /// <returns></returns>
+        private int Compare(T item1, T item2)
+        {
+            if (Comparer != null)
+                return Comparer.Compare(item1, item2);
+            else
+                return item1.CompareTo(item2);
         }
 
         public bool FindSuccesor(T item, out T succesor)

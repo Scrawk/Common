@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Collections.Queues;
 
-namespace Common.Collections.Test.Lists
+namespace Common.Collections.Test.Queues
 {
     [TestClass]
     public class BinaryHeapTest
@@ -123,39 +123,26 @@ namespace Common.Collections.Test.Lists
         }
 
         [TestMethod]
-        public void Find()
-        {
-            var list = TestQueue();
-
-            float v = 0;
-            Assert.IsTrue(list.Find(1, out v));
-            Assert.AreEqual(1, v);
-
-            Assert.IsFalse(list.Find(0, out v));
-        }
-
-        [TestMethod]
         public void Order()
         {
             int num = 1000;
             Random rnd = new Random(0);
 
-            var list = new BinaryHeap<float>();
+            var list = new BinaryHeap<double>();
 
             for (int i = 0; i < num; i++)
-                list.Add((float)rnd.NextDouble());
+                list.Add(rnd.NextDouble());
 
-            float v = list.Peek();
+            double v = list.Peek();
             list.Remove(v);
 
             while (list.Count != 0)
             {
-                float next = list.Peek();
+                double next = list.Peek();
                 list.Remove(next);
                 Assert.IsTrue(v <= next);
                 v = next;
             }
-
         }
 
         [TestMethod]

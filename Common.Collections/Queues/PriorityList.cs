@@ -16,6 +16,8 @@ namespace Common.Collections.Queues
 
         private List<T> m_list;
 
+        private bool m_isDirty = true;
+
         public PriorityList()
         {
             m_list = new List<T>();
@@ -43,6 +45,11 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
+        /// Optional comparer to use.
+        /// </summary>
+        public IComparer<T> Comparer { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -53,30 +60,52 @@ namespace Common.Collections.Queues
 
         public void Add(IEnumerable<T> items)
         {
+            m_isDirty = true;
             m_list.AddRange(items);
-            m_list.Sort();
         }
 
         public bool Add(T item)
         {
+            m_isDirty = true;
             m_list.Add(item);
-            m_list.Sort();
             return true;
         }
 
+        /// <summary>
+        /// Find if the item is in the list.
+        /// This utilizes the type T's Comparer and will consider items 
+        /// the same order the same object.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public bool Contains(T item)
         {
             return IndexOf(item) >= 0;
         }
 
+        /// <summary>
+        /// Find the index of the item in the list.
+        /// This utilizes the type T's Comparer and will consider items 
+        /// the same order the same object.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public int IndexOf(T item)
         {
-            int i = m_list.BinarySearch(item);
+            Sort();
+
+            int i = 0;
+            if(Comparer != null)
+                i = m_list.BinarySearch(item, Comparer);
+            else
+                i = m_list.BinarySearch(item, Comparer);
+
             return (i < 0) ? -1 : i;
         }
 
         public bool FindPredecessor(T item, out T predecessor)
         {
+            Sort();
             int i = IndexOf(item);
             if (i <= 0)
             {
@@ -92,6 +121,7 @@ namespace Common.Collections.Queues
 
         public bool FindSuccesor(T item, out T succesor)
         {
+            Sort();
             int i = IndexOf(item);
             if (i < 0 || i >= Count - 1)
             {
@@ -107,6 +137,7 @@ namespace Common.Collections.Queues
 
         public T Peek()
         {
+            Sort();
             return m_list[0];
         }
 
@@ -120,23 +151,15 @@ namespace Common.Collections.Queues
 
         public T RemoveFirst()
         {
+            Sort();
             T item = m_list[0];
             m_list.RemoveAt(0);
             return item;
         }
 
-        public bool Find(T key, out T item)
-        {
-            item = default(T);
-            int i = IndexOf(key);
-            if (i < 0) return false;
-
-            item = m_list[i];
-            return true;
-        }
-
         public List<T> ToList()
         {
+            Sort();
             return new List<T>(m_list);
         }
 
@@ -153,6 +176,18 @@ namespace Common.Collections.Queues
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        private void Sort()
+        {
+            if (!m_isDirty) return;
+
+            if(Comparer != null)
+                m_list.Sort(Comparer);
+            else
+                m_list.Sort();
+
+            m_isDirty = false;
         }
     }
 }

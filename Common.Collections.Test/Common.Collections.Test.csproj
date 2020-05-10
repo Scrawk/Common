@@ -54,11 +54,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Arrays\SparseArray2Test.cs" />
-    <Compile Include="Lists\LALinkedListTest.cs" />
     <Compile Include="Queues\BinaryHeapTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queues\PriorityQueueTest.cs" />
-    <Compile Include="Sets\ConnectedGridSet2Test.cs" />
+    <Compile Include="Queues\PriorityListTest.cs" />
     <Compile Include="Textures\Mipmap2DTest.cs" />
     <Compile Include="Textures\Texture1DTest.cs" />
     <Compile Include="Textures\Texture2DTest.cs" />
@@ -79,7 +77,10 @@
       <Name>Common.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Lists\" />
+    <Folder Include="Sets\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
