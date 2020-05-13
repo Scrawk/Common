@@ -335,12 +335,16 @@ namespace Common.Collections.Queues
 
         public bool FindSuccesor(T item, out T succesor)
         {
-            throw new NotImplementedException();
+            succesor = default(T);
+            return false;
+            //throw new NotImplementedException();
         }
 
         public bool FindPredecessor(T item, out T predecessor)
         {
-            throw new NotImplementedException();
+            predecessor = default(T);
+            return false;
+            //throw new NotImplementedException();
         }
     }
 }

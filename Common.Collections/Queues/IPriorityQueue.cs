@@ -29,6 +29,12 @@ namespace Common.Collections.Queues
         int Capacity { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        string ToString();
+
+        /// <summary>
         /// Return the first item in the queue.
         /// </summary>
         /// <returns></returns>

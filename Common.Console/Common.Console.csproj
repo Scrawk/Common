@@ -50,11 +50,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\PriorityQueuePerformanceTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Collections\Common.Collections.csproj">
+      <Project>{d3e52eba-9643-4051-91ea-c49d0290fcd9}</Project>
+      <Name>Common.Collections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common.Geometry\Common.Geometry.csproj">
+      <Project>{f8e8054c-c677-4d42-ba29-17fc132dba05}</Project>
+      <Name>Common.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common.GraphTheory\Common.GraphTheory.csproj">
+      <Project>{aae15d50-f89f-4019-bb56-adcdf5db1955}</Project>
+      <Name>Common.GraphTheory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common.Mathematics\Common.Mathematics.csproj">
+      <Project>{6c7f456b-0564-45d8-a612-ac754a12002d}</Project>
+      <Name>Common.Mathematics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
