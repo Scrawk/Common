@@ -85,7 +85,7 @@ namespace Common.Console.Collections
             timer.Start();
 
             for (int i = 0; i < count; i++)
-                queue.Remove(new TestComparer(i));
+                queue.RemoveValue(new TestComparer(i));
 
             timer.Stop();
             return timer.ElapsedSeconds;

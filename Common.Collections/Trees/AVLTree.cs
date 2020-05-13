@@ -87,7 +87,7 @@ namespace Common.Collections.Trees
         /// Tree must be rebalanced.
         /// </summary>
         /// <param name="item"></param>
-        public override bool Remove(T key)
+        public override bool RemoveValue(T key)
         {
             var node = Root;
             while (node != null)

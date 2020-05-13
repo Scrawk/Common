@@ -15,7 +15,7 @@ namespace Common.Collections.Test.Queues
             var list = new PriorityList<float>();
             list.Add(0);
             Assert.AreEqual(1, list.Count);
-            list.Remove(0);
+            list.RemoveValue(0);
             Assert.AreEqual(0, list.Count);
         }
 
@@ -58,16 +58,16 @@ namespace Common.Collections.Test.Queues
         {
             var list = TestQueue();
 
-            list.Remove(0.5f);
-            Assert.IsFalse(list.Contains(0.5f));
+            list.RemoveValue(0.5f);
+            Assert.IsFalse(list.ContainsValue(0.5f));
             CollectionAssert.AreEqual(new float[] { 1.0f, 1.5f }, list.ToList());
 
-            list.Remove(1.5f);
-            Assert.IsFalse(list.Contains(1.5f));
+            list.RemoveValue(1.5f);
+            Assert.IsFalse(list.ContainsValue(1.5f));
             CollectionAssert.AreEqual(new float[] { 1.0f }, list.ToList());
 
-            list.Remove(1.0f);
-            Assert.IsFalse(list.Contains(1.0f));
+            list.RemoveValue(1.0f);
+            Assert.IsFalse(list.ContainsValue(1.0f));
             Assert.AreEqual(0, list.Count);
         }
 
@@ -77,13 +77,13 @@ namespace Common.Collections.Test.Queues
             var list = TestQueue();
 
             list.RemoveFirst();
-            Assert.IsFalse(list.Contains(0.5f));
+            Assert.IsFalse(list.ContainsValue(0.5f));
 
             list.RemoveFirst();
-            Assert.IsFalse(list.Contains(1.0f));
+            Assert.IsFalse(list.ContainsValue(1.0f));
 
             list.RemoveFirst();
-            Assert.IsFalse(list.Contains(1.5f));
+            Assert.IsFalse(list.ContainsValue(1.5f));
 
             Assert.AreEqual(0, list.Count);
         }
@@ -93,12 +93,12 @@ namespace Common.Collections.Test.Queues
         {
             var list = TestQueue();
 
-            Assert.IsTrue(list.Contains(1));
-            Assert.IsTrue(list.Contains(0.5f));
-            Assert.IsTrue(list.Contains(1.5f));
-            Assert.IsFalse(list.Contains(-1));
-            Assert.IsFalse(list.Contains(0));
-            Assert.IsFalse(list.Contains(2.5f));
+            Assert.IsTrue(list.ContainsValue(1));
+            Assert.IsTrue(list.ContainsValue(0.5f));
+            Assert.IsTrue(list.ContainsValue(1.5f));
+            Assert.IsFalse(list.ContainsValue(-1));
+            Assert.IsFalse(list.ContainsValue(0));
+            Assert.IsFalse(list.ContainsValue(2.5f));
         }
 
         [TestMethod]
@@ -159,12 +159,12 @@ namespace Common.Collections.Test.Queues
                 list.Add(rnd.NextDouble());
 
             double v = list.Peek();
-            list.Remove(v);
+            list.RemoveValue(v);
 
             while (list.Count != 0)
             {
                 double next = list.Peek();
-                list.Remove(next);
+                list.RemoveValue(next);
                 Assert.IsTrue(v <= next);
                 v = next;
             }

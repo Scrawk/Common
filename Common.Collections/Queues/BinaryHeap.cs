@@ -159,7 +159,7 @@ namespace Common.Collections.Queues
         /// </summary>
         /// <param name="item">The item to be removed.</param>
         /// <returns>Boolean true if the item was removed.</returns>
-        public bool Remove(T item)
+        public bool RemoveValue(T item)
         {
             EnsureSort();
             int i = IndexOf(item);
@@ -195,7 +195,7 @@ namespace Common.Collections.Queues
         /// </summary>
         /// <param name="item">The item to search the binary heap for.</param>
         /// <returns>A boolean, true if binary heap contains item.</returns>
-        public bool Contains(T item)
+        public bool ContainsValue(T item)
         {
             EnsureSort();
             return IndexOf(item) >= 0;

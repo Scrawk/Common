@@ -102,9 +102,9 @@ namespace Common.Collections.Test.Trees
             tree.Add(30);
             tree.Add(10);
 
-            tree.Remove(34);
-            tree.Remove(30);
-            tree.Remove(50);
+            tree.RemoveValue(34);
+            tree.RemoveValue(30);
+            tree.RemoveValue(50);
 
             Assert.AreEqual(10, tree.Root.Item);
             Assert.AreEqual(5, tree.Root.Left.Item);
@@ -112,7 +112,7 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual(20, tree.Root.Right.Left.Item);
             Assert.AreEqual(4, tree.Count);
 
-            tree.Remove(5);
+            tree.RemoveValue(5);
 
             Assert.AreEqual(20, tree.Root.Item);
             Assert.AreEqual(10, tree.Root.Left.Item);
@@ -138,7 +138,7 @@ namespace Common.Collections.Test.Trees
             {
                 int j = list[i];
                 list.Remove(j);
-                tree.Remove(j);
+                tree.RemoveValue(j);
             }
 
             list.Sort();

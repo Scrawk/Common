@@ -69,7 +69,7 @@ namespace Common.Collections.Queues
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Contains(T item)
+        public bool ContainsValue(T item)
         {
             foreach (var i in m_list)
                 if (i.CompareTo(item) == 0) return true;
@@ -145,7 +145,7 @@ namespace Common.Collections.Queues
             return m_list.First.Value;
         }
 
-        public bool Remove(T item)
+        public bool RemoveValue(T item)
         {
             return m_list.Remove(item);
         }

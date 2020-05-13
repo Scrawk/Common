@@ -100,7 +100,7 @@ namespace Common.Collections.Trees
         /// </summary>
         /// <param name="item">the item</param>
         /// <returns>If the item is in the tree</returns>
-        public bool Contains(T item)
+        public bool ContainsValue(T item)
         {
             BinaryTreeNode<T> current = Root;
 
@@ -175,7 +175,7 @@ namespace Common.Collections.Trees
         /// </summary>
         /// <param name="item"></param>
         /// <returns>True if the item was removed</returns>
-        public virtual bool Remove(T item)
+        public virtual bool RemoveValue(T item)
         {
             BinaryTreeNode<T> parent = null;
             BinaryTreeNode<T> current = Root;
@@ -254,7 +254,7 @@ namespace Common.Collections.Trees
                 throw new InvalidOperationException("Queue is empty.");
 
             T item = FindMinimum();
-            Remove(item);
+            RemoveValue(item);
             return item;
         }
 

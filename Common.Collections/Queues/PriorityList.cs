@@ -72,38 +72,38 @@ namespace Common.Collections.Queues
         /// and will consider items  the same 
         /// order the same object.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public bool Contains(T item)
+        public bool ContainsValue(T value)
         {
-            return IndexOf(item) >= 0;
+            return IndexOfValue(value) >= 0;
         }
 
         /// <summary>
-        /// Find the index of the item in the list.
+        /// Find the index of the value in the list.
         /// This utilizes the type T's Comparer 
         /// and will consider items  the same 
         /// order the same object.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public int IndexOf(T item)
+        public int IndexOfValue(T value)
         {
             Sort();
 
             int i = 0;
             if(Comparer != null)
-                i = m_list.BinarySearch(item, Comparer);
+                i = m_list.BinarySearch(value, Comparer);
             else
-                i = m_list.BinarySearch(item);
+                i = m_list.BinarySearch(value);
 
             return (i < 0) ? -1 : i;
         }
 
-        public bool FindPredecessor(T item, out T predecessor)
+        public bool FindPredecessor(T value, out T predecessor)
         {
             Sort();
-            int i = IndexOf(item);
+            int i = IndexOfValue(value);
             if (i <= 0)
             {
                 predecessor = default(T);
@@ -116,10 +116,10 @@ namespace Common.Collections.Queues
             }
         }
 
-        public bool FindSuccesor(T item, out T succesor)
+        public bool FindSuccesor(T value, out T succesor)
         {
             Sort();
-            int i = IndexOf(item);
+            int i = IndexOfValue(value);
             if (i < 0 || i >= Count - 1)
             {
                 succesor = default(T);
@@ -138,12 +138,17 @@ namespace Common.Collections.Queues
             return m_list[0];
         }
 
-        public bool Remove(T item)
+        public bool RemoveValue(T value)
         {
-            int i = IndexOf(item);
+            int i = IndexOfValue(value);
             if (i < 0) return false;
             m_list.RemoveAt(i);
             return true;
+        }
+
+        public bool RemoveObject(T item)
+        {
+            return m_list.Remove(item);
         }
 
         public T RemoveFirst()

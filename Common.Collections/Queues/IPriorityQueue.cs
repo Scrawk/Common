@@ -54,11 +54,24 @@ namespace Common.Collections.Queues
         bool Add(T item);
 
         /// <summary>
-        /// Remove a item from the queue.
+        /// Find if the value is in the list.
+        /// This utilizes the type T's Comparer 
+        /// and will consider items  the same 
+        /// order the same object.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        bool Remove(T item);
+        bool ContainsValue(T value);
+
+        /// <summary>
+        /// Remove a value from the queue.
+        /// This utilizes the type T's Comparer 
+        /// and will consider items  the same 
+        /// order the same object.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        bool RemoveValue(T value);
 
         /// <summary>
         /// Remove the first item from the queue.
@@ -69,18 +82,18 @@ namespace Common.Collections.Queues
         /// <summary>
         /// Find the first item after this item in queue.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="value"></param>
         /// <param name="succesor"></param>
         /// <returns></returns>
-        bool FindSuccesor(T item, out T succesor);
+        bool FindSuccesor(T value, out T succesor);
 
         /// <summary>
         /// Find the first item before this item in queue.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="value"></param>
         /// <param name="predecessor"></param>
         /// <returns></returns>
-        bool FindPredecessor(T item, out T predecessor);
+        bool FindPredecessor(T value, out T predecessor);
 
         /// <summary>
         /// Return queue as list.

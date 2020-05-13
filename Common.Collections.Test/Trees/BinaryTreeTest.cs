@@ -17,7 +17,7 @@ namespace Common.Collections.Test.Trees
             tree.Add("Joe");
             Assert.AreEqual(1, tree.Count);
 
-            tree.Remove("Joe");
+            tree.RemoveValue("Joe");
             Assert.AreEqual(0, tree.Count);
         }
 
@@ -29,7 +29,7 @@ namespace Common.Collections.Test.Trees
 
             foreach (string name in list)
             {
-                Assert.IsTrue(tree.Contains(name));
+                Assert.IsTrue(tree.ContainsValue(name));
             }
         }
 
@@ -95,7 +95,7 @@ namespace Common.Collections.Test.Trees
         {
             var tree = TestTree();
 
-            tree.Remove("George");
+            tree.RemoveValue("George");
             Assert.AreEqual("Daniel", tree.Root.Item);
             Assert.AreEqual("Adam", tree.Root.Left.Item);
             Assert.AreEqual("Michael", tree.Root.Right.Item);
@@ -104,7 +104,7 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual("Peter", tree.Root.Right.Right.Left.Item);
             Assert.AreEqual(6, tree.Count);
 
-            tree.Remove("Adam");
+            tree.RemoveValue("Adam");
             Assert.AreEqual("Daniel", tree.Root.Item);
             Assert.AreEqual("Michael", tree.Root.Right.Item);
             Assert.AreEqual("Jones", tree.Root.Right.Left.Item);
@@ -112,7 +112,7 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual("Peter", tree.Root.Right.Right.Left.Item);
             Assert.AreEqual(5, tree.Count);
 
-            tree.Remove("Michael");
+            tree.RemoveValue("Michael");
             Assert.AreEqual("Daniel", tree.Root.Item);
             Assert.AreEqual("Jones", tree.Root.Right.Item);
             Assert.AreEqual("Tom", tree.Root.Right.Right.Item);
@@ -136,19 +136,19 @@ namespace Common.Collections.Test.Trees
             var tree = TestTree();
             CheckParent(null, tree.Root);
 
-            tree.Remove("Adam");
+            tree.RemoveValue("Adam");
             CheckParent(null, tree.Root);
 
-            tree.Remove("Jones");
+            tree.RemoveValue("Jones");
             CheckParent(null, tree.Root);
 
-            tree.Remove("Michael");
+            tree.RemoveValue("Michael");
             CheckParent(null, tree.Root);
 
-            tree.Remove("Tom");
+            tree.RemoveValue("Tom");
             CheckParent(null, tree.Root);
 
-            tree.Remove("Peter");
+            tree.RemoveValue("Peter");
             CheckParent(null, tree.Root);
         }
 
