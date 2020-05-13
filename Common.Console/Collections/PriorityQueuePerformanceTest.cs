@@ -31,6 +31,8 @@ namespace Common.Console.Collections
         {
             Run(new PriorityList<TestComparer>());
 
+            Run(new PriorityLinkedList<TestComparer>());
+
             Run(new BinaryHeap<TestComparer>());
 
             Run(new BinaryTree<TestComparer>());

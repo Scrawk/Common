@@ -7,7 +7,7 @@ namespace Common.Collections.Queues
 
     /// <summary>
     /// A naive implementation of a priority queue
-    /// using a list. Used for Debuging and performance tests.
+    /// using a list.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class PriorityList<T> : IPriorityQueue<T>

@@ -7,7 +7,7 @@ namespace Common.Collections.Queues
 
     /// <summary>
     /// A naive implementation of a priority queue
-    /// using a list. Used for Debuging and performance tests.
+    /// using a linked list.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class PriorityLinkedList<T> : IPriorityQueue<T>
@@ -147,17 +147,14 @@ namespace Common.Collections.Queues
 
         public bool Remove(T item)
         {
-            //int i = IndexOf(item);
-            //if (i < 0) return false;
-            //m_list.RemoveAt(i);
-            return true;
+            return m_list.Remove(item);
         }
 
         public T RemoveFirst()
         {
             Sort();
             T item = m_list.First.Value;
-            m_list.RemoveAt(0);
+            m_list.RemoveFirst();
             return item;
         }
 
