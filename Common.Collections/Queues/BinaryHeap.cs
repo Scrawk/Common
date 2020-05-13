@@ -155,14 +155,15 @@ namespace Common.Collections.Queues
 
         /// <summary>
         /// Removes an item from the binary heap. 
-        /// This utilizes the type T's Comparer and will not remove duplicates.
+        /// This utilizes the type T's Comparer 
+        /// and will not remove duplicates.
         /// </summary>
-        /// <param name="item">The item to be removed.</param>
+        /// <param name="value">The item to be removed.</param>
         /// <returns>Boolean true if the item was removed.</returns>
-        public bool RemoveValue(T item)
+        public bool RemoveValue(T value)
         {
             EnsureSort();
-            int i = IndexOf(item);
+            int i = IndexOfValue(value);
             if (i < 0) return false;
             Array.Copy(m_data, i + 1, m_data, i, Count - i - 1);
             Count--;
@@ -189,31 +190,34 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Checks to see if the binary heap contains the specified item.
-        /// This utilizes the type T's Comparer and will consider items the 
+        /// Checks to see if the binary heap contains 
+        /// the specified item.
+        /// This utilizes the type T's Comparer 
+        /// and will consider items the 
         /// same order the same object.
         /// </summary>
-        /// <param name="item">The item to search the binary heap for.</param>
+        /// <param name="value">The item to search the binary heap for.</param>
         /// <returns>A boolean, true if binary heap contains item.</returns>
-        public bool ContainsValue(T item)
+        public bool ContainsValue(T value)
         {
             EnsureSort();
-            return IndexOf(item) >= 0;
+            return IndexOfValue(value) >= 0;
         }
 
         /// <summary>
         /// Find the index of the item in the list.
-        /// This utilizes the type T's Comparer and will consider items 
+        /// This utilizes the type T's Comparer 
+        /// and will consider items 
         /// the same order the same object.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        private int IndexOf(T item)
+        private int IndexOfValue(T value)
         {
             if (Comparer != null)
-                return Array.BinarySearch<T>(m_data, 0, Count, item, Comparer);
+                return Array.BinarySearch<T>(m_data, 0, Count, value, Comparer);
             else
-                return Array.BinarySearch<T>(m_data, 0, Count, item);
+                return Array.BinarySearch<T>(m_data, 0, Count, value);
         }
 
         /// <summary>

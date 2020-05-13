@@ -98,15 +98,15 @@ namespace Common.Collections.Trees
         /// <summary>
         /// Does the tree contain the item.
         /// </summary>
-        /// <param name="item">the item</param>
+        /// <param name="value">the item</param>
         /// <returns>If the item is in the tree</returns>
-        public bool ContainsValue(T item)
+        public bool ContainsValue(T value)
         {
             BinaryTreeNode<T> current = Root;
 
             while(current != null)
             {
-                int c = Compare(item, current.Item);
+                int c = Compare(value, current.Item);
                 if (c < 0)
                     current = current.Left;
                 else if (c > 0)
@@ -171,18 +171,18 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// Remove a item from the tree.
+        /// Remove a value from the tree.
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns>True if the item was removed</returns>
-        public virtual bool RemoveValue(T item)
+        /// <param name="value"></param>
+        /// <returns>True if the value was removed</returns>
+        public virtual bool RemoveValue(T value)
         {
             BinaryTreeNode<T> parent = null;
             BinaryTreeNode<T> current = Root;
 
             while (current != null)
             {
-                int c = Compare(item, current.Item);
+                int c = Compare(value, current.Item);
                 if (c < 0)
                 {
                     parent = current;
@@ -208,7 +208,7 @@ namespace Common.Collections.Trees
                 }
                 else
                 {
-                    if (Compare(item, parent.Item) < 0)
+                    if (Compare(value, parent.Item) < 0)
                     {
                         parent.Left = current.Right;
                         SetParent(parent, parent.Left);

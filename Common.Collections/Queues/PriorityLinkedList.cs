@@ -145,7 +145,24 @@ namespace Common.Collections.Queues
             return m_list.First.Value;
         }
 
-        public bool RemoveValue(T item)
+        public bool RemoveValue(T value)
+        {
+            if (Count == 0) return false;
+            Sort();
+
+            for (var node = m_list.First; node != m_list.Last.Next; node = node.Next)
+            {
+                if (node.Value.CompareTo(value) == 0)
+                {
+                    m_list.Remove(node);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool RemoveObject(T item)
         {
             return m_list.Remove(item);
         }
