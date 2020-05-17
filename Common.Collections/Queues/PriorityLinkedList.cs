@@ -77,7 +77,7 @@ namespace Common.Collections.Queues
             return false;
         }
 
-        public bool FindPredecessor(T item, out T predecessor)
+        public bool FindPredecessor(T value, out T predecessor)
         {
             if(Count == 0)
             {
@@ -89,7 +89,7 @@ namespace Common.Collections.Queues
 
             for (var node = m_list.First; node != m_list.Last.Next; node = node.Next)
             {
-                if (node.Value.CompareTo(item) == 0)
+                if (node.Value.CompareTo(value) == 0)
                 {
                     if (node.Previous == null)
                     {
@@ -108,7 +108,7 @@ namespace Common.Collections.Queues
             return false;
         }
 
-        public bool FindSuccesor(T item, out T succesor)
+        public bool FindSuccesor(T value, out T succesor)
         {
             if (Count == 0)
             {
@@ -120,7 +120,7 @@ namespace Common.Collections.Queues
 
             for (var node = m_list.First; node != m_list.Last.Next; node = node.Next)
             {
-                if (node.Value.CompareTo(item) == 0)
+                if (node.Value.CompareTo(value) == 0)
                 {
                     if (node.Next == null)
                     {
@@ -188,6 +188,7 @@ namespace Common.Collections.Queues
 
         public IEnumerator<T> GetEnumerator()
         {
+            Sort();
             return m_list.GetEnumerator();
         }
 

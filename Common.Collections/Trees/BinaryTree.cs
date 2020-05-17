@@ -301,14 +301,14 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// Finds the nodes succesor. ie the next highest item.
+        /// Find the values succesor.
         /// </summary>
-        /// <param name="node">the node</param>
-        /// <param name="succesor">the nodes succesors item</param>
-        /// <returns>if the node has a succesor</returns>
-        public bool FindSuccesor(T item, out T succesor)
+        /// <param name="value"></param>
+        /// <param name="succesor"></param>
+        /// <returns></returns>
+        public bool FindSuccesor(T value, out T succesor)
         {
-            return FindSuccesor(FindNode(item), out succesor);
+            return FindSuccesor(FindNode(value), out succesor);
         }
 
         public bool FindSuccesor(BinaryTreeNode<T> node, out T succesor)
@@ -336,14 +336,14 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// Finds the nodes succesor. ie the next highest item.
+        /// The values predecessor.
         /// </summary>
-        /// <param name="node">the node</param>
-        /// <param name="predecessor">the nodes predecessors item</param>
-        /// <returns>if the node has a succesor</returns>
-        public bool FindPredecessor(T item, out T predecessor)
+        /// <param name="value"></param>
+        /// <param name="predecessor"></param>
+        /// <returns></returns>
+        public bool FindPredecessor(T value, out T predecessor)
         {
-            return FindPredecessor(FindNode(item), out predecessor);
+            return FindPredecessor(FindNode(value), out predecessor);
         }
 
         public bool FindPredecessor(BinaryTreeNode<T> node, out T predecessor)

@@ -45,6 +45,23 @@ namespace Common.Collections.Queues
         public IComparer<T> Comparer { get; set; }
 
         /// <summary>
+        /// Access a element at index i.
+        /// </summary>
+        public T this[int i]
+        {
+            get 
+            {
+                Sort();
+                return m_list[i]; 
+            }
+            set 
+            {
+                m_isDirty = true;
+                m_list[i] = value; 
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -172,6 +189,7 @@ namespace Common.Collections.Queues
 
         public IEnumerator<T> GetEnumerator()
         {
+            Sort();
             return m_list.GetEnumerator();
         }
 
