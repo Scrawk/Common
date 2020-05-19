@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
@@ -280,6 +281,23 @@ namespace Common.Geometry.Polygons
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Print the object for debugging.
+        /// </summary>
+        public string Print()
+        {
+            var builder = new StringBuilder();
+
+            builder.AppendLine("var points = new Vector2f[]{");
+
+            for(int i = 0; i < Count; i++)
+                builder.AppendLine("(" + Positions[i] + "),");
+
+            builder.AppendLine("};");
+
+            return builder.ToString();
         }
     }
 }

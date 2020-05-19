@@ -446,7 +446,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
-            return string.Format("{0},{1}", x, y);
+            return string.Format("{0}f,{1}f", x, y);
         }
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
-            return string.Format("{0},{1}", x.ToString(f), y.ToString(f));
+            return string.Format("{0}f,{1}f", x.ToString(f), y.ToString(f));
         }
 
         /// <summary>

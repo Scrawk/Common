@@ -32,5 +32,13 @@ namespace System.Collections.Generic
             for (int i = 0; i < count; i++)
                 list.Add(item);
         }
+
+        public static T PopLast<T>(this List<T> list)
+        {
+            int count = list.Count;
+            var v = list[count - 1];
+            list.RemoveAt(count - 1);
+            return v;
+        }
     }
 }

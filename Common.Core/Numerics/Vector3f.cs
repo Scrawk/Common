@@ -509,7 +509,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
-            return string.Format("{0},{1},{2}", x, y, z);
+            return string.Format("{0}f,{1}f,{2}f", x, y, z);
         }
 
         /// <summary>
@@ -518,7 +518,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
-            return string.Format("{0},{1},{2}", x.ToString(f), y.ToString(f), z.ToString(f));
+            return string.Format("{0}f,{1}f,{2}f", x.ToString(f), y.ToString(f), z.ToString(f));
         }
 
         /// <summary>

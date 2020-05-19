@@ -9,6 +9,12 @@ namespace System.Collections.Generic
     public static class IListExtension
     {
 
+        public static T PeekLast<T>(this IList<T> list)
+        {
+            int count = list.Count;
+            return list[count - 1];
+        }
+
         public static void Shuffle<T>(this IList<T> list, int seed)
         {
             var rnd = new Random(seed);
