@@ -35,7 +35,7 @@ namespace System.Collections.Generic
 
         public static T GetCircular<T>(this IList<T> list, int i)
         {
-            return list[IMath.Wrap(i, list.Count)];
+            return list[MathUtil.Wrap(i, list.Count)];
         }
 
         public static T GetClamped<T>(this IList<T> list, int i)

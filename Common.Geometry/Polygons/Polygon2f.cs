@@ -79,7 +79,7 @@ namespace Common.Geometry.Polygons
             for (int i = 0; i < Count; i++)
             {
                 Indices[i * 2 + 0] = i;
-                Indices[i * 2 + 1] = IMath.Wrap(i + 1, Count);
+                Indices[i * 2 + 1] = MathUtil.Wrap(i + 1, Count);
             }
         }
 
@@ -228,15 +228,15 @@ namespace Common.Geometry.Polygons
         {
             var polygon = new Polygon2f(segments);
 
-            float pi = FMath.PI;
+            float pi = MathUtil.F_PI;
             float fseg = segments;
 
             for (int i = 0; i < segments; i++)
             {
                 float theta = 2.0f * pi * i / fseg;
 
-                float x = -radius * FMath.Cos(theta);
-                float y = -radius * FMath.Sin(theta);
+                float x = -radius * MathUtil.Cos(theta);
+                float y = -radius * MathUtil.Sin(theta);
 
                 polygon.Positions[i] = center + new Vector2f(x, y);
             }

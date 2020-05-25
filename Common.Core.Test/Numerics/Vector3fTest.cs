@@ -65,7 +65,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void Magnitude()
         {
-            Assert.IsTrue(NearlyEqual(VECTOR.One.Magnitude, FMath.Sqrt(3)));
+            Assert.IsTrue(NearlyEqual(VECTOR.One.Magnitude, MathUtil.Sqrt(3)));
         }
 
         [TestMethod]
@@ -207,13 +207,6 @@ namespace Common.Core.Test.Numerics
         {
             VECTOR v = new VECTOR(1, 2, 3);
             Assert.AreEqual("1,2,3", v.ToString());
-        }
-
-        [TestMethod]
-        public void FromString()
-        {
-            VECTOR v = new VECTOR(1, 2, 3);
-            Assert.AreEqual(v, VECTOR.FromString("1,2,3"));
         }
 
         bool NearlyEqual(REAL f1, REAL f2, REAL eps = 1e-6f)

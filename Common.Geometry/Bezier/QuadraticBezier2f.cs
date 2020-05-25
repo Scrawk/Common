@@ -46,13 +46,13 @@ namespace Common.Geometry.Bezier
                 float B = 4.0f * (ax * bx + az * bz);
                 float C = bx * bx + bz * bz;
 
-                float Sabc = 2.0f * FMath.Sqrt(A + B + C);
-                float A2 = FMath.Sqrt(A);
+                float Sabc = 2.0f * MathUtil.Sqrt(A + B + C);
+                float A2 = MathUtil.Sqrt(A);
                 float A32 = 2.0f * A * A2;
-                float CSQ = 2.0f * FMath.Sqrt(C);
+                float CSQ = 2.0f * MathUtil.Sqrt(C);
                 float BA = B / A2;
 
-                return (A32 * Sabc + A2 * B * (Sabc - CSQ) + (4 * C * A - B * B) * FMath.Log((2 * A2 + BA + Sabc) / (BA + CSQ))) / (4 * A32);
+                return (A32 * Sabc + A2 * B * (Sabc - CSQ) + (4 * C * A - B * B) * MathUtil.Log((2 * A2 + BA + Sabc) / (BA + CSQ))) / (4 * A32);
             }
         }
 

@@ -63,7 +63,7 @@ namespace Common.GraphTheory.GridGraphs
 
                         if (alt < v.Cost)
                         {
-                            if (!FMath.IsFinite(alt))
+                            if (!MathUtil.IsFinite(alt))
                                 throw new ArithmeticException("Cost is not finite.");
 
                             v.Cost = alt;

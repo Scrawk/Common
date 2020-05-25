@@ -194,7 +194,7 @@ namespace Common.Core.Numerics
         {
             get
             {
-                return Adjoint * FMath.SafeInv(Determinant);
+                return Adjoint * MathUtil.SafeInv(Determinant);
             }
         }
 
@@ -299,7 +299,7 @@ namespace Common.Core.Numerics
         {
             Vector3f kProd = new Vector3f();
 
-			float invW = FMath.SafeInv(m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33);
+			float invW = MathUtil.SafeInv(m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33);
 
 			kProd.x = (m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03) * invW;
 			kProd.y = (m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13) * invW;
@@ -458,7 +458,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix4x4f m0, Matrix4x4f m1, float eps = FMath.EPS)
+        public static bool AlmostEqual(Matrix4x4f m0, Matrix4x4f m1, float eps = MathUtil.F_EPS)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;
@@ -529,7 +529,7 @@ namespace Common.Core.Numerics
 
             float det = Determinant;
 
-            if (FMath.IsZero(det))
+            if (MathUtil.IsZero(det))
                 return false;
 
             mInv = Adjoint * (1.0f / det);
@@ -693,9 +693,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4f RotateX(float angle)
         {
-            float a = angle * FMath.Rad2Deg;
-			float ca = (float)Math.Cos(a);
-			float sa = (float)Math.Sin(a);
+            float a = MathUtil.ToRadians(angle);
+			float ca = MathUtil.Cos(a);
+			float sa = MathUtil.Sin(a);
 
             return new Matrix4x4f(	1, 0, 0, 0,
                                     0, ca, -sa, 0,
@@ -708,9 +708,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4f RotateY(float angle)
         {
-            float a = angle * FMath.Rad2Deg;
-            float ca = (float)Math.Cos(a);
-            float sa = (float)Math.Sin(a);
+            float a = MathUtil.ToRadians(angle);
+            float ca = MathUtil.Cos(a);
+            float sa = MathUtil.Sin(a);
 
             return new Matrix4x4f(	ca, 0, sa, 0,
                                     0, 1, 0, 0,
@@ -723,9 +723,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4f RotateZ(float angle)
         {
-            float a = angle * FMath.Rad2Deg;
-            float ca = (float)Math.Cos(a);
-            float sa = (float)Math.Sin(a);
+            float a = MathUtil.ToRadians(angle);
+            float ca = MathUtil.Cos(a);
+            float sa = MathUtil.Sin(a);
 
             return new Matrix4x4f(	ca, -sa, 0, 0,
                                     sa, ca, 0, 0,

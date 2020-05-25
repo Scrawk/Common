@@ -73,7 +73,7 @@ namespace Common.Geometry.Shapes
             float dy = ray.Position.y - Position.y;
 
             float det = Direction.x * Direction.y - ray.Direction.y * ray.Direction.x;
-            if (DMath.IsZero(det)) return false;
+            if (MathUtil.IsZero(det)) return false;
 
             s = (dy * ray.Direction.x - dx * ray.Direction.y) / det;
             t = (dy * Direction.x - dx * Direction.y) / det;
@@ -96,14 +96,14 @@ namespace Common.Geometry.Shapes
             float dy = seg.A.y - Position.y;
 
             float len = Vector2f.Distance(seg.A, seg.B);
-            if (DMath.IsZero(len)) return false;
+            if (MathUtil.IsZero(len)) return false;
 
             Vector2f n1;
             n1.x = (seg.B.x - seg.A.x) / len;
             n1.y = (seg.B.y - seg.A.y) / len;
 
             float det = n1.x * Direction.y - n1.y * Direction.x;
-            if (DMath.IsZero(det)) return false;
+            if (MathUtil.IsZero(det)) return false;
 
             s = (dy * n1.x - dx * n1.y) / det;
             t = (dy * Direction.x - dx * Direction.y) / det;
@@ -130,7 +130,7 @@ namespace Common.Geometry.Shapes
             float discr = b * b - c;
             if (discr < 0.0) return false;
 
-            t = -b - FMath.Sqrt(discr);
+            t = -b - MathUtil.Sqrt(discr);
 
             if (t < 0.0) t = 0;
             return true;
@@ -150,7 +150,7 @@ namespace Common.Geometry.Shapes
 
             for (int i = 0; i < 2; i++)
             {
-                if (Math.Abs(Direction[i]) < DMath.EPS)
+                if (MathUtil.IsZero(Direction[i]))
                 {
                     if (Position[i] < box.Min[i] || Position[i] > box.Max[i])
                         return false;

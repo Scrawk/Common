@@ -188,9 +188,9 @@ namespace Common.Geometry.Shapes
 
             //add in an epsilon term to counteract arithmetic errors 
             //when segment is near parallel to a coordinate axis.
-            adx += FMath.EPS;
-            ady += FMath.EPS;
-            adz += FMath.EPS;
+            adx += MathUtil.F_EPS;
+            ady += MathUtil.F_EPS;
+            adz += MathUtil.F_EPS;
 
             if (Math.Abs(m.y * d.z - m.z * d.y) > e.y * adz + e.z * ady) return false;
             if (Math.Abs(m.z * d.x - m.x * d.z) > e.x * adz + e.z * adx) return false;
@@ -222,10 +222,10 @@ namespace Common.Geometry.Shapes
             Vector3f ap = p - A;
 
             float len = ab.x * ab.x + ab.y * ab.y;
-            if (len < FMath.EPS) return;
+            if (MathUtil.IsZero(len)) return;
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
-            t = FMath.Clamp01(t);
+            t = MathUtil.Clamp01(t);
         }
 
         /// <summary>

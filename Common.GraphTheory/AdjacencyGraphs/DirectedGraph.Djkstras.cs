@@ -42,7 +42,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
                         if (alt < Vertices[v].Cost)
                         {
-                            if (!FMath.IsFinite(alt))
+                            if (!MathUtil.IsFinite(alt))
                                 throw new ArithmeticException("Cost is not finite.");
 
                             Vertices[v].Cost = alt;

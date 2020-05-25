@@ -213,7 +213,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return FMath.SafeSqrt(SqrMagnitude);
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -237,7 +237,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y + z * z + w * w);
+                REAL invLength = MathUtil.SafeInvSqrt(1.0f, x * x + y * y + z * z + w * w);
                 return new Vector4f(x * invLength, y * invLength, z * invLength, w * invLength);
             }
         }
@@ -413,7 +413,7 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(Vector4f v0, Vector4f v1, REAL eps = FMath.EPS)
+        public static bool AlmostEqual(Vector4f v0, Vector4f v1, REAL eps = MathUtil.F_EPS)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
             if (Math.Abs(v0.y - v1.y) > eps) return false;
@@ -471,7 +471,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
-            return string.Format("{0}f,{1}f,{2}f,{3}f", x, y, z, w);
+            return string.Format("{0},{1},{2},{3}", x, y, z, w);
         }
 
         /// <summary>
@@ -480,29 +480,8 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
-            return string.Format("{0}f,{1}f,{2}f,{3}f", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
+            return string.Format("{0},{1},{2},{3}", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
         }
-
-        /// <summary>
-        /// Vector from a string.
-        /// </summary>
-        public static Vector4f FromString(string s)
-		{
-            Vector4f v = new Vector4f();
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
-
-                v.x = REAL.Parse(result[0]);
-                v.y = REAL.Parse(result[1]);
-                v.z = REAL.Parse(result[2]);
-                v.w = REAL.Parse(result[3]);
-            }
-            catch { }
-			
-			return v;
-		}
 
         /// <summary>
         /// The dot product of two vectors.
@@ -528,7 +507,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Distance(Vector4f v0, Vector4f v1)
         {
-            return FMath.SafeSqrt(SqrDistance(v0, v1));
+            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
@@ -550,7 +529,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
-            REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y + z * z + w * w);
+            REAL invLength = MathUtil.SafeInvSqrt(1.0f, x * x + y * y + z * z + w * w);
             x *= invLength;
             y *= invLength;
             z *= invLength;

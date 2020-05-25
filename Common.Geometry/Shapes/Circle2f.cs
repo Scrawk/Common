@@ -47,7 +47,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public float Area
         {
-            get { return FMath.PI * Radius * Radius; }
+            get { return MathUtil.F_PI * Radius * Radius; }
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public float Circumference
         {
-            get { return FMath.PI * Radius * 2.0f; }
+            get { return MathUtil.F_PI * Radius * 2.0f; }
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Common.Geometry.Shapes
 
             if (dist2 > cir.Radius2)
             {
-                float dist = FMath.Sqrt(dist2);
+                float dist = MathUtil.Sqrt(dist2);
                 float radius = (cir.Radius + dist) * 0.5f;
                 float k = (radius - cir.Radius) / dist;
 
@@ -238,7 +238,7 @@ namespace Common.Geometry.Shapes
             float s = -1.0f / (2.0f * a);
 
             var circumCenter = new Vector2f(s * dx, s * dy);
-            float radius = Math.Abs(s) * FMath.Sqrt(dx * dx + dy * dy - 4.0f * a * c);
+            float radius = Math.Abs(s) * MathUtil.Sqrt(dx * dx + dy * dy - 4.0f * a * c);
 
             return new Circle2f(circumCenter, radius);
         }

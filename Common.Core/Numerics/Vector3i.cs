@@ -204,7 +204,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return DMath.SafeSqrt(SqrMagnitude);
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -446,26 +446,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Vector from a string.
-        /// </summary>
-        static public Vector3i FromString(string s)
-		{
-            Vector3i v = new Vector3i();
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
-
-                v.x = REAL.Parse(result[0]);
-                v.y = REAL.Parse(result[1]);
-                v.z = REAL.Parse(result[2]);
-            }
-            catch { }
-			
-			return v;
-		}
-
-        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -498,7 +478,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Distance(Vector3i v0, Vector3i v1)
         {
-            return DMath.SafeSqrt(SqrDistance(v0, v1));
+            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>

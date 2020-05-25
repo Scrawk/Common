@@ -201,7 +201,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return DMath.SafeSqrt(SqrMagnitude);
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -225,7 +225,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z + w * w);
+                REAL invLength = MathUtil.SafeInvSqrt(1.0, x * x + y * y + z * z + w * w);
                 return new Vector4d(x * invLength, y * invLength, z * invLength, w * invLength);
             }
         }
@@ -401,7 +401,7 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(Vector4d v0, Vector4d v1, REAL eps = DMath.EPS)
+        public static bool AlmostEqual(Vector4d v0, Vector4d v1, REAL eps = MathUtil.D_EPS)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
             if (Math.Abs(v0.y - v1.y) > eps) return false;
@@ -472,27 +472,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Vector from a string.
-        /// </summary>
-        static public Vector4d FromString(string s)
-		{
-            Vector4d v = new Vector4d();
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
-
-                v.x = REAL.Parse(result[0]);
-                v.y = REAL.Parse(result[1]);
-                v.z = REAL.Parse(result[2]);
-                v.w = REAL.Parse(result[3]);
-            }
-            catch { }
-			
-			return v;
-		}
-
-        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -515,7 +494,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Distance(Vector4d v0, Vector4d v1)
         {
-            return DMath.SafeSqrt(SqrDistance(v0, v1));
+            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
@@ -537,7 +516,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
 		{
-            REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z + w * w);
+            REAL invLength = MathUtil.SafeInvSqrt(1.0, x * x + y * y + z * z + w * w);
 	    	x *= invLength;
 			y *= invLength;
 			z *= invLength;

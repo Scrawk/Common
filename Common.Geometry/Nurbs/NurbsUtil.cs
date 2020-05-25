@@ -289,10 +289,10 @@ namespace Common.Geometry.Nurbs
 		 * @param[in] eps Tolerance for checking closeness
 		 * @return Whether the numbers are close w.r.t. the tolerance
 		 */
-		internal static bool Close(double a, double b, double eps = DMath.EPS)
-		{
-			return (Math.Abs(a - b) < eps) ? true : false;
-		}
+		//internal static bool Close(double a, double b, double eps = MathUtil.D_EPS)
+		//{
+		//	return (Math.Abs(a - b) < eps) ? true : false;
+		//}
 
 		/**
 		 * Map numbers from one interval to another

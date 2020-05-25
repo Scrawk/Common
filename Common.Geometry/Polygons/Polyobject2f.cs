@@ -195,7 +195,7 @@ namespace Common.Geometry.Polygons
         public float Interpolate(float t, IList<float> array)
         {
             FindInterpolationPoint(t, out int idx, out float s);
-            return FMath.Lerp(array[idx], array.GetCircular(idx + 1), s);
+            return MathUtil.Lerp(array[idx], array.GetCircular(idx + 1), s);
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         private void FindInterpolationPoint(float t, out int idx, out float s)
         {
-            t = FMath.Clamp01(t) * Length;
+            t = MathUtil.Clamp01(t) * Length;
             int size = Lengths.Length;
 
             if (t == 0)

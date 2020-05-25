@@ -56,11 +56,11 @@ namespace Common.Collections.Textures
         protected int Index(int i, int size)
         {
             if (Wrap == TEXTURE_WRAP.WRAP)
-                return IMath.Wrap(i, size);
+                return MathUtil.Wrap(i, size);
             else if(Wrap == TEXTURE_WRAP.CLAMP)
-                return IMath.Clamp(i, 0, size-1);
+                return MathUtil.Clamp(i, 0, size-1);
             else //MIRROR
-                return IMath.Mirror(i, size);
+                return MathUtil.Mirror(i, size);
         }
 
         protected BilinearIndex NewBilinearIndex(double i, int size)
@@ -76,18 +76,18 @@ namespace Common.Collections.Textures
 
             if (Wrap == TEXTURE_WRAP.WRAP)
             {
-                i0 = IMath.Wrap(i0, size);
-                i1 = IMath.Wrap(i1, size);
+                i0 = MathUtil.Wrap(i0, size);
+                i1 = MathUtil.Wrap(i1, size);
             }
             else if (Wrap == TEXTURE_WRAP.CLAMP)
             {
-                i0 = IMath.Clamp(i0, 0, size - 1);
-                i1 = IMath.Clamp(i1, 0, size - 1);
+                i0 = MathUtil.Clamp(i0, 0, size - 1);
+                i1 = MathUtil.Clamp(i1, 0, size - 1);
             }
             else //MIRROR
             {
-                i0 = IMath.Mirror(i0, size);
-                i1 = IMath.Mirror(i1, size);
+                i0 = MathUtil.Mirror(i0, size);
+                i1 = MathUtil.Mirror(i1, size);
             }
 
             BilinearIndex idx;
@@ -114,24 +114,24 @@ namespace Common.Collections.Textures
 
             if (Wrap == TEXTURE_WRAP.WRAP)
             {
-                i0 = IMath.Wrap(i0, size);
-                i1 = IMath.Wrap(i1, size);
-                i2 = IMath.Wrap(i2, size);
-                i3 = IMath.Wrap(i3, size);
+                i0 = MathUtil.Wrap(i0, size);
+                i1 = MathUtil.Wrap(i1, size);
+                i2 = MathUtil.Wrap(i2, size);
+                i3 = MathUtil.Wrap(i3, size);
             }
             else if (Wrap == TEXTURE_WRAP.CLAMP)
             {
-                i0 = IMath.Clamp(i0, 0, size - 1);
-                i1 = IMath.Clamp(i1, 0, size - 1);
-                i2 = IMath.Clamp(i2, 0, size - 1);
-                i3 = IMath.Clamp(i3, 0, size - 1);
+                i0 = MathUtil.Clamp(i0, 0, size - 1);
+                i1 = MathUtil.Clamp(i1, 0, size - 1);
+                i2 = MathUtil.Clamp(i2, 0, size - 1);
+                i3 = MathUtil.Clamp(i3, 0, size - 1);
             }
             else //MIRROR
             {
-                i0 = IMath.Mirror(i0, size);
-                i1 = IMath.Mirror(i1, size);
-                i2 = IMath.Mirror(i2, size);
-                i3 = IMath.Mirror(i3, size);
+                i0 = MathUtil.Mirror(i0, size);
+                i1 = MathUtil.Mirror(i1, size);
+                i2 = MathUtil.Mirror(i2, size);
+                i3 = MathUtil.Mirror(i3, size);
             }
 
             BicubicIndex idx;

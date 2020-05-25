@@ -281,7 +281,7 @@ namespace Common.Core.IO
 			byte[] bytes = new byte[size];
 
 			for(int i = 0; i < size; i++)
-				bytes[i] = (byte)(FMath.Clamp(data[i], 0.0f, 1.0f) * 255.0f);
+				bytes[i] = (byte)(MathUtil.Clamp(data[i], 0.0f, 1.0f) * 255.0f);
 
 			File.WriteAllBytes(filename, bytes);
 		}
@@ -305,7 +305,7 @@ namespace Common.Core.IO
 			
 			ushort[] tmp = new ushort[data.Length];
 			for(int i = 0; i < data.Length; i++)
-				tmp[i] = (ushort)FMath.Clamp(data[i] * ushort.MaxValue, 0, ushort.MaxValue);
+				tmp[i] = (ushort)MathUtil.Clamp(data[i] * ushort.MaxValue, 0, ushort.MaxValue);
 
 			Buffer.BlockCopy(tmp, 0, bytes, 0, size);
 

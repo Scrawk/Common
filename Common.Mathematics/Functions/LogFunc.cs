@@ -22,7 +22,7 @@ namespace Common.Mathematics.Functions
 
 		public LogFunc(double a, double b) : base(a)
 		{
-            if (!DMath.IsFinite(b))
+            if (!MathUtil.IsFinite(b))
                 throw new ArgumentException("b must be finite.");
 
             if (b <= 1)
@@ -61,7 +61,7 @@ namespace Common.Mathematics.Functions
         public override bool IsUndefined(double x)
         {
             if (x <= 0) return true;
-            return !DMath.IsFinite(x);
+            return !MathUtil.IsFinite(x);
         }
 
         public override double Evalulate(double x)

@@ -34,7 +34,7 @@ namespace Common.Mathematics.Functions
 
 		public ExpFunc(double a, double c) : base(a)
 		{
-            if (!DMath.IsFinite(c))
+            if (!MathUtil.IsFinite(c))
                 throw new ArgumentException("c must be finite.");
 
             if (c == 0)
@@ -74,7 +74,7 @@ namespace Common.Mathematics.Functions
         /// </summary>
         public override bool IsUndefined(double x)
         {
-            return !DMath.IsFinite(x);
+            return !MathUtil.IsFinite(x);
         }
 
         /// <summary>

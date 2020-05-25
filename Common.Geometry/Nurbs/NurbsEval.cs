@@ -119,7 +119,7 @@ namespace Common.Geometry.Nurbs
 			var du = ders[1];
 			var du_len = du.Magnitude;
 
-			if (!NurbsUtil.Close(du_len, 0))
+			if (!MathUtil.IsZero(du_len))
 			{
 				du /= du_len;
 			}
@@ -138,7 +138,7 @@ namespace Common.Geometry.Nurbs
 			var du = ders[1];
 			var du_len = du.Magnitude;
 
-			if (!NurbsUtil.Close(du_len, 0))
+			if (!MathUtil.IsZero(du_len))
 			{
 				du /= du_len;
 			}
@@ -289,14 +289,12 @@ namespace Common.Geometry.Nurbs
 
 			var du_len = du.Magnitude;
 			var dv_len = dv.Magnitude;
-			if (!NurbsUtil.Close(du_len, 0))
-			{
+
+			if (!MathUtil.IsZero(du_len))
 				du /= du_len;
-			}
-			if (!NurbsUtil.Close(dv_len, 0))
-			{
+
+			if (!MathUtil.IsZero(dv_len))
 				dv /= dv_len;
-			}
 
 			return (du, dv);
 		}
@@ -317,14 +315,12 @@ namespace Common.Geometry.Nurbs
 
 			var du_len = du.Magnitude;
 			var dv_len = dv.Magnitude;
-			if (!NurbsUtil.Close(du_len, 0))
-			{
+
+			if (!MathUtil.IsZero(du_len))
 				du /= du_len;
-			}
-			if (!NurbsUtil.Close(dv_len, 0))
-			{
+			
+			if (!MathUtil.IsZero(dv_len))
 				dv /= dv_len;
-			}
 
 			return (du, dv);
 		}
@@ -344,10 +340,8 @@ namespace Common.Geometry.Nurbs
 			var n = Vector.Cross3(ptder[0, 1], ptder[1, 0]);
 
 			var n_len = n.Magnitude;
-			if (!NurbsUtil.Close(n_len, 0))
-			{
+			if (!MathUtil.IsZero(n_len))
 				n /= n_len;
-			}
 
 			return n;
 		}
@@ -367,10 +361,9 @@ namespace Common.Geometry.Nurbs
 			var n = Vector.Cross3(ptder[0, 1], ptder[1, 0]);
 
 			var n_len = n.Magnitude;
-			if (!NurbsUtil.Close(n_len, 0))
-			{
+			if (!MathUtil.IsZero(n_len))
 				n /= n_len;
-			}
+			
 			return n;
 		}
 

@@ -239,7 +239,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return FMath.SafeSqrt(SqrMagnitude);
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -263,7 +263,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y + z * z);
+                REAL invLength = MathUtil.SafeInvSqrt(1.0f, x * x + y * y + z * z);
                 return new Vector3f(x * invLength, y * invLength, z * invLength);
             }
         }
@@ -455,7 +455,7 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(Vector3f v0, Vector3f v1, REAL eps = FMath.EPS)
+        public static bool AlmostEqual(Vector3f v0, Vector3f v1, REAL eps = MathUtil.F_EPS)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
             if (Math.Abs(v0.y - v1.y) > eps) return false;
@@ -509,7 +509,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
-            return string.Format("{0}f,{1}f,{2}f", x, y, z);
+            return string.Format("{0},{1},{2}", x, y, z);
         }
 
         /// <summary>
@@ -518,29 +518,8 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
-            return string.Format("{0}f,{1}f,{2}f", x.ToString(f), y.ToString(f), z.ToString(f));
+            return string.Format("{0},{1},{2}", x.ToString(f), y.ToString(f), z.ToString(f));
         }
-
-        /// <summary>
-        /// Vector from a string.
-        /// </summary>
-        static public Vector3f FromString(string s)
-		{
-            Vector3f v = new Vector3f();
-
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
-
-                v.x = REAL.Parse(result[0]);
-                v.y = REAL.Parse(result[1]);
-                v.z = REAL.Parse(result[2]);
-            }
-            catch { }
-			
-			return v;
-		}
 
         /// <summary>
         /// The dot product of two vectors.
@@ -566,7 +545,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
-            REAL invLength = FMath.SafeInvSqrt(1.0f, x * x + y * y + z * z);
+            REAL invLength = MathUtil.SafeInvSqrt(1.0f, x * x + y * y + z * z);
             x *= invLength;
             y *= invLength;
             z *= invLength;
@@ -579,9 +558,9 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Angle180(Vector3f a, Vector3f b)
         {
-            REAL dp = Vector3f.Dot(a, b);
+            REAL dp = Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
-            return FMath.SafeAcos(FMath.SafeDiv(dp, m)) * FMath.Rad2Deg;
+            return MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
         }
 
         /// <summary>
@@ -608,7 +587,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Distance(Vector3f v0, Vector3f v1)
         {
-            return FMath.SafeSqrt(SqrDistance(v0, v1));
+            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
@@ -651,7 +630,7 @@ namespace Common.Core.Numerics
             REAL ni = Dot(n, i);
             REAL k = 1.0f - eta * eta * (1.0f - ni * ni);
 
-            return (k >= 0) ? eta * i - (eta * ni + FMath.SafeSqrt(k)) * n : Zero;
+            return (k >= 0) ? eta * i - (eta * ni + MathUtil.SafeSqrt(k)) * n : Zero;
         }
 
         /// <summary>
@@ -783,7 +762,7 @@ namespace Common.Core.Numerics
             if (to.x == from.x && to.y == from.y && to.z == from.z) return to;
 
             REAL m = from.Magnitude * to.Magnitude;
-            if (FMath.IsZero(m)) return Vector3f.Zero;
+            if (MathUtil.IsZero(m)) return Vector3f.Zero;
 
             double theta = Math.Acos(Dot(from, to) / m);
 

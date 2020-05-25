@@ -64,20 +64,20 @@ namespace Common.Geometry.Bezier
          
             if (r2 < q3)
             {
-                float t = r / FMath.Sqrt(q3);
+                float t = r / MathUtil.Sqrt(q3);
                 if (t < -1.0) t = -1.0f;
                 if (t > 1.0) t = 1.0f;
-                t = FMath.Acos(t);
+                t = MathUtil.Acos(t);
                 B /= 3.0f;
-                q = -2.0f * FMath.Sqrt(q);
+                q = -2.0f * MathUtil.Sqrt(q);
                 roots.real = 3;
-                roots.x0 = q * FMath.Cos(t / 3.0f) - B;
-                roots.x1 = q * FMath.Cos((t + FMath.PI * 2.0f) / 3.0f) - B;
-                roots.x2 = q * FMath.Cos((t - FMath.PI * 2.0f) / 3.0f) - B;
+                roots.x0 = q * MathUtil.Cos(t / 3.0f) - B;
+                roots.x1 = q * MathUtil.Cos((t + MathUtil.F_PI * 2.0f) / 3.0f) - B;
+                roots.x2 = q * MathUtil.Cos((t - MathUtil.F_PI * 2.0f) / 3.0f) - B;
             }
             else
             {
-                float s = -CubeRoot(Math.Abs(r) + FMath.Sqrt(r2 - q3));
+                float s = -CubeRoot(Math.Abs(r) + MathUtil.Sqrt(r2 - q3));
                 if (r < 0) s = -s;
                 float t = s == 0 ? 0 : t = q / s;
 

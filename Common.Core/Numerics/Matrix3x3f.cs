@@ -347,7 +347,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix3x3f m0, Matrix3x3f m1, float eps = FMath.EPS)
+        public static bool AlmostEqual(Matrix3x3f m0, Matrix3x3f m1, float eps = MathUtil.F_EPS)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;
@@ -411,7 +411,7 @@ namespace Common.Core.Numerics
 
 			float det = m00 * mInv.m00 + m01 * mInv.m10 + m02 * mInv.m20;
 
-            if (FMath.IsZero(det))
+            if (MathUtil.IsZero(det))
                 return false;
 
             float invDet = 1.0f / det;

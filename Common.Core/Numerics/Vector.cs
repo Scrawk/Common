@@ -340,7 +340,7 @@ namespace Common.Core.Numerics
         {
             get
             {
-                double invLength = DMath.SafeInvSqrt(1.0, SqrMagnitude);
+                double invLength = MathUtil.SafeInvSqrt(1.0, SqrMagnitude);
 
                 var vec = new Vector(Dimension);
                 for (int i = 0; i < Dimension; i++)
@@ -378,7 +378,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public void Normalize()
         {
-            double invLength = DMath.SafeInvSqrt(1.0, SqrMagnitude);
+            double invLength = MathUtil.SafeInvSqrt(1.0, SqrMagnitude);
 
             for (int i = 0; i < Dimension; i++)
                 array[i] *= invLength;

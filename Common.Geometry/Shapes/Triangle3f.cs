@@ -43,12 +43,12 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                var xmin = FMath.Min(A.x, B.x, C.x);
-                var xmax = FMath.Max(A.x, B.x, C.x);
-                var ymin = FMath.Min(A.y, B.y, C.y);
-                var ymax = FMath.Max(A.y, B.y, C.y);
-                var zmin = FMath.Min(A.z, B.y, C.y);
-                var zmax = FMath.Max(A.z, B.z, C.z);
+                var xmin = MathUtil.Min(A.x, B.x, C.x);
+                var xmax = MathUtil.Max(A.x, B.x, C.x);
+                var ymin = MathUtil.Min(A.y, B.y, C.y);
+                var ymax = MathUtil.Max(A.y, B.y, C.y);
+                var zmin = MathUtil.Min(A.z, B.y, C.y);
+                var zmax = MathUtil.Max(A.z, B.z, C.z);
 
                 return new Box3f(xmin, xmax, ymin, ymax, zmin, zmax);
             }

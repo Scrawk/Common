@@ -209,13 +209,6 @@ namespace Common.Core.Test.Numerics
             Assert.AreEqual("1,2,3", v.ToString());
         }
 
-        [TestMethod]
-        public void FromString()
-        {
-            VECTOR v = new VECTOR(1, 2, 3);
-            Assert.AreEqual(v, VECTOR.FromString("1,2,3"));
-        }
-
         bool NearlyEqual(REAL f1, REAL f2, REAL eps = 1e-6)
         {
             return Math.Abs(f1 - f2) < eps;

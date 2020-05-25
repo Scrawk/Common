@@ -53,7 +53,7 @@ namespace Common.Mathematics.Probability
             int K = (int)k;
             if (K < 0) return 0;
 
-            return Math.Pow(Lambda, k) * ExpLambda / (double)IMath.FactorialBI(K);
+            return Math.Pow(Lambda, k) * ExpLambda / (double)MathUtil.FactorialBI(K);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Common.Mathematics.Probability
 
             double sum = 0;
             for (int i = 0; i < K; i++)
-                sum += Math.Pow(Lambda, i) / (double)IMath.FactorialBI(i);
+                sum += Math.Pow(Lambda, i) / (double)MathUtil.FactorialBI(i);
 
             return ExpLambda * sum;
         }

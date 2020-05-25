@@ -48,7 +48,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public float Area
         {
-            get { return 4.0f / 3.0f * FMath.PI * Radius * Radius * Radius; }
+            get { return 4.0f / 3.0f * MathUtil.F_PI * Radius * Radius * Radius; }
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public float SurfaceArea
         {
-            get { return 4.0f * FMath.PI * Radius2; }
+            get { return 4.0f * MathUtil.F_PI * Radius2; }
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Common.Geometry.Shapes
 
             if (dist2 > Radius2)
             {
-                float dist = FMath.Sqrt(dist2);
+                float dist = MathUtil.Sqrt(dist2);
                 float radius = (Radius + dist) * 0.5f;
                 float k = (radius - Radius) / dist;
 
@@ -248,7 +248,7 @@ namespace Common.Geometry.Shapes
             float s = -1.0f / (2.0f * a);
 
             var circumCenter = new Vector3f(s * dx, s * dy, s * dz);
-            float radius = Math.Abs(s) * FMath.Sqrt(dx * dx + dy * dy + dz * dz - 4.0f * a * c);
+            float radius = Math.Abs(s) * MathUtil.Sqrt(dx * dx + dy * dy + dz * dz - 4.0f * a * c);
 
             return new Sphere3f(circumCenter, radius);
         }

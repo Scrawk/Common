@@ -23,7 +23,7 @@ namespace Common.Geometry.Nurbs
 			for (int i = index; i < knots.Count; ++i)
 			{
 				int idx = index + 1;
-				if (Math.Abs(u - knots[idx]) < DMath.EPS)
+				if (MathUtil.IsZero(u - knots[idx]))
 				{
 					++mult;
 				}
@@ -290,7 +290,7 @@ namespace Common.Geometry.Nurbs
 			{
 				int j = knots.Count - degree + i;
 
-				if (Math.Abs((knots[i + 1] - knots[i]) - (knots[j + 1] - knots[j])) > DMath.EPS)
+				if (!MathUtil.IsZero((knots[i + 1] - knots[i]) - (knots[j + 1] - knots[j])))
 				{
 					return false;
 				}
@@ -310,7 +310,7 @@ namespace Common.Geometry.Nurbs
 			for (int i = 0; i < degree; ++i)
 			{
 				int j = vec.Count - degree + i;
-				if ((vec[i] - vec[j]) > DMath.EPS)
+				if (!MathUtil.IsZero(vec[i] - vec[j]))
 				{
 					return false;
 				}
@@ -330,7 +330,7 @@ namespace Common.Geometry.Nurbs
 			for (int i = 0; i < degree; ++i)
 			{
 				int j = vec.Count - degree + i;
-				if ((vec[i] - vec[j]).Magnitude > DMath.EPS)
+				if (!MathUtil.IsZero((vec[i] - vec[j]).Magnitude))
 				{
 					return false;
 				}
@@ -352,7 +352,7 @@ namespace Common.Geometry.Nurbs
 				for (int j = 0; j < arr.GetLength(1); ++j)
 				{
 					int k = arr.GetLength(1) - degree_u + i;
-					if ((arr[i, j] - arr[k, j]) > DMath.EPS)
+					if (!MathUtil.IsZero(arr[i, j] - arr[k, j]))
 					{
 						return false;
 					}
@@ -375,7 +375,7 @@ namespace Common.Geometry.Nurbs
 				for (int j = 0; j < degree_v; j++)
 				{
 					int k = arr.GetLength(0) - degree_v + i;
-					if ((arr[i, j] - arr[i, k]) > DMath.EPS)
+					if (!MathUtil.IsZero(arr[i, j] - arr[i, k]))
 					{
 						return false;
 					}
@@ -398,7 +398,7 @@ namespace Common.Geometry.Nurbs
 				for (int j = 0; j < arr.GetLength(1); ++j)
 				{
 					int k = arr.GetLength(1) - degree_u + i;
-					if ((arr[i, j] - arr[k, j]).Magnitude > DMath.EPS)
+					if (!MathUtil.IsZero((arr[i, j] - arr[k, j]).Magnitude))
 					{
 						return false;
 					}
@@ -421,7 +421,7 @@ namespace Common.Geometry.Nurbs
 				for (int j = 0; j < degree_v; j++)
 				{
 					int k = arr.GetLength(0) - degree_v + i;
-					if ((arr[i, j] - arr[i, k]).Magnitude > DMath.EPS)
+					if (!MathUtil.IsZero((arr[i, j] - arr[i, k]).Magnitude))
 					{
 						return false;
 					}

@@ -17,8 +17,8 @@ namespace Common.Mathematics.Probability
         public BinomialDistribution1(int trials, double probability)
         {
             Trials = trials;
-            TrailsFactorial = IMath.FactorialBI(Trials);
-            Probability = DMath.Clamp01(probability);
+            TrailsFactorial = MathUtil.FactorialBI(Trials);
+            Probability = MathUtil.Clamp01(probability);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Common.Mathematics.Probability
         /// </summary>
         private double BinomialCoefficient(int k)
         {
-            return (double)(TrailsFactorial / (IMath.FactorialBI(k) * IMath.FactorialBI(Trials - k)));
+            return (double)(TrailsFactorial / (MathUtil.FactorialBI(k) * MathUtil.FactorialBI(Trials - k)));
         }
     }
 }

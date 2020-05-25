@@ -56,7 +56,7 @@ namespace Common.Core.Numerics
 
             double dotProdPlus1 = 1.0 + Vector3d.Dot(f, t);
 
-            if (dotProdPlus1 < DMath.EPS)
+            if (dotProdPlus1 < MathUtil.D_EPS)
             {
                 w = 0;
                 if (Math.Abs(f.x) < 0.6f)
@@ -112,7 +112,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                double im = DMath.SafeInv(SqrMagnitude);
+                double im = MathUtil.SafeInv(SqrMagnitude);
                 return new Quaternion3d(im * -x, im * -y, im * -z, im * w);
             }
         }
@@ -125,7 +125,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return DMath.SafeSqrt(SqrMagnitude);
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -149,7 +149,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                double inv = DMath.SafeInv(Magnitude);
+                double inv = MathUtil.SafeInv(Magnitude);
                 return new Quaternion3d(x * inv, y * inv, z * inv, w * inv);
             }
         }
@@ -338,7 +338,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
-            double invLength = DMath.SafeInv(Magnitude);
+            double invLength = MathUtil.SafeInv(Magnitude);
             x *= invLength;
             y *= invLength;
             z *= invLength;
@@ -375,9 +375,9 @@ namespace Common.Core.Numerics
                 double scale0;
                 double scale1;
 
-                if ((1 - absCosom) > DMath.EPS)
+                if ((1.0 - absCosom) > MathUtil.D_EPS)
                 {
-                    double omega = DMath.SafeAcos(absCosom);
+                    double omega = MathUtil.SafeAcos(absCosom);
                     double sinom = 1.0 / Math.Sin(omega);
                     scale0 = Math.Sin((1.0 - t) * omega) * sinom;
                     scale1 = Math.Sin(t * omega) * sinom;
@@ -387,6 +387,7 @@ namespace Common.Core.Numerics
                     scale0 = 1 - t;
                     scale1 = t;
                 }
+
                 Quaternion3d res = new Quaternion3d(scale0 * from.x + scale1 * to.x,
                                                     scale0 * from.y + scale1 * to.y,
                                                     scale0 * from.z + scale1 * to.z,
@@ -402,16 +403,16 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Quaternion3d FromEuler(Vector3d euler)
         {
-            double heading = euler.y * DMath.Deg2Rad;
-            double attitude = euler.z * DMath.Deg2Rad;
-            double bank = euler.x * DMath.Deg2Rad;
+            double heading = MathUtil.ToRadians(euler.y);
+            double attitude = MathUtil.ToRadians(euler.z);
+            double bank = MathUtil.ToRadians(euler.x);
 
-            double c1 = Math.Cos(heading / 2);
-            double s1 = Math.Sin(heading / 2);
-            double c2 = Math.Cos(attitude / 2);
-            double s2 = Math.Sin(attitude / 2);
-            double c3 = Math.Cos(bank / 2);
-            double s3 = Math.Sin(bank / 2);
+            double c1 = MathUtil.Cos(heading / 2);
+            double s1 = MathUtil.Sin(heading / 2);
+            double c2 = MathUtil.Cos(attitude / 2);
+            double s2 = MathUtil.Sin(attitude / 2);
+            double c3 = MathUtil.Cos(bank / 2);
+            double s3 = MathUtil.Sin(bank / 2);
             double c1c2 = c1 * c2;
             double s1s2 = s1 * s2;
 
@@ -433,9 +434,9 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion3d RotateX(double angle)
         {
-            double a = angle * DMath.Deg2Rad * 0.5f;
-            double sina = Math.Sin(a);
-            double cosa = Math.Cos(a);
+            double a = MathUtil.ToRadians(angle) * 0.5;
+            double sina = MathUtil.Sin(a);
+            double cosa = MathUtil.Cos(a);
             return new Quaternion3d(sina, 0.0, 0.0, cosa);
         }
 
@@ -448,9 +449,9 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion3d RotateY(double angle)
         {
-            double a = angle * DMath.Deg2Rad * 0.5f;
-            double sina = Math.Sin(a);
-            double cosa = Math.Cos(a);
+            double a = MathUtil.ToRadians(angle) * 0.5;
+            double sina = MathUtil.Sin(a);
+            double cosa = MathUtil.Cos(a);
             return new Quaternion3d(0.0, sina, 0.0, cosa);
         }
 
@@ -463,9 +464,9 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion3d RotateZ(double angle)
         {
-            double a = angle * DMath.Deg2Rad * 0.5f;
-            double sina = Math.Sin(a);
-            double cosa = Math.Cos(a);
+            double a = MathUtil.ToRadians(angle) * 0.5;
+            double sina = MathUtil.Sin(a);
+            double cosa = MathUtil.Cos(a);
             return new Quaternion3d(0.0, 0.0, sina, cosa);
         }
 

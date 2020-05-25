@@ -42,7 +42,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                if (FMath.IsZero(B)) return 0;
+                if (MathUtil.IsZero(B)) return 0;
                 return -A / B;
             }
         }
@@ -56,7 +56,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (FMath.IsZero(B) || (-A / B) >= 0);
+                return (MathUtil.IsZero(B) || (-A / B) >= 0);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return FMath.IsZero(B) && !FMath.IsZero(A);
+                return MathUtil.IsZero(B) && !MathUtil.IsZero(A);
             }
         }
 
@@ -82,7 +82,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (FMath.IsZero(B) || (-A / B) < 0);
+                return (MathUtil.IsZero(B) || (-A / B) < 0);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (FMath.IsZero(A) && !FMath.IsZero(B));
+                return (MathUtil.IsZero(A) && !MathUtil.IsZero(B));
             }
         }
 
@@ -107,7 +107,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                return (FMath.IsZero(A) && FMath.IsZero(B) && FMath.IsZero(C));
+                return (MathUtil.IsZero(A) && MathUtil.IsZero(B) && MathUtil.IsZero(C));
             }
         }
 
@@ -120,10 +120,10 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                if (IsVertical) return FMath.PI / 2.0f;
+                if (IsVertical) return MathUtil.F_PI / 2.0f;
 
-                REAL atan = FMath.Atan(-A / B);
-                if (atan < 0) atan += FMath.PI;
+                REAL atan = MathUtil.Atan(-A / B);
+                if (atan < 0) atan += MathUtil.F_PI;
 
                 return atan;
             }
@@ -173,7 +173,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL XforY(REAL y)
         {
-            if (FMath.IsZero(A)) return 0;
+            if (MathUtil.IsZero(A)) return 0;
             return (-C - B * y) / A;
         }
 
@@ -182,7 +182,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL YforX(REAL x)
         {
-            if (FMath.IsZero(B)) return 0;
+            if (MathUtil.IsZero(B)) return 0;
             return (-C - A * x) / B;
         }
 
@@ -193,7 +193,7 @@ namespace Common.Geometry.Shapes
         /// <returns>if the point lies on the line</returns>
         public bool PointOnLine(VECTOR2 p)
         {
-            return Math.Abs(A * p.x + B * p.y + C) < FMath.EPS;
+            return MathUtil.IsZero(A * p.x + B * p.y + C);
         }
 
         /// <summary>
@@ -230,13 +230,13 @@ namespace Common.Geometry.Shapes
         /// <returns></returns>
         public bool IsParallel(Line2f line)
         {
-            if (!FMath.AlmostEqual(C, line.C)) return false;
+            if (!MathUtil.AlmostEqual(C, line.C)) return false;
 
             REAL slope = Slope;
-            if (FMath.IsZero(slope))
+            if (MathUtil.IsZero(slope))
                 return IsVertical && line.IsVertical;
             else
-                return FMath.AlmostEqual(slope, line.Slope);
+                return MathUtil.AlmostEqual(slope, line.Slope);
         }
 
         /// <summary>
@@ -248,10 +248,10 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Line2f line, out VECTOR2 p)
         {
 
-            if (!FMath.IsZero(B))
+            if (!MathUtil.IsZero(B))
             {
                 REAL f = line.A - line.B * A / B;
-                if (FMath.IsZero(f))
+                if (MathUtil.IsZero(f))
                 {
                     p = VECTOR2.Zero;
                     return false;
@@ -267,7 +267,7 @@ namespace Common.Geometry.Shapes
             }
             else
             {
-                if (FMath.IsZero(A))
+                if (MathUtil.IsZero(A))
                 {
                     p = VECTOR2.Zero;
                     return false;
@@ -275,7 +275,7 @@ namespace Common.Geometry.Shapes
                 else
                 {
                     REAL f = line.B - line.A * B / A;
-                    if (FMath.IsZero(f))
+                    if (MathUtil.IsZero(f))
                     {
                         p = VECTOR2.Zero;
                         return false;

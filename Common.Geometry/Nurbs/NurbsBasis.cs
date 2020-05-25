@@ -19,18 +19,20 @@ namespace Common.Geometry.Nurbs
 		{ 
 			// index of last control point
 			int n = knots.Count - degree - 2;
+			double eps = 1e-9f;
 
 			// For values of u that lies outside the domain
-			if (u > (knots[n + 1] - FMath.EPS))
+			if (u > (knots[n + 1] - eps))
 			{
 				return n;
 			}
-			if (u < (knots[degree] + FMath.EPS))
+			if (u < (knots[degree] + eps))
 			{
 				return degree;
 			}
 
 			// Binary search
+			//TODO - FIX ME
 
 			int low = degree;
 			int high = n + 1;
@@ -64,7 +66,7 @@ namespace Common.Geometry.Nurbs
 		{
 			int m = U.Count - 1;
 			// Special case
-			if ((i == 0 && NurbsUtil.Close(u, U[0])) || (i == m - deg - 1 && NurbsUtil.Close(u, U[m])))
+			if ((i == 0 && MathUtil.AlmostEqual(u, U[0])) || (i == m - deg - 1 && MathUtil.AlmostEqual(u, U[m])))
 			{
 				return 1.0;
 			}
@@ -85,12 +87,12 @@ namespace Common.Geometry.Nurbs
 			// Compute triangular table
 			for (int k = 1; k <= deg; k++)
 			{
-				var saved = NurbsUtil.Close(N[0], 0.0) ? 0.0 : ((u - U[i]) * N[0]) / (U[i + k] - U[i]);
+				var saved = MathUtil.IsZero(N[0]) ? 0.0 : ((u - U[i]) * N[0]) / (U[i + k] - U[i]);
 				for (int j = 0; j < deg - k + 1; j++)
 				{
 					var Uleft = U[i + j + 1];
 					var Uright = U[i + j + k + 1];
-					if (NurbsUtil.Close(N[j + 1], 0.0))
+					if (MathUtil.IsZero(N[j + 1]))
 					{
 						N[j] = saved;
 						saved = 0.0;

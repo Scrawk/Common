@@ -151,7 +151,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return DMath.SafeSqrt(SqrMagnitude);
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -442,7 +442,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Distance(Vector2i v0, Vector2i v1)
         {
-            return DMath.SafeSqrt(SqrDistance(v0, v1));
+            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
@@ -463,9 +463,9 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Angle180(Vector2i a, Vector2i b)
         {
-            double dp = Vector2i.Dot(a, b);
+            double dp = Dot(a, b);
             double m = a.Magnitude * b.Magnitude;
-            return DMath.SafeAcos(DMath.SafeDiv(dp, m)) * DMath.Rad2Deg;
+            return MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
         }
 
         /// <summary>
@@ -479,9 +479,9 @@ namespace Common.Core.Numerics
             double angle = Math.Atan2(a.y, a.x) - Math.Atan2(b.y, b.x);
 
             if (angle <= 0.0)
-                angle = DMath.PI * 2.0 + angle;
+                angle = MathUtil.D_PI * 2.0 + angle;
 
-            angle = 360.0 - angle * DMath.Rad2Deg;
+            angle = 360.0 - MathUtil.ToDegrees(angle);
             return angle >= 360.0 ? 0 : angle;
         }
 

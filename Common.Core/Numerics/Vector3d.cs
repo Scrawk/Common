@@ -228,7 +228,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                return DMath.SafeSqrt(SqrMagnitude);
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
@@ -252,7 +252,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z);
+                REAL invLength = MathUtil.SafeInvSqrt(1.0, x * x + y * y + z * z);
                 return new Vector3d(x * invLength, y * invLength, z * invLength);
             }
         }
@@ -444,7 +444,7 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(Vector3d v0, Vector3d v1, REAL eps = DMath.EPS)
+        public static bool AlmostEqual(Vector3d v0, Vector3d v1, REAL eps = MathUtil.D_EPS)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
             if (Math.Abs(v0.y - v1.y) > eps) return false;
@@ -555,7 +555,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
 		{
-            REAL invLength = DMath.SafeInvSqrt(1.0, x * x + y * y + z * z);
+            REAL invLength = MathUtil.SafeInvSqrt(1.0, x * x + y * y + z * z);
 	    	x *= invLength;
 			y *= invLength;
 			z *= invLength;
@@ -568,9 +568,9 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Angle180(Vector3d a, Vector3d b)
         {
-            REAL dp = Vector3d.Dot(a, b);
+            REAL dp = Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
-            return DMath.SafeAcos(DMath.SafeDiv(dp, m)) * DMath.Rad2Deg;
+            return MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
         }
 
         /// <summary>
@@ -597,7 +597,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Distance(Vector3d v0, Vector3d v1)
         {
-            return DMath.SafeSqrt(SqrDistance(v0, v1));
+            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace Common.Core.Numerics
             REAL ni = Dot(n, i);
             REAL k = 1.0f - eta * eta * (1.0f - ni * ni);
 
-            return (k >= 0) ? eta * i - (eta * ni + DMath.SafeSqrt(k)) * n : Zero;
+            return (k >= 0) ? eta * i - (eta * ni + MathUtil.SafeSqrt(k)) * n : Zero;
         }
 
         /// <summary>
@@ -772,7 +772,7 @@ namespace Common.Core.Numerics
             if (to.x == from.x && to.y == from.y && to.z == from.z) return to;
 
             REAL m = from.Magnitude * to.Magnitude;
-            if (DMath.IsZero(m)) return Vector3d.Zero;
+            if (MathUtil.IsZero(m)) return Vector3d.Zero;
 
             REAL theta = Math.Acos(Dot(from, to) / m);
 

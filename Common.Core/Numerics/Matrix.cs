@@ -226,7 +226,7 @@ namespace Common.Core.Numerics
         {
             get
             {
-                return Cofactor.Transpose * DMath.SafeInv(Determinant);
+                return Cofactor.Transpose * MathUtil.SafeInv(Determinant);
             }
         }
 

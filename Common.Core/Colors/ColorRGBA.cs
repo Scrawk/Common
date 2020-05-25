@@ -156,10 +156,10 @@ namespace Common.Core.Colors
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                int R = (int)FMath.Clamp(r * 255.0f, 0.0f, 255.0f);
-                int G = (int)FMath.Clamp(g * 255.0f, 0.0f, 255.0f);
-                int B = (int)FMath.Clamp(b * 255.0f, 0.0f, 255.0f);
-                int A = (int)FMath.Clamp(a * 255.0f, 0.0f, 255.0f);
+                int R = (int)MathUtil.Clamp(r * 255.0f, 0.0f, 255.0f);
+                int G = (int)MathUtil.Clamp(g * 255.0f, 0.0f, 255.0f);
+                int B = (int)MathUtil.Clamp(b * 255.0f, 0.0f, 255.0f);
+                int A = (int)MathUtil.Clamp(a * 255.0f, 0.0f, 255.0f);
 
                 return R | (G << 8) | (B << 16) | (A << 24);
             }
@@ -446,9 +446,9 @@ namespace Common.Core.Colors
             float delta, min;
             float h = 0, s, v;
 
-            float R = FMath.Clamp(r * 255.0f, 0.0f, 255.0f);
-            float G = FMath.Clamp(g * 255.0f, 0.0f, 255.0f);
-            float B = FMath.Clamp(b * 255.0f, 0.0f, 255.0f);
+            float R = MathUtil.Clamp(r * 255.0f, 0.0f, 255.0f);
+            float G = MathUtil.Clamp(g * 255.0f, 0.0f, 255.0f);
+            float B = MathUtil.Clamp(b * 255.0f, 0.0f, 255.0f);
 
             min = Math.Min(Math.Min(R, G), B);
             v = Math.Max(Math.Max(R, G), B);

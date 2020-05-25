@@ -28,7 +28,7 @@ namespace Common.Mathematics.Functions
 
         public CosFunc(double a, double b) : base(a)
         {
-            if (!DMath.IsFinite(b))
+            if (!MathUtil.IsFinite(b))
                 throw new ArgumentException("b must be finite.");
 
             if (b == 0)
@@ -68,7 +68,7 @@ namespace Common.Mathematics.Functions
         /// </summary>
         public override bool IsUndefined(double x)
         {
-            return !DMath.IsFinite(x);
+            return !MathUtil.IsFinite(x);
         }
 
         /// <summary>

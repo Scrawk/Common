@@ -66,7 +66,7 @@ namespace Common.Core.Test.Numerics
         [TestMethod]
         public void Magnitude()
         {
-            Assert.IsTrue(NearlyEqual(VECTOR.One.Magnitude, FMath.Sqrt(2.0f)));
+            Assert.IsTrue(NearlyEqual(VECTOR.One.Magnitude, MathUtil.Sqrt(2.0f)));
         }
 
         [TestMethod]
@@ -129,7 +129,7 @@ namespace Common.Core.Test.Numerics
             VECTOR a = new VECTOR(1, 1);
             VECTOR b = new VECTOR(2, 2);
 
-            REAL len = FMath.Sqrt(2);
+            REAL len = MathUtil.Sqrt(2);
 
             Assert.IsTrue(NearlyEqual(len, VECTOR.Distance(a, b)));
         }
@@ -140,7 +140,7 @@ namespace Common.Core.Test.Numerics
             VECTOR a = new VECTOR(1, 1);
             VECTOR b = new VECTOR(2, 2);
 
-            REAL len = FMath.Sqrt(2);
+            REAL len = MathUtil.Sqrt(2);
             len = len * len;
 
             Assert.IsTrue(NearlyEqual(len, VECTOR.SqrDistance(a, b)));
@@ -156,9 +156,9 @@ namespace Common.Core.Test.Numerics
             {
                 REAL di = i / 360.0f;
 
-                REAL theta = 2.0f * FMath.PI * di;
-                REAL x = FMath.Cos(theta);
-                REAL y = FMath.Sin(theta);
+                REAL theta = 2.0f * MathUtil.F_PI * di;
+                REAL x = MathUtil.Cos(theta);
+                REAL y = MathUtil.Sin(theta);
 
                 int j = (i > 180) ? 360 - i : i;
 
@@ -171,9 +171,9 @@ namespace Common.Core.Test.Numerics
             {
                 REAL di = i / 360.0f;
 
-                REAL theta = 2.0f * FMath.PI * di;
-                REAL x = FMath.Cos(theta);
-                REAL y = FMath.Sin(theta);
+                REAL theta = 2.0f * MathUtil.F_PI * di;
+                REAL x = MathUtil.Cos(theta);
+                REAL y = MathUtil.Sin(theta);
 
                 int j = (i + 45) % 360;
                 j = (j > 180) ? 360 - j : j;
@@ -192,9 +192,9 @@ namespace Common.Core.Test.Numerics
             {
                 float di = i / 360.0f;
 
-                REAL theta = 2.0f * FMath.PI * di;
-                REAL x = FMath.Cos(theta);
-                REAL y = FMath.Sin(theta);
+                REAL theta = 2.0f * MathUtil.F_PI * di;
+                REAL x = MathUtil.Cos(theta);
+                REAL y = MathUtil.Sin(theta);
 
                 Assert.IsTrue(NearlyEqual(i, VECTOR.Angle360(v, new VECTOR(x, y)), error));
             }
@@ -282,13 +282,6 @@ namespace Common.Core.Test.Numerics
         {
             VECTOR v = new VECTOR(1, 2);
             Assert.AreEqual("1,2", v.ToString());
-        }
-
-        [TestMethod]
-        public void FromString()
-        {
-            VECTOR v = new VECTOR(1, 2);
-            Assert.AreEqual(v, VECTOR.FromString("1,2"));
         }
 
         bool NearlyEqual(REAL f1, REAL f2, REAL eps = 1e-6f)

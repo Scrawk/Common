@@ -24,13 +24,13 @@ namespace Common.Mathematics.Probability
 
         public Probability1i(double p)
         {
-            Probability = DMath.Clamp01(p);
+            Probability = MathUtil.Clamp01(p);
             Outcome = 0;
         }
 
         public Probability1i(double p, int outcome)
         {
-            Probability = DMath.Clamp01(p);
+            Probability = MathUtil.Clamp01(p);
             Outcome = outcome;
         }
 

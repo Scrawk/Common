@@ -15,7 +15,7 @@ namespace Common.Mathematics.Probability
 
         public BernoulliDistribution1(double probability)
         {
-            Probability = DMath.Clamp01(probability);
+            Probability = MathUtil.Clamp01(probability);
         }
 
         /// <summary>

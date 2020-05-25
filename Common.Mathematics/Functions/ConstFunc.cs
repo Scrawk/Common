@@ -49,7 +49,7 @@ namespace Common.Mathematics.Functions
         /// </summary>
         public override bool IsUndefined(double x)
         {
-            return !DMath.IsFinite(x);
+            return !MathUtil.IsFinite(x);
         }
 
         /// <summary>

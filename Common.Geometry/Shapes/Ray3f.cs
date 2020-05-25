@@ -77,7 +77,7 @@ namespace Common.Geometry.Shapes
             float discr = b * b - c;
             if (discr < 0.0) return false;
 
-            t = -b - FMath.Sqrt(discr);
+            t = -b - MathUtil.Sqrt(discr);
 
             if (t < 0) t = 0;
             return true;

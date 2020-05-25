@@ -324,7 +324,7 @@ namespace Common.Geometry.Shapes
         {
             Vector3f d = (p - Center).Absolute - Size * 0.5f;
             Vector3f max = Vector3f.Max(d, 0);
-            return max.Magnitude + Math.Min(FMath.Max(d.x, d.y, d.z), 0.0f);
+            return max.Magnitude + Math.Min(MathUtil.Max(d.x, d.y, d.z), 0.0f);
         }
 
         public static Box3f CalculateBounds(IList<Vector3f> vertices)

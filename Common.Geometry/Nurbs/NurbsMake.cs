@@ -352,7 +352,7 @@ namespace Common.Geometry.Nurbs
 			var div = daa * dbb - dab * dab;
 
 			//parallel case
-			if (Math.Abs(div) < DMath.EPS)
+			if (MathUtil.IsZero(div))
 				return false;
 
 			var num = dab * (dab0 - daa0) - daa * (dbb0 - dba0);

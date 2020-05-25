@@ -194,7 +194,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public bool Contains(VECTOR2 p, REAL eps = DMath.Deg2Rad)
+        public bool Contains(VECTOR2 p, REAL eps)
         {
             var c = Closest(p);
             return VECTOR2.AlmostEqual(c, p, eps);
@@ -294,8 +294,8 @@ namespace Common.Geometry.Shapes
 
             //add in an epsilon term to counteract arithmetic errors 
             //when segment is near parallel to a coordinate axis.
-            adx += DMath.EPS;
-            ady += DMath.EPS;
+            adx += MathUtil.D_EPS;
+            ady += MathUtil.D_EPS;
 
             if (Math.Abs(m.x * d.y - m.y * d.x) > e.x * ady + e.y * adx) return false;
 
@@ -325,10 +325,10 @@ namespace Common.Geometry.Shapes
             VECTOR2 ap = p - A;
 
             REAL len = ab.x * ab.x + ab.y * ab.y;
-            if (len < DMath.EPS) return;
+            if (MathUtil.IsZero(len)) return;
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
-            t = DMath.Clamp01(t);
+            t = MathUtil.Clamp01(t);
         }
 
         /// <summary>
@@ -372,23 +372,23 @@ namespace Common.Geometry.Shapes
             t = 0;
 
             //Check if either or both segments degenerate into points.
-            if (d00 < DMath.EPS && d11 < DMath.EPS)
+            if (MathUtil.IsZero(d00) && MathUtil.IsZero(d11))
                 return;
 
-            if (d00 < DMath.EPS)
+            if (MathUtil.IsZero(d00))
             {
                 //First segment degenerates into a point.
                 s = 0;
-                t = DMath.Clamp01(d1 / d11);
+                t = MathUtil.Clamp01(d1 / d11);
             }
             else
             {
                 REAL c = VECTOR2.Dot(ab0, a01);
 
-                if (d11 < DMath.EPS)
+                if (MathUtil.IsZero(d11))
                 {
                     //Second segment degenerates into a point.
-                    s = DMath.Clamp01(-c / d00);
+                    s = MathUtil.Clamp01(-c / d00);
                     t = 0;
                 }
                 else
@@ -398,8 +398,8 @@ namespace Common.Geometry.Shapes
                     REAL denom = d00 * d11 - d2 * d2;
 
                     //if segments not parallel compute closest point and clamp to segment.
-                    if (!DMath.IsZero(denom))
-                        s = DMath.Clamp01((d2 * d1 - c * d11) / denom);
+                    if (!MathUtil.IsZero(denom))
+                        s = MathUtil.Clamp01((d2 * d1 - c * d11) / denom);
                     else
                         s = 0;
 
@@ -408,12 +408,12 @@ namespace Common.Geometry.Shapes
                     if (t < 0.0f)
                     {
                         t = 0.0f;
-                        s = DMath.Clamp01(-c / d00);
+                        s = MathUtil.Clamp01(-c / d00);
                     }
                     else if (t > 1.0f)
                     {
                         t = 1.0f;
-                        s = DMath.Clamp01((d2 - c) / d00);
+                        s = MathUtil.Clamp01((d2 - c) / d00);
                     }
                 }
             }

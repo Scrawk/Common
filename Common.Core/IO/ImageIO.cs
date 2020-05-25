@@ -107,7 +107,7 @@ namespace Common.Core.IO
             switch (properties.BitDepth)
             {
                 case 8:
-                    bytes[i] = (byte)FMath.Clamp(c * 255, 0, 255);
+                    bytes[i] = (byte)MathUtil.Clamp(c * 255, 0, 255);
                     break;
 
                 case 16:
@@ -143,7 +143,7 @@ namespace Common.Core.IO
         {
             int index = i * 2;
 
-            ushort v = (ushort)FMath.Clamp(c * ushort.MaxValue, 0, ushort.MaxValue);
+            ushort v = (ushort)MathUtil.Clamp(c * ushort.MaxValue, 0, ushort.MaxValue);
             byte[] b = BitConverter.GetBytes(v);
 
             if (bigEndian)

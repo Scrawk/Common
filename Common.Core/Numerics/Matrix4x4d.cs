@@ -194,7 +194,7 @@ namespace Common.Core.Numerics
         {
             get
             {
-                return Adjoint * DMath.SafeInv(Determinant);
+                return Adjoint * MathUtil.SafeInv(Determinant);
             }
         }
 
@@ -299,7 +299,7 @@ namespace Common.Core.Numerics
         {
             Vector3d kProd = new Vector3d();
 
-			double invW = DMath.SafeInv(m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33);
+			double invW = MathUtil.SafeInv(m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33);
 
 			kProd.x = (m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03) * invW;
 			kProd.y = (m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13) * invW;
@@ -458,7 +458,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix4x4d m0, Matrix4x4d m1, double eps = DMath.EPS)
+        public static bool AlmostEqual(Matrix4x4d m0, Matrix4x4d m1, double eps = MathUtil.D_EPS)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;
@@ -528,7 +528,7 @@ namespace Common.Core.Numerics
         {
             double det = Determinant;
 
-            if (DMath.IsZero(det))
+            if (MathUtil.IsZero(det))
                 return false;
 
             mInv = Adjoint * (1.0 / det);
@@ -692,9 +692,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4d RotateX(double angle)
         {
-            double a = angle * DMath.Rad2Deg;
-            double ca = Math.Cos(a);
-            double sa = Math.Sin(a);
+            double a = MathUtil.ToRadians(angle);
+            double ca = MathUtil.Cos(a);
+            double sa = MathUtil.Sin(a);
 
             return new Matrix4x4d(1, 0, 0, 0,
                                     0, ca, -sa, 0,
@@ -707,9 +707,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4d RotateY(double angle)
         {
-            double a = angle * DMath.Rad2Deg;
-            double ca = Math.Cos(a);
-            double sa = Math.Sin(a);
+            double a = MathUtil.ToRadians(angle);
+            double ca = MathUtil.Cos(a);
+            double sa = MathUtil.Sin(a);
 
             return new Matrix4x4d(ca, 0, sa, 0,
                                     0, 1, 0, 0,
@@ -722,9 +722,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4d RotateZ(double angle)
         {
-            double a = angle * DMath.Rad2Deg;
-            double ca = Math.Cos(a);
-            double sa = Math.Sin(a);
+            double a = MathUtil.ToRadians(angle);
+            double ca = MathUtil.Cos(a);
+            double sa = MathUtil.Sin(a);
 
             return new Matrix4x4d(ca, -sa, 0, 0,
                                     sa, ca, 0, 0,

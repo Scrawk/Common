@@ -25,7 +25,7 @@ namespace Common.Mathematics.Functions
 
         public PowFunc(double a, double n) : base(a)
         {
-            if (!DMath.IsFinite(n))
+            if (!MathUtil.IsFinite(n))
                 throw new ArgumentException("n must be finite.");
 
             if (n == 0)
@@ -66,7 +66,7 @@ namespace Common.Mathematics.Functions
         {
             if (x == 0 && n < 0) return true;
             if (x < 0 && Math.Floor(n) != n) return true;
-            if (!DMath.IsFinite(x)) return true;
+            if (!MathUtil.IsFinite(x)) return true;
 
             return false;
         }

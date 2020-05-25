@@ -22,7 +22,7 @@ namespace Common.Mathematics.Functions
 
         public Function(double a)
         {
-            if (!DMath.IsFinite(a))
+            if (!MathUtil.IsFinite(a))
                 throw new ArgumentException("a must be finite.");
 
             this.a = a;

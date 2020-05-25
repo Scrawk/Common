@@ -298,9 +298,9 @@ namespace Common.Core.Colors
                 int idx;
                 float f, p, q, t;
 
-                float H = FMath.Clamp(h, 0.0f, 1.0f) * 360.0f;
-                float S = FMath.Clamp(s, 0.0f, 1.0f);
-                float V = FMath.Clamp(v, 0.0f, 1.0f);
+                float H = MathUtil.Clamp(h, 0.0f, 1.0f) * 360.0f;
+                float S = MathUtil.Clamp(s, 0.0f, 1.0f);
+                float V = MathUtil.Clamp(v, 0.0f, 1.0f);
 
                 if (H == 360)
                     H = 0;
