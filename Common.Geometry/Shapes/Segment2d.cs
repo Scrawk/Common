@@ -194,10 +194,10 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public bool Contains(VECTOR2 p, REAL eps)
+        public bool Contains(VECTOR2 p)
         {
             var c = Closest(p);
-            return VECTOR2.AlmostEqual(c, p, eps);
+            return VECTOR2.AlmostEqual(c, p);
         }
 
         /// <summary>
