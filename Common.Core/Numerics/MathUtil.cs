@@ -51,6 +51,18 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Abs(float a)
+        {
+            return (float)Math.Abs(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Abs(double a)
+        {
+            return Math.Abs(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Sin(float a)
         {
             return (float)Math.Sin(a);

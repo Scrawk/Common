@@ -4,6 +4,11 @@ using System.Runtime.CompilerServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Double;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
+using MATRIX3 = Common.Core.Numerics.Matrix3x3d;
+using MATRIX4 = Common.Core.Numerics.Matrix4x4d;
+
 namespace Common.Core.Numerics
 {
     [Serializable]
@@ -11,7 +16,7 @@ namespace Common.Core.Numerics
     public struct Quaternion3d : IEquatable<Quaternion3d>
     {
 
-        public double x, y, z, w;
+        public REAL x, y, z, w;
 
         public readonly static Quaternion3d Identity = new Quaternion3d(0, 0, 0, 1);
 
@@ -21,7 +26,7 @@ namespace Common.Core.Numerics
         /// A Quaternion from varibles.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Quaternion3d(double x, double y, double z, double w)
+        public Quaternion3d(REAL x, REAL y, REAL z, REAL w)
         {
             this.x = x;
             this.y = y;
@@ -33,12 +38,12 @@ namespace Common.Core.Numerics
         /// A Quaternion from a vector axis and angle.
         /// The axis is the up direction and the angle is the rotation.
         /// </summary>
-        public Quaternion3d(Vector3d axis, double angle)
+        public Quaternion3d(VECTOR3 axis, REAL angle)
         {
-            Vector3d axisN = axis.Normalized;
-            double a = angle * 0.5f;
-            double sina = Math.Sin(a);
-            double cosa = Math.Cos(a);
+            VECTOR3 axisN = axis.Normalized;
+            REAL a = angle * 0.5f;
+            REAL sina = MathUtil.Sin(a);
+            REAL cosa = MathUtil.Cos(a);
             x = axisN.x * sina;
             y = axisN.y * sina;
             z = axisN.z * sina;
@@ -49,33 +54,33 @@ namespace Common.Core.Numerics
         /// A quaternion with the rotation required to
         /// rotation from the from direction to the to direction.
         /// </summary>
-        public Quaternion3d(Vector3d to, Vector3d from)
+        public Quaternion3d(VECTOR3 to, VECTOR3 from)
         {
-            Vector3d f = from.Normalized;
-            Vector3d t = to.Normalized;
+            VECTOR3 f = from.Normalized;
+            VECTOR3 t = to.Normalized;
 
-            double dotProdPlus1 = 1.0 + Vector3d.Dot(f, t);
+            REAL dotProdPlus1 = 1.0 + VECTOR3.Dot(f, t);
 
-            if (dotProdPlus1 < MathUtil.D_EPS)
+            if (MathUtil.IsZero(dotProdPlus1))
             {
                 w = 0;
-                if (Math.Abs(f.x) < 0.6f)
+                if (MathUtil.Abs(f.x) < 0.6)
                 {
-                    double norm = Math.Sqrt(1 - f.x * f.x);
+                    REAL norm = MathUtil.Sqrt(1 - f.x * f.x);
                     x = 0;
                     y = f.z / norm;
                     z = -f.y / norm;
                 }
-                else if (Math.Abs(f.y) < 0.6f)
+                else if (MathUtil.Abs(f.y) < 0.6)
                 {
-                    double norm = Math.Sqrt(1 - f.y * f.y);
+                    REAL norm = MathUtil.Sqrt(1 - f.y * f.y);
                     x = -f.z / norm;
                     y = 0;
                     z = f.x / norm;
                 }
                 else
                 {
-                    double norm = Math.Sqrt(1 - f.z * f.z);
+                    REAL norm = MathUtil.Sqrt(1 - f.z * f.z);
                     x = f.y / norm;
                     y = -f.x / norm;
                     z = 0;
@@ -83,8 +88,8 @@ namespace Common.Core.Numerics
             }
             else
             {
-                double s = Math.Sqrt(0.5f * dotProdPlus1);
-                Vector3d tmp = (Vector3d.Cross(f, t)) / (2.0 * s);
+                REAL s = MathUtil.Sqrt(0.5 * dotProdPlus1);
+                VECTOR3 tmp = (VECTOR3.Cross(f, t)) / (2.0 * s);
                 x = tmp.x;
                 y = tmp.y;
                 z = tmp.z;
@@ -112,7 +117,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                double im = MathUtil.SafeInv(SqrMagnitude);
+                REAL im = MathUtil.SafeInv(SqrMagnitude);
                 return new Quaternion3d(im * -x, im * -y, im * -z, im * w);
             }
         }
@@ -120,7 +125,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The length of the quaternion.
         /// </summary>
-        double Magnitude
+        REAL Magnitude
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
@@ -132,7 +137,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The sqr length of the quaternion.
         /// </summary>
-        double SqrMagnitude
+        REAL SqrMagnitude
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
@@ -149,7 +154,7 @@ namespace Common.Core.Numerics
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                double inv = MathUtil.SafeInv(Magnitude);
+                REAL inv = MathUtil.SafeInv(Magnitude);
                 return new Quaternion3d(x * inv, y * inv, z * inv, w * inv);
             }
         }
@@ -170,22 +175,22 @@ namespace Common.Core.Numerics
         /// Multiply a quaternion and a vector together.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3d operator *(Quaternion3d q, Vector3d v)
+        public static VECTOR3 operator *(Quaternion3d q, VECTOR3 v)
         {
-            Vector3d xyz = new Vector3d(q.x, q.y, q.z);
-            Vector3d t = 2 * Vector3d.Cross(xyz, v);
-            return v + q.w * t + Vector3d.Cross(xyz, t);
+            VECTOR3 xyz = new VECTOR3(q.x, q.y, q.z);
+            VECTOR3 t = 2 * VECTOR3.Cross(xyz, v);
+            return v + q.w * t + VECTOR3.Cross(xyz, t);
         }
 
         /// <summary>
         /// Multiply a quaternion and a vector together.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3d operator *(Vector3d v, Quaternion3d q)
+        public static VECTOR3 operator *(VECTOR3 v, Quaternion3d q)
         {
-            Vector3d xyz = new Vector3d(q.x, q.y, q.z);
-            Vector3d t = 2 * Vector3d.Cross(xyz, v);
-            return v + q.w * t + Vector3d.Cross(xyz, t);
+            VECTOR3 xyz = new VECTOR3(q.x, q.y, q.z);
+            VECTOR3 t = 2 * VECTOR3.Cross(xyz, v);
+            return v + q.w * t + VECTOR3.Cross(xyz, t);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -265,32 +270,11 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Quaternion from a string.
-        /// </summary>
-        public static Quaternion3d FromString(string s)
-        {
-            Quaternion3d q = new Quaternion3d();
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
-
-                q.x = double.Parse(result[0]);
-                q.y = double.Parse(result[1]);
-                q.z = double.Parse(result[2]);
-                q.w = double.Parse(result[3]);
-            }
-            catch { }
-
-            return q;
-        }
-
-        /// <summary>
         /// Convert to a single precision 3 dimension matrix.
         /// </summary>
-        public Matrix3x3d ToMatrix3x3d()
+        public MATRIX3 ToMatrix3x3d()
         {
-            double xx = x * x,
+            REAL xx = x * x,
                     xy = x * y,
                     xz = x * z,
                     xw = x * w,
@@ -300,7 +284,7 @@ namespace Common.Core.Numerics
                     zz = z * z,
                     zw = z * w;
 
-            return new Matrix3x3d
+            return new MATRIX3
             (
                 1.0 - 2.0 * (yy + zz), 2.0 * (xy - zw), 2.0 * (xz + yw),
                 2.0 * (xy + zw), 1.0 - 2.0 * (xx + zz), 2.0 * (yz - xw),
@@ -311,9 +295,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Convert to a single precision 4 dimension matrix.
         /// </summary>
-        public Matrix4x4d ToMatrix4x4d()
+        public MATRIX4 ToMatrix4x4d()
         {
-            double xx = x * x,
+            REAL xx = x * x,
                     xy = x * y,
                     xz = x * z,
                     xw = x * w,
@@ -323,7 +307,7 @@ namespace Common.Core.Numerics
                     zz = z * z,
                     zw = z * w;
 
-            return new Matrix4x4d
+            return new MATRIX4
             (
                 1.0 - 2.0 * (yy + zz), 2.0 * (xy - zw), 2.0 * (xz + yw), 0.0,
                 2.0 * (xy + zw), 1.0 - 2.0 * (xx + zz), 2.0 * (yz - xw), 0.0,
@@ -338,7 +322,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
-            double invLength = MathUtil.SafeInv(Magnitude);
+            REAL invLength = MathUtil.SafeInv(Magnitude);
             x *= invLength;
             y *= invLength;
             z *= invLength;
@@ -349,7 +333,7 @@ namespace Common.Core.Numerics
         /// The dot product of two quaternion..
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Dot(Quaternion3d q0, Quaternion3d q1)
+        public static REAL Dot(Quaternion3d q0, Quaternion3d q1)
         {
             return q0.x * q1.x + q0.y * q1.y + q0.z * q1.z + q0.w * q1.w;
         }
@@ -357,7 +341,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Slerp the quaternion from the from rotation to the to rotation by t.
         /// </summary>
-		public static Quaternion3d Slerp(Quaternion3d from, Quaternion3d to, double t)
+		public static Quaternion3d Slerp(Quaternion3d from, Quaternion3d to, REAL t)
         {
             if (t <= 0.0)
             {
@@ -369,18 +353,18 @@ namespace Common.Core.Numerics
             }
             else
             {
-                double cosom = from.x * to.x + from.y * to.y + from.z * to.z + from.w * to.w;
-                double absCosom = Math.Abs(cosom);
+                REAL cosom = from.x * to.x + from.y * to.y + from.z * to.z + from.w * to.w;
+                REAL absCosom = MathUtil.Abs(cosom);
 
-                double scale0;
-                double scale1;
+                REAL scale0;
+                REAL scale1;
 
-                if ((1.0 - absCosom) > MathUtil.D_EPS)
+                if (!MathUtil.IsZero(1.0 - absCosom))
                 {
-                    double omega = MathUtil.SafeAcos(absCosom);
-                    double sinom = 1.0 / Math.Sin(omega);
-                    scale0 = Math.Sin((1.0 - t) * omega) * sinom;
-                    scale1 = Math.Sin(t * omega) * sinom;
+                    REAL omega = MathUtil.SafeAcos(absCosom);
+                    REAL sinom = 1.0 / MathUtil.Sin(omega);
+                    scale0 = MathUtil.Sin((1.0 - t) * omega) * sinom;
+                    scale1 = MathUtil.Sin(t * omega) * sinom;
                 }
                 else
                 {
@@ -401,20 +385,20 @@ namespace Common.Core.Numerics
         /// Create a rotation out of a vector.
         /// Uses Unity euler axis (+x right, +y up, +z forward)
         /// </summary>
-        public static Quaternion3d FromEuler(Vector3d euler)
+        public static Quaternion3d FromEuler(VECTOR3 euler)
         {
-            double heading = MathUtil.ToRadians(euler.y);
-            double attitude = MathUtil.ToRadians(euler.z);
-            double bank = MathUtil.ToRadians(euler.x);
+            REAL heading = MathUtil.ToRadians(euler.y);
+            REAL attitude = MathUtil.ToRadians(euler.z);
+            REAL bank = MathUtil.ToRadians(euler.x);
 
-            double c1 = MathUtil.Cos(heading / 2);
-            double s1 = MathUtil.Sin(heading / 2);
-            double c2 = MathUtil.Cos(attitude / 2);
-            double s2 = MathUtil.Sin(attitude / 2);
-            double c3 = MathUtil.Cos(bank / 2);
-            double s3 = MathUtil.Sin(bank / 2);
-            double c1c2 = c1 * c2;
-            double s1s2 = s1 * s2;
+            REAL c1 = MathUtil.Cos(heading / 2);
+            REAL s1 = MathUtil.Sin(heading / 2);
+            REAL c2 = MathUtil.Cos(attitude / 2);
+            REAL s2 = MathUtil.Sin(attitude / 2);
+            REAL c3 = MathUtil.Cos(bank / 2);
+            REAL s3 = MathUtil.Sin(bank / 2);
+            REAL c1c2 = c1 * c2;
+            REAL s1s2 = s1 * s2;
 
             Quaternion3d q;
             q.w = (c1c2 * c3 - s1s2 * s3);
@@ -426,47 +410,47 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Returns a double4x4 matrix that rotates around the x-axis by a given number of degrees.
+        /// Returns a REAL4x4 matrix that rotates around the x-axis by a given number of degrees.
         /// </summary>
         /// <param name="angle">
         /// The clockwise rotation angle when looking along the x-axis towards the origin in degrees.
         /// </param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion3d RotateX(double angle)
+        public static Quaternion3d RotateX(REAL angle)
         {
-            double a = MathUtil.ToRadians(angle) * 0.5;
-            double sina = MathUtil.Sin(a);
-            double cosa = MathUtil.Cos(a);
+            REAL a = MathUtil.ToRadians(angle) * 0.5;
+            REAL sina = MathUtil.Sin(a);
+            REAL cosa = MathUtil.Cos(a);
             return new Quaternion3d(sina, 0.0, 0.0, cosa);
         }
 
         /// <summary>
-        /// Returns a double4x4 matrix that rotates around the y-axis by a given number of degrees.
+        /// Returns a REAL4x4 matrix that rotates around the y-axis by a given number of degrees.
         /// </summary>
         /// <param name="angle">
         /// The clockwise rotation angle when looking along the y-axis towards the origin in degrees.
         /// </param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion3d RotateY(double angle)
+        public static Quaternion3d RotateY(REAL angle)
         {
-            double a = MathUtil.ToRadians(angle) * 0.5;
-            double sina = MathUtil.Sin(a);
-            double cosa = MathUtil.Cos(a);
+            REAL a = MathUtil.ToRadians(angle) * 0.5;
+            REAL sina = MathUtil.Sin(a);
+            REAL cosa = MathUtil.Cos(a);
             return new Quaternion3d(0.0, sina, 0.0, cosa);
         }
 
         /// <summary>
-        /// Returns a double4x4 matrix that rotates around the z-axis by a given number of degrees.
+        /// Returns a REAL4x4 matrix that rotates around the z-axis by a given number of degrees.
         /// </summary>
         /// <param name="angle">
         /// The clockwise rotation angle when looking along the z-axis towards the origin in degrees.
         /// </param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion3d RotateZ(double angle)
+        public static Quaternion3d RotateZ(REAL angle)
         {
-            double a = MathUtil.ToRadians(angle) * 0.5;
-            double sina = MathUtil.Sin(a);
-            double cosa = MathUtil.Cos(a);
+            REAL a = MathUtil.ToRadians(angle) * 0.5;
+            REAL sina = MathUtil.Sin(a);
+            REAL cosa = MathUtil.Cos(a);
             return new Quaternion3d(0.0, 0.0, sina, cosa);
         }
 
