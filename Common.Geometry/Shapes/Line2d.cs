@@ -171,7 +171,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Calculates the X coordinate of a point on the line by its Y coordinate.
         /// </summary>
-        public REAL XforY(REAL y)
+        public REAL X(REAL y)
         {
             if (MathUtil.IsZero(A)) return 0;
             return (-C - B * y) / A;
@@ -180,7 +180,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Calculates the Y coordinate of a point on the line by its X coordinate.
         /// </summary>
-        public REAL YforX(REAL x)
+        public REAL Y(REAL x)
         {
             if (MathUtil.IsZero(B)) return 0;
             return (-C - A * x) / B;
@@ -211,7 +211,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool IsLeftPoint(VECTOR2 p)
         {
-            return p.x < XforY(p.y);
+            return p.x < X(p.y);
         }
 
         /// <summary>
@@ -220,23 +220,29 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool IsRightPoint(VECTOR2 p)
         {
-            return p.x > XforY(p.y);
+            return p.x > X(p.y);
         }
 
         /// <summary>
-        /// Determine if the two lines are parallel.
+        /// Determine if the two lines are the equivalent
+        /// even though they may have a different equation.
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public bool IsParallel(Line2d line)
+        public bool AreEquivalent(Line2d line)
         {
-            if (!MathUtil.AlmostEqual(C, line.C)) return false;
-
-            REAL slope = Slope;
-            if (MathUtil.IsZero(slope))
-                return IsVertical && line.IsVertical;
+            if (IsVertical)
+            {
+                return line.IsVertical &&
+                       MathUtil.AlmostEqual(X(0), line.X(0)) &&
+                       MathUtil.AlmostEqual(Slope, line.Slope);
+            }
             else
-                return MathUtil.AlmostEqual(slope, line.Slope);
+            {
+                return !line.IsVertical &&
+                       MathUtil.AlmostEqual(Y(0), line.Y(0)) &&
+                       MathUtil.AlmostEqual(Slope, line.Slope);
+            }
         }
 
         /// <summary>

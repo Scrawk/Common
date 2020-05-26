@@ -10,53 +10,108 @@ namespace Common.Geometry.Test.Shapes
     public class Line2fTest
     {
         [TestMethod]
-        public void AreParallel()
+        public void AreEquivalent()
         {
-            var ab = new Line2f((0, 0), (1, 1));
-            var cd = new Line2f((1, 1), (0, 0));
+            //Vertical cases.............................
 
-            Assert.IsTrue(ab.IsParallel(cd));
+            var ab = new Line2f((0, 0), (0, 1));
+            var cd = new Line2f((0, 0), (0, 1));
 
-            ab = new Line2f((1, 1), (0, 0));
-            cd = new Line2f((0, 0), (1, 1));
+            Assert.IsTrue(ab.AreEquivalent(cd));
 
-            Assert.IsTrue(ab.IsParallel(cd));
+            ab = new Line2f((0, 0), (0, 1));
+            cd = new Line2f((0, 0), (0, -1));
+
+            Assert.IsTrue(ab.AreEquivalent(cd));
+
+            ab = new Line2f((1, 0), (1, 1));
+            cd = new Line2f((0, 0), (0, 1));
+
+            Assert.IsFalse(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 0), (0, 1));
+            cd = new Line2f((0, 0), (1, 0));
+
+            Assert.IsFalse(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 0), (0, 1000));
+            cd = new Line2f((0, 0), (0, 1));
+
+            Assert.IsTrue(ab.AreEquivalent(cd));
+
+            //Horizontal cases.............................
+
+            ab = new Line2f((0, 0), (1, 0));
+            cd = new Line2f((0, 0), (1, 0));
+
+            Assert.IsTrue(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 0), (1, 0));
+            cd = new Line2f((0, 0), (-1, 0));
+
+            Assert.IsTrue(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 1), (1, 1));
+            cd = new Line2f((0, 0), (-1, 0));
+
+            Assert.IsFalse(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 0), (1, 0));
+            cd = new Line2f((0, 0), (0, 1));
+
+            Assert.IsFalse(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 0), (1000, 0));
+            cd = new Line2f((0, 0), (1, 0));
+
+            Assert.IsTrue(ab.AreEquivalent(cd));
+
+            //Other cases.............................
 
             ab = new Line2f((0, 0), (1, 1));
             cd = new Line2f((0, 0), (1, 1));
 
-            Assert.IsTrue(ab.IsParallel(cd));
+            Assert.IsTrue(ab.AreEquivalent(cd));
 
-            ab = new Line2f((4, 0), (5, 1));
+            ab = new Line2f((0, 0), (1, 1));
+            cd = new Line2f((0, 0), (-1, -1));
+
+            Assert.IsTrue(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 0), (1, -1));
             cd = new Line2f((0, 0), (1, 1));
 
-            Assert.IsFalse(ab.IsParallel(cd));
+            Assert.IsFalse(ab.AreEquivalent(cd));
 
-            ab = new Line2f((0, 2), (1, 3));
+            ab = new Line2f((0, 0), (1, 1));
+            cd = new Line2f((0, 0), (-1, 1));
+
+            Assert.IsFalse(ab.AreEquivalent(cd));
+
+            ab = new Line2f((0, 0), (1, -1));
+            cd = new Line2f((0, 0), (-1, 1));
+
+            Assert.IsTrue(ab.AreEquivalent(cd));
+
+            ab = new Line2f((1, 0), (1, 1));
             cd = new Line2f((0, 0), (1, 1));
 
-            Assert.IsFalse(ab.IsParallel(cd));
+            Assert.IsFalse(ab.AreEquivalent(cd));
 
-            ab = new Line2f((0, 0), (2, 1));
+            ab = new Line2f((0, 1), (1, 1));
             cd = new Line2f((0, 0), (1, 1));
 
-            Assert.IsFalse(ab.IsParallel(cd));
-
-            ab = new Line2f((-2, -2), (2, -2));
-            cd = new Line2f((-2, 0), (-2, -4));
-
-            Assert.IsFalse(ab.IsParallel(cd));
+            Assert.IsFalse(ab.AreEquivalent(cd));
 
             ab = new Line2f((2, 0), (2, 1));
-            cd = new Line2f((-2, 0), (-2, 1));
+            cd = new Line2f((0, 0), (1, 1));
 
-            Assert.IsFalse(ab.IsParallel(cd));
+            Assert.IsFalse(ab.AreEquivalent(cd));
 
-            ab = new Line2f((0, 2), (1, 2));
-            cd = new Line2f((0, -2), (1, -2));
+            ab = new Line2f((2, 0), (-2, 1));
+            cd = new Line2f((0, 0), (1, 1));
 
-            Assert.IsFalse(ab.IsParallel(cd));
-
+            Assert.IsFalse(ab.AreEquivalent(cd));
         }
     }
 }

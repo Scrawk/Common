@@ -109,16 +109,16 @@ namespace Common.Geometry.Shapes
             if (IsLeftBoundary)
             {
                 if (Line.IsHorizontal)
-                    return p.y < Line.YforX(0);
+                    return p.y < Line.Y(0);
                 else
-                    return p.x > Line.XforY(p.y);
+                    return p.x > Line.X(p.y);
             }
             else
             {
                 if (Line.IsHorizontal)
-                    return p.y > Line.YforX(0);
+                    return p.y > Line.Y(0);
                 else
-                    return p.x < Line.XforY(p.y);
+                    return p.x < Line.X(p.y);
             }
         }
 

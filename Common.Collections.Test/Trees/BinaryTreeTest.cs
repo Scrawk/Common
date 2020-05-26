@@ -22,7 +22,7 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
-        public void Contains()
+        public void ContainsValue()
         {
             var tree = TestTree();
             var list = TestList();
@@ -91,7 +91,7 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
-        public void Remove()
+        public void RemoveValue()
         {
             var tree = TestTree();
 

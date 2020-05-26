@@ -54,7 +54,7 @@ namespace Common.Collections.Test.Queues
         }
 
         [TestMethod]
-        public void Remove()
+        public void RemoveValue()
         {
             var list = TestQueue();
 
@@ -69,6 +69,26 @@ namespace Common.Collections.Test.Queues
             list.RemoveValue(1.0f);
             Assert.IsFalse(list.ContainsValue(1.0f));
             Assert.AreEqual(0, list.Count);
+        }
+
+        [TestMethod]
+        public void RemoveObject()
+        {
+            var list = new PriorityList<TestComparable>();
+
+            var a = new TestComparable(0.5f);
+            var b = new TestComparable(1.0f);
+            var c = new TestComparable(1.5f);
+            var d = new TestComparable(1.0f);
+
+            list.Add(a);
+            list.Add(b);
+            list.Add(c);
+
+            Assert.AreEqual(3, list.Count);
+            Assert.IsFalse(list.RemoveObject(d));
+            Assert.IsTrue(list.RemoveObject(b));
+            Assert.AreEqual(2, list.Count);
         }
 
         [TestMethod]
@@ -89,7 +109,7 @@ namespace Common.Collections.Test.Queues
         }
 
         [TestMethod]
-        public void Contains()
+        public void ContainsValue()
         {
             var list = TestQueue();
 

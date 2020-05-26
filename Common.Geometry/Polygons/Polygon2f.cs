@@ -212,6 +212,17 @@ namespace Common.Geometry.Polygons
             return (windingNumber % 2 != 0);
         }
 
+        public static Polygon2f FromTriangle(Vector2f a, Vector2f b, Vector2f c)
+        {
+            var polygon = new Polygon2f(3);
+
+            polygon.Positions[0] = a;
+            polygon.Positions[1] = b;
+            polygon.Positions[2] = c;
+
+            return polygon;
+        }
+
         public static Polygon2f FromBox(Vector2f min, Vector2f max)
         {
             var polygon = new Polygon2f(4);

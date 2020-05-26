@@ -201,6 +201,17 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Does the point line on the segemnts.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public bool Contains(VECTOR2 p, REAL eps)
+        {
+            var c = Closest(p);
+            return VECTOR2.AlmostEqual(c, p, eps);
+        }
+
+        /// <summary>
         /// Does the two segments intersect.
         /// </summary>
         /// <param name="seg">other segment</param>

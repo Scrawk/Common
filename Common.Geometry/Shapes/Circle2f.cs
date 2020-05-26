@@ -253,7 +253,7 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Calculate the minimum bounding circle that contains 
+        /// Calculate the bounding circle that contains 
         /// all the points in the list.
         /// </summary>
         public static Circle2f CalculateBounds(IList<Vector2f> points)

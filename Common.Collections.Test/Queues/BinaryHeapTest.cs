@@ -51,7 +51,7 @@ namespace Common.Collections.Test.Queues
         }
 
         [TestMethod]
-        public void Contains()
+        public void ContainsValue()
         {
             var list = TestQueue();
 
@@ -64,7 +64,7 @@ namespace Common.Collections.Test.Queues
         }
 
         [TestMethod]
-        public void Remove()
+        public void RemoveValue()
         {
             var list = TestQueue();
 

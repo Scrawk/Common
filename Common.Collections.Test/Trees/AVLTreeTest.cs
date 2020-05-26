@@ -89,7 +89,7 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
-        public void Remove()
+        public void RemoveValue()
         {
 
             var tree = new AVLTree<int>();
