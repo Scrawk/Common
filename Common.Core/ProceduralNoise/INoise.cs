@@ -9,17 +9,17 @@ namespace Common.Core.ProceduralNoise
 	public interface INoise 
 	{
 
-        Vector3d Frequency { get; set; }
+        Vector3f Frequency { get; set; }
 
-        double Amplitude { get; set; }
+        float Amplitude { get; set; }
 
-        Vector3d Offset { get; set; }
+        Vector3f Offset { get; set; }
 
-		double Sample1D(double x);
+		float Sample1D(float x);
 
-		double Sample2D(double x, double y);
+		float Sample2D(float x, float y);
 
-		double Sample3D(double x, double y, double z);
+		float Sample3D(float x, float y, float z);
 
         void UpdateSeed(int seed);
 

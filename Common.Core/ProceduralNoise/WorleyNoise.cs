@@ -8,15 +8,15 @@ namespace Common.Core.ProceduralNoise
     public class WorleyNoise : Noise
     {
 
-        private static readonly double[] OFFSET_I = new double[] { -1.0, 0.0, 1.0 };
+        private static readonly float[] OFFSET_I = new float[] { -1.0f, 0.0f, 1.0f };
 
-        private static readonly double[] OFFSET_F = new double[] { -0.5, 0.5, 1.5 };
+        private static readonly float[] OFFSET_F = new float[] { -0.5f, 0.5f, 1.5f };
 
-        private const double K = 1.0 / 7.0;
+        private const float K = 1.0f / 7.0f;
 
-        private const double Ko = 3.0 / 7.0;
+        private const float Ko = 3.0f / 7.0f;
 
-        public WorleyNoise(int seed, double frequency, double jitter, double amplitude = 1.0) 
+        public WorleyNoise(int seed, float frequency, float jitter, float amplitude = 1.0f) 
             : base(seed, frequency, amplitude)
         {
             Jitter = jitter;
@@ -24,7 +24,7 @@ namespace Common.Core.ProceduralNoise
             Combination = VORONOI_COMBINATION.D1_D0;
         }
 
-        public WorleyNoise(int seed, Vector3d frequency, double jitter, double amplitude = 1.0)
+        public WorleyNoise(int seed, Vector3f frequency, float jitter, float amplitude = 1.0f)
             : base(seed, frequency, amplitude)
         {
             Jitter = jitter;
@@ -32,7 +32,7 @@ namespace Common.Core.ProceduralNoise
             Combination = VORONOI_COMBINATION.D1_D0;
         }
 
-        public double Jitter { get; set; }
+        public float Jitter { get; set; }
 
         public VORONOI_DISTANCE Distance { get; set; }
 
@@ -48,26 +48,26 @@ namespace Common.Core.ProceduralNoise
                 Frequency, Amplitude, Offset, Jitter, Distance, Combination);
         }
 
-        public override double Sample1D(double x)
+        public override float Sample1D(float x)
         {
             x = (x + Offset.x) * Frequency.x;
 
             int Pi0 = (int)Math.Floor(x);
-            double Pf0 = Frac(x);
+            float Pf0 = Frac(x);
 
             Vector3i pX = new Vector3i();
             pX[0] = Perm[Pi0 - 1];
             pX[1] = Perm[Pi0];
             pX[2] = Perm[Pi0 + 1];
 
-            double d0, d1, d2;
-            double F0 = double.PositiveInfinity;
-            double F1 = double.PositiveInfinity;
-            double F2 = double.PositiveInfinity;
-            double S = 0;
+            float d0, d1, d2;
+            float F0 = float.PositiveInfinity;
+            float F1 = float.PositiveInfinity;
+            float F2 = float.PositiveInfinity;
+            float S = 0;
 
             int px, py, pz;
-            double oxx, oxy, oxz;
+            float oxx, oxy, oxz;
 
             px = Perm[pX[0]];
             py = Perm[pX[1]];
@@ -96,7 +96,7 @@ namespace Common.Core.ProceduralNoise
             return Combine(F0, F1, F2, S) * Amplitude;
         }
 
-        public override double Sample2D(double x, double y)
+        public override float Sample2D(float x, float y)
         {
             x = (x + Offset.x) * Frequency.x;
             y = (y + Offset.y) * Frequency.y;
@@ -104,23 +104,23 @@ namespace Common.Core.ProceduralNoise
             int Pi0 = (int)Math.Floor(x);
             int Pi1 = (int)Math.Floor(y);
 
-            double Pf0 = Frac(x);
-            double Pf1 = Frac(y);
+            float Pf0 = Frac(x);
+            float Pf1 = Frac(y);
 
             Vector3i pX = new Vector3i();
             pX[0] = Perm[Pi0 - 1];
             pX[1] = Perm[Pi0];
             pX[2] = Perm[Pi0 + 1];
 
-            double d0, d1, d2;
-            double F0 = double.PositiveInfinity;
-            double F1 = double.PositiveInfinity;
-            double F2 = double.PositiveInfinity;
-            double S = 0;
+            float d0, d1, d2;
+            float F0 = float.PositiveInfinity;
+            float F1 = float.PositiveInfinity;
+            float F2 = float.PositiveInfinity;
+            float S = 0;
 
             int px, py, pz;
-            double oxx, oxy, oxz;
-            double oyx, oyy, oyz;
+            float oxx, oxy, oxz;
+            float oyx, oyy, oyz;
 
             for (int i = 0; i < 3; i++)
             {
@@ -132,9 +132,9 @@ namespace Common.Core.ProceduralNoise
                 oxy = Frac(py * K) - Ko;
                 oxz = Frac(pz * K) - Ko;
 
-                oyx = Mod(Math.Floor(px * K), 7.0) * K - Ko;
-                oyy = Mod(Math.Floor(py * K), 7.0) * K - Ko;
-                oyz = Mod(Math.Floor(pz * K), 7.0) * K - Ko;
+                oyx = Mod(MathUtil.Floor(px * K), 7.0f) * K - Ko;
+                oyy = Mod(MathUtil.Floor(py * K), 7.0f) * K - Ko;
+                oyz = Mod(MathUtil.Floor(pz * K), 7.0f) * K - Ko;
 
                 d0 = Distance2(Pf0, Pf1, OFFSET_F[i] + Jitter * oxx, -0.5f + Jitter * oyx);
                 d1 = Distance2(Pf0, Pf1, OFFSET_F[i] + Jitter * oxy, 0.5f + Jitter * oyy);
@@ -157,7 +157,7 @@ namespace Common.Core.ProceduralNoise
             return Combine(F0, F1, F2, S) * Amplitude;
         }
 
-        public override double Sample3D(double x, double y, double z)
+        public override float Sample3D(float x, float y, float z)
         {
             x = (x + Offset.x) * Frequency.x;
             y = (y + Offset.y) * Frequency.y;
@@ -167,9 +167,9 @@ namespace Common.Core.ProceduralNoise
             int Pi1 = (int)Math.Floor(y);
             int Pi2 = (int)Math.Floor(z);
 
-            double Pf0 = Frac(x);
-            double Pf1 = Frac(y);
-            double Pf2 = Frac(z);
+            float Pf0 = Frac(x);
+            float Pf1 = Frac(y);
+            float Pf2 = Frac(z);
 
             Vector3i pX = new Vector3i();
             pX[0] = Perm[Pi0 - 1];
@@ -181,16 +181,16 @@ namespace Common.Core.ProceduralNoise
             pY[1] = Perm[Pi1];
             pY[2] = Perm[Pi1 + 1];
 
-            double d0, d1, d2;
-            double F0 = double.PositiveInfinity;
-            double F1 = double.PositiveInfinity;
-            double F2 = double.PositiveInfinity;
-            double S = 0;
+            float d0, d1, d2;
+            float F0 = float.PositiveInfinity;
+            float F1 = float.PositiveInfinity;
+            float F2 = float.PositiveInfinity;
+            float S = 0;
 
             int px, py, pz;
-            double oxx, oxy, oxz;
-            double oyx, oyy, oyz;
-            double ozx, ozy, ozz;
+            float oxx, oxy, oxz;
+            float oyx, oyy, oyz;
+            float ozx, ozy, ozz;
 
             for (int i = 0; i < 3; i++)
             {
@@ -205,9 +205,9 @@ namespace Common.Core.ProceduralNoise
                     oxy = Frac(py * K) - Ko;
                     oxz = Frac(pz * K) - Ko;
 
-                    oyx = Mod(Math.Floor(px * K), 7.0) * K - Ko;
-                    oyy = Mod(Math.Floor(py * K), 7.0) * K - Ko;
-                    oyz = Mod(Math.Floor(pz * K), 7.0) * K - Ko;
+                    oyx = Mod(MathUtil.Floor(px * K), 7.0f) * K - Ko;
+                    oyy = Mod(MathUtil.Floor(py * K), 7.0f) * K - Ko;
+                    oyz = Mod(MathUtil.Floor(pz * K), 7.0f) * K - Ko;
 
                     px = Perm[px];
                     py = Perm[py];
@@ -238,17 +238,17 @@ namespace Common.Core.ProceduralNoise
             return Combine(F0, F1, F2, S) * Amplitude;
         }
 
-        private double Mod(double x, double y)
+        private float Mod(float x, float y)
         {
-            return x - y * Math.Floor(x / y);
+            return x - y * MathUtil.Floor(x / y);
         }
 
-        private double Frac(double v)
+        private float Frac(float v)
         {
-            return v - Math.Floor(v);
+            return v - MathUtil.Floor(v);
         }
 
-        private double Distance1(double p1x, double p2x)
+        private float Distance1(float p1x, float p2x)
         {
             switch (Distance)
             {
@@ -265,7 +265,7 @@ namespace Common.Core.ProceduralNoise
             return 0;
         }
 
-        private double Distance2(double p1x, double p1y, double p2x, double p2y)
+        private float Distance2(float p1x, float p1y, float p2x, float p2y)
         {
             switch (Distance)
             {
@@ -282,7 +282,7 @@ namespace Common.Core.ProceduralNoise
             return 0;
         }
 
-        private double Distance3(double p1x, double p1y, double p1z, double p2x, double p2y, double p2z)
+        private float Distance3(float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
         {
             switch (Distance)
             {
@@ -299,7 +299,7 @@ namespace Common.Core.ProceduralNoise
             return 0;
         }
 
-        private double Combine(double f0, double f1, double f2, double s)
+        private float Combine(float f0, float f1, float f2, float s)
         {
             switch (Combination)
             {

@@ -19,27 +19,27 @@ namespace Common.Core.ProceduralNoise
         /// <summary>
         /// The frequency of the fractal.
         /// </summary>
-        public Vector3d Frequency { get; set; }
+        public Vector3f Frequency { get; set; }
 
         /// <summary>
         /// The amplitude of the fractal.
         /// </summary>
-        public double Amplitude { get; set; }
+        public float Amplitude { get; set; }
 
         /// <summary>
         /// The offset applied to each dimension.
         /// </summary>
-        public Vector3d Offset { get; set; }
+        public Vector3f Offset { get; set; }
 
         /// <summary>
         /// The rate at which the amplitude changes.
         /// </summary>
-        public double Lacunarity { get; set; }
+        public float Lacunarity { get; set; }
 
         /// <summary>
         /// The rate at which the frequency changes.
         /// </summary>
-        public double Gain { get; set; }
+        public float Gain { get; set; }
 
         /// <summary>
         /// The noises to sample from to generate the fractal.
@@ -49,48 +49,48 @@ namespace Common.Core.ProceduralNoise
         /// <summary>
         /// The amplitudes for each octave.
         /// </summary>
-        public double[] Amplitudes { get; set; }
+        public float[] Amplitudes { get; set; }
 
         /// <summary>
         /// The frequencies for each octave.
         /// </summary>
-        public Vector3d[] Frequencies { get; set; }
+        public Vector3f[] Frequencies { get; set; }
 
-        public FractalNoise(INoise noise, int octaves, double frequency, double amplitude = 1.0)
+        public FractalNoise(INoise noise, int octaves, float frequency, float amplitude = 1.0f)
         {
 
             Octaves = octaves;
-            Frequency = new Vector3d(frequency);
+            Frequency = new Vector3f(frequency);
             Amplitude = amplitude;
-            Offset = Vector3d.Zero;
-            Lacunarity = 2.0;
-            Gain = 0.5;
+            Offset = Vector3f.Zero;
+            Lacunarity = 2.0f;
+            Gain = 0.5f;
 
             UpdateTable(new INoise[] { noise });
         }
 
-        public FractalNoise(INoise noise, int octaves, Vector3d frequency, double amplitude = 1.0)
+        public FractalNoise(INoise noise, int octaves, Vector3f frequency, float amplitude = 1.0f)
         {
 
             Octaves = octaves;
             Frequency = frequency;
             Amplitude = amplitude;
-            Offset = Vector3d.Zero;
-            Lacunarity = 2.0;
-            Gain = 0.5;
+            Offset = Vector3f.Zero;
+            Lacunarity = 2.0f;
+            Gain = 0.5f;
 
             UpdateTable(new INoise[] { noise });
         }
 
-        public FractalNoise(INoise[] noises, int octaves, Vector3d frequency, double amplitude = 1.0)
+        public FractalNoise(INoise[] noises, int octaves, Vector3f frequency, float amplitude = 1.0f)
         {
 
             Octaves = octaves;
             Frequency = frequency;
             Amplitude = amplitude;
-            Offset = Vector3d.Zero;
-            Lacunarity = 2.0;
-            Gain = 0.5;
+            Offset = Vector3f.Zero;
+            Lacunarity = 2.0f;
+            Gain = 0.5f;
 
             UpdateTable(noises);
         }
@@ -118,14 +118,14 @@ namespace Common.Core.ProceduralNoise
 
         protected virtual void UpdateTable(INoise[] noises)
 		{
-			Amplitudes = new double[Octaves];
-			Frequencies = new Vector3d[Octaves];
+			Amplitudes = new float[Octaves];
+			Frequencies = new Vector3f[Octaves];
             Noises = new INoise[Octaves];
 
             int numNoises = noises.Length;
 			
-			double amp = 0.5;
-            Vector3d frq = Frequency;
+			float amp = 0.5f;
+            Vector3f frq = Frequency;
 			for(int i = 0; i < Octaves; i++)
 			{
                 Noises[i] = noises[Math.Min(i, numNoises - 1)];
@@ -143,14 +143,14 @@ namespace Common.Core.ProceduralNoise
         /// <param name="i">The octave to sample.</param>
         /// <param name="x">A value on the x axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-		public virtual double Octave1D(int i, double x)
+		public virtual float Octave1D(int i, float x)
 		{
-            if (i >= Octaves) return 0.0;
-            if (Noises[i] == null) return 0.0;
+            if (i >= Octaves) return 0.0f;
+            if (Noises[i] == null) return 0.0f;
 
 			x = x + Offset.x;
 
-			double fx = Frequencies[i].x;
+			float fx = Frequencies[i].x;
 			return Noises[i].Sample1D(x * fx) * Amplitudes[i] * Amplitude;
 		}
 		
@@ -161,39 +161,39 @@ namespace Common.Core.ProceduralNoise
         /// <param name="x">A value on the x axis.</param>
         /// <param name="y">A value on the y axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-		public virtual double Octave2D(int i, double x, double y)
+		public virtual float Octave2D(int i, float x, float y)
 		{
-            if (i >= Octaves) return 0.0;
-            if (Noises[i] == null) return 0.0;
+            if (i >= Octaves) return 0.0f;
+            if (Noises[i] == null) return 0.0f;
 
 			x = x + Offset.x;
 			y = y + Offset.y;
 
-			double fx = Frequencies[i].x;
-            double fy = Frequencies[i].y;
+			float fx = Frequencies[i].x;
+            float fy = Frequencies[i].y;
             return Noises[i].Sample2D(x * fx, y * fy) * Amplitudes[i] * Amplitude;
 		}
 		
         /// <summary>
-        /// Returns the noise value from a octave in a 3D fractal.
+        /// Returns the noise value from a octave in a 3f fractal.
         /// </summary>
         /// <param name="i">The octave to sample.</param>
         /// <param name="x">A value on the x axis.</param>
         /// <param name="y">A value on the y axis.</param>
         /// <param name="z">A value on the z axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-		public virtual double Octave3D(int i, double x, double y, double z)
+		public virtual float Octave3f(int i, float x, float y, float z)
 		{
-            if (i >= Octaves) return 0.0;
-            if (Noises[i] == null) return 0.0;
+            if (i >= Octaves) return 0.0f;
+            if (Noises[i] == null) return 0.0f;
 
 			x = x + Offset.x;
 			y = y + Offset.y;
 			z = z + Offset.z;
 
-            double fx = Frequencies[i].x;
-            double fy = Frequencies[i].y;
-            double fz = Frequencies[i].z;
+            float fx = Frequencies[i].x;
+            float fy = Frequencies[i].y;
+            float fz = Frequencies[i].z;
             return Noises[i].Sample3D(x * fx, y * fy, z * fz) * Amplitudes[i] * Amplitude;
 		}
 
@@ -202,14 +202,14 @@ namespace Common.Core.ProceduralNoise
         /// </summary>
         /// <param name="x">A value on the x axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-        public virtual double Sample1D(double x)
+        public virtual float Sample1D(float x)
         {
 			x = x + Offset.x;
 
-	        double sum = 0;
+	        float sum = 0;
 			for(int i = 0; i < Octaves; i++) 
 	        {
-                double fx = Frequencies[i].x;
+                float fx = Frequencies[i].x;
 
                 if (Noises[i] != null)
                     sum += Noises[i].Sample1D(x * fx) * Amplitudes[i];
@@ -223,16 +223,16 @@ namespace Common.Core.ProceduralNoise
         /// <param name="x">A value on the x axis.</param>
         /// <param name="y">A value on the y axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-        public virtual double Sample2D(double x, double y)
+        public virtual float Sample2D(float x, float y)
         {
 			x = x + Offset.x;
 			y = y + Offset.y;
 
-	        double sum = 0;
+	        float sum = 0;
 	        for(int i = 0; i < Octaves; i++) 
 	        {
-                double fx = Frequencies[i].x;
-                double fy = Frequencies[i].y;
+                float fx = Frequencies[i].x;
+                float fy = Frequencies[i].y;
 
                 if (Noises[i] != null)
                     sum += Noises[i].Sample2D(x * fx, y * fy) * Amplitudes[i];
@@ -241,24 +241,24 @@ namespace Common.Core.ProceduralNoise
         }
 
         /// <summary>
-        /// Samples a 3D fractal.
+        /// Samples a 3f fractal.
         /// </summary>
         /// <param name="x">A value on the x axis.</param>
         /// <param name="y">A value on the y axis.</param>
         /// <param name="z">A value on the z axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-        public virtual double Sample3D(double x, double y, double z)
+        public virtual float Sample3f(float x, float y, float z)
         {
 			x = x + Offset.x;
 			y = y + Offset.y;
 			z = z + Offset.z;
 
-	        double sum = 0;
+	        float sum = 0;
 			for(int i = 0; i < Octaves; i++) 
 	        {
-                double fx = Frequencies[i].x;
-                double fy = Frequencies[i].y;
-                double fz = Frequencies[i].z;
+                float fx = Frequencies[i].x;
+                float fy = Frequencies[i].y;
+                float fz = Frequencies[i].z;
 
                 if (Noises[i] != null)
                     sum += Noises[i].Sample3D(x * fx, y * fy, z * fz) * Amplitudes[i];

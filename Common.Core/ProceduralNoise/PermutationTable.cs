@@ -12,7 +12,7 @@ namespace Common.Core.ProceduralNoise
 
         public int Max { get; private set; }
 
-        public double Inverse { get; private set; }
+        public float Inverse { get; private set; }
 
         private int Wrap;
 
@@ -23,7 +23,7 @@ namespace Common.Core.ProceduralNoise
             Size = size;
             Wrap = Size - 1;
             Max = Math.Max(1, max);
-            Inverse = 1.0 / Max;
+            Inverse = 1.0f / Max;
             Build(seed);
         }
 

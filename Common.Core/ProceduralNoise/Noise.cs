@@ -9,27 +9,27 @@ namespace Common.Core.ProceduralNoise
 	public abstract class Noise : INoise
 	{
 
-        public Vector3d Frequency { get; set; }
+        public Vector3f Frequency { get; set; }
 
-        public double Amplitude { get; set; }
+        public float Amplitude { get; set; }
 
-        public Vector3d Offset { get; set; }
+        public Vector3f Offset { get; set; }
 
         protected PermutationTable Perm { get; set; }
 
-		public Noise(int seed, double frequency, double amplitude)
+		public Noise(int seed, float frequency, float amplitude)
 		{
-            Frequency = new Vector3d(frequency);
+            Frequency = new Vector3f(frequency);
             Amplitude = amplitude;
-            Offset = Vector3d.Zero;
+            Offset = Vector3f.Zero;
             Perm = new PermutationTable(256, 255, seed);
 		}
 
-        public Noise(int seed, Vector3d frequency, double amplitude)
+        public Noise(int seed, Vector3f frequency, float amplitude)
         {
             Frequency = frequency;
             Amplitude = amplitude;
-            Offset = Vector3d.Zero;
+            Offset = Vector3f.Zero;
             Perm = new PermutationTable(256, 255, seed);
         }
 
@@ -42,11 +42,11 @@ namespace Common.Core.ProceduralNoise
             return string.Format("[Noise: Frequency={0}, Amplitude={1}, Offset={2}]", Frequency, Amplitude, Offset);
         }
 
-        public abstract double Sample1D(double x);
+        public abstract float Sample1D(float x);
 
-		public abstract double Sample2D(double x, double y);
+		public abstract float Sample2D(float x, float y);
 
-		public abstract double Sample3D(double x, double y, double z);
+		public abstract float Sample3D(float x, float y, float z);
 
         public virtual void UpdateSeed(int seed)
         {

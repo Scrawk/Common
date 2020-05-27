@@ -13,14 +13,14 @@ namespace Common.Core.ProceduralNoise
     public class VoronoiNoise : Noise
     {
 
-        public VoronoiNoise(int seed, double frequency, double amplitude = 1.0) 
+        public VoronoiNoise(int seed, float frequency, float amplitude = 1.0f) 
             : base(seed, frequency, amplitude)
         {
             Distance = VORONOI_DISTANCE.EUCLIDIAN;
             Combination = VORONOI_COMBINATION.D1_D0;
         }
 
-        public VoronoiNoise(int seed, Vector3d frequency, double amplitude = 1.0)
+        public VoronoiNoise(int seed, Vector3f frequency, float amplitude = 1.0f)
             : base(seed, frequency, amplitude)
         {
             Distance = VORONOI_DISTANCE.EUCLIDIAN;
@@ -41,17 +41,17 @@ namespace Common.Core.ProceduralNoise
                 Frequency, Amplitude, Offset, Distance, Combination);
         }
 
-        public override double Sample1D(double x)
+        public override float Sample1D(float x)
         {
             //The 0.75 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.75;
+            x = (x + Offset.x) * Frequency.x * 0.75f;
 
             int lastRandom, numberFeaturePoints;
-            double randomDiffX;
-            double featurePointX;
+            float randomDiffX;
+            float featurePointX;
             int cubeX;
 
-            Vector3d distanceArray = new Vector3d(double.PositiveInfinity);
+            Vector3f distanceArray = new Vector3f(float.PositiveInfinity);
 
             //1. Determine which cube the evaluation point is in
             int evalCubeX = (int)Math.Floor(x);
@@ -88,18 +88,18 @@ namespace Common.Core.ProceduralNoise
             return Combine(distanceArray) * Amplitude;
         }
 
-        public override double Sample2D(double x, double y)
+        public override float Sample2D(float x, float y)
         {
             //The 0.75 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.75;
-            y = (y + Offset.y) * Frequency.y * 0.75;
+            x = (x + Offset.x) * Frequency.x * 0.75f;
+            y = (y + Offset.y) * Frequency.y * 0.75f;
 
             int lastRandom, numberFeaturePoints;
-            double randomDiffX, randomDiffY;
-            double featurePointX, featurePointY;
+            float randomDiffX, randomDiffY;
+            float featurePointX, featurePointY;
             int cubeX, cubeY;
 
-            Vector3d distanceArray = new Vector3d(double.PositiveInfinity);
+            Vector3f distanceArray = new Vector3f(float.PositiveInfinity);
 
             //1. Determine which cube the evaluation point is in
             int evalCubeX = (int)Math.Floor(x);
@@ -143,19 +143,19 @@ namespace Common.Core.ProceduralNoise
             return Combine(distanceArray) * Amplitude;
         }
 
-        public override double Sample3D(double x, double y, double z)
+        public override float Sample3D(float x, float y, float z)
         {
             //The 0.75 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.75;
-            y = (y + Offset.y) * Frequency.y * 0.75;
-            z = (z + Offset.z) * Frequency.z * 0.75;
+            x = (x + Offset.x) * Frequency.x * 0.75f;
+            y = (y + Offset.y) * Frequency.y * 0.75f;
+            z = (z + Offset.z) * Frequency.z * 0.75f;
 
             int lastRandom, numberFeaturePoints;
-            double randomDiffX, randomDiffY, randomDiffZ;
-            double featurePointX, featurePointY, featurePointZ;
+            float randomDiffX, randomDiffY, randomDiffZ;
+            float featurePointX, featurePointY, featurePointZ;
             int cubeX, cubeY, cubeZ;
 
-            Vector3d distanceArray = new Vector3d(double.PositiveInfinity);
+            Vector3f distanceArray = new Vector3f(float.PositiveInfinity);
 
             //1. Determine which cube the evaluation point is in
             int evalCubeX = (int)Math.Floor(x);
@@ -208,7 +208,7 @@ namespace Common.Core.ProceduralNoise
             return Combine(distanceArray) * Amplitude;
         }
 
-        private double Distance1(double p1x, double p2x)
+        private float Distance1(float p1x, float p2x)
         {
             switch (Distance)
             {
@@ -225,7 +225,7 @@ namespace Common.Core.ProceduralNoise
             return 0;
         }
 
-        private double Distance2(double p1x, double p1y, double p2x, double p2y)
+        private float Distance2(float p1x, float p1y, float p2x, float p2y)
         {
             switch(Distance)
             {
@@ -242,7 +242,7 @@ namespace Common.Core.ProceduralNoise
             return 0;
         }
 
-        private double Distance3(double p1x, double p1y, double p1z, double p2x, double p2y, double p2z)
+        private float Distance3(float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
         {
             switch (Distance)
             {
@@ -259,7 +259,7 @@ namespace Common.Core.ProceduralNoise
             return 0;
         }
 
-        private double Combine(Vector3d arr)
+        private float Combine(Vector3f arr)
         {
             switch(Combination)
             {
@@ -281,7 +281,7 @@ namespace Common.Core.ProceduralNoise
         /// </summary>
         /// <param name="value">a uniformly distributed random number</param>
         /// <returns>The number of feature points in a cube.</returns>
-        int ProbLookup(double value)
+        int ProbLookup(float value)
         {
             //Poisson Distribution
             if (value < 0.0915781944272058) return 1;
@@ -302,9 +302,9 @@ namespace Common.Core.ProceduralNoise
         /// </summary>
         /// <param name="arr">The array to insert the value into.</param>
         /// <param name="value">The value to insert into the array.</param>
-        Vector3d Insert(Vector3d arr, double value)
+        Vector3f Insert(Vector3f arr, float value)
         {
-            double temp;
+            float temp;
             for (int i = 3 - 1; i >= 0; i--)
             {
                 if (value > arr[i]) break;
