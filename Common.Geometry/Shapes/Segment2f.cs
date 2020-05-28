@@ -212,6 +212,15 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Return the signed distance to the point. 
+        /// Always positive.
+        /// </summary>
+        public REAL SignedDistance(VECTOR2 p)
+        {
+            return VECTOR2.Distance(Closest(p), p);
+        }
+
+        /// <summary>
         /// Does the two segments intersect.
         /// </summary>
         /// <param name="seg">other segment</param>
@@ -340,15 +349,6 @@ namespace Common.Geometry.Shapes
 
             t = (ab.x * ap.x + ab.y * ap.y) / len;
             t = MathUtil.Clamp01(t);
-        }
-
-        /// <summary>
-        /// Return the signed distance to the point. 
-        /// Always positive.
-        /// </summary>
-        public REAL SignedDistance(VECTOR2 p)
-        {
-            return VECTOR2.Distance(Closest(p), p);
         }
 
         /// <summary>

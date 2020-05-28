@@ -129,10 +129,13 @@ namespace Common.Geometry.Polygons
             CalculateLengths();
         }
 
+        /// <summary>
+        /// The average position of the polygon.
+        /// </summary>
         public void CalculateCentroid()
         {
             Centroid = Vector2f.Zero;
-            if (Count == 0) return;
+            if (Count < 3) return;
 
             for (int i = 0; i < Count; i++)
                 Centroid += Positions[i];
@@ -141,12 +144,13 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
+        /// The polygons area.
         /// https://en.wikipedia.org/wiki/Shoelace_formula
         /// </summary>
         public void CalculateArea()
         {
             SignedArea = 0;
-            if (Count == 0) return;
+            if (Count < 3) return;
 
             float firstProducts = 0.0f;
             float secondProducts = 0.0f;
@@ -171,7 +175,7 @@ namespace Common.Geometry.Polygons
             Length = 0;
 
             int size = Count;
-            if (size == 0) return;
+            if (size < 3) return;
 
             //polygons need a extra length to wrap
             //back to start position.
@@ -190,9 +194,14 @@ namespace Common.Geometry.Polygons
             }
         }
 
-        public override bool ContainsPoint(Vector2f point)
+        /// <summary>
+        /// Does the polygon contain the point.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public override bool Contains(Vector2f point)
         {
-            if (Count == 0) return false;
+            if (Count < 3) return false;
             if (!Bounds.Contains(point)) return false;
 
             var ab = new Segment2f();
@@ -210,6 +219,46 @@ namespace Common.Geometry.Polygons
             }
 
             return (windingNumber % 2 != 0);
+        }
+
+        /// <summary>
+        /// The sigined distance from the polygon to the point.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public override float SignedDistance(Vector2f point)
+        {
+            if (Count < 3) 
+                return float.PositiveInfinity;
+
+            var v0 = Positions[0];
+
+            float d = Vector2f.Dot(point - v0, point - v0);
+            float s = 1.0f;
+
+            for (int i = 0; i < Count; i++)
+            {
+                Vector2f vj = GetPosition(i - 1);
+                Vector2f vi = GetPosition(i);
+
+                Vector2f e = vj - vi;
+                Vector2f w = point - vi;
+
+                float we = Vector2f.Dot(w, e);
+                float ee = Vector2f.Dot(e, e);
+                Vector2f b = w - e * MathUtil.Clamp(MathUtil.SafeDiv(we, ee), 0.0f, 1.0f);
+
+                d = Math.Min(d, Vector2f.Dot(b, b));
+
+                bool b0 = point.y >= vi.y;
+                bool b1 = point.y < vj.y;
+                bool b2 = e.x * w.y > e.y * w.x;
+
+                if ((b0 && b1 && b2) || (!b0 && !b1 && !b2))
+                    s *= -1.0f;
+            }
+
+            return s * MathUtil.Sqrt(d);
         }
 
         public static Polygon2f FromTriangle(Vector2f a, Vector2f b, Vector2f c)

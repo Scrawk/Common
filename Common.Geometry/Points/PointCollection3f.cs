@@ -131,7 +131,7 @@ namespace Common.Geometry.Points
         public float SignedDistance(Vector3f point)
         {
             if (Count == 0)
-                throw new InvalidOperationException("Can not find signed distance if collection is empty.");
+                return float.PositiveInfinity;
 
             return Vector3f.Distance(point, Closest(point));
         }

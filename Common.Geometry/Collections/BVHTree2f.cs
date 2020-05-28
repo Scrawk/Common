@@ -9,7 +9,7 @@ namespace Common.Geometry.Collections
 {
 
     /// <summary>
-    /// A BVH ( aka BVH ) tree using based on the implementation found here.
+    /// A BVH tree using based on the implementation found here.
     /// http://allenchou.net/2014/02/game-physics-broadphase-dynamic-aabb-tree/
     /// </summary>
     public class BVHTree2f : IShapeCollection2f
@@ -114,7 +114,7 @@ namespace Common.Geometry.Collections
         public float SignedDistance(Vector2f point)
         {
             if (Root == null)
-                throw new ArgumentException("Can not find signed distance if collection is empty.");
+                return float.PositiveInfinity;
 
             float sd = float.PositiveInfinity;
 
@@ -127,7 +127,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does the tree have a shape that contains the point.
         /// </summary>
-        public bool ContainsPoint(Vector2f point)
+        public bool Contains(Vector2f point)
         {
             return ContainsPoint(Root, point);
         }

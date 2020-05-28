@@ -138,24 +138,55 @@ namespace Common.Geometry.Polygons
             }
         }
 
-        public override bool ContainsPoint(Vector2f point)
+        /// <summary>
+        /// Does the line contain the point.
+        /// The line has some thickness from its width.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public override bool Contains(Vector2f point)
         {
             if (Count == 0) return false;
             if (!Bounds.Contains(point)) return false;
 
-            float w2 = Width * Width;
+            float radius = Width * 0.5f;
 
             for (int i = 0; i < Count - 1; i++)
             {
                 var a = Positions[i];
                 var b = Positions[i + 1];
                 var seg = new Segment2f(a, b);
-                var c = seg.Closest(point);
+                var sdf = seg.SignedDistance(point) - radius;
 
-                if (Vector2f.SqrDistance(c, point) < w2) return true;
+                if (sdf < 0.0f) return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// The igned distance from the line to the point.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public override float SignedDistance(Vector2f point)
+        {
+            if (Count == 0) 
+                return float.PositiveInfinity;
+
+            float sdf = float.PositiveInfinity;
+            float radius = Width * 0.5f;
+
+            for (int i = 0; i < Count - 1; i++)
+            {
+                var a = Positions[i];
+                var b = Positions[i + 1];
+                var seg = new Segment2f(a, b);
+
+                sdf = Math.Min(sdf, seg.SignedDistance(point) - radius);
+            }
+
+            return sdf;
         }
 
     }

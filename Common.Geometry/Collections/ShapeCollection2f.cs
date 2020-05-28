@@ -101,9 +101,6 @@ namespace Common.Geometry.Collections
         /// </summary>
         public float SignedDistance(Vector2f point)
         {
-            if (Count == 0)
-                throw new InvalidOperationException("Can not find signed distance if collection is empty.");
-
             var dist = float.PositiveInfinity;
 
             int count = Count;
@@ -122,7 +119,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does the collection have a shape that contains the point.
         /// </summary>
-        public bool ContainsPoint(Vector2f point)
+        public bool Contains(Vector2f point)
         {
             int count = Count;
             for (int i = 0; i < count; i++)

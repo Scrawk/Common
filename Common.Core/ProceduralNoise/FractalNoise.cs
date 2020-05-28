@@ -182,7 +182,7 @@ namespace Common.Core.ProceduralNoise
         /// <param name="y">A value on the y axis.</param>
         /// <param name="z">A value on the z axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-		public virtual float Octave3f(int i, float x, float y, float z)
+		public virtual float Octave3D(int i, float x, float y, float z)
 		{
             if (i >= Octaves) return 0.0f;
             if (Noises[i] == null) return 0.0f;
@@ -247,7 +247,7 @@ namespace Common.Core.ProceduralNoise
         /// <param name="y">A value on the y axis.</param>
         /// <param name="z">A value on the z axis.</param>
         /// <returns>A noise value between -Amp and Amp.</returns>
-        public virtual float Sample3f(float x, float y, float z)
+        public virtual float Sample3D(float x, float y, float z)
         {
 			x = x + Offset.x;
 			y = y + Offset.y;

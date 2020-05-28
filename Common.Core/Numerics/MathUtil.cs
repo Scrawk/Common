@@ -500,6 +500,24 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Min(int a, int b)
+        {
+            return Math.Min(a, b);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Min(float a, float b)
+        {
+            return Math.Min(a, b);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Min(double a, double b)
+        {
+            return Math.Min(a, b);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Min(int a, int b, int c)
         {
             return Math.Min(a, Math.Min(b, c));
@@ -515,6 +533,24 @@ namespace Common.Core.Numerics
         public static double Min(double a, double b, double c)
         {
             return Math.Min(a, Math.Min(b, c));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Max(int a, int b)
+        {
+            return Math.Max(a, b);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Max(float a, float b)
+        {
+            return Math.Max(a, b);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Max(double a, double b)
+        {
+            return Math.Max(a, b);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

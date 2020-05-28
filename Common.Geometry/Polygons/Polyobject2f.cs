@@ -176,7 +176,12 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Does the shape contain the points.
         /// </summary>
-        public abstract bool ContainsPoint(Vector2f point);
+        public abstract bool Contains(Vector2f point);
+
+        /// <summary>
+        /// The signed distance to the point.
+        /// </summary>
+        public abstract float SignedDistance(Vector2f point);
 
         /// <summary>
         /// Given the number (0 >= t <= 1) interpolate 

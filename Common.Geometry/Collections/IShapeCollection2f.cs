@@ -12,7 +12,7 @@ namespace Common.Geometry.Collections
 
         float SignedDistance(Vector2f point);
 
-        bool ContainsPoint(Vector2f point);
+        bool Contains(Vector2f point);
 
         List<IShape2f> ToList();
     }
