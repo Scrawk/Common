@@ -6,21 +6,15 @@ namespace Common.Core.Numerics
 {
     public static class MathUtil
     {
-        public const double D_EPS = 1e-18;
+        public const float EPS = 1e-9f;
 
-        public const float F_EPS = 1e-9f;
+        public const float PI = (float)Math.PI;
 
-        public const double D_PI = Math.PI;
+        public const float SQRT2 = 1.414213562373095f;
 
-        public const float F_PI = (float)Math.PI;
+        public const float Rad2Deg = 180.0f / PI;
 
-        public const double D_SQRT2 = 1.414213562373095;
-
-        public const float F_SQRT2 = 1.414213562373095f;
-
-        public const double Rad2Deg = 180.0 / D_PI;
-
-        public const double Deg2Rad = F_PI / 180.0;
+        public const float Deg2Rad = PI / 180.0f;
 
         public const int MAX_FACTORIAL = 20;
 
@@ -29,7 +23,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToRadians(float a)
         {
-            return (float)(a * Deg2Rad);
+            return a * Deg2Rad;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,7 +35,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToDegrees(float a)
         {
-            return (float)(a * Rad2Deg);
+            return a * Rad2Deg;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -297,7 +291,7 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float SafeInvSqrt(float n, float d, float eps = F_EPS)
+        public static float SafeInvSqrt(float n, float d, float eps = EPS)
         {
             if (d <= 0.0f) return 0.0f;
             d = Sqrt(d);
@@ -306,7 +300,7 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double SafeInvSqrt(double n, double d, double eps = D_EPS)
+        public static double SafeInvSqrt(double n, double d, double eps = EPS)
         {
             if (d <= 0.0) return 0.0;
             d = Math.Sqrt(d);
@@ -315,53 +309,53 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float SafeInv(float v, float eps = F_EPS)
+        public static float SafeInv(float v, float eps = EPS)
         {
             if (Math.Abs(v) < eps) return 0.0f;
             return 1.0f / v;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double SafeInv(double v, double eps = D_EPS)
+        public static double SafeInv(double v, double eps = EPS)
         {
             if (Math.Abs(v) < eps) return 0.0;
             return 1.0 / v;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float SafeDiv(float n, float d, float eps = F_EPS)
+        public static float SafeDiv(float n, float d, float eps = EPS)
         {
             if (Math.Abs(d) < eps) return 0.0f;
             return n / d;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double SafeDiv(double n, double d, double eps = D_EPS)
+        public static double SafeDiv(double n, double d, double eps = EPS)
         {
             if (Math.Abs(d) < eps) return 0.0;
             return n / d;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsZero(float v, float eps = F_EPS)
+        public static bool IsZero(float v, float eps = EPS)
         {
             return Math.Abs(v) < eps;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsZero(double v, double eps = D_EPS)
+        public static bool IsZero(double v, double eps = EPS)
         {
             return Math.Abs(v) < eps;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(float v0, float v1, float eps = F_EPS)
+        public static bool AlmostEqual(float v0, float v1, float eps = EPS)
         {
             return Math.Abs(v0 - v1) < eps;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(double v0, double v1, double eps = D_EPS)
+        public static bool AlmostEqual(double v0, double v1, double eps = EPS)
         {
             return Math.Abs(v0 - v1) < eps;
         }

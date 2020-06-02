@@ -314,8 +314,8 @@ namespace Common.Geometry.Shapes
 
             //add in an epsilon term to counteract arithmetic errors 
             //when segment is near parallel to a coordinate axis.
-            adx += MathUtil.F_EPS;
-            ady += MathUtil.F_EPS;
+            adx += MathUtil.EPS;
+            ady += MathUtil.EPS;
 
             if (Math.Abs(m.x * d.y - m.y * d.x) > e.x * ady + e.y * adx) return false;
 

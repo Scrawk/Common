@@ -4,27 +4,27 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
 
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Circle2f : IEquatable<Circle2f>, IShape2f
+    public struct Circle2d : IEquatable<Circle2d>
     {
         public VECTOR2 Center;
 
         public REAL Radius;
 
-        public Circle2f(VECTOR2 centre, REAL radius)
+        public Circle2d(VECTOR2 centre, REAL radius)
         {
             Center = centre;
             Radius = radius;
         }
 
-        public Circle2f(REAL x, REAL y, REAL radius)
+        public Circle2d(REAL x, REAL y, REAL radius)
         {
             Center = new VECTOR2(x, y);
             Radius = radius;
@@ -43,7 +43,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL Diameter
         {
-            get { return Radius * 2.0f; }
+            get { return Radius * 2.0; }
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL Circumference
         {
-            get { return MathUtil.PI * Radius * 2.0f; }
+            get { return MathUtil.PI * Radius * 2.0; }
         }
 
         /// <summary>
@@ -78,24 +78,24 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        public static bool operator ==(Circle2f c1, Circle2f c2)
+        public static bool operator ==(Circle2d c1, Circle2d c2)
         {
             return c1.Radius == c2.Radius && c1.Center == c2.Center;
         }
 
-        public static bool operator !=(Circle2f c1, Circle2f c2)
+        public static bool operator !=(Circle2d c1, Circle2d c2)
         {
             return c1.Radius != c2.Radius || c1.Center != c2.Center;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Circle2f)) return false;
-            Circle2f cir = (Circle2f)obj;
+            if (!(obj is Circle2d)) return false;
+            Circle2d cir = (Circle2d)obj;
             return this == cir;
         }
 
-        public bool Equals(Circle2f cir)
+        public bool Equals(Circle2d cir)
         {
             return this == cir;
         }
@@ -113,7 +113,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Circle2f: Center={0}, Radius={1}]", Center, Radius);
+            return string.Format("[Circle2d: Center={0}, Radius={1}]", Center, Radius);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="circle">The other circle</param>
         /// <returns>True if the circles intersect</returns>
-        public bool Intersects(Circle2f circle)
+        public bool Intersects(Circle2d circle)
         {
             REAL r = Radius + circle.Radius;
             return VECTOR2.SqrDistance(Center, circle.Center) <= r * r;
@@ -183,7 +183,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the circle so it contains the point p.
         /// </summary>
-        public static Circle2f Enlarge(Circle2f cir, VECTOR2 p)
+        public static Circle2d Enlarge(Circle2d cir, VECTOR2 p)
         {
             VECTOR2 d = p - cir.Center;
             REAL dist2 = d.SqrMagnitude;
@@ -191,7 +191,7 @@ namespace Common.Geometry.Shapes
             if (dist2 > cir.Radius2)
             {
                 REAL dist = MathUtil.Sqrt(dist2);
-                REAL radius = (cir.Radius + dist) * 0.5f;
+                REAL radius = (cir.Radius + dist) * 0.5;
                 REAL k = (radius - cir.Radius) / dist;
 
                 cir.Center += d * k;
@@ -204,11 +204,11 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Creates a circle that has both points on its circumference.
         /// </summary>
-        public static Circle2f CircumCircle(VECTOR2 p0, VECTOR2 p1)
+        public static Circle2d CircumCircle(VECTOR2 p0, VECTOR2 p1)
         {
-            var centre = (p0 + p1) * 0.5f;
-            var radius = VECTOR2.Distance(p0, p1) * 0.5f;
-            var bounds = new Circle2f(centre, radius);
+            var centre = (p0 + p1) * 0.5;
+            var radius = VECTOR2.Distance(p0, p1) * 0.5;
+            var bounds = new Circle2d(centre, radius);
             return bounds;
         }
 
@@ -217,7 +217,7 @@ namespace Common.Geometry.Shapes
         /// From MathWorld: http://mathworld.wolfram.com/Circumcircle.html.
         /// Fails if the points are colinear.
         /// </summary>
-        public static Circle2f CircumCircle(VECTOR2 p0, VECTOR2 p1, VECTOR2 p2)
+        public static Circle2d CircumCircle(VECTOR2 p0, VECTOR2 p1, VECTOR2 p2)
         {
             var m = new Matrix3x3f();
 
@@ -239,18 +239,18 @@ namespace Common.Geometry.Shapes
             m.SetColumn(2, new Vector3f(p0.y, p1.y, p2.y));
             REAL c = -m.Determinant;
 
-            REAL s = -1.0f / (2.0f * a);
+            REAL s = -1.0 / (2.0 * a);
 
             var circumCenter = new VECTOR2(s * dx, s * dy);
-            REAL radius = Math.Abs(s) * MathUtil.Sqrt(dx * dx + dy * dy - 4.0f * a * c);
+            REAL radius = Math.Abs(s) * MathUtil.Sqrt(dx * dx + dy * dy - 4.0 * a * c);
 
-            return new Circle2f(circumCenter, radius);
+            return new Circle2d(circumCenter, radius);
         }
 
         /// <summary>
         /// Creates a circle that contains all three point.
         /// </summary>
-        public static Circle2f CalculateBounds(VECTOR2 p0, VECTOR2 p1, VECTOR2 p2)
+        public static Circle2d CalculateBounds(VECTOR2 p0, VECTOR2 p1, VECTOR2 p2)
         {
             var bounds = CircumCircle(p0, p1);
             return Enlarge(bounds, p2);
@@ -260,7 +260,7 @@ namespace Common.Geometry.Shapes
         /// Calculate the bounding circle that contains 
         /// all the points in the list.
         /// </summary>
-        public static Circle2f CalculateBounds(IList<VECTOR2> points)
+        public static Circle2d CalculateBounds(IList<VECTOR2> points)
         {
             var idx = ExtremePoints(points);
 

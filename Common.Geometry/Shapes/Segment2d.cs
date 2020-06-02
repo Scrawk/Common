@@ -265,7 +265,6 @@ namespace Common.Geometry.Shapes
         /// <returns>If they intersect</returns>
         public bool Intersects(Segment2d seg, out REAL s, out REAL t)
         {
-
             REAL area1 = SignedTriArea(A, B, seg.B);
             REAL area2 = SignedTriArea(A, B, seg.A);
             s = 0.0;
@@ -314,8 +313,8 @@ namespace Common.Geometry.Shapes
 
             //add in an epsilon term to counteract arithmetic errors 
             //when segment is near parallel to a coordinate axis.
-            adx += MathUtil.D_EPS;
-            ady += MathUtil.D_EPS;
+            adx += MathUtil.EPS;
+            ady += MathUtil.EPS;
 
             if (Math.Abs(m.x * d.y - m.y * d.x) > e.x * ady + e.y * adx) return false;
 
@@ -340,7 +339,7 @@ namespace Common.Geometry.Shapes
         /// <param name="t">closest point = A + t * (B - A)</param>
         public void Closest(VECTOR2 p, out REAL t)
         {
-            t = 0.0f;
+            t = 0.0;
             VECTOR2 ab = B - A;
             VECTOR2 ap = p - A;
 

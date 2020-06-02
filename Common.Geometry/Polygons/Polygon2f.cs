@@ -288,7 +288,7 @@ namespace Common.Geometry.Polygons
         {
             var polygon = new Polygon2f(segments);
 
-            float pi = MathUtil.F_PI;
+            float pi = MathUtil.PI;
             float fseg = segments;
 
             for (int i = 0; i < segments; i++)

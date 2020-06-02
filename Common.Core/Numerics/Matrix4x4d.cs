@@ -458,7 +458,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix4x4d m0, Matrix4x4d m1, double eps = MathUtil.D_EPS)
+        public static bool AlmostEqual(Matrix4x4d m0, Matrix4x4d m1, double eps = MathUtil.EPS)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;

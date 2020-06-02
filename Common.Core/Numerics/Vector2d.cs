@@ -386,7 +386,7 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(Vector2d v0, Vector2d v1, REAL eps = MathUtil.D_EPS)
+        public static bool AlmostEqual(Vector2d v0, Vector2d v1, REAL eps = MathUtil.EPS)
 		{
 			if(Math.Abs(v0.x - v1.x) > eps) return false;
 			if(Math.Abs(v0.y - v1.y) > eps) return false;
@@ -571,7 +571,7 @@ namespace Common.Core.Numerics
             REAL angle = MathUtil.Atan2(a.y, a.x) - MathUtil.Atan2(b.y, b.x);
 
             if (angle <= 0.0)
-                angle = MathUtil.D_PI * 2.0 + angle;
+                angle = MathUtil.PI * 2.0 + angle;
 
             angle = 360.0 - MathUtil.ToDegrees(angle);
             return angle >= 360.0 ? 0 : angle;
