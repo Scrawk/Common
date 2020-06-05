@@ -6,6 +6,8 @@ namespace Common.Core.Numerics
 {
     public static class MathUtil
     {
+        public const int PRECISION = 9;
+
         public const float EPS = 1e-9f;
 
         public const float PI = (float)Math.PI;
