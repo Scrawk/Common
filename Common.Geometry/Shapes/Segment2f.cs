@@ -237,13 +237,13 @@ namespace Common.Geometry.Shapes
         /// <returns>If they intersect</returns>
         public bool Intersects(Segment2f seg, out REAL t)
         {
-            REAL area1 = SignedTriArea(A, B, seg.B);
-            REAL area2 = SignedTriArea(A, B, seg.A);
+            REAL area1 = Triangle2f.CrossProductArea(A, B, seg.B);
+            REAL area2 = Triangle2f.CrossProductArea(A, B, seg.A);
             t = 0.0f;
 
             if (area1 * area2 < 0.0f)
             {
-                REAL area3 = SignedTriArea(seg.A, seg.B, A);
+                REAL area3 = Triangle2f.CrossProductArea(seg.A, seg.B, A);
                 REAL area4 = area3 + area2 - area1;
 
                 if (area3 * area4 < 0.0f)
@@ -266,14 +266,14 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Segment2f seg, out REAL s, out REAL t)
         {
 
-            REAL area1 = SignedTriArea(A, B, seg.B);
-            REAL area2 = SignedTriArea(A, B, seg.A);
+            REAL area1 = Triangle2f.CrossProductArea(A, B, seg.B);
+            REAL area2 = Triangle2f.CrossProductArea(A, B, seg.A);
             s = 0.0f;
             t = 0.0f;
 
             if (area1 * area2 < 0.0f)
             {
-                REAL area3 = SignedTriArea(seg.A, seg.B, A);
+                REAL area3 = Triangle2f.CrossProductArea(seg.A, seg.B, A);
                 REAL area4 = area3 + area2 - area1;
 
                 if (area3 * area4 < 0.0f)
@@ -283,7 +283,7 @@ namespace Common.Geometry.Shapes
                     REAL a2 = area2;
                     REAL a3 = area3;
 
-                    area1 = SignedTriArea(seg.A, seg.B, B);
+                    area1 = Triangle2f.CrossProductArea(seg.A, seg.B, B);
                     area2 = a3;
                     area3 = a2;
                     area4 = area3 + area2 - area1;
@@ -428,11 +428,6 @@ namespace Common.Geometry.Shapes
                     }
                 }
             }
-        }
-
-        private static REAL SignedTriArea(VECTOR2 a, VECTOR2 b, VECTOR2 c)
-        {
-            return (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
         }
 
     }

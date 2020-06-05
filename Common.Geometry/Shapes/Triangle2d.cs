@@ -53,7 +53,7 @@ namespace Common.Geometry.Shapes
 
         public REAL SignedArea
         {
-            get { return (A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x); }
+            get { return ((A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x)) * 0.5; }
         }
 
         /// <summary>
@@ -279,6 +279,15 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// The cross product area which is the 
+        /// same as double the signed area.
+        /// </summary>
+        public static REAL CrossProductArea(VECTOR2 a, VECTOR2 b, VECTOR2 c)
+        {
+            return (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
+        }
+
+        /// <summary>
         /// Return th barycentric coordinates
         /// with respect to p.
         /// </summary>
@@ -293,7 +302,7 @@ namespace Common.Geometry.Shapes
             REAL denom = d00 * d11 - d01 * d01;
             REAL v = (d11 * d20 - d01 * d21) / denom;
             REAL w = (d00 * d21 - d01 * d20) / denom;
-            REAL u = 1.0f - v - w;
+            REAL u = 1.0 - v - w;
             return new VECTOR3(u, v, w);
         }
 

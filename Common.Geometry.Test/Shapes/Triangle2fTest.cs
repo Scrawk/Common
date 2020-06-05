@@ -10,6 +10,18 @@ namespace Common.Geometry.Test.Shapes
     public class Triangle2fTest
     {
         [TestMethod]
+        public void Area()
+        {
+            var a = new Vector2f(0, 1);
+            var b = new Vector2f(0, 0);
+            var c = new Vector2f(1, 0);
+            var triangle = new Triangle2f(a, b, c);
+
+            Assert.AreEqual(0.5f, triangle.SignedArea);
+            Assert.AreEqual(0.5f, triangle.Area);
+        }
+
+        [TestMethod]
         public void IntersectsBox()
         {
             var a = new Vector2f(-2, -1);
@@ -26,5 +38,6 @@ namespace Common.Geometry.Test.Shapes
             box = new Box2f(new Vector2f(1, -3), new Vector2f(2, -2));
             //Assert.IsFalse(triangle.Intersects(box));
         }
+
     }
 }

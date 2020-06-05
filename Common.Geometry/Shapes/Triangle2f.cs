@@ -53,7 +53,7 @@ namespace Common.Geometry.Shapes
 
         public REAL SignedArea
         {
-            get { return (A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x); }
+            get { return ((A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x)) * 0.5f; }
         }
 
         /// <summary>
@@ -276,6 +276,15 @@ namespace Common.Geometry.Shapes
         public override string ToString()
         {
             return string.Format("[Triangle2f: A={0}, B={1}, C={2}]", A, B, C);
+        }
+
+        /// <summary>
+        /// The cross product area which is the 
+        /// same as double the signed area.
+        /// </summary>
+        public static REAL CrossProductArea(VECTOR2 a, VECTOR2 b, VECTOR2 c)
+        {
+            return (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
         }
 
         /// <summary>

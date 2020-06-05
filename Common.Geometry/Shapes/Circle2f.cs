@@ -202,6 +202,17 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Returns true if the point d is inside the circle defined by the points a, b, c.
+        /// </summary>
+        public static bool InCircle(VECTOR2 a, VECTOR2 b, VECTOR2 c, VECTOR2 d)
+        {
+            return (a.x * a.x + a.y * a.y) * Triangle2f.CrossProductArea(b, c, d) -
+                    (b.x * b.x + b.y * b.y) * Triangle2f.CrossProductArea(a, c, d) +
+                    (c.x * c.x + c.y * c.y) * Triangle2f.CrossProductArea(a, b, d) -
+                    (d.x * d.x + d.y * d.y) * Triangle2f.CrossProductArea(a, b, c) > 0;
+        }
+
+        /// <summary>
         /// Creates a circle that has both points on its circumference.
         /// </summary>
         public static Circle2f CircumCircle(VECTOR2 p0, VECTOR2 p1)
