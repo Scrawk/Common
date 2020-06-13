@@ -288,21 +288,5 @@ namespace Common.Geometry.Polygons
             }
         }
 
-        /// <summary>
-        /// Print the object for debugging.
-        /// </summary>
-        public string Print()
-        {
-            var builder = new StringBuilder();
-
-            builder.AppendLine("var points = new Vector2f[]{");
-
-            for(int i = 0; i < Count; i++)
-                builder.AppendLine("(" + Positions[i] + "),");
-
-            builder.AppendLine("};");
-
-            return builder.ToString();
-        }
     }
 }

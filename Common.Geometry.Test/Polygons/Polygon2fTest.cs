@@ -18,7 +18,7 @@ namespace Common.Geometry.Test.Polygons
             Assert.AreEqual(12, polygon.Area);
             Assert.AreEqual(16, polygon.Length);
             Assert.AreEqual(true, polygon.IsCW);
-            Assert.AreEqual(new Vector2f(0), polygon.Centroid);
+            Assert.AreEqual(new Vector2f(0), polygon.ConvexCentroid);
             Assert.AreEqual(new Box2f(-2,2), polygon.Bounds);
         }
 

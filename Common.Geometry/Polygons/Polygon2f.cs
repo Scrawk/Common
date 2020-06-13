@@ -26,7 +26,7 @@ namespace Common.Geometry.Polygons
 
         public float Area => Math.Abs(SignedArea);
 
-        public Vector2f Centroid { get; private set; }
+        public Vector2f ConvexCentroid { get; private set; }
 
         public bool IsCW => SignedArea < 0.0;
 
@@ -104,7 +104,7 @@ namespace Common.Geometry.Polygons
         {
             var copy = new Polygon2f(Positions);
             copy.SignedArea = SignedArea;
-            copy.Centroid = Centroid;
+            copy.ConvexCentroid = ConvexCentroid;
             copy.Bounds = Bounds;
 
             if (Params != null)
@@ -123,24 +123,33 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public void Calculate()
         {
-            CalculateCentroid();
+            CalculateConvexCentroid();
             CalculateBounds();
             CalculateArea();
             CalculateLengths();
         }
 
         /// <summary>
-        /// The average position of the polygon.
+        /// The centroid of the polygon presuming its convex.
         /// </summary>
-        public void CalculateCentroid()
+        public void CalculateConvexCentroid()
         {
-            Centroid = Vector2f.Zero;
-            if (Count < 3) return;
+            float det = 0;
+            ConvexCentroid = Vector2f.Zero;
 
             for (int i = 0; i < Count; i++)
-                Centroid += Positions[i];
+            {
+                var a = GetPosition(i);
+                var b = GetPosition(i + 1);
 
-            Centroid /= Count;
+                // compute the determinant
+                float tempDet = a.x * b.y - b.x * a.y;
+                det += tempDet;
+
+                ConvexCentroid += (a + b) * tempDet;
+            }
+
+            ConvexCentroid /= (3 * det);
         }
 
         /// <summary>
