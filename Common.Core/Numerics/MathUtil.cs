@@ -351,6 +351,18 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsOne(float v, float eps = EPS)
+        {
+            return Math.Abs(1.0f - v) < eps;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsOne(double v, double eps = EPS)
+        {
+            return Math.Abs(1.0 - v) < eps;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AlmostEqual(float v0, float v1, float eps = EPS)
         {
             return Math.Abs(v0 - v1) < eps;

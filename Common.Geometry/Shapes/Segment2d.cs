@@ -19,6 +19,14 @@ namespace Common.Geometry.Shapes
 
         public VECTOR2 B;
 
+        /// <summary>
+        /// Alternative names for a and b to make
+        /// it more clear when comparing two segments 
+        /// named ab and cd.
+        /// </summary>
+        public VECTOR2 C => A;
+        public VECTOR2 D => B;
+
         public Segment2d(VECTOR2 a, VECTOR2 b)
         {
             A = a;
@@ -31,48 +39,23 @@ namespace Common.Geometry.Shapes
             B = new VECTOR2(bx, by);
         }
 
-        public VECTOR2 Center
-        {
-            get { return (A + B) * 0.5; }
-        }
+        public VECTOR2 Center => (A + B) * 0.5;
 
-        public REAL Length
-        {
-            get { return VECTOR2.Distance(A, B); }
-        }
+        public REAL Length => VECTOR2.Distance(A, B);
 
-        public REAL SqrLength
-        {
-            get { return VECTOR2.SqrDistance(A, B); }
-        }
+        public REAL SqrLength => VECTOR2.SqrDistance(A, B);
 
-        public VECTOR2 Normal
-        {
-            get
-            {
-                return (B - A).Normalized.PerpendicularCW;
-            }
-        }
+        public VECTOR2 Normal => (B - A).Normalized.PerpendicularCW;
 
-        public REAL LeftMost
-        {
-            get { return Math.Min(A.x, B.x); }
-        }
+        public REAL LeftMost => Math.Min(A.x, B.x);
 
-        public REAL RightMost
-        {
-            get { return Math.Max(A.x, B.x); }
-        }
+        public REAL RightMost => Math.Max(A.x, B.x);
 
-        public REAL BottomMost
-        {
-            get { return Math.Min(A.y, B.y); }
-        }
+        public REAL BottomMost => Math.Min(A.y, B.y);
 
-        public REAL TopMost
-        {
-            get { return Math.Max(A.y, B.y); }
-        }
+        public REAL TopMost => Math.Max(A.y, B.y);
+
+        public Segment2d Flipped => new Segment2d(B, A);
 
         public BOX2 Bounds
         {

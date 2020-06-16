@@ -165,7 +165,7 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
-        /// The igned distance from the line to the point.
+        /// The signed distance from the line to the point.
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
