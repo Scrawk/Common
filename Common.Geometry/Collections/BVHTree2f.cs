@@ -20,7 +20,7 @@ namespace Common.Geometry.Collections
 
         }
 
-        public BVHTree2f(int border)
+        public BVHTree2f(float border)
         {
             Border = border;
         }
@@ -141,6 +141,38 @@ namespace Common.Geometry.Collections
         }
 
         /// <summary>
+        /// Does a shape contain the point.
+        /// </summary>
+        public bool Contains(Vector2f point)
+        {
+            return NodeContains(Root, point, false);
+        }
+
+        /// <summary>
+        /// Does a shapes bounds contain the point.
+        /// </summary>
+        public bool BoundsContains(Vector2f point)
+        {
+            return NodeContains(Root, point, true);
+        }
+
+        /// <summary>
+        /// Does a shape intersects the box.
+        /// </summary>
+        public bool Intersects(Box2f box)
+        {
+            return NodeIntersects(Root, box, false);
+        }
+
+        /// <summary>
+        /// Does a shapes bounds intersects the box.
+        /// </summary>
+        public bool BoundsIntersects(Box2f box)
+        {
+            return NodeIntersects(Root, box, true);
+        }
+
+        /// <summary>
         /// Return the signed distance field from 
         /// the union of all shapes in tree.
         /// Any point not contained in a leaf nodes aabb has undefined
@@ -150,14 +182,6 @@ namespace Common.Geometry.Collections
         {
             float sd = float.PositiveInfinity;
             return NodeSignedDistance(Root, point, sd);
-        }
-
-        /// <summary>
-        /// Does the tree have a shape that contains the point.
-        /// </summary>
-        public bool Contains(Vector2f point)
-        {
-            return NodeContains(Root, point);
         }
 
         /// <summary>
@@ -285,20 +309,23 @@ namespace Common.Geometry.Collections
         }
 
         /// <summary>
-        /// Find if a shape contains this point by iterating
-        /// throught the nodes if the nodes aabb contians the
-        /// point in its bounds.
+        /// 
         /// </summary>
-        private bool NodeContains(BVHTreeNode2f node, Vector2f point)
+        private bool NodeContains(BVHTreeNode2f node, Vector2f point, bool boundsOnly)
         {
             if (node != null && node.Bounds.Contains(point))
             {
                 if (node.IsLeaf)
-                    return node.Shape.Contains(point);
+                {
+                    if (boundsOnly)
+                        return true;
+                    else
+                        return node.Shape.Contains(point);
+                }
                 else
                 {
-                    if (NodeContains(node.Left, point)) return true;
-                    if (NodeContains(node.Right, point)) return true;
+                    if (NodeContains(node.Left, point, boundsOnly)) return true;
+                    if (NodeContains(node.Right, point, boundsOnly)) return true;
                 }
             }
 
@@ -306,10 +333,31 @@ namespace Common.Geometry.Collections
         }
 
         /// <summary>
-        /// Find the minimium signed distance by iterating 
-        /// throught the nodes if the nodes aabb contains the point.
-        /// Any point not contained in a leaf nodes aabb has undefined
-        /// signed distance.
+        /// 
+        /// </summary>
+        private bool NodeIntersects(BVHTreeNode2f node, Box2f box, bool boundsOnly)
+        {
+            if (node != null && node.Bounds.Intersects(box))
+            {
+                if (node.IsLeaf)
+                {
+                    if (boundsOnly)
+                        return true;
+                    else
+                        return node.Shape.Intersects(box);
+                }
+                else
+                {
+                    if (NodeIntersects(node.Left, box, boundsOnly)) return true;
+                    if (NodeIntersects(node.Right, box, boundsOnly)) return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 
         /// </summary>
         private float NodeSignedDistance(BVHTreeNode2f node, Vector2f point, float sd)
         {
