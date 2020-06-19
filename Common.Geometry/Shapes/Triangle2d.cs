@@ -13,7 +13,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Triangle2d : IEquatable<Triangle2d>
+    public struct Triangle2d : IEquatable<Triangle2d>, IShape2d
     {
 
         public VECTOR2 A;

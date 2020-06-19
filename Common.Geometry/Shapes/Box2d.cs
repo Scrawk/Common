@@ -13,7 +13,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Box2d : IEquatable<Box2d>
+    public struct Box2d : IEquatable<Box2d>, IShape2d
     {
 
         public VECTOR2 Min;

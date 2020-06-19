@@ -183,10 +183,10 @@ namespace Common.Geometry.Polygons
                 var b = Positions[i + 1];
                 var seg = new Segment2f(a, b);
 
-                sdf = Math.Min(sdf, seg.SignedDistance(point) - radius);
+                sdf = Math.Min(sdf, seg.SignedDistance(point));
             }
 
-            return sdf;
+            return sdf - radius;
         }
 
     }

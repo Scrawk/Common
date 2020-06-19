@@ -12,7 +12,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Segment2d : IEquatable<Segment2d>
+    public struct Segment2d : IEquatable<Segment2d>, IShape2d
     {
 
         public VECTOR2 A;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
@@ -20,10 +20,27 @@ namespace Common.Geometry.Collections
 
         }
 
+        public BVHTree2f(int border)
+        {
+            Border = border;
+        }
+
+        /// <summary>
+        /// Added border around the nodes aabb.
+        /// </summary>
+        public float Border { get; private set; }
+
         /// <summary>
         /// The number of shapes in the tree.
         /// </summary>
-        public int Count => CountLeaves(Root, 0);
+        public int Count
+        {
+            get
+            {
+                if (Root == null) return 0;
+                return CountLeaves(Root, 0);
+            }
+        }
 
         /// <summary>
         /// The max depth of the tree.
@@ -57,7 +74,11 @@ namespace Common.Geometry.Collections
         /// </summary>
         public bool Contains(IShape2f shape)
         {
-            return FindNode(Root, shape, shape.Bounds) != null;
+            var bounds = shape.Bounds;
+            bounds.Min -= Border;
+            bounds.Max += Border;
+
+            return FindNode(Root, shape, bounds) != null;
         }
 
         /// <summary>
@@ -65,7 +86,11 @@ namespace Common.Geometry.Collections
         /// </summary>
         public BVHTreeNode2f FindNode(IShape2f shape)
         {
-            return FindNode(Root, shape, shape.Bounds);
+            var bounds = shape.Bounds;
+            bounds.Min -= Border;
+            bounds.Max += Border;
+
+            return FindNode(Root, shape, bounds);
         }
 
         /// <summary>
@@ -82,13 +107,17 @@ namespace Common.Geometry.Collections
         /// </summary>
         public void Add(IShape2f shape)
         {
+            var bounds = shape.Bounds;
+            bounds.Min -= Border;
+            bounds.Max += Border;
+
             if (Root != null)
             {
-                var node = new BVHTreeNode2f(shape);
+                var node = new BVHTreeNode2f(shape, bounds);
                 Add(Root, node);
             }
             else
-                Root = new BVHTreeNode2f(shape);
+                Root = new BVHTreeNode2f(shape, bounds);
         }
 
         /// <summary>
@@ -96,7 +125,11 @@ namespace Common.Geometry.Collections
         /// </summary>
         public bool Remove(IShape2f shape)
         {
-            var node = FindNode(Root, shape, shape.Bounds);
+            var bounds = shape.Bounds;
+            bounds.Min -= Border;
+            bounds.Max += Border;
+
+            var node = FindNode(Root, shape, bounds);
             if (node == null) return false;
 
             if (node == Root)
@@ -110,18 +143,13 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Return the signed distance field from 
         /// the union of all shapes in tree.
+        /// Any point not contained in a leaf nodes aabb has undefined
+        /// signed distance.
         /// </summary>
         public float SignedDistance(Vector2f point)
         {
-            if (Root == null)
-                return float.PositiveInfinity;
-
             float sd = float.PositiveInfinity;
-
-            foreach (var shape in this)
-                sd = Math.Min(sd, shape.SignedDistance(point));
-
-            return sd;
+            return NodeSignedDistance(Root, point, sd);
         }
 
         /// <summary>
@@ -129,7 +157,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         public bool Contains(Vector2f point)
         {
-            return ContainsPoint(Root, point);
+            return NodeContains(Root, point);
         }
 
         /// <summary>
@@ -171,8 +199,12 @@ namespace Common.Geometry.Collections
         {
             if (parent.IsLeaf)
             {
+                var bounds = parent.Shape.Bounds;
+                bounds.Min -= Border;
+                bounds.Max += Border;
+
                 parent.Left = node;
-                parent.Right = new BVHTreeNode2f(parent.Shape);
+                parent.Right = new BVHTreeNode2f(parent.Shape, bounds);
                 parent.Shape = null;
 
                 parent.Left.Parent = parent;
@@ -257,7 +289,7 @@ namespace Common.Geometry.Collections
         /// throught the nodes if the nodes aabb contians the
         /// point in its bounds.
         /// </summary>
-        private bool ContainsPoint(BVHTreeNode2f node, Vector2f point)
+        private bool NodeContains(BVHTreeNode2f node, Vector2f point)
         {
             if (node != null && node.Bounds.Contains(point))
             {
@@ -265,12 +297,37 @@ namespace Common.Geometry.Collections
                     return node.Shape.Contains(point);
                 else
                 {
-                    if (ContainsPoint(node.Left, point)) return true;
-                    if (ContainsPoint(node.Right, point)) return true;
+                    if (NodeContains(node.Left, point)) return true;
+                    if (NodeContains(node.Right, point)) return true;
                 }
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Find the minimium signed distance by iterating 
+        /// throught the nodes if the nodes aabb contains the point.
+        /// Any point not contained in a leaf nodes aabb has undefined
+        /// signed distance.
+        /// </summary>
+        private float NodeSignedDistance(BVHTreeNode2f node, Vector2f point, float sd)
+        {
+            if (node == null) return sd;
+
+            if (node.Bounds.Contains(point))
+            {
+                if (node.IsLeaf)
+                    return Math.Min(sd, node.Shape.SignedDistance(point));
+                else
+                {
+                    float left = NodeSignedDistance(node.Left, point, sd);
+                    float right = NodeSignedDistance(node.Right, point, sd);
+                    return Math.Min(left, right);
+                }
+            }
+
+            return sd;
         }
 
         private int MaxDepth(BVHTreeNode2f node, int depth)

@@ -11,10 +11,10 @@ namespace Common.Geometry.Collections
     public class BVHTreeNode2f : IEnumerable<BVHTreeNode2f>
     {
 
-        public BVHTreeNode2f(IShape2f shape)
+        public BVHTreeNode2f(IShape2f shape, Box2f bounds)
         {
             Shape = shape;
-            Bounds = shape.Bounds;
+            Bounds = bounds;
         }
 
         public BVHTreeNode2f(Box2f bounds)
@@ -35,13 +35,8 @@ namespace Common.Geometry.Collections
 
         public bool IsLeaf => Shape != null;
 
-        internal BVHTreeNode2f Sibling
-        {
-            get
-            {
-                return (Parent.Left == this) ? Parent.Right : Parent.Left;
-            }
-        }
+        internal BVHTreeNode2f Sibling => Parent.Left == this ? Parent.Right : Parent.Left;
+
 
         /// <summary>
         /// Enumerate all leaf nodes.

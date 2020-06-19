@@ -17,4 +17,29 @@ namespace Common.Geometry.Shapes
 
         float SignedDistance(Vector3f p);
     }
+
+    public abstract class Shape3f : IShape3f
+    {
+        public abstract Box3f Bounds { get; }
+
+        public Vector3f Closest(Vector3f p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(Vector3f p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Intersects(Box3f box)
+        {
+            throw new NotImplementedException();
+        }
+
+        public float SignedDistance(Vector3f p)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
