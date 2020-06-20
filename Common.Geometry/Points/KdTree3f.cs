@@ -11,7 +11,7 @@ namespace Common.Geometry.Points
     /// A 3f KdTree using Vector3f as the point.
     /// Does not support points with the same coordinates.
     /// </summary>
-    public class KdTree3f : IStaticPointCollection3f
+    public class KdTree3f : IStaticPointCollection3f, ISignedDistanceFunction3f
     {
 
         private Box3f m_bounds;

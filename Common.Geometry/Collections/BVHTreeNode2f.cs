@@ -11,10 +11,10 @@ namespace Common.Geometry.Collections
     public class BVHTreeNode2f : IEnumerable<BVHTreeNode2f>
     {
 
-        public BVHTreeNode2f(IShape2f shape, Box2f bounds)
+        public BVHTreeNode2f(IShape2f shape)
         {
             Shape = shape;
-            Bounds = bounds;
+            Bounds = shape.Bounds;
         }
 
         public BVHTreeNode2f(Box2f bounds)

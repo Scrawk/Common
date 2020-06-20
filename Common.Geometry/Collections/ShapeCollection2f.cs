@@ -12,7 +12,7 @@ namespace Common.Geometry.Collections
     /// A naive implementation of a shape collection
     /// where all operations are O(n2).
     /// </summary>
-    public class ShapeCollection2f : IShapeCollection2f
+    public class ShapeCollection2f : IShapeCollection2f, ISignedDistanceFunction2f
     {
 
         private List<IShape2f> m_shapes;

@@ -12,7 +12,7 @@ namespace Common.Geometry.Points
     /// A naive implementation of a point collection
     /// where all operations are O(n2).
     /// </summary>
-    public class PointCollection2f : IPointCollection2f
+    public class PointCollection2f : IPointCollection2f, ISignedDistanceFunction2f
     {
 
         private List<Vector2f> m_points;

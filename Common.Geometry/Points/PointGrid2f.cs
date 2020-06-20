@@ -239,20 +239,6 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Returns the signed distance to the closest point in th grid.
-        /// Grid will only search within a points nearest neighbour cells
-        /// so this will fail if closest point not in that region.
-        /// In this case returned dist will be zero.
-        /// </summary>
-        public float SignedDistance(Vector2f point)
-        {
-            if (Count == 0)
-                return float.PositiveInfinity;
-
-            return Vector2f.Distance(point, Closest(point));
-        }
-
-        /// <summary>
         /// Returns the closest point in the grid.
         /// Grid will only search within a points nearest neighbour cells
         /// so this will fail if closest point not in that region.

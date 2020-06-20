@@ -5,7 +5,12 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Shapes
 {
-    public interface IShape3f
+    public interface ISignedDistanceFunction3f
+    {
+        float SignedDistance(Vector3f p);
+    }
+
+    public interface IShape3f : ISignedDistanceFunction3f
     {
         Box3f Bounds { get; }
 
@@ -15,7 +20,6 @@ namespace Common.Geometry.Shapes
 
         Vector3f Closest(Vector3f p);
 
-        float SignedDistance(Vector3f p);
     }
 
     public abstract class Shape3f : IShape3f

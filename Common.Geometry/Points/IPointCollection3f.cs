@@ -17,8 +17,6 @@ namespace Common.Geometry.Points
 
         Vector3f Closest(Vector3f point);
 
-        float SignedDistance(Vector3f point);
-
         List<Vector3f> ToList();
 
     }

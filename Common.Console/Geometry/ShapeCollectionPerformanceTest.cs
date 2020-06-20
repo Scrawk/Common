@@ -15,19 +15,17 @@ namespace Common.Console.Geometry
         public static void Run()
         {
             Run(new ShapeCollection2f());
-            Run(new BVHTree2f(5));
+            Run(new BVHTree2f());
         }
 
         private static void Run(IShapeCollection2f collection)
         {
             double addTime = RunAddTest(collection, 10000);
-            double distanceTime = RunSignedDistanceTest(collection, 10000);
             double containsTime = RunContainsTest(collection, 10000);
             double removeTime = RunRemoveTest(collection);
 
             CONSOLE.WriteLine(collection.ToString());
             CONSOLE.WriteLine("Add = " + addTime + "s");
-            CONSOLE.WriteLine("Signed Distance = " + distanceTime + "s");
             CONSOLE.WriteLine("Contains = " + containsTime + "s");
             CONSOLE.WriteLine("Remove = " + removeTime + "s");
             CONSOLE.WriteLine("");
@@ -40,24 +38,6 @@ namespace Common.Console.Geometry
             timer.Start();
 
             CreateRandomSegments(collection, count);
-
-            timer.Stop();
-            return timer.ElapsedSeconds;
-        }
-
-        private static double RunSignedDistanceTest(IShapeCollection2f collection, int count)
-        {
-            var rnd = new System.Random(0);
-
-            var timer = new Timer();
-            timer.Start();
-
-            for(int i = 0; i < count; i++)
-            {
-                var p = rnd.NextVector2f(-Range, Range);
-
-                collection.SignedDistance(p);
-            }
 
             timer.Stop();
             return timer.ElapsedSeconds;

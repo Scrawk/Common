@@ -11,7 +11,7 @@ namespace Common.Geometry.Points
     /// A 2f KdTree using Vector2f as the point.
     /// Does not support points with the same coordinates.
     /// </summary>
-    public class KdTree2f : IStaticPointCollection2f
+    public class KdTree2f : IStaticPointCollection2f, ISignedDistanceFunction2f
     {
 
         private Box2f m_bounds;

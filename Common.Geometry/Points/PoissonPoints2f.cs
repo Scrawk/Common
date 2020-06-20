@@ -73,11 +73,6 @@ namespace Common.Geometry.Points
             m_grid.Search(region, indices);
         }
 
-        public float SignedDistance(Vector2f point)
-        {
-            return m_grid.SignedDistance(point);
-        }
-
         public Vector2f Closest(Vector2f point)
         {
             return m_grid.Closest(point);

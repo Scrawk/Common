@@ -10,8 +10,6 @@ namespace Common.Geometry.Collections
     {
         int Count { get; }
 
-        float SignedDistance(Vector2f point);
-
         bool Contains(Vector2f point);
 
         List<IShape2f> ToList();
