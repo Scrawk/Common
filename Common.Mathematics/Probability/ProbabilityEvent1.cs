@@ -10,7 +10,7 @@ namespace Common.Mathematics.Probability
     /// <summary>
     /// A probability event.
     /// </summary>
-    public struct Probability1i : IEquatable<Probability1i>, IComparable<Probability1i>
+    public struct ProbabilityEvent1 : IEquatable<ProbabilityEvent1>, IComparable<ProbabilityEvent1>
     {
         /// <summary>
         /// The events probability. Must be 0-1.
@@ -22,13 +22,13 @@ namespace Common.Mathematics.Probability
         /// </summary>
         public int Outcome;
 
-        public Probability1i(double p)
+        public ProbabilityEvent1(double p)
         {
             Probability = MathUtil.Clamp01(p);
             Outcome = 0;
         }
 
-        public Probability1i(double p, int outcome)
+        public ProbabilityEvent1(double p, int outcome)
         {
             Probability = MathUtil.Clamp01(p);
             Outcome = outcome;
@@ -47,7 +47,7 @@ namespace Common.Mathematics.Probability
         /// Compare if p1 less likely than p2.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator <(Probability1i p1, Probability1i p2)
+        public static bool operator <(ProbabilityEvent1 p1, ProbabilityEvent1 p2)
         {
             return p1.Probability < p2.Probability;
         }
@@ -56,7 +56,7 @@ namespace Common.Mathematics.Probability
         /// Compare if p1 less likely than p2.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator <=(Probability1i p1, Probability1i p2)
+        public static bool operator <=(ProbabilityEvent1 p1, ProbabilityEvent1 p2)
         {
             return p1.Probability <= p2.Probability;
         }
@@ -65,7 +65,7 @@ namespace Common.Mathematics.Probability
         /// Compare if p1 more likely than p2.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator >(Probability1i p1, Probability1i p2)
+        public static bool operator >(ProbabilityEvent1 p1, ProbabilityEvent1 p2)
         {
             return p1.Probability > p2.Probability;
         }
@@ -74,7 +74,7 @@ namespace Common.Mathematics.Probability
         /// Compare if p1 more likely than p2.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator >=(Probability1i p1, Probability1i p2)
+        public static bool operator >=(ProbabilityEvent1 p1, ProbabilityEvent1 p2)
         {
             return p1.Probability >= p2.Probability;
         }
@@ -83,7 +83,7 @@ namespace Common.Mathematics.Probability
         /// Are the two events equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(Probability1i p1, Probability1i p2)
+        public static bool operator ==(ProbabilityEvent1 p1, ProbabilityEvent1 p2)
         {
             return (p1.Probability == p2.Probability && p1.Outcome == p2.Outcome);
         }
@@ -92,7 +92,7 @@ namespace Common.Mathematics.Probability
         /// Are the two events equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(Probability1i p1, Probability1i p2)
+        public static bool operator !=(ProbabilityEvent1 p1, ProbabilityEvent1 p2)
         {
             return (p1.Probability != p2.Probability || p1.Outcome != p2.Outcome);
         }
@@ -102,8 +102,8 @@ namespace Common.Mathematics.Probability
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (!(obj is Probability1i)) return false;
-            Probability1i p = (Probability1i)obj;
+            if (!(obj is ProbabilityEvent1)) return false;
+            ProbabilityEvent1 p = (ProbabilityEvent1)obj;
             return this == p;
         }
 
@@ -111,7 +111,7 @@ namespace Common.Mathematics.Probability
         /// Are the two events equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(Probability1i p)
+        public bool Equals(ProbabilityEvent1 p)
         {
             return this == p;
         }
@@ -143,7 +143,7 @@ namespace Common.Mathematics.Probability
         /// Compare two events by there probability.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int CompareTo(Probability1i other)
+        public int CompareTo(ProbabilityEvent1 other)
         {
             return Probability.CompareTo(other.Probability);
         }
@@ -167,9 +167,9 @@ namespace Common.Mathematics.Probability
         /// <param name="b">independant probability b</param>
         /// <param name="outcome"> the outcome of a and b events occuring</param>
         /// <returns>The probability of a and b occuring</returns>
-        public static Probability1i IndependantAnd(Probability1i a, Probability1i b, int outcome = 0)
+        public static ProbabilityEvent1 IndependantAnd(ProbabilityEvent1 a, ProbabilityEvent1 b, int outcome = 0)
         {
-            return new Probability1i(a.Probability * b.Probability, outcome);
+            return new ProbabilityEvent1(a.Probability * b.Probability, outcome);
         }
 
         /// <summary>
@@ -181,9 +181,9 @@ namespace Common.Mathematics.Probability
         /// <param name="ab">probability b occuring if a has occured</param>
         /// <param name="outcome"> the outcome of a and b events occuring</param>
         /// <returns>The probability of a and b occuring</returns>
-        public static Probability1i DependantAnd(Probability1i a, Probability1i ab, int outcome = 0)
+        public static ProbabilityEvent1 DependantAnd(ProbabilityEvent1 a, ProbabilityEvent1 ab, int outcome = 0)
         {
-            return new Probability1i(a.Probability * ab.Probability, outcome);
+            return new ProbabilityEvent1(a.Probability * ab.Probability, outcome);
         }
 
         /// <summary>
@@ -195,9 +195,9 @@ namespace Common.Mathematics.Probability
         /// <param name="b">independant probability b</param>
         /// <param name="outcome"> the outcome of a or b occuring</param>
         /// <returns>The probability of a or b occuring</returns>
-        public static Probability1i ExclusiveOr(Probability1i a, Probability1i b, int outcome = 0)
+        public static ProbabilityEvent1 ExclusiveOr(ProbabilityEvent1 a, ProbabilityEvent1 b, int outcome = 0)
         {
-            return new Probability1i(a.Probability + b.Probability, outcome);
+            return new ProbabilityEvent1(a.Probability + b.Probability, outcome);
         }
 
         /// <summary>
@@ -208,9 +208,9 @@ namespace Common.Mathematics.Probability
         /// <param name="b">independant probability b</param>
         /// <param name="outcome"> the outcome of a or b occuring</param>
         /// <returns>The probability of a or b occuring</returns>
-        public static Probability1i NonExclusiveOr(Probability1i a, Probability1i b, int outcome = 0)
+        public static ProbabilityEvent1 NonExclusiveOr(ProbabilityEvent1 a, ProbabilityEvent1 b, int outcome = 0)
         {
-            return new Probability1i(a.Probability + b.Probability - a.Probability * b.Probability, outcome);
+            return new ProbabilityEvent1(a.Probability + b.Probability - a.Probability * b.Probability, outcome);
         }
 
         /// <summary>
@@ -221,9 +221,9 @@ namespace Common.Mathematics.Probability
         /// <param name="z">probability of z</param>
         /// <param name="outcome"> the outcome of A|Z occuring</param>
         /// <returns>probability of a depending on z</returns>
-        public static Probability1i SimpleBayes(Probability1i a, Probability1i za, Probability1i z, int outcome = 0)
+        public static ProbabilityEvent1 SimpleBayes(ProbabilityEvent1 a, ProbabilityEvent1 za, ProbabilityEvent1 z, int outcome = 0)
         {
-            return new Probability1i(za.Probability * a.Probability / z.Probability, outcome);
+            return new ProbabilityEvent1(za.Probability * a.Probability / z.Probability, outcome);
         }
 
         /// <summary>
@@ -234,10 +234,10 @@ namespace Common.Mathematics.Probability
         /// <param name="z_not_a">probability of z depending on not a</param>
         /// <param name="outcome">the outcome of A|Z occuring</param>
         /// <returns>probability of a depending on z</returns>
-        public static Probability1i ExplicitBayes(Probability1i a, Probability1i za, Probability1i z_not_a, int outcome = 0)
+        public static ProbabilityEvent1 ExplicitBayes(ProbabilityEvent1 a, ProbabilityEvent1 za, ProbabilityEvent1 z_not_a, int outcome = 0)
         {
             var zaa = za.Probability * a.Probability;
-            return new Probability1i(zaa / (zaa + z_not_a.Probability * a.Not), outcome);
+            return new ProbabilityEvent1(zaa / (zaa + z_not_a.Probability * a.Not), outcome);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Common.Mathematics.Probability
         /// <param name="za">List of probabilites z depending on a</param>
         /// <param name="outcome">the outcome of Ai|Z occuring</param>
         /// <returns>probability of ai depending on z</returns>
-        public static Probability1i GeneralBayes(int index, IList<Probability1i> a, IList<Probability1i> za, int outcome = 0)
+        public static ProbabilityEvent1 GeneralBayes(int index, IList<ProbabilityEvent1> a, IList<ProbabilityEvent1> za, int outcome = 0)
         {
             var zaa = za[index].Probability * a[index].Probability;
 
@@ -256,7 +256,7 @@ namespace Common.Mathematics.Probability
             for (int i = 0; i < a.Count; i++)
                 sum += za[i].Probability * a[i].Probability;
 
-            return new Probability1i(zaa / sum, outcome);
+            return new ProbabilityEvent1(zaa / sum, outcome);
         }
     }
 }

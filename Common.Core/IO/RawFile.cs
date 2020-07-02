@@ -10,6 +10,30 @@ namespace Common.Core.IO
     public enum BYTE_ORDER { WINDOWS, MAC };
 
     /// <summary>
+    /// Raw file Settings.
+    /// </summary>
+    public struct RawFileProperties
+    {
+
+        public string fileName;
+
+        public int bitDepth;
+
+        public BYTE_ORDER byteOrder;
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[RawFileFormat: FileName={0}, ByteOrder={1}, ByteCount={2}]",
+                fileName, bitDepth, byteOrder);
+        }
+    }
+
+    /// <summary>
     /// Raw file to help loading and saving of raw file format.
     /// Always converts the data to a float for convenience.
     /// </summary>
@@ -55,7 +79,7 @@ namespace Common.Core.IO
         /// <summary>
         /// Load data from file with the provided format.
         /// </summary>
-        public RawFile(RawFileFormat format)
+        public RawFile(RawFileProperties format)
         {
             FileName = format.fileName;
             BitDepth = format.bitDepth;

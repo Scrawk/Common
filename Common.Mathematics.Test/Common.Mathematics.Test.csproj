@@ -51,26 +51,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Functions\ChainFuncTest.cs" />
-    <Compile Include="Functions\CosFuncTest.cs" />
-    <Compile Include="Functions\ExpFuncTest.cs" />
-    <Compile Include="Functions\FunctionTest.cs" />
-    <Compile Include="Functions\LinearFuncTest.cs" />
-    <Compile Include="Functions\LogChainTest.cs" />
-    <Compile Include="Functions\LogFuncTest.cs" />
-    <Compile Include="Functions\PolynominalFuncTest.cs" />
-    <Compile Include="Functions\PowFuncTest.cs" />
-    <Compile Include="Functions\ProductFuncTest.cs" />
-    <Compile Include="Functions\QuotientFuncTest.cs" />
-    <Compile Include="Functions\SinFuncTest.cs" />
-    <Compile Include="Functions\SubFuncTest.cs" />
-    <Compile Include="Functions\SumFuncTest.cs" />
-    <Compile Include="Functions\TanFuncTest.cs" />
-    <Compile Include="Polynomials\Polynomial2dTest.cs" />
-    <Compile Include="Polynomials\Polynomial3dTest.cs" />
     <Compile Include="Probability\NormalDistribution1Test.cs" />
     <Compile Include="Probability\StatisticsTest.cs" />
-    <Compile Include="Probability\Probability1iTest.cs" />
+    <Compile Include="Probability\ProbabilityEvent1Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
