@@ -6,24 +6,33 @@ namespace System.Collections.Generic
 {
     public static class LinkedListExtensions
     {
+        /// <summary>
+        /// Add the item to the end of the list.
+        /// </summary>
         public static void Add<T>(this LinkedList<T> list, T item)
         {
             list.AddLast(item);
         }
 
+        /// <summary>
+        /// Add a range of items to end of list.
+        /// </summary>
         public static void AddRange<T>(this LinkedList<T> list, IEnumerable<T> items)
         {
             foreach(var item in items)
                 list.AddLast(item);
         }
 
+        /// <summary>
+        /// Find the index of the item in the list.
+        /// </summary>
         public static int IndexOf<T>(this LinkedList<T> list, T item)
         {
             int index = 0;
 
-            foreach(var node in list)
+            foreach(var value in list)
             {
-                if (EqualityComparer<T>.Default.Equals(item, node))
+                if (EqualityComparer<T>.Default.Equals(item, value))
                     return index;
 
                 index++;
@@ -32,6 +41,9 @@ namespace System.Collections.Generic
             return -1;
         }
 
+        /// <summary>
+        /// Remove the item at index i.
+        /// </summary>
         public static void RemoveAt<T>(this LinkedList<T> list, int index)
         {
             if (list.Count == 0) return;
@@ -49,6 +61,9 @@ namespace System.Collections.Generic
             }
         }
 
+        /// <summary>
+        /// Sort the linked list.
+        /// </summary>
         public static void Sort<T>(this LinkedList<T> linkedList)
             where T : IComparable<T>
         {
@@ -56,12 +71,18 @@ namespace System.Collections.Generic
             Sort(linkedList.First, linkedList.Last);
         }
 
+        /// <summary>
+        /// Sort the linked list.
+        /// </summary>
         public static void Sort<T>(this LinkedList<T> linkedList, IComparer<T> comparer)
         {
             if (linkedList == null || linkedList.Count <= 1) return;
             Sort(linkedList.First, linkedList.Last, comparer);
         }
 
+        /// <summary>
+        /// Sort the linked list.
+        /// </summary>
         private static void Sort<T>(LinkedListNode<T> head, LinkedListNode<T> tail)
             where T : IComparable<T>
         {
@@ -98,6 +119,9 @@ namespace System.Collections.Generic
             if (tail != pivot) Sort(pivot.Next, tail);
         }
 
+        /// <summary>
+        /// Sort the linked list.
+        /// </summary>
         private static void Sort<T>(LinkedListNode<T> head, LinkedListNode<T> tail, IComparer<T> comparer)
         {
             if (head == tail) return;

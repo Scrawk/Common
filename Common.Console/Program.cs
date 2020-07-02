@@ -13,8 +13,8 @@ namespace Common.Console
         static void Main(string[] args)
         {
             //PriorityQueuePerformanceTest.Run();
-
-            ShapeCollectionPerformanceTest.Run();
+            DynamicListPerformanceTest.Run();
+            //ShapeCollectionPerformanceTest.Run();
 
             CONSOLE.ReadLine();
         }

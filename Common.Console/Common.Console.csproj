@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\DynamicListPerformanceTest.cs" />
     <Compile Include="Collections\PriorityQueuePerformanceTest.cs" />
     <Compile Include="Geometry\ShapeCollectionPerformanceTest.cs" />
     <Compile Include="Program.cs" />

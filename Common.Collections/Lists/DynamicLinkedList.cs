@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Common.Collections.Lists
+{
+    public class DynamicLinkedList<T> : IDynamicList<T>
+    {
+        private LinkedList<T> m_list;
+
+        public DynamicLinkedList()
+        {
+            m_list = new LinkedList<T>();
+        }
+
+        public DynamicLinkedList(IEnumerable<T> items)
+        {
+            m_list = new LinkedList<T>(items);
+        }
+
+        public int Count => m_list.Count;
+
+        public override string ToString()
+        {
+            return string.Format("[DynamicLinkedList: Count={0}]", Count);
+        }
+
+        public T ElementAt(int i)
+        {
+            return m_list.ElementAt(i);
+        }
+
+        public void Add(T item)
+        {
+            m_list.Add(item);
+        }
+
+        public void Add(IEnumerable<T> items)
+        {
+            m_list.AddRange(items);
+        }
+
+        public void Clear()
+        {
+            m_list.Clear();
+        }
+
+        public bool Contains(T item)
+        {
+            return m_list.Contains(item);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return m_list.GetEnumerator();
+        }
+
+        public int IndexOf(T item)
+        {
+            return m_list.IndexOf(item);
+        }
+
+        public bool Remove(T item)
+        {
+            return m_list.Remove(item);
+        }
+
+        public void RemoveAt(int i)
+        {
+            m_list.RemoveAt(i);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+}
