@@ -25,22 +25,22 @@ namespace Common.Geometry.Shapes
     {
         public abstract Box2d Bounds { get; }
 
-        public Vector2d Closest(Vector2d p)
+        public virtual Vector2d Closest(Vector2d p)
         {
             throw new NotImplementedException();
         }
 
-        public bool Contains(Vector2d p)
+        public virtual bool Contains(Vector2d p)
         {
             throw new NotImplementedException();
         }
 
-        public bool Intersects(Box2d box)
+        public virtual bool Intersects(Box2d box)
         {
             throw new NotImplementedException();
         }
 
-        public double SignedDistance(Vector2d p)
+        public virtual double SignedDistance(Vector2d p)
         {
             throw new NotImplementedException();
         }

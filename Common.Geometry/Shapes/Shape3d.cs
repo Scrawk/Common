@@ -27,17 +27,17 @@ namespace Common.Geometry.Shapes
     {
         public abstract Box3d Bounds { get; }
 
-        public Vector3d Closest(Vector3d p)
+        public virtual Vector3d Closest(Vector3d p)
         {
             throw new NotImplementedException();
         }
 
-        public bool Contains(Vector3d p)
+        public virtual bool Contains(Vector3d p)
         {
             throw new NotImplementedException();
         }
 
-        public bool Intersects(Box3d box)
+        public virtual bool Intersects(Box3d box)
         {
             throw new NotImplementedException();
         }

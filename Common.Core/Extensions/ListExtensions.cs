@@ -33,6 +33,13 @@ namespace System.Collections.Generic
                 list.Add(item);
         }
 
+        public static T PopFirst<T>(this List<T> list)
+        {
+            var v = list[0];
+            list.RemoveAt(0);
+            return v;
+        }
+
         public static T PopLast<T>(this List<T> list)
         {
             int count = list.Count;

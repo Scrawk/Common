@@ -7,7 +7,7 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Capsule2f : IEquatable<Capsule2f>
+    public struct Capsule2f : IEquatable<Capsule2f>, IShape2f
     {
         public Vector2f A;
 
@@ -29,6 +29,9 @@ namespace Common.Geometry.Shapes
             Radius = radius;
         }
 
+        /// <summary>
+        /// The center position of the capsule.
+        /// </summary>
         public Vector2f Center
         {
             get { return (A + B) * 0.5f; }
@@ -84,11 +87,17 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override string ToString()
         {
             return string.Format("[Capsule2f: A={0}, B={1}, Radius={2}]", A, B, Radius);
         }
 
+        /// <summary>
+        /// Does the capsule contain the point.
+        /// </summary>
         public bool Contains(Vector2f p)
         {
             float r2 = Radius * Radius;
@@ -113,6 +122,31 @@ namespace Common.Geometry.Shapes
             if (p.x * p.x + p.y * p.y <= r2) return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// The closest point to the surface of the capsule.
+        /// </summary>
+        public Vector2f Closest(Vector2f p)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Does the capsule intersect with the box.
+        /// </summary>
+        public bool Intersects(Box2f box)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The signed distance to the point.
+        /// </summary>
+        public float SignedDistance(Vector2f p)
+        {
+            var seg = new Segment2f(A, B);
+	    return seg.SignedDistance(p) - Radius;
         }
 
     }

@@ -123,6 +123,15 @@ namespace Common.Geometry.Collections
         }
 
         /// <summary>
+        /// Find all the shapes that contain the point and 
+        /// add them to the list.
+        /// </summary>
+        public void Containing(Vector2f point, List<IShape2f> shapes)
+        {
+            NodeContaining(Root, point, shapes);
+        }
+
+        /// <summary>
         /// Does a shape intersects the box.
         /// </summary>
         public bool Intersects(Box2f box)
@@ -270,6 +279,27 @@ namespace Common.Geometry.Collections
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Find all the shapes that contain the point and 
+        /// add them to the list.
+        /// </summary>
+        private void NodeContaining(BVHTreeNode2f node, Vector2f point, List<IShape2f> shapes)
+        {
+            if (node != null && node.Bounds.Contains(point))
+            {
+                if (node.IsLeaf)
+                {
+                    if (node.Shape.Contains(point))
+                        shapes.Add(node.Shape);
+                }
+                else
+                {
+                    NodeContaining(node.Left, point, shapes);
+                    NodeContaining(node.Right, point, shapes);
+                }
+            }
         }
 
         /// <summary>

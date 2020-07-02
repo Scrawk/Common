@@ -24,6 +24,8 @@ namespace Common.Geometry.Polygons
 
         public float Width { get; set; }
 
+        public float Radius => Width * 0.5f;
+
         public override string ToString()
         {
             return string.Format("[Polyline2f: Count={0}, Length={1}]", Count, Length);
