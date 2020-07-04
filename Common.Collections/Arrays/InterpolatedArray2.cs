@@ -81,26 +81,42 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Get the value at clamped index x,y.
+        /// </summary>
+        public float GetValue(int x, int y)
+        {
+            x = MathUtil.Clamp(x, 0, Width - 1);
+            y = MathUtil.Clamp(y, 0, Height - 1);
+            return Data[x, y];
+        }
+
+        /// <summary>
         /// Sample the array by clamped bilinear interpolation.
         /// </summary>
         public float GetBilinear(float u, float v)
         {
-            u = MathUtil.Clamp(u * (Width - 1), 0, Width - 1);
-            v = MathUtil.Clamp(v * (Height - 1), 0, Height - 1);
+            float x = u * Width;
+            float y = v * Height;
 
-            int x0 = (int)u;
-            int y0 = (int)v;
+            int xi = (int)x;
+            int yi = (int)y;
 
-            int x1 = MathUtil.Clamp(x0+1, 0, Width - 1);
-            int y1 = MathUtil.Clamp(y0+1, 0, Height - 1);
+            var v00 = GetValue(xi, yi);
+            var v10 = GetValue(xi + 1, yi);
+            var v01 = GetValue(xi, yi + 1);
+            var v11 = GetValue(xi + 1, yi + 1);
 
-            float fx = x1 - u;
-            float fy = y1 - v;
+            return Blerp(v00, v10, v01, v11, x - xi, y - yi);
+        }
 
-            float v0 = Data[x0, y0] * (1.0f - fx) + Data[x1, y0] * fx;
-            float v1 = Data[x0, y1] * (1.0f - fx) + Data[x1, y1] * fx;
+        private static float Lerp(float s, float e, float t)
+        {
+            return s + (e - s) * t;
+        }
 
-            return v0 * (1.0f - fy) + v1 * fy;
+        private static float Blerp(float c00, float c10, float c01, float c11, float tx, float ty)
+        {
+            return Lerp(Lerp(c00, c10, tx), Lerp(c01, c11, tx), ty);
         }
     }
 }
