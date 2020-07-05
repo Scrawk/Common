@@ -6,25 +6,27 @@ using Common.Geometry.Shapes;
 
 namespace Common.Geometry.Collections
 {
-    public interface IStaticShapeCollection2f : IEnumerable<IShape2f>
+    public interface IStaticShapeCollection2f<T> : IEnumerable<T>
+        where T : class, IShape2f
     {
         int Count { get; }
 
         bool Contains(Vector2f point);
 
-        List<IShape2f> ToList();
+        List<T> ToList();
     }
 
-    public interface IShapeCollection2f : IStaticShapeCollection2f
+    public interface IShapeCollection2f<T> : IStaticShapeCollection2f<T>
+        where T : class, IShape2f
     {
 
         void Clear();
 
-        void Add(IEnumerable<IShape2f> shapes);
+        void Add(IEnumerable<T> shapes);
 
-        void Add(IShape2f shape);
+        void Add(T shape);
 
-        bool Remove(IShape2f shape);
+        bool Remove(T shape);
 
     }
 }

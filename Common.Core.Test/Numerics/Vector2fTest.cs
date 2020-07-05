@@ -258,14 +258,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void Abs()
-        {
-            VECTOR v = new VECTOR(-1, -2);
-            v.Abs();
-            Assert.AreEqual(v, new VECTOR(1, 2));
-        }
-
-        [TestMethod]
         public void Clamp()
         {
             VECTOR v = new VECTOR(0.4f, 1.6f);

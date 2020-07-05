@@ -15,10 +15,10 @@ namespace Common.Console.Geometry
         public static void Run()
         {
             Run(new ShapeCollection2f());
-            Run(new BVHTree2f());
+            Run(new BVHTree2f<IShape2f>());
         }
 
-        private static void Run(IShapeCollection2f collection)
+        private static void Run(IShapeCollection2f<IShape2f> collection)
         {
             double addTime = RunAddTest(collection, 10000);
             double containsTime = RunContainsTest(collection, 10000);
@@ -31,7 +31,7 @@ namespace Common.Console.Geometry
             CONSOLE.WriteLine("");
         }
 
-        private static double RunAddTest(IShapeCollection2f collection, int count)
+        private static double RunAddTest(IShapeCollection2f<IShape2f> collection, int count)
         {
 
             var timer = new Timer();
@@ -43,7 +43,7 @@ namespace Common.Console.Geometry
             return timer.ElapsedSeconds;
         }
 
-        private static double RunContainsTest(IShapeCollection2f collection, int count)
+        private static double RunContainsTest(IShapeCollection2f<IShape2f> collection, int count)
         {
             var rnd = new System.Random(0);
 
@@ -61,7 +61,7 @@ namespace Common.Console.Geometry
             return timer.ElapsedSeconds;
         }
 
-        private static double RunRemoveTest(IShapeCollection2f collection)
+        private static double RunRemoveTest(IShapeCollection2f<IShape2f> collection)
         {
             var list = collection.ToList();
             list.Shuffle(0);
@@ -76,7 +76,7 @@ namespace Common.Console.Geometry
             return timer.ElapsedSeconds;
         }
 
-        private static void CreateRandomSegments(IShapeCollection2f collection, int count)
+        private static void CreateRandomSegments(IShapeCollection2f<IShape2f> collection, int count)
         {
             var rnd = new System.Random(0);
        

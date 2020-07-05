@@ -133,30 +133,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// The sum of the vector.
-        /// </summary>
-        public REAL Sum
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return x + y + z + w;
-            }
-        }
-
-        /// <summary>
-        /// The multiple of the vector.
-        /// </summary>
-        public REAL Mul
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return x * y * z * w;
-            }
-        }
-
-        /// <summary>
         /// The length of the vector.
         /// </summary>
         public double Magnitude
@@ -498,18 +474,6 @@ namespace Common.Core.Numerics
             v0.z = Math.Max(v0.z, v1.z);
             v0.w = Math.Max(v0.w, v1.w);
             return v0;
-        }
-
-        /// <summary>
-        /// The absolute vector.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Abs()
-        {
-            x = Math.Abs(x);
-            y = Math.Abs(y);
-            z = Math.Abs(z);
-            w = Math.Abs(w);
         }
 
         /// <summary>

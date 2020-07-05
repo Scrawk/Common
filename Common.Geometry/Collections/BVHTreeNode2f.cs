@@ -8,10 +8,11 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Collections
 {
 
-    public class BVHTreeNode2f : IEnumerable<BVHTreeNode2f>
+    public class BVHTreeNode2f<T> : IEnumerable<BVHTreeNode2f<T>>
+        where T : class, IShape2f
     {
 
-        public BVHTreeNode2f(IShape2f shape)
+        public BVHTreeNode2f(T shape)
         {
             Shape = shape;
             Bounds = shape.Bounds;
@@ -23,25 +24,25 @@ namespace Common.Geometry.Collections
             Bounds = bounds;
         }
 
-        public BVHTreeNode2f Left { get; internal set; }
+        public BVHTreeNode2f<T> Left { get; internal set; }
 
-        public BVHTreeNode2f Right { get; internal set; }
+        public BVHTreeNode2f<T> Right { get; internal set; }
 
-        public BVHTreeNode2f Parent { get; internal set; }
+        public BVHTreeNode2f<T> Parent { get; internal set; }
 
         public Box2f Bounds { get; internal set; }
 
-        public IShape2f Shape { get; internal set; }
+        public T Shape { get; internal set; }
 
         public bool IsLeaf => Shape != null;
 
-        internal BVHTreeNode2f Sibling => Parent.Left == this ? Parent.Right : Parent.Left;
+        internal BVHTreeNode2f<T> Sibling => Parent.Left == this ? Parent.Right : Parent.Left;
 
 
         /// <summary>
         /// Enumerate all leaf nodes.
         /// </summary>
-        public IEnumerator<BVHTreeNode2f> GetEnumerator()
+        public IEnumerator<BVHTreeNode2f<T>> GetEnumerator()
         {
             if (Left != null)
             {

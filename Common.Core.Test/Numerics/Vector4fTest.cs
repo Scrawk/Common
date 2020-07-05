@@ -142,14 +142,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void Abs()
-        {
-            VECTOR v = new VECTOR(-1, -2, -3, -4);
-            v.Abs();
-            Assert.AreEqual(v, new VECTOR(1, 2, 3, 4));
-        }
-
-        [TestMethod]
         public new void ToString()
         {
             VECTOR v = new VECTOR(1, 2, 3, 4);

@@ -8,28 +8,34 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Collections
 {
 
+    public class ShapeCollection2f : ShapeCollection2f<IShape2f>
+    {
+
+    }
+
     /// <summary>
     /// A naive implementation of a shape collection
     /// where all operations are O(n2).
     /// </summary>
-    public class ShapeCollection2f : IShapeCollection2f, ISignedDistanceFunction2f
+    public class ShapeCollection2f<T> : IShapeCollection2f<T>, ISignedDistanceFunction2f
+        where T : class, IShape2f
     {
 
-        private List<IShape2f> m_shapes;
+        private List<T> m_shapes;
 
         public ShapeCollection2f()
         {
-            m_shapes = new List<IShape2f>();
+            m_shapes = new List<T>();
         }
 
         public ShapeCollection2f(int size)
         {
-            m_shapes = new List<IShape2f>(size);
+            m_shapes = new List<T>(size);
         }
 
-        public ShapeCollection2f(IEnumerable<IShape2f> shapes)
+        public ShapeCollection2f(IEnumerable<T> shapes)
         {
-            m_shapes = new List<IShape2f>(shapes);
+            m_shapes = new List<T>(shapes);
         }
 
         /// <summary>
@@ -52,7 +58,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Get or Set the shape at index i.
         /// </summary>
-        public IShape2f this[int i]
+        public T this[int i]
         {
             get { return m_shapes[i]; }
             set { m_shapes[i] = value; }
@@ -74,7 +80,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Add all the shapes in the enumerable to the collection.
         /// </summary>
-        public void Add(IEnumerable<IShape2f> shapes)
+        public void Add(IEnumerable<T> shapes)
         {
             m_shapes.AddRange(shapes);
         }
@@ -82,7 +88,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Add a shape to the collection.
         /// </summary>
-        public void Add(IShape2f shape)
+        public void Add(T shape)
         {
             m_shapes.Add(shape);
         }
@@ -90,7 +96,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Remove a shape from the collection.
         /// </summary>
-        public bool Remove(IShape2f shape)
+        public bool Remove(T shape)
         {
             return m_shapes.Remove(shape);
         }
@@ -134,15 +140,15 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Create a list of all the shapes in the collection.
         /// </summary>
-        public List<IShape2f> ToList()
+        public List<T> ToList()
         {
-            return new List<IShape2f>(m_shapes);
+            return new List<T>(m_shapes);
         }
 
         /// <summary>
         /// Enumerate all shapes in the collection.
         /// </summary>
-        public IEnumerator<IShape2f> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return m_shapes.GetEnumerator();
         }
