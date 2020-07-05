@@ -8,21 +8,21 @@ namespace Common.Collections.Lists
     {
         int Count { get; }
 
-        T ElementAt(int i);
+        int Capacity { get; set; }
+
+        T this[int i] { get; set; }
 
         void Clear();
 
         void Add(T item);
 
-        void Add(IEnumerable<T> items);
+        void AddRange(IEnumerable<T> items);
 
         bool Contains(T item);
 
         int IndexOf(T item);
 
         bool Remove(T item);
-
-        void RemoveAt(int i);
 
     }
 }

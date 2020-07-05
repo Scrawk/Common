@@ -193,12 +193,6 @@ namespace Common.Geometry.Test.Points
             for (int i = 0; i < 100; i++)
             {
                 var p = RandomPoint(i, bounds);
-                Assert.AreEqual(naive.SignedDistance(p), grid.SignedDistance(p));
-            }
-
-            for (int i = 0; i < 100; i++)
-            {
-                var p = RandomPoint(i, bounds);
                 var region = new Circle2f(p, 0.1f);
                 var list0 = new List<Vector2f>();
                 var list1 = new List<Vector2f>();

@@ -58,13 +58,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queues\PriorityListTest.cs" />
     <Compile Include="Queues\TestComparable.cs" />
-    <Compile Include="Textures\Mipmap2DTest.cs" />
-    <Compile Include="Textures\Texture1DTest.cs" />
-    <Compile Include="Textures\Texture2DTest.cs" />
-    <Compile Include="Textures\Texture3DTest.cs" />
-    <Compile Include="Textures\TextureData1DTest.cs" />
-    <Compile Include="Textures\TextureData2DTest.cs" />
-    <Compile Include="Textures\TextureData3DTest.cs" />
     <Compile Include="Trees\AVLTreeTest.cs" />
     <Compile Include="Trees\BinaryTreeTest.cs" />
   </ItemGroup>

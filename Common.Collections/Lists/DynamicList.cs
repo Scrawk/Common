@@ -26,14 +26,21 @@ namespace Common.Collections.Lists
 
         public int Count => m_list.Count;
 
+        public int Capacity
+        {
+            get { return m_list.Capacity; }
+            set { m_list.Capacity = value; }
+        }
+
         public override string ToString()
         {
             return string.Format("[DynamicList: Count={0}]", Count);
         }
 
-        public T ElementAt(int i)
+        public T this[int i]
         {
-            return m_list[i];
+            get { return m_list[i]; }
+            set { m_list[i] = value; }
         }
 
         public void Add(T item)
@@ -41,7 +48,7 @@ namespace Common.Collections.Lists
             m_list.Add(item);
         }
 
-        public void Add(IEnumerable<T> items)
+        public void AddRange(IEnumerable<T> items)
         {
             m_list.AddRange(items);
         }
@@ -69,11 +76,6 @@ namespace Common.Collections.Lists
         public bool Remove(T item)
         {
             return m_list.Remove(item);
-        }
-
-        public void RemoveAt(int i)
-        {
-            m_list.RemoveAt(i);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

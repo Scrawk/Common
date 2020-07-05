@@ -14,7 +14,7 @@ namespace Common.Console.Collections
         public static void Run()
         {
             Run(new DynamicList<object>());
-            Run(new DynamicLinkedList<object>());
+            Run(new DelayList<object>());
         }
 
         private static void Run(IDynamicList<object> list)
@@ -41,7 +41,7 @@ namespace Common.Console.Collections
             var timer = new Timer();
             timer.Start();
 
-            list.Add(objects);
+            list.AddRange(objects);
 
             timer.Stop();
             return timer.ElapsedSeconds;
@@ -54,7 +54,7 @@ namespace Common.Console.Collections
 
             for(int i = 0; i < list.Count; i++)
             {
-                var obj = list.ElementAt(i);
+                var obj = list[i];
             }
                
             timer.Stop();
