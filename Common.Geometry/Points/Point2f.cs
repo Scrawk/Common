@@ -11,21 +11,33 @@ using BOX = Common.Geometry.Shapes.Box2f;
 
 namespace Common.Geometry.Points
 {
-
+    /// <summary>
+    /// Interface for point in 2D space.
+    /// </summary>
     public interface IPoint2f
     {
         REAL x { get; set; }
         REAL y { get; set; }
     }
 
+    /// <summary>
+    /// Generic helper class for common point operations.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class PointOps2f<T>
         where T : IPoint2f
     {
+        /// <summary>
+        /// The distance between two points.
+        /// </summary>
         public static REAL Distance(T p0, T p1)
         {
             return MathUtil.SafeSqrt(SqrDistance(p0, p1));
         }
 
+        /// <summary>
+        /// The square distance between two points.
+        /// </summary>
         public static REAL SqrDistance(T p0, T p1)
         {
             var x = p0.x - p1.x;
@@ -33,6 +45,9 @@ namespace Common.Geometry.Points
             return x * x + y * y;
         }
 
+        /// <summary>
+        /// Does the circle contain the point.
+        /// </summary>
         public static bool Contains(CIRCLE circle, T point)
         {
             var x = circle.Center.x - point.x;
@@ -40,6 +55,9 @@ namespace Common.Geometry.Points
             return (x*x + y*y) <= circle.Radius2;
         }
 
+        /// <summary>
+        /// Does the box contain the point.
+        /// </summary>
         public static bool Contains(BOX box, T point)
         {
             if (point.x > box.Max.x || point.x < box.Min.x) return false;
