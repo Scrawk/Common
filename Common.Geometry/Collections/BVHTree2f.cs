@@ -7,11 +7,6 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Collections
 {
 
-    public class BVHTree2f : BVHTree2f<IShape2f>
-    {
-
-    }
-
     /// <summary>
     /// A BVH tree using based on the implementation found here.
     /// http://allenchou.net/2014/02/game-physics-broadphase-dynamic-aabb-tree/

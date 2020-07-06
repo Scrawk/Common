@@ -8,11 +8,6 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Collections
 {
 
-    public class ShapeCollection2f : ShapeCollection2f<IShape2f>
-    {
-
-    }
-
     /// <summary>
     /// A naive implementation of a shape collection
     /// where all operations are O(n2).

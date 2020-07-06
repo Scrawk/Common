@@ -14,7 +14,7 @@ namespace Common.Console.Geometry
 
         public static void Run()
         {
-            Run(new ShapeCollection2f());
+            Run(new ShapeCollection2f<IShape2f>());
             Run(new BVHTree2f<IShape2f>());
         }
 
