@@ -6,6 +6,8 @@ using System.Runtime.CompilerServices;
 using Common.Core.Numerics;
 
 using REAL = System.Single;
+using CIRCLE = Common.Geometry.Shapes.Circle2f;
+using BOX = Common.Geometry.Shapes.Box2f;
 
 namespace Common.Geometry.Points
 {
@@ -14,6 +16,36 @@ namespace Common.Geometry.Points
     {
         REAL x { get; set; }
         REAL y { get; set; }
+    }
+
+    public static class PointOps2f<T>
+        where T : IPoint2f
+    {
+        public static REAL Distance(T p0, T p1)
+        {
+            return MathUtil.SafeSqrt(SqrDistance(p0, p1));
+        }
+
+        public static REAL SqrDistance(T p0, T p1)
+        {
+            var x = p0.x - p1.x;
+            var y = p0.y - p1.y;
+            return x * x + y * y;
+        }
+
+        public static bool Contains(CIRCLE circle, T point)
+        {
+            var x = circle.Center.x - point.x;
+            var y = circle.Center.y - point.y;
+            return (x*x + y*y) <= circle.Radius2;
+        }
+
+        public static bool Contains(BOX box, T point)
+        {
+            if (point.x > box.Max.x || point.x < box.Min.x) return false;
+            if (point.y > box.Max.y || point.y < box.Min.y) return false;
+            return true;
+        }
     }
 
     [Serializable]

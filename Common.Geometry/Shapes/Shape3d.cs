@@ -8,7 +8,7 @@ namespace Common.Geometry.Shapes
     /*
     public interface ISignedDistanceFunction3d
     {
-        double SignedDistance(Vector3d p);
+        float SignedDistance(Vector3d p);
     }
 
     public interface IShape3d : ISignedDistanceFunction3d
@@ -42,6 +42,10 @@ namespace Common.Geometry.Shapes
             throw new NotImplementedException();
         }
 
+        public virtual float SignedDistance(Vector3d p)
+        {
+            throw new NotImplementedException();
+        }
     }
     */
 }

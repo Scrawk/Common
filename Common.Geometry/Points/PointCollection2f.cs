@@ -12,24 +12,25 @@ namespace Common.Geometry.Points
     /// A naive implementation of a point collection
     /// where all operations are O(n2).
     /// </summary>
-    public class PointCollection2f : IPointCollection2f, ISignedDistanceFunction2f
+    public class PointCollection2f<T> : IPointCollection2f<T>
+        where T : IPoint2f
     {
 
-        private List<Vector2f> m_points;
+        private List<T> m_points;
 
         public PointCollection2f()
         {
-            m_points = new List<Vector2f>();
+            m_points = new List<T>();
         }
 
         public PointCollection2f(int size)
         {
-            m_points = new List<Vector2f>(size);
+            m_points = new List<T>(size);
         }
 
-        public PointCollection2f(IEnumerable<Vector2f> points)
+        public PointCollection2f(IEnumerable<T> points)
         {
-            m_points = new List<Vector2f>(points);
+            m_points = new List<T>(points);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Get or Set the point at index i.
         /// </summary>
-        public Vector2f this[int i]
+        public T this[int i]
         {
             get { return m_points[i]; }
             set { m_points[i] = value; }
@@ -74,7 +75,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Add all the points in the enumerable to the collection.
         /// </summary>
-        public bool Add(IEnumerable<Vector2f> points)
+        public bool Add(IEnumerable<T> points)
         {
             m_points.AddRange(points);
             return true;
@@ -83,7 +84,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Add a point to the collection.
         /// </summary>
-        public bool Add(Vector2f point)
+        public bool Add(T point)
         {
             m_points.Add(point);
             return true;
@@ -92,7 +93,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Remove point from collection.
         /// </summary>
-        public bool Remove(Vector2f point)
+        public bool Remove(T point)
         {
            return m_points.Remove(point);
         }
@@ -101,56 +102,31 @@ namespace Common.Geometry.Points
         /// Fill the points list with all points in the 
         /// collection contained within the region.
         /// </summary>
-        public void Search(Circle2f region, List<Vector2f> points)
+        public void Search(Circle2f region, List<T> points)
         {
             int count = Count;
             for (int i = 0; i < count; i++)
             {
-                if (region.Contains(m_points[i]))
+                if (PointOps2f<T>.Contains(region, m_points[i]))
                     points.Add(m_points[i]);
             }
         }
 
         /// <summary>
-        /// Fill the points list with all point indices in the 
-        /// collection contained within the region.
-        /// </summary>
-        public void Search(Circle2f region, List<int> indices)
-        {
-            int count = Count;
-            for (int i = 0; i < count; i++)
-            {
-                if (region.Contains(m_points[i]))
-                    indices.Add(i);
-            }
-        }
-
-        /// <summary>
-        /// Return the signed distance to point.
-        /// </summary>
-        public float SignedDistance(Vector2f point)
-        {
-            if (Count == 0)
-                return float.PositiveInfinity;
-
-            return Vector2f.Distance(point, Closest(point));
-        }
-
-        /// <summary>
         /// Return the closest point in collect to this point.
         /// </summary>
-        public Vector2f Closest(Vector2f point)
+        public T Closest(T point)
         {
             if (Count == 0)
                 throw new InvalidOperationException("Can not find nearest point if collection is empty.");
 
-            var nearest = new Vector2f();
+            T nearest = default(T);
             var dist2 = float.PositiveInfinity;
 
             int count = Count;
             for (int i = 0; i < count; i++)
             {
-                float d2 = Vector2f.SqrDistance(m_points[i], point);
+                float d2 = PointOps2f<T>.SqrDistance(m_points[i], point);
                 if(d2 < dist2)
                 {
                     nearest = m_points[i];
@@ -164,15 +140,15 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Create a list from all points in the collection.
         /// </summary>
-        public List<Vector2f> ToList()
+        public List<T> ToList()
         {
-            return new List<Vector2f>(m_points);
+            return new List<T>(m_points);
         }
 
         /// <summary>
         /// Enumerate all points in the collection.
         /// </summary>
-        public IEnumerator<Vector2f> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return m_points.GetEnumerator();
         }

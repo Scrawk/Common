@@ -16,7 +16,7 @@ namespace Common.Geometry.Test.Points
         public void Count()
         {
             var points = RandomPoints(6, 0, -5, 5);
-            var collection = new KdTree2f(points);
+            var collection = new KdTree2f<Point2f>(points);
             Assert.AreEqual(6, collection.Count);
         }
 
@@ -24,7 +24,7 @@ namespace Common.Geometry.Test.Points
         public void Clear()
         {
             var points = RandomPoints(5, 0, -5, 5);
-            var collection = new KdTree2f(points);
+            var collection = new KdTree2f<Point2f>(points);
 
             collection.Clear();
             Assert.AreEqual(0, collection.Count);
@@ -34,9 +34,9 @@ namespace Common.Geometry.Test.Points
         public void Enumerable()
         {
             var points = RandomPoints(5, 0, -5, 5);
-            var collection = new KdTree2f(points);
+            var collection = new KdTree2f<Point2f>(points);
 
-            var list = new List<Vector2f>();
+            var list = new List<Point2f>();
             foreach (var p in collection)
             {
                 list.Add(p);
@@ -49,7 +49,7 @@ namespace Common.Geometry.Test.Points
         public void ToList()
         {
             var points = RandomPoints(5, 0, -5, 5);
-            var collection = new KdTree2f(points);
+            var collection = new KdTree2f<Point2f>(points);
 
             var list = collection.ToList();
             CollectionAssert.AreEquivalent(points, list);
@@ -58,48 +58,48 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void Closest()
         {
-            var points = new List<Vector2f>();
+            var points = new List<Point2f>();
 
             for (int i = 0; i <= 5; i++)
-                points.Add(new Vector2f(i));
+                points.Add(new Point2f(i));
 
-            var collection = new KdTree2f(points);
+            var collection = new KdTree2f<Point2f>(points);
 
-            Assert.AreEqual(new Vector2f(0), collection.Closest(new Vector2f(-1, -1)));
-            Assert.AreEqual(new Vector2f(5), collection.Closest(new Vector2f(6, 6)));
-            Assert.AreEqual(new Vector2f(2), collection.Closest(new Vector2f(2.1f, 2)));
-            Assert.AreEqual(new Vector2f(3), collection.Closest(new Vector2f(3, 3.1f)));
+            Assert.AreEqual(new Point2f(0), collection.Closest(new Point2f(-1, -1)));
+            Assert.AreEqual(new Point2f(5), collection.Closest(new Point2f(6, 6)));
+            Assert.AreEqual(new Point2f(2), collection.Closest(new Point2f(2.1f, 2)));
+            Assert.AreEqual(new Point2f(3), collection.Closest(new Point2f(3, 3.1f)));
            
         }
 
         [TestMethod]
         public void Search()
         {
-            var points = new List<Vector2f>();
+            var points = new List<Point2f>();
             for (int i = 0; i <= 5; i++)
-                points.Add(new Vector2f(i));
+                points.Add(new Point2f(i));
 
-            var collection = new KdTree2f(points);
+            var collection = new KdTree2f<Point2f>(points);
 
-            var results = new List<Vector2f>();
+            var results = new List<Point2f>();
             var region = new Circle2f(new Vector2f(2.5f), 4);
             collection.Search(region, results);
 
             var list = collection.ToList();
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector2f>();
+            results = new List<Point2f>();
             region = new Circle2f(new Vector2f(2), 0.1f);
             collection.Search(region, results);
 
-            list = new List<Vector2f>() { new Vector2f(2) };
+            list = new List<Point2f>() { new Point2f(2) };
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector2f>();
+            results = new List<Point2f>();
             region = new Circle2f(new Vector2f(3.5f), 1);
             collection.Search(region, results);
 
-            list = new List<Vector2f>() { new Vector2f(3), new Vector2f(4) };
+            list = new List<Point2f>() { new Point2f(3), new Point2f(4) };
             CollectionAssert.AreEquivalent(list, results);
         }
 
@@ -108,8 +108,8 @@ namespace Common.Geometry.Test.Points
         {
             var points = RandomPoints(1000, 0, -5, 5);
 
-            var naive = new PointCollection2f(points);
-            var tree = new KdTree2f(points);
+            var naive = new PointCollection2f<Point2f>(points);
+            var tree = new KdTree2f<Point2f>(points);
 
             for(int i = 0; i < 100; i++)
             {
@@ -120,15 +120,9 @@ namespace Common.Geometry.Test.Points
             for (int i = 0; i < 100; i++)
             {
                 var p = RandomPoint(i, -5, 5);
-                Assert.AreEqual(naive.SignedDistance(p), tree.SignedDistance(p));
-            }
-
-            for (int i = 0; i < 100; i++)
-            {
-                var p = RandomPoint(i, -5, 5);
-                var region = new Circle2f(p, 0.1f);
-                var list0 = new List<Vector2f>();
-                var list1 = new List<Vector2f>();
+                var region = new Circle2f(p.x, p.y, 0.1f);
+                var list0 = new List<Point2f>();
+                var list1 = new List<Point2f>();
 
                 naive.Search(region, list0);
                 tree.Search(region, list1);
@@ -137,28 +131,28 @@ namespace Common.Geometry.Test.Points
             }
         }
 
-        private List<Vector2f> RandomPoints(int count, int seed, float min, float max)
+        private List<Point2f> RandomPoints(int count, int seed, float min, float max)
         {
             var rnd = new Random(seed);
-            List<Vector2f> points = new List<Vector2f>(count);
+            List<Point2f> points = new List<Point2f>(count);
 
             for (int i = 0; i < count; i++)
             {
                 float x = min + rnd.NextFloat() * (max - min);
                 float y = min + rnd.NextFloat() * (max - min);
 
-                points.Add(new Vector2f(x, y));
+                points.Add(new Point2f(x, y));
             }
 
             return points;
         }
-        private Vector2f RandomPoint(int seed, float min, float max)
+        private Point2f RandomPoint(int seed, float min, float max)
         {
             var rnd = new Random(seed);
             float x = min + rnd.NextFloat() * (max - min);
             float y = min + rnd.NextFloat() * (max - min);
 
-            return new Vector2f(x, y);
+            return new Point2f(x, y);
         }
 
     }

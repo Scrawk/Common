@@ -13,8 +13,6 @@ namespace Common.Geometry.Points
 
         void Search(Sphere3f region, List<Vector3f> points);
 
-        void Search(Sphere3f region, List<int> indices);
-
         Vector3f Closest(Vector3f point);
 
         List<Vector3f> ToList();

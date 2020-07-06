@@ -2,38 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using Common.Core.Numerics;
-using Common.Geometry.Shapes;
-
 namespace Common.Geometry.Points
 {
-    public class KdTreeNode2f : IEnumerable<KdTreeNode2f>
+    public class KdTreeNode2f<T> : IEnumerable<KdTreeNode2f<T>>
+        where T : IPoint2f
     {
 
-        public KdTreeNode2f(Vector2f point, int depth, int index)
+        public KdTreeNode2f(T point, int depth)
         {
             Point = point;
             Depth = depth;
-            Index = index;
         }
 
-        public Vector2f Point { get; private set; }
+        public T Point { get; private set; }
 
-        public KdTreeNode2f Left { get; internal set; }
+        public KdTreeNode2f<T> Left { get; internal set; }
 
-        public KdTreeNode2f Right { get; internal set; }
+        public KdTreeNode2f<T> Right { get; internal set; }
 
         /// <summary>
         /// The depth of this node in the tree.
         /// </summary>
         public int Depth { get; private set; }
-
-        /// <summary>
-        /// The index of the point in the tree.
-        /// Represents the order node 
-        /// was added to the tree.
-        /// </summary>
-        public int Index { get; private set; }
 
         public bool IsLeaf { get { return Left == null && Right == null; } }
 
@@ -42,7 +32,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Enumerate all points from this node.
         /// </summary>
-        public IEnumerator<KdTreeNode2f> GetEnumerator()
+        public IEnumerator<KdTreeNode2f<T>> GetEnumerator()
         {
             if (Left != null)
             {

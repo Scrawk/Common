@@ -6,31 +6,31 @@ using Common.Geometry.Shapes;
 
 namespace Common.Geometry.Points
 {
-    public interface IStaticPointCollection2f : IEnumerable<Vector2f>
+    public interface IStaticPointCollection2f<T> : IEnumerable<T>
+        where T : IPoint2f
     {
 
         int Count { get; }
 
-        void Search(Circle2f region, List<Vector2f> points);
+        void Search(Circle2f region, List<T> points);
 
-        void Search(Circle2f region, List<int> indices);
+        T Closest(T point);
 
-        Vector2f Closest(Vector2f point);
-
-        List<Vector2f> ToList();
+        List<T> ToList();
 
     }
 
-    public interface IPointCollection2f : IStaticPointCollection2f
+    public interface IPointCollection2f<T> : IStaticPointCollection2f<T>
+        where T : IPoint2f
     {
 
         void Clear();
 
-        bool Add(IEnumerable<Vector2f> points);
+        bool Add(IEnumerable<T> points);
 
-        bool Add(Vector2f point);
+        bool Add(T point);
 
-        bool Remove(Vector2f point);
+        bool Remove(T point);
 
     }
 }

@@ -11,7 +11,7 @@ namespace Common.Geometry.Points
     /// A 3f KdTree using Vector3f as the point.
     /// Does not support points with the same coordinates.
     /// </summary>
-    public class KdTree3f : IStaticPointCollection3f, ISignedDistanceFunction3f
+    public class KdTree3f : IStaticPointCollection3f
     {
 
         private Box3f m_bounds;
@@ -80,7 +80,7 @@ namespace Common.Geometry.Points
             {
                 var p = list[0];
                 m_bounds = new Box3f(p, p);
-                Root = new KdTreeNode3f(p, 0, 0);
+                Root = new KdTreeNode3f(p, 0);
                 Count = 1;
             }
             else
@@ -98,26 +98,6 @@ namespace Common.Geometry.Points
         {
             if (!region.Intersects(Bounds)) return;
             Search(Root, region, Bounds, points);
-        }
-
-        /// <summary>
-        /// Return all points indices contained in the search region.
-        /// </summary>
-        public void Search(Sphere3f region, List<int> indices)
-        {
-            if (!region.Intersects(Bounds)) return;
-            Search(Root, region, Bounds, indices);
-        }
-
-        /// <summary>
-        /// Find the nsigned distance to input point.
-        /// </summary>
-        public float SignedDistance(Vector3f point)
-        {
-            if (Count == 0)
-                return float.PositiveInfinity;
-
-            return Vector3f.Distance(point, Closest(point));
         }
 
         /// <summary>
@@ -211,7 +191,7 @@ namespace Common.Geometry.Points
                 var p = points[0];
                 Count++;
                 m_bounds = Box3f.Enlarge(m_bounds, p);
-                return new KdTreeNode3f(p, depth, Count-1);
+                return new KdTreeNode3f(p, depth);
             }
             else
             {
@@ -240,7 +220,7 @@ namespace Common.Geometry.Points
 
                 Count++;
                 m_bounds = Box3f.Enlarge(m_bounds, p);
-                var node = new KdTreeNode3f(p, depth, Count-1);
+                var node = new KdTreeNode3f(p, depth);
 
                 node.Left = Build(left, depth + 1);
                 node.Right = Build(right, depth + 1);
@@ -291,47 +271,6 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Iteratively searchs the tree for points contained
-        /// in the search region.
-        /// </summary>
-        private void Search(KdTreeNode3f node, Sphere3f region, Box3f bounds, List<int> indices)
-        {
-            if (node == null) return;
-
-            if (region.Contains(node.Point))
-                indices.Add(node.Index);
-
-            var left = bounds;
-            var right = bounds;
-
-            if (node.Depth % 3 == 0)
-            {
-                left.Max.x = node.Point.x;
-                right.Min.x = node.Point.x;
-            }
-            else if (node.Depth % 3 == 1)
-            {
-                left.Max.y = node.Point.y;
-                right.Min.y = node.Point.y;
-            }
-            else
-            {
-                left.Max.z = node.Point.z;
-                right.Min.z = node.Point.z;
-            }
-
-            if (region.Contains(left))
-                CopyTo(node.Left, indices);
-            else if (region.Intersects(left))
-                Search(node.Left, region, left, indices);
-
-            if (region.Contains(right))
-                CopyTo(node.Right, indices);
-            else if (region.Intersects(right))
-                Search(node.Right, region, right, indices);
-        }
-
-        /// <summary>
         /// Iteratively searchs the tree for the nearest point to input.
         /// </summary>
         private void Closest(KdTreeNode3f node, Vector3f point, ref Vector3f closest, ref float dist)
@@ -379,16 +318,6 @@ namespace Common.Geometry.Points
             if (node == null) return;
             foreach (var n in node)
                 points.Add(n.Point);
-        }
-
-        /// <summary>
-        /// Iteratively adds the point indices into the list.
-        /// </summary>
-        private void CopyTo(KdTreeNode3f node, List<int> indices)
-        {
-            if (node == null) return;
-            foreach (var n in node)
-                indices.Add(n.Index);
         }
 
         /// <summary>

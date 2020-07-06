@@ -12,31 +12,19 @@ namespace Common.Geometry.Points
     /// A point collection seperated into spatial grids
     /// confined to a bounding box.
     /// </summary>
-    public class PointGrid2f : IPointCollection2f
+    public class PointGrid2f<T> : IPointCollection2f<T>
+        where T : IPoint2f
     {
-        /// <summary>
-        /// The entry in the cell that holds 
-        /// the point and the point count 
-        /// when point was added. This would 
-        /// be the point index in orginal source.
-        /// If a point is removed and another added then
-        /// these indices will no longer be correct.
-        /// </summary>
-        private struct PointEntry
-        {
-            public Vector2f point;
-            public int index;
-        }
 
-        private List<PointEntry>[,] m_grid;
+        private List<T>[,] m_grid;
 
-        public PointGrid2f(float width, float height, float cellsize, IEnumerable<Vector2f> points = null)
+        public PointGrid2f(float width, float height, float cellsize, IEnumerable<T> points = null)
             : this(new Box2f(0, width, 0, height), cellsize, points)
         {
 
         }
 
-        public PointGrid2f(Box2f bounds, float cellsize, IEnumerable<Vector2f> points = null)
+        public PointGrid2f(Box2f bounds, float cellsize, IEnumerable<T> points = null)
         {
             Bounds = bounds;
             int width = (int)Math.Ceiling(bounds.Width / cellsize) + 1;
@@ -45,7 +33,7 @@ namespace Common.Geometry.Points
             CellSize = cellsize;
             InvCellSize = 1.0f / cellsize;
 
-            m_grid = new List<PointEntry>[width, height];
+            m_grid = new List<T>[width, height];
 
             if (points != null)
                 Add(points);
@@ -108,7 +96,7 @@ namespace Common.Geometry.Points
         /// Returns false if any of the points was 
         /// outside the grid bounds.
         /// </summary>
-        public bool Add(IEnumerable<Vector2f> points)
+        public bool Add(IEnumerable<T> points)
         {
             bool allAdded = true;
 
@@ -123,18 +111,14 @@ namespace Common.Geometry.Points
         /// Retruns false if point out of
         /// the grid bounds and will not be added.
         /// </summary>
-        public bool Add(Vector2f point)
+        public bool Add(T point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!PointOps2f<T>.Contains(Bounds, point)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index, true);
 
-            var entry = new PointEntry();
-            entry.point = point;
-            entry.index = Count;
-
-            cell.Add(entry);
+            cell.Add(point);
             Count++;
             return true;
         }
@@ -142,9 +126,9 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Remove a point from the grid.
         /// </summary>
-        public bool Remove(Vector2f point)
+        public bool Remove(T point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!PointOps2f<T>.Contains(Bounds, point)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index);
@@ -152,7 +136,7 @@ namespace Common.Geometry.Points
 
             for (int i = 0; i < cell.Count; i++)
             {
-                if (cell[i].point == point)
+                if (cell[i].x == point.x && cell[i].y == point.y)
                 {
                     cell.RemoveAt(i);
                     Count--;
@@ -166,9 +150,9 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Return a list of all points in the grid.
         /// </summary>
-        public List<Vector2f> ToList()
+        public List<T> ToList()
         {
-            List<Vector2f> list = new List<Vector2f>(Count);
+            List<T> list = new List<T>(Count);
 
             for (int y = 0; y < GridSize.y; y++)
             {
@@ -178,7 +162,7 @@ namespace Common.Geometry.Points
                     if (cell != null)
                     {
                         for (int i = 0; i < cell.Count; i++)
-                            list.Add(cell[i].point);
+                            list.Add(cell[i]);
                     }
                 }
             }
@@ -190,7 +174,7 @@ namespace Common.Geometry.Points
         /// Return a list of all points found 
         /// within the search region.
         /// </summary>
-        public void Search(Circle2f region, List<Vector2f> points)
+        public void Search(Circle2f region, List<T> points)
         {
             if (!region.Intersects(Bounds)) return;
             var box = ToCellSpace(region.Bounds);
@@ -205,34 +189,8 @@ namespace Common.Geometry.Points
                     int count = cell.Count;
                     for (int k = 0; k < count; k++)
                     {
-                        if (region.Contains(cell[k].point))
-                            points.Add(cell[k].point);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Return a list of all point indices found 
-        /// within the search region.
-        /// </summary>
-        public void Search(Circle2f region, List<int> indices)
-        {
-            if (!region.Intersects(Bounds)) return;
-            var box = ToCellSpace(region.Bounds);
-
-            for (int y = box.Min.y; y <= box.Max.y; y++)
-            {
-                for (int x = box.Min.x; x <= box.Max.x; x++)
-                {
-                    var cell = m_grid[x, y];
-                    if (cell == null) continue;
-
-                    int count = cell.Count;
-                    for (int k = 0; k < count; k++)
-                    {
-                        if (region.Contains(cell[k].point))
-                            indices.Add(cell[k].index);
+                        if (PointOps2f<T>.Contains(region, cell[k]))
+                            points.Add(cell[k]);
                     }
                 }
             }
@@ -244,12 +202,12 @@ namespace Common.Geometry.Points
         /// so this will fail if closest point not in that region.
         /// In this case returned point will be zero.
         /// </summary>
-        public Vector2f Closest(Vector2f point)
+        public T Closest(T point)
         {
             if (Count == 0)
                 throw new InvalidOperationException("Can not find nearest point if collection is empty.");
 
-            Vector2f closest;
+            T closest;
             Closest(point, out closest);
             return closest;
         }
@@ -259,9 +217,9 @@ namespace Common.Geometry.Points
         /// Grid will only search within a points nearest neighbour cells
         /// and will return false if no point is located in this range.
         /// </summary>
-        public bool Closest(Vector2f point, out Vector2f closest)
+        public bool Closest(T point, out T closest)
         {
-            closest = new Vector2f();
+            closest = default(T);
             float dist2 = float.PositiveInfinity;
             bool found = false;
 
@@ -281,10 +239,10 @@ namespace Common.Geometry.Points
 
                     for (int k = 0; k < cell.Count; k++)
                     {
-                        float d2 = Vector2f.SqrDistance(point, cell[k].point);
+                        float d2 = PointOps2f<T>.SqrDistance(cell[k], point);
                         if (d2 < dist2)
                         {
-                            closest = cell[k].point;
+                            closest = cell[k];
                             dist2 = d2;
                             found = true;
                         }
@@ -298,7 +256,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Enumerate the points in the grid.
         /// </summary>
-        public IEnumerator<Vector2f> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             for (int y = 0; y < GridSize.y; y++)
             {
@@ -308,7 +266,7 @@ namespace Common.Geometry.Points
                     if (cell == null) continue;
 
                     for (int k = 0; k < cell.Count; k++)
-                        yield return cell[k].point;
+                        yield return cell[k];
                 }
             }
         }
@@ -324,11 +282,10 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Returns the points cell space position.
         /// </summary>
-        private Vector2i ToCellSpace(Vector2f p)
+        private Vector2i ToCellSpace(T p)
         {
-            p -= Bounds.Min;
-            int x = (int)Math.Floor(p.x * InvCellSize);
-            int y = (int)Math.Floor(p.y * InvCellSize);
+            int x = (int)Math.Floor((p.x - Bounds.Min.x) * InvCellSize);
+            int y = (int)Math.Floor((p.y - Bounds.Min.y) * InvCellSize);
             return new Vector2i(x, y);
         }
 
@@ -355,12 +312,12 @@ namespace Common.Geometry.Points
         /// If create is true a new empty list will be 
         /// added to the grid and returned.
         /// </summary>
-        private List<PointEntry> GetGridCell(Vector2i index, bool create = false)
+        private List<T> GetGridCell(Vector2i index, bool create = false)
         {
             if (create)
             {
                 if (m_grid[index.x, index.y] == null)
-                    m_grid[index.x, index.y] = new List<PointEntry>();
+                    m_grid[index.x, index.y] = new List<T>();
 
                 return m_grid[index.x, index.y];
             }

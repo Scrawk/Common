@@ -16,17 +16,17 @@ namespace Common.Geometry.Test.Points
         public void Count()
         {
             var bounds = new Box2f(-5, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
             Assert.AreEqual(0, collection.Count);
 
-            collection.Add(new Vector2f(1, 1));
+            collection.Add(new Point2f(1, 1));
             Assert.AreEqual(1, collection.Count);
 
             collection.Add(RandomPoints(5, 0, bounds));
             Assert.AreEqual(6, collection.Count);
 
-            collection.Remove(new Vector2f(1, 1));
+            collection.Remove(new Point2f(1, 1));
             Assert.AreEqual(5, collection.Count);
 
         }
@@ -35,7 +35,7 @@ namespace Common.Geometry.Test.Points
         public void Clear()
         {
             var bounds = new Box2f(-5, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
             collection.Add(RandomPoints(5, 0, bounds));
             collection.Clear();
@@ -46,12 +46,12 @@ namespace Common.Geometry.Test.Points
         public void Enumerable()
         {
             var bounds = new Box2f(-5, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
             var points = RandomPoints(5, 0, bounds);
             collection.Add(points);
 
-            var list = new List<Vector2f>();
+            var list = new List<Point2f>();
 
             foreach (var p in collection)
                 list.Add(p);
@@ -63,7 +63,7 @@ namespace Common.Geometry.Test.Points
         public void ToList()
         {
             var bounds = new Box2f(-5, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
             var points = RandomPoints(5, 0, bounds);
             collection.Add(points);
@@ -76,18 +76,18 @@ namespace Common.Geometry.Test.Points
         public void Add()
         {
             var bounds = new Box2f(-5, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
             var points = RandomPoints(5, 0, bounds);
 
             foreach (var p in points)
                 collection.Add(p);
 
-            collection.Add(new Vector2f(-5, -5));
-            points.Add(new Vector2f(-5, -5));
+            collection.Add(new Point2f(-5, -5));
+            points.Add(new Point2f(-5, -5));
 
-            collection.Add(new Vector2f(5, 5));
-            points.Add(new Vector2f(5, 5));
+            collection.Add(new Point2f(5, 5));
+            points.Add(new Point2f(5, 5));
 
             var list = collection.ToList();
 
@@ -98,20 +98,20 @@ namespace Common.Geometry.Test.Points
         public void AddOutOfBounds()
         {
             var bounds = new Box2f(-5, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
-            Assert.IsTrue(collection.Add(new Vector2f(-4.999f, 4.999f)));
-            Assert.IsFalse(collection.Add(new Vector2f(-5.001f, 0)));
-            Assert.IsFalse(collection.Add(new Vector2f(5.001f, 0)));
-            Assert.IsFalse(collection.Add(new Vector2f(0, -5.001f)));
-            Assert.IsFalse(collection.Add(new Vector2f(0, 5.001f)));
+            Assert.IsTrue(collection.Add(new Point2f(-4.999f, 4.999f)));
+            Assert.IsFalse(collection.Add(new Point2f(-5.001f, 0)));
+            Assert.IsFalse(collection.Add(new Point2f(5.001f, 0)));
+            Assert.IsFalse(collection.Add(new Point2f(0, -5.001f)));
+            Assert.IsFalse(collection.Add(new Point2f(0, 5.001f)));
         }
 
         [TestMethod]
         public void Remove()
         {
             var bounds = new Box2f(-5, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
             var points = RandomPoints(5, 0, bounds);
             collection.Add(points);
@@ -122,8 +122,8 @@ namespace Common.Geometry.Test.Points
             Assert.IsTrue(collection.Remove(points[3]));
             Assert.IsTrue(points.Remove(points[3]));
 
-            Assert.IsFalse(collection.Remove(new Vector2f(10, 10)));
-            Assert.IsFalse(points.Remove(new Vector2f(10, 10)));
+            Assert.IsFalse(collection.Remove(new Point2f(10, 10)));
+            Assert.IsFalse(points.Remove(new Point2f(10, 10)));
 
             var list = collection.ToList();
             CollectionAssert.AreEquivalent(points, list);
@@ -133,45 +133,45 @@ namespace Common.Geometry.Test.Points
         public void Closest()
         {
             var bounds = new Box2f(0, 5);
-            var collection = new PointGrid2f(bounds, 1);
+            var collection = new PointGrid2f<Point2f>(bounds, 1);
 
             for (int i = 0; i <= 5; i++)
-                collection.Add(new Vector2f(i));
+                collection.Add(new Point2f(i));
 
-            Assert.AreEqual(new Vector2f(0), collection.Closest(new Vector2f(-1, -1)));
-            Assert.AreEqual(new Vector2f(5), collection.Closest(new Vector2f(6, 6)));
-            Assert.AreEqual(new Vector2f(2), collection.Closest(new Vector2f(2.1f, 2)));
-            Assert.AreEqual(new Vector2f(3), collection.Closest(new Vector2f(3, 3.1f)));
+            Assert.AreEqual(new Point2f(0), collection.Closest(new Point2f(-1, -1)));
+            Assert.AreEqual(new Point2f(5), collection.Closest(new Point2f(6, 6)));
+            Assert.AreEqual(new Point2f(2), collection.Closest(new Point2f(2.1f, 2)));
+            Assert.AreEqual(new Point2f(3), collection.Closest(new Point2f(3, 3.1f)));
         }
 
         [TestMethod]
         public void Search()
         {
             var bounds = new Box2f(0, 5);
-            var collection = new PointGrid2f(bounds, 0.5f);
+            var collection = new PointGrid2f<Point2f>(bounds, 0.5f);
 
             for (int i = 0; i <= 5; i++)
-                collection.Add(new Vector2f(i));
+                collection.Add(new Point2f(i));
 
-            var results = new List<Vector2f>();
+            var results = new List<Point2f>();
             var region = new Circle2f(new Vector2f(2.5f), 4);
             collection.Search(region, results);
 
             var list = collection.ToList();
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector2f>();
+            results = new List<Point2f>();
             region = new Circle2f(new Vector2f(2), 0.1f);
             collection.Search(region, results);
 
-            list = new List<Vector2f>() { new Vector2f(2) };
+            list = new List<Point2f>() { new Point2f(2) };
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector2f>();
+            results = new List<Point2f>();
             region = new Circle2f(new Vector2f(3.5f), 1);
             collection.Search(region, results);
 
-            list = new List<Vector2f>() { new Vector2f(3), new Vector2f(4) };
+            list = new List<Point2f>() { new Point2f(3), new Point2f(4) };
             CollectionAssert.AreEquivalent(list, results);
         }
 
@@ -181,8 +181,8 @@ namespace Common.Geometry.Test.Points
             var bounds = new Box2f(-5, 5);
             var points = RandomPoints(1000, 0, bounds);
 
-            var naive = new PointCollection2f(points);
-            var grid = new PointGrid2f(bounds, 0.5f, points);
+            var naive = new PointCollection2f<Point2f>(points);
+            var grid = new PointGrid2f<Point2f>(bounds, 0.5f, points);
 
             for (int i = 0; i < 100; i++)
             {
@@ -193,9 +193,9 @@ namespace Common.Geometry.Test.Points
             for (int i = 0; i < 100; i++)
             {
                 var p = RandomPoint(i, bounds);
-                var region = new Circle2f(p, 0.1f);
-                var list0 = new List<Vector2f>();
-                var list1 = new List<Vector2f>();
+                var region = new Circle2f(p.x, p.y, 0.1f);
+                var list0 = new List<Point2f>();
+                var list1 = new List<Point2f>();
 
                 naive.Search(region, list0);
                 grid.Search(region, list1);
@@ -204,29 +204,29 @@ namespace Common.Geometry.Test.Points
             }
         }
 
-        private List<Vector2f> RandomPoints(int count, int seed, Box2f bounds)
+        private List<Point2f> RandomPoints(int count, int seed, Box2f bounds)
         {
             var rnd = new Random(seed);
-            List<Vector2f> points = new List<Vector2f>(count);
+            List<Point2f> points = new List<Point2f>(count);
 
             for (int i = 0; i < count; i++)
             {
                 float x = bounds.Min.x + rnd.NextFloat() * bounds.Width;
                 float y = bounds.Min.y + rnd.NextFloat() * bounds.Height;
 
-                points.Add(new Vector2f(x, y));
+                points.Add(new Point2f(x, y));
             }
 
             return points;
         }
 
-        private Vector2f RandomPoint(int seed, Box2f bounds)
+        private Point2f RandomPoint(int seed, Box2f bounds)
         {
             var rnd = new Random(seed);
             float x = bounds.Min.x + rnd.NextFloat() * bounds.Width;
             float y = bounds.Min.y + rnd.NextFloat() * bounds.Height;
 
-            return new Vector2f(x, y);
+            return new Point2f(x, y);
         }
     }
 }

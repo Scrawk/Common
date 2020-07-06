@@ -8,10 +8,11 @@ using Common.Geometry.Shapes;
 namespace Common.Geometry.Points
 {
     /// <summary>
-    /// A 2f KdTree using Vector2f as the point.
+    /// A 2f KdTree using T as the point.
     /// Does not support points with the same coordinates.
     /// </summary>
-    public class KdTree2f : IStaticPointCollection2f, ISignedDistanceFunction2f
+    public class KdTree2f<T> : IStaticPointCollection2f<T>
+        where T : IPoint2f
     {
 
         private Box2f m_bounds;
@@ -21,7 +22,7 @@ namespace Common.Geometry.Points
 
         }
 
-        public KdTree2f(IEnumerable<Vector2f> points)
+        public KdTree2f(IEnumerable<T> points)
         {
             Build(points);
         }
@@ -47,7 +48,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// The root node of the tree.
         /// </summary>
-        public KdTreeNode2f Root { get; private set; }
+        public KdTreeNode2f<T> Root { get; private set; }
 
         public override string ToString()
         {
@@ -67,9 +68,9 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Build the tree from a set of points.
         /// </summary>
-        public void Build(IEnumerable<Vector2f> points)
+        public void Build(IEnumerable<T> points)
         {
-            var list = new List<Vector2f>(points);
+            var list = new List<T>(points);
 
             int count = list.Count;
             if (count == 0)
@@ -79,14 +80,14 @@ namespace Common.Geometry.Points
             else if (count == 1)
             {
                 var p = list[0];
-                m_bounds = new Box2f(p, p);
-                Root = new KdTreeNode2f(p, 0, 0);
+                m_bounds = new Box2f(p.x, p.x, p.y, p.y);
+                Root = new KdTreeNode2f<T>(p, 0);
                 Count = 1;
             }
             else
             {
                 var p = list[0];
-                m_bounds = new Box2f(p, p);
+                m_bounds = new Box2f(p.x, p.x, p.y, p.y);
                 Root = Build(list, 0);
             }
         }
@@ -94,41 +95,21 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Return all points contained in the search region.
         /// </summary>
-        public void Search(Circle2f region, List<Vector2f> points)
+        public void Search(Circle2f region, List<T> points)
         {
             if (!region.Intersects(Bounds)) return;
             Search(Root, region, Bounds, points);
         }
 
         /// <summary>
-        /// Return all point indices contained in the search region.
-        /// </summary>
-        public void Search(Circle2f region, List<int> indices)
-        {
-            if (!region.Intersects(Bounds)) return;
-            Search(Root, region, Bounds, indices);
-        }
-
-        /// <summary>
-        /// Find the signed distance to input point.
-        /// </summary>
-        public float SignedDistance(Vector2f point)
-        {
-            if (Count == 0)
-                return float.PositiveInfinity;
-
-            return Vector2f.Distance(point, Closest(point));
-        }
-
-        /// <summary>
         /// Find the nearest point to input point.
         /// </summary>
-        public Vector2f Closest(Vector2f point)
+        public T Closest(T point)
         {
             if (Count == 0)
                 throw new InvalidOperationException("Can not find closest point if collection is empty.");
 
-            Vector2f closest = new Vector2f();
+            T closest = default(T);
             float dist = float.PositiveInfinity;
 
             Closest(Root, point, ref closest, ref dist);
@@ -156,9 +137,9 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Copy the tree into a list.
         /// </summary>
-        public List<Vector2f> ToList()
+        public List<T> ToList()
         {
-            var list = new List<Vector2f>(Count);
+            var list = new List<T>(Count);
             CopyTo(Root, list);
             return list;
         }
@@ -166,7 +147,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Gets an enumerator for the tree.
         /// </summary>
-        public IEnumerator<Vector2f> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             if (Root != null)
             {
@@ -183,7 +164,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Iteratively builds the tree from a set of points.
         /// </summary>
-        private KdTreeNode2f Build(List<Vector2f> points, int depth)
+        private KdTreeNode2f<T> Build(List<T> points, int depth)
         {
             int count = points.Count;
             if (count == 0)
@@ -193,14 +174,14 @@ namespace Common.Geometry.Points
             {
                 var p = points[0];
                 Count++;
-                m_bounds = Box2f.Enlarge(m_bounds, p);
-                return new KdTreeNode2f(p, depth, Count-1);
+                m_bounds = Box2f.Enlarge(m_bounds, new Vector2f(p.x, p.y));
+                return new KdTreeNode2f<T>(p, depth);
             }
             else
             {
                 int median = count / 2;
-                List<Vector2f> left, right;
-                Vector2f p;
+                List<T> left, right;
+                T p;
 
                 if (depth % 2 == 0)
                 {
@@ -217,8 +198,8 @@ namespace Common.Geometry.Points
                 right = points.GetRange(median + 1, count - median-1);
 
                 Count++;
-                m_bounds = Box2f.Enlarge(m_bounds, p);
-                var node = new KdTreeNode2f(p, depth, Count-1);
+                m_bounds = Box2f.Enlarge(m_bounds, new Vector2f(p.x, p.y));
+                var node = new KdTreeNode2f<T>(p, depth);
 
                 node.Left = Build(left, depth + 1);
                 node.Right = Build(right, depth + 1);
@@ -231,11 +212,11 @@ namespace Common.Geometry.Points
         /// Iteratively searchs the tree for points 
         /// contained in the search region.
         /// </summary>
-        private void Search(KdTreeNode2f node, Circle2f region, Box2f bounds, List<Vector2f> points)
+        private void Search(KdTreeNode2f<T> node, Circle2f region, Box2f bounds, List<T> points)
         {
             if (node == null) return;
 
-            if (region.Contains(node.Point))
+            if (PointOps2f<T>.Contains(region, node.Point))
                 points.Add(node.Point);
 
             var left = bounds;
@@ -264,49 +245,13 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Iteratively searchs the tree for points 
-        /// contained in the search region.
-        /// </summary>
-        private void Search(KdTreeNode2f node, Circle2f region, Box2f bounds, List<int> indices)
-        {
-            if (node == null) return;
-
-            if (region.Contains(node.Point))
-                indices.Add(node.Index);
-
-            var left = bounds;
-            var right = bounds;
-
-            if (node.IsVertical)
-            {
-                left.Max.x = node.Point.x;
-                right.Min.x = node.Point.x;
-            }
-            else
-            {
-                left.Max.y = node.Point.y;
-                right.Min.y = node.Point.y;
-            }
-
-            if (region.Contains(left))
-                CopyTo(node.Left, indices);
-            else if (region.Intersects(left))
-                Search(node.Left, region, left, indices);
-
-            if (region.Contains(right))
-                CopyTo(node.Right, indices);
-            else if (region.Intersects(right))
-                Search(node.Right, region, right, indices);
-        }
-
-        /// <summary>
         /// Iteratively searchs the tree for the nearest point to input.
         /// </summary>
-        private void Closest(KdTreeNode2f node, Vector2f point, ref Vector2f closest, ref float dist)
+        private void Closest(KdTreeNode2f<T> node, T point, ref T closest, ref float dist)
         {
             if (node == null) return;
 
-            float d = Vector2f.Distance(node.Point, point);
+            float d = PointOps2f<T>.Distance(node.Point, point);
             if (d < dist)
             {
                 dist = d;
@@ -334,7 +279,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Iteratively adds the points into the list.
         /// </summary>
-        private void CopyTo(KdTreeNode2f node, List<Vector2f> points)
+        private void CopyTo(KdTreeNode2f<T> node, List<T> points)
         {
             if (node == null) return;
             foreach (var n in node)
@@ -342,23 +287,13 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Iteratively adds the point indices into the list.
-        /// </summary>
-        private void CopyTo(KdTreeNode2f node, List<int> indices)
-        {
-            if (node == null) return;
-            foreach (var n in node)
-                indices.Add(n.Index);
-        }
-
-        /// <summary>
         /// Iteratively calculates the segements made from 
         /// the intersecting lines.
         /// </summary>
-        private void CalculateSegments(KdTreeNode2f parent, KdTreeNode2f node, Box2f bounds, List<Segment2f> segments)
+        private void CalculateSegments(KdTreeNode2f<T> parent, KdTreeNode2f<T> node, Box2f bounds, List<Segment2f> segments)
         {
             if (node == null) return;
-  
+
             Vector2f p0, p1;
             if (node.IsVertical)
             {
@@ -408,7 +343,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Find the max depth of tree.
         /// </summary>
-        public int MaxDepth(KdTreeNode2f node)
+        public int MaxDepth(KdTreeNode2f<T> node)
         {
             if (node == null) return 0;
             if (node.IsLeaf) return node.Depth;
@@ -425,17 +360,17 @@ namespace Common.Geometry.Points
         /// </summary>
         private static readonly CompareY m_compareY = new CompareY();
 
-        private class CompareX : IComparer<Vector2f>
+        private class CompareX : IComparer<T>
         {
-            public int Compare(Vector2f v0, Vector2f v1)
+            public int Compare(T v0, T v1)
             {
                 return v0.x.CompareTo(v1.x);
             }
         }
 
-        private class CompareY : IComparer<Vector2f>
+        private class CompareY : IComparer<T>
         {
-            public int Compare(Vector2f v0, Vector2f v1)
+            public int Compare(T v0, T v1)
             {
                 return v0.y.CompareTo(v1.y);
             }

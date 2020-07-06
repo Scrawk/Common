@@ -9,11 +9,10 @@ namespace Common.Geometry.Points
 {
     public class KdTreeNode3f : IEnumerable<KdTreeNode3f>
     {
-        public KdTreeNode3f(Vector3f point, int depth, int index)
+        public KdTreeNode3f(Vector3f point, int depth)
         {
             Point = point;
             Depth = depth;
-            Index = index;
         }
 
         public Vector3f Point { get; private set; }
@@ -26,13 +25,6 @@ namespace Common.Geometry.Points
         /// The depth of this node in the tree.
         /// </summary>
         public int Depth { get; private set; }
-
-        /// <summary>
-        /// The index of the point in the tree.
-        /// Represents the order node 
-        /// was added to the tree.
-        /// </summary>
-        public int Index { get; private set; }
 
         public bool IsLeaf { get { return Left == null && Right == null; } }
 

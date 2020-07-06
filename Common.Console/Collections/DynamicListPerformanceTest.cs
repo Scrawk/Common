@@ -14,7 +14,6 @@ namespace Common.Console.Collections
         public static void Run()
         {
             Run(new DynamicList<object>());
-            Run(new DelayList<object>());
         }
 
         private static void Run(IDynamicList<object> list)

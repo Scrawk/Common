@@ -12,7 +12,7 @@ namespace Common.Geometry.Points
     /// A naive implementation of a point collection
     /// where all operations are O(n2).
     /// </summary>
-    public class PointCollection3f : IPointCollection3f, ISignedDistanceFunction3f
+    public class PointCollection3f : IPointCollection3f
     {
 
         private List<Vector3f> m_points;
@@ -109,31 +109,6 @@ namespace Common.Geometry.Points
                 if (region.Contains(m_points[i]))
                     points.Add(m_points[i]);
             }
-        }
-
-        /// <summary>
-        /// Fill the points list with all point indices in the 
-        /// collection contained within the region.
-        /// </summary>
-        public void Search(Sphere3f region, List<int> indices)
-        {
-            int count = Count;
-            for (int i = 0; i < count; i++)
-            {
-                if (region.Contains(m_points[i]))
-                    indices.Add(i);
-            }
-        }
-
-        /// <summary>
-        /// Return the signed distance to point.
-        /// </summary>
-        public float SignedDistance(Vector3f point)
-        {
-            if (Count == 0)
-                return float.PositiveInfinity;
-
-            return Vector3f.Distance(point, Closest(point));
         }
 
         /// <summary>
