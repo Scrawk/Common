@@ -134,6 +134,11 @@ namespace Common.Geometry.Shapes
             return new Segment2f(m * seg.A, m * seg.B);
         }
 
+        public static explicit operator Segment2f(Segment2d seg)
+        {
+            return new Segment2f((Vector2f)seg.A, (Vector2f)seg.B);
+        }
+
         public static bool operator ==(Segment2f s1, Segment2f s2)
         {
             return s1.A == s2.A && s1.B == s2.B;

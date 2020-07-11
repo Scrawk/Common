@@ -21,6 +21,8 @@ namespace Common.Core.Time
 
         private Stopwatch m_watch;
 
+        private static Timer s_timer;
+
         public Timer()
         {
             m_watch = new Stopwatch();
@@ -64,6 +66,17 @@ namespace Common.Core.Time
             ElapsedMilliseconds = 0.0;
             ElapsedSeconds = 0.0;
             m_watch.Reset();
+        }
+
+        public static void StartTimer()
+        {
+            s_timer = new Timer();
+            s_timer.Start();
+        }
+
+        public static double StopTimer()
+        {
+            return s_timer.Stop();
         }
 
     }

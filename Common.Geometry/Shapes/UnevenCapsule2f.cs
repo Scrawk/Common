@@ -7,26 +7,30 @@ namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Capsule2f : IEquatable<Capsule2f>, IShape2f
+    public struct UnevenCapsule2f : IEquatable<UnevenCapsule2f>, IShape2f
     {
         public Vector2f A;
 
         public Vector2f B;
 
-        public float Radius;
+        public float RadiusA;
 
-        public Capsule2f(Vector2f a, Vector2f b, float radius)
+        public float RadiusB;
+
+        public UnevenCapsule2f(Vector2f a, Vector2f b, float radiusA, float radiusB)
         {
             A = a;
             B = b;
-            Radius = radius;
+            RadiusA = radiusA;
+            RadiusB = radiusB;
         }
 
-        public Capsule2f(float ax, float ay, float bx, float by, float radius)
+        public UnevenCapsule2f(float ax, float ay, float bx, float by, float radiusA, float radiusB)
         {
             A = new Vector2f(ax, ay);
             B = new Vector2f(bx, by);
-            Radius = radius;
+            RadiusA = radiusA;
+            RadiusB = radiusB;
         }
 
         /// <summary>
@@ -44,33 +48,33 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                float xmin = Math.Min(A.x, B.x) - Radius;
-                float xmax = Math.Max(A.x, B.x) + Radius;
-                float ymin = Math.Min(A.y, B.y) - Radius;
-                float ymax = Math.Max(A.y, B.y) + Radius;
+                float xmin = Math.Min(A.x - RadiusA, B.x - RadiusB);
+                float xmax = Math.Max(A.x + RadiusA, B.x + RadiusB);
+                float ymin = Math.Min(A.y - RadiusA, B.y - RadiusB);
+                float ymax = Math.Max(A.y + RadiusA, B.y + RadiusB);
 
                 return new Box2f(xmin, xmax, ymin, ymax);
             }
         }
 
-        public static bool operator ==(Capsule2f c1, Capsule2f c2)
+        public static bool operator ==(UnevenCapsule2f c1, UnevenCapsule2f c2)
         {
-            return c1.Radius == c2.Radius && c1.A == c2.A && c1.B == c2.B;
+            return c1.RadiusA == c2.RadiusA && c1.RadiusB == c2.RadiusB && c1.A == c2.A && c1.B == c2.B;
         }
 
-        public static bool operator !=(Capsule2f c1, Capsule2f c2)
+        public static bool operator !=(UnevenCapsule2f c1, UnevenCapsule2f c2)
         {
-            return c1.Radius != c2.Radius || c1.A != c2.A || c1.A != c2.A;
+            return c1.RadiusA != c2.RadiusA || c1.RadiusB != c2.RadiusB || c1.A != c2.A || c1.A != c2.A;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Capsule2f)) return false;
-            Capsule2f cap = (Capsule2f)obj;
+            if (!(obj is UnevenCapsule2f)) return false;
+            UnevenCapsule2f cap = (UnevenCapsule2f)obj;
             return this == cap;
         }
 
-        public bool Equals(Capsule2f cap)
+        public bool Equals(UnevenCapsule2f cap)
         {
             return this == cap;
         }
@@ -80,7 +84,8 @@ namespace Common.Geometry.Shapes
             unchecked
             {
                 int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ Radius.GetHashCode();
+                hash = (hash * 16777619) ^ RadiusA.GetHashCode();
+                hash = (hash * 16777619) ^ RadiusB.GetHashCode();
                 hash = (hash * 16777619) ^ A.GetHashCode();
                 hash = (hash * 16777619) ^ B.GetHashCode();
                 return hash;
@@ -92,7 +97,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public override string ToString()
         {
-            return string.Format("[Capsule2f: A={0}, B={1}, Radius={2}]", A, B, Radius);
+            return string.Format("[Capsule2f: A={0}, B={1}, RadiusA={2}, RadiusB={2}]", A, B, RadiusA, RadiusB);
         }
 
         /// <summary>
@@ -100,28 +105,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool Contains(Vector2f p)
         {
-            float r2 = Radius * Radius;
-
-            Vector2f ap = p - A;
-
-            if (ap.x * ap.x + ap.y * ap.y <= r2) return true;
-
-            Vector2f bp = p - B.x;
-
-            if (bp.x * bp.x + bp.y * bp.y <= r2) return true;
-
-            Vector2f ab = B - A;
-
-            float t = (ab.x * A.x + ab.y * A.y) / (ab.x * ab.x + ab.y * ab.y);
-
-            if (t < 0.0) t = 0.0f;
-            if (t > 1.0) t = 1.0f;
-
-            p = p - (A + t * ab);
-
-            if (p.x * p.x + p.y * p.y <= r2) return true;
-
-            return false;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -145,8 +129,9 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public float SignedDistance(Vector2f p)
         {
-            var seg = new Segment2f(A, B);
-	        return seg.SignedDistance(p) - Radius;
+            Vector2f pa = p - A, ba = B - A;
+            float h = MathUtil.Clamp01(Vector2f.Dot(pa, ba) / Vector2f.Dot(ba, ba));
+            return (pa - ba * h).Magnitude - MathUtil.Lerp(RadiusA, RadiusB, h);
         }
 
     }

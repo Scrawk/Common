@@ -78,6 +78,11 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        public static explicit operator Circle2f(Circle2d cir)
+        {
+            return new Circle2f((Vector2f)cir.Center, (float)cir.Radius);
+        }
+
         public static bool operator ==(Circle2f c1, Circle2f c2)
         {
             return c1.Radius == c2.Radius && c1.Center == c2.Center;

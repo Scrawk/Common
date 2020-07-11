@@ -130,6 +130,11 @@ namespace Common.Geometry.Shapes
             return new Box2d(m * box.Min, m * box.Max);
         }
 
+        public static implicit operator Box2d(Box2f box)
+        {
+            return new Box2d(box.Min, box.Max);
+        }
+
         public static implicit operator Box2d(Box2i box)
         {
             return new Box2d(box.Min, box.Max);
