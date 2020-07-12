@@ -8,7 +8,7 @@ namespace Common.Collections.Arrays
     /// Wrapper for system array using the general array2 interface.
     /// </summary>
     /// <typeparam name="T">The element type</typeparam>
-    public class SystemArray2<T> : IArray2<T>
+    public class Array2<T> : IArray2<T>
     {
 
         private T[,] m_array;
@@ -18,7 +18,7 @@ namespace Common.Collections.Arrays
         /// </summary>
         /// <param name="width">The size of the arrays 1st dimention.</param>
         /// <param name="height">The size of the arrays 2st dimention.</param>
-        public SystemArray2(int width, int height)
+        public Array2(int width, int height)
         {
             m_array = new T[width, height];
         }

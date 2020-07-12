@@ -5,12 +5,8 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Shapes
 {
-    public interface ISignedDistanceFunction2f
-    {
-        float SignedDistance(Vector2f p);
-    }
 
-    public interface IShape2f : ISignedDistanceFunction2f
+    public interface IShape2f
     {
         Box2f Bounds { get; }
 
@@ -19,6 +15,8 @@ namespace Common.Geometry.Shapes
         bool Intersects(Box2f box);
 
         Vector2f Closest(Vector2f p);
+
+        float SignedDistance(Vector2f p);
     }
 
     public abstract class Shape2f : IShape2f

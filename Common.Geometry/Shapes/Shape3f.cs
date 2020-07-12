@@ -5,13 +5,9 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Shapes
 {
-    public interface ISignedDistanceFunction3f
-    {
-        float SignedDistance(Vector3f p);
-    }
 
-    public interface IShape3f : ISignedDistanceFunction3f
-    {
+    public interface IShape3f
+    { 
         Box3f Bounds { get; }
 
         bool Contains(Vector3f p);
@@ -19,6 +15,8 @@ namespace Common.Geometry.Shapes
         bool Intersects(Box3f box);
 
         Vector3f Closest(Vector3f p);
+
+        float SignedDistance(Vector3f p);
 
     }
 

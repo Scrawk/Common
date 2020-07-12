@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Common.Collections.Arrays
 {
-    public class InterpolatedArray2 : IEnumerable<float>
+    public class InterpolatedArray2 : IArray2<float>
     {
 
         /// <summary>
