@@ -142,9 +142,15 @@ namespace Common.Core.ProceduralNoise
             return n * Amplitude;
         }
 
-        private float FADE(float t) { return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f); }
+        private static float FADE(float t) 
+        { 
+            return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f); 
+        }
 
-        private float LERP(float t, float a, float b) { return a + t * (b - a); }
+        private static float LERP(float t, float a, float b) 
+        { 
+            return a + t * (b - a); 
+        }
 
 	}
 

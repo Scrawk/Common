@@ -220,7 +220,7 @@ namespace Common.Core.ProceduralNoise
             return 32.0f * (n0 + n1 + n2 + n3) * Amplitude;
         }
 
-        private float Grad(int hash, float x)
+        private static float Grad(int hash, float x)
         {
             int h = hash & 15;
             float grad = 1.0f + (h & 7);   // Gradient value 1.0, 2.0, ..., 8.0
@@ -228,7 +228,7 @@ namespace Common.Core.ProceduralNoise
             return (grad * x);           // Multiply the gradient with the distance
         }
 
-        private float Grad(int hash, float x, float y)
+        private static float Grad(int hash, float x, float y)
         {
             int h = hash & 7;           // Convert low 3 bits of hash code
             float u = h < 4 ? x : y;     // into 8 simple gradient directions,
@@ -236,7 +236,7 @@ namespace Common.Core.ProceduralNoise
             return ((h & 1) != 0 ? -u : u) + ((h & 2) != 0 ? -2.0f * v : 2.0f * v);
         }
 
-        private float Grad(int hash, float x, float y, float z)
+        private static float Grad(int hash, float x, float y, float z)
         {
             int h = hash & 15;      // Convert low 4 bits of hash code into 12 simple
             float u = h < 8 ? x : y; // gradient directions, and compute dot product.
@@ -244,7 +244,7 @@ namespace Common.Core.ProceduralNoise
             return ((h & 1) != 0 ? -u : u) + ((h & 2) != 0 ? -v : v);
         }
 
-        private float Grad(int hash, float x, float y, float z, float t)
+        private static float Grad(int hash, float x, float y, float z, float t)
         {
             int h = hash & 31;          // Convert low 5 bits of hash code into 32 simple
             float u = h < 24 ? x : y;    // gradient directions, and compute dot product.
