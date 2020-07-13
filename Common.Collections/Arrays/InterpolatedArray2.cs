@@ -2,6 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Common.Core.Threading;
 
 namespace Common.Collections.Arrays
 {
@@ -78,6 +81,33 @@ namespace Common.Collections.Arrays
         public void Clear()
         {
             Array.Clear(Data, 0, Data.Length);
+        }
+
+        /// <summary>
+        /// Fill the array with the value.
+        /// </summary>
+        public void Fill(float value)
+        {
+            Data.Fill(value);
+        }
+
+        /// <summary>
+        /// Fill the array with the value from the function in parallel.
+        /// </summary>
+        public void ParallelFill(int blockSize, Func<int, int, float> func)
+        {
+            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
+
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        Data[x, y] = func(x, y);
+                    }
+                }
+            });
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Common.Core.Numerics;
 
@@ -62,6 +63,31 @@ namespace Common.Core.Threading
 
                 return blocks;
             }
+        }
+
+        public static void ParallelAction(Vector3i size, int blockSize, Action<int, int, int> action)
+        {
+            ParallelAction(size.x, size.y, size.z, blockSize, action);
+        }
+
+        public static void ParallelAction(int width, int height, int depth, int blockSize, Action<int, int, int> action)
+        {
+            var blocks = CreateBlocks(width, height, depth, blockSize);
+
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int z = block.Min.z; z < block.Max.z; z++)
+                {
+                    for (int y = block.Min.y; y < block.Max.y; y++)
+                    {
+                        for (int x = block.Min.x; x < block.Max.x; x++)
+                        {
+                            action(x, y, z);
+                        }
+                    }
+                }
+
+            });
         }
     }
 }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using Common.Core.Threading;
 
 namespace Common.Collections.Arrays
 {
@@ -87,6 +90,33 @@ namespace Common.Collections.Arrays
                     m_array[x, y] = default(T);
                 }
             }
+        }
+
+        /// <summary>
+        /// Fill the array with the value.
+        /// </summary>
+        public void Fill(T value)
+        {
+            m_array.Fill(value);
+        }
+
+        /// <summary>
+        /// Fill the array with the value from the function in parallel.
+        /// </summary>
+        public void ParallelFill(int blockSize, Func<int, int, T> func)
+        {
+            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
+
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        m_array[x, y] = func(x, y);
+                    }
+                }
+            });
         }
     }
 }

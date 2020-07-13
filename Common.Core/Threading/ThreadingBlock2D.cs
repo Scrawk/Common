@@ -60,6 +60,28 @@ namespace Common.Core.Threading
             }
         }
 
+        public static void ParallelAction(Vector2i size, int blockSize, Action<int, int> action)
+        {
+            ParallelAction(size.x, size.y, blockSize, action);
+        }
+
+        public static void ParallelAction(int width, int height, int blockSize, Action<int, int> action)
+        {
+            var blocks = CreateBlocks(width, height, blockSize);
+
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        action(x, y);
+                    }
+                }
+
+            });
+        }
+
     }
 }
 

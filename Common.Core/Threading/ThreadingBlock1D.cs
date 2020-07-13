@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Common.Core.Numerics;
 
@@ -40,6 +41,19 @@ namespace Common.Core.Threading
 
                 return blocks;
             }
+        }
+
+        public static void ParallelAction(int width, int blockSize, Action<int> action)
+        {
+            var blocks = CreateBlocks(width, blockSize);
+
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int x = block.Min; x < block.Max; x++)
+                {
+                    action(x);
+                }
+            });
         }
     }
 }
