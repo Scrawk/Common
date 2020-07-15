@@ -20,13 +20,6 @@ namespace Common.Core.ProceduralNoise
             Combination = VORONOI_COMBINATION.D1_D0;
         }
 
-        public VoronoiNoise(int seed, Vector3f frequency, float amplitude = 1.0f)
-            : base(seed, frequency, amplitude)
-        {
-            Distance = VORONOI_DISTANCE.EUCLIDIAN;
-            Combination = VORONOI_COMBINATION.D1_D0;
-        }
-
         public VORONOI_DISTANCE Distance { get; set; }
 
         public VORONOI_COMBINATION Combination { get; set; }
@@ -44,7 +37,7 @@ namespace Common.Core.ProceduralNoise
         public override float Sample1D(float x)
         {
             //The 0.75 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.75f;
+            x = (x + Offset.x) * Frequency * 0.75f;
 
             int lastRandom, numberFeaturePoints;
             float randomDiffX;
@@ -91,8 +84,8 @@ namespace Common.Core.ProceduralNoise
         public override float Sample2D(float x, float y)
         {
             //The 0.75 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.75f;
-            y = (y + Offset.y) * Frequency.y * 0.75f;
+            x = (x + Offset.x) * Frequency * 0.75f;
+            y = (y + Offset.y) * Frequency * 0.75f;
 
             int lastRandom, numberFeaturePoints;
             float randomDiffX, randomDiffY;
@@ -146,9 +139,9 @@ namespace Common.Core.ProceduralNoise
         public override float Sample3D(float x, float y, float z)
         {
             //The 0.75 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.75f;
-            y = (y + Offset.y) * Frequency.y * 0.75f;
-            z = (z + Offset.z) * Frequency.z * 0.75f;
+            x = (x + Offset.x) * Frequency * 0.75f;
+            y = (y + Offset.y) * Frequency * 0.75f;
+            z = (z + Offset.z) * Frequency * 0.75f;
 
             int lastRandom, numberFeaturePoints;
             float randomDiffX, randomDiffY, randomDiffZ;

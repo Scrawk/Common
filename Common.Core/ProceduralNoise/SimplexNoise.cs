@@ -17,12 +17,6 @@ namespace Common.Core.ProceduralNoise
 
         }
 
-        public SimplexNoise(int seed, Vector3f frequency, float amplitude = 1.0f)
-            : base(seed, frequency, amplitude)
-        {
-
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -35,7 +29,7 @@ namespace Common.Core.ProceduralNoise
         public override float Sample1D(float x)
         {
             //The 0.5 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.5f;
+            x = (x + Offset.x) * Frequency * 0.5f;
 
             int i0 = (int)Math.Floor(x);
             int i1 = i0 + 1;
@@ -60,8 +54,8 @@ namespace Common.Core.ProceduralNoise
 		public override float Sample2D(float x, float y)
         {
             //The 0.5 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.5f;
-            y = (y + Offset.y) * Frequency.y * 0.5f;
+            x = (x + Offset.x) * Frequency * 0.5f;
+            y = (y + Offset.y) * Frequency * 0.5f;
 
             const float F2 = 0.366025403f; // F2 = 0.5*(sqrt(3.0)-1.0)
             const float G2 = 0.211324865f; // G2 = (3.0-Math.sqrt(3.0))/6.0
@@ -126,9 +120,9 @@ namespace Common.Core.ProceduralNoise
         public override float Sample3D(float x, float y, float z)
         {
             //The 0.5 is to make the scale simliar to the other noise algorithms
-            x = (x + Offset.x) * Frequency.x * 0.5f;
-            y = (y + Offset.y) * Frequency.y * 0.5f;
-            z = (z + Offset.z) * Frequency.z * 0.5f;
+            x = (x + Offset.x) * Frequency * 0.5f;
+            y = (y + Offset.y) * Frequency * 0.5f;
+            z = (z + Offset.z) * Frequency * 0.5f;
 
             // Simple skewing factors for the 3f case
             const float F3 = 0.333333333f;

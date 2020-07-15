@@ -20,12 +20,6 @@ namespace Common.Core.ProceduralNoise
 
         }
 
-        public ValueNoise(int seed, Vector3f frequency, float amplitude = 1.0f)
-            : base(seed, frequency, amplitude)
-        {
-
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -37,7 +31,7 @@ namespace Common.Core.ProceduralNoise
 
         public override float Sample1D(float x)
         {
-            x = (x + Offset.x) * Frequency.x;
+            x = (x + Offset.x) * Frequency;
 
             int ix0;
             float fx0;
@@ -60,8 +54,8 @@ namespace Common.Core.ProceduralNoise
 
         public override float Sample2D(float x, float y)
         {
-            x = (x + Offset.x) * Frequency.x;
-            y = (y + Offset.y) * Frequency.y;
+            x = (x + Offset.x) * Frequency;
+            y = (y + Offset.y) * Frequency;
 
             int ix0, iy0;
             float fx0, fy0, s, t, nx0, nx1, n0, n1;
@@ -95,9 +89,9 @@ namespace Common.Core.ProceduralNoise
         public override float Sample3D(float x, float y, float z)
         {
 
-            x = (x + Offset.x) * Frequency.x;
-            y = (y + Offset.y) * Frequency.y;
-            z = (z + Offset.z) * Frequency.z;
+            x = (x + Offset.x) * Frequency;
+            y = (y + Offset.y) * Frequency;
+            z = (z + Offset.z) * Frequency;
 
             int ix0, iy0, iz0;
             float fx0, fy0, fz0;

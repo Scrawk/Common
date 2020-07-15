@@ -24,14 +24,6 @@ namespace Common.Core.ProceduralNoise
             Combination = VORONOI_COMBINATION.D1_D0;
         }
 
-        public WorleyNoise(int seed, Vector3f frequency, float jitter, float amplitude = 1.0f)
-            : base(seed, frequency, amplitude)
-        {
-            Jitter = jitter;
-            Distance = VORONOI_DISTANCE.EUCLIDIAN;
-            Combination = VORONOI_COMBINATION.D1_D0;
-        }
-
         public float Jitter { get; set; }
 
         public VORONOI_DISTANCE Distance { get; set; }
@@ -50,7 +42,7 @@ namespace Common.Core.ProceduralNoise
 
         public override float Sample1D(float x)
         {
-            x = (x + Offset.x) * Frequency.x;
+            x = (x + Offset.x) * Frequency;
 
             int Pi0 = (int)Math.Floor(x);
             float Pf0 = Frac(x);
@@ -98,8 +90,8 @@ namespace Common.Core.ProceduralNoise
 
         public override float Sample2D(float x, float y)
         {
-            x = (x + Offset.x) * Frequency.x;
-            y = (y + Offset.y) * Frequency.y;
+            x = (x + Offset.x) * Frequency;
+            y = (y + Offset.y) * Frequency;
 
             int Pi0 = (int)Math.Floor(x);
             int Pi1 = (int)Math.Floor(y);
@@ -159,9 +151,9 @@ namespace Common.Core.ProceduralNoise
 
         public override float Sample3D(float x, float y, float z)
         {
-            x = (x + Offset.x) * Frequency.x;
-            y = (y + Offset.y) * Frequency.y;
-            z = (z + Offset.z) * Frequency.z;
+            x = (x + Offset.x) * Frequency;
+            y = (y + Offset.y) * Frequency;
+            z = (z + Offset.z) * Frequency;
 
             int Pi0 = (int)Math.Floor(x);
             int Pi1 = (int)Math.Floor(y);

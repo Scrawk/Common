@@ -1,14 +1,10 @@
 ﻿using Common.Core.Numerics;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Common.Core.Threading;
 
 namespace Common.Collections.Arrays
 {
-    public class InterpolatedArray2 : IArray2<float>
+    public class InterpolatedArray2 : Array2<float>
     {
 
         /// <summary>
@@ -16,35 +12,10 @@ namespace Common.Collections.Arrays
         /// </summary>
         /// <param name="width">The size of the arrays 1st dimention.</param>
         /// <param name="height">The size of the arrays 2st dimention.</param>
-        public InterpolatedArray2(int width, int height)
+        public InterpolatedArray2(int width, int height) 
+            : base(width, height)
         {
-            Data = new float[width, height];
-        }
-
-        public float[,] Data { get; private set; }
-
-        /// <summary>
-        /// The number of elements in the array.
-        /// </summary>
-        public int Count { get { return Data.Length; } }
-
-        /// <summary>
-        /// The size of the arrays 1st dimention.
-        /// </summary>
-        public int Width { get { return Data.GetLength(0); } }
-
-        /// <summary>
-        /// The size of the arrays 2st dimention.
-        /// </summary>
-        public int Height { get { return Data.GetLength(1); } }
-
-        /// <summary>
-        /// Access a element at index x,y.
-        /// </summary>
-        public float this[int x, int y]
-        {
-            get { return Data[x, y]; }
-            set { Data[x, y] = value; }
+   
         }
 
         /// <summary>
@@ -54,60 +25,6 @@ namespace Common.Collections.Arrays
         public override string ToString()
         {
             return string.Format("[InterpolatedArray: Width={0}, Height={1}, Count={2}]", Width, Height, Count);
-        }
-
-        /// <summary>
-        /// Enumerate all elements in the array.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<float> GetEnumerator()
-        {
-            foreach (var t in Data)
-                yield return t;
-        }
-
-        /// <summary>
-        /// Enumerate all elements in the array.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        /// <summary>
-        /// Sets all elements in the array to default value.
-        /// </summary>
-        public void Clear()
-        {
-            Array.Clear(Data, 0, Data.Length);
-        }
-
-        /// <summary>
-        /// Fill the array with the value.
-        /// </summary>
-        public void Fill(float value)
-        {
-            Data.Fill(value);
-        }
-
-        /// <summary>
-        /// Fill the array with the value from the function in parallel.
-        /// </summary>
-        public void ParallelFill(int blockSize, Func<int, int, float> func)
-        {
-            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
-
-            Parallel.ForEach(blocks, (block) =>
-            {
-                for (int y = block.Min.y; y < block.Max.y; y++)
-                {
-                    for (int x = block.Min.x; x < block.Max.x; x++)
-                    {
-                        Data[x, y] = func(x, y);
-                    }
-                }
-            });
         }
 
         /// <summary>

@@ -14,8 +14,6 @@ namespace Common.Collections.Arrays
     public class Array2<T> : IArray2<T>
     {
 
-        private T[,] m_array;
-
         /// <summary>
         /// Create a new array.
         /// </summary>
@@ -23,31 +21,33 @@ namespace Common.Collections.Arrays
         /// <param name="height">The size of the arrays 2st dimention.</param>
         public Array2(int width, int height)
         {
-            m_array = new T[width, height];
+            Data = new T[width, height];
         }
+
+        public T[,] Data { get; private set; }
 
         /// <summary>
         /// The number of elements in the array.
         /// </summary>
-        public int Count {  get { return m_array.Length; } }
+        public int Count {  get { return Data.Length; } }
 
         /// <summary>
         /// The size of the arrays 1st dimention.
         /// </summary>
-        public int Width { get { return m_array.GetLength(0); } }
+        public int Width { get { return Data.GetLength(0); } }
 
         /// <summary>
         /// The size of the arrays 2st dimention.
         /// </summary>
-        public int Height { get { return m_array.GetLength(1); } }
+        public int Height { get { return Data.GetLength(1); } }
 
         /// <summary>
         /// Access a element at index x,y.
         /// </summary>
         public T this[int x, int y]
         {
-            get { return m_array[x, y]; }
-            set { m_array[x, y] = value; }
+            get { return Data[x, y]; }
+            set { Data[x, y] = value; }
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Common.Collections.Arrays
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (var t in m_array)
+            foreach (var t in Data)
                 yield return t;
         }
 
@@ -87,7 +87,7 @@ namespace Common.Collections.Arrays
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    m_array[x, y] = default(T);
+                    Data[x, y] = default(T);
                 }
             }
         }
@@ -97,7 +97,21 @@ namespace Common.Collections.Arrays
         /// </summary>
         public void Fill(T value)
         {
-            m_array.Fill(value);
+            Data.Fill(value);
+        }
+
+        /// <summary>
+        /// Fill the array with the value from the function.
+        /// </summary>
+        public void Fill(Func<int, int, T> func)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    Data[x, y] = func(x, y);
+                }
+            }
         }
 
         /// <summary>
@@ -113,7 +127,7 @@ namespace Common.Collections.Arrays
                 {
                     for (int x = block.Min.x; x < block.Max.x; x++)
                     {
-                        m_array[x, y] = func(x, y);
+                        Data[x, y] = func(x, y);
                     }
                 }
             });

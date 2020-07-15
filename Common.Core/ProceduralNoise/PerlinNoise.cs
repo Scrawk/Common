@@ -1,5 +1,7 @@
 using System;
 using Common.Core.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace Common.Core.ProceduralNoise
 {
@@ -10,12 +12,6 @@ namespace Common.Core.ProceduralNoise
         public PerlinNoise(int seed, float frequency, float amplitude = 1.0f) 
             : base(seed, frequency, amplitude)
 		{
-
-        }
-
-        public PerlinNoise(int seed, Vector3f frequency, float amplitude = 1.0f)
-            : base(seed, frequency, amplitude)
-        {
 
         }
 
@@ -30,7 +26,7 @@ namespace Common.Core.ProceduralNoise
 
         public override float Sample1D( float x )
 		{
-            x = (x + Offset.x) * Frequency.x;
+            x = (x + Offset.x) * Frequency;
 
 		    int ix0;
 		    float fx0, fx1;
@@ -50,8 +46,8 @@ namespace Common.Core.ProceduralNoise
 		
 		public override float Sample2D( float x, float y )
 		{
-            x = (x + Offset.x) * Frequency.x;
-            y = (y + Offset.y) * Frequency.y;
+            x = (x + Offset.x) * Frequency;
+            y = (y + Offset.y) * Frequency;
 
 		    int ix0, iy0;
 		    float fx0, fy0, fx1, fy1, s, t, nx0, nx1, n0, n1;
@@ -87,9 +83,9 @@ namespace Common.Core.ProceduralNoise
 		
 		public override float Sample3D( float x, float y, float z )
 		{
-            x = (x + Offset.x) * Frequency.x;
-            y = (y + Offset.y) * Frequency.y;
-            z = (z + Offset.z) * Frequency.z;
+            x = (x + Offset.x) * Frequency;
+            y = (y + Offset.y) * Frequency;
+            z = (z + Offset.z) * Frequency;
 
             int ix0, iy0, iz0;
 		    float fx0, fy0, fz0, fx1, fy1, fz1;
@@ -133,17 +129,20 @@ namespace Common.Core.ProceduralNoise
             return 1.1111f * LERP(s, n0, n1) * Amplitude;
 		}
 
-        private static float FADE(float t) 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static float FADE(float t) 
 		{
 			return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f); 
 		}
 
-        private static float LERP(float t, float a, float b) 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static float LERP(float t, float a, float b) 
 		{
 			return a + t * (b - a); 
 		}
 
-        private static float Grad(int hash, float x)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static float Grad(int hash, float x)
         {
             int h = hash & 15;
             float grad = 1.0f + (h & 7);    // Gradient value 1.0, 2.0, ..., 8.0
@@ -151,7 +150,8 @@ namespace Common.Core.ProceduralNoise
             return (grad * x);              // Multiply the gradient with the distance
         }
 
-        private static float Grad(int hash, float x, float y)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static float Grad(int hash, float x, float y)
         {
             int h = hash & 7;           // Convert low 3 bits of hash code
             float u = h < 4 ? x : y;  // into 8 simple gradient directions,
@@ -159,7 +159,8 @@ namespace Common.Core.ProceduralNoise
             return ((h & 1) != 0 ? -u : u) + ((h & 2) != 0 ? -2.0f * v : 2.0f * v);
         }
 
-        private static float Grad(int hash, float x, float y, float z)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static float Grad(int hash, float x, float y, float z)
         {
             int h = hash & 15;     // Convert low 4 bits of hash code into 12 simple
             float u = h < 8 ? x : y; // gradient directions, and compute dot product.
@@ -167,7 +168,8 @@ namespace Common.Core.ProceduralNoise
             return ((h & 1) != 0 ? -u : u) + ((h & 2) != 0 ? -v : v);
         }
 
-        private static float Grad(int hash, float x, float y, float z, float t)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static float Grad(int hash, float x, float y, float z, float t)
         {
             int h = hash & 31;          // Convert low 5 bits of hash code into 32 simple
             float u = h < 24 ? x : y; // gradient directions, and compute dot product.
