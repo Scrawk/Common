@@ -43,7 +43,7 @@ namespace Common.Collections.Arrays
             Data = data.Copy();
         }
 
-        public T[,] Data { get; private set; }
+        public T[,] Data { get; protected set; }
 
         /// <summary>
         /// The number of elements in the array.
