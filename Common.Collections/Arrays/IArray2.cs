@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Common.Core.Numerics;
+
 namespace Common.Collections.Arrays
 {
     /// <summary>
@@ -28,6 +30,11 @@ namespace Common.Collections.Arrays
         /// Access a element at index x,y.
         /// </summary>
         T this[int x, int y] { get; set; }
+
+        /// <summary>
+        /// Access a element at index x,y.
+        /// </summary>
+        T this[Vector2i i] { get; set; }
 
         /// <summary>
         /// Sets all elements in the array to default value.

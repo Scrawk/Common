@@ -78,6 +78,15 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Access a element at index x,y.
         /// </summary>
+        public T this[Vector2i i]
+        {
+            get => this[i.x, i.y];
+            set => this[i.x, i.y] = value;
+        }
+
+        /// <summary>
+        /// Access a element at index x,y.
+        /// </summary>
         public T this[int x, int y]
         {
             get
