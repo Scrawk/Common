@@ -477,13 +477,25 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Lerp(float v0, float v1, float a)
         {
-            return v0 * (1.0f - a) + v1 * a;
+            return v0 + (v1 - v0) * a;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Lerp(double v0, double v1, double a)
         {
-            return v0 * (1.0 - a) + v1 * a;
+            return v0 + (v1 - v0) * a;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Blerp(float v00, float v10, float v01, float v11, float tx, float ty)
+        {
+            return Lerp(Lerp(v00, v10, tx), Lerp(v01, v11, tx), ty);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Blerp(double v00, double v10, double v01, double v11, double tx, double ty)
+        {
+            return Lerp(Lerp(v00, v10, tx), Lerp(v01, v11, tx), ty);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

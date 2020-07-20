@@ -11,6 +11,27 @@ namespace System
             Array.Clear(array, 0, array.Length);
         }
 
+        public static T[] Copy<T>(this T[] array)
+        {
+            var dest = new T[array.Length];
+            Array.Copy(array, dest, array.Length);
+            return dest;
+        }
+
+        public static T[,] Copy<T>(this T[,] array)
+        {
+            var dest = new T[array.GetLength(0), array.GetLength(1)];
+            Array.Copy(array, dest, array.Length);
+            return dest;
+        }
+
+        public static T[,,] Copy<T>(this T[,,] array)
+        {
+            var dest = new T[array.GetLength(0), array.GetLength(1), array.GetLength(2)];
+            Array.Copy(array, dest, array.Length);
+            return dest;
+        }
+
         public static void Fill<T>(this T[] array, T value)
         {
             for (int x = 0; x < array.Length; x++)

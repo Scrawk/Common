@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using Common.Core.Numerics;
+
 namespace Common.Collections.Arrays
 {
     /// <summary>
@@ -204,6 +206,26 @@ namespace Common.Collections.Arrays
             }
 
             GridCount = 0;
+        }
+
+        /// <summary>
+        /// Get the element at clamped index x,y.
+        /// </summary>
+        public T GetClamped(int x, int y)
+        {
+            x = MathUtil.Clamp(x, 0, Width - 1);
+            y = MathUtil.Clamp(y, 0, Height - 1);
+            return this[x, y];
+        }
+
+        /// <summary>
+        /// Get the element at wrapped index x,y.
+        /// </summary>
+        public T GetWrapped(int x, int y)
+        {
+            x = MathUtil.Wrap(x, Width);
+            y = MathUtil.Wrap(y, Height);
+            return this[x, y];
         }
 
         /// <summary>

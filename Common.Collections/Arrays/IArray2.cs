@@ -34,5 +34,15 @@ namespace Common.Collections.Arrays
         /// </summary>
         void Clear();
 
+        /// <summary>
+        /// Get the element at clamped index x,y.
+        /// </summary>
+        T GetClamped(int x, int y);
+
+        /// <summary>
+        /// Get the element at wrapped index x,y.
+        /// </summary>
+        T GetWrapped(int x, int y);
+
     }
 }

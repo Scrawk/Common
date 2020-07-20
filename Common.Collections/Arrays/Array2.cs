@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Common.Core.Numerics;
 using Common.Core.Threading;
 
 namespace Common.Collections.Arrays
 {
     /// <summary>
-    /// Wrapper for system array using the general array2 interface.
+    /// Wrapper for system array using the general IArray2 interface.
     /// </summary>
     /// <typeparam name="T">The element type</typeparam>
     public class Array2<T> : IArray2<T>
@@ -22,6 +23,24 @@ namespace Common.Collections.Arrays
         public Array2(int width, int height)
         {
             Data = new T[width, height];
+        }
+
+        /// <summary>
+        /// Create a new array.
+        /// </summary>
+        /// <param name="size">The size of the array.</param>
+        public Array2(Vector2i size)
+        {
+            Data = new T[size.x, size.y];
+        }
+
+        /// <summary>
+        /// Create a new array.
+        /// </summary>
+        /// <param name="data">The data form the array. Will be deep copied.</param>
+        public Array2(T[,] data)
+        {
+            Data = data.Copy();
         }
 
         public T[,] Data { get; private set; }
@@ -51,12 +70,21 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Access a element at index x,y.
+        /// </summary>
+        public T this[Vector2i i]
+        {
+            get { return Data[i.x, i.y]; }
+            set { Data[i.x, i.y] = value; }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[SystemArray: Width={0}, Height={1}, Count={2}]", Width, Height, Count);
+            return string.Format("[Array2: Width={0}, Height={1}, Count={2}]", Width, Height, Count);
         }
 
         /// <summary>
@@ -83,13 +111,27 @@ namespace Common.Collections.Arrays
         /// </summary>
         public void Clear()
         {
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    Data[x, y] = default(T);
-                }
-            }
+            Data.Clear();
+        }
+
+        /// <summary>
+        /// Get the element at clamped index x,y.
+        /// </summary>
+        public T GetClamped(int x, int y)
+        {
+            x = MathUtil.Clamp(x, 0, Width - 1);
+            y = MathUtil.Clamp(y, 0, Height - 1);
+            return Data[x, y];
+        }
+
+        /// <summary>
+        /// Get the element at wrapped index x,y.
+        /// </summary>
+        public T GetWrapped(int x, int y)
+        {
+            x = MathUtil.Wrap(x, Width);
+            y = MathUtil.Wrap(y, Height);
+            return Data[x, y];
         }
 
         /// <summary>
