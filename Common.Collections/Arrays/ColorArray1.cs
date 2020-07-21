@@ -44,14 +44,7 @@ namespace Common.Collections.Arrays
         public ColorRGB GetBilinear01(float u)
         {
             float x = u * Count;
-            return GetBilinear(x);
-        }
 
-        /// <summary>
-        /// Sample the array by clamped bilinear interpolation.
-        /// </summary>
-        public ColorRGB GetBilinear(float x)
-        {
             int xi = (int)x;
 
             var v0 = GetClamped(xi);

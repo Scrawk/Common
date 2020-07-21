@@ -40,17 +40,10 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Sample the array by clamped bilinear interpolation.
         /// </summary>
-        public float GetBilinear01(float u)
+        public float GetBilinear(float u)
         {
             float x = u * Count;
-            return GetBilinear(x);
-        }
 
-        /// <summary>
-        /// Sample the array by clamped bilinear interpolation.
-        /// </summary>
-        public float GetBilinear(float x)
-        {
             int xi = (int)x;
 
             var v0 = GetClamped(xi);
