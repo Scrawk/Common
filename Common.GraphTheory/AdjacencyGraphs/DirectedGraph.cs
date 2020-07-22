@@ -43,11 +43,22 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Add a edge to the graph.
-        /// The edge starts at the from vertex 
-        /// and ends at the to vertex.
+        /// Add a directed edge.
         /// </summary>
-        public void AddEdge(int from, int to, float weight = 0.0f)
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        public void AddEdge(int from, int to)
+        {
+            AddEdge(from, to, 0);
+        }
+
+        /// <summary>
+        /// Add a directed edge.
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        /// <param name="weight">The edge weight</param>
+        public void AddEdge(int from, int to, float weight)
         {
             var edge = new GraphEdge();
             edge.From = from;

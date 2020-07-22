@@ -50,21 +50,48 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Add a edge to the graph.
-        /// The edge starts at the from vertex 
-        /// and ends at the to vertex.
+        /// Add a undirected edge.
+        /// A undirected edge has a edge going both ways
         /// </summary>
-        public void AddEdge(int from, int to, float w0 = 0.0f, float w1 = 0.0f)
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        /// <param name="w">The edges weight</param>
+        public void AddEdge(int from, int to)
+        {
+            AddEdge(from, to, 0, 0);
+        }
+
+        /// <summary>
+        /// Add a undirected edge.
+        /// A undirected edge has a edge going both ways
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        /// <param name="weight">The edges weight</param>
+        public void AddEdge(int from, int to, float weight)
+        {
+            AddEdge(from, to, weight, weight);
+        }
+
+        /// <summary>
+        /// Add a undirected edge.
+        /// A undirected edge has a edge going both ways
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        /// <param name="w0">The edge going from-to weight</param>
+        /// <param name="w1">The edge going to-from weigh</param>
+        public void AddEdge(int from, int to, float weight0, float weight1)
         {
             var edge = new GraphEdge();
             edge.From = from;
             edge.To = to;
-            edge.Weight = w0;
+            edge.Weight = weight0;
 
             var opposite = new GraphEdge();
             opposite.From = to;
             opposite.To = from;
-            opposite.Weight = w1;
+            opposite.Weight = weight1;
 
             AddEdgeInternal(edge);
             AddEdgeInternal(opposite);

@@ -325,14 +325,26 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Get the data of all leaf vertices.
         /// </summary>
-        public void GetLeavesData<T>(List<T> leaves)
+        public void GetLeavesData<T>(List<T> data)
         {
             for (int i = 0; i < Count; i++)
             {
                 if (!InTree(i)) continue;
                 if (!IsLeaf(i)) continue;
 
-                leaves.Add(Graph.GetVertexData<T>(i));
+                data.Add(Graph.GetVertexData<T>(i));
+            }
+        }
+
+        /// <summary>
+        /// Get the data of all vertices.
+        /// </summary>
+        public void GetData<T>(List<T> data)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (!InTree(i)) continue;
+                data.Add(Graph.GetVertexData<T>(i));
             }
         }
 
