@@ -11,13 +11,15 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
         private Dictionary<int, GraphTree> m_forest;
 
-        public GraphForest()
+        public GraphForest(AdjacencyGraph graph)
         {
+            Graph = graph;
             m_forest = new Dictionary<int, GraphTree>();
         }
 
-        public GraphForest(int size)
+        public GraphForest(AdjacencyGraph graph, int size)
         {
+            Graph = graph;
             m_forest = new Dictionary<int, GraphTree>(size);
         }
 
@@ -25,6 +27,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// 
         /// </summary>
         public int Count => m_forest.Count;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AdjacencyGraph Graph { get; private set; }
 
         /// <summary>
         /// 

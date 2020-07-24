@@ -7,7 +7,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// Represents a tree of a given graph.
     /// The tree only holds the indices of
     /// the vertices from the graph it was 
-    /// created from.
+    /// created from. A tree may not contain 
+    /// all the vertices in the graph if the
+    /// graph is not completely connected.
     /// </summary>
     public class GraphTree
     {
@@ -37,9 +39,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public AdjacencyGraph Graph { get; private set; }
 
         /// <summary>
-        /// The number of verices in the tree.
+        /// The number of verices in the graph.
         /// </summary>
-        public int Count => Parent.Length;
+        private int Count => Parent.Length;
 
         /// <summary>
         /// The root vertex.
@@ -196,6 +198,23 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public bool IsLeaf(int i)
         {
             return GetDegree(i) == 0;
+        }
+
+        /// <summary>
+        /// The number of vertices in the graph  
+        /// that are included in the tree.
+        /// </summary>
+        /// <returns></returns>
+        public int TreeSize()
+        {
+            int size = 0;
+            for (int i = 0; i < Count; i++)
+            {
+                if (!InTree(i)) continue;
+                size++;
+            }
+
+            return size;
         }
 
         /// <summary>

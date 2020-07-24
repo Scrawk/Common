@@ -42,7 +42,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 table[root].Add(edges[i]);
             }
 
-            var forest = new GraphForest();
+            var forest = new GraphForest(this);
             var graph = new UndirectedGraph(VertexCount);
 
             foreach (var kvp in table)

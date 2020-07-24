@@ -162,7 +162,6 @@ namespace Common.Collections.Arrays
         public void ParallelFill(int blockSize, Func<int, int, T> func)
         {
             var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
-
             Parallel.ForEach(blocks, (block) =>
             {
                 for (int y = block.Min.y; y < block.Max.y; y++)
@@ -170,6 +169,38 @@ namespace Common.Collections.Arrays
                     for (int x = block.Min.x; x < block.Max.x; x++)
                     {
                         Data[x, y] = func(x, y);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Modify the array with the function.
+        /// </summary>
+        public void Modify(Func<T, T> func)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    Data[x, y] = func(Data[x, y]);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Modify the array with the function in parallel.
+        /// </summary>
+        public void ParallelModify(int blockSize, Func<T, T> func)
+        {
+            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        Data[x, y] = func(Data[x, y]);
                     }
                 }
             });
