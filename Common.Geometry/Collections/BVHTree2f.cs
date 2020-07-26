@@ -140,6 +140,14 @@ namespace Common.Geometry.Collections
         }
 
         /// <summary>
+        /// The signed distance to the closest shape.
+        /// </summary>
+        public float SignedDistance(Vector2f point)
+        {
+            return NodeSignedDistance(Root, point, float.PositiveInfinity);
+        }
+
+        /// <summary>
         /// Create a list containing all the
         /// shapes in the tree.
         /// </summary>
@@ -322,6 +330,44 @@ namespace Common.Geometry.Collections
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private float NodeSignedDistance(BVHTreeNode2f<T> node, Vector2f point, float sd)
+        {
+            if (node != null)
+            {
+		if(node.IsLeaf || node.Bounds.Contains(point))
+		{
+                	if (node.IsLeaf)
+                	{
+                    		sd = Math.Min(sd, node.Shape.SignedDistance(point));
+                	}
+                	else
+                	{
+                    		sd = NodeSignedDistance(node.Left, point, sd);
+                    		sd = NodeSignedDistance(node.Right, point, sd);
+                	}
+		}
+		else
+		{
+			float leftSD = float.PositiveInfinity;
+			float rightSD = float.PositiveInfinity;
+
+			if(node.Left != null)
+				leftSD = node.Left.Bounds.SignedDistance(point);
+
+			if(node.Right != null)
+				rightSD = node.Right.Bounds.SignedDistance(point);
+
+			var closest = (leftSD < rightSD) ? node.Left : node.Right;
+			sd = NodeSignedDistance(closest, point, sd);
+		}
+            }
+
+            return sd;
         }
 
         private int MaxDepth(BVHTreeNode2f<T> node, int depth)

@@ -7,19 +7,20 @@ using Common.Geometry.Shapes;
 
 namespace Common.Geometry.Points
 {
-    public class KdTreeNode3f : IEnumerable<KdTreeNode3f>
+    public class KdTreeNode3f<T> : IEnumerable<KdTreeNode3f<T>>
+	where T : IPoint3f
     {
-        public KdTreeNode3f(Vector3f point, int depth)
+        public KdTreeNode3f(T point, int depth)
         {
             Point = point;
             Depth = depth;
         }
 
-        public Vector3f Point { get; private set; }
+        public T Point { get; private set; }
 
-        public KdTreeNode3f Left { get; internal set; }
+        public KdTreeNode3f<T> Left { get; internal set; }
 
-        public KdTreeNode3f Right { get; internal set; }
+        public KdTreeNode3f<T> Right { get; internal set; }
 
         /// <summary>
         /// The depth of this node in the tree.
@@ -31,7 +32,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Enumerate all points from this node.
         /// </summary>
-        public IEnumerator<KdTreeNode3f> GetEnumerator()
+        public IEnumerator<KdTreeNode3f<T>> GetEnumerator()
         {
             if (Left != null)
             {

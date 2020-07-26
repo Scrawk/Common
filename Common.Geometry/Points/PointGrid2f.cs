@@ -136,7 +136,8 @@ namespace Common.Geometry.Points
 
             for (int i = 0; i < cell.Count; i++)
             {
-                if (cell[i].x == point.x && cell[i].y == point.y)
+                if (cell[i].x == point.x && 
+                    cell[i].y == point.y)
                 {
                     cell.RemoveAt(i);
                     Count--;

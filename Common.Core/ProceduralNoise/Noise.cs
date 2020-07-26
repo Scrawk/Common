@@ -34,6 +34,8 @@ namespace Common.Core.ProceduralNoise
             return string.Format("[Noise: Frequency={0}, Amplitude={1}, Offset={2}]", Frequency, Amplitude, Offset);
         }
 
+        public int Seed => Perm.Seed;
+
         public abstract float Sample1D(float x);
 
 		public abstract float Sample2D(float x, float y);

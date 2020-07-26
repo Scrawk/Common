@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using Common.Core.Numerics;
 
 using REAL = System.Single;
+using CIRCLE = Common.Geometry.Shapes.Sphere3f;
+using BOX = Common.Geometry.Shapes.Box3f;
 
 namespace Common.Geometry.Points
 {
@@ -15,6 +17,55 @@ namespace Common.Geometry.Points
         REAL x { get; set; }
         REAL y { get; set; }
         REAL z { get; set; }
+    }
+
+    /// <summary>
+    /// Generic helper class for common point operations.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public static class PointOps3f<T>
+        where T : IPoint3f
+    {
+        /// <summary>
+        /// The distance between two points.
+        /// </summary>
+        public static REAL Distance(T p0, T p1)
+        {
+            return MathUtil.SafeSqrt(SqrDistance(p0, p1));
+        }
+
+        /// <summary>
+        /// The square distance between two points.
+        /// </summary>
+        public static REAL SqrDistance(T p0, T p1)
+        {
+            var x = p0.x - p1.x;
+            var y = p0.y - p1.y;
+            var z = p0.z - p1.z;
+            return x * x + y * y + z * z;
+        }
+
+        /// <summary>
+        /// Does the circle contain the point.
+        /// </summary>
+        public static bool Contains(CIRCLE circle, T point)
+        {
+            var x = circle.Center.x - point.x;
+            var y = circle.Center.y - point.y;
+            var z = circle.Center.z - point.z;
+            return (x*x + y*y + z*z) <= circle.Radius2;
+        }
+
+        /// <summary>
+        /// Does the box contain the point.
+        /// </summary>
+        public static bool Contains(BOX box, T point)
+        {
+            if (point.x > box.Max.x || point.x < box.Min.x) return false;
+            if (point.y > box.Max.y || point.y < box.Min.y) return false;
+            if (point.z > box.Max.z || point.z < box.Min.z) return false;
+            return true;
+        }
     }
 
     [Serializable]

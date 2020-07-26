@@ -12,18 +12,19 @@ namespace Common.Geometry.Points
     /// A point collection seperated into spatial grids
     /// confined to a bounding box.
     /// </summary>
-    public class PointGrid3f : IPointCollection3f
+    public class PointGrid3f<T> : IPointCollection3f<T>
+            where T : IPoint3f
     {
 
-        private List<Vector3f>[,,] m_grid;
+        private List<T>[,,] m_grid;
 
-        public PointGrid3f(float width, float height, float depth, float cellsize, IEnumerable<Vector3f> points = null)
+        public PointGrid3f(float width, float height, float depth, float cellsize, IEnumerable<T> points = null)
             : this(new Box3f(0, width, 0, height, 0, depth), cellsize, points)
         {
 
         }
 
-        public PointGrid3f(Box3f bounds, float cellsize, IEnumerable<Vector3f> points = null)
+        public PointGrid3f(Box3f bounds, float cellsize, IEnumerable<T> points = null)
         {
             Bounds = bounds;
             var width = (int)Math.Ceiling(bounds.Width / cellsize) + 1;
@@ -33,7 +34,7 @@ namespace Common.Geometry.Points
             CellSize = cellsize;
             InvCellSize = 1.0f / cellsize;
 
-            m_grid = new List<Vector3f>[width, height, depth];
+            m_grid = new List<T>[width, height, depth];
 
             if (points != null)
                 Add(points);
@@ -99,7 +100,7 @@ namespace Common.Geometry.Points
         /// Returns false if any of the points was 
         /// outside the grid bounds.
         /// </summary>
-        public bool Add(IEnumerable<Vector3f> points)
+        public bool Add(IEnumerable<T> points)
         {
             bool allAdded = true;
 
@@ -114,9 +115,9 @@ namespace Common.Geometry.Points
         /// Retruns false if point out of
         /// the grid bounds and will not be added.
         /// </summary>
-        public bool Add(Vector3f point)
+        public bool Add(T point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!PointOps3f<T>.Contains(Bounds, point)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index, true);
@@ -129,9 +130,9 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Remove a point from the grid.
         /// </summary>
-        public bool Remove(Vector3f point)
+        public bool Remove(T point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!PointOps3f<T>.Contains(Bounds, point)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index);
@@ -139,7 +140,9 @@ namespace Common.Geometry.Points
 
             for (int i = 0; i < cell.Count; i++)
             {
-                if(cell[i] == point)
+                if (cell[i].x == point.x && 
+                    cell[i].y == point.y && 
+                    cell[i].z == point.z)
                 {
                     cell.RemoveAt(i);
                     Count--;
@@ -153,9 +156,9 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Return a list of all points in the grid.
         /// </summary>
-        public List<Vector3f> ToList()
+        public List<T> ToList()
         {
-            List<Vector3f> list = new List<Vector3f>(Count);
+            List<T> list = new List<T>(Count);
 
             for (int z = 0; z < GridSize.z; z++)
             {
@@ -166,9 +169,9 @@ namespace Common.Geometry.Points
                         var cell = m_grid[x, y, z];
                         if (cell != null)
                         {
-                            for(int i = 0; i < cell.Count; i++)
+                            for (int i = 0; i < cell.Count; i++)
                                 list.Add(cell[i]);
-                        } 
+                        }
                     }
                 }
             }
@@ -180,7 +183,7 @@ namespace Common.Geometry.Points
         /// Return a list of all points found 
         /// within the search region.
         /// </summary>
-        public void Search(Sphere3f region, List<Vector3f> points)
+        public void Search(Sphere3f region, List<T> points)
         {
             if (!region.Intersects(Bounds)) return;
             var box = ToCellSpace(region.Bounds);
@@ -197,7 +200,7 @@ namespace Common.Geometry.Points
                         int count = cell.Count;
                         for (int k = 0; k < count; k++)
                         {
-                            if (region.Contains(cell[k]))
+                            if (PointOps3f<T>.Contains(region, cell[k]))
                                 points.Add(cell[k]);
                         }
                     }
@@ -211,12 +214,12 @@ namespace Common.Geometry.Points
         /// so this will fail if closest point not in that region.
         /// In this case returned point will be zero.
         /// </summary>
-        public Vector3f Closest(Vector3f point)
+        public T Closest(T point)
         {
             if (Count == 0)
                 throw new InvalidOperationException("Can not find nearest point if collection is empty.");
 
-            Vector3f closest;
+            T closest;
             Closest(point, out closest);
             return closest;
         }
@@ -226,9 +229,9 @@ namespace Common.Geometry.Points
         /// Grid will only search within a points nearest neighbour cells
         /// and will return false if no point is located in this range.
         /// </summary>
-        public bool Closest(Vector3f point, out Vector3f closest)
+        public bool Closest(T point, out T closest)
         {
-            closest = new Vector3f();
+            closest = default(T);
             float dist2 = float.PositiveInfinity;
             bool found = false;
 
@@ -252,7 +255,7 @@ namespace Common.Geometry.Points
 
                         for (int k = 0; k < cell.Count; k++)
                         {
-                            float d2 = Vector3f.SqrDistance(point, cell[k]);
+                            float d2 = PointOps3f<T>.SqrDistance(point, cell[k]);
                             if (d2 < dist2)
                             {
                                 closest = cell[k];
@@ -270,7 +273,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Enumerate the points in the grid.
         /// </summary>
-        public IEnumerator<Vector3f> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             for (int z = 0; z < GridSize.z; z++)
             {
@@ -299,12 +302,11 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Returns the points cell space position.
         /// </summary>
-        private Vector3i ToCellSpace(Vector3f p)
+        private Vector3i ToCellSpace(T p)
         {
-            p -= Bounds.Min;
-            int x = (int)Math.Floor(p.x * InvCellSize);
-            int y = (int)Math.Floor(p.y * InvCellSize);
-            int z = (int)Math.Floor(p.z * InvCellSize);
+            int x = (int)Math.Floor((p.x - Bounds.Min.x) * InvCellSize);
+            int y = (int)Math.Floor((p.y - Bounds.Min.y) * InvCellSize);
+            int z = (int)Math.Floor((p.z - Bounds.Min.z) * InvCellSize);
             return new Vector3i(x, y, z);
         }
 
@@ -333,12 +335,12 @@ namespace Common.Geometry.Points
         /// If create is true a new empty list will be 
         /// added to the grid and returned.
         /// </summary>
-        private List<Vector3f> GetGridCell(Vector3i index, bool create = false)
+        private List<T> GetGridCell(Vector3i index, bool create = false)
         {
             if (create)
             {
                 if (m_grid[index.x, index.y, index.z] == null)
-                    m_grid[index.x, index.y, index.z] = new List<Vector3f>();
+                    m_grid[index.x, index.y, index.z] = new List<T>();
 
                 return m_grid[index.x, index.y, index.z];
             }

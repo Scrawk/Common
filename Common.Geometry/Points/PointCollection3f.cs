@@ -12,24 +12,25 @@ namespace Common.Geometry.Points
     /// A naive implementation of a point collection
     /// where all operations are O(n2).
     /// </summary>
-    public class PointCollection3f : IPointCollection3f
+    public class PointCollection3f<T> : IPointCollection3f<T>
+        where T : IPoint3f
     {
 
-        private List<Vector3f> m_points;
+        private List<T> m_points;
 
         public PointCollection3f()
         {
-            m_points = new List<Vector3f>();
+            m_points = new List<T>();
         }
 
         public PointCollection3f(int size)
         {
-            m_points = new List<Vector3f>(size);
+            m_points = new List<T>(size);
         }
 
-        public PointCollection3f(IEnumerable<Vector3f> points)
+        public PointCollection3f(IEnumerable<T> points)
         {
-            m_points = new List<Vector3f>(points);
+            m_points = new List<T>(points);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Get or Set the point at index i.
         /// </summary>
-        public Vector3f this[int i]
+        public T this[int i]
         {
             get { return m_points[i]; }
             set { m_points[i] = value; }
@@ -74,7 +75,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Add all the points in the enumerable to the collection.
         /// </summary>
-        public bool Add(IEnumerable<Vector3f> points)
+        public bool Add(IEnumerable<T> points)
         {
             m_points.AddRange(points);
             return true;
@@ -83,7 +84,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Add a point to the collection.
         /// </summary>
-        public bool Add(Vector3f point)
+        public bool Add(T point)
         {
             m_points.Add(point);
             return true;
@@ -92,7 +93,7 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Remove point from collection.
         /// </summary>
-        public bool Remove(Vector3f point)
+        public bool Remove(T point)
         {
             return m_points.Remove(point);
         }
@@ -101,12 +102,12 @@ namespace Common.Geometry.Points
         /// Fill the points list with all points in the 
         /// collection contained within the region.
         /// </summary>
-        public void Search(Sphere3f region, List<Vector3f> points)
+        public void Search(Sphere3f region, List<T> points)
         {
             int count = Count;
             for (int i = 0; i < count; i++)
             {
-                if (region.Contains(m_points[i]))
+                if (PointOps3f<T>.Contains(region, m_points[i]))
                     points.Add(m_points[i]);
             }
         }
@@ -114,18 +115,18 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Return the closest point in collect to this point.
         /// </summary>
-        public Vector3f Closest(Vector3f point)
+        public T Closest(T point)
         {
             if (Count == 0)
                 throw new InvalidOperationException("Can not find nearest point if collection is empty.");
 
-            var nearest = new Vector3f();
+            var nearest = default(T);
             var dist2 = float.PositiveInfinity;
 
             int count = Count;
             for (int i = 0; i < count; i++)
             {
-                float d2 = Vector3f.SqrDistance(m_points[i], point);
+                float d2 = PointOps3f<T>.SqrDistance(m_points[i], point);
                 if (d2 < dist2)
                 {
                     nearest = m_points[i];
@@ -139,15 +140,15 @@ namespace Common.Geometry.Points
         /// <summary>
         /// Create a list from all points in the collection.
         /// </summary>
-        public List<Vector3f> ToList()
+        public List<T> ToList()
         {
-            return new List<Vector3f>(m_points);
+            return new List<T>(m_points);
         }
 
         /// <summary>
         /// Enumerate all points in the collection.
         /// </summary>
-        public IEnumerator<Vector3f> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return m_points.GetEnumerator();
         }

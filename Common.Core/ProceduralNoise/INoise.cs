@@ -8,6 +8,7 @@ namespace Common.Core.ProceduralNoise
 
 	public interface INoise 
 	{
+		int Seed { get; }
 
         float Frequency { get; set; }
 
