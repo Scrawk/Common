@@ -342,8 +342,20 @@ namespace Common.Geometry.Collections
                 }
                 else
                 {
-                    sd = NodeSignedDistance(node.Left, point, sd);
-                    sd = NodeSignedDistance(node.Right, point, sd);
+                    float leftSD = float.PositiveInfinity;
+                    float rightSD = float.PositiveInfinity;
+
+                    if (node.Left != null)
+                        leftSD = node.Left.Bounds.SignedDistance(point);
+
+                    if (node.Right != null)
+                        rightSD = node.Right.Bounds.SignedDistance(point);
+
+                    if(leftSD <= sd)
+                        sd = NodeSignedDistance(node.Left, point, sd);
+
+                    if (rightSD <= sd)
+                        sd = NodeSignedDistance(node.Right, point, sd);
                 }
             }
 
