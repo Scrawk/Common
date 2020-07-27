@@ -30,7 +30,7 @@ namespace Common.Geometry.Collections
 
         public BVHTreeNode2f<T> Parent { get; internal set; }
 
-        public Box2f Bounds { get; internal set; }
+        public Box2f Bounds;
 
         public T Shape { get; internal set; }
 

@@ -332,39 +332,19 @@ namespace Common.Geometry.Collections
             return false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         private float NodeSignedDistance(BVHTreeNode2f<T> node, Vector2f point, float sd)
         {
             if (node != null)
             {
-		if(node.IsLeaf || node.Bounds.Contains(point))
-		{
-                	if (node.IsLeaf)
-                	{
-                    		sd = Math.Min(sd, node.Shape.SignedDistance(point));
-                	}
-                	else
-                	{
-                    		sd = NodeSignedDistance(node.Left, point, sd);
-                    		sd = NodeSignedDistance(node.Right, point, sd);
-                	}
-		}
-		else
-		{
-			float leftSD = float.PositiveInfinity;
-			float rightSD = float.PositiveInfinity;
-
-			if(node.Left != null)
-				leftSD = node.Left.Bounds.SignedDistance(point);
-
-			if(node.Right != null)
-				rightSD = node.Right.Bounds.SignedDistance(point);
-
-			var closest = (leftSD < rightSD) ? node.Left : node.Right;
-			sd = NodeSignedDistance(closest, point, sd);
-		}
+                if (node.IsLeaf)
+                {
+                    sd = Math.Min(sd, node.Shape.SignedDistance(point));
+                }
+                else
+                {
+                    sd = NodeSignedDistance(node.Left, point, sd);
+                    sd = NodeSignedDistance(node.Right, point, sd);
+                }
             }
 
             return sd;
