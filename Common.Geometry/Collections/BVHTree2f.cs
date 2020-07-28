@@ -119,7 +119,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         public bool Contains(Vector2f point)
         {
-            return NodeContains(Root, point);
+            return NodeContains(Root, point) != null;
         }
 
         /// <summary>
@@ -144,7 +144,13 @@ namespace Common.Geometry.Collections
         /// </summary>
         public float SignedDistance(Vector2f point)
         {
-            return NodeSignedDistance(Root, point, float.PositiveInfinity);
+            float sd = float.PositiveInfinity;
+
+            var middle = NodeCenterMost(Root, true);
+            if (middle == null) return sd;
+
+            sd = middle.Shape.SignedDistance(point);
+            return NodeSignedDistance(Root, point, sd);
         }
 
         /// <summary>
@@ -271,22 +277,26 @@ namespace Common.Geometry.Collections
         /// Find the leaf node that has a shape containing
         /// this point.
         /// </summary>
-        private bool NodeContains(BVHTreeNode2f<T> node, Vector2f point)
+        private BVHTreeNode2f<T> NodeContains(BVHTreeNode2f<T> node, Vector2f point)
         {
             if (node != null && node.Bounds.Contains(point))
             {
                 if (node.IsLeaf)
                 {
-                    return node.Shape.Contains(point);
+                    if (node.Shape.Contains(point))
+                        return node;
                 }
                 else
                 {
-                    if (NodeContains(node.Left, point)) return true;
-                    if (NodeContains(node.Right, point)) return true;
+                    var left = NodeContains(node.Left, point);
+                    if (left != null) return left;
+
+                    var right = NodeContains(node.Right, point);
+                    if (right != null) return right;
                 }
             }
 
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -332,6 +342,9 @@ namespace Common.Geometry.Collections
             return false;
         }
 
+        /// <summary>
+        /// Find the smallest signed distance to the point.
+        /// </summary>
         private float NodeSignedDistance(BVHTreeNode2f<T> node, Vector2f point, float sd)
         {
             if (node != null)
@@ -360,6 +373,36 @@ namespace Common.Geometry.Collections
             }
 
             return sd;
+        }
+
+        /// <summary>
+        /// Find the node that is center most in the tree.
+        /// </summary>
+        private BVHTreeNode2f<T> NodeCenterMost(BVHTreeNode2f<T> node, bool left)
+        {
+            if (node != null)
+            {
+                if (node.IsLeaf)
+                {
+                    return node;
+                }
+                else
+                {
+                    if(left || node.Right == null)
+                    {
+                        var n = NodeCenterMost(node.Left, !left);
+                        if (n != null) return n;
+                    }
+
+                    if (!left || node.Left == null)
+                    {
+                        var n = NodeCenterMost(node.Right, !left);
+                        if (n != null) return n;
+                    }
+                }
+            }
+
+            return null;
         }
 
         private int MaxDepth(BVHTreeNode2f<T> node, int depth)
