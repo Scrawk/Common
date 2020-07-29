@@ -38,11 +38,24 @@ namespace System
                 array[x] = value;
         }
 
+        public static void Fill<T>(this T[] array, Func<int, T> func)
+        {
+            for (int x = 0; x < array.Length; x++)
+                array[x] = func(x);
+        }
+
         public static void Fill<T>(this T[,] array, T value)
         {
             for (int y = 0; y < array.GetLength(1); y++)
                 for (int x = 0; x < array.GetLength(0); x++)
                     array[x,y] = value;
+        }
+
+        public static void Fill<T>(this T[,] array, Func<int, int, T> func)
+        {
+            for (int y = 0; y < array.GetLength(1); y++)
+                for (int x = 0; x < array.GetLength(0); x++)
+                    array[x, y] = func(x, y);
         }
 
         public static void Fill<T>(this T[,,] array, T value)
@@ -51,6 +64,14 @@ namespace System
                 for (int y = 0; y < array.GetLength(1); y++)
                     for (int x = 0; x < array.GetLength(0); x++)
                         array[x, y, z] = value;
+        }
+
+        public static void Fill<T>(this T[,,] array, Func<int, int, int, T> func)
+        {
+            for (int z = 0; z < array.GetLength(2); z++)
+                for (int y = 0; y < array.GetLength(1); y++)
+                    for (int x = 0; x < array.GetLength(0); x++)
+                        array[x, y, z] = func(x,y,z);
         }
     }
 }
