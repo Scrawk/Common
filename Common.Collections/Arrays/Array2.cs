@@ -155,7 +155,6 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Iterate over the array with the action.
         /// </summary>
-        /// <param name="func"></param>
         public void Iterate(Action<int, int> func)
         {
             for (int y = 0; y < Height; y++)
@@ -165,6 +164,24 @@ namespace Common.Collections.Arrays
                     func(x, y);
                 }
             }
+        }
+
+        /// <summary>
+        /// Iterate over the array with the action in parallel.
+        /// </summary>
+        public void ParallelIterate(int blockSize, Action<int, int> func)
+        {
+            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        func(x, y);
+                    }
+                }
+            });
         }
 
         /// <summary>

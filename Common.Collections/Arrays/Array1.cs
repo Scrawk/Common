@@ -123,13 +123,27 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Iterate over the array with the action.
         /// </summary>
-        /// <param name="func"></param>
         public void Iterate(Action<int> func)
         {
             for (int x = 0; x < Count; x++)
             {
                 func(x);
             }
+        }
+
+        /// <summary>
+        /// Iterate over the array with the action in parallel.
+        /// </summary>
+        public void ParallelIterate(int blockSize, Action<int> func)
+        {
+            var blocks = ThreadingBlock1D.CreateBlocks(Count, blockSize);
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int x = block.Min; x < block.Max; x++)
+                {
+                    func(x);
+                }
+            });
         }
 
         /// <summary>
