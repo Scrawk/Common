@@ -59,6 +59,23 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Is this index in the bounds of the array.
+        /// </summary>
+        public bool InBounds(int x)
+        {
+            if (x < 0 || x >= Count) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Is this index not in the bounds of the array.
+        /// </summary>
+        public bool NotInBounds(int x)
+        {
+            return !InBounds(x);
+        }
+
+        /// <summary>
         /// Enumerate all elements in the array.
         /// </summary>
         /// <returns></returns>
@@ -104,6 +121,18 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Iterate over the array with the action.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Iterate(Action<int> func)
+        {
+            for (int x = 0; x < Count; x++)
+            {
+                func(x);
+            }
+        }
+
+        /// <summary>
         /// Fill the array with the value.
         /// </summary>
         public void Fill(T value)
@@ -128,13 +157,38 @@ namespace Common.Collections.Arrays
         public void ParallelFill(int blockSize, Func<int, T> func)
         {
             var blocks = ThreadingBlock1D.CreateBlocks(Count, blockSize);
-
             Parallel.ForEach(blocks, (block) =>
             {
                     for (int x = block.Min; x < block.Max; x++)
                     {
                         Data[x] = func(x);
                     }
+            });
+        }
+
+        /// <summary>
+        /// Modify the array with the function.
+        /// </summary>
+        public void Modify(Func<T, T> func)
+        {
+            for (int x = 0; x < Count; x++)
+            {
+                Data[x] = func(Data[x]);
+            }
+        }
+
+        /// <summary>
+        /// Modify the array with the function in parallel.
+        /// </summary>
+        public void ParallelModify(int blockSize, Func<T, T> func)
+        {
+            var blocks = ThreadingBlock1D.CreateBlocks(Count, blockSize);
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int x = block.Min; x < block.Max; x++)
+                {
+                    Data[x] = func(Data[x]);
+                }
             });
         }
     }

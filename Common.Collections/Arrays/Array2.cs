@@ -88,6 +88,24 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Are the x and y index in the bounds of the array.
+        /// </summary>
+        public bool InBounds(int x, int y)
+        {
+            if (x < 0 || x >= Width) return false;
+            if (y < 0 || y >= Height) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Are the x and y index not in the bounds of the array.
+        /// </summary>
+        public bool NotInBounds(int x, int y)
+        {
+            return !InBounds(x, y);
+        }
+
+        /// <summary>
         /// Enumerate all elements in the array.
         /// </summary>
         /// <returns></returns>
@@ -132,6 +150,21 @@ namespace Common.Collections.Arrays
             x = MathUtil.Wrap(x, Width);
             y = MathUtil.Wrap(y, Height);
             return Data[x, y];
+        }
+
+        /// <summary>
+        /// Iterate over the array with the action.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Iterate(Action<int, int> func)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    func(x, y);
+                }
+            }
         }
 
         /// <summary>
