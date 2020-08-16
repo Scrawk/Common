@@ -213,7 +213,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public static bool InCircle(VECTOR2 a, VECTOR2 b, VECTOR2 c, VECTOR2 d)
         {
-            return  (a.x * a.x + a.y * a.y) * Triangle2d.CrossProductArea(b, c, d) -
+            return (a.x * a.x + a.y * a.y) * Triangle2d.CrossProductArea(b, c, d) -
                     (b.x * b.x + b.y * b.y) * Triangle2d.CrossProductArea(a, c, d) +
                     (c.x * c.x + c.y * c.y) * Triangle2d.CrossProductArea(a, b, d) -
                     (d.x * d.x + d.y * d.y) * Triangle2d.CrossProductArea(a, b, c) > 0;

@@ -464,7 +464,14 @@ namespace Common.Geometry.Points
         {
             public int Compare(T v0, T v1)
             {
-                return v0.x.CompareTo(v1.x);
+                if (v0.x != v1.x)
+                    return v0.x < v1.x ? -1 : 1;
+                else if (v0.y != v1.y)
+                    return v0.y < v1.y ? -1 : 1;
+                else if (v0.z != v1.z)
+                    return v0.z < v1.z ? -1 : 1;
+
+                return 0;
             }
         }
 
@@ -472,7 +479,14 @@ namespace Common.Geometry.Points
         {
             public int Compare(T v0, T v1)
             {
-                return v0.y.CompareTo(v1.y);
+                if (v0.y != v1.y)
+                    return v0.y < v1.y ? -1 : 1;
+                else if (v0.z != v1.z)
+                    return v0.z < v1.z ? -1 : 1;
+                else if (v0.x != v1.x)
+                    return v0.x < v1.x ? -1 : 1;
+
+                return 0;
             }
         }
 
@@ -480,7 +494,14 @@ namespace Common.Geometry.Points
         {
             public int Compare(T v0, T v1)
             {
-                return v0.z.CompareTo(v1.z);
+                if (v0.z != v1.z)
+                    return v0.z < v1.z ? -1 : 1;
+                else if (v0.x != v1.x)
+                    return v0.x < v1.x ? -1 : 1;
+                else if (v0.y != v1.y)
+                    return v0.y < v1.y ? -1 : 1;
+
+                return 0;
             }
         }
 
