@@ -27,9 +27,12 @@ namespace Common.Core.Colors
         public readonly static ColorRGBA Purple = new ColorRGBA(0.5, 0, 0.5, 1);
         public readonly static ColorRGBA Magenta = new ColorRGBA(1, 0, 1, 1);
 
-        public readonly static ColorRGBA Black = new ColorRGBA(0, 0, 0, 1);
-        public readonly static ColorRGBA White = new ColorRGBA(1, 1, 1, 1);
-        public readonly static ColorRGBA Clear = new ColorRGBA(0, 0, 0, 0);
+        public readonly static ColorRGBA Black = new ColorRGBA(0, 1);
+        public readonly static ColorRGBA DarkGrey = new ColorRGBA(0.25f, 1);
+        public readonly static ColorRGBA Grey = new ColorRGBA(0.5f, 1);
+        public readonly static ColorRGBA LightGrey = new ColorRGBA(0.75f, 1);
+        public readonly static ColorRGBA White = new ColorRGBA(1, 1);
+        public readonly static ColorRGBA Clear = new ColorRGBA(0, 0);
 
         public float r, g, b, a;
 
@@ -80,7 +83,7 @@ namespace Common.Core.Colors
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGBA(double v, double a) : this(v, v, v, 1)
+        public ColorRGBA(double v, double a) : this(v, v, v, a)
         {
 
         }

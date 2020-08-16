@@ -70,7 +70,7 @@ namespace Common.Geometry.Points
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Point3f : IEquatable<Point3f>, IComparable<Point3f>
+    public struct Point3f : IEquatable<Point3f>, IComparable<Point3f>, IPoint3f
     {
         private REAL _x, _y, _z;
 
@@ -435,22 +435,24 @@ namespace Common.Geometry.Points
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(REAL min, REAL max)
+        public static Point3f Clamp(Point3f p, REAL min, REAL max)
         {
-            x = Math.Max(Math.Min(x, max), min);
-            y = Math.Max(Math.Min(y, max), min);
-            z = Math.Max(Math.Min(z, max), min);
+            p.x = Math.Max(Math.Min(p.x, max), min);
+            p.y = Math.Max(Math.Min(p.y, max), min);
+            p.z = Math.Max(Math.Min(p.z, max), min);
+            return p;
         }
 
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(Point3f min, Point3f max)
+        public static Point3f Clamp(Point3f p, Point3f min, Point3f max)
         {
-            x = Math.Max(Math.Min(x, max.x), min.x);
-            y = Math.Max(Math.Min(y, max.y), min.y);
-            z = Math.Max(Math.Min(z, max.z), min.z);
+            p.x = Math.Max(Math.Min(p.x, max.x), min.x);
+            p.y = Math.Max(Math.Min(p.y, max.y), min.y);
+            p.z = Math.Max(Math.Min(p.z, max.z), min.z);
+            return p;
         }
 
         /// <summary>
@@ -472,12 +474,27 @@ namespace Common.Geometry.Points
             return v;
         }
 
+        /// <summary>
+        /// A rounded point.
+        /// </summary>
+        /// <param name="digits"></param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round(int digits = 0)
+        public Point3f Rounded(int digits = 0)
         {
-            x = (REAL)Math.Round(x, digits);
-            y = (REAL)Math.Round(y, digits);
-            z = (REAL)Math.Round(z, digits);
+            x = MathUtil.Round(this.x, digits);
+            y = MathUtil.Round(this.y, digits);
+            z = MathUtil.Round(this.z, digits);
+            return new Point3f(x, y, z);
+        }
+
+        /// <summary>
+        /// Convert to vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3f ToVector3f()
+        {
+            return new Vector3f(x, y, z);
         }
 
     }

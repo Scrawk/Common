@@ -416,20 +416,22 @@ namespace Common.Geometry.Points
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(REAL min, REAL max)
+        public static Point2f Clamp(Point2f p, REAL min, REAL max)
         {
-            x = Math.Max(Math.Min(x, max), min);
-            y = Math.Max(Math.Min(y, max), min);
+            p.x = Math.Max(Math.Min(p.x, max), min);
+            p.y = Math.Max(Math.Min(p.y, max), min);
+            return p;
         }
 
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(Point2f min, Point2f max)
+        public static Point2f Clamp(Point2f p, Point2f min, Point2f max)
         {
-            x = Math.Max(Math.Min(x, max.x), min.x);
-            y = Math.Max(Math.Min(y, max.y), min.y);
+            p.x = Math.Max(Math.Min(p.x, max.x), min.x);
+            p.y = Math.Max(Math.Min(p.y, max.y), min.y);
+            return p;
         }
 
         /// <summary>
@@ -451,14 +453,25 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Round point.
+        /// A rounded point.
         /// </summary>
-        /// <param name="digits">number of digits to round to.</param>
+        /// <param name="digits"></param>
+        /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round(int digits = 0)
+        public Point2f Rounded(int digits = 0)
         {
-            x = (REAL)Math.Round(x, digits);
-            y = (REAL)Math.Round(y, digits);
+            x = MathUtil.Round(this.x, digits);
+            y = MathUtil.Round(this.y, digits);
+            return new Point2f(x, y);
+        }
+
+        /// <summary>
+        /// Convert to vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector2f ToVector2f()
+        {
+            return new Vector2f(x, y);
         }
 
     }

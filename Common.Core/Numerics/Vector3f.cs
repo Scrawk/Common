@@ -208,6 +208,30 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// The sum of the vector.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y + z;
+            }
+        }
+
+        /// <summary>
+        /// The multiple of the vector.
+        /// </summary>
+        public REAL Product
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y * z;
+            }
+        }
+
+        /// <summary>
         /// The length of the vector.
         /// </summary>
         public REAL Magnitude
@@ -674,25 +698,27 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Clamp the each component to specified min and max.
+        /// Clamp each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(REAL min, REAL max)
-		{
-			x = Math.Max(Math.Min(x, max), min);
-			y = Math.Max(Math.Min(y, max), min);
-			z = Math.Max(Math.Min(z, max), min);
-		}
+        public static Vector3f Clamp(Vector3f v, REAL min, REAL max)
+        {
+            v.x = Math.Max(Math.Min(v.x, max), min);
+            v.y = Math.Max(Math.Min(v.y, max), min);
+            v.z = Math.Max(Math.Min(v.z, max), min);
+            return v;
+        }
 
         /// <summary>
-        /// Clamp the each component to specified min and max.
+        /// Clamp each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(Vector3f min, Vector3f max)
+        public static Vector3f Clamp(Vector3f v, Vector3f min, Vector3f max)
         {
-            x = Math.Max(Math.Min(x, max.x), min.x);
-            y = Math.Max(Math.Min(y, max.y), min.y);
-            z = Math.Max(Math.Min(z, max.z), min.z);
+            v.x = Math.Max(Math.Min(v.x, max.x), min.x);
+            v.y = Math.Max(Math.Min(v.y, max.y), min.y);
+            v.z = Math.Max(Math.Min(v.z, max.z), min.z);
+            return v;
         }
 
         /// <summary>
@@ -745,12 +771,17 @@ namespace Common.Core.Numerics
             return v;
         }
 
+        /// <summary>
+        /// Round vector.
+        /// </summary>
+        /// <param name="digits">number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round(int digits = 0)
+        public Vector3f Rounded(int digits)
         {
-            x = (REAL)Math.Round(x, digits);
-            y = (REAL)Math.Round(y, digits);
-            z = (REAL)Math.Round(z, digits);
+            REAL x = MathUtil.Round(this.x, digits);
+            REAL y = MathUtil.Round(this.y, digits);
+            REAL z = MathUtil.Round(this.z, digits);
+            return new Vector3f(x, y, z);
         }
 
     }

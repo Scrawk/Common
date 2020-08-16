@@ -27,8 +27,11 @@ namespace Common.Core.Colors
         public readonly static ColorRGB Purple = new ColorRGB(0.5, 0, 0.5);
         public readonly static ColorRGB Magenta = new ColorRGB(1, 0, 1);
 
-        public readonly static ColorRGB Black = new ColorRGB(0, 0, 0);
-        public readonly static ColorRGB White = new ColorRGB(1, 1, 1);
+        public readonly static ColorRGB Black = new ColorRGB(0);
+        public readonly static ColorRGB DarkGrey = new ColorRGB(0.25f);
+        public readonly static ColorRGB Grey = new ColorRGB(0.5f);
+        public readonly static ColorRGB LightGrey = new ColorRGB(0.75f);
+        public readonly static ColorRGB White = new ColorRGB(1);
 
         public float r, g, b;
 

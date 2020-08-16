@@ -11,6 +11,15 @@ namespace System
             Array.Clear(array, 0, array.Length);
         }
 
+        public static int IndexOf<T>(this T[] array, T value)
+        {
+            for (int i = 0; i < array.Length; i++)
+                if (EqualityComparer<T>.Default.Equals(array[i], value))
+                    return i;
+
+            return -1;
+        }
+
         public static T[] Copy<T>(this T[] array)
         {
             var dest = new T[array.Length];
@@ -73,5 +82,6 @@ namespace System
                     for (int x = 0; x < array.GetLength(0); x++)
                         array[x, y, z] = func(x,y,z);
         }
+
     }
 }

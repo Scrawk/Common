@@ -15,23 +15,23 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void Count()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
             Assert.AreEqual(0, collection.Count);
 
-            collection.Add(new Vector3f(1, 1));
+            collection.Add(new Point3f(1, 1, 1));
             Assert.AreEqual(1, collection.Count);
 
             collection.Add(RandomPoints(5, 0, -5, 5));
             Assert.AreEqual(6, collection.Count);
 
-            collection.Remove(new Vector3f(1, 1));
+            collection.Remove(new Point3f(1, 1, 1));
             Assert.AreEqual(5, collection.Count);
         }
 
         [TestMethod]
         public void Clear()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
 
             collection.Add(RandomPoints(5, 0, -5, 5));
             collection.Clear();
@@ -41,11 +41,11 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void Enumerable()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
             var points = RandomPoints(5, 0, -5, 5);
             collection.Add(points);
 
-            var list = new List<Vector3f>();
+            var list = new List<Point3f>();
 
             foreach (var p in collection)
                 list.Add(p);
@@ -56,7 +56,7 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void ToList()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
             var points = RandomPoints(5, 0, -5, 5);
             collection.Add(points);
 
@@ -67,7 +67,7 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void Add()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
 
             var points = RandomPoints(5, 0, -5, 5);
 
@@ -81,7 +81,7 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void Remove()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
 
             var points = RandomPoints(5, 0, -5, 5);
             collection.Add(points);
@@ -102,26 +102,26 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void Closest()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
 
             for (int i = 0; i <= 5; i++)
-                collection.Add(new Vector3f(i));
+                collection.Add(new Point3f(i));
 
-            Assert.AreEqual(new Vector3f(0), collection.Closest(new Vector3f(-1)));
-            Assert.AreEqual(new Vector3f(5), collection.Closest(new Vector3f(6)));
-            Assert.AreEqual(new Vector3f(2), collection.Closest(new Vector3f(2.1f, 2, 1.9f)));
-            Assert.AreEqual(new Vector3f(3), collection.Closest(new Vector3f(3, 3.1f, 2.0f)));
+            Assert.AreEqual(new Point3f(0), collection.Closest(new Point3f(-1)));
+            Assert.AreEqual(new Point3f(5), collection.Closest(new Point3f(6)));
+            Assert.AreEqual(new Point3f(2), collection.Closest(new Point3f(2.1f, 2, 1.9f)));
+            Assert.AreEqual(new Point3f(3), collection.Closest(new Point3f(3, 3.1f, 2.0f)));
         }
 
         [TestMethod]
         public void Search()
         {
-            var collection = new PointCollection3f();
+            var collection = new PointCollection3f<Point3f>();
 
             for (int i = 0; i <= 5; i++)
-                collection.Add(new Vector3f(i));
+                collection.Add(new Point3f(i));
 
-            var results = new List<Vector3f>();
+            var results = new List<Point3f>();
             var region = new Sphere3f(new Vector3f(2.5f), 5);
             collection.Search(region, results);
 
@@ -129,27 +129,27 @@ namespace Common.Geometry.Test.Points
             Assert.AreEqual(6, results.Count);
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector3f>();
+            results = new List<Point3f>();
             region = new Sphere3f(new Vector3f(2), 0.1f);
             collection.Search(region, results);
 
             Console.WriteLine(region.Contains(new Vector3f(2)));
 
-            list = new List<Vector3f>() { new Vector3f(2) };
+            list = new List<Point3f>() { new Point3f(2) };
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector3f>();
+            results = new List<Point3f>();
             region = new Sphere3f(new Vector3f(3.5f), 1);
             collection.Search(region, results);
 
-            list = new List<Vector3f>() { new Vector3f(3), new Vector3f(4) };
+            list = new List<Point3f>() { new Point3f(3), new Point3f(4) };
             CollectionAssert.AreEquivalent(list, results);
         }
 
-        private List<Vector3f> RandomPoints(int count, int seed, float min, float max)
+        private List<Point3f> RandomPoints(int count, int seed, float min, float max)
         {
             var rnd = new Random(seed);
-            List<Vector3f> points = new List<Vector3f>(count);
+            List<Point3f> points = new List<Point3f>(count);
 
             for (int i = 0; i < count; i++)
             {
@@ -157,7 +157,7 @@ namespace Common.Geometry.Test.Points
                 float y = min + rnd.NextFloat() * (max - min);
                 float z = min + rnd.NextFloat() * (max - min);
 
-                points.Add(new Vector3f(x, y, z));
+                points.Add(new Point3f(x, y, z));
             }
 
             return points;

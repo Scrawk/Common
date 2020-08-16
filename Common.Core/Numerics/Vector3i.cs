@@ -173,6 +173,30 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// The sum of the vector.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y + z;
+            }
+        }
+
+        /// <summary>
+        /// The multiple of the vector.
+        /// </summary>
+        public REAL Product
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y * z;
+            }
+        }
+
+        /// <summary>
         /// The length of the vector.
         /// </summary>
         public double Magnitude

@@ -261,11 +261,11 @@ namespace Common.Core.Test.Numerics
         public void Clamp()
         {
             VECTOR v = new VECTOR(0.4f, 1.6f);
-            v.Clamp(0.5f, 1.5f);
+            v = VECTOR.Clamp(v, 0.5f, 1.5f);
             Assert.AreEqual(v, new VECTOR(0.5f, 1.5f));
 
             v = new VECTOR(0.4f, 1.6f);
-            v.Clamp(new VECTOR(0.5f, 1.5f), new VECTOR(0.5f, 1.5f));
+            v = VECTOR.Clamp(v, new VECTOR(0.5f, 1.5f), new VECTOR(0.5f, 1.5f));
             Assert.AreEqual(v, new VECTOR(0.5f, 1.5f));
         }
 

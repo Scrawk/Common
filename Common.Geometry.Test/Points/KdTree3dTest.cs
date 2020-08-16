@@ -16,7 +16,7 @@ namespace Common.Geometry.Test.Points
         public void Count()
         {
             var points = RandomPoints(6, 0, -5, 5);
-            var collection = new KdTree3f(points);
+            var collection = new KdTree3f<Point3f>(points);
             Assert.AreEqual(6, collection.Count);
         }
 
@@ -24,7 +24,7 @@ namespace Common.Geometry.Test.Points
         public void Clear()
         {
             var points = RandomPoints(5, 0, -5, 5);
-            var collection = new KdTree3f(points);
+            var collection = new KdTree3f<Point3f>(points);
 
             collection.Clear();
             Assert.AreEqual(0, collection.Count);
@@ -34,9 +34,9 @@ namespace Common.Geometry.Test.Points
         public void Enumerable()
         {
             var points = RandomPoints(5, 0, -5, 5);
-            var collection = new KdTree3f(points);
+            var collection = new KdTree3f<Point3f>(points);
 
-            var list = new List<Vector3f>();
+            var list = new List<Point3f>();
             foreach (var p in collection)
             {
                 list.Add(p);
@@ -49,7 +49,7 @@ namespace Common.Geometry.Test.Points
         public void ToList()
         {
             var points = RandomPoints(5, 0, -5, 5);
-            var collection = new KdTree3f(points);
+            var collection = new KdTree3f<Point3f>(points);
 
             var list = collection.ToList();
             CollectionAssert.AreEquivalent(points, list);
@@ -58,48 +58,48 @@ namespace Common.Geometry.Test.Points
         [TestMethod]
         public void Closest()
         {
-            var points = new List<Vector3f>();
+            var points = new List<Point3f>();
 
             for (int i = 0; i <= 5; i++)
-                points.Add(new Vector3f(i));
+                points.Add(new Point3f(i));
 
-            var collection = new KdTree3f(points);
+            var collection = new KdTree3f<Point3f>(points);
 
-            Assert.AreEqual(new Vector3f(0), collection.Closest(new Vector3f(-1)));
-            Assert.AreEqual(new Vector3f(5), collection.Closest(new Vector3f(6)));
-            Assert.AreEqual(new Vector3f(2), collection.Closest(new Vector3f(2.1f, 2, 1.9f)));
-            Assert.AreEqual(new Vector3f(3), collection.Closest(new Vector3f(3, 3.1f, 2.9f)));
+            Assert.AreEqual(new Point3f(0), collection.Closest(new Point3f(-1)));
+            Assert.AreEqual(new Point3f(5), collection.Closest(new Point3f(6)));
+            Assert.AreEqual(new Point3f(2), collection.Closest(new Point3f(2.1f, 2, 1.9f)));
+            Assert.AreEqual(new Point3f(3), collection.Closest(new Point3f(3, 3.1f, 2.9f)));
 
         }
 
         [TestMethod]
         public void Search()
         {
-            var points = new List<Vector3f>();
+            var points = new List<Point3f>();
             for (int i = 0; i <= 5; i++)
-                points.Add(new Vector3f(i));
+                points.Add(new Point3f(i));
 
-            var collection = new KdTree3f(points);
+            var collection = new KdTree3f<Point3f>(points);
 
-            var results = new List<Vector3f>();
+            var results = new List<Point3f>();
             var region = new Sphere3f(new Vector3f(2.5f), 5);
             collection.Search(region, results);
 
             var list = collection.ToList();
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector3f>();
+            results = new List<Point3f>();
             region = new Sphere3f(new Vector3f(2), 0.1f);
             collection.Search(region, results);
 
-            list = new List<Vector3f>() { new Vector3f(2) };
+            list = new List<Point3f>() { new Point3f(2) };
             CollectionAssert.AreEquivalent(list, results);
 
-            results = new List<Vector3f>();
+            results = new List<Point3f>();
             region = new Sphere3f(new Vector3f(3.5f), 1);
             collection.Search(region, results);
 
-            list = new List<Vector3f>() { new Vector3f(3), new Vector3f(4) };
+            list = new List<Point3f>() { new Point3f(3), new Point3f(4) };
             CollectionAssert.AreEquivalent(list, results);
         }
 
@@ -108,8 +108,8 @@ namespace Common.Geometry.Test.Points
         {
             var points = RandomPoints(1000, 0, -5, 5);
 
-            var naive = new PointCollection3f(points);
-            var tree = new KdTree3f(points);
+            var naive = new PointCollection3f<Point3f>(points);
+            var tree = new KdTree3f<Point3f>(points);
 
             for (int i = 0; i < 100; i++)
             {
@@ -120,9 +120,9 @@ namespace Common.Geometry.Test.Points
             for (int i = 0; i < 100; i++)
             {
                 var p = RandomPoint(i, -5, 5);
-                var region = new Sphere3f(p, 0.1f);
-                var list0 = new List<Vector3f>();
-                var list1 = new List<Vector3f>();
+                var region = new Sphere3f(new Vector3f(p.x, p.y, p.z), 0.1f);
+                var list0 = new List<Point3f>();
+                var list1 = new List<Point3f>();
 
                 naive.Search(region, list0);
                 tree.Search(region, list1);
@@ -131,10 +131,10 @@ namespace Common.Geometry.Test.Points
             }
         }
 
-        private List<Vector3f> RandomPoints(int count, int seed, float min, float max)
+        private List<Point3f> RandomPoints(int count, int seed, float min, float max)
         {
             var rnd = new Random(seed);
-            List<Vector3f> points = new List<Vector3f>(count);
+            List<Point3f> points = new List<Point3f>(count);
 
             for (int i = 0; i < count; i++)
             {
@@ -142,19 +142,19 @@ namespace Common.Geometry.Test.Points
                 float y = min + rnd.NextFloat() * (max - min);
                 float z = min + rnd.NextFloat() * (max - min);
 
-                points.Add(new Vector3f(x, y, z));
+                points.Add(new Point3f(x, y, z));
             }
 
             return points;
         }
-        private Vector3f RandomPoint(int seed, float min, float max)
+        private Point3f RandomPoint(int seed, float min, float max)
         {
             var rnd = new Random(seed);
             float x = min + rnd.NextFloat() * (max - min);
             float y = min + rnd.NextFloat() * (max - min);
             float z = min + rnd.NextFloat() * (max - min);
 
-            return new Vector3f(x, y, z);
+            return new Point3f(x, y, z);
         }
 
     }

@@ -141,6 +141,30 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// The sum of the vector.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y;
+            }
+        }
+
+        /// <summary>
+        /// The multiple of the vector.
+        /// </summary>
+        public REAL Product
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y;
+            }
+        }
+
+        /// <summary>
         /// The length of the vector.
         /// </summary>
         public REAL Magnitude
@@ -588,23 +612,25 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Clamp the each component to specified min and max.
+        /// Clamp each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(REAL min, REAL max)
-		{
-			x = Math.Max(Math.Min(x, max), min);
-			y = Math.Max(Math.Min(y, max), min);
-		}
+        public static Vector2f Clamp(Vector2f v, REAL min, REAL max)
+        {
+            v.x = Math.Max(Math.Min(v.x, max), min);
+            v.y = Math.Max(Math.Min(v.y, max), min);
+            return v;
+        }
 
         /// <summary>
-        /// Clamp the each component to specified min and max.
+        /// Clamp each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(Vector2f min, Vector2f max)
+        public static Vector2f Clamp(Vector2f v, Vector2f min, Vector2f max)
         {
-            x = Math.Max(Math.Min(x, max.x), min.x);
-            y = Math.Max(Math.Min(y, max.y), min.y);
+            v.x = Math.Max(Math.Min(v.x, max.x), min.x);
+            v.y = Math.Max(Math.Min(v.y, max.y), min.y);
+            return v;
         }
 
         /// <summary>
@@ -660,10 +686,11 @@ namespace Common.Core.Numerics
         /// </summary>
         /// <param name="digits">number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round(int digits = 0)
+        public Vector2f Rounded(int digits)
         {
-            x = (REAL)Math.Round(x, digits);
-            y = (REAL)Math.Round(y, digits);
+            REAL x = MathUtil.Round(this.x, digits);
+            REAL y = MathUtil.Round(this.y, digits);
+            return new Vector2f(x, y);
         }
 
         /// <summary>
