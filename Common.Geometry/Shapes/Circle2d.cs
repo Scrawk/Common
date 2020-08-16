@@ -6,7 +6,9 @@ using Common.Core.Numerics;
 
 using REAL = System.Double;
 using VECTOR2 = Common.Core.Numerics.Vector2d;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
 using BOX2 = Common.Geometry.Shapes.Box2d;
+using MATRIX3 = Common.Core.Numerics.Matrix3x3d;
 
 namespace Common.Geometry.Shapes
 {
@@ -235,24 +237,24 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public static Circle2d CircumCircle(VECTOR2 p0, VECTOR2 p1, VECTOR2 p2)
         {
-            var m = new Matrix3x3f();
+            var m = new MATRIX3();
 
             // x, y, 1
-            m.SetRow(0, new Vector3f(p0.x, p0.y, 1));
-            m.SetRow(1, new Vector3f(p1.x, p1.y, 1));
-            m.SetRow(2, new Vector3f(p2.x, p2.y, 1));
+            m.SetRow(0, new VECTOR3(p0.x, p0.y, 1));
+            m.SetRow(1, new VECTOR3(p1.x, p1.y, 1));
+            m.SetRow(2, new VECTOR3(p2.x, p2.y, 1));
             REAL a = m.Determinant;
 
             // size, y, 1
-            m.SetColumn(0, new Vector3f(p0.SqrMagnitude, p1.SqrMagnitude, p2.SqrMagnitude));
+            m.SetColumn(0, new VECTOR3(p0.SqrMagnitude, p1.SqrMagnitude, p2.SqrMagnitude));
             REAL dx = -m.Determinant;
 
             // size, x, 1
-            m.SetColumn(1, new Vector3f(p0.x, p1.x, p2.x));
+            m.SetColumn(1, new VECTOR3(p0.x, p1.x, p2.x));
             REAL dy = m.Determinant;
 
             // size, x, y
-            m.SetColumn(2, new Vector3f(p0.y, p1.y, p2.y));
+            m.SetColumn(2, new VECTOR3(p0.y, p1.y, p2.y));
             REAL c = -m.Determinant;
 
             REAL s = -1.0 / (2.0 * a);

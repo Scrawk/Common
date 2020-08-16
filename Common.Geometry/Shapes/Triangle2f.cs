@@ -56,6 +56,113 @@ namespace Common.Geometry.Shapes
             get { return ((A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x)) * 0.5f; }
         }
 
+        /// <summary>
+        /// The side lengths are given as
+        /// a = sqrt((cx - bx)^2 + (cy - by)^2) -- side BC opposite of A
+        /// b = sqrt((cx - ax)^2 + (cy - ay)^2) -- side CA opposite of B
+        /// c = sqrt((ax - bx)^2 + (ay - by)^2) -- side AB opposite of C
+        /// </summary>
+        public VECTOR3 SideLengths
+        {
+            get
+            {
+                var a = MathUtil.Sqrt(MathUtil.Sqr(C.x - B.x) + MathUtil.Sqr(C.y - B.y));
+                var b = MathUtil.Sqrt(MathUtil.Sqr(C.x - A.x) + MathUtil.Sqr(C.y - A.y));
+                var c = MathUtil.Sqrt(MathUtil.Sqr(A.x - B.x) + MathUtil.Sqr(A.y - B.y));
+                return new VECTOR3(a, b, c);
+            }
+        }
+
+        /// <summary>
+        /// The side lengths are given as
+        /// ang_a = acos((b^2 + c^2 - a^2)  / (2 * b * c)) -- angle at A
+        /// ang_b = acos((c^2 + a^2 - b^2)  / (2 * c * a)) -- angle at B
+        /// ang_c = acos((a^2 + b^2 - c^2)  / (2 * a * b)) -- angle at C
+        /// </summary>
+        public VECTOR3 Angles
+        {
+            get
+            {
+                var len = SideLengths;
+                var a2 = len.a * len.a;
+                var b2 = len.b * len.b;
+                var c2 = len.c * len.c;
+                var a = MathUtil.Acos((b2 + c2 - a2) * (2 * len.b * len.c));
+                var b = MathUtil.Acos((c2 + a2 - b2) * (2 * len.c * len.a));
+                var c = MathUtil.Acos((a2 + b2 - c2) * (2 * len.a * len.b));
+                return new VECTOR3(a, b, c);
+            }
+        }
+
+        /// <summary>
+        /// The semiperimeter is given as
+        /// s = (a + b + c) / 2
+        /// </summary>
+        public REAL Semiperimeter
+        {
+            get
+            {
+                return SideLengths.Sum / 2;
+            }
+        }
+
+        /// <summary>
+        /// The inradius is given as
+        ///   r = D / s
+        /// </summary>
+        public REAL Inradius
+        {
+            get
+            {
+                return Area / Semiperimeter;
+            }
+        }
+
+        /// <summary>
+        /// The circumradius is given as
+        ///   R = a * b * c / (4 * D)
+        /// </summary>
+        public REAL Circumradius
+        {
+            get
+            {
+                return SideLengths.Product / (4 * Area);
+            }
+        }
+
+        /// <summary>
+        /// The altitudes are given as
+        ///   alt_a = 2 * D / a -- altitude above side a
+        ///   alt_b = 2 * D / b -- altitude above side b
+        ///   alt_c = 2 * D / c -- altitude above side c
+        /// </summary>
+        public VECTOR3 Altitudes
+        {
+            get
+            {
+                var a = 2 * Area / SideLengths.a;
+                var b = 2 * Area / SideLengths.b;
+                var c = 2 * Area / SideLengths.c;
+                return new VECTOR3(a, b, c);
+            }
+        }
+
+        /// <summary>
+        /// The aspect ratio may be given as the ratio of the longest to the
+        /// shortest edge or, more commonly as the ratio of the circumradius 
+        /// to twice the inradius
+        ///   ar = R / (2 * r)
+        ///      = a * b * c / (8 * (s - a) * (s - b) * (s - c))
+        ///      = a * b * c / ((b + c - a) * (c + a - b) * (a + b - c))
+        /// </summary>
+        public REAL AspectRatio
+        {
+            get
+            {
+                return Circumradius / (2 * Inradius);
+            }
+        }
+
         public BOX2 Bounds
         {
             get
