@@ -7,6 +7,7 @@ using REAL = System.Single;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
 using VECTOR3 = Common.Core.Numerics.Vector3f;
 using BOX2 = Common.Geometry.Shapes.Box2f;
+using CIRCLE2 = Common.Geometry.Shapes.Circle2f;
 using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
 
 namespace Common.Geometry.Shapes
@@ -36,25 +37,25 @@ namespace Common.Geometry.Shapes
             C = new VECTOR2(cx, cy);
         }
 
-        public VECTOR2 Center
-        {
-            get { return (A + B + C) / 3.0f; }
-        }
+        /// <summary>
+        /// The average of the triangles positions.
+        /// </summary>
+        public VECTOR2 Center => (A + B + C) / 3.0f;
 
-        public bool IsCCW
-        {
-            get { return SignedArea > 0; }
-        }
+        /// <summary>
+        /// Is the triangle orientated ccw.
+        /// </summary>
+        public bool IsCCW => SignedArea > 0;
 
-        public REAL Area
-        {
-            get { return Math.Abs(SignedArea); }
-        }
+        /// <summary>
+        /// The triangles area.
+        /// </summary>
+        public REAL Area => Math.Abs(SignedArea);
 
-        public REAL SignedArea
-        {
-            get { return ((A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x)) * 0.5f; }
-        }
+        /// <summary>
+        /// The triangles signed area.
+        /// </summary>
+        public REAL SignedArea => ((A.x - C.x) * (B.y - C.y) - (A.y - C.y) * (B.x - C.x)) * 0.5f;
 
         /// <summary>
         /// The side lengths are given as
@@ -98,37 +99,28 @@ namespace Common.Geometry.Shapes
         /// The semiperimeter is given as
         /// s = (a + b + c) / 2
         /// </summary>
-        public REAL Semiperimeter
-        {
-            get
-            {
-                return SideLengths.Sum / 2;
-            }
-        }
+        public REAL SemiPerimeter => SideLengths.Sum / 2;
 
         /// <summary>
         /// The inradius is given as
-        ///   r = D / s
+        /// r = D / s
+        /// This is the radius of the largest circle that can
+        /// fit within the triangle. Not the same as the 
+        /// circum circles radius.
         /// </summary>
-        public REAL Inradius
-        {
-            get
-            {
-                return Area / Semiperimeter;
-            }
-        }
+        public REAL InRadius => MathUtil.SafeDiv(Area, SemiPerimeter);
 
         /// <summary>
         /// The circumradius is given as
         ///   R = a * b * c / (4 * D)
         /// </summary>
-        public REAL Circumradius
-        {
-            get
-            {
-                return SideLengths.Product / (4 * Area);
-            }
-        }
+        public REAL CircumRadius => SideLengths.Product / (4 * Area);
+
+        /// <summary>
+        /// The circum circle formed by the 
+        /// triangles points.
+        /// </summary>
+        public CIRCLE2 CircumCircle => CIRCLE2.CircumCircle(A, B, C);
 
         /// <summary>
         /// The altitudes are given as
@@ -155,13 +147,7 @@ namespace Common.Geometry.Shapes
         ///      = a * b * c / (8 * (s - a) * (s - b) * (s - c))
         ///      = a * b * c / ((b + c - a) * (c + a - b) * (a + b - c))
         /// </summary>
-        public REAL AspectRatio
-        {
-            get
-            {
-                return Circumradius / (2 * Inradius);
-            }
-        }
+        public REAL AspectRatio => CircumRadius / (2 * InRadius);
 
         public BOX2 Bounds
         {
