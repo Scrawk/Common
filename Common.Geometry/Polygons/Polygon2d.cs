@@ -1,13 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
-using SEGMENT2 = Common.Geometry.Shapes.Segment2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
+using SEGMENT2 = Common.Geometry.Shapes.Segment2d;
 
 namespace Common.Geometry.Polygons
 {
@@ -15,14 +15,14 @@ namespace Common.Geometry.Polygons
     /// A simple polygon with no holes.
     /// Maybe CCW or CW.
     /// </summary>
-    public class Polygon2f : Polyobject2f
+    public class Polygon2d : Polyobject2d
     {
 
-        public Polygon2f(int count) : base(count)
+        public Polygon2d(int count) : base(count)
         {
         }
 
-        public Polygon2f(IList<VECTOR2> positions) : base(positions)
+        public Polygon2d(IList<VECTOR2> positions) : base(positions)
         {
 
         }
@@ -41,7 +41,7 @@ namespace Common.Geometry.Polygons
 
         public override string ToString()
         {
-            return string.Format("[Polygon2f: Count={0}, Length={1}, Area={2}, IsCCW={3}]",
+            return string.Format("[Polygon2d: Count={0}, Length={1}, Area={2}, IsCCW={3}]",
                 Count, Length, Area, IsCCW);
         }
 
@@ -105,9 +105,9 @@ namespace Common.Geometry.Polygons
         /// Copy the polygon.
         /// No need to recalculate the copy.
         /// </summary>
-        public Polygon2f Copy()
+        public Polygon2d Copy()
         {
-            var copy = new Polygon2f(Positions);
+            var copy = new Polygon2d(Positions);
             copy.SignedArea = SignedArea;
             copy.Centroid = Centroid;
             copy.Bounds = Bounds;
@@ -166,8 +166,8 @@ namespace Common.Geometry.Polygons
             SignedArea = 0;
             if (Count < 3) return;
 
-            REAL firstProducts = 0.0f;
-            REAL secondProducts = 0.0f;
+            REAL firstProducts = 0;
+            REAL secondProducts = 0;
 
             for (int i = 0; i < Count; i++)
             {
@@ -178,7 +178,7 @@ namespace Common.Geometry.Polygons
                 secondProducts += p0.y * p1.x;
             }
 
-            SignedArea = (firstProducts - secondProducts) / 2.0f;
+            SignedArea = (firstProducts - secondProducts) / 2;
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace Common.Geometry.Polygons
         /// <returns></returns>
         public override REAL SignedDistance(VECTOR2 point)
         {
-            if (Count < 3) 
+            if (Count < 3)
                 return REAL.PositiveInfinity;
 
             var v0 = Positions[0];
@@ -260,7 +260,7 @@ namespace Common.Geometry.Polygons
 
                 REAL we = VECTOR2.Dot(w, e);
                 REAL ee = VECTOR2.Dot(e, e);
-                VECTOR2 b = w - e * MathUtil.Clamp(MathUtil.SafeDiv(we, ee), 0.0f, 1.0f);
+                VECTOR2 b = w - e * MathUtil.Clamp(MathUtil.SafeDiv(we, ee), 0.0, 1.0);
 
                 d = Math.Min(d, VECTOR2.Dot(b, b));
 
@@ -275,9 +275,9 @@ namespace Common.Geometry.Polygons
             return s * MathUtil.Sqrt(d);
         }
 
-        public static Polygon2f FromTriangle(VECTOR2 a, VECTOR2 b, VECTOR2 c)
+        public static Polygon2d FromTriangle(VECTOR2 a, VECTOR2 b, VECTOR2 c)
         {
-            var polygon = new Polygon2f(3);
+            var polygon = new Polygon2d(3);
 
             polygon.Positions[0] = a;
             polygon.Positions[1] = b;
@@ -286,9 +286,9 @@ namespace Common.Geometry.Polygons
             return polygon;
         }
 
-        public static Polygon2f FromBox(VECTOR2 min, VECTOR2 max)
+        public static Polygon2d FromBox(VECTOR2 min, VECTOR2 max)
         {
-            var polygon = new Polygon2f(4);
+            var polygon = new Polygon2d(4);
 
             polygon.Positions[0] = min;
             polygon.Positions[1] = new VECTOR2(max.x, min.y);
@@ -298,16 +298,16 @@ namespace Common.Geometry.Polygons
             return polygon;
         }
 
-        public static Polygon2f FromCircle(VECTOR2 center, REAL radius, int segments)
+        public static Polygon2d FromCircle(VECTOR2 center, REAL radius, int segments)
         {
-            var polygon = new Polygon2f(segments);
+            var polygon = new Polygon2d(segments);
 
             REAL pi = MathUtil.PI;
             REAL fseg = segments;
 
             for (int i = 0; i < segments; i++)
             {
-                REAL theta = 2.0f * pi * i / fseg;
+                REAL theta = 2.0 * pi * i / fseg;
 
                 REAL x = -radius * MathUtil.Cos(theta);
                 REAL y = -radius * MathUtil.Sin(theta);

@@ -1,39 +1,39 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
-using SEGMENT2 = Common.Geometry.Shapes.Segment2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
+using SEGMENT2 = Common.Geometry.Shapes.Segment2d;
 
 namespace Common.Geometry.Polygons
 {
     /// <summary>
     /// 
     /// </summary>
-    public class Polyline2f : Polyobject2f
+    public class Polyline2d : Polyobject2d
     {
 
-        public Polyline2f(REAL width, int count) : base(count)
+        public Polyline2d(REAL width, int count) : base(count)
         {
             Width = width;
         }
 
-        public Polyline2f(REAL width, IList<VECTOR2> positions) : base(positions)
+        public Polyline2d(REAL width, IList<VECTOR2> positions) : base(positions)
         {
             Width = width;
         }
 
         public REAL Width { get; set; }
 
-        public REAL Radius => Width * 0.5f;
+        public REAL Radius => Width * 0.5;
 
         public override string ToString()
         {
-            return string.Format("[Polyline2f: Count={0}, Length={1}]", Count, Length);
+            return string.Format("[Polyline2d: Count={0}, Length={1}]", Count, Length);
         }
 
         /// <summary>
@@ -93,9 +93,9 @@ namespace Common.Geometry.Polygons
         /// Copy the polyline.
         /// No need to recalculate the copy.
         /// </summary>
-        public Polyline2f Copy()
+        public Polyline2d Copy()
         {
-            var copy = new Polyline2f(Width, Positions);
+            var copy = new Polyline2d(Width, Positions);
             copy.Length = Length;
             copy.Bounds = Bounds;
 
@@ -156,7 +156,7 @@ namespace Common.Geometry.Polygons
             if (Count == 0) return false;
             if (!Bounds.Contains(point)) return false;
 
-            REAL radius = Width * 0.5f;
+            REAL radius = Width * 0.5;
 
             for (int i = 0; i < Count - 1; i++)
             {
@@ -178,11 +178,11 @@ namespace Common.Geometry.Polygons
         /// <returns></returns>
         public override REAL SignedDistance(VECTOR2 point)
         {
-            if (Count == 0) 
+            if (Count == 0)
                 return REAL.PositiveInfinity;
 
             REAL sdf = REAL.PositiveInfinity;
-            REAL radius = Width * 0.5f;
+            REAL radius = Width * 0.5;
 
             for (int i = 0; i < Count - 1; i++)
             {

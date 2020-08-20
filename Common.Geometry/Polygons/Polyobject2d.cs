@@ -5,11 +5,11 @@ using System.Text;
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
-using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
-using MATRIX4 = Common.Core.Numerics.Matrix4x4f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
+using MATRIX2 = Common.Core.Numerics.Matrix2x2d;
+using MATRIX4 = Common.Core.Numerics.Matrix4x4d;
 
 namespace Common.Geometry.Polygons
 {
@@ -17,15 +17,15 @@ namespace Common.Geometry.Polygons
     /// <summary>
     /// Base class for polygon and polyline.
     /// </summary>
-    public abstract class Polyobject2f
+    public abstract class Polyobject2d
     {
 
-        public Polyobject2f(int count)
+        public Polyobject2d(int count)
         {
             CreatePositions(count);
         }
 
-        public Polyobject2f(IList<VECTOR2> positions)
+        public Polyobject2d(IList<VECTOR2> positions)
         {
             SetPositions(positions);
         }
