@@ -200,11 +200,11 @@ namespace Common.Core.Colors
         /// Are these colors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool AlmostEqual(ColorHSV hsv, float eps)
+        public static bool AlmostEqual(ColorHSV c0, ColorHSV c1, float eps = MathUtil.EPS)
         {
-            if (Math.Abs(h - hsv.h) > eps) return false;
-            if (Math.Abs(s - hsv.s) > eps) return false;
-            if (Math.Abs(v - hsv.v) > eps) return false;
+            if (Math.Abs(c0.h - c1.h) > eps) return false;
+            if (Math.Abs(c0.s - c1.s) > eps) return false;
+            if (Math.Abs(c0.v - c1.v) > eps) return false;
             return true;
         }
 
@@ -247,26 +247,6 @@ namespace Common.Core.Colors
         public string ToString(string f)
         {
             return string.Format("{0},{1},{2}", h.ToString(f), s.ToString(f), v.ToString(f));
-        }
-
-        /// <summary>
-        /// Vector from a string.
-        /// </summary>
-        static public ColorHSV FromString(string s)
-        {
-            ColorHSV hsv = new ColorHSV();
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
-
-                hsv.h = float.Parse(result[0]);
-                hsv.s = float.Parse(result[1]);
-                hsv.v = float.Parse(result[2]);
-            }
-            catch { }
-
-            return hsv;
         }
 
         /// <summary>

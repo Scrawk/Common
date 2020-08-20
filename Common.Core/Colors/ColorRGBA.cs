@@ -302,12 +302,12 @@ namespace Common.Core.Colors
         /// Are these colors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool AlmostEqual(ColorRGBA v, float eps)
+        public static bool AlmostEqual(ColorRGBA c0, ColorRGBA c1, float eps = MathUtil.EPS)
         {
-            if (Math.Abs(r - v.r) > eps) return false;
-            if (Math.Abs(g - v.g) > eps) return false;
-            if (Math.Abs(b - v.b) > eps) return false;
-            if (Math.Abs(a - v.a) > eps) return false;
+            if (Math.Abs(c0.r - c1.r) > eps) return false;
+            if (Math.Abs(c0.g - c1.g) > eps) return false;
+            if (Math.Abs(c0.b - c1.b) > eps) return false;
+            if (Math.Abs(c0.a - c1.a) > eps) return false;
             return true;
         }
 
@@ -354,27 +354,6 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
-        /// color from a string.
-        /// </summary>
-        public static ColorRGBA FromString(string s)
-        {
-            ColorRGBA v = new ColorRGBA();
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
-
-                v.r = float.Parse(result[0]);
-                v.g = float.Parse(result[1]);
-                v.b = float.Parse(result[2]);
-                v.a = float.Parse(result[3]);
-            }
-            catch { }
-
-            return v;
-        }
-
-        /// <summary>
         /// color from bytes.
         /// </summary>
         public static ColorRGBA FromBytes(int r, int g, int b)
@@ -391,39 +370,43 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
-        /// The minimum value between s and each component in color.
+        /// <summary>
+        /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Min(float s)
+        public static ColorRGBA Min(ColorRGBA col, float s)
         {
-            r = Math.Min(r, s);
-            g = Math.Min(g, s);
-            b = Math.Min(b, s);
-            a = Math.Min(a, s);
+            col.r = Math.Min(col.r, s);
+            col.g = Math.Min(col.g, s);
+            col.b = Math.Min(col.b, s);
+            col.a = Math.Min(col.a, s);
+            return col;
         }
 
         /// <summary>
-        /// The maximum value between s and each component in color.
+        /// The maximum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Max(float s)
+        public static ColorRGBA Max(ColorRGBA col, float s)
         {
-            r = Math.Max(r, s);
-            g = Math.Max(g, s);
-            b = Math.Max(b, s);
-            a = Math.Max(a, s);
+            col.r = Math.Max(col.r, s);
+            col.g = Math.Max(col.g, s);
+            col.b = Math.Max(col.b, s);
+            col.a = Math.Max(col.a, s);
+            return col;
         }
 
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clamp(float min, float max)
+        public static ColorRGBA Clamp(ColorRGBA col, float min, float max)
         {
-            r = Math.Max(Math.Min(r, max), min);
-            g = Math.Max(Math.Min(g, max), min);
-            b = Math.Max(Math.Min(b, max), min);
-            a = Math.Max(Math.Min(a, max), min);
+            col.r = Math.Max(Math.Min(col.r, max), min);
+            col.g = Math.Max(Math.Min(col.g, max), min);
+            col.b = Math.Max(Math.Min(col.b, max), min);
+            col.a = Math.Max(Math.Min(col.a, max), min);
+            return col;
         }
 
         /// <summary>
