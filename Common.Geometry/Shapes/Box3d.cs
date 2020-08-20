@@ -4,35 +4,35 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
-using VECTOR4 = Common.Core.Numerics.Vector4f;
-using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
+using REAL = System.Double;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
+using VECTOR4 = Common.Core.Numerics.Vector4d;
+using MATRIX3 = Common.Core.Numerics.Matrix3x3d;
 
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Box3f : IEquatable<Box3f>, IShape3f
+    public struct Box3d : IEquatable<Box3d>, IShape3d
     {
 
         public VECTOR3 Min;
 
         public VECTOR3 Max;
 
-        public Box3f(REAL min, REAL max)
+        public Box3d(REAL min, REAL max)
         {
             Min = new VECTOR3(min);
             Max = new VECTOR3(max);
         }
 
-        public Box3f(REAL minX, REAL maxX, REAL minY, REAL maxY, REAL minZ, REAL maxZ)
+        public Box3d(REAL minX, REAL maxX, REAL minY, REAL maxY, REAL minZ, REAL maxZ)
         {
             Min = new VECTOR3(minX, minY, minZ);
             Max = new VECTOR3(maxX, maxY, maxZ);
         }
 
-        public Box3f(VECTOR3 min, VECTOR3 max)
+        public Box3d(VECTOR3 min, VECTOR3 max)
         {
             Min = min;
             Max = max;
@@ -40,7 +40,7 @@ namespace Common.Geometry.Shapes
 
         public VECTOR3 Center
         {
-            get { return (Min + Max) * 0.5f; }
+            get { return (Min + Max) * 0.5; }
         }
 
         public VECTOR3 Size
@@ -76,85 +76,85 @@ namespace Common.Geometry.Shapes
             get
             {
                 VECTOR3 d = Max - Min;
-                return 2.0f * (d.x * d.y + d.x * d.z + d.y * d.z);
+                return 2.0 * (d.x * d.y + d.x * d.z + d.y * d.z);
             }
         }
 
-        public Box3f Bounds => this;
+        public Box3d Bounds => this;
 
-        public static Box3f operator +(Box3f box, REAL s)
+        public static Box3d operator +(Box3d box, REAL s)
         {
-            return new Box3f(box.Min + s, box.Max + s);
+            return new Box3d(box.Min + s, box.Max + s);
         }
 
-        public static Box3f operator +(Box3f box, VECTOR3 v)
+        public static Box3d operator +(Box3d box, VECTOR3 v)
         {
-            return new Box3f(box.Min + v, box.Max + v);
+            return new Box3d(box.Min + v, box.Max + v);
         }
 
-        public static Box3f operator -(Box3f box, REAL s)
+        public static Box3d operator -(Box3d box, REAL s)
         {
-            return new Box3f(box.Min - s, box.Max - s);
+            return new Box3d(box.Min - s, box.Max - s);
         }
 
-        public static Box3f operator -(Box3f box, VECTOR3 v)
+        public static Box3d operator -(Box3d box, VECTOR3 v)
         {
-            return new Box3f(box.Min - v, box.Max - v);
+            return new Box3d(box.Min - v, box.Max - v);
         }
 
-        public static Box3f operator *(Box3f box, REAL s)
+        public static Box3d operator *(Box3d box, REAL s)
         {
-            return new Box3f(box.Min * s, box.Max * s);
+            return new Box3d(box.Min * s, box.Max * s);
         }
 
-        public static Box3f operator *(Box3f box, VECTOR3 v)
+        public static Box3d operator *(Box3d box, VECTOR3 v)
         {
-            return new Box3f(box.Min * v, box.Max * v);
+            return new Box3d(box.Min * v, box.Max * v);
         }
 
-        public static Box3f operator /(Box3f box, REAL s)
+        public static Box3d operator /(Box3d box, REAL s)
         {
-            return new Box3f(box.Min / s, box.Max / s);
+            return new Box3d(box.Min / s, box.Max / s);
         }
 
-        public static Box3f operator /(Box3f box, VECTOR3 v)
+        public static Box3d operator /(Box3d box, VECTOR3 v)
         {
-            return new Box3f(box.Min / v, box.Max / v);
+            return new Box3d(box.Min / v, box.Max / v);
         }
 
-        public static Box3f operator *(Box3f box, MATRIX3 m)
+        public static Box3d operator *(Box3d box, MATRIX3 m)
         {
-            return new Box3f(m * box.Min, m * box.Max);
+            return new Box3d(m * box.Min, m * box.Max);
         }
 
-        public static implicit operator Box3f(Box3i box)
+        public static implicit operator Box3d(Box3i box)
         {
-            return new Box3f(box.Min, box.Max);
+            return new Box3d(box.Min, box.Max);
         }
 
-        public static explicit operator Box3f(Box3d box)
+        public static implicit operator Box3d(Box3f box)
         {
-            return new Box3f((Vector3f)box.Min, (Vector3f)box.Max);
+            return new Box3d(box.Min, box.Max);
         }
 
-        public static bool operator ==(Box3f b1, Box3f b2)
+        public static bool operator ==(Box3d b1, Box3d b2)
         {
             return b1.Min == b2.Min && b1.Max == b2.Max;
         }
 
-        public static bool operator !=(Box3f b1, Box3f b2)
+        public static bool operator !=(Box3d b1, Box3d b2)
         {
             return b1.Min != b2.Min || b1.Max != b2.Max;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Box3f)) return false;
-            Box3f box = (Box3f)obj;
+            if (!(obj is Box3d)) return false;
+            Box3d box = (Box3d)obj;
             return this == box;
         }
 
-        public bool Equals(Box3f box)
+        public bool Equals(Box3d box)
         {
             return this == box;
         }
@@ -172,7 +172,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Box3f: Min={0}, Max={1}, Width={2}, Height={3}, Depth={4}]", Min, Max, Width, Height, Depth);
+            return string.Format("[Box3d: Min={0}, Max={1}, Width={2}, Height={3}, Depth={4}]", Min, Max, Width, Height, Depth);
         }
 
         public void GetCorners(IList<VECTOR3> corners)
@@ -204,9 +204,9 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the bounding box containing this box and the given point.
         /// </summary>
-        public static Box3f Enlarge(Box3f box, VECTOR3 p)
+        public static Box3d Enlarge(Box3d box, VECTOR3 p)
         {
-            var b = new Box3f();
+            var b = new Box3d();
             b.Min.x = Math.Min(box.Min.x, p.x);
             b.Min.y = Math.Min(box.Min.y, p.y);
             b.Min.z = Math.Min(box.Min.z, p.z);
@@ -219,9 +219,9 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the bounding box containing this box and the given box.
         /// </summary>
-        public static Box3f Enlarge(Box3f box0, Box3f box1)
+        public static Box3d Enlarge(Box3d box0, Box3d box1)
         {
-            var b = new Box3f();
+            var b = new Box3d();
             b.Min.x = Math.Min(box0.Min.x, box1.Min.x);
             b.Min.y = Math.Min(box0.Min.y, box1.Min.y);
             b.Min.z = Math.Min(box0.Min.z, box1.Min.z);
@@ -234,16 +234,16 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the box by a given percent.
         /// </summary>
-        public static Box3f Enlarge(Box3f box, REAL percent)
+        public static Box3d Enlarge(Box3d box, REAL percent)
         {
-            var amount = box.Size * percent * 0.5f;
-            return new Box3f(box.Min - amount, box.Max + amount);
+            var amount = box.Size * percent * 0.5;
+            return new Box3d(box.Min - amount, box.Max + amount);
         }
 
         /// <summary>
         /// Returns true if this box intersects the other box.
         /// </summary>
-        public bool Intersects(Box3f a)
+        public bool Intersects(Box3d a)
         {
             if (Max.x < a.Min.x || Min.x > a.Max.x) return false;
             if (Max.y < a.Min.y || Min.y > a.Max.y) return false;
@@ -254,7 +254,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Does the box contain the other box.
         /// </summary>
-        public bool Contains(Box3f a)
+        public bool Contains(Box3d a)
         {
             if (a.Max.x > Max.x || a.Min.x < Min.x) return false;
             if (a.Max.y > Max.y || a.Min.y < Min.y) return false;
@@ -312,12 +312,12 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL SignedDistance(VECTOR3 p)
         {
-            VECTOR3 d = (p - Center).Absolute - Size * 0.5f;
+            VECTOR3 d = (p - Center).Absolute - Size * 0.5;
             VECTOR3 max = VECTOR3.Max(d, 0);
-            return max.Magnitude + Math.Min(MathUtil.Max(d.x, d.y, d.z), 0.0f);
+            return max.Magnitude + Math.Min(MathUtil.Max(d.x, d.y, d.z), 0);
         }
 
-        public static Box3f CalculateBounds(IList<VECTOR3> vertices)
+        public static Box3d CalculateBounds(IList<VECTOR3> vertices)
         {
             VECTOR3 min = VECTOR3.PositiveInfinity;
             VECTOR3 max = VECTOR3.NegativeInfinity;
@@ -335,10 +335,10 @@ namespace Common.Geometry.Shapes
                 if (v.z > max.z) max.z = v.z;
             }
 
-            return new Box3f(min, max);
+            return new Box3d(min, max);
         }
 
-        public static Box3f CalculateBounds(VECTOR3 a, VECTOR3 b)
+        public static Box3d CalculateBounds(VECTOR3 a, VECTOR3 b)
         {
             REAL xmin = Math.Min(a.x, b.x);
             REAL xmax = Math.Max(a.x, b.x);
@@ -347,7 +347,7 @@ namespace Common.Geometry.Shapes
             REAL zmin = Math.Min(a.z, b.z);
             REAL zmax = Math.Max(a.z, b.z);
 
-            return new Box3f(xmin, xmax, ymin, ymax, zmin, zmax);
+            return new Box3d(xmin, xmax, ymin, ymax, zmin, zmax);
         }
     }
 

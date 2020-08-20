@@ -5,13 +5,8 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Shapes
 {
-    /*
-    public interface ISignedDistanceFunction3d
-    {
-        float SignedDistance(Vector3d p);
-    }
 
-    public interface IShape3d : ISignedDistanceFunction3d
+    public interface IShape3d
     {
         Box3d Bounds { get; }
 
@@ -20,6 +15,8 @@ namespace Common.Geometry.Shapes
         bool Intersects(Box3d box);
 
         Vector3d Closest(Vector3d p);
+
+        double SignedDistance(Vector3d p);
 
     }
 
@@ -42,10 +39,9 @@ namespace Common.Geometry.Shapes
             throw new NotImplementedException();
         }
 
-        public virtual float SignedDistance(Vector3d p)
+        public virtual double SignedDistance(Vector3d p)
         {
             throw new NotImplementedException();
         }
     }
-    */
 }
