@@ -18,29 +18,26 @@ namespace Common.Core.Threading
 
         public int Max;
 
-        public static List<ThreadingBlock1D> CreateBlocks(int width, int blockSize, bool single = false)
+        public static int BlockSize(int width, int divisions = 8)
         {
-            if (single)
-            {
-                var blocks = new List<ThreadingBlock1D>(1);
-                blocks.Add(new ThreadingBlock1D(0, width));
-                return blocks;
-            }
-            else
-            {
-                int sizeX = width / blockSize + 1;
-                var blocks = new List<ThreadingBlock1D>(sizeX);
+            if (divisions <= 0) divisions = 8;
+            return Math.Max(256, width / divisions);
+        }
 
-                for (int x = 0; x < width; x += blockSize)
-                {
-                    var box = new ThreadingBlock1D();
-                    box.Min = x;
-                    box.Max = Math.Min(x + blockSize, width);
-                    blocks.Add(box);
-                }
+        public static List<ThreadingBlock1D> CreateBlocks(int width, int blockSize)
+        {
+            int sizeX = width / blockSize + 1;
+            var blocks = new List<ThreadingBlock1D>(sizeX);
 
-                return blocks;
+            for (int x = 0; x < width; x += blockSize)
+            {
+                var box = new ThreadingBlock1D();
+                box.Min = x;
+                box.Max = Math.Min(x + blockSize, width);
+                blocks.Add(box);
             }
+
+            return blocks;
         }
 
         public static void ParallelAction(int width, int blockSize, Action<int> action)

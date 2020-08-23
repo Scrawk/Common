@@ -24,45 +24,48 @@ namespace Common.Core.Threading
 
         public Vector3i Max;
 
-        public static List<ThreadingBlock3D> CreateBlocks(Vector3i size, int blockSize, bool single = false)
+        public static int BlockSize(Vector3i size, int divisions = 2)
         {
-            return CreateBlocks(size.x, size.y, size.z, blockSize, single);
+            if (divisions <= 0) divisions = 2;
+            return Math.Max(16, MathUtil.Max(size.x, size.y, size.z) / divisions);
         }
 
-        public static List<ThreadingBlock3D> CreateBlocks(int width, int height, int depth, int blockSize, bool single = false)
+        public static int BlockSize(int width, int height, int depth, int divisions = 2)
         {
-            if (single)
-            {
-                var blocks = new List<ThreadingBlock3D>(1);
-                blocks.Add(new ThreadingBlock3D(0, width, 0, height, 0, depth));
-                return blocks;
-            }
-            else
-            {
-                int sizeX = width / blockSize + 1;
-                int sizeY = height / blockSize + 1;
-                int sizeZ = depth / blockSize + 1;
-                var blocks = new List<ThreadingBlock3D>(sizeX * sizeY * sizeZ);
+            if (divisions <= 0) divisions = 2;
+            return Math.Max(16, MathUtil.Max(width, height, depth) / divisions);
+        }
 
-                for (int z = 0; z < depth; z += blockSize)
+        public static List<ThreadingBlock3D> CreateBlocks(Vector3i size, int blockSize)
+        {
+            return CreateBlocks(size.x, size.y, size.z, blockSize);
+        }
+
+        public static List<ThreadingBlock3D> CreateBlocks(int width, int height, int depth, int blockSize)
+        {
+            int sizeX = width / blockSize + 1;
+            int sizeY = height / blockSize + 1;
+            int sizeZ = depth / blockSize + 1;
+            var blocks = new List<ThreadingBlock3D>(sizeX * sizeY * sizeZ);
+
+            for (int z = 0; z < depth; z += blockSize)
+            {
+                for (int y = 0; y < height; y += blockSize)
                 {
-                    for (int y = 0; y < height; y += blockSize)
+                    for (int x = 0; x < width; x += blockSize)
                     {
-                        for (int x = 0; x < width; x += blockSize)
-                        {
-                            var box = new ThreadingBlock3D();
-                            box.Min = new Vector3i(x, y, z);
-                            box.Max.x = Math.Min(x + blockSize, width);
-                            box.Max.y = Math.Min(y + blockSize, height);
-                            box.Max.z = Math.Min(z + blockSize, depth);
+                        var box = new ThreadingBlock3D();
+                        box.Min = new Vector3i(x, y, z);
+                        box.Max.x = Math.Min(x + blockSize, width);
+                        box.Max.y = Math.Min(y + blockSize, height);
+                        box.Max.z = Math.Min(z + blockSize, depth);
 
-                            blocks.Add(box);
-                        }
+                        blocks.Add(box);
                     }
                 }
-
-                return blocks;
             }
+
+            return blocks;
         }
 
         public static void ParallelAction(Vector3i size, int blockSize, Action<int, int, int> action)

@@ -153,6 +153,16 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Recommended blocks for parallel processing.
+        /// </summary>
+        /// <param name="divisions">Number of divisions on each axis to make.</param>
+        /// <returns></returns>
+        public int BlockSize(int divisions = 4)
+        {
+            return ThreadingBlock2D.BlockSize(Width, Height, divisions);
+        }
+
+        /// <summary>
         /// Iterate over the array with the action.
         /// </summary>
         public void Iterate(Action<int, int> func)
@@ -164,6 +174,14 @@ namespace Common.Collections.Arrays
                     func(x, y);
                 }
             }
+        }
+
+        /// <summary>
+        /// Iterate over the array with the action in parallel.
+        /// </summary>
+        public void ParallelIterate(Action<int, int> func)
+        {
+            ParallelIterate(BlockSize(), func);
         }
 
         /// <summary>
@@ -209,6 +227,14 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Fill the array with the value from the function in parallel.
         /// </summary>
+        public void ParallelFill(Func<int, int, T> func)
+        {
+            ParallelFill(BlockSize(), func);
+        }
+
+        /// <summary>
+        /// Fill the array with the value from the function in parallel.
+        /// </summary>
         public void ParallelFill(int blockSize, Func<int, int, T> func)
         {
             var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
@@ -236,6 +262,14 @@ namespace Common.Collections.Arrays
                     Data[x, y] = func(Data[x, y]);
                 }
             }
+        }
+
+        /// <summary>
+        /// Modify the array with the function in parallel.
+        /// </summary>
+        public void ParallelModify(Func<T, T> func)
+        {
+            ParallelModify(BlockSize(), func);
         }
 
         /// <summary>

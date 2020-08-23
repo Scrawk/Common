@@ -24,40 +24,43 @@ namespace Common.Core.Threading
 
         public Vector2i Max;
 
-        public static List<ThreadingBlock2D> CreateBlocks(Vector2i size, int blockSize, bool single = false)
+        public static int BlockSize(Vector2i size, int divisions = 4)
         {
-            return CreateBlocks(size.x, size.y, blockSize, single);
+            if (divisions <= 0) divisions = 4;
+            return Math.Max(64, Math.Max(size.x, size.y) / divisions);
         }
 
-        public static List<ThreadingBlock2D> CreateBlocks(int width, int height, int blockSize, bool single = false)
+        public static int BlockSize(int width, int height, int divisions = 4)
         {
-            if (single)
-            {
-                var blocks = new List<ThreadingBlock2D>(1);
-                blocks.Add(new ThreadingBlock2D(0, width, 0, height));
-                return blocks;
-            }
-            else
-            {
-                int sizeX = width / blockSize + 1;
-                int sizeY = height / blockSize + 1;
-                var blocks = new List<ThreadingBlock2D>(sizeX * sizeY);
+            if (divisions <= 0) divisions = 4;
+            return Math.Max(64, Math.Max(width, height) / divisions);
+        }
 
-                for (int y = 0; y < height; y += blockSize)
+        public static List<ThreadingBlock2D> CreateBlocks(Vector2i size, int blockSize)
+        {
+            return CreateBlocks(size.x, size.y, blockSize);
+        }
+
+        public static List<ThreadingBlock2D> CreateBlocks(int width, int height, int blockSize)
+        {
+            int sizeX = width / blockSize + 1;
+            int sizeY = height / blockSize + 1;
+            var blocks = new List<ThreadingBlock2D>(sizeX * sizeY);
+
+            for (int y = 0; y < height; y += blockSize)
+            {
+                for (int x = 0; x < width; x += blockSize)
                 {
-                    for (int x = 0; x < width; x += blockSize)
-                    {
-                        var box = new ThreadingBlock2D();
-                        box.Min = new Vector2i(x, y);
-                        box.Max.x = Math.Min(x + blockSize, width);
-                        box.Max.y = Math.Min(y + blockSize, height);
+                    var box = new ThreadingBlock2D();
+                    box.Min = new Vector2i(x, y);
+                    box.Max.x = Math.Min(x + blockSize, width);
+                    box.Max.y = Math.Min(y + blockSize, height);
 
-                        blocks.Add(box);
-                    }
+                    blocks.Add(box);
                 }
-
-                return blocks;
             }
+
+            return blocks;
         }
 
         public static void ParallelAction(Vector2i size, int blockSize, Action<int, int> action)
