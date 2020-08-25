@@ -46,19 +46,22 @@ namespace Common.Core.Colors
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGBA(float r, float g, float b) : this(r,g,b,1)
+        public ColorRGBA(float r, float g, float b) 
+            : this(r,g,b,1)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGBA(float v) : this(v,v,v,v)
+        public ColorRGBA(float v) 
+            : this(v,v,v,v)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGBA(float v, float a) : this(v,v,v, 1)
+        public ColorRGBA(float v, float a) 
+            : this(v,v,v, 1)
         {
 
         }
@@ -71,19 +74,29 @@ namespace Common.Core.Colors
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGBA(double r, double g, double b) : this(r, g, b, 1)
+        public ColorRGBA(double r, double g, double b) 
+            : this(r, g, b, 1)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGBA(double v) : this(v, v, v, v)
+        public ColorRGBA(double v) 
+            : this(v, v, v, v)
         {
 
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGBA(double v, double a) : this(v, v, v, a)
+        public ColorRGBA(double v, double a) 
+            : this(v, v, v, a)
+        {
+
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ColorRGBA(ColorRGB col, float a) 
+            : this(col.r, col.g, col.b, a)
         {
 
         }

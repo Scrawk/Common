@@ -44,7 +44,8 @@ namespace Common.Core.Colors
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGB(float v) : this(v,v,v)
+        public ColorRGB(float v) 
+            : this(v,v,v)
         {
 
         }
@@ -57,7 +58,8 @@ namespace Common.Core.Colors
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ColorRGB(double v) : this(v, v, v)
+        public ColorRGB(double v) 
+            : this(v, v, v)
         {
 
         }
