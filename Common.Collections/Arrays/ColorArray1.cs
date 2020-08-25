@@ -47,8 +47,8 @@ namespace Common.Collections.Arrays
 
             int xi = (int)x;
 
-            var v0 = GetClamped(xi);
-            var v1 = GetClamped(xi + 1);
+            var v0 = base.GetClamped(xi);
+            var v1 = base.GetClamped(xi + 1);
 
             ColorRGB col;
             col.r = MathUtil.Lerp(v0.r, v1.r, x - xi);
@@ -66,8 +66,8 @@ namespace Common.Collections.Arrays
 
             int xi = (int)x;
 
-            var v0 = GetWrapped(xi);
-            var v1 = GetWrapped(xi + 1);
+            var v0 = base.GetWrapped(xi);
+            var v1 = base.GetWrapped(xi + 1);
 
             ColorRGB col;
             col.r = MathUtil.Lerp(v0.r, v1.r, x - xi);

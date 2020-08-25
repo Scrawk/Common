@@ -60,10 +60,10 @@ namespace Common.Collections.Arrays
             int xi = (int)x;
             int yi = (int)y;
 
-            var v00 = GetClamped(xi, yi);
-            var v10 = GetClamped(xi + 1, yi);
-            var v01 = GetClamped(xi, yi + 1);
-            var v11 = GetClamped(xi + 1, yi + 1);
+            var v00 = base.GetClamped(xi, yi);
+            var v10 = base.GetClamped(xi + 1, yi);
+            var v01 = base.GetClamped(xi, yi + 1);
+            var v11 = base.GetClamped(xi + 1, yi + 1);
 
             var col = new ColorRGB();
             col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
@@ -83,10 +83,10 @@ namespace Common.Collections.Arrays
             int xi = (int)x;
             int yi = (int)y;
 
-            var v00 = GetWrapped(xi, yi);
-            var v10 = GetWrapped(xi + 1, yi);
-            var v01 = GetWrapped(xi, yi + 1);
-            var v11 = GetWrapped(xi + 1, yi + 1);
+            var v00 = base.GetWrapped(xi, yi);
+            var v10 = base.GetWrapped(xi + 1, yi);
+            var v01 = base.GetWrapped(xi, yi + 1);
+            var v11 = base.GetWrapped(xi + 1, yi + 1);
 
             var col = new ColorRGB();
             col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
