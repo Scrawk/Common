@@ -40,14 +40,29 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Sample the array by clamped bilinear interpolation.
         /// </summary>
-        public float GetBilinear(float u)
+        public float GetClamped(float u)
         {
-            float x = u * Count;
+            float x = u * (Count-1);
 
             int xi = (int)x;
 
             var v0 = GetClamped(xi);
             var v1 = GetClamped(xi + 1);
+
+            return MathUtil.Lerp(v0, v1, x - xi);
+        }
+
+        /// <summary>
+        /// Sample the array by wrapped bilinear interpolation.
+        /// </summary>
+        public float GetWrapped(float u)
+        {
+            float x = u * (Count - 1);
+
+            int xi = (int)x;
+
+            var v0 = GetWrapped(xi);
+            var v1 = GetWrapped(xi + 1);
 
             return MathUtil.Lerp(v0, v1, x - xi);
         }

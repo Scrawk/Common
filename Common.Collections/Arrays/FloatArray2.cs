@@ -50,10 +50,10 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Sample the array by clamped bilinear interpolation.
         /// </summary>
-        public float GetBilinear(float u, float v)
+        public float GetClamped(float u, float v)
         {
-            float x = u * Width;
-            float y = v * Height;
+            float x = u * (Width-1);
+            float y = v * (Height-1);
 
             int xi = (int)x;
             int yi = (int)y;
@@ -62,6 +62,26 @@ namespace Common.Collections.Arrays
             var v10 = GetClamped(xi + 1, yi);
             var v01 = GetClamped(xi, yi + 1);
             var v11 = GetClamped(xi + 1, yi + 1);
+
+            return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
+        }
+
+
+        /// <summary>
+        /// Sample the array by wrapped bilinear interpolation.
+        /// </summary>
+        public float GetWrapped(float u, float v)
+        {
+            float x = u * (Width - 1);
+            float y = v * (Height - 1);
+
+            int xi = (int)x;
+            int yi = (int)y;
+
+            var v00 = GetWrapped(xi, yi);
+            var v10 = GetWrapped(xi + 1, yi);
+            var v01 = GetWrapped(xi, yi + 1);
+            var v11 = GetWrapped(xi + 1, yi + 1);
 
             return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
         }

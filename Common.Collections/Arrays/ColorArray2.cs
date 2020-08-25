@@ -52,10 +52,10 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Sample the array by clamped bilinear interpolation.
         /// </summary>
-        public ColorRGB GetBilinear(float u, float v)
+        public ColorRGB GetClamped(float u, float v)
         {
-            float x = u * Width;
-            float y = v * Height;
+            float x = u * (Width-1);
+            float y = v * (Height-1);
 
             int xi = (int)x;
             int yi = (int)y;
@@ -64,6 +64,29 @@ namespace Common.Collections.Arrays
             var v10 = GetClamped(xi + 1, yi);
             var v01 = GetClamped(xi, yi + 1);
             var v11 = GetClamped(xi + 1, yi + 1);
+
+            var col = new ColorRGB();
+            col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
+            col.g = MathUtil.Blerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
+            col.b = MathUtil.Blerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
+            return col;
+        }
+
+        /// <summary>
+        /// Sample the array by wrapped bilinear interpolation.
+        /// </summary>
+        public ColorRGB GetWrapped(float u, float v)
+        {
+            float x = u * (Width - 1);
+            float y = v * (Height - 1);
+
+            int xi = (int)x;
+            int yi = (int)y;
+
+            var v00 = GetWrapped(xi, yi);
+            var v10 = GetWrapped(xi + 1, yi);
+            var v01 = GetWrapped(xi, yi + 1);
+            var v11 = GetWrapped(xi + 1, yi + 1);
 
             var col = new ColorRGB();
             col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
