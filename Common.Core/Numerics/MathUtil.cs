@@ -463,15 +463,27 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Frac(float x)
+        public static float FloorFrac(float x)
         {
             return (float)(x - Math.Floor(x));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Frac(double x)
+        public static double FloorFrac(double x)
         {
             return x - Math.Floor(x);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float TruncateFrac(float x)
+        {
+            return (float)(x - Math.Truncate(x));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double TruncateFrac(double x)
+        {
+            return x - Math.Truncate(x);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

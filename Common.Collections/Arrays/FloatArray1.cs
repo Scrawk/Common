@@ -44,7 +44,7 @@ namespace Common.Collections.Arrays
         {
             float x = u * (Count-1);
 
-            int xi = (int)x;
+            int xi = (int)MathUtil.Floor(x);
 
             var v0 = base.GetClamped(xi);
             var v1 = base.GetClamped(xi + 1);
@@ -59,7 +59,7 @@ namespace Common.Collections.Arrays
         {
             float x = u * (Count - 1);
 
-            int xi = (int)x;
+            int xi = (int)MathUtil.Floor(x);
 
             var v0 = base.GetWrapped(xi);
             var v1 = base.GetWrapped(xi + 1);

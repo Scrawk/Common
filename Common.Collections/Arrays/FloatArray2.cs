@@ -55,8 +55,8 @@ namespace Common.Collections.Arrays
             float x = u * (Width-1);
             float y = v * (Height-1);
 
-            int xi = (int)x;
-            int yi = (int)y;
+            int xi = (int)MathUtil.Floor(x);
+            int yi = (int)MathUtil.Floor(y);
 
             var v00 = base.GetClamped(xi, yi);
             var v10 = base.GetClamped(xi + 1, yi);
@@ -75,8 +75,8 @@ namespace Common.Collections.Arrays
             float x = u * (Width - 1);
             float y = v * (Height - 1);
 
-            int xi = (int)x;
-            int yi = (int)y;
+            int xi = (int)MathUtil.Floor(x);
+            int yi = (int)MathUtil.Floor(y);
 
             var v00 = base.GetWrapped(xi, yi);
             var v10 = base.GetWrapped(xi + 1, yi);
