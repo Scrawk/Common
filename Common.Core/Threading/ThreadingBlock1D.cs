@@ -18,10 +18,10 @@ namespace Common.Core.Threading
 
         public int Max;
 
-        public static int BlockSize(int width, int divisions = 8)
+        public static int BlockSize(int width, int divisions = 16)
         {
-            if (divisions <= 0) divisions = 8;
-            return Math.Max(256, width / divisions);
+            if (divisions <= 0) divisions = 16;
+            return Math.Max(4096, width / divisions);
         }
 
         public static List<ThreadingBlock1D> CreateBlocks(int width, int blockSize)

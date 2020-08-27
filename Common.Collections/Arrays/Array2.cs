@@ -88,6 +88,18 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Is this array the same size as the other array.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public bool IsSameSize<S>(IArray2<S> array)
+        {
+            if (Width != array.Width) return false;
+            if (Height != array.Height) return false;
+            return true;
+        }
+
+        /// <summary>
         /// Are the x and y index in the bounds of the array.
         /// </summary>
         public bool InBounds(int x, int y)

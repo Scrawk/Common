@@ -125,7 +125,7 @@ namespace Common.Collections.Arrays
         /// </summary>
         /// <param name="divisions">Number of divisions on each axis to make.</param>
         /// <returns></returns>
-        public int BlockSize(int divisions = 4)
+        public int BlockSize(int divisions = 16)
         {
             return ThreadingBlock2D.BlockSize(Count, divisions);
         }
