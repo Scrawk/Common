@@ -165,6 +165,16 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Get the element at mirrored index x,y.
+        /// </summary>
+        public T GetMirrored(int x, int y)
+        {
+            x = MathUtil.Mirror(x, Width);
+            y = MathUtil.Mirror(y, Height);
+            return Data[x, y];
+        }
+
+        /// <summary>
         /// Recommended blocks for parallel processing.
         /// </summary>
         /// <param name="divisions">Number of divisions on each axis to make.</param>

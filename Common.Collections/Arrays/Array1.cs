@@ -121,6 +121,15 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Get the element at mirrored index x.
+        /// </summary>
+        public T GetMirrored(int x)
+        {
+            x = MathUtil.Mirror(x, Count);
+            return Data[x];
+        }
+
+        /// <summary>
         /// Recommended blocks for parallel processing.
         /// </summary>
         /// <param name="divisions">Number of divisions on each axis to make.</param>

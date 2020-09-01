@@ -76,5 +76,24 @@ namespace Common.Collections.Arrays
             return col;
         }
 
+        /// <summary>
+        /// Sample the array by wrapped bilinear interpolation.
+        /// </summary>
+        public ColorRGB GetMirrored(float u)
+        {
+            float x = u * (Count - 1);
+
+            int xi = (int)MathUtil.Floor(x);
+
+            var v0 = base.GetMirrored(xi);
+            var v1 = base.GetMirrored(xi + 1);
+
+            ColorRGB col;
+            col.r = MathUtil.Lerp(v0.r, v1.r, x - xi);
+            col.g = MathUtil.Lerp(v0.g, v1.g, x - xi);
+            col.b = MathUtil.Lerp(v0.b, v1.b, x - xi);
+            return col;
+        }
+
     }
 }

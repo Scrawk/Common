@@ -95,5 +95,28 @@ namespace Common.Collections.Arrays
             return col;
         }
 
+        /// <summary>
+        /// Sample the array by mirrored bilinear interpolation.
+        /// </summary>
+        public ColorRGB GetMirrored(float u, float v)
+        {
+            float x = u * (Width - 1);
+            float y = v * (Height - 1);
+
+            int xi = (int)MathUtil.Floor(x);
+            int yi = (int)MathUtil.Floor(y);
+
+            var v00 = base.GetMirrored(xi, yi);
+            var v10 = base.GetMirrored(xi + 1, yi);
+            var v01 = base.GetMirrored(xi, yi + 1);
+            var v11 = base.GetMirrored(xi + 1, yi + 1);
+
+            var col = new ColorRGB();
+            col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
+            col.g = MathUtil.Blerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
+            col.b = MathUtil.Blerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
+            return col;
+        }
+
     }
 }

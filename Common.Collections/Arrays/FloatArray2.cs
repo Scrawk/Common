@@ -66,7 +66,6 @@ namespace Common.Collections.Arrays
             return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
         }
 
-
         /// <summary>
         /// Sample the array by wrapped bilinear interpolation.
         /// </summary>
@@ -82,6 +81,25 @@ namespace Common.Collections.Arrays
             var v10 = base.GetWrapped(xi + 1, yi);
             var v01 = base.GetWrapped(xi, yi + 1);
             var v11 = base.GetWrapped(xi + 1, yi + 1);
+
+            return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
+        }
+
+        /// <summary>
+        /// Sample the array by wrapped bilinear interpolation.
+        /// </summary>
+        public float GetMirrored(float u, float v)
+        {
+            float x = u * (Width - 1);
+            float y = v * (Height - 1);
+
+            int xi = (int)MathUtil.Floor(x);
+            int yi = (int)MathUtil.Floor(y);
+
+            var v00 = base.GetMirrored(xi, yi);
+            var v10 = base.GetMirrored(xi + 1, yi);
+            var v01 = base.GetMirrored(xi, yi + 1);
+            var v11 = base.GetMirrored(xi + 1, yi + 1);
 
             return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
         }

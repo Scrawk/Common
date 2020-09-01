@@ -67,5 +67,20 @@ namespace Common.Collections.Arrays
             return MathUtil.Lerp(v0, v1, x - xi);
         }
 
+        /// <summary>
+        /// Sample the array by mirrored bilinear interpolation.
+        /// </summary>
+        public float GetMirrored(float u)
+        {
+            float x = u * (Count - 1);
+
+            int xi = (int)MathUtil.Floor(x);
+
+            var v0 = base.GetMirrored(xi);
+            var v1 = base.GetMirrored(xi + 1);
+
+            return MathUtil.Lerp(v0, v1, x - xi);
+        }
+
     }
 }

@@ -51,5 +51,10 @@ namespace Common.Collections.Arrays
         /// </summary>
         T GetWrapped(int x, int y);
 
+        /// <summary>
+        /// Get the element at mirrored index x,y.
+        /// </summary>
+        T GetMirrored(int x, int y);
+
     }
 }
