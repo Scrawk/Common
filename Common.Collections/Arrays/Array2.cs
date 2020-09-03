@@ -145,6 +145,14 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Resize the array. Will clear any existing data.
+        /// </summary>
+        public void Resize(int width, int height)
+        {
+            Data = new T[width, height];
+        }
+
+        /// <summary>
         /// Get the element at clamped index x,y.
         /// </summary>
         public T GetClamped(int x, int y)

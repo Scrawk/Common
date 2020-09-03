@@ -103,6 +103,15 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Resize the array. Will clear any existing data.
+        /// </summary>
+        /// <param name="count"></param>
+        public void Resize(int count)
+        {
+            Data = new T[count];
+        }
+
+        /// <summary>
         /// Get the element at clamped index x.
         /// </summary>
         public T GetClamped(int x)
