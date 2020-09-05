@@ -153,6 +153,14 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Resize the array. Will clear any existing data.
+        /// </summary>
+        public void Resize(Vector2i size)
+        {
+            Data = new T[size.x, size.y];
+        }
+
+        /// <summary>
         /// Get the element at clamped index x,y.
         /// </summary>
         public T GetClamped(int x, int y)

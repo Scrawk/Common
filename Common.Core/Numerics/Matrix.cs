@@ -226,7 +226,7 @@ namespace Common.Core.Numerics
         {
             get
             {
-                return Cofactor.Transpose * MathUtil.SafeInv(Determinant);
+                return GetInverse(Determinant);
             }
         }
 
@@ -279,6 +279,14 @@ namespace Common.Core.Numerics
 
                 return mat;
             }
+        }
+
+        /// <summary>
+        /// Inverse the matrix.
+        /// </summary>
+        public Matrix GetInverse(double determinant)
+        {
+            return Cofactor.Transpose * MathUtil.SafeInv(determinant);
         }
 
         /// <summary>
