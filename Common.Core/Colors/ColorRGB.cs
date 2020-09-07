@@ -23,6 +23,7 @@ namespace Common.Core.Colors
         public readonly static ColorRGB Azure = new ColorRGB(0, 0.5, 1);
         public readonly static ColorRGB Teal = new ColorRGB(0, 0.5, 0.5);
         public readonly static ColorRGB Blue = new ColorRGB(0, 0, 1);
+        public readonly static ColorRGB Indigo = new ColorRGB(0.25, 0, 1);
         public readonly static ColorRGB Violet = new ColorRGB(0.5, 0, 1);
         public readonly static ColorRGB Purple = new ColorRGB(0.5, 0, 0.5);
         public readonly static ColorRGB Magenta = new ColorRGB(1, 0, 1);
@@ -32,7 +33,7 @@ namespace Common.Core.Colors
         public readonly static ColorRGB Grey = new ColorRGB(0.5f);
         public readonly static ColorRGB LightGrey = new ColorRGB(0.75f);
         public readonly static ColorRGB White = new ColorRGB(1);
-
+        
         public float r, g, b;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,7 +92,7 @@ namespace Common.Core.Colors
         public float Magnitude
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return (float)Math.Sqrt(SqrMagnitude); }
+            get { return MathUtil.SafeSqrt(SqrMagnitude); }
         }
 
         public float SqrMagnitude
@@ -336,6 +337,22 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// The distance between two colors.
+        /// </summary>
+        public static float Distance(ColorRGB c0, ColorRGB c1)
+        {
+            return MathUtil.SafeSqrt(SqrDistance(c0, c1));
+        }
+
+        /// <summary>
+        /// The square distance between two colors.
+        /// </summary>
+        public static float SqrDistance(ColorRGB c0, ColorRGB c1)
+        {
+            return (c0 - c1).SqrMagnitude;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -425,7 +442,36 @@ namespace Common.Core.Colors
             return new ColorHSV(h / 360.0f, s, v / 255.0f);
         }
 
+        /// <summary>
+        /// Create a palette of 6 colors from the rainbow.
+        /// </summary>
+        /// <returns></returns>
+        public static ColorRGB[] RainbowPalatte()
+        {
+            return new ColorRGB[]
+            {
+                Red, Orange, Yellow, Green, Blue, Violet
+            };
+        }
 
+        /// <summary>
+        /// Create a custom palette of hues with the same saturation and value.
+        /// </summary>
+        /// <param name="hues">The number of hues in the palette.</param>
+        /// <param name="saturation">The saturation of the colors.</param>
+        /// <param name="value">The values of the colors.</param>
+        /// <returns></returns>
+        public static ColorRGB[] CustomPalatte(int hues, float saturation, float value)
+        {
+            var palette = new ColorRGB[hues];
+            for(int i = 0; i < hues; i++)
+            {
+                float hue = (i + 1.0f) / hues;
+                palette[i] = ColorHSV.ToRGB(hue, saturation, value);
+            }
+
+            return palette;
+        }
 
     }
 

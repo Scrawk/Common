@@ -48,6 +48,18 @@ namespace Common.Core.Colors
             get { return ToRGB(h, s, v).rgb1; }
         }
 
+        public float Magnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return MathUtil.SafeSqrt(SqrMagnitude); }
+        }
+
+        public float SqrMagnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return (h * h + s * s + v * v); }
+        }
+
         unsafe public float this[int i]
         {
             get
@@ -255,6 +267,22 @@ namespace Common.Core.Colors
         public static ColorHSV FromBytes(int h, int s, int v)
         {
             return new ColorHSV(h, s, v) / 255.0f;
+        }
+
+        /// <summary>
+        /// The distance between two colors.
+        /// </summary>
+        public static float Distance(ColorHSV c0, ColorHSV c1)
+        {
+            return MathUtil.SafeSqrt(SqrDistance(c0, c1));
+        }
+
+        /// <summary>
+        /// The square distance between two colors.
+        /// </summary>
+        public static float SqrDistance(ColorHSV c0, ColorHSV c1)
+        {
+            return (c0 - c1).SqrMagnitude;
         }
 
         /// <summary>

@@ -152,7 +152,7 @@ namespace Common.Core.Colors
         public float SqrMagnitude
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return (r * r + g * g + b * b + a*a); }
+            get { return (r * r + g * g + b * b + a * a); }
         }
 
         public float Intensity
@@ -372,6 +372,22 @@ namespace Common.Core.Colors
         public static ColorRGBA FromBytes(int r, int g, int b)
         {
             return new ColorRGBA(r, g, b, 255) / 255.0f;
+        }
+
+        /// <summary>
+        /// The distance between two colors.
+        /// </summary>
+        public static float Distance(ColorRGBA c0, ColorRGBA c1)
+        {
+            return MathUtil.SafeSqrt(SqrDistance(c0, c1));
+        }
+
+        /// <summary>
+        /// The square distance between two colors.
+        /// </summary>
+        public static float SqrDistance(ColorRGBA c0, ColorRGBA c1)
+        {
+            return (c0 - c1).SqrMagnitude;
         }
 
         /// <summary>
