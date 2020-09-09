@@ -214,6 +214,7 @@ namespace Common.Collections.Arrays
             }
         }
 
+        /*
         /// <summary>
         /// Iterate over the array with the action in parallel.
         /// </summary>
@@ -239,6 +240,7 @@ namespace Common.Collections.Arrays
                 }
             });
         }
+        */
 
         /// <summary>
         /// Fill the array with the value.
@@ -262,6 +264,7 @@ namespace Common.Collections.Arrays
             }
         }
 
+        /*
         /// <summary>
         /// Fill the array with the value from the function in parallel.
         /// </summary>
@@ -287,6 +290,7 @@ namespace Common.Collections.Arrays
                 }
             });
         }
+        */
 
         /// <summary>
         /// Modify the array with the function.
@@ -302,6 +306,7 @@ namespace Common.Collections.Arrays
             }
         }
 
+        /*
         /// <summary>
         /// Modify the array with the function in parallel.
         /// </summary>
@@ -327,5 +332,6 @@ namespace Common.Collections.Arrays
                 }
             });
         }
+        */
     }
 }

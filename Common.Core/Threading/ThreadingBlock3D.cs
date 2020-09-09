@@ -68,6 +68,7 @@ namespace Common.Core.Threading
             return blocks;
         }
 
+        /*
         public static void ParallelAction(Vector3i size, int blockSize, Action<int, int, int> action)
         {
             ParallelAction(size.x, size.y, size.z, blockSize, action);
@@ -92,6 +93,7 @@ namespace Common.Core.Threading
 
             });
         }
+        */
     }
 }
 

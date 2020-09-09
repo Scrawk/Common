@@ -40,6 +40,7 @@ namespace Common.Core.Threading
             return blocks;
         }
 
+        /*
         public static void ParallelAction(int width, int blockSize, Action<int> action)
         {
             var blocks = CreateBlocks(width, blockSize);
@@ -52,6 +53,7 @@ namespace Common.Core.Threading
                 }
             });
         }
+        */
     }
 }
 
