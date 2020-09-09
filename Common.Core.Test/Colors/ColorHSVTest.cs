@@ -23,7 +23,7 @@ namespace Common.Core.Test.Colors
         [TestMethod]
         public void AreEqualWithError()
         {
-            Assert.IsTrue(Random(0).AlmostEqual(Random(0), 1e-6f));
+            Assert.IsTrue(ColorHSV.AlmostEqual(Random(0), Random(0), 1e-6f));
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace Common.Core.Test.Colors
 
                 ColorHSV col = rgb.hsv;
 
-                Assert.IsTrue(hsv.AlmostEqual(col, 1e-6f));
+                Assert.IsTrue(ColorHSV.AlmostEqual(hsv, col, 1e-6f));
             }
         }
 

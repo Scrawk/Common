@@ -23,7 +23,7 @@ namespace Common.Core.Test.Colors
         [TestMethod]
         public void AreEqualWithError()
         {
-            Assert.IsTrue(Random(0).AlmostEqual(Random(0), 1e-6f));
+            Assert.IsTrue(ColorRGBA.AlmostEqual(Random(0), Random(0), 1e-6f));
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace Common.Core.Test.Colors
         public void min()
         {
             ColorRGBA vd = ColorRGBA.White;
-            vd.Min(0.5f);
+            vd = ColorRGBA.Min(vd, 0.5f);
 
             Assert.AreEqual(vd, new ColorRGBA(0.5f, 0.5f, 0.5f, 0.5f));
         }
@@ -82,7 +82,7 @@ namespace Common.Core.Test.Colors
         public void Max()
         {
             ColorRGBA vd = ColorRGBA.White;
-            vd.Max(1.5f);
+            vd = ColorRGBA.Max(vd, 1.5f);
 
             Assert.AreEqual(vd, new ColorRGBA(1.5f, 1.5f, 1.5f, 1.5f));
         }
@@ -91,7 +91,7 @@ namespace Common.Core.Test.Colors
         public void Clamp()
         {
             ColorRGBA vd = new ColorRGBA(0.4f, 1.6f, 0.1f, 1.7f);
-            vd.Clamp(0.5f, 1.5f);
+            vd = ColorRGBA.Clamp(vd, 0.5f, 1.5f);
 
             Assert.AreEqual(vd, new ColorRGBA(0.5f, 1.5f, 0.5f, 1.5f));
         }

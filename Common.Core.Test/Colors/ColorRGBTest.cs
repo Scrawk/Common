@@ -23,7 +23,7 @@ namespace Common.Core.Test.Colors
         [TestMethod]
         public void AreEqualWithError()
         {
-            Assert.IsTrue(Random(0).AlmostEqual(Random(0), 1e-6f));
+            Assert.IsTrue(ColorRGB.AlmostEqual(Random(0), Random(0), 1e-6f));
         }
 
         [TestMethod]
@@ -72,7 +72,7 @@ namespace Common.Core.Test.Colors
         public void Min()
         {
             ColorRGB vd = ColorRGB.White;
-            vd.Min(0.5f);
+            vd = ColorRGB.Min(vd, 0.5f);
 
             Assert.AreEqual(vd, new ColorRGB(0.5f, 0.5f, 0.5f));
         }
@@ -81,7 +81,7 @@ namespace Common.Core.Test.Colors
         public void Max()
         {
             ColorRGB vd = ColorRGB.White;
-            vd.Max(1.5f);
+            vd = ColorRGB.Max(vd, 1.5f);
 
             Assert.AreEqual(vd, new ColorRGB(1.5f, 1.5f, 1.5f));
         }
@@ -90,7 +90,7 @@ namespace Common.Core.Test.Colors
         public void Clamp()
         {
             ColorRGB vd = new ColorRGB(0.4f, 1.6f, 0.1f);
-            vd.Clamp(0.5f, 1.5f);
+            vd = ColorRGB.Clamp(vd, 0.5f, 1.5f);
 
             Assert.AreEqual(vd, new ColorRGB(0.5f, 1.5f, 0.5f));
         }
@@ -107,7 +107,7 @@ namespace Common.Core.Test.Colors
 
                 ColorRGB col = hsv.rgb;
 
-                Assert.IsTrue(rgb.AlmostEqual(col, 1e-6f));
+                Assert.IsTrue(ColorRGB.AlmostEqual(rgb, col, 1e-6f));
             }
         }
 
