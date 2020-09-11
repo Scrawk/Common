@@ -78,15 +78,32 @@ namespace Common.Geometry.Nurbs
 
 			int width = control_points.GetLength(0);
 			int height = control_points.GetLength(1);
-			this.weights = new double[width, height];
 
 			if (weights == null)
+			{
+				this.weights = new double[width, height];
 				this.weights.Fill(1);
+			}
 			else
 			{
-				weights.CopyTo(this.weights, 0);
+				this.weights = weights.Copy();
 			}
 
+		}
+
+		public Vector Point(double u, double v)
+        {
+			return NurbsEval.SurfacePoint(this, u, v);
+        }
+
+		public static (RationalNurbsSurface, RationalNurbsSurface) SplitU(RationalNurbsSurface surface, double u)
+		{
+			return NurbsModify.SurfaceSplitU(surface, u);
+		}
+
+		public static (RationalNurbsSurface, RationalNurbsSurface) SplitV(RationalNurbsSurface surface, double v)
+		{
+			return NurbsModify.SurfaceSplitU(surface, v);
 		}
 
 	}

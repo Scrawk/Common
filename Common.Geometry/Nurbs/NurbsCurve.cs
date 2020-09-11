@@ -7,17 +7,11 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
-	public interface INurbsCurve
-	{
-		List<Vector> Tessellate(int samples);
-
-		List<Vector> CartesianControlPoints();
-	}
 
 	/// <summary>
 	/// Class for holding a polynomial B-spline curve
 	/// </summary>
-	public class NurbsCurve : INurbsCurve
+	public class NurbsCurve
 	{
 
 		public int Degree;
@@ -44,22 +38,34 @@ namespace Common.Geometry.Nurbs
 			this.ControlPoints = NurbsUtil.ToList(control_points);
 		}
 
+		public bool IsValid => NurbsCheck.CurveIsValid(this);
+
+		public Vector Point(double u)
+		{
+			return NurbsEval.CurvePoint(this, u);
+		}
+
+		public Vector Tangent(double u)
+		{
+			return NurbsEval.CurveTangent(this, u);
+		}
+
 		public List<Vector> Tessellate(int samples)
 		{
 			return NurbsTess.Regular(this, 0, 1, samples);
 		}
 
-		public List<Vector> CartesianControlPoints()
-		{
-			return NurbsUtil.HomogenousToCartesian(ControlPoints);
-		}
+		public static NurbsCurve InsertKnot(NurbsCurve curve, double u, int repeats = 1)
+        {
+			return NurbsModify.CurveKnotInsert(curve, u, repeats);
+        }
 
 	}
 
 	/// <summary>
 	/// Class for holding a rational B-spline curve
 	/// </summary>
-	public class RationalNurbsCurve : INurbsCurve
+	public class RationalNurbsCurve
 	{
 		public int Degree;
 
@@ -101,15 +107,22 @@ namespace Common.Geometry.Nurbs
 			}
 		}
 
+		public Vector Point(double u)
+		{
+			return NurbsEval.CurvePoint(this, u);
+		}
+
+		public Vector Tangent(double u)
+		{
+			return NurbsEval.CurveTangent(this, u);
+		}
+
 		public List<Vector> Tessellate(int samples)
 		{
 			return NurbsTess.Regular(this, 0, 1, samples);
 		}
 
-		public List<Vector> CartesianControlPoints()
-		{
-			return NurbsUtil.HomogenousToCartesian(ControlPoints);
-		}
+
 	}
 
 } 
