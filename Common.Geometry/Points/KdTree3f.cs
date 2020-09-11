@@ -80,14 +80,14 @@ namespace Common.Geometry.Points
             else if (count == 1)
             {
                 var p = list[0];
-                m_bounds = new Box3f(p.x, p.x, p.x, p.y, p.y, p.y);
+                m_bounds = new Box3f(p.x, p.x, p.y, p.y, p.z, p.z);
                 Root = new KdTreeNode3f<T>(p, 0);
                 Count = 1;
             }
             else
             {
                 var p = list[0];
-                m_bounds = new Box3f(p.x, p.x, p.x, p.y, p.y, p.y);
+                m_bounds = new Box3f(p.x, p.x, p.y, p.y, p.z, p.z);
                 Root = Build(list, 0);
             }
         }
@@ -117,35 +117,9 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Create a indexed list of the segments that make up the 
-        /// bounds of the lines of the tree.
+        /// 
         /// </summary>
-        /// <param name="addBounds">should the bounding box be added</param>
-        public void CalculateSegments(List<Segment3f> segments, bool addBounds = true)
-        {
-            if (addBounds)
-            {
-                var CUBE_INDICES = new int[]
-                {
-                    0, 1, 1, 2, 2, 3, 3, 0,
-                    4, 5, 5, 6, 6, 7, 7, 4,
-                    0, 4, 1, 5, 2, 6, 3, 7
-                };
-
-                var corners = new Vector3f[8];
-                m_bounds.GetCorners(corners);
-
-                for (int i = 0; i < CUBE_INDICES.Length / 2; i++)
-                {
-                    var a = corners[CUBE_INDICES[i * 2 + 0]];
-                    var b = corners[CUBE_INDICES[i * 2 + 1]];
-                    segments.Add(new Segment3f(a, b));
-                }
-            }
-
-            CalculateSegments(null, Root, Bounds, segments);
-        }
-
+        /// <param name="boxes"></param>
         public void CalculateBoxes(List<Box3f> boxes)
         {
             CalculateBoxes(Root, Bounds, boxes);
@@ -322,90 +296,8 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Iteratively calculates the segements made from 
-        /// the intersecting lines.
+        /// 
         /// </summary>
-        private void CalculateSegments(KdTreeNode3f<T> parent, KdTreeNode3f<T> node, Box3f bounds, List<Segment3f> segments)
-        {
-            if (node == null) return;
-
-            Vector3f p0, p1;
-            if (node.Depth % 3 == 0)
-            {
-                p0 = new Vector3f(node.Point.x, bounds.Min.y, bounds.Min.z);
-                p1 = new Vector3f(node.Point.x, bounds.Max.y, bounds.Max.z);
-
-                if (parent != null)
-                {
-                    if (node == parent.Left)
-                    {
-                        p1.y = parent.Point.y;
-                        p1.z = parent.Point.z;
-                        bounds.Max.y = p1.y;
-                        bounds.Max.z = p1.z;
-                    }
-                    else
-                    {
-                        p0.y = parent.Point.y;
-                        p0.z = parent.Point.z;
-                        bounds.Min.y = p0.y;
-                        bounds.Min.z = p0.z;
-                    }
-                }
-            }
-            else if (node.Depth % 3 == 1)
-            {
-                p0 = new Vector3f(bounds.Min.x, node.Point.y, bounds.Min.z);
-                p1 = new Vector3f(bounds.Max.x, node.Point.y, bounds.Max.z);
-
-                if (parent != null)
-                {
-                    if (node == parent.Left)
-                    {
-                        p1.x = parent.Point.x;
-                        p1.z = parent.Point.z;
-                        bounds.Max.x = p1.x;
-                        bounds.Max.z = p1.z;
-                    }
-                    else
-                    {
-                        p0.x = parent.Point.x;
-                        p0.z = parent.Point.z;
-                        bounds.Min.x = p0.x;
-                        bounds.Min.z = p0.z;
-                    }
-                }
-            }
-            else
-            {
-                p0 = new Vector3f(bounds.Min.x, bounds.Min.y, node.Point.z);
-                p1 = new Vector3f(bounds.Max.x, bounds.Max.y, node.Point.z);
-
-                if (parent != null)
-                {
-                    if (node == parent.Left)
-                    {
-                        p1.x = parent.Point.x;
-                        p1.y = parent.Point.y;
-                        bounds.Max.x = p1.x;
-                        bounds.Max.y = p1.y;
-                    }
-                    else
-                    {
-                        p0.x = parent.Point.x;
-                        p0.y = parent.Point.y;
-                        bounds.Min.x = p0.x;
-                        bounds.Min.y = p0.y;
-                    }
-                }
-            }
-
-            segments.Add(new Segment3f(p0, p1));
-
-            CalculateSegments(node, node.Left, bounds, segments);
-            CalculateSegments(node, node.Right, bounds, segments);
-        }
-
         private void CalculateBoxes(KdTreeNode3f<T> node, Box3f bounds, List<Box3f> boxes)
         {
             if (node == null) return;

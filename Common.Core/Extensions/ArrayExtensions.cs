@@ -20,6 +20,14 @@ namespace System
             return -1;
         }
 
+        public static S[] ConvertAll<T, S>(this T[] array, Func<T, S> func)
+        {
+            var dest = new S[array.Length];
+            for (int i = 0; i < array.Length; i++)
+                dest[i] = func(array[i]);
+            return dest;
+        }
+
         public static T[] Copy<T>(this T[] array)
         {
             var dest = new T[array.Length];
