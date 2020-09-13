@@ -5,267 +5,145 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Nurbs
 {
-	public static class NurbsUtil
+	internal static class NurbsUtil
 	{
 
-		public static Vector[] ToVectors(IList<Vector2f> points)
+		/// <summary>
+		/// Convert an nd point in homogenous coordinates to an (n-1)d point in cartesian
+		/// coordinates by perspective division
+		/// </summary>
+		/// <param name="pt">Point in homogenous coordinates</param>
+		/// <returns>Point in cartesian coordinates</returns>
+		internal static Vector3d HomogenousToCartesian(Vector4d pt)
 		{
-			var copy = new Vector[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector(points[i].x, points[i].y);
-
-			return copy;
+			return pt.xyz / pt.w;
 		}
 
-		public static Vector[] ToVectors(IList<Vector3f> points)
+		/// <summary>
+		/// Convert a list of nd points in homogenous coordinates to a list of (n-1)d points in cartesian
+		/// coordinates by perspective division
+		/// </summary>
+		/// <param name="ptsws">Points in homogenous coordinates</param>
+		/// <param name="pts">Points in cartesian coordinates</param>
+		/// <param name="ws">Homogenous weights</param>
+		internal static void HomogenousToCartesian(IList<Vector4d> ptsws, out List<Vector3d> pts, out List<double> ws)
 		{
-			var copy = new Vector[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector(points[i].x, points[i].y, points[i].z);
-
-			return copy;
-		}
-
-		public static Vector[] ToVectors(IList<Vector2d> points)
-		{
-			var copy = new Vector[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector(points[i].x, points[i].y);
-
-			return copy;
-		}
-
-		public static Vector[] ToVectors(IList<Vector3d> points)
-		{
-			var copy = new Vector[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector(points[i].x, points[i].y, points[i].z);
-
-			return copy;
-		}
-
-		public static Vector2f[] ToVectors2f(IList<Vector> points)
-		{
-			var copy = new Vector2f[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector2f(points[i].x, points[i].y);
-
-			return copy;
-		}
-
-		public static Vector3f[] ToVectors3f(IList<Vector> points)
-		{
-			var copy = new Vector3f[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector3f(points[i].x, points[i].y, points[i].z);
-
-			return copy;
-		}
-
-		public static Vector2d[] ToVectors2d(IList<Vector> points)
-		{
-			var copy = new Vector2d[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector2d(points[i].x, points[i].y);
-
-			return copy;
-		}
-
-		public static Vector3d[] ToVectors3d(IList<Vector> points)
-		{
-			var copy = new Vector3d[points.Count];
-			for (int i = 0; i < points.Count; i++)
-				copy[i] = new Vector3d(points[i].x, points[i].y, points[i].z);
-
-			return copy;
-		}
-
-		public static Vector[] ToArray(IList<Vector> list)
-		{
-			var copy = new Vector[list.Count];
-			for (int i = 0; i < list.Count; i++)
-				copy[i] = list[i].Copy();
-
-			return copy;
-		}
-
-		public static Vector[,] ToArray(Vector[,] array)
-		{
-			int width = array.GetLength(0);
-			int height = array.GetLength(1);
-
-			var copy = new Vector[width, height];
-
-			for (int x = 0; x < width; x++)
-				for (int y = 0; y < height; y++)
-					copy[x, y] = array[x, y].Copy();
-
-			return copy;
-		}
-
-		public static List<Vector> ToList(IList<Vector> list)
-		{
-			var copy = new List<Vector>(list.Count);
-			for(int i = 0; i < list.Count; i++)
-				copy.Add(list[i].Copy());
-
-			return copy;
-		}
-
-		/**
-		 * Convert an nd point in homogenous coordinates to an (n-1)d point in cartesian
-		 * coordinates by perspective division
-		 * @param[in] pt Point in homogenous coordinates
-		 * @return Point in cartesian coordinates
-		 */
-		internal static Vector HomogenousToCartesian(Vector pt)
-		{
-			int nd = pt.Dimension;
-			return new Vector(nd - 1, pt / pt[nd - 1]);
-		}
-
-		/**
-		 * Convert a list of nd points in homogenous coordinates to a list of (n-1)d points in cartesian
-		 * coordinates by perspective division
-		 * @param[in] ptsws Points in homogenous coordinates
-		 * @param[out] pts Points in cartesian coordinates
-		 * @param[out] ws Homogenous weights
-		 */
-		internal static void HomogenousToCartesian(IList<Vector> ptsws, out List<Vector> pts, out List<double> ws)
-		{
-			pts = new List<Vector>(ptsws.Count);
+			pts = new List<Vector3d>(ptsws.Count);
 			ws = new List<double>(ptsws.Count);
 
 			for (int i = 0; i < ptsws.Count; ++i)
 			{
-				Vector ptw_i = ptsws[i];
-				int nd = ptw_i.Dimension;
+				Vector4d ptw_i = ptsws[i];
 
-				pts.Add(new Vector(nd - 1, ptw_i / ptw_i[nd - 1]));
-				ws.Add(ptw_i[nd - 1]);
+				pts.Add(ptw_i.xyz / ptw_i.w);
+				ws.Add(ptw_i.w);
 			}
 		}
 
-		/**
-		* Convert a list of nd points in homogenous coordinates to a list of (n-1)d points in cartesian
-		* coordinates by perspective division
-		* @param[in] ptsws Points in homogenous coordinates
-		* @param[out] pts Points in cartesian coordinates
-		*/
-		internal static List<Vector> HomogenousToCartesian(IList<Vector> ptsws)
+		/// <summary>
+		/// Convert a list of nd points in homogenous coordinates to a list of (n-1)d points in cartesian
+		/// coordinates by perspective division
+		/// </summary>
+		/// <param name="ptws">Points in homogenous coordinates</param>
+		/// <returns>Points in cartesian coordinates</returns>
+		internal static List<Vector3d> HomogenousToCartesian(IList<Vector4d> ptsws)
 		{
-			var pts = new List<Vector>(ptsws.Count);
+			var pts = new List<Vector3d>(ptsws.Count);
 
 			for (int i = 0; i < ptsws.Count; ++i)
-			{
-				Vector ptw_i = ptsws[i];
-				int nd = ptw_i.Dimension;
-
-				pts.Add(new Vector(nd - 1, ptw_i / ptw_i[nd - 1]));
-			}
+				pts.Add(HomogenousToCartesian(ptsws[i]));
 
 			return pts;
 		}
 
-		/**
-		 * Convert a 2D list of nd points in homogenous coordinates to cartesian
-		 * coordinates by perspective division
-		 * @param[in] ptsws Points in homogenous coordinates
-		 * @param[out] pts Points in cartesian coordinates
-		 * @param[out] ws Homogenous weights
-		 */
-		internal static void HomogenousToCartesian(Vector[,] ptsws, out Vector[,] pts, out double[,] ws)
+		/// <summary>
+		/// Convert a 2D list of nd points in homogenous coordinates to cartesian
+		/// coordinates by perspective division
+		/// </summary>
+		/// <param name="ptsws">Points in homogenous coordinates</param>
+		/// <param name=pts">Points in cartesian coordinates</param>
+		/// <param name="ws">Homogenous weights</param>
+		internal static void HomogenousToCartesian(Vector4d[,] ptsws, out Vector3d[,] pts, out double[,] ws)
 		{
 			int width = ptsws.GetLength(0);
 			int height = ptsws.GetLength(1);
-			pts = new Vector[width, height];
+			pts = new Vector3d[width, height];
 			ws = new double[width, height];
 
 			for (int i = 0; i < width; ++i)
 			{
 				for (int j = 0; j < height; ++j)
 				{
-					Vector ptw_ij = ptsws[i, j];
-					int nd = ptw_ij.Dimension;
+					Vector4d ptw_ij = ptsws[i, j];
+					double w_ij = ptw_ij.w;
 
-					double w_ij = ptw_ij[nd - 1];
-					pts[i, j] = new Vector(nd - 1, ptw_ij / w_ij);
+					pts[i, j] = ptw_ij.xyz / w_ij;
 					ws[i, j] = w_ij;
 				}
 			}
 		}
 
-		/**
-		 * Convert an nd point in cartesian coordinates to an (n+1)d point in homogenous
-		 * coordinates
-		 * @param[in] pt Point in cartesian coordinates
-		 * @param[in] w Weight
-		 * @return Input point in homogenous coordinates
-		 */
-		internal static Vector CartesianToHomogenous(Vector pt, double w)
+		/// <summary>
+		/// Convert an nd point in cartesian coordinates to an (n+1)d point in homogenous coordinates
+		/// </summary>
+		/// <param name="pt">Point in cartesian coordinates</param>
+		/// <param name="w">Weight</param>
+		/// <returns>point in homogenous coordinates</returns>
+		internal static Vector4d CartesianToHomogenous(Vector3d pt, double w)
 		{
-			int nd = pt.Dimension;
-			return new Vector(nd + 1, pt * w, w);
+			return new Vector4d(pt * w, w);
 		}
 
-		/**
-		 * Convert list of points in cartesian coordinates to homogenous coordinates
-		 * @param[in] pts Points in cartesian coordinates
-		 * @param[in] ws Weights
-		 * @return Points in homogenous coordinates
-		 */
-		internal static List<Vector> CartesianToHomogenous(IList<Vector> pts, List<double> ws)
+		/// <summary>
+		/// Convert list of points in cartesian coordinates to homogenous coordinates
+		/// </summary>
+		/// <param name="pts">Points in cartesian coordinates</param>
+		/// <param name="ws">Weights</param>
+		/// <returns>Points in homogenous coordinates</returns>
+		internal static List<Vector4d> CartesianToHomogenous(IList<Vector3d> pts, IList<double> ws)
 		{
-			var Cw = new List<Vector>(pts.Count);
-	
+			var Cw = new List<Vector4d>(pts.Count);
+
 			for (int i = 0; i < pts.Count; ++i)
-			{
 				Cw.Add(CartesianToHomogenous(pts[i], ws[i]));
-			}
 
 			return Cw;
 		}
 
-		/**
-		 * Convert 2D list of points in cartesian coordinates to homogenous coordinates
-		 * @param[in] pts Points in cartesian coordinates
-		 * @param[in] ws Weights
-		 * @return Points in homogenous coordinates
-		 */
-		internal static Vector[,] CartesianToHomogenous(Vector[,] pts, double[,] ws)
+		/// <summary>
+		/// Convert 2D list of points in cartesian coordinates to homogenous coordinates
+		/// </summary>
+		/// <param name="pts">Points in cartesian coordinates</param>
+		/// <param name="ws">Weights</param>
+		/// <returns>Points in homogenous coordinates</returns>
+		internal static Vector4d[,] CartesianToHomogenous(Vector3d[,] pts, double[,] ws)
 		{
 			int width = pts.GetLength(0);
 			int height = pts.GetLength(1);
 
-			var Cw = new Vector[width, height];
+			var Cw = new Vector4d[width, height];
 
 			for (int i = 0; i < width; ++i)
-			{
 				for (int j = 0; j < height; ++j)
-				{
 					Cw[i, j] = CartesianToHomogenous(pts[i, j], ws[i, j]);
-				}
-			}
 
 			return Cw;
 		}
 
-		/**
-		 * Convert an (n+1)d point to an nd point without perspective division
-		 * by truncating the last dimension
-		 * @param[in] pt Point in homogenous coordinates
-		 * @return Input point in cartesian coordinates
-		 */
-		internal static Vector TruncateHomogenous(Vector pt)
+		/// <summary>
+		/// Convert an (n+1)d point to an nd point without perspective division
+		/// by truncating the last dimension
+		/// </summary>
+		/// <param name="pt">Point in homogenous coordinates</param>
+		/// <returns>Input point in cartesian coordinates</returns>
+		internal static Vector3d TruncateHomogenous(Vector4d pt)
 		{
-			int nd = pt.Dimension;
-			return new Vector(nd-1, pt);
+			return pt.xyz;
 		}
 
-		/**
-		 * Compute the binomial coefficient (nCk) using the formula
-		 * \product_{i=0}^k (n + 1 - i) / i
-		 */
+		/// <summary>
+		/// Compute the binomial coefficient
+		/// </summary>
 		internal static uint Binomial(int n, int k)
 		{
 			uint result = 1;
@@ -282,27 +160,9 @@ namespace Common.Geometry.Nurbs
 			return result;
 		}
 
-		/**
-		 * Check if two numbers are close enough within eps
-		 * @param[in] a First number
-		 * @param[in] b Second number
-		 * @param[in] eps Tolerance for checking closeness
-		 * @return Whether the numbers are close w.r.t. the tolerance
-		 */
-		//internal static bool Close(double a, double b, double eps = MathUtil.D_EPS)
-		//{
-		//	return (Math.Abs(a - b) < eps) ? true : false;
-		//}
-
-		/**
-		 * Map numbers from one interval to another
-		 * @param[in] val Number to map to another range
-		 * @param[in] old_min Minimum value of original range
-		 * @param[in] old_max Maximum value of original range
-		 * @param[in] new_min Minimum value of new range
-		 * @param[in] new_max Maximum value of new range
-		 * @return Number mapped to new range
-		 */
+		/// <summary>
+		/// Map numbers from one interval to another
+		/// </summary>
 		internal static double MapToRange(double val, double old_min, double old_max, double new_min, double new_max)
 		{
 			double old_range = old_max - old_min;

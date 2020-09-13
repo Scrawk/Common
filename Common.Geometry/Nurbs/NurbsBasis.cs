@@ -8,31 +8,27 @@ namespace Common.Geometry.Nurbs
 
 	internal static class NurbsBasis
 	{
-		/**
-		 * Find the span of the given parameter in the knot vector.
-		 * @param[in] degree Degree of the curve.
-		 * @param[in] knots Knot vector of the curve.
-		 * @param[in] u Parameter value.
-		 * @return Span index into the knot vector such that (span - 1) < u <= span
-		*/
-		internal static int FindSpan(int degree, List<double> knots, double u)
-		{ 
+		/// <summary>
+		/// Find the span of the given parameter in the knot vector.
+		/// </summary>
+		/// <param name="degree">Degree of the curve.</param>
+		/// <param name="knots">Knot vector of the curve.</param>
+		/// <param name="u">Parameter value.</param>
+		/// <returns>Span index into the knot vector such that (span - 1) < u <= span</returns>
+		internal static int FindSpan(int degree, IList<double> knots, double u)
+		{
 			// index of last control point
 			int n = knots.Count - degree - 2;
 			double eps = 1e-9f;
 
 			// For values of u that lies outside the domain
 			if (u > (knots[n + 1] - eps))
-			{
 				return n;
-			}
+			
 			if (u < (knots[degree] + eps))
-			{
 				return degree;
-			}
 
 			// Binary search
-			//TODO - FIX ME
 
 			int low = degree;
 			int high = n + 1;
@@ -41,48 +37,41 @@ namespace Common.Geometry.Nurbs
 			while (u < knots[mid] || u >= knots[mid + 1])
 			{
 				if (u < knots[mid])
-				{
 					high = mid;
-				}
 				else
-				{
 					low = mid;
-				}
+				
 				mid = (int)Math.Floor((low + high) / 2.0);
 			}
-			
+
 			return mid;
 		}
 
-		/**
-		 * Compute a single B-spline basis function
-		 * @param[in] i The ith basis function to compute.
-		 * @param[in] deg Degree of the basis function.
-		 * @param[in] knots Knot vector corresponding to the basis functions.
-		 * @param[in] u Parameter to evaluate the basis functions at.
-		 * @return The value of the ith basis function at u.
-		 */
-		internal static double BSplineOneBasis(int i, int deg, List<double> U, double u)
+		/// <summary>
+		/// Compute a single B-spline basis function
+		/// </summary>
+		/// <param name="i">The ith basis function to compute.</param>
+		/// <param name="deg">Degree of the basis function.</param>
+		/// <param name="knots">Knot vector corresponding to the basis functions.</param>
+		/// <param name="u">Parameter to evaluate the basis functions at.</param>
+		/// <returns>The value of the ith basis function at u.</returns>
+		internal static double BSplineOneBasis(int i, int deg, IList<double> U, double u)
 		{
 			int m = U.Count - 1;
+
 			// Special case
 			if ((i == 0 && MathUtil.AlmostEqual(u, U[0])) || (i == m - deg - 1 && MathUtil.AlmostEqual(u, U[m])))
-			{
 				return 1.0;
-			}
 
 			// Local property ensures that basis function is zero outside span
 			if (u < U[i] || u >= U[i + deg + 1])
-			{
 				return 0.0;
-			}
 
 			// Initialize zeroth-degree functions
 			var N = new List<double>(deg + 1);
+
 			for (int j = 0; j <= deg; j++)
-			{
-				N.Add( (u >= U[i + j] && u < U[i + j + 1]) ? 1.0 : 0.0 );
-			}
+				N.Add((u >= U[i + j] && u < U[i + j + 1]) ? 1.0 : 0.0);
 
 			// Compute triangular table
 			for (int k = 1; k <= deg; k++)
@@ -109,18 +98,17 @@ namespace Common.Geometry.Nurbs
 			return N[0];
 		}
 
-		/**
-		 * Compute all non-zero B-spline basis functions
-		 * @param[in] deg Degree of the basis function.
-		 * @param[in] span Index obtained from findSpan() corresponding the u and knots.
-		 * @param[in] knots Knot vector corresponding to the basis functions.
-		 * @param[in] u Parameter to evaluate the basis functions at.
-		 * @return N Values of (deg+1) non-zero basis functions.
-		 */
-		internal static double[] BSplineBasis(int deg, int span, List<double> knots, double u)
+		/// <summary>
+		/// Compute all non-zero B-spline basis functions
+		/// </summary>
+		/// <param name="deg">Degree of the basis function.</param>
+		/// <param name="knots">Knot vector corresponding to the basis functions.</param>
+		/// <param name="u">Parameter to evaluate the basis functions at.</param>
+		/// <returns>N Values of (deg+1) non-zero basis functions.</returns>
+		internal static double[] BSplineBasis(int deg, int span, IList<double> knots, double u)
 		{
 			var N = new double[deg + 1];
-			var left = new double[deg + 1]; 
+			var left = new double[deg + 1];
 			var right = new double[deg + 1];
 
 			double saved = 0.0, temp = 0.0;
@@ -132,6 +120,7 @@ namespace Common.Geometry.Nurbs
 				left[j] = (u - knots[span + 1 - j]);
 				right[j] = knots[span + j] - u;
 				saved = 0.0;
+
 				for (int r = 0; r < j; r++)
 				{
 					temp = N[r] / (right[r + 1] + left[j - r]);
@@ -145,20 +134,20 @@ namespace Common.Geometry.Nurbs
 			return N;
 		}
 
-		/**
-		 * Compute all non-zero derivatives of B-spline basis functions
-		 * @param[in] deg Degree of the basis function.
-		 * @param[in] span Index obtained from findSpan() corresponding the u and knots.
-		 * @param[in] knots Knot vector corresponding to the basis functions.
-		 * @param[in] u Parameter to evaluate the basis functions at.
-		 * @param[in] num_ders Number of derivatives to compute (num_ders <= deg)
-		 * @return ders Values of non-zero derivatives of basis functions.
-		 */
-		internal static double[,] BSplineDerBasis(int deg, int span, List<double> knots, double u, int num_ders)
+		/// <summary>
+		/// Compute all non-zero derivatives of B-spline basis functions
+		/// </summary>
+		/// <param name="deg">Degree of the basis function.</param>
+		/// <param name="span">Index obtained from findSpan() corresponding the u and knots.</param>
+		/// <param name="knots">Knot vector corresponding to the basis functions.</param>
+		/// <param name="u">Parameter to evaluate the basis functions at.</param>
+		/// <param name="num_ders">Number of derivatives to compute (num_ders <= deg)</param>
+		/// <returns>Values of non-zero derivatives of basis functions.</returns>
+		internal static double[,] BSplineDerBasis(int deg, int span, IList<double> knots, double u, int num_ders)
 		{
-			var left = new double[deg + 1]; 
+			var left = new double[deg + 1];
 			var right = new double[deg + 1];
-		
+
 			var ndu = new double[deg + 1, deg + 1];
 			ndu[0, 0] = 1.0;
 
@@ -184,9 +173,7 @@ namespace Common.Geometry.Nurbs
 			var ders = new double[num_ders + 1, deg + 1];
 
 			for (int j = 0; j <= deg; j++)
-			{
 				ders[0, j] = ndu[j, deg];
-			}
 
 			var a = new double[2, deg + 1];
 

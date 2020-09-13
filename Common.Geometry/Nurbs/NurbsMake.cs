@@ -20,7 +20,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="degree">The degree of the curve.</param>
 		/// <param name="points">The points to interp curve from.</param>
 		/// <returns></returns>
-		public static NurbsCurve FromPoints(int degree, IList<Vector> points)
+		public static NurbsCurve3d FromPoints(int degree, IList<Vector3d> points)
 		{
 			if (points.Count < degree + 1)
 				throw new Exception("You need to supply at least degree + 1 points.");
@@ -82,7 +82,7 @@ namespace Common.Geometry.Nurbs
 			}
 
 			//for each dimension, solve
-			int rows = points[0].Dimension;
+			const int rows = 3;
 			int columns = points.Count;
 			Matrix xs = new Matrix(rows, columns);
 			Matrix M = new Matrix(A);
@@ -99,20 +99,19 @@ namespace Common.Geometry.Nurbs
 				xs.SetRow(i, x);
 			}
 
-			var controlPts = new List<Vector>();
+			var controlPts = new List<Vector3d>();
 			for (int i = 0; i < columns; i++)
 			{
-				var v = new Vector(rows + 1);
+				var v = new Vector3d();
 
-				for (int j = 0; j < rows; j++)
-					v[j] = xs[j, i];
-
-				v[rows] = 1.0f;
+				v.x = xs[0, i];
+				v.y = xs[1, i];
+				v.z = xs[2, i];
 
 				controlPts.Add(v);
 			}
 
-			return new NurbsCurve(degree, knots, controlPts);
+			return new NurbsCurve3d(degree, knots, controlPts);
 		}
 
 		/// <summary>
@@ -120,7 +119,7 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="controlPoints">Points in counter-clockwise form.</param>
 		/// <returns></returns>
-		public static NurbsCurve BezierCurve(IList<Vector> controlPoints)
+		public static NurbsCurve3d BezierCurve(IList<Vector3d> controlPoints)
 		{
 			int count = controlPoints.Count;
 			int degree = count - 1;
@@ -132,7 +131,7 @@ namespace Common.Geometry.Nurbs
 				knots[count + i] = 1;
 			}
 
-			return new NurbsCurve(degree, knots, controlPoints);
+			return new NurbsCurve3d(degree, knots, controlPoints);
 		}
 
 		/// <summary>
@@ -140,7 +139,7 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="controlPoints">Points in counter-clockwise form.</param>
 		/// <returns></returns>
-		public static RationalNurbsCurve RationalBezierCurve(IList<Vector> controlPoints, IList<double> weights)
+		public static RationalNurbsCurve3d RationalBezierCurve(IList<Vector3d> controlPoints, IList<double> weights)
 		{
 			int count = controlPoints.Count;
 			int degree = count - 1;
@@ -152,7 +151,7 @@ namespace Common.Geometry.Nurbs
 				knots[count + i] = 1;
 			}
 
-			return new RationalNurbsCurve(degree, knots, controlPoints, weights);
+			return new RationalNurbsCurve3d(degree, knots, controlPoints, weights);
 		}
 
 		/// <summary>
@@ -160,10 +159,10 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="center"></param>
 		/// <param name="radius">the radius</param>
-		public static RationalNurbsCurve Circle(Vector center, double radius)
+		public static RationalNurbsCurve3d Circle(Vector3d center, double radius)
 		{
-			var unitX = Vector.UnitX(center.Dimension);
-			var unitY = Vector.UnitY(center.Dimension);
+			var unitX = Vector3d.UnitX;
+			var unitY = Vector3d.UnitY;
 			return EllipseArc(center, radius, radius, 0, Math.PI * 2, unitX, unitY);
 		}
 
@@ -174,10 +173,10 @@ namespace Common.Geometry.Nurbs
 		/// <param name="radius">the radius</param>
 		/// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
 		/// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
-		public static RationalNurbsCurve Arc(Vector center, double radius, double minAngle, double maxAngle)
+		public static RationalNurbsCurve3d Arc(Vector3d center, double radius, double minAngle, double maxAngle)
 		{
-			var unitX = Vector.UnitX(center.Dimension);
-			var unitY = Vector.UnitY(center.Dimension);
+			var unitX = Vector3d.UnitX;
+			var unitY = Vector3d.UnitY;
 			return EllipseArc(center, radius, radius, minAngle, maxAngle, unitX, unitY);
 		}
 
@@ -187,10 +186,10 @@ namespace Common.Geometry.Nurbs
 		/// <param name="center"></param>
 		/// <param name="xradius">the x radius</param>
 		/// <param name="yradius">the y radius</param>
-		public static RationalNurbsCurve Ellipse(Vector center, double xradius, double yradius)
+		public static RationalNurbsCurve3d Ellipse(Vector3d center, double xradius, double yradius)
 		{
-			var unitX = Vector.UnitX(center.Dimension);
-			var unitY = Vector.UnitY(center.Dimension);
+			var unitX = Vector3d.UnitX;
+			var unitY = Vector3d.UnitY;
 			return EllipseArc(center, xradius, yradius, 0, Math.PI * 2, unitX, unitY);
 		}
 
@@ -202,10 +201,10 @@ namespace Common.Geometry.Nurbs
 		/// <param name="yradius">the y radius</param>
 		/// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
 		/// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
-		public static RationalNurbsCurve EllipseArc(Vector center, double xradius, double yradius, double minAngle, double maxAngle)
+		public static RationalNurbsCurve3d EllipseArc(Vector3d center, double xradius, double yradius, double minAngle, double maxAngle)
 		{
-			var unitX = Vector.UnitX(center.Dimension);
-			var unitY = Vector.UnitY(center.Dimension);
+			var unitX = Vector3d.UnitX;
+			var unitY = Vector3d.UnitY;
 			return EllipseArc(center, xradius, yradius, minAngle, maxAngle, unitX, unitY);
 		}
 
@@ -221,7 +220,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="xaxis">the x axis</param>
 		/// <param name="yaxis">the y axis</param>
 		/// <returns></returns>
-		public static RationalNurbsCurve EllipseArc(Vector center, double xradius, double yradius, double startAngle, double endAngle, Vector xaxis, Vector yaxis)
+		public static RationalNurbsCurve3d EllipseArc(Vector3d center, double xradius, double yradius, double startAngle, double endAngle, Vector3d xaxis, Vector3d yaxis)
 		{
 			//if the end angle is less than the start angle, do a circle
 			if (endAngle < startAngle)
@@ -249,7 +248,7 @@ namespace Common.Geometry.Nurbs
 			var P0 = center + (xaxis * (xradius * Math.Cos(startAngle))) + (yaxis * (yradius * Math.Sin(startAngle)));
 			var T0 = (yaxis * Math.Cos(startAngle)) - (xaxis * Math.Sin(startAngle));
 
-			var controlPoints = new Vector[numArcs * 2 + 1];
+			var controlPoints = new Vector3d[numArcs * 2 + 1];
 			var knots = new double[2 * numArcs + 3 + 1];
 
 			int index = 0;
@@ -311,17 +310,17 @@ namespace Common.Geometry.Nurbs
 					break;
 			}
 
-			return new RationalNurbsCurve(2, knots, controlPoints, weights);
+			return new RationalNurbsCurve3d(2, knots, controlPoints, weights);
 		}
 
 
 		private struct CurveCurveIntersection
 		{
 			//where the intersection took place
-			public Vector point0;
+			public Vector3d point0;
 
 			//where the intersection took place on the second curve
-			public Vector point1;
+			public Vector3d point1;
 
 			//the parameter on the first curve
 			public double u0;
@@ -338,17 +337,17 @@ namespace Common.Geometry.Nurbs
 		/// <param name="b0">origin for ray 2</param>
 		/// <param name="b">direction of ray 2, assumed normalized</param>
 		/// <returns></returns>
-		private static bool IntersectRays(Vector a0, Vector a, Vector b0, Vector b, out CurveCurveIntersection result)
+		private static bool IntersectRays(Vector3d a0, Vector3d a, Vector3d b0, Vector3d b, out CurveCurveIntersection result)
 		{
 			result = new CurveCurveIntersection();
 
-			var dab = Vector.Dot(a, b);
-			var dab0 = Vector.Dot(a, b0);
-			var daa0 = Vector.Dot(a, a0);
-			var dbb0 = Vector.Dot(b, b0);
-			var dba0 = Vector.Dot(b, a0);
-			var daa = Vector.Dot(a, a);
-			var dbb = Vector.Dot(b, b);
+			var dab = Vector3d.Dot(a, b);
+			var dab0 = Vector3d.Dot(a, b0);
+			var daa0 = Vector3d.Dot(a, a0);
+			var dbb0 = Vector3d.Dot(b, b0);
+			var dba0 = Vector3d.Dot(b, a0);
+			var daa = Vector3d.Dot(a, a);
+			var dbb = Vector3d.Dot(b, b);
 			var div = daa * dbb - dab * dab;
 
 			//parallel case
