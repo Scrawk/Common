@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\BVHTree2fTest.cs" />
-    <Compile Include="Nurbs\NurbsCurveTest.cs" />
     <Compile Include="Points\KdTree2dTest.cs" />
     <Compile Include="Points\KdTree3dTest.cs" />
     <Compile Include="Points\PointCollection2dTest.cs" />

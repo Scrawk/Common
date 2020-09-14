@@ -55,50 +55,6 @@ namespace Common.Core.Numerics
                 array[i] = list[i];
         }
 
-        /// <summary>
-        /// Create a vector of dimension and
-        /// copy the other vector v into this.
-        /// Presumes v has the same or larger dimension.
-        /// </summary>
-        public Vector(int dimension, Vector v)
-        {
-            array = new double[dimension];
-
-            for (int i = 0; i < Dimension; i++)
-                array[i] = v[i];
-        }
-
-        /// <summary>
-        /// Create a vector of other vector v's dimension + 1
-        /// and copy the other vector v into this.
-        /// Then set the last value to w.
-        /// </summary>
-        public Vector(Vector v, double w)
-        {
-            array = new double[v.Dimension + 1];
-
-            for (int i = 0; i < Dimension - 1; i++)
-                array[i] = v[i];
-
-            array[Dimension - 1] = w;
-        }
-
-        /// <summary>
-        /// Create a vector of dimension and
-        /// copy the other vector v into this then 
-        /// set the last value to w.
-        /// Presumes v is the same or larger as dimension - 1.
-        /// </summary>
-        public Vector(int dimension, Vector v, double w)
-        {
-            array = new double[dimension];
-
-            for (int i = 0; i < Dimension - 1; i++)
-                array[i] = v[i];
-
-            array[Dimension - 1] = w;
-        }
-
         public int Dimension => array.Length;
 
         public double x => array[0];
@@ -114,27 +70,6 @@ namespace Common.Core.Numerics
         public Vector3d xyz => new Vector3d(x, y, z);
 
         public Vector4d xyzw => new Vector4d(x, y, z, w);
-
-        public static Vector UnitX(int dimension)
-        {
-            var v = new Vector(dimension);
-            v[0] = 1;
-            return v;
-        }
-
-        public static Vector UnitY(int dimension)
-        {
-            var v = new Vector(dimension);
-            v[1] = 1;
-            return v;
-        }
-
-        public static Vector UnitZ(int dimension)
-        {
-            var v = new Vector(dimension);
-            v[2] = 1;
-            return v;
-        }
 
         public double this[int i]
         {
@@ -227,18 +162,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Multiply two vectors.
-        /// </summary>
-        public static Vector operator *(Vector v1, Vector v2)
-        {
-            var vec = new Vector(v1.Dimension);
-            for (int i = 0; i < vec.Dimension; i++)
-                vec[i] = v1[i] * v2[i];
-
-            return vec;
-        }
-
-        /// <summary>
         /// Multiply a vector and a scalar.
         /// </summary>
         public static Vector operator *(Vector v, double s)
@@ -302,19 +225,11 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// The last value in the vector.
-        /// </summary>
-        public double Last
-        {
-            get => array[Dimension-1];
-        }
-
-        /// <summary>
         /// The vectors magnitude.
         /// </summary>
         public double Magnitude
         {
-            get => Math.Sqrt(SqrMagnitude);
+            get => MathUtil.SafeSqrt(SqrMagnitude);
         }
 
         /// <summary>
@@ -412,29 +327,6 @@ namespace Common.Core.Numerics
         public static Vector Cross3(Vector v0, Vector v1)
         {
             return new Vector(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x);
-        }
-
-        /// <summary>
-        /// The distance between two vectors.
-        /// </summary>
-        public static double Distance(Vector v0, Vector v1)
-        {
-            return Math.Sqrt(SqrDistance(v0, v1));
-        }
-
-        /// <summary>
-        /// The sqr distance between two vectors.
-        /// </summary>
-        public static double SqrDistance(Vector v0, Vector v1)
-        {
-            double sum = 0;
-            for (int i = 0; i < v0.Dimension; i++)
-            {
-                double diff = v0[i] - v1[i];
-                sum += diff * diff;
-            }
-                
-            return sum;
         }
 
         /// <summary>

@@ -439,29 +439,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Return a copy of the matrix as a list of lists.
-        /// </summary>
-        /// <returns></returns>
-        public List<List<double>> ToList()
-        {
-            var mat = new List<List<double>>();
-
-            for (int i = 0; i < Rows; i++)
-            {
-                var row = new List<double>();
-
-                for (int j = 0; j < Columns; j++)
-                {
-                    row.Add(array[i, j]);
-                }
-
-                mat.Add(row);
-            }
-
-            return mat;
-        }
-
-        /// <summary>
         /// Return a list where each row in matrix is a vector.
         /// </summary>
         public List<Vector> GetRowVectors()
