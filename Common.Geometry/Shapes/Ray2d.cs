@@ -3,46 +3,46 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using CIRCLE2 = Common.Geometry.Shapes.Circle2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using CIRCLE2 = Common.Geometry.Shapes.Circle2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
 
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Ray2f : IEquatable<Ray2f>
+    public struct Ray2d : IEquatable<Ray2d>
     {
 
         public VECTOR2 Position;
 
         public VECTOR2 Direction;
 
-        public Ray2f(VECTOR2 position, VECTOR2 direction)
+        public Ray2d(VECTOR2 position, VECTOR2 direction)
         {
             Position = position;
             Direction = direction;
         }
 
-        public static bool operator ==(Ray2f r1, Ray2f r2)
+        public static bool operator ==(Ray2d r1, Ray2d r2)
         {
             return r1.Position == r2.Position && r1.Direction == r2.Direction;
         }
 
-        public static bool operator !=(Ray2f r1, Ray2f r2)
+        public static bool operator !=(Ray2d r1, Ray2d r2)
         {
             return r1.Position != r2.Position || r1.Direction != r2.Direction;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Ray2f)) return false;
-            Ray2f ray = (Ray2f)obj;
+            if (!(obj is Ray2d)) return false;
+            Ray2d ray = (Ray2d)obj;
             return this == ray;
         }
 
-        public bool Equals(Ray2f ray)
+        public bool Equals(Ray2d ray)
         {
             return this == ray;
         }
@@ -60,7 +60,7 @@ namespace Common.Geometry.Shapes
 
         public override string ToString()
         {
-            return string.Format("[Ray2f: Position={0}, Direction={1}]", Position, Direction);
+            return string.Format("[Ray2d: Position={0}, Direction={1}]", Position, Direction);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Common.Geometry.Shapes
         /// <param name="s">Intersection point = Position + s * Direction</param>
         /// <param name="t">Intersection point = ray.Position + t * ray.Direction</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Ray2f ray, out REAL s, out REAL t)
+        public bool Intersects(Ray2d ray, out REAL s, out REAL t)
         {
             s = 0;
             t = 0;
@@ -103,7 +103,7 @@ namespace Common.Geometry.Shapes
         /// <param name="s">Intersection point = Position + s * Direction</param>
         /// <param name="t">Intersection point = A + t * (B - A)</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Segment2f seg, out REAL s, out REAL t)
+        public bool Intersects(Segment2d seg, out REAL s, out REAL t)
         {
             s = t = 0;
 

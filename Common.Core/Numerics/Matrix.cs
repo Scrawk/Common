@@ -281,6 +281,22 @@ namespace Common.Core.Numerics
             }
         }
 
+        private static int ChangeSign(int i)
+        {
+            if (i % 2 == 0)
+                return 1;
+            return -1;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("[Matrix: Rows={0}, Columns={1}]", Rows, Columns);
+        }
+
         /// <summary>
         /// Inverse the matrix.
         /// </summary>
@@ -316,22 +332,6 @@ namespace Common.Core.Numerics
             }
 
             return mat;
-        }
-
-        private static int ChangeSign(int i)
-        {
-            if (i % 2 == 0)
-                return 1;
-            return -1;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return string.Format("[Matrix: Rows={0}, Columns={1}]", Rows, Columns);
         }
 
         public Vector GetRow(int i)
