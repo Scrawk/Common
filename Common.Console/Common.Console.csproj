@@ -57,6 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
@@ -71,10 +74,6 @@
     <ProjectReference Include="..\Common.GraphTheory\Common.GraphTheory.csproj">
       <Project>{aae15d50-f89f-4019-bb56-adcdf5db1955}</Project>
       <Name>Common.GraphTheory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.Mathematics\Common.Mathematics.csproj">
-      <Project>{6c7f456b-0564-45d8-a612-ac754a12002d}</Project>
-      <Name>Common.Mathematics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
