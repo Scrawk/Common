@@ -32,10 +32,17 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The center position of the capsule.
         /// </summary>
-        public Vector2f Center
-        {
-            get { return (A + B) * 0.5f; }
-        }
+        public Vector2f Center => (A + B) * 0.5f;
+
+        /// <summary>
+        /// The capsules squared radius at the end points.
+        /// </summary>
+        public float Radius2 => Radius * Radius;
+
+        /// <summary>
+        /// The capsules diameter at the end points.
+        /// </summary>
+        public float Diameter => Radius * 2.0f;
 
         /// <summary>
         /// Calculate the bounding box.
@@ -53,16 +60,25 @@ namespace Common.Geometry.Shapes
             }
         }
 
+        /// <summary>
+        /// Are these two capsules equal.
+        /// </summary>
         public static bool operator ==(Capsule2f c1, Capsule2f c2)
         {
             return c1.Radius == c2.Radius && c1.A == c2.A && c1.B == c2.B;
         }
 
+        /// <summary>
+        /// Are these two capsules not equal.
+        /// </summary>
         public static bool operator !=(Capsule2f c1, Capsule2f c2)
         {
             return c1.Radius != c2.Radius || c1.A != c2.A || c1.A != c2.A;
         }
 
+        /// <summary>
+        /// Are these two capsules equal.
+        /// </summary>
         public override bool Equals(object obj)
         {
             if (!(obj is Capsule2f)) return false;
@@ -70,11 +86,18 @@ namespace Common.Geometry.Shapes
             return this == cap;
         }
 
+        /// <summary>
+        /// Are these two capsules equal.
+        /// </summary>
         public bool Equals(Capsule2f cap)
         {
             return this == cap;
         }
 
+        /// <summary>
+        /// The capsules hash code.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             unchecked
@@ -88,7 +111,7 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// 
+        /// The capsules description.
         /// </summary>
         public override string ToString()
         {
