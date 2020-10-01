@@ -3,60 +3,64 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
+using REAL = System.Single;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
+using BOX2 = Common.Geometry.Shapes.Box2f;
+
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Capsule2f : IEquatable<Capsule2f>, IShape2f
     {
-        public Vector2f A;
+        public VECTOR2 A;
 
-        public Vector2f B;
+        public VECTOR2 B;
 
-        public float Radius;
+        public REAL Radius;
 
-        public Capsule2f(Vector2f a, Vector2f b, float radius)
+        public Capsule2f(VECTOR2 a, VECTOR2 b, REAL radius)
         {
             A = a;
             B = b;
             Radius = radius;
         }
 
-        public Capsule2f(float ax, float ay, float bx, float by, float radius)
+        public Capsule2f(REAL ax, REAL ay, REAL bx, REAL by, REAL radius)
         {
-            A = new Vector2f(ax, ay);
-            B = new Vector2f(bx, by);
+            A = new VECTOR2(ax, ay);
+            B = new VECTOR2(bx, by);
             Radius = radius;
         }
 
         /// <summary>
         /// The center position of the capsule.
         /// </summary>
-        public Vector2f Center => (A + B) * 0.5f;
+        public VECTOR2 Center => (A + B) * 0.5f;
 
         /// <summary>
         /// The capsules squared radius at the end points.
         /// </summary>
-        public float Radius2 => Radius * Radius;
+        public REAL Radius2 => Radius * Radius;
 
         /// <summary>
         /// The capsules diameter at the end points.
         /// </summary>
-        public float Diameter => Radius * 2.0f;
+        public REAL Diameter => Radius * 2.0f;
 
         /// <summary>
         /// Calculate the bounding box.
         /// </summary>
-        public Box2f Bounds
+        public BOX2 Bounds
         {
             get
             {
-                float xmin = Math.Min(A.x, B.x) - Radius;
-                float xmax = Math.Max(A.x, B.x) + Radius;
-                float ymin = Math.Min(A.y, B.y) - Radius;
-                float ymax = Math.Max(A.y, B.y) + Radius;
+                REAL xmin = Math.Min(A.x, B.x) - Radius;
+                REAL xmax = Math.Max(A.x, B.x) + Radius;
+                REAL ymin = Math.Min(A.y, B.y) - Radius;
+                REAL ymax = Math.Max(A.y, B.y) + Radius;
 
-                return new Box2f(xmin, xmax, ymin, ymax);
+                return new BOX2(xmin, xmax, ymin, ymax);
             }
         }
 
@@ -121,21 +125,21 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Does the capsule contain the point.
         /// </summary>
-        public bool Contains(Vector2f p)
+        public bool Contains(VECTOR2 p)
         {
-            float r2 = Radius * Radius;
+            REAL r2 = Radius * Radius;
 
-            Vector2f ap = p - A;
+            VECTOR2 ap = p - A;
 
             if (ap.x * ap.x + ap.y * ap.y <= r2) return true;
 
-            Vector2f bp = p - B.x;
+            VECTOR2 bp = p - B.x;
 
             if (bp.x * bp.x + bp.y * bp.y <= r2) return true;
 
-            Vector2f ab = B - A;
+            VECTOR2 ab = B - A;
 
-            float t = (ab.x * A.x + ab.y * A.y) / (ab.x * ab.x + ab.y * ab.y);
+            REAL t = (ab.x * A.x + ab.y * A.y) / (ab.x * ab.x + ab.y * ab.y);
 
             if (t < 0.0) t = 0.0f;
             if (t > 1.0) t = 1.0f;
@@ -148,25 +152,36 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// The closest point to the surface of the capsule.
+        /// Find the closest point to the capsule
+        /// If point inside capsule return point.
         /// </summary>
-        public Vector2f Closest(Vector2f p)
+        public VECTOR2 Closest(VECTOR2 p)
         {
-            throw new NotImplementedException();
+            var seg = new Segment2f(A, B);
+            REAL sd = seg.SignedDistance(p) - Radius;
+
+            if (sd <= 0)
+                return p;
+            else
+            {
+                var c = seg.Closest(p);
+                return (c - p).Normalized * Radius;
+            }
         }
 
         /// <summary>
         /// Does the capsule intersect with the box.
         /// </summary>
-        public bool Intersects(Box2f box)
+        public bool Intersects(BOX2 box)
         {
-            throw new NotImplementedException();
+            var c = Closest(box.Center);
+            return SignedDistance(c) <= Radius;
         }
 
         /// <summary>
         /// The signed distance to the point.
         /// </summary>
-        public float SignedDistance(Vector2f p)
+        public REAL SignedDistance(VECTOR2 p)
         {
             var seg = new Segment2f(A, B);
 	        return seg.SignedDistance(p) - Radius;

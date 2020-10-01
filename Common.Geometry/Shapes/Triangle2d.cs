@@ -205,19 +205,9 @@ namespace Common.Geometry.Shapes
             return new Triangle2d(tri.A * s, tri.B * s, tri.C * s);
         }
 
-        public static Triangle2d operator *(Triangle2d tri, VECTOR2 v)
-        {
-            return new Triangle2d(tri.A * v, tri.B * v, tri.C * v);
-        }
-
         public static Triangle2d operator /(Triangle2d tri, REAL s)
         {
             return new Triangle2d(tri.A / s, tri.B / s, tri.C / s);
-        }
-
-        public static Triangle2d operator /(Triangle2d tri, VECTOR2 v)
-        {
-            return new Triangle2d(tri.A / v, tri.B / v, tri.C / v);
         }
 
         public static Triangle2d operator *(Triangle2d tri, MATRIX2 m)

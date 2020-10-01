@@ -87,19 +87,9 @@ namespace Common.Geometry.Shapes
             return new Triangle3f(tri.A - s, tri.B - s, tri.C - s);
         }
 
-        public static Triangle3f operator -(Triangle3f tri, Vector3f v)
-        {
-            return new Triangle3f(tri.A - v, tri.B - v, tri.C - v);
-        }
-
         public static Triangle3f operator *(Triangle3f tri, float s)
         {
             return new Triangle3f(tri.A * s, tri.B * s, tri.C * s);
-        }
-
-        public static Triangle3f operator *(Triangle3f tri, Vector3f v)
-        {
-            return new Triangle3f(tri.A * v, tri.B * v, tri.C * v);
         }
 
         public static Triangle3f operator /(Triangle3f tri, float s)

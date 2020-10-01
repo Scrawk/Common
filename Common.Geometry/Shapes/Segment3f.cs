@@ -99,19 +99,9 @@ namespace Common.Geometry.Shapes
             return new Segment3f(seg.A * s, seg.B * s);
         }
 
-        public static Segment3f operator *(Segment3f seg, Vector3f v)
-        {
-            return new Segment3f(seg.A * v, seg.B * v);
-        }
-
         public static Segment3f operator /(Segment3f seg, float s)
         {
             return new Segment3f(seg.A / s, seg.B / s);
-        }
-
-        public static Segment3f operator /(Segment3f seg, Vector3f v)
-        {
-            return new Segment3f(seg.A / v, seg.B / v);
         }
 
         public static Segment3f operator *(Segment3f seg, Matrix3x3f m)

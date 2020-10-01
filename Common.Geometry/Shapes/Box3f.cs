@@ -107,19 +107,9 @@ namespace Common.Geometry.Shapes
             return new Box3f(box.Min * s, box.Max * s);
         }
 
-        public static Box3f operator *(Box3f box, VECTOR3 v)
-        {
-            return new Box3f(box.Min * v, box.Max * v);
-        }
-
         public static Box3f operator /(Box3f box, REAL s)
         {
             return new Box3f(box.Min / s, box.Max / s);
-        }
-
-        public static Box3f operator /(Box3f box, VECTOR3 v)
-        {
-            return new Box3f(box.Min / v, box.Max / v);
         }
 
         public static Box3f operator *(Box3f box, MATRIX3 m)

@@ -114,19 +114,9 @@ namespace Common.Geometry.Shapes
             return new Segment2d(seg.A * s, seg.B * s);
         }
 
-        public static Segment2d operator *(Segment2d seg, VECTOR2 v)
-        {
-            return new Segment2d(seg.A * v, seg.B * v);
-        }
-
         public static Segment2d operator /(Segment2d seg, REAL s)
         {
             return new Segment2d(seg.A / s, seg.B / s);
-        }
-
-        public static Segment2d operator /(Segment2d seg, VECTOR2 v)
-        {
-            return new Segment2d(seg.A / v, seg.B / v);
         }
 
         public static Segment2d operator *(Segment2d seg, MATRIX2 m)
@@ -192,6 +182,7 @@ namespace Common.Geometry.Shapes
         /// Does the point line on the segemnts.
         /// </summary>
         /// <param name="p"></param>
+        /// <param name="eps"></param>
         /// <returns></returns>
         public bool Contains(VECTOR2 p, REAL eps)
         {

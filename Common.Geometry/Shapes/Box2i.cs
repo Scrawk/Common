@@ -103,19 +103,9 @@ namespace Common.Geometry.Shapes
             return new Box2i(box.Min * s, box.Max * s);
         }
 
-        public static Box2i operator *(Box2i box, Vector2i v)
-        {
-            return new Box2i(box.Min * v, box.Max * v);
-        }
-
         public static Box2i operator /(Box2i box, int s)
         {
             return new Box2i(box.Min / s, box.Max / s);
-        }
-
-        public static Box2i operator /(Box2i box, Vector2i v)
-        {
-            return new Box2i(box.Min / v, box.Max / v);
         }
 
         public static explicit operator Box2i(Box2f box)

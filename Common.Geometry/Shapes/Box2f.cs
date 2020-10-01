@@ -110,19 +110,9 @@ namespace Common.Geometry.Shapes
             return new Box2f(box.Min * s, box.Max * s);
         }
 
-        public static Box2f operator *(Box2f box, VECTOR2 v)
-        {
-            return new Box2f(box.Min * v, box.Max * v);
-        }
-
         public static Box2f operator /(Box2f box, REAL s)
         {
             return new Box2f(box.Min / s, box.Max / s);
-        }
-
-        public static Box2f operator /(Box2f box, VECTOR2 v)
-        {
-            return new Box2f(box.Min / v, box.Max / v);
         }
 
         public static Box2f operator *(Box2f box, MATRIX2 m)
