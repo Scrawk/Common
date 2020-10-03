@@ -71,6 +71,29 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Access point a or b by index.
+        /// </summary>
+        /// <param name="i">A index of 0 or 1.</param>
+        /// <returns>The point at index i.</returns>
+        unsafe public VECTOR2 this[int i]
+        {
+            get
+            {
+                if ((uint)i >= 2)
+                    throw new IndexOutOfRangeException("Capsule2f index out of range.");
+
+                fixed (Capsule2f* array = &this) { return ((VECTOR2*)array)[i]; }
+            }
+            set
+            {
+                if ((uint)i >= 2)
+                    throw new IndexOutOfRangeException("Capsule2f index out of range.");
+
+                fixed (VECTOR2* array = &A) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
         /// Cast the capsule.
         /// </summary>
         /// <param name="cap"></param>

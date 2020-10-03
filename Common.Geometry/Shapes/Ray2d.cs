@@ -74,11 +74,24 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Intersection point between two rays.
+        /// Presumes there is a intersection.
+        /// </summary>
+        /// <param name="ray">The other ray.</param>
+        /// <returns></returns>
+        public VECTOR2 Intersection(Ray2d ray)
+        {
+            REAL s, t;
+            Intersects(ray, out s, out t);
+            return GetPosition(s);
+        }
+
+        /// <summary>
         /// Intersection between two rays.
         /// </summary>
-        /// <param name="ray">other ray</param>
-        /// <param name="s">Intersection point = Position + s * Direction</param>
-        /// <param name="t">Intersection point = ray.Position + t * ray.Direction</param>
+        /// <param name="ray">The other ray</param>
+        /// <param name="s">Intersection point = Position + s * Direction.</param>
+        /// <param name="t">Intersection point = ray.Position + t * ray.Direction.</param>
         /// <returns>If rays intersect</returns>
         public bool Intersects(Ray2d ray, out REAL s, out REAL t)
         {
