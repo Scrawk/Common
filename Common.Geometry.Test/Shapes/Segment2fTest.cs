@@ -9,6 +9,7 @@ namespace Common.Geometry.Test.Shapes
     [TestClass]
     public class Segment2fTest
     {
+
         [TestMethod]
         public void IntersectsBox()
         {

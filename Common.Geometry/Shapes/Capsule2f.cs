@@ -6,6 +6,7 @@ using Common.Core.Numerics;
 using REAL = System.Single;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
 using BOX2 = Common.Geometry.Shapes.Box2f;
+using SEGMENT2 = Common.Geometry.Shapes.Segment2f;
 
 namespace Common.Geometry.Shapes
 {
@@ -49,7 +50,12 @@ namespace Common.Geometry.Shapes
         public REAL Diameter => Radius * 2.0f;
 
         /// <summary>
-        /// Calculate the bounding box.
+        /// The segment made from the capsules two points.
+        /// </summary>
+        public SEGMENT2 Segment => new SEGMENT2(A, B);
+
+        /// <summary>
+        /// The capsules bounding box.
         /// </summary>
         public BOX2 Bounds
         {
@@ -63,6 +69,15 @@ namespace Common.Geometry.Shapes
                 return new BOX2(xmin, xmax, ymin, ymax);
             }
         }
+
+        /// <summary>
+        /// Cast the capsule.
+        /// </summary>
+        /// <param name="cap"></param>
+        //public static explicit operator Capsule2f(Capsule2d cap)
+        //{
+        //    return new Capsule2f((Vector2f)cap.A, (Vector2f)cap.B, (float)cap.Radius);
+        //}
 
         /// <summary>
         /// Are these two capsules equal.
@@ -157,7 +172,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public VECTOR2 Closest(VECTOR2 p)
         {
-            var seg = new Segment2f(A, B);
+            var seg = Segment;
             REAL sd = seg.SignedDistance(p) - Radius;
 
             if (sd <= 0)
@@ -174,8 +189,24 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool Intersects(BOX2 box)
         {
-            var c = Closest(box.Center);
-            return SignedDistance(c) <= Radius;
+            var a = box.Closest(A);
+            if (SignedDistance(a) <= Radius)
+                return true;
+
+            var b = box.Closest(B);
+            if (SignedDistance(b) <= Radius)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Does the capsule intersect with the capsule.
+        /// </summary>
+        public bool Intersects(Capsule2f capsule)
+        {
+            var closest = Segment.Closest(capsule.Segment);
+            return closest.Length <= Radius + capsule.Radius;
         }
 
         /// <summary>
@@ -183,8 +214,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL SignedDistance(VECTOR2 p)
         {
-            var seg = new Segment2f(A, B);
-	        return seg.SignedDistance(p) - Radius;
+	        return Segment.SignedDistance(p) - Radius;
         }
 
     }

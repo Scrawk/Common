@@ -132,11 +132,20 @@ namespace Common.Geometry.Collections
         }
 
         /// <summary>
-        /// Does a shape intersects the box.
+        /// Does a shape intersect the box.
         /// </summary>
         public bool Intersects(Box2f box)
         {
             return NodeIntersects(Root, box);
+        }
+
+        /// <summary>
+        /// Find all the shapes that intersect the box and 
+        /// add them to the list.
+        /// </summary>
+        public void Intersecting(Box2f box, List<T> shapes)
+        {
+            NodeIntersecting(Root, box, shapes);
         }
 
         /// <summary>
@@ -336,6 +345,29 @@ namespace Common.Geometry.Collections
                 {
                     if (NodeIntersects(node.Left, box)) return true;
                     if (NodeIntersects(node.Right, box)) return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Find all the shapes that intersect the box and 
+        /// add them to the list.
+        /// </summary>
+        private bool NodeIntersecting(BVHTreeNode2f<T> node, Box2f box, List<T> shapes)
+        {
+            if (node != null && node.Bounds.Intersects(box))
+            {
+                if (node.IsLeaf)
+                {
+                    if (node.Shape.Intersects(box))
+                        shapes.Add(node.Shape);
+                }
+                else
+                {
+                    NodeIntersecting(node.Left, box, shapes);
+                    NodeIntersecting(node.Right, box, shapes);
                 }
             }
 

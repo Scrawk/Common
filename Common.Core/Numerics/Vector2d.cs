@@ -527,6 +527,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Project vector v onto u.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2d Project(Vector2d u, Vector2d v)
+        {
+            return Dot(u, v) / u.SqrMagnitude * u;
+        }
+
+        /// <summary>
         /// Given an incident vector i and a normal vector n.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

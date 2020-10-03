@@ -603,12 +603,12 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Project v on to normal n.
+        /// Project vector v onto u.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f Project(Vector3f v, Vector3f n)
+        public static Vector3f Project(Vector3f u, Vector3f v)
         {
-            return Dot(v, n) * n;
+            return Dot(u, v) / u.SqrMagnitude * u;
         }
 
         /// <summary>
@@ -642,7 +642,7 @@ namespace Common.Core.Numerics
             a.Normalize();
             c = Cross(a, b);
 
-            if (c.SqrMagnitude == 0)
+            if (MathUtil.IsZero(c.SqrMagnitude))
                 throw new ArgumentException("a and b are parallel");
 
             c.Normalize();
