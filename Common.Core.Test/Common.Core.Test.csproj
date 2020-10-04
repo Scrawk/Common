@@ -63,7 +63,6 @@
     <Compile Include="Numerics\Matrix2x2dTest.cs" />
     <Compile Include="Numerics\Matrix3x3dTest.cs" />
     <Compile Include="Numerics\Matrix4x4dTest.cs" />
-    <Compile Include="Numerics\MatrixTest.cs" />
     <Compile Include="Numerics\Matrix2x2fTest.cs" />
     <Compile Include="Numerics\Matrix3x3fTest.cs" />
     <Compile Include="Numerics\Matrix4x4fTest.cs" />

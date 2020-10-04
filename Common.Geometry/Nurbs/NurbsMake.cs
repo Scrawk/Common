@@ -12,101 +12,93 @@ namespace Common.Geometry.Nurbs
 
 		/// <summary>
 		/// 0) build knot vector for curve by normalized chord length
-		/// 1) construct effective basis function in square matrix (W)
-		/// 2) construct set of coordinattes to interpolate vector (p)
-		/// 3) set of control points (c)
-		/// 4) solve for c in all 3 dimensions
+		/// 1) construct effective basis function in square matrix
+		/// 2) construct set of coordinattes to interpolate vector
+		/// 3) set of control points
+		/// 4) solve in all 3 dimensions
 		/// </summary>
 		/// <param name="degree">The degree of the curve.</param>
 		/// <param name="points">The points to interp curve from.</param>
-		/// <returns></returns>
+		/// <returns>A curve that passes through all the points.</returns>
 		public static NurbsCurve3d FromPoints(int degree, IList<Vector3d> points)
 		{
 			if (points.Count < degree + 1)
 				throw new Exception("You need to supply at least degree + 1 points.");
 
-			var us = new List<double>();
-			us.Add(0);
+			int columns = points.Count;
+			var us = new double[columns];
 
-			for (int i = 1; i < points.Count; i++)
+			for (int i = 1; i < columns; i++)
 			{
 				var chord = (points[i] - points[i - 1]).Magnitude;
-				var last = us[us.Count - 1];
-				us.Add(last + chord);
+				var last = us[i - 1];
+				us[i] = last + chord;
 			}
 
 			//normalize
-			var max = us[us.Count - 1];
-			for (int i = 1; i < us.Count; i++)
+			var max = us[columns - 1];
+			for (int i = 1; i < columns; i++)
 				us[i] = us[i] / max;
 
-			var knotsStart = new List<double>(degree + 1);
-			knotsStart.AddRange(degree + 1, 0);
+			var knots = new List<double>(degree + 1);
+			knots.AddRange(degree + 1, 0);
 
 			//we need two more control points, two more knots
 			int start = 1;
-			int end = us.Count - degree;
+			int end = columns - degree;
+			double invDegree = 1.0 / degree;
 
 			for (int i = start; i < end; i++)
 			{
 				double weightSums = 0;
 				for (int j = 0; j < degree; j++)
-				{
 					weightSums += us[i + j];
-				}
 
-				knotsStart.Add((1.0 / degree) * weightSums);
+				knots.Add(weightSums * invDegree);
 			}
 
-			var knots = knotsStart.ToList();
 			knots.AddRange(degree + 1, 1);
 
-			//build matrix of basis function coeffs (TODO: use sparse rep)
-			var A = new List<List<double>>();
-			int n = points.Count - 1;
-			int ld = points.Count - (degree + 1);
+			var A = new double[columns, columns];
 
-			foreach (var u in us)
+			for (int i = 0; i < columns; i++)
 			{
+				double u = us[i];
 				int span = NurbsBasis.FindSpan(degree, knots, u);
 				var basisFuncs = NurbsBasis.BSplineBasis(degree, span, knots, u);
-
 				int ls = span - degree;
 
-				var row = new List<double>();
-				row.AddRange(ls, 0);
-				row.AddRange(basisFuncs);
-				row.AddRange(ld - ls, 0);
-
-				A.Add(row);
+				for (int j = 0; j < basisFuncs.Length; j++)
+					A[i, j + ls] = basisFuncs[j];
 			}
 
 			//for each dimension, solve
 			const int rows = 3;
-			int columns = points.Count;
-			Matrix xs = new Matrix(rows, columns);
-			Matrix M = new Matrix(A);
+			var solutions = new double[rows, columns];
+
+			var system = new LinearSystem(A);
+			var b = new double[columns];
+			var x = new double[columns];
 
 			for (int i = 0; i < rows; i++)
 			{
-				var b = new Vector(columns);
+				for (int j = 0; j < columns; j++)
+					b[j] = points[j][i];
 
-				int j = 0;
-				foreach (var p in points)
-					b[j++] = p[i];
+				system.Solve(b, x);
 
-				var x = Matrix.Solve(M, b);
-				xs.SetRow(i, x);
+				for (int j = 0; j < columns; j++)
+					solutions[i, j] = x[j];
 			}
 
-			var controlPts = new List<Vector3d>();
-			for (int i = 0; i < columns; i++)
+			var controlPts = new List<Vector3d>(columns);
+			for (int j = 0; j < columns; j++)
 			{
 				var v = new Vector3d();
 
-				v.x = xs[0, i];
-				v.y = xs[1, i];
-				v.z = xs[2, i];
+				v.x = solutions[0, j];
+				v.y = solutions[1, j];
+				v.z = solutions[2, j];
 
 				controlPts.Add(v);
 			}

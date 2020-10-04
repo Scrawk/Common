@@ -555,17 +555,6 @@ namespace Common.Core.Numerics
 		}
 		
 		/// <summary>
-		/// Flip the ith column.
-		/// </summary>
-		public void FlipColumn(int iCol)
-		{
-			this[0, iCol] *= -1.0;
-			this[1, iCol] *= -1.0;
-			this[2, iCol] *= -1.0;
-			this[3, iCol] *= -1.0;
-		}
-		
-		/// <summary>
 		/// Get the ith row as a vector.
 		/// </summary>
 		public Vector4d GetRow(int iRow)
@@ -582,17 +571,6 @@ namespace Common.Core.Numerics
 			this[iRow, 1] = v.y;
 			this[iRow, 2] = v.z;
 			this[iRow, 3] = v.w;
-		}
-		
-		/// <summary>
-		/// Flip the ith row.
-		/// </summary>
-		public void FlipRow(int iRow)
-		{
-			this[iRow, 0] *= -1.0f;
-			this[iRow, 1] *= -1.0f;
-			this[iRow, 2] *= -1.0f;
-			this[iRow, 3] *= -1.0f;
 		}
 
         /// <summary>
