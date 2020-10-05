@@ -8,19 +8,38 @@ namespace System.Collections.Generic
 {
     public static class IListExtension
     {
-
+        /// <summary>
+        /// Return the last item in list.
+        /// </summary>
         public static T PeekLast<T>(this IList<T> list)
         {
             int count = list.Count;
             return list[count - 1];
         }
 
+        /// <summary>
+        /// Shuffle the list into a random order.
+        /// </summary>
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            var rnd = new Random();
+            Shuffle(list, rnd);
+        }
+
+        /// <summary>
+        /// Shuffle the list into a random order.
+        /// </summary>
+        /// <param name="seed">The random generators seed.</param>
         public static void Shuffle<T>(this IList<T> list, int seed)
         {
             var rnd = new Random(seed);
             Shuffle(list, rnd);
         }
 
+        /// <summary>
+        /// Shuffle the list into a random order.
+        /// </summary>
+        /// <param name="rnd">The random generator.</param>
         public static void Shuffle<T>(this IList<T> list, Random rnd)
         {
             int n = list.Count;
@@ -33,47 +52,28 @@ namespace System.Collections.Generic
             }
         }
 
+        /// <summary>
+        /// Get the element at index i and wrap
+        /// the index to the lists bounds.
+        /// </summary>
+        /// <param name="i">The index.</param>
+        /// <returns>The element at index i.</returns>
         public static T GetCircular<T>(this IList<T> list, int i)
         {
             return list[MathUtil.Wrap(i, list.Count)];
         }
 
+        /// <summary>
+        /// Get the element at index i and clamp
+        /// the index to the lists bounds.
+        /// </summary>
+        /// <param name="i">The index.</param>
+        /// <returns>The element at index i.</returns>
         public static T GetClamped<T>(this IList<T> list, int i)
         {
             if (i < 0) i = 0;
             if (i > list.Count - 1) i = list.Count - 1;
             return list[i];
-        }
-
-        public static T[] Slice<T>(this IList<T> list, int pos)
-        {
-            return Slice(list, pos, list.Count);
-        }
-
-        public static T[] Slice<T>(this IList<T> list, int pos, int end)
-        {
-            if (pos < 0)
-            {
-                pos = list.Count + pos;
-                if (pos < 0)
-                    pos = 0;
-            }
-
-            if (end < 0)
-                end = list.Count + end;
-
-            if (end > list.Count)
-                end = list.Count;
-
-            int len = end - pos;
-            if (len < 0)
-                return new T[0];
-
-            var array = new T[len];
-            for (int i = 0; i < len; i++)
-                array[i] = list[pos + i];
-
-            return array;
         }
 
     }

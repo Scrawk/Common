@@ -82,7 +82,27 @@ namespace System.Collections.Generic
                 list[i] = list[count - 1];
                 list.RemoveAt(count - 1);
             }
+        }
 
+        /// <summary>
+        /// Remove the elements in the list and return as a seperate list.
+        /// </summary>
+        /// <param name="index">The index to start at.</param>
+        /// <param name="count">The number of elements to cut.</param>
+        /// <returns>The cut elements.</returns>
+        public static List<T> Cut<T>(this List<T> list, int index, int count)
+        {
+            var cut = new List<T>(count);
+
+            count = Math.Min(count, list.Count() - index);
+            if (index < 0 || count < 0 || index >= list.Count)
+                return cut;
+
+            for (int i = 0; i < count; i++)
+                cut.Add(list[index + i]);
+
+            list.RemoveRange(index, count);
+            return cut;
         }
     }
 }
