@@ -12,9 +12,10 @@ using SEGMENT2 = Common.Geometry.Shapes.Segment2d;
 namespace Common.Geometry.Polygons
 {
     /// <summary>
-    /// 
+    /// A line made from connected segments.
+    /// Segment have width and are treated as capsules.
     /// </summary>
-    public class Polyline2d : Polyobject2d
+    public class Polyline2d : Polyobject2d, IShape2d
     {
 
         public Polyline2d(REAL width, int count) : base(count)
@@ -149,13 +150,8 @@ namespace Common.Geometry.Polygons
         /// Does the line contain the point.
         /// The line has some thickness from its width.
         /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
         public override bool Contains(VECTOR2 point)
         {
-            if (Count == 0) return false;
-            if (!Bounds.Contains(point)) return false;
-
             REAL radius = Width * 0.5;
 
             for (int i = 0; i < Count - 1; i++)
@@ -172,15 +168,65 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
+        /// Find the closest point to the line
+        /// If point inside line return point.
+        /// </summary>
+        public VECTOR2 Closest(VECTOR2 p)
+        {
+            REAL radius = Width * 0.5;
+            REAL min = REAL.PositiveInfinity;
+            var seg = new SEGMENT2();
+            var closest = new SEGMENT2();
+
+            for (int i = 0; i < Count - 1; i++)
+            {
+                seg.A = Positions[i];
+                seg.B = Positions[i + 1];
+                var sd = seg.SignedDistance(p) - radius;
+
+                if (sd <= 0)
+                    return p;
+                else if (sd < min)
+                {
+                    min = sd;
+                    closest = seg;
+                }
+            }
+
+            var c = closest.Closest(p);
+            return (c - p).Normalized * Radius;
+        }
+
+        /// <summary>
+        /// Does the line intersect with the box.
+        /// </summary>
+        public bool Intersects(BOX2 box)
+        {
+            REAL radius = Width * 0.5;
+            var seg = new SEGMENT2();
+
+            for (int i = 0; i < Count - 1; i++)
+            {
+                seg.A = Positions[i];
+                seg.B = Positions[i + 1];
+
+                var a = box.Closest(seg.A);
+                if (seg.SignedDistance(a) <= radius)
+                    return true;
+
+                var b = box.Closest(seg.B);
+                if (seg.SignedDistance(b) <= radius)
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// The signed distance from the line to the point.
         /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
         public override REAL SignedDistance(VECTOR2 point)
         {
-            if (Count == 0)
-                return REAL.PositiveInfinity;
-
             REAL sdf = REAL.PositiveInfinity;
             REAL radius = Width * 0.5;
 

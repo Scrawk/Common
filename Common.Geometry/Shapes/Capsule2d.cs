@@ -3,16 +3,16 @@ using System.Runtime.InteropServices;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
-using SEGMENT2 = Common.Geometry.Shapes.Segment2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
+using SEGMENT2 = Common.Geometry.Shapes.Segment2d;
 
 namespace Common.Geometry.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Capsule2f : IEquatable<Capsule2f>, IShape2f
+    public struct Capsule2d : IEquatable<Capsule2d>, IShape2d
     {
         public VECTOR2 A;
 
@@ -20,14 +20,14 @@ namespace Common.Geometry.Shapes
 
         public REAL Radius;
 
-        public Capsule2f(VECTOR2 a, VECTOR2 b, REAL radius)
+        public Capsule2d(VECTOR2 a, VECTOR2 b, REAL radius)
         {
             A = a;
             B = b;
             Radius = radius;
         }
 
-        public Capsule2f(REAL ax, REAL ay, REAL bx, REAL by, REAL radius)
+        public Capsule2d(REAL ax, REAL ay, REAL bx, REAL by, REAL radius)
         {
             A = new VECTOR2(ax, ay);
             B = new VECTOR2(bx, by);
@@ -37,7 +37,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The center position of the capsule.
         /// </summary>
-        public VECTOR2 Center => (A + B) * 0.5f;
+        public VECTOR2 Center => (A + B) * 0.5;
 
         /// <summary>
         /// The capsules squared radius at the end points.
@@ -47,7 +47,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The capsules diameter at the end points.
         /// </summary>
-        public REAL Diameter => Radius * 2.0f;
+        public REAL Diameter => Radius * 2.0;
 
         /// <summary>
         /// The segment made from the capsules two points.
@@ -80,14 +80,14 @@ namespace Common.Geometry.Shapes
             get
             {
                 if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Capsule2f index out of range.");
+                    throw new IndexOutOfRangeException("Capsule2d index out of range.");
 
-                fixed (Capsule2f* array = &this) { return ((VECTOR2*)array)[i]; }
+                fixed (Capsule2d* array = &this) { return ((VECTOR2*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
-                    throw new IndexOutOfRangeException("Capsule2f index out of range.");
+                    throw new IndexOutOfRangeException("Capsule2d index out of range.");
 
                 fixed (VECTOR2* array = &A) { array[i] = value; }
             }
@@ -96,15 +96,15 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Cast the capsule.
         /// </summary>
-        public static explicit operator Capsule2f(Capsule2d cap)
+        public static implicit operator Capsule2d(Capsule2f cap)
         {
-            return new Capsule2f((Vector2f)cap.A, (Vector2f)cap.B, (float)cap.Radius);
+            return new Capsule2d(cap.A, cap.B, cap.Radius);
         }
 
         /// <summary>
         /// Are these two capsules equal.
         /// </summary>
-        public static bool operator ==(Capsule2f c1, Capsule2f c2)
+        public static bool operator ==(Capsule2d c1, Capsule2d c2)
         {
             return c1.Radius == c2.Radius && c1.A == c2.A && c1.B == c2.B;
         }
@@ -112,7 +112,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Are these two capsules not equal.
         /// </summary>
-        public static bool operator !=(Capsule2f c1, Capsule2f c2)
+        public static bool operator !=(Capsule2d c1, Capsule2d c2)
         {
             return c1.Radius != c2.Radius || c1.A != c2.A || c1.A != c2.A;
         }
@@ -122,15 +122,15 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public override bool Equals(object obj)
         {
-            if (!(obj is Capsule2f)) return false;
-            Capsule2f cap = (Capsule2f)obj;
+            if (!(obj is Capsule2d)) return false;
+            Capsule2d cap = (Capsule2d)obj;
             return this == cap;
         }
 
         /// <summary>
         /// Are these two capsules equal.
         /// </summary>
-        public bool Equals(Capsule2f cap)
+        public bool Equals(Capsule2d cap)
         {
             return this == cap;
         }
@@ -156,7 +156,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public override string ToString()
         {
-            return string.Format("[Capsule2f: A={0}, B={1}, Radius={2}]", A, B, Radius);
+            return string.Format("[Capsule2d: A={0}, B={1}, Radius={2}]", A, B, Radius);
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Does the capsule intersect with the capsule.
         /// </summary>
-        public bool Intersects(Capsule2f capsule)
+        public bool Intersects(Capsule2d capsule)
         {
             var closest = Segment.Closest(capsule.Segment);
             return closest.Length <= Radius + capsule.Radius;
@@ -236,7 +236,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL SignedDistance(VECTOR2 p)
         {
-	        return Segment.SignedDistance(p) - Radius;
+            return Segment.SignedDistance(p) - Radius;
         }
 
     }
