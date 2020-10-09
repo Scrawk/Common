@@ -168,33 +168,30 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
-        /// Find the closest point to the line
-        /// If point inside line return point.
+        /// Find the closest point on the line
+        /// to the other point.
         /// </summary>
         public VECTOR2 Closest(VECTOR2 p)
         {
-            REAL radius = Width * 0.5;
             REAL min = REAL.PositiveInfinity;
             var seg = new SEGMENT2();
-            var closest = new SEGMENT2();
+            var closest = new VECTOR2();
 
             for (int i = 0; i < Count - 1; i++)
             {
                 seg.A = Positions[i];
                 seg.B = Positions[i + 1];
-                var sd = seg.SignedDistance(p) - radius;
+                var c = seg.Closest(p);
+                var d2 = VECTOR2.SqrDistance(c, p);
 
-                if (sd <= 0)
-                    return p;
-                else if (sd < min)
+                if (d2 < min)
                 {
-                    min = sd;
-                    closest = seg;
+                    min = d2;
+                    closest = c;
                 }
             }
 
-            var c = closest.Closest(p);
-            return (c - p).Normalized * Radius;
+            return closest;
         }
 
         /// <summary>

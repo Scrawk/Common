@@ -141,7 +141,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// The sum of the vector.
+        /// The sum of the vectors components.
         /// </summary>
         public REAL Sum
         {
@@ -153,7 +153,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// The multiple of the vector.
+        /// The product of the vectors components.
         /// </summary>
         public REAL Product
         {

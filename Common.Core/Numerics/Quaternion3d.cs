@@ -410,7 +410,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Returns a REAL4x4 matrix that rotates around the x-axis by a given number of degrees.
+        /// Returns a 4x4 matrix that rotates around the x-axis by a given number of degrees.
         /// </summary>
         /// <param name="angle">
         /// The clockwise rotation angle when looking along the x-axis towards the origin in degrees.
@@ -425,7 +425,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Returns a REAL4x4 matrix that rotates around the y-axis by a given number of degrees.
+        /// Returns a 4x4 matrix that rotates around the y-axis by a given number of degrees.
         /// </summary>
         /// <param name="angle">
         /// The clockwise rotation angle when looking along the y-axis towards the origin in degrees.
@@ -440,7 +440,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Returns a REAL4x4 matrix that rotates around the z-axis by a given number of degrees.
+        /// Returns a 4x4 matrix that rotates around the z-axis by a given number of degrees.
         /// </summary>
         /// <param name="angle">
         /// The clockwise rotation angle when looking along the z-axis towards the origin in degrees.

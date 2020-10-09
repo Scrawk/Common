@@ -209,7 +209,19 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// The multiple of the vector.
+        /// The sum of the vectors components.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y + z;
+            }
+        }
+
+        /// <summary>
+        /// The product of the vectors components.
         /// </summary>
         public REAL Product
         {
@@ -217,18 +229,6 @@ namespace Common.Core.Numerics
             get
             {
                 return x * y * z;
-            }
-        }
-
-        /// <summary>
-        /// The length of the vector.
-        /// </summary>
-        public REAL Magnitude
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
