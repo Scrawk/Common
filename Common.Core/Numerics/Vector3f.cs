@@ -17,14 +17,6 @@ namespace Common.Core.Numerics
     {
         public REAL x, y, z;
 
-        public REAL a => x;
-        public REAL b => y;
-        public REAL c => z;
-
-        public REAL u => x;
-        public REAL v => y;
-        public REAL w => z;
-
         /// <summary>
         /// The unit x vector.
         /// </summary>
@@ -90,33 +82,6 @@ namespace Common.Core.Numerics
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get { return new Vector2f(z, y); }
-        }
-
-        /// <summary>
-        /// Convert to a 2 dimension vector.
-        /// </summary>
-        public Vector2f ab
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2f(a, b); }
-        }
-
-        /// <summary>
-        /// Convert to a 2 dimension vector.
-        /// </summary>
-        public Vector2f bc
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2f(b, c); }
-        }
-
-        /// <summary>
-        /// Convert to a 2 dimension vector.
-        /// </summary>
-        public Vector2f ca
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2f(c, a); }
         }
 
         /// <summary>

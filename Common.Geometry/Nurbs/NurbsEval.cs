@@ -17,31 +17,26 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Resulting point on the curve at parameter u.</returns>
 		internal static Vector3d CurvePoint(NurbsCurve3d crv, double u)
 		{
-			if(crv.IsRational)
-				return RationalCurvePoint(crv as RationalNurbsCurve3d, u);
+			if (crv.IsRational)
+			{
+				var rcrv = crv as RationalNurbsCurve3d;
+
+				// Compute homogenous coordinates of control points
+				var Cw = new List<Vector4d>(rcrv.ControlPoints.Length);
+
+				for (int i = 0; i < rcrv.ControlPoints.Length; i++)
+					Cw.Add(NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints[i], rcrv.Weights[i]));
+
+				// Compute point using homogenous coordinates
+				Vector4d pointw = CurvePoint(rcrv.Degree, rcrv.Knots, Cw, u);
+
+				// Convert back to cartesian coordinates
+				return NurbsUtil.HomogenousToCartesian(pointw);
+			}
 			else
+			{
 				return CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
-		}
-
-		/// <summary>
-		/// Evaluate point on a rational NURBS curve
-		/// </summary>
-		/// <param name="crv">Curve object</param>
-		/// <param name="u">Parameter to evaluate the curve at.</param>
-		/// <returns>Resulting point on the curve at parameter u.</returns>
-		internal static Vector3d RationalCurvePoint(RationalNurbsCurve3d crv, double u)
-		{
-			// Compute homogenous coordinates of control points
-			var Cw = new List<Vector4d>(crv.ControlPoints.Length);
-
-			for (int i = 0; i < crv.ControlPoints.Length; i++)
-				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
-
-			// Compute point using homogenous coordinates
-			Vector4d pointw = CurvePoint(crv.Degree, crv.Knots, Cw, u);
-
-			// Convert back to cartesian coordinates
-			return NurbsUtil.HomogenousToCartesian(pointw);
+			}
 		}
 
 		/// <summary>
@@ -55,55 +50,46 @@ namespace Common.Geometry.Nurbs
 		internal static Vector3d[] CurveDerivatives(NurbsCurve3d crv, int num_ders, double u)
 		{
 			if (crv.IsRational)
-				return RationalCurveDerivatives(crv as RationalNurbsCurve3d, num_ders, u);
+			{
+				var rcrv = crv as RationalNurbsCurve3d;
+
+				// Compute homogenous coordinates of control points
+				var Cw = new List<Vector4d>(rcrv.ControlPoints.Length);
+
+				for (int i = 0; i < rcrv.ControlPoints.Length; i++)
+					Cw.Add(NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints[i], rcrv.Weights[i]));
+
+				// Derivatives of Cw
+				var Cwders = CurveDerivatives(rcrv.Degree, rcrv.Knots, Cw, num_ders, u);
+
+				// Split Cwders into coordinates and weights
+				var Aders = new List<Vector3d>(Cwders.Length);
+				var wders = new List<double>(Cwders.Length);
+
+				foreach (var val in Cwders)
+				{
+					Aders.Add(NurbsUtil.TruncateHomogenous(val));
+					wders.Add(val.w);
+				}
+
+				var curve_ders = new Vector3d[num_ders + 1];
+
+				// Compute rational derivatives
+				for (int k = 0; k <= num_ders; k++)
+				{
+					var v = Aders[k];
+					for (int i = 1; i <= k; i++)
+						v -= curve_ders[k - i] * NurbsUtil.Binomial(k, i) * wders[i];
+
+					curve_ders[k] = v / wders[0];
+				}
+
+				return curve_ders;
+			}
 			else
+			{
 				return CurveDerivatives(crv.Degree, crv.Knots, crv.ControlPoints, num_ders, u);
-		}
-
-		/// <summary>
-		/// Evaluate derivatives of a rational NURBS curve
-		/// E.g. curve_ders[n] is the nth derivative at u, where n is between 0 and num_ders-1.
-		/// </summary>
-		/// <param name="u"></param>
-		/// <param name="knots"></param>
-		/// <param name="control_points"></param>
-		/// <param name="weights"></param>
-		/// <param name="num_ders"></param>
-		/// <returns>Derivatives of the curve at u</returns>
-		internal static Vector3d[] RationalCurveDerivatives(RationalNurbsCurve3d crv, int num_ders, double u)
-		{
-			// Compute homogenous coordinates of control points
-			var Cw = new List<Vector4d>(crv.ControlPoints.Length);
-
-			for (int i = 0; i < crv.ControlPoints.Length; i++)
-				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
-
-			// Derivatives of Cw
-			var Cwders = CurveDerivatives(crv.Degree, crv.Knots, Cw, num_ders, u);
-
-			// Split Cwders into coordinates and weights
-			var Aders = new List<Vector3d>(Cwders.Length);
-			var wders = new List<double>(Cwders.Length);
-
-			foreach (var val in Cwders)
-			{
-				Aders.Add(NurbsUtil.TruncateHomogenous(val));
-				wders.Add(val.w);
 			}
-
-			var curve_ders = new Vector3d[num_ders + 1];
-
-			// Compute rational derivatives
-			for (int k = 0; k <= num_ders; k++)
-			{
-				var v = Aders[k];
-				for (int i = 1; i <= k; i++)
-					v -= curve_ders[k - i] * NurbsUtil.Binomial(k, i) * wders[i];
-
-				curve_ders[k] = v / wders[0];
-			}
-
-			return curve_ders;
 		}
 
 		/// <summary>
@@ -113,23 +99,7 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Unit tangent of the curve at u.</returns>
 		internal static Vector3d CurveTangent(NurbsCurve3d crv, double u)
 		{
-			if (crv.IsRational)
-				return RationalCurveTangent(crv as RationalNurbsCurve3d, u);
-			else
-			{
-				var ders = CurveDerivatives(crv, 1, u);
-				return ders[1].Normalized;
-			}
-		}
-
-		/// <summary>
-		/// Evaluate the tangent of a rational B-spline curve
-		/// </summary>
-		/// <param name="crv">Curve object</param>
-		/// <returns>Unit tangent of the curve at u.</returns>
-		internal static Vector3d RationalCurveTangent(RationalNurbsCurve3d crv, double u)
-		{
-			var ders = RationalCurveDerivatives(crv, 1, u);
+			var ders = CurveDerivatives(crv, 1, u);
 			return ders[1].Normalized;
 		}
 
@@ -142,38 +112,32 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Resulting point on the surface at (u, v).</returns>
 		internal static Vector3d SurfacePoint(NurbsSurface3d srf, double u, double v)
 		{
-			if(srf.IsRational)
-				return RationalSurfacePoint(srf as RationalNurbsSurface3d, u, v);
-			else
-				return SurfacePoint(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, u, v);
-		}
-
-		/// <summary>
-		/// Evaluate point on a rational NURBS surface
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="u">Parameter to evaluate the surface at.</param>
-		/// <param name="v">Parameter to evaluate the surface at.</param>
-		/// <returns>Resulting point on the surface at (u, v).</returns>
-		internal static Vector3d RationalSurfacePoint(RationalNurbsSurface3d srf, double u, double v)
-		{
-			int width = srf.ControlPoints.GetLength(0);
-			int height = srf.ControlPoints.GetLength(1);
-
-			// Compute homogenous coordinates of control points
-			var Cw = new Vector4d[width, height];
-
-			for (int i = 0; i < width; i++)
+			if (srf.IsRational)
 			{
-				for (int j = 0; j < height; j++)
-					Cw[i, j] = NurbsUtil.CartesianToHomogenous(srf.ControlPoints[i, j], srf.Weights[i, j]);
+				var rsrf = srf as RationalNurbsSurface3d;
+
+				int width = rsrf.ControlPoints.GetLength(0);
+				int height = rsrf.ControlPoints.GetLength(1);
+
+				// Compute homogenous coordinates of control points
+				var Cw = new Vector4d[width, height];
+
+				for (int i = 0; i < width; i++)
+				{
+					for (int j = 0; j < height; j++)
+						Cw[i, j] = NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints[i, j], rsrf.Weights[i, j]);
+				}
+
+				// Compute point using homogenous coordinates
+				var pointw = SurfacePoint(rsrf.DegreeU, rsrf.DegreeV, rsrf.KnotsU, rsrf.KnotsV, Cw, u, v);
+
+				// Convert back to cartesian coordinates
+				return NurbsUtil.HomogenousToCartesian(pointw);
 			}
-
-			// Compute point using homogenous coordinates
-			var pointw = SurfacePoint(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, Cw, u, v);
-
-			// Convert back to cartesian coordinates
-			return NurbsUtil.HomogenousToCartesian(pointw);
+			else
+			{
+				return SurfacePoint(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, u, v);
+			}
 		}
 
 		/// <summary>
@@ -187,77 +151,70 @@ namespace Common.Geometry.Nurbs
 		internal static Vector3d[,] SurfaceDerivatives(NurbsSurface3d srf, int num_ders, double u, double v)
 		{
 			if(srf.IsRational)
-				return RationalSurfaceDerivatives(srf as RationalNurbsSurface3d, num_ders, u, v);
-			else
-				return SurfaceDerivatives(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, num_ders, u, v);
-		}
+            {
+				var rsrf = srf as RationalNurbsSurface3d;
 
-		/// <summary>
-		/// Evaluate derivatives on a rational NURBS surface
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="num_ders">Number of times to differentiate</param>
-		/// <param name="u">Parameter to evaluate the surface at.</param>
-		/// <param name="v">Parameter to evaluate the surface at.</param>
-		/// <returns>Derivatives of the surface at (u, v).</returns>
-		internal static Vector3d[,] RationalSurfaceDerivatives(RationalNurbsSurface3d srf, int num_ders, double u, double v)
-		{
-			int width = srf.ControlPoints.GetLength(0);
-			int height = srf.ControlPoints.GetLength(1);
-			var homo_cp = new Vector4d[width, height];
+				int width = rsrf.ControlPoints.GetLength(0);
+				int height = rsrf.ControlPoints.GetLength(1);
+				var homo_cp = new Vector4d[width, height];
 
-			for (int i = 0; i < width; ++i)
-			{
-				for (int j = 0; j < height; ++j)
+				for (int i = 0; i < width; ++i)
 				{
-					homo_cp[i, j] = NurbsUtil.CartesianToHomogenous(srf.ControlPoints[i, j], srf.Weights[i, j]);
-				}
-			}
-
-			var homo_ders = SurfaceDerivatives(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, homo_cp, num_ders, u, v);
-
-			var Aders = new Vector3d[num_ders + 1, num_ders + 1];
-
-			for (int i = 0; i < homo_ders.GetLength(0); ++i)
-			{
-				for (int j = 0; j < homo_ders.GetLength(1); ++j)
-				{
-					Aders[i, j] = NurbsUtil.TruncateHomogenous(homo_ders[i, j]);
-				}
-			}
-
-			var surf_ders = new Vector3d[num_ders + 1, num_ders + 1];
-
-			for (int k = 0; k < num_ders + 1; ++k)
-			{
-				for (int l = 0; l < num_ders - k + 1; ++l)
-				{
-					var der = Aders[k, l];
-
-					for (int j = 1; j < l + 1; ++j)
+					for (int j = 0; j < height; ++j)
 					{
-						der -= surf_ders[k, l - j] * (homo_ders[0, j].w * NurbsUtil.Binomial(l, j));
+						homo_cp[i, j] = NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints[i, j], rsrf.Weights[i, j]);
 					}
+				}
 
-					for (int i = 1; i < k + 1; ++i)
+				var homo_ders = SurfaceDerivatives(rsrf.DegreeU, rsrf.DegreeV, rsrf.KnotsU, rsrf.KnotsV, homo_cp, num_ders, u, v);
+
+				var Aders = new Vector3d[num_ders + 1, num_ders + 1];
+
+				for (int i = 0; i < homo_ders.GetLength(0); ++i)
+				{
+					for (int j = 0; j < homo_ders.GetLength(1); ++j)
 					{
-						der -= surf_ders[k - i, l] * (homo_ders[i, 0].w * NurbsUtil.Binomial(k, i));
+						Aders[i, j] = NurbsUtil.TruncateHomogenous(homo_ders[i, j]);
+					}
+				}
 
-						var tmp = new Vector3d();
+				var surf_ders = new Vector3d[num_ders + 1, num_ders + 1];
+
+				for (int k = 0; k < num_ders + 1; ++k)
+				{
+					for (int l = 0; l < num_ders - k + 1; ++l)
+					{
+						var der = Aders[k, l];
+
 						for (int j = 1; j < l + 1; ++j)
 						{
-							tmp -= surf_ders[k - 1, l - j] * (homo_ders[i, j].w * NurbsUtil.Binomial(l, j));
+							der -= surf_ders[k, l - j] * (homo_ders[0, j].w * NurbsUtil.Binomial(l, j));
 						}
 
-						der -= tmp * NurbsUtil.Binomial(k, i);
+						for (int i = 1; i < k + 1; ++i)
+						{
+							der -= surf_ders[k - i, l] * (homo_ders[i, 0].w * NurbsUtil.Binomial(k, i));
+
+							var tmp = new Vector3d();
+							for (int j = 1; j < l + 1; ++j)
+							{
+								tmp -= surf_ders[k - 1, l - j] * (homo_ders[i, j].w * NurbsUtil.Binomial(l, j));
+							}
+
+							der -= tmp * NurbsUtil.Binomial(k, i);
+						}
+
+						der *= 1 / homo_ders[0, 0].w;
+						surf_ders[k, l] = der;
 					}
-
-					der *= 1 / homo_ders[0, 0].w;
-					surf_ders[k, l] = der;
 				}
-			}
 
-			return surf_ders;
+				return surf_ders;
+			}
+			else
+            {
+				return SurfaceDerivatives(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, num_ders, u, v);
+			}
 		}
 
 		/// <summary>
@@ -269,28 +226,7 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Tuple with unit tangents along u- and v-directions</returns>
 		internal static (Vector3d, Vector3d) SurfaceTangent(NurbsSurface3d srf, double u, double v)
 		{
-			if (srf.IsRational)
-				return RationalSurfaceTangent(srf as RationalNurbsSurface3d, u, v);
-			else
-			{
-				var ptder = SurfaceDerivatives(srf, 1, u, v);
-				var du = ptder[1, 0];
-				var dv = ptder[0, 1];
-
-				return (du.Normalized, dv.Normalized);
-			}
-		}
-
-		/// <summary>
-		/// Evaluate the two orthogonal tangents of a rational surface at the given
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="u">Parameter in the u-direction</param>
-		/// <param name="v">Parameter in the v-direction</param>
-		/// <returns>Tuple with unit tangents along u- and v-directions</returns>
-		internal static (Vector3d, Vector3d) RationalSurfaceTangent(RationalNurbsSurface3d srf, double u, double v)
-		{
-			var ptder = RationalSurfaceDerivatives(srf, 1, u, v);
+			var ptder = SurfaceDerivatives(srf, 1, u, v);
 			var du = ptder[1, 0];
 			var dv = ptder[0, 1];
 
@@ -306,26 +242,7 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Unit normal at of the surface at (u, v)</returns>
 		internal static Vector3d SurfaceNormal(NurbsSurface3d srf, double u, double v)
 		{
-			if (srf.IsRational)
-				return RationalSurfaceNormal(srf as RationalNurbsSurface3d, u, v);
-			else
-			{
-				var ptder = SurfaceDerivatives(srf, 1, u, v);
-				var n = Vector3d.Cross(ptder[0, 1], ptder[1, 0]);
-				return n.Normalized;
-			}
-		}
-
-		/// <summary>
-		/// Evaluate the normal a rational surface at the given parameters
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="u">Parameter in the u-direction</param>
-		/// <param name="v">Parameter in the v-direction</param>
-		/// <returns>Unit normal at of the surface at (u, v)</returns>
-		internal static Vector3d RationalSurfaceNormal(RationalNurbsSurface3d srf, double u, double v)
-		{
-			var ptder = RationalSurfaceDerivatives(srf, 1, u, v);
+			var ptder = SurfaceDerivatives(srf, 1, u, v);
 			var n = Vector3d.Cross(ptder[0, 1], ptder[1, 0]);
 			return n.Normalized;
 		}

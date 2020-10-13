@@ -85,12 +85,12 @@ namespace Common.Geometry.Shapes
             get
             {
                 var len = SideLengths;
-                var a2 = len.a * len.a;
-                var b2 = len.b * len.b;
-                var c2 = len.c * len.c;
-                var a = MathUtil.Acos((b2 + c2 - a2) * (2 * len.b * len.c));
-                var b = MathUtil.Acos((c2 + a2 - b2) * (2 * len.c * len.a));
-                var c = MathUtil.Acos((a2 + b2 - c2) * (2 * len.a * len.b));
+                var a2 = len.x * len.x;
+                var b2 = len.y * len.y;
+                var c2 = len.z * len.z;
+                var a = MathUtil.Acos((b2 + c2 - a2) * (2 * len.y * len.z));
+                var b = MathUtil.Acos((c2 + a2 - b2) * (2 * len.z * len.x));
+                var c = MathUtil.Acos((a2 + b2 - c2) * (2 * len.x * len.y));
                 return new VECTOR3(a, b, c);
             }
         }
@@ -132,9 +132,9 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                var a = 2 * Area / SideLengths.a;
-                var b = 2 * Area / SideLengths.b;
-                var c = 2 * Area / SideLengths.c;
+                var a = 2 * Area / SideLengths.x;
+                var b = 2 * Area / SideLengths.y;
+                var c = 2 * Area / SideLengths.z;
                 return new VECTOR3(a, b, c);
             }
         }

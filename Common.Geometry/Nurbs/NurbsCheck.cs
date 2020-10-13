@@ -39,19 +39,28 @@ namespace Common.Geometry.Nurbs
 		internal static bool CurveIsValid(NurbsCurve3d crv)
 		{
 			if (crv.IsRational)
-				return RationalCurveIsValid(crv as RationalNurbsCurve3d);
+			{
+				var rcrv = crv as RationalNurbsCurve3d;
+				return CurveIsValid(rcrv.Degree, rcrv.Knots, rcrv.ControlPoints.Length, rcrv.Weights.Length);
+			}
 			else
-				return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints);
+				return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints.Length, -1);
 		}
 
 		/// <summary>
 		/// Returns whether the curve is valid
 		/// </summary>
-		/// <param name="crv">Rational Curve object</param>
+		/// <param name="crv">Curve object</param>
 		/// <returns>Whether valid</returns>
-		internal static bool RationalCurveIsValid(RationalNurbsCurve3d crv)
+		internal static bool CurveIsValid(NurbsCurve2d crv)
 		{
-			return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints, crv.Weights);
+			if (crv.IsRational)
+			{
+				var rcrv = crv as RationalNurbsCurve2d;
+				return CurveIsValid(rcrv.Degree, rcrv.Knots, rcrv.ControlPoints.Length, rcrv.Weights.Length);
+			}
+			else
+				return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints.Length, -1);
 		}
 
 		/// <summary>
@@ -61,20 +70,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Whether valid</returns>
 		internal static bool SurfaceIsValid(NurbsSurface3d srf)
 		{
-			if (srf.IsRational)
-				return RationalSurfaceIsValid(srf as RationalNurbsSurface3d);
-			else
-				return SurfaceIsValid(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints);
-		}
-
-		/// <summary>
-		/// Returns whether the surface is valid
-		/// </summary>
-		/// <param name="srf">Rational Surface object</param>
-		/// <returns>Whether valid</returns>
-		internal static bool RationalSurfaceIsValid(RationalNurbsSurface3d srf)
-		{
-			return SurfaceIsValid(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, srf.Weights);
+			return SurfaceIsValid(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV,
+				srf.ControlPoints.GetLength(0), srf.ControlPoints.GetLength(1));
 		}
 
 		/// <summary>
@@ -85,7 +82,12 @@ namespace Common.Geometry.Nurbs
 		internal static bool CurveIsClosed(NurbsCurve3d crv)
 		{
 			if (crv.IsRational)
-				return RationalCurveIsClosed(crv as RationalNurbsCurve3d);
+            {
+				var rcrv = crv as RationalNurbsCurve3d;
+				return IsArray1Closed(rcrv.Degree, rcrv.ControlPoints) &&
+					IsArray1Closed(rcrv.Degree, rcrv.Weights) &&
+					IsKnotVectorClosed(rcrv.Degree, rcrv.Knots);
+			}
 			else
 				return IsArray1Closed(crv.Degree, crv.ControlPoints) && 
 					IsKnotVectorClosed(crv.Degree, crv.Knots);
@@ -96,11 +98,18 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="crv">Curve object</param>
 		/// <returns>Whether closed</returns>
-		internal static bool RationalCurveIsClosed(RationalNurbsCurve3d crv)
+		internal static bool CurveIsClosed(NurbsCurve2d crv)
 		{
-			return IsArray1Closed(crv.Degree, crv.ControlPoints) &&
-				IsArray1Closed(crv.Degree, crv.Weights) &&
-				IsKnotVectorClosed(crv.Degree, crv.Knots);
+			if (crv.IsRational)
+			{
+				var rcrv = crv as RationalNurbsCurve2d;
+				return IsArray1Closed(rcrv.Degree, rcrv.ControlPoints) &&
+					IsArray1Closed(rcrv.Degree, rcrv.Weights) &&
+					IsKnotVectorClosed(rcrv.Degree, rcrv.Knots);
+			}
+			else
+				return IsArray1Closed(crv.Degree, crv.ControlPoints) &&
+					IsKnotVectorClosed(crv.Degree, crv.Knots);
 		}
 
 		/// <summary>
@@ -111,7 +120,12 @@ namespace Common.Geometry.Nurbs
 		internal static bool SurfaceIsClosedU(NurbsSurface3d srf)
 		{
 			if (srf.IsRational)
-				return RationalSurfaceIsClosedU(srf as RationalNurbsSurface3d);
+            {
+				var rsrf = srf as RationalNurbsSurface3d;
+				return IsArray2ClosedU(rsrf.DegreeU, rsrf.ControlPoints) &&
+					IsKnotVectorClosed(rsrf.DegreeU, rsrf.KnotsU) &&
+					IsArray2ClosedU(rsrf.DegreeU, rsrf.Weights);
+			}
 			else
 				return IsArray2ClosedU(srf.DegreeU, srf.ControlPoints) && 
 					IsKnotVectorClosed(srf.DegreeU, srf.KnotsU);
@@ -121,38 +135,19 @@ namespace Common.Geometry.Nurbs
 		/// Checks whether the surface is closed along v-direction
 		/// </summary>
 		/// <param name="srf">Surface object</param>
-		/// <returns>Whether closed along u-direction</returns>
+		/// <returns>Whether closed along v-direction</returns>
 		internal static bool SurfaceIsClosedV(NurbsSurface3d srf)
 		{
 			if (srf.IsRational)
-				return RationalSurfaceIsClosedV(srf as RationalNurbsSurface3d);
+			{
+				var rsrf = srf as RationalNurbsSurface3d;
+				return IsArray2ClosedV(rsrf.DegreeV, rsrf.ControlPoints) &&
+					IsKnotVectorClosed(rsrf.DegreeV, rsrf.KnotsV) &&
+					IsArray2ClosedV(rsrf.DegreeV, rsrf.Weights);
+			}
 			else
 				return IsArray2ClosedV(srf.DegreeV, srf.ControlPoints) &&
 					IsKnotVectorClosed(srf.DegreeV, srf.KnotsV);
-		}
-
-		/// <summary>
-		/// Checks whether the rational surface is closed along u-direction
-		/// </summary>
-		/// <param name="srf">RationalSurface object</param>
-		/// <returns>Whether closed along u-direction</returns>
-		internal static bool RationalSurfaceIsClosedU(RationalNurbsSurface3d srf)
-		{
-			return IsArray2ClosedU(srf.DegreeU, srf.ControlPoints) &&
-				IsKnotVectorClosed(srf.DegreeU, srf.KnotsU) &&
-				IsArray2ClosedU(srf.DegreeU, srf.Weights);
-		}
-
-		/// <summary>
-		/// Checks whether the rational surface is closed along v-direction
-		/// </summary>
-		/// <param name="srf">RationalSurface object</param>
-		/// <returns>Whether closed along v-direction</returns>
-		internal static bool RationalSurfaceIsClosedV(RationalNurbsSurface3d srf)
-		{
-			return IsArray2ClosedV(srf.DegreeV, srf.ControlPoints) &&
-				IsKnotVectorClosed(srf.DegreeV, srf.KnotsV) &&
-				IsArray2ClosedV(srf.DegreeV, srf.Weights);
 		}
 
 		/// <summary>
@@ -190,41 +185,26 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="degree">Degree of curve</param>
 		/// <param name="knots">Knot vector of curve</param>
-		/// <param name="control_points">Control points of curve</param>
+		/// <param name="numControlPoints">The number of control points.</param>
+		/// <param name="numWeights">The number of weights.</param>
 		/// <returns>Whether valid</returns>
-		private static bool CurveIsValid(int degree, IList<double> knots, IList<Vector3d> control_points)
+		private static bool CurveIsValid(int degree, IList<double> knots, int numControlPoints, int numWeights)
 		{
 			if (degree < 1 || degree > 9)
 				return false;
 
-			if (!IsValidRelation(degree, knots.Count, control_points.Count))
+			if (!IsValidRelation(degree, knots.Count, numControlPoints))
 				return false;
 
 			if (!IsKnotVectorMonotonic(knots))
 				return false;
 
-			return true;
-		}
-
-
-		/// <summary>
-		/// Returns whether the curve is valid
-		/// </summary>
-		/// <param name="degree">Degree of curve</param>
-		/// <param name="knots">Knot vector of curve</param>
-		/// <param name="control_points">Control points of curve</param>
-		/// <param name="weights">Weights of curve</param>
-		/// <returns>Whether valid</returns>
-		private static bool CurveIsValid(int degree, IList<double> knots, IList<Vector3d> control_points, IList<double> weights)
-		{
-			if (!IsValidRelation(degree, knots.Count, control_points.Count))
-				return false;
-
-			if (weights.Count != control_points.Count)
+			if (numWeights != -1 && numWeights != numControlPoints)
 				return false;
 
 			return true;
 		}
+
 
 		/// <summary>
 		/// Returns whether the surface is valid
@@ -233,15 +213,16 @@ namespace Common.Geometry.Nurbs
 		/// <param name="degree_v">Degree of surface along v-direction</param>
 		/// <param name="knots_u">Knot vector of surface along u-direction</param>
 		/// <param name="knots_v">Knot vector of surface along v-direction</param>
-		/// <param name="control_points">Control points grid of surface</param>
+		/// <param name="controlPointsLen0">The number of control point in first dimension.</param>
+		/// <param name="controlPointsLen1">The number of control point in second dimension.</param>
 		/// <returns>Whether valid</returns>
-		private static bool SurfaceIsValid(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, Vector3d[,] control_points)
+		private static bool SurfaceIsValid(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, int controlPointsLen0, int controlPointsLen1)
 		{
 			if (degree_u < 1 || degree_u > 9 || degree_v < 1 || degree_v > 9)
 				return false;
 
-			if (!IsValidRelation(degree_u, knots_u.Count, control_points.GetLength(0)) ||
-				!IsValidRelation(degree_v, knots_v.Count, control_points.GetLength(1)))
+			if (!IsValidRelation(degree_u, knots_u.Count, controlPointsLen0) ||
+				!IsValidRelation(degree_v, knots_v.Count, controlPointsLen1))
 				return false;
 
 			if (!IsKnotVectorMonotonic(knots_u) || !IsKnotVectorMonotonic(knots_v))
@@ -249,28 +230,6 @@ namespace Common.Geometry.Nurbs
 
 			return true;
 		}
-
-		/// <summary>
-		/// Returns whether the surface is valid
-		/// </summary>
-		/// <param name="degree_u">Degree of surface along u-direction</param>
-		/// <param name="degree_v">Degree of surface along v-direction</param>
-		/// <param name="knots_u">Knot vector of surface along u-direction</param>
-		/// <param name="knots_v">Knot vector of surface along v-direction</param>
-		/// <param name="control_points">Control points grid of surface</param>
-		/// <param name="weights">Weights corresponding to control point grid of surface</param>
-		/// <returns>Whether valid</returns>
-		private static bool SurfaceIsValid(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, Vector3d[,] control_points, double[,] weights)
-		{
-			if (!SurfaceIsValid(degree_u, degree_v, knots_u, knots_v, control_points))
-				return false;
-
-			if (control_points.GetLength(0) != weights.GetLength(0) || control_points.GetLength(1) != weights.GetLength(1))
-				return false;
-
-			return true;
-		}
-
 
 		/// <summary>
 		/// Returns whether the given knot vector is closed by checking the
@@ -316,6 +275,24 @@ namespace Common.Geometry.Nurbs
 		/// <param name="vec">Array of any control points</param>
 		/// <returns>Whether knot vector is closed</returns>
 		private static bool IsArray1Closed(int degree, IList<Vector3d> vec)
+		{
+			for (int i = 0; i < degree; ++i)
+			{
+				int j = vec.Count - degree + i;
+				if (!MathUtil.IsZero((vec[i] - vec[j]).Magnitude))
+					return false;
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Returns whether the given knot vector is closed by checking the
+		/// periodicity of knot vectors near the start and end
+		/// </summary>
+		/// <param name="degree">Degree of curve/surface</param>
+		/// <param name="vec">Array of any control points</param>
+		/// <returns>Whether knot vector is closed</returns>
+		private static bool IsArray1Closed(int degree, IList<Vector2d> vec)
 		{
 			for (int i = 0; i < degree; ++i)
 			{
