@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Nurbs
 {
-
+	/*
 
 	/// <summary>
 	/// Class for holding a polynomial B-spline curve
@@ -84,8 +84,6 @@ namespace Common.Geometry.Nurbs
 		/// Is this a closed curve.
 		/// </summary>
 		public bool IsClosed => NurbsCheck.CurveIsClosed(this);
-
-		/*
 
 		/// <summary>
 		/// Get the point at parameter u.
@@ -180,8 +178,6 @@ namespace Common.Geometry.Nurbs
 			return curves;
 		}
 
-		*/
-
 	}
 
 	/// <summary>
@@ -233,8 +229,6 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		public double[] Weights { get; private set; }
 
-		/*
-
 		/// <summary>
 		/// Insert a new knot into the curve and return as a new curve.
 		/// </summary>
@@ -261,9 +255,9 @@ namespace Common.Geometry.Nurbs
 			return curves;
 		}
 
-		*/
-
 	}
+
+	*/
 
 }
 

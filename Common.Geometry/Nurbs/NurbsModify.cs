@@ -48,12 +48,7 @@ namespace Common.Geometry.Nurbs
 			// Convert back to cartesian coordinates
 			List<double> weights = new List<double>(new_Cw.Count);
 			List<Vector3d> controlPoints = new List<Vector3d>(new_Cw.Count);
-
-			for (int i = 0; i < new_Cw.Count; ++i)
-			{
-				controlPoints.Add(NurbsUtil.HomogenousToCartesian(new_Cw[i]));
-				weights.Add(new_Cw[i].w);
-			}
+			NurbsUtil.HomogenousToCartesian(new_Cw, controlPoints, weights);
 
 			return new RationalNurbsCurve3d(crv.Degree, knots, controlPoints, weights);
 		}
@@ -300,7 +295,8 @@ namespace Common.Geometry.Nurbs
 		internal static (RationalNurbsSurface3d, RationalNurbsSurface3d) RationalSurfaceSplitU(RationalNurbsSurface3d srf, double u)
 		{
 			// Compute homogenous coordinates of control points and weights
-			var Cw = NurbsUtil.CartesianToHomogenous(srf.ControlPoints, srf.Weights);
+			var Cw = new Vector4d[srf.ControlPoints.GetLength(0), srf.ControlPoints.GetLength(1)];
+			NurbsUtil.CartesianToHomogenous(srf.ControlPoints, srf.Weights, Cw);
 
 			// Split surface with homogenous coordinates
 			Vector4d[,] left_Cw, right_Cw;
@@ -366,7 +362,8 @@ namespace Common.Geometry.Nurbs
 		internal static (RationalNurbsSurface3d, RationalNurbsSurface3d) RationalSurfaceSplitV(RationalNurbsSurface3d srf, double v)
 		{
 			// Compute homogenous coordinates of control points and weights
-			var Cw = NurbsUtil.CartesianToHomogenous(srf.ControlPoints, srf.Weights);
+			var Cw = new Vector4d[srf.ControlPoints.GetLength(0), srf.ControlPoints.GetLength(1)];
+			NurbsUtil.CartesianToHomogenous(srf.ControlPoints, srf.Weights, Cw);
 
 			// Split surface with homogenous coordinates
 			Vector4d[,] left_Cw, right_Cw;
@@ -610,8 +607,9 @@ namespace Common.Geometry.Nurbs
 						new_cp[i + r, col] = cp[i, col];
 
 					// Copy affected control points to temp array
+					tmp.Clear();
 					for (int i = 0; i < degree - s + 1; ++i)
-						tmp[i] = cp[span - degree + i, col];
+						tmp.Add(cp[span - degree + i, col]);
 
 					// Insert knot
 					for (int j = 1; j <= r; ++j)
@@ -651,8 +649,9 @@ namespace Common.Geometry.Nurbs
 						new_cp[row, i + r] = cp[row, i];
 
 					// Copy affected control points to temp array
+					tmp.Clear();
 					for (int i = 0; i < degree - s + 1; ++i)
-						tmp[i] = cp[row, span - degree + i];
+						tmp.Add(cp[row, span - degree + i]);
 
 					// Insert knot
 					for (int j = 1; j <= r; ++j)
@@ -746,8 +745,9 @@ namespace Common.Geometry.Nurbs
 						new_cp[i + r, col] = cp[i, col];
 
 					// Copy affected control points to temp array
+					tmp.Clear();
 					for (int i = 0; i < degree - s + 1; ++i)
-						tmp[i] = cp[span - degree + i, col];
+						tmp.Add(cp[span - degree + i, col]);
 
 					// Insert knot
 					for (int j = 1; j <= r; ++j)
@@ -787,8 +787,9 @@ namespace Common.Geometry.Nurbs
 						new_cp[row, i + r] = cp[row, i];
 
 					// Copy affected control points to temp array
+					tmp.Clear();
 					for (int i = 0; i < degree - s + 1; ++i)
-						tmp[i] = cp[row, span - degree + i];
+						tmp.Add(cp[row, span - degree + i]);
 
 					// Insert knot
 					for (int j = 1; j <= r; ++j)

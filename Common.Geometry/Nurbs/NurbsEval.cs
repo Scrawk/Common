@@ -23,9 +23,7 @@ namespace Common.Geometry.Nurbs
 
 				// Compute homogenous coordinates of control points
 				var Cw = new List<Vector4d>(rcrv.ControlPoints.Length);
-
-				for (int i = 0; i < rcrv.ControlPoints.Length; i++)
-					Cw.Add(NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints[i], rcrv.Weights[i]));
+				NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints, rcrv.Weights, Cw);
 
 				// Compute point using homogenous coordinates
 				Vector4d pointw = CurvePoint(rcrv.Degree, rcrv.Knots, Cw, u);
@@ -55,9 +53,7 @@ namespace Common.Geometry.Nurbs
 
 				// Compute homogenous coordinates of control points
 				var Cw = new List<Vector4d>(rcrv.ControlPoints.Length);
-
-				for (int i = 0; i < rcrv.ControlPoints.Length; i++)
-					Cw.Add(NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints[i], rcrv.Weights[i]));
+				NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints, rcrv.Weights, Cw);
 
 				// Derivatives of Cw
 				var Cwders = CurveDerivatives(rcrv.Degree, rcrv.Knots, Cw, num_ders, u);
@@ -121,12 +117,7 @@ namespace Common.Geometry.Nurbs
 
 				// Compute homogenous coordinates of control points
 				var Cw = new Vector4d[width, height];
-
-				for (int i = 0; i < width; i++)
-				{
-					for (int j = 0; j < height; j++)
-						Cw[i, j] = NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints[i, j], rsrf.Weights[i, j]);
-				}
+				NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints, rsrf.Weights, Cw);
 
 				// Compute point using homogenous coordinates
 				var pointw = SurfacePoint(rsrf.DegreeU, rsrf.DegreeV, rsrf.KnotsU, rsrf.KnotsV, Cw, u, v);
@@ -157,26 +148,15 @@ namespace Common.Geometry.Nurbs
 				int width = rsrf.ControlPoints.GetLength(0);
 				int height = rsrf.ControlPoints.GetLength(1);
 				var homo_cp = new Vector4d[width, height];
-
-				for (int i = 0; i < width; ++i)
-				{
-					for (int j = 0; j < height; ++j)
-					{
-						homo_cp[i, j] = NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints[i, j], rsrf.Weights[i, j]);
-					}
-				}
+				NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints, rsrf.Weights, homo_cp);
 
 				var homo_ders = SurfaceDerivatives(rsrf.DegreeU, rsrf.DegreeV, rsrf.KnotsU, rsrf.KnotsV, homo_cp, num_ders, u, v);
 
 				var Aders = new Vector3d[num_ders + 1, num_ders + 1];
 
 				for (int i = 0; i < homo_ders.GetLength(0); ++i)
-				{
 					for (int j = 0; j < homo_ders.GetLength(1); ++j)
-					{
 						Aders[i, j] = NurbsUtil.TruncateHomogenous(homo_ders[i, j]);
-					}
-				}
 
 				var surf_ders = new Vector3d[num_ders + 1, num_ders + 1];
 

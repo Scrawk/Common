@@ -48,22 +48,6 @@ namespace Common.Geometry.Nurbs
 		}
 
 		/// <summary>
-		/// Returns whether the curve is valid
-		/// </summary>
-		/// <param name="crv">Curve object</param>
-		/// <returns>Whether valid</returns>
-		internal static bool CurveIsValid(NurbsCurve2d crv)
-		{
-			if (crv.IsRational)
-			{
-				var rcrv = crv as RationalNurbsCurve2d;
-				return CurveIsValid(rcrv.Degree, rcrv.Knots, rcrv.ControlPoints.Length, rcrv.Weights.Length);
-			}
-			else
-				return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints.Length, -1);
-		}
-
-		/// <summary>
 		/// Returns whether the surface is valid
 		/// </summary>
 		/// <param name="srf">Surface object</param>
@@ -90,25 +74,6 @@ namespace Common.Geometry.Nurbs
 			}
 			else
 				return IsArray1Closed(crv.Degree, crv.ControlPoints) && 
-					IsKnotVectorClosed(crv.Degree, crv.Knots);
-		}
-
-		/// <summary>
-		/// Checks whether the curve is closed
-		/// </summary>
-		/// <param name="crv">Curve object</param>
-		/// <returns>Whether closed</returns>
-		internal static bool CurveIsClosed(NurbsCurve2d crv)
-		{
-			if (crv.IsRational)
-			{
-				var rcrv = crv as RationalNurbsCurve2d;
-				return IsArray1Closed(rcrv.Degree, rcrv.ControlPoints) &&
-					IsArray1Closed(rcrv.Degree, rcrv.Weights) &&
-					IsKnotVectorClosed(rcrv.Degree, rcrv.Knots);
-			}
-			else
-				return IsArray1Closed(crv.Degree, crv.ControlPoints) &&
 					IsKnotVectorClosed(crv.Degree, crv.Knots);
 		}
 
