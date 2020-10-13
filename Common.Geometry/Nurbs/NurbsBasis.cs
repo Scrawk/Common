@@ -55,32 +55,32 @@ namespace Common.Geometry.Nurbs
 		/// <param name="knots">Knot vector corresponding to the basis functions.</param>
 		/// <param name="u">Parameter to evaluate the basis functions at.</param>
 		/// <returns>The value of the ith basis function at u.</returns>
-		internal static double BSplineOneBasis(int i, int deg, IList<double> U, double u)
+		internal static double BSplineOneBasis(int i, int deg, IList<double> knots, double u)
 		{
-			int m = U.Count - 1;
+			int m = knots.Count - 1;
 
 			// Special case
-			if ((i == 0 && MathUtil.AlmostEqual(u, U[0])) || (i == m - deg - 1 && MathUtil.AlmostEqual(u, U[m])))
+			if ((i == 0 && MathUtil.AlmostEqual(u, knots[0])) || (i == m - deg - 1 && MathUtil.AlmostEqual(u, knots[m])))
 				return 1.0;
 
 			// Local property ensures that basis function is zero outside span
-			if (u < U[i] || u >= U[i + deg + 1])
+			if (u < knots[i] || u >= knots[i + deg + 1])
 				return 0.0;
 
 			// Initialize zeroth-degree functions
 			var N = new List<double>(deg + 1);
 
 			for (int j = 0; j <= deg; j++)
-				N.Add((u >= U[i + j] && u < U[i + j + 1]) ? 1.0 : 0.0);
+				N.Add((u >= knots[i + j] && u < knots[i + j + 1]) ? 1.0 : 0.0);
 
 			// Compute triangular table
 			for (int k = 1; k <= deg; k++)
 			{
-				var saved = MathUtil.IsZero(N[0]) ? 0.0 : ((u - U[i]) * N[0]) / (U[i + k] - U[i]);
+				var saved = MathUtil.IsZero(N[0]) ? 0.0 : ((u - knots[i]) * N[0]) / (knots[i + k] - knots[i]);
 				for (int j = 0; j < deg - k + 1; j++)
 				{
-					var Uleft = U[i + j + 1];
-					var Uright = U[i + j + k + 1];
+					var Uleft = knots[i + j + 1];
+					var Uright = knots[i + j + k + 1];
 					if (MathUtil.IsZero(N[j + 1]))
 					{
 						N[j] = saved;

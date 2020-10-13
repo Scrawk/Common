@@ -31,7 +31,7 @@ namespace Common.Geometry.Test.Bezier
                 float t = i / (count - 1.0f);
 
                 Vector2f p0 = quadratic.Position(t);
-                Vector2f p1 = bezier.Position(t);
+                Vector2f p1 = bezier.Point(t);
 
                 Assert.AreEqual(Math.Round(p0.x, PRECISION), Math.Round(p1.x, PRECISION));
                 Assert.AreEqual(Math.Round(p0.y, PRECISION), Math.Round(p1.y, PRECISION));
@@ -134,7 +134,7 @@ namespace Common.Geometry.Test.Bezier
             Assert.AreEqual(bezier.Control[0], b0.Control[0]);
             Assert.AreEqual(bezier.Control[3], b1.Control[3]);
 
-            Vector2f p = bezier.Position(split);
+            Vector2f p = bezier.Point(split);
             Assert.AreEqual(p, b0.Control[3]);
             Assert.AreEqual(p, b1.Control[0]);
 

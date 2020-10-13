@@ -59,7 +59,7 @@ namespace Common.Geometry.Bezier
         /// The position on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2f Position(float t)
+        public Vector2f Point(float t)
         {
             if (t < 0) t = 0;
             if (t > 1) t = 1;
@@ -123,7 +123,7 @@ namespace Common.Geometry.Bezier
         /// <summary>
         /// Fills the array with positions on the curve.
         /// </summary>
-        public void Tessellate(List<Vector2f> points, int samples)
+        public void GetPoints(List<Vector2f> points, int samples)
         {
             int n = Control.Length;
             int degree = Degree;
@@ -157,12 +157,12 @@ namespace Common.Geometry.Bezier
             {
                 steps = Math.Max(steps, 2);
                 float len = 0;
-                Vector2f previous = Position(0);
+                Vector2f previous = Point(0);
 
                 for (int i = 1; i < steps; i++)
                 {
                     float t = i / (steps - 1.0f) * tmax;
-                    Vector2f p = Position(t);
+                    Vector2f p = Point(t);
 
                     len += Vector2f.Distance(previous, p);
                     previous = p;

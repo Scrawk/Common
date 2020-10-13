@@ -19,7 +19,7 @@ namespace Common.Geometry.Nurbs
 		internal static NurbsCurve3d CurveKnotInsert(NurbsCurve3d crv, double u, int repeat = 1)
 		{
 			List<double> knots;
-			List<Vector3d> controlPoints;
+			List<Vector4d> controlPoints;
 			CurveKnotInsert(crv.Degree, crv.Knots, crv.ControlPoints, u, repeat, out knots, out controlPoints);
 
 			return new NurbsCurve3d(crv.Degree, knots, controlPoints);
@@ -34,23 +34,12 @@ namespace Common.Geometry.Nurbs
 		/// <returns>New curve with repeat knots inserted at u</returns>
 		internal static RationalNurbsCurve3d RationalCurveKnotInsert(RationalNurbsCurve3d crv, double u, int repeat = 1)
 		{
-			// Convert to homogenous coordinates
-			var Cw = new List<Vector4d>(crv.ControlPoints.Length);
-
-			for (int i = 0; i < crv.ControlPoints.Length; ++i)
-				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
-
 			// Perform knot insertion and get new knots and control points
 			List<double> knots;
 			List<Vector4d> new_Cw;
-			CurveKnotInsert(crv.Degree, crv.Knots, Cw, u, repeat, out knots, out new_Cw);
+			CurveKnotInsert(crv.Degree, crv.Knots, crv.ControlPoints, u, repeat, out knots, out new_Cw);
 
-			// Convert back to cartesian coordinates
-			List<double> weights = new List<double>(new_Cw.Count);
-			List<Vector3d> controlPoints = new List<Vector3d>(new_Cw.Count);
-			NurbsUtil.HomogenousToCartesian(new_Cw, controlPoints, weights);
-
-			return new RationalNurbsCurve3d(crv.Degree, knots, controlPoints, weights);
+			return new RationalNurbsCurve3d(crv.Degree, knots, new_Cw);
 		}
 
 		/// <summary>
@@ -206,7 +195,7 @@ namespace Common.Geometry.Nurbs
 		{
 
 			List<double> left_knots, right_knots;
-			List<Vector3d> left_controlPoints, right_controlPoints;
+			List<Vector4d> left_controlPoints, right_controlPoints;
 
 			CurveSplit(crv.Degree, crv.Knots, crv.ControlPoints, u,
 				out left_knots, out left_controlPoints,
@@ -226,35 +215,13 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Tuple with first half and second half of the curve</returns>
 		internal static (RationalNurbsCurve3d, RationalNurbsCurve3d) RationalCurveSplit(RationalNurbsCurve3d crv, double u)
 		{
-
-			var Cw = new List<Vector4d>(crv.ControlPoints.Length);
 			List<double> left_knots, right_knots;
 			List<Vector4d> left_Cw, right_Cw;
 
-			for (int i = 0; i < crv.ControlPoints.Length; ++i)
-				Cw.Add(NurbsUtil.CartesianToHomogenous(crv.ControlPoints[i], crv.Weights[i]));
+			CurveSplit(crv.Degree, crv.Knots, crv.ControlPoints, u, out left_knots, out left_Cw, out right_knots, out right_Cw);
 
-			CurveSplit(crv.Degree, crv.Knots, Cw, u, out left_knots, out left_Cw, out right_knots, out right_Cw);
-
-			var left_controlPoints = new List<Vector3d>(left_Cw.Count);
-			var right_controlPoints = new List<Vector3d>(right_Cw.Count);
-
-			var left_weights = new List<double>(left_Cw.Count);
-			var right_weights = new List<double>(right_Cw.Count);
-
-			for (int i = 0; i < left_Cw.Count; ++i)
-			{
-				left_controlPoints.Add(NurbsUtil.HomogenousToCartesian(left_Cw[i]));
-				left_weights.Add(left_Cw[i].w);
-			}
-			for (int i = 0; i < right_Cw.Count; ++i)
-			{
-				right_controlPoints.Add(NurbsUtil.HomogenousToCartesian(right_Cw[i]));
-				right_weights.Add(right_Cw[i].w);
-			}
-
-			var left = new RationalNurbsCurve3d(crv.Degree, left_knots, left_controlPoints, left_weights);
-			var right = new RationalNurbsCurve3d(crv.Degree, right_knots, right_controlPoints, right_weights);
+			var left = new RationalNurbsCurve3d(crv.Degree, left_knots, left_Cw);
+			var right = new RationalNurbsCurve3d(crv.Degree, right_knots, right_Cw);
 
 			return (left, right);
 		}
@@ -391,77 +358,6 @@ namespace Common.Geometry.Nurbs
 			var right = new RationalNurbsSurface3d(degreeU, degreeV, right_knots_u, right_knots_v, right_controlPoints, right_weights);
 
 			return (left, right);
-		}
-
-		/// <summary>
-		///  Insert knots in the curve
-		/// </summary>
-		/// <param name="deg">Degree of the curve</param>
-		/// <param name="knots">Knot vector of the curve</param>
-		/// <param name="cp">Control points of the curve</param>
-		/// <param name="u">Parameter to insert knot(s) at</param>
-		/// <param name="r">Number of times to insert knot</param>
-		/// <param name="new_knots">Updated knot vector</param>
-		/// <param name="new_cp">Updated control pointss</param>
-		private static void CurveKnotInsert(int deg, IList<double> knots, IList<Vector3d> cp, double u, int r,
-			out List<double> new_knots, out List<Vector3d> new_cp)
-		{
-			int k = NurbsBasis.FindSpan(deg, knots, u);
-			int s = NurbsCheck.KnotMultiplicity(knots, k);
-			int L;
-
-			if (s == deg)
-				throw new Exception("s == deg");
-
-			if ((r + s) > deg)
-				r = deg - s;
-
-			// Insert new knots between span and (span + 1)
-			new_knots = new List<double>(knots.Count + r);
-			new_knots.AddRange(knots.Count + r, 0);
-
-			for (int i = 0; i < k + 1; ++i)
-				new_knots[i] = knots[i];
-
-			for (int i = 1; i < r + 1; ++i)
-				new_knots[k + i] = u;
-
-			for (int i = k + 1; i < knots.Count; ++i)
-				new_knots[i + r] = knots[i];
-
-			// Copy unaffected control points
-			new_cp = new List<Vector3d>(cp.Count + r);
-			new_cp.AddRange(cp.Count + r, Vector3d.Zero);
-
-			for (int i = 0; i < k - deg + 1; ++i)
-				new_cp[i] = cp[i];
-
-			for (int i = k - s; i < cp.Count; ++i)
-				new_cp[i + r] = cp[i];
-
-			// Copy affected control points
-			var tmp = new List<Vector3d>(deg - s + 1);
-
-			for (int i = 0; i < deg - s + 1; ++i)
-				tmp.Add(cp[k - deg + i]);
-
-			// Modify affected control points
-			for (int j = 1; j <= r; ++j)
-			{
-				L = k - deg + j;
-				for (int i = 0; i < deg - j - s + 1; ++i)
-				{
-					var a = (u - knots[L + i]) / (knots[i + k + 1] - knots[L + i]);
-					tmp[i] = tmp[i] * (1 - a) + tmp[i + 1] * a;
-				}
-				new_cp[L] = tmp[0];
-				new_cp[k + r - j - s] = tmp[deg - j - s];
-			}
-
-			L = k - deg + r;
-			for (int i = L + 1; i < k - s; ++i)
-				new_cp[i] = tmp[i - L];
-
 		}
 
 		/// <summary>
@@ -809,55 +705,6 @@ namespace Common.Geometry.Nurbs
 						new_cp[row, i] = tmp[i - L];
 				}
 			}
-		}
-
-		/// <summary>
-		/// Split the curve into two
-		/// </summary>
-		/// <param name="degree"></param>
-		/// <param name="knots"></param>
-		/// <param name="control_points"></param>
-		/// <param name="u"></param>
-		/// <param name="left_knots"></param>
-		/// <param name="left_control_points"></param>
-		/// <param name="right_knots"></param>
-		/// <param name="right_control_points"></param>
-		private static void CurveSplit(int degree, IList<double> knots, IList<Vector3d> control_points, double u,
-			out List<double> left_knots, out List<Vector3d> left_control_points,
-			out List<double> right_knots, out List<Vector3d> right_control_points)
-		{
-			List<double> tmp_knots;
-			List<Vector3d> tmp_cp;
-
-			int span = NurbsBasis.FindSpan(degree, knots, u);
-			int r = degree - NurbsCheck.KnotMultiplicity(knots, span);
-
-			CurveKnotInsert(degree, knots, control_points, u, r, out tmp_knots, out tmp_cp);
-
-			left_knots = new List<double>();
-			right_knots = new List<double>();
-			left_control_points = new List<Vector3d>();
-			right_control_points = new List<Vector3d>();
-
-			int span_l = NurbsBasis.FindSpan(degree, tmp_knots, u) + 1;
-			for (int i = 0; i < span_l; ++i)
-				left_knots.Add(tmp_knots[i]);
-
-			left_knots.Add(u);
-
-			for (int i = 0; i < degree + 1; ++i)
-				right_knots.Add(u);
-
-			for (int i = span_l; i < tmp_knots.Count; ++i)
-				right_knots.Add(tmp_knots[i]);
-
-			int ks = span - degree + 1;
-			for (int i = 0; i < ks + r; ++i)
-				left_control_points.Add(tmp_cp[i]);
-
-			for (int i = ks + r - 1; i < tmp_cp.Count; ++i)
-				right_control_points.Add(tmp_cp[i]);
-
 		}
 
 		/// <summary>

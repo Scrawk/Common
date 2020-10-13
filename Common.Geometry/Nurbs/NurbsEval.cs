@@ -19,21 +19,17 @@ namespace Common.Geometry.Nurbs
 		{
 			if (crv.IsRational)
 			{
-				var rcrv = crv as RationalNurbsCurve3d;
-
-				// Compute homogenous coordinates of control points
-				var Cw = new List<Vector4d>(rcrv.ControlPoints.Length);
-				NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints, rcrv.Weights, Cw);
-
 				// Compute point using homogenous coordinates
-				Vector4d pointw = CurvePoint(rcrv.Degree, rcrv.Knots, Cw, u);
-
+				Vector4d pointw = CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
 				// Convert back to cartesian coordinates
 				return NurbsUtil.HomogenousToCartesian(pointw);
 			}
 			else
 			{
-				return CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
+				// Compute point using homogenous coordinates but since curve is not
+				// rational the points xyz position will end up cartesian.
+				Vector4d pointw = CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
+				return pointw.xyz;
 			}
 		}
 
@@ -49,14 +45,8 @@ namespace Common.Geometry.Nurbs
 		{
 			if (crv.IsRational)
 			{
-				var rcrv = crv as RationalNurbsCurve3d;
-
-				// Compute homogenous coordinates of control points
-				var Cw = new List<Vector4d>(rcrv.ControlPoints.Length);
-				NurbsUtil.CartesianToHomogenous(rcrv.ControlPoints, rcrv.Weights, Cw);
-
 				// Derivatives of Cw
-				var Cwders = CurveDerivatives(rcrv.Degree, rcrv.Knots, Cw, num_ders, u);
+				var Cwders = CurveDerivatives(crv.Degree, crv.Knots, crv.ControlPoints, num_ders, u);
 
 				// Split Cwders into coordinates and weights
 				var Aders = new List<Vector3d>(Cwders.Length);
@@ -84,7 +74,16 @@ namespace Common.Geometry.Nurbs
 			}
 			else
 			{
-				return CurveDerivatives(crv.Degree, crv.Knots, crv.ControlPoints, num_ders, u);
+				// Compute rational derivatives but since curve is not
+				// rational the points xyz position will end up cartesian.
+				var Cwders = CurveDerivatives(crv.Degree, crv.Knots, crv.ControlPoints, num_ders, u);
+
+				var curve_ders = new Vector3d[num_ders + 1];
+
+				for (int k = 0; k <= num_ders; k++)
+					curve_ders[k] = Cwders[k].xyz;
+
+				return curve_ders;
 			}
 		}
 
@@ -235,29 +234,6 @@ namespace Common.Geometry.Nurbs
 		/// <param name="control_points">Control points of the curve.</param>
 		/// <param name="u">Parameter to evaluate the curve at.</param>
 		/// <returns>Resulting point on the curve at parameter u.</returns>
-		private static Vector3d CurvePoint(int degree, IList<double> knots, IList<Vector3d> control_points, double u)
-		{
-			var point = new Vector3d();
-
-			// Find span and corresponding non-zero basis functions
-			int span = NurbsBasis.FindSpan(degree, knots, u);
-			var N = NurbsBasis.BSplineBasis(degree, span, knots, u);
-
-			// Compute point
-			for (int j = 0; j <= degree; j++)
-				point += control_points[span - degree + j] * N[j];
-
-			return point;
-		}
-
-		/// <summary>
-		/// Evaluate point on a nonrational NURBS curve
-		/// </summary>
-		/// <param name="degree">Degree of the given curve.</param>
-		/// <param name="knots">Knot vector of the curve.</param>
-		/// <param name="control_points">Control points of the curve.</param>
-		/// <param name="u">Parameter to evaluate the curve at.</param>
-		/// <returns>Resulting point on the curve at parameter u.</returns>
 		private static Vector4d CurvePoint(int degree, IList<double> knots, IList<Vector4d> control_points, double u)
 		{
 			var point = new Vector4d();
@@ -282,46 +258,9 @@ namespace Common.Geometry.Nurbs
 		/// <param name="num_ders">Number of times to derivate.</param>
 		/// <param name="u">Parameter to evaluate the derivatives at.</param>
 		/// <returns>Derivatives of the curve at u.</returns>
-		private static Vector3d[] CurveDerivatives(int degree, IList<double> knots, IList<Vector3d> control_points, int num_ders, double u)
-		{
-			var curve_ders = new Vector3d[num_ders + 1];
-
-			// Assign higher order derivatives to zero
-			//for (int k = degree + 1; k <= num_ders; k++)
-			//	curve_ders[k] = new Vector3d();
-
-			// Find the span and corresponding non-zero basis functions & derivatives
-			int span = NurbsBasis.FindSpan(degree, knots, u);
-			var ders = NurbsBasis.BSplineDerBasis(degree, span, knots, u, num_ders);
-
-			// Compute first num_ders derivatives
-			int du = num_ders < degree ? num_ders : degree;
-			for (int k = 0; k <= du; k++)
-			{
-				//curve_ders[k] = new Vector3d();
-				for (int j = 0; j <= degree; j++)
-					curve_ders[k] += control_points[span - degree + j] * ders[k, j];
-			}
-
-			return curve_ders;
-		}
-
-		/// <summary>
-		/// Evaluate derivatives of a non-rational NURBS curve
-		/// </summary>
-		/// <param name="degree">Degree of the curve</param>
-		/// <param name="knots">Knot vector of the curve.</param>
-		/// <param name="control_points">Control points of the curve.</param>
-		/// <param name="num_ders">Number of times to derivate.</param>
-		/// <param name="u">Parameter to evaluate the derivatives at.</param>
-		/// <returns>Derivatives of the curve at u.</returns>
 		private static Vector4d[] CurveDerivatives(int degree, IList<double> knots, IList<Vector4d> control_points, int num_ders, double u)
 		{
 			var curve_ders = new Vector4d[num_ders + 1];
-
-			// Assign higher order derivatives to zero
-			//for (int k = degree + 1; k <= num_ders; k++)
-			//	curve_ders[k] = new Vector4d();
 
 			// Find the span and corresponding non-zero basis functions & derivatives
 			int span = NurbsBasis.FindSpan(degree, knots, u);
@@ -426,15 +365,6 @@ namespace Common.Geometry.Nurbs
 		{
 			var surf_ders = new Vector3d[num_ders + 1, num_ders + 1];
 
-			// Set higher order derivatives to 0
-			//for (int k = degree_u + 1; k <= num_ders; k++)
-			//{
-			//	for (int l = degree_v + 1; l <= num_ders; l++)
-			//	{
-			//		surf_ders[k, l] = new Vector3d();
-			//	}
-			//}
-
 			// Find span and basis function derivatives
 			int span_u = NurbsBasis.FindSpan(degree_u, knots_u, u);
 			int span_v = NurbsBasis.FindSpan(degree_v, knots_v, v);
@@ -484,15 +414,6 @@ namespace Common.Geometry.Nurbs
 					IList<double> knots_v, Vector4d[,] control_points, int num_ders, double u, double v)
 		{
 			var surf_ders = new Vector4d[num_ders + 1, num_ders + 1];
-
-			// Set higher order derivatives to 0
-			//for (int k = degree_u + 1; k <= num_ders; k++)
-			//{
-			//	for (int l = degree_v + 1; l <= num_ders; l++)
-			//	{
-			//		surf_ders[k, l] = new Vector4d();
-			//	}
-			//}
 
 			// Find span and basis function derivatives
 			int span_u = NurbsBasis.FindSpan(degree_u, knots_u, u);

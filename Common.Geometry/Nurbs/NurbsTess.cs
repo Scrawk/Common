@@ -10,14 +10,14 @@ namespace Common.Geometry.Nurbs
     {
 
         /// <summary>
-        /// Sample a range of a NURBS curve at equally spaced parametric intervals.
+        /// Sample a curves points in a range of equally spaced parametric intervals.
         /// </summary>
         /// <param name="curve">NurbsCurveData object</param>
         /// <param name="start">start parameter for sampling</param>
         /// <param name="end">end parameter for sampling</param>
         /// <param name="numSamples">integer number of samples</param>
         /// <param name="points">The list of sampled points.</param>
-        internal static  void Regular(NurbsCurve3d curve, List<Vector3d> points, double start, double end, int numSamples)
+        internal static  void GetPoints(NurbsCurve3d curve, List<Vector3d> points, double start, double end, int numSamples)
         {
             if (numSamples < 2)
                 numSamples = 2;
@@ -28,6 +28,28 @@ namespace Common.Geometry.Nurbs
             {
                 double u = start + span * i;
                 points.Add(curve.Point(u));
+            }
+        }
+
+        /// <summary>
+        /// Sample a curves tangents in a range of equally spaced parametric intervals.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object</param>
+        /// <param name="start">start parameter for sampling</param>
+        /// <param name="end">end parameter for sampling</param>
+        /// <param name="numSamples">integer number of samples</param>
+        /// <param name="tangents">The list of sampled points.</param>
+        internal static void GetTangents(NurbsCurve3d curve, List<Vector3d> tangents, double start, double end, int numSamples)
+        {
+            if (numSamples < 2)
+                numSamples = 2;
+
+            double span = (end - start) / (numSamples - 1);
+
+            for (int i = 0; i < numSamples; i++)
+            {
+                double u = start + span * i;
+                tangents.Add(curve.Tangent(u));
             }
         }
 

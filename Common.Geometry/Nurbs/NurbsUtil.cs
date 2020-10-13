@@ -14,54 +14,9 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="pt">Point in homogenous coordinates</param>
 		/// <returns>Point in cartesian coordinates</returns>
-		internal static Vector2d HomogenousToCartesian(Vector3d pt)
-		{
-			return pt.xy / pt.z;
-		}
-
-		/// <summary>
-		/// Convert an nd point in homogenous coordinates to an (n-1)d point in cartesian
-		/// coordinates by perspective division
-		/// </summary>
-		/// <param name="pt">Point in homogenous coordinates</param>
-		/// <returns>Point in cartesian coordinates</returns>
 		internal static Vector3d HomogenousToCartesian(Vector4d pt)
 		{
 			return pt.xyz / pt.w;
-		}
-
-		/// <summary>
-		/// Convert a list of nd points in homogenous coordinates to a list of (n-1)d points in cartesian
-		/// coordinates by perspective division
-		/// </summary>
-		/// <param name="ptsws">Points in homogenous coordinates</param>
-		/// <param name="pts">Points in cartesian coordinates</param>
-		/// <param name="ws">Homogenous weights</param>
-		internal static void HomogenousToCartesian(IList<Vector3d> ptsws, List<Vector2d> pts, List<double> ws)
-		{
-			for (int i = 0; i < ptsws.Count; ++i)
-			{
-				Vector3d ptw_i = ptsws[i];
-				pts.Add(ptw_i.xy / ptw_i.z);
-				ws.Add(ptw_i.z);
-			}
-		}
-
-		/// <summary>
-		/// Convert a list of nd points in homogenous coordinates to a list of (n-1)d points in cartesian
-		/// coordinates by perspective division
-		/// </summary>
-		/// <param name="ptsws">Points in homogenous coordinates</param>
-		/// <param name="pts">Points in cartesian coordinates</param>
-		/// <param name="ws">Homogenous weights</param>
-		internal static void HomogenousToCartesian(IList<Vector4d> ptsws, List<Vector3d> pts, List<double> ws)
-		{
-			for (int i = 0; i < ptsws.Count; ++i)
-			{
-				Vector4d ptw_i = ptsws[i];
-				pts.Add(ptw_i.xyz / ptw_i.w);
-				ws.Add(ptw_i.w);
-			}
 		}
 
 		/// <summary>
@@ -97,44 +52,9 @@ namespace Common.Geometry.Nurbs
 		/// <param name="pt">Point in cartesian coordinates</param>
 		/// <param name="w">Weight</param>
 		/// <returns>point in homogenous coordinates</returns>
-		internal static Vector3d CartesianToHomogenous(Vector2d pt, double w)
-		{
-			return new Vector3d(pt * w, w);
-		}
-
-		/// <summary>
-		/// Convert an nd point in cartesian coordinates to an (n+1)d point in homogenous coordinates
-		/// </summary>
-		/// <param name="pt">Point in cartesian coordinates</param>
-		/// <param name="w">Weight</param>
-		/// <returns>point in homogenous coordinates</returns>
 		internal static Vector4d CartesianToHomogenous(Vector3d pt, double w)
 		{
 			return new Vector4d(pt * w, w);
-		}
-
-		/// <summary>
-		/// Convert list of points in cartesian coordinates to homogenous coordinates
-		/// </summary>
-		/// <param name="pts">Points in cartesian coordinates</param>
-		/// <param name="ws">Weights</param>
-		/// <param name="ptsw">Points in homogenous coordinates</param>
-		internal static void CartesianToHomogenous(IList<Vector2d> pts, IList<double> ws, List<Vector3d> ptsw)
-		{
-			for (int i = 0; i < pts.Count; ++i)
-				ptsw.Add(CartesianToHomogenous(pts[i], ws[i]));
-		}
-
-		/// <summary>
-		/// Convert list of points in cartesian coordinates to homogenous coordinates
-		/// </summary>
-		/// <param name="pts">Points in cartesian coordinates</param>
-		/// <param name="ws">Weights</param>
-		/// <param name="ptsw">Points in homogenous coordinates</param>
-		internal static void CartesianToHomogenous(IList<Vector3d> pts, IList<double> ws, List<Vector4d> ptsw)
-		{
-			for (int i = 0; i < pts.Count; ++i)
-				ptsw.Add(CartesianToHomogenous(pts[i], ws[i]));
 		}
 
 		/// <summary>
@@ -151,17 +71,6 @@ namespace Common.Geometry.Nurbs
 			for (int i = 0; i < width; ++i)
 				for (int j = 0; j < height; ++j)
 					ptsw[i, j] = CartesianToHomogenous(pts[i, j], ws[i, j]);
-		}
-
-		/// <summary>
-		/// Convert an (n+1)d point to an nd point without perspective division
-		/// by truncating the last dimension
-		/// </summary>
-		/// <param name="pt">Point in homogenous coordinates</param>
-		/// <returns>Input point in cartesian coordinates</returns>
-		internal static Vector2d TruncateHomogenous(Vector3d pt)
-		{
-			return pt.xy;
 		}
 
 		/// <summary>
