@@ -72,8 +72,8 @@ namespace Common.Geometry.Bezier
                 q = -2.0f * MathUtil.Sqrt(q);
                 roots.real = 3;
                 roots.x0 = q * MathUtil.Cos(t / 3.0f) - B;
-                roots.x1 = q * MathUtil.Cos((t + MathUtil.PI * 2.0f) / 3.0f) - B;
-                roots.x2 = q * MathUtil.Cos((t - MathUtil.PI * 2.0f) / 3.0f) - B;
+                roots.x1 = q * MathUtil.Cos((t + MathUtil.PI_32 * 2.0f) / 3.0f) - B;
+                roots.x2 = q * MathUtil.Cos((t - MathUtil.PI_32 * 2.0f) / 3.0f) - B;
             }
             else
             {

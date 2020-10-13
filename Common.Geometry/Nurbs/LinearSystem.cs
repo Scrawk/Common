@@ -62,7 +62,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="eps">small tolerance number to detect failure 
         /// when the matrix is near degenerate</param>
         /// <returns>If the decompositon was successful.</returns>
-        public bool Decompose(double[,] A, double eps = MathUtil.EPS)
+        public bool Decompose(double[,] A, double eps = MathUtil.EPS_64)
         {
             if (A.GetLength(0) != A.GetLength(1))
                 throw new ArgumentException("Matrix needs to be square.");

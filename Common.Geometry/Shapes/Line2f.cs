@@ -120,10 +120,10 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                if (IsVertical) return MathUtil.PI / 2.0f;
+                if (IsVertical) return MathUtil.PI_32 / 2.0f;
 
                 REAL atan = MathUtil.Atan(-A / B);
-                if (atan < 0) atan += MathUtil.PI;
+                if (atan < 0) atan += MathUtil.PI_32;
 
                 return atan;
             }

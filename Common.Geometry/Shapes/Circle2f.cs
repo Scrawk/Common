@@ -53,7 +53,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL Area
         {
-            get { return MathUtil.PI * Radius * Radius; }
+            get { return MathUtil.PI_32 * Radius * Radius; }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public REAL Circumference
         {
-            get { return MathUtil.PI * Radius * 2.0f; }
+            get { return MathUtil.PI_32 * Radius * 2.0f; }
         }
 
         /// <summary>

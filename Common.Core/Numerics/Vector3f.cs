@@ -455,7 +455,7 @@ namespace Common.Core.Numerics
         /// Are these vectors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(Vector3f v0, Vector3f v1, REAL eps = MathUtil.EPS)
+        public static bool AlmostEqual(Vector3f v0, Vector3f v1, REAL eps = MathUtil.EPS_32)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
             if (Math.Abs(v0.y - v1.y) > eps) return false;

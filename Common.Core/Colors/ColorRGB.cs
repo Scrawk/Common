@@ -279,7 +279,7 @@ namespace Common.Core.Colors
         /// Are these colors equal given the error.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool AlmostEqual(ColorRGB c0, ColorRGB c1, float eps = MathUtil.EPS)
+        public static bool AlmostEqual(ColorRGB c0, ColorRGB c1, float eps = MathUtil.EPS_32)
         {
             if (Math.Abs(c0.r - c1.r) > eps) return false;
             if (Math.Abs(c0.g - c1.g) > eps) return false;

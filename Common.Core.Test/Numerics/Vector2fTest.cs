@@ -156,7 +156,7 @@ namespace Common.Core.Test.Numerics
             {
                 REAL di = i / 360.0f;
 
-                REAL theta = 2.0f * MathUtil.PI * di;
+                REAL theta = 2.0f * MathUtil.PI_32 * di;
                 REAL x = MathUtil.Cos(theta);
                 REAL y = MathUtil.Sin(theta);
 
@@ -171,7 +171,7 @@ namespace Common.Core.Test.Numerics
             {
                 REAL di = i / 360.0f;
 
-                REAL theta = 2.0f * MathUtil.PI * di;
+                REAL theta = 2.0f * MathUtil.PI_32 * di;
                 REAL x = MathUtil.Cos(theta);
                 REAL y = MathUtil.Sin(theta);
 
@@ -192,7 +192,7 @@ namespace Common.Core.Test.Numerics
             {
                 float di = i / 360.0f;
 
-                REAL theta = 2.0f * MathUtil.PI * di;
+                REAL theta = 2.0f * MathUtil.PI_32 * di;
                 REAL x = MathUtil.Cos(theta);
                 REAL y = MathUtil.Sin(theta);
 

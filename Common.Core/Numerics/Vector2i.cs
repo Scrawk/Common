@@ -479,7 +479,7 @@ namespace Common.Core.Numerics
             double angle = Math.Atan2(a.y, a.x) - Math.Atan2(b.y, b.x);
 
             if (angle <= 0.0)
-                angle = MathUtil.PI * 2.0 + angle;
+                angle = MathUtil.PI_64 * 2.0 + angle;
 
             angle = 360.0 - MathUtil.ToDegrees(angle);
             return angle >= 360.0 ? 0 : angle;

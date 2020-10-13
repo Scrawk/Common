@@ -302,7 +302,7 @@ namespace Common.Geometry.Polygons
         {
             var polygon = new Polygon2f(segments);
 
-            REAL pi = MathUtil.PI;
+            REAL pi = MathUtil.PI_32;
             REAL fseg = segments;
 
             for (int i = 0; i < segments; i++)

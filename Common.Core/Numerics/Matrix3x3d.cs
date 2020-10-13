@@ -347,7 +347,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix3x3d m0, Matrix3x3d m1, double eps = MathUtil.EPS)
+        public static bool AlmostEqual(Matrix3x3d m0, Matrix3x3d m1, double eps = MathUtil.EPS_64)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;

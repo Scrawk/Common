@@ -48,7 +48,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public float Area
         {
-            get { return 4.0f / 3.0f * MathUtil.PI * Radius * Radius * Radius; }
+            get { return 4.0f / 3.0f * MathUtil.PI_32 * Radius * Radius * Radius; }
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public float SurfaceArea
         {
-            get { return 4.0f * MathUtil.PI * Radius2; }
+            get { return 4.0f * MathUtil.PI_32 * Radius2; }
         }
 
         /// <summary>
