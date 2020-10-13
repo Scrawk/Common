@@ -109,24 +109,17 @@ namespace Common.Geometry.Nurbs
 		{
 			if (srf.IsRational)
 			{
-				var rsrf = srf as RationalNurbsSurface3d;
-
-				int width = rsrf.ControlPoints.GetLength(0);
-				int height = rsrf.ControlPoints.GetLength(1);
-
-				// Compute homogenous coordinates of control points
-				var Cw = new Vector4d[width, height];
-				NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints, rsrf.Weights, Cw);
-
 				// Compute point using homogenous coordinates
-				var pointw = SurfacePoint(rsrf.DegreeU, rsrf.DegreeV, rsrf.KnotsU, rsrf.KnotsV, Cw, u, v);
-
+				var pointw = SurfacePoint(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV,srf.ControlPoints, u, v);
 				// Convert back to cartesian coordinates
 				return NurbsUtil.HomogenousToCartesian(pointw);
 			}
 			else
 			{
-				return SurfacePoint(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, u, v);
+				// Compute point using homogenous coordinates but since surface is not
+				// rational the points xyz position will end up cartesian.
+				var pointw = SurfacePoint(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, u, v);
+				return pointw.xyz;
 			}
 		}
 
@@ -142,14 +135,7 @@ namespace Common.Geometry.Nurbs
 		{
 			if(srf.IsRational)
             {
-				var rsrf = srf as RationalNurbsSurface3d;
-
-				int width = rsrf.ControlPoints.GetLength(0);
-				int height = rsrf.ControlPoints.GetLength(1);
-				var homo_cp = new Vector4d[width, height];
-				NurbsUtil.CartesianToHomogenous(rsrf.ControlPoints, rsrf.Weights, homo_cp);
-
-				var homo_ders = SurfaceDerivatives(rsrf.DegreeU, rsrf.DegreeV, rsrf.KnotsU, rsrf.KnotsV, homo_cp, num_ders, u, v);
+				var homo_ders = SurfaceDerivatives(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, num_ders, u, v);
 
 				var Aders = new Vector3d[num_ders + 1, num_ders + 1];
 
@@ -192,7 +178,15 @@ namespace Common.Geometry.Nurbs
 			}
 			else
             {
-				return SurfaceDerivatives(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, num_ders, u, v);
+				var homo_ders = SurfaceDerivatives(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, num_ders, u, v);
+
+				var surf_ders = new Vector3d[num_ders + 1, num_ders + 1];
+
+				for (int i = 0; i < num_ders + 1; ++i)
+					for (int j = 0; j < num_ders - i + 1; ++j)
+						surf_ders[i, j] = homo_ders[i, j].xyz;
+
+				return surf_ders;
 			}
 		}
 
@@ -289,41 +283,6 @@ namespace Common.Geometry.Nurbs
 		/// <param name="u">Parameter to evaluate the surface at.</param>
 		/// <param name="v">Parameter to evaluate the surface at.</param>
 		/// <returns>Resulting point on the surface at (u, v).</returns>
-		private static Vector3d SurfacePoint(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v,
-			Vector3d[,] control_points, double u, double v)
-		{
-			// Initialize result to 0s
-			var point = new Vector3d();
-
-			// Find span and non-zero basis functions
-			int span_u = NurbsBasis.FindSpan(degree_u, knots_u, u);
-			int span_v = NurbsBasis.FindSpan(degree_v, knots_v, v);
-			var Nu = NurbsBasis.BSplineBasis(degree_u, span_u, knots_u, u);
-			var Nv = NurbsBasis.BSplineBasis(degree_v, span_v, knots_v, v);
-
-			for (int l = 0; l <= degree_v; l++)
-			{
-				var temp = new Vector3d();
-				for (int k = 0; k <= degree_u; k++)
-					temp += control_points[span_u - degree_u + k, span_v - degree_v + l] * Nu[k];
-
-				point += temp * Nv[l];
-			}
-
-			return point;
-		}
-
-		/// <summary>
-		/// Evaluate point on a nonrational NURBS surface
-		/// </summary>
-		/// <param name="degree_u">Degree of the given surface in u-direction.</param>
-		/// <param name="degree_v">Degree of the given surface in v-direction.</param>
-		/// <param name="knots_u">Knot vector of the surface in u-direction.</param>
-		/// <param name="knots_v">Knot vector of the surface in v-direction.</param>
-		/// <param name="control_points">Control points of the surface in a 2d array.</param>
-		/// <param name="u">Parameter to evaluate the surface at.</param>
-		/// <param name="v">Parameter to evaluate the surface at.</param>
-		/// <returns>Resulting point on the surface at (u, v).</returns>
 		private static Vector4d SurfacePoint(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v,
 			Vector4d[,] control_points, double u, double v)
 		{
@@ -346,56 +305,6 @@ namespace Common.Geometry.Nurbs
 			}
 
 			return point;
-		}
-
-		/// <summary>
-		/// Evaluate derivatives on a non-rational NURBS surface
-		/// </summary>
-		/// <param name="degree_u">Degree of the given surface in u-direction.</param>
-		/// <param name="degree_v">Degree of the given surface in v-direction.</param>
-		/// <param name="knots_u">Knot vector of the surface in u-direction.</param>
-		/// <param name="knots_v">Knot vector of the surface in v-direction.</param>
-		/// <param name="control_points">Control points of the surface in a 2d array.</param>
-		/// <param name="num_ders">Number of times to differentiate.</param>
-		/// <param name="u">Parameter to evaluate the surface at.</param>
-		/// <param name="v">Parameter to evaluate the surface at.</param>
-		/// <returns>Derivatives of the surface at (u, v).</returns>
-		private static Vector3d[,] SurfaceDerivatives(int degree_u, int degree_v, IList<double> knots_u,
-					IList<double> knots_v, Vector3d[,] control_points, int num_ders, double u, double v)
-		{
-			var surf_ders = new Vector3d[num_ders + 1, num_ders + 1];
-
-			// Find span and basis function derivatives
-			int span_u = NurbsBasis.FindSpan(degree_u, knots_u, u);
-			int span_v = NurbsBasis.FindSpan(degree_v, knots_v, v);
-			var ders_u = NurbsBasis.BSplineDerBasis(degree_u, span_u, knots_u, u, num_ders);
-			var ders_v = NurbsBasis.BSplineDerBasis(degree_v, span_v, knots_v, v, num_ders);
-
-			// Number of non-zero derivatives is <= degree
-			int du = Math.Min(num_ders, degree_u);
-			int dv = Math.Min(num_ders, degree_v);
-
-			var temp = new Vector3d[degree_v + 1];
-			// Compute derivatives
-			for (int k = 0; k <= du; k++)
-			{
-				for (int s = 0; s <= degree_v; s++)
-				{
-					temp[s] = new Vector3d();
-					for (int r = 0; r <= degree_u; r++)
-						temp[s] += control_points[span_u - degree_u + r, span_v - degree_v + s] * ders_u[k, r];
-				}
-
-				int dd = Math.Min(num_ders - k, dv);
-
-				for (int l = 0; l <= dd; l++)
-				{
-					for (int s = 0; s <= degree_v; s++)
-						surf_ders[k, l] += temp[s] * ders_v[l, s];
-				}
-			}
-
-			return surf_ders;
 		}
 
 		/// <summary>

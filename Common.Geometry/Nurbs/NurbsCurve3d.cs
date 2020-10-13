@@ -51,11 +51,7 @@ namespace Common.Geometry.Nurbs
 
 			ControlPoints = new Vector4d[control_points.Count];
 			for (int i = 0; i < control_points.Count; i++)
-            {
-				var cp = control_points[i];
-				cp.w = 1;
-				ControlPoints[i] = cp;
-			}
+				ControlPoints[i] = new Vector4d(control_points[i].xyz, 1);
 				
 		}
 
@@ -68,16 +64,6 @@ namespace Common.Geometry.Nurbs
 		/// The curves degree.
 		/// </summary>
 		public int Degree { get; protected set; }
-
-		/// <summary>
-		/// The value of the first knot.
-		/// </summary>
-		public double FirstKnot => Knots[0];
-
-		/// <summary>
-		/// The value of the last knot.
-		/// </summary>
-		public double LastKnot => Knots.Last();
 
 		/// <summary>
 		/// The curves knots.
@@ -204,8 +190,8 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		public void NormalizeKnots()
         {
-			double fisrt = FirstKnot;
-			double last = LastKnot;
+			double fisrt = Knots[0];
+			double last = Knots.Last();
 
 			for (int i = 0; i < Knots.Length; i++)
 				Knots[i] = MathUtil.Normalize(Knots[i], fisrt, last);

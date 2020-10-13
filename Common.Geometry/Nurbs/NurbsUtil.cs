@@ -20,33 +20,6 @@ namespace Common.Geometry.Nurbs
 		}
 
 		/// <summary>
-		/// Convert a 2D list of nd points in homogenous coordinates to cartesian
-		/// coordinates by perspective division
-		/// </summary>
-		/// <param name="ptsws">Points in homogenous coordinates</param>
-		/// <param name="pts">Points in cartesian coordinates</param>
-		/// <param name="ws">Homogenous weights</param>
-		internal static void HomogenousToCartesian(Vector4d[,] ptsws, out Vector3d[,] pts, out double[,] ws)
-		{
-			int width = ptsws.GetLength(0);
-			int height = ptsws.GetLength(1);
-			pts = new Vector3d[width, height];
-			ws = new double[width, height];
-
-			for (int i = 0; i < width; ++i)
-			{
-				for (int j = 0; j < height; ++j)
-				{
-					Vector4d ptw_ij = ptsws[i, j];
-					double w_ij = ptw_ij.w;
-
-					pts[i, j] = ptw_ij.xyz / w_ij;
-					ws[i, j] = w_ij;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Convert an nd point in cartesian coordinates to an (n+1)d point in homogenous coordinates
 		/// </summary>
 		/// <param name="pt">Point in cartesian coordinates</param>
@@ -55,22 +28,6 @@ namespace Common.Geometry.Nurbs
 		internal static Vector4d CartesianToHomogenous(Vector3d pt, double w)
 		{
 			return new Vector4d(pt * w, w);
-		}
-
-		/// <summary>
-		/// Convert 2D list of points in cartesian coordinates to homogenous coordinates
-		/// </summary>
-		/// <param name="pts">Points in cartesian coordinates</param>
-		/// <param name="ws">Weights</param>
-		/// <param name="ptsw">Points in homogenous coordinates</param>
-		internal static void CartesianToHomogenous(Vector3d[,] pts, double[,] ws, Vector4d[,] ptsw)
-		{
-			int width = pts.GetLength(0);
-			int height = pts.GetLength(1);
-
-			for (int i = 0; i < width; ++i)
-				for (int j = 0; j < height; ++j)
-					ptsw[i, j] = CartesianToHomogenous(pts[i, j], ws[i, j]);
 		}
 
 		/// <summary>

@@ -13,45 +13,94 @@ namespace Common.Geometry.Nurbs
 	public class NurbsSurface3d
 	{
 
-
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
 		public NurbsSurface3d()
 		{
 
 		}
 
-		public NurbsSurface3d(RationalNurbsSurface3d srf) :
-			this(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints)
-		{
-		}
-
+		/// <summary>
+		/// Create a new surface.
+		/// </summary>
+		/// <param name="degree_u">The degree on the first dimension.</param>
+		/// <param name="degree_v">The degree on the second dimension.</param>
+		/// <param name="knots_u">The knots on the first dimension.</param>
+		/// <param name="knots_v">The knots on the second dimension.</param>
+		/// <param name="control_points">The control points in cartesion coordinates.</param>
 		public NurbsSurface3d(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, Vector3d[,] control_points)
 		{
 			DegreeU = degree_u;
 			DegreeV = degree_v;
 			KnotsU = knots_u.ToArray();
 			KnotsV = knots_v.ToArray();
-			ControlPoints = control_points.Copy();
+
+			int width = control_points.GetLength(0);
+			int height = control_points.GetLength(1);
+
+			ControlPoints = new Vector4d[width, height];
+
+			for (int j = 0; j < height; j++)
+				for (int i = 0; i < width; i++)
+					ControlPoints[i, j] = new Vector4d(control_points[i, j], 1);
 		}
 
+		/// <summary>
+		/// Create a new surface.
+		/// </summary>
+		/// <param name="degree_u">The degree on the first dimension.</param>
+		/// <param name="degree_v">The degree on the second dimension.</param>
+		/// <param name="knots_u">The knots on the first dimension.</param>
+		/// <param name="knots_v">The knots on the second dimension.</param>
+		/// <param name="control_points">The control points in cartesion coordinates.</param>
+		internal NurbsSurface3d(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, Vector4d[,] control_points)
+		{
+			DegreeU = degree_u;
+			DegreeV = degree_v;
+			KnotsU = knots_u.ToArray();
+			KnotsV = knots_v.ToArray();
+
+			int width = control_points.GetLength(0);
+			int height = control_points.GetLength(1);
+
+			ControlPoints = new Vector4d[width, height];
+
+			for (int j = 0; j < height; j++)
+				for (int i = 0; i < width; i++)
+					ControlPoints[i, j] = new Vector4d(control_points[i, j].xyz, 1);
+		}
+
+		/// <summary>
+		/// Is the surface rational.
+		/// </summary>
 		public bool IsRational => this is RationalNurbsSurface3d;
 
-		public int DegreeU { get; private set; }
+		/// <summary>
+		/// The degree on the first dimension.
+		/// </summary>
+		public int DegreeU { get; protected set; }
 
-		public int DegreeV { get; private set; }
+		/// <summary>
+		/// The degree on the second dimension.
+		/// </summary>
+		public int DegreeV { get; protected set; }
 
-		public double FirstKnotU => KnotsU[0];
+		/// <summary>
+		/// The knots on the first dimension.
+		/// </summary>
+		public double[] KnotsU { get; protected set; }
 
-		public double LastKnotU => KnotsU.Last();
+		/// <summary>
+		/// The knots on the second dimension.
+		/// </summary>
+		public double[] KnotsV { get; protected set; }
 
-		public double FirstKnotV => KnotsV[0];
+		public int ControlPointsWidth => ControlPoints.GetLength(0);
 
-		public double LastKnotV => KnotsV.Last();
+		public int ControlPointsHeight => ControlPoints.GetLength(1);
 
-		public double[] KnotsU { get; private set; }
-
-		public double[] KnotsV { get; private set; }
-
-		public Vector3d[,] ControlPoints { get; private set; }
+		internal Vector4d[,] ControlPoints { get; set; }
 
 		public bool IsValid => NurbsCheck.SurfaceIsValid(this);
 
@@ -59,49 +108,125 @@ namespace Common.Geometry.Nurbs
 
 		public bool IsClosedV => NurbsCheck.SurfaceIsClosedV(this);
 
+		/// <summary>
+		/// Get the control point.
+		/// </summary>
+		/// <param name="i">The points first index.</param>
+		/// <param name="j">The points second index.</param>
+		/// <returns>The control point in cartesian coordinates.</returns>
+		public Vector3d GetControlPoint(int i, int j)
+		{
+			return NurbsUtil.HomogenousToCartesian(ControlPoints[i, j]);
+		}
+
+		/// <summary>
+		/// Get the control points
+		/// </summary>
+		/// <param name="points">The list to copy the points into.</param>
+		public void GetControlPoints(List<Vector3d> points)
+		{
+			for (int j = 0; j < ControlPoints.GetLength(1); j++)
+				for (int i = 0; i < ControlPoints.GetLength(0); i++)
+				points.Add(NurbsUtil.HomogenousToCartesian(ControlPoints[i, j]));
+		}
+
+		/// <summary>
+		/// Set the control point.
+		/// </summary>
+		/// <param name="i">The points first index.</param>
+		/// <param name="j">The points second index.</param>
+		/// <param name="point">The control point in cartesian coordinates.</param>
+		public void SetControlPoint(int i, int j, Vector3d point)
+		{
+			ControlPoints[i, j] = new Vector4d(point, 1);
+		}
+
+		/// <summary>
+		/// Get the point at parameter u,v.
+		/// </summary>
+		/// <param name="u">The parameter.</param>
+		/// <returns>The point at u,v.</returns>
 		public Vector3d Point(double u, double v)
 		{
 			return NurbsEval.SurfacePoint(this, u, v);
 		}
 
+		/// <summary>
+		/// Get the tangent at parameter u,v.
+		/// </summary>
+		/// <param name="u">The parameter.</param>
+		/// <returns>The tanget at u,v.</returns>
 		public (Vector3d, Vector3d) Tangent(double u, double v)
 		{
 			return NurbsEval.SurfaceTangent(this, u, v);
 		}
 
+		/// <summary>
+		/// Get the normal at parameter u,v.
+		/// </summary>
+		/// <param name="u">The parameter.</param>
+		/// <returns>The normal at u,v.</returns>
 		public Vector3d Normal(double u, double v)
 		{
 			return NurbsEval.SurfaceNormal(this, u, v);
 		}
 
+		/// <summary>
+		/// Normlize the surfaces u knots so the first knot starts at 0
+		/// and the last knot ends at 1.
+		/// </summary>
 		public void NormalizeKnotsU()
 		{
-			double fisrt = FirstKnotU;
-			double last = LastKnotU;
+			double fisrt = KnotsU[0];
+			double last = KnotsU.Last();
 
 			for (int i = 0; i < KnotsU.Length; i++)
 				KnotsU[i] = MathUtil.Normalize(KnotsU[i], fisrt, last);
 		}
 
+		/// <summary>
+		/// Normlize the surfaces v knots so the first knot starts at 0
+		/// and the last knot ends at 1.
+		/// </summary>
 		public void NormalizeKnotsV()
 		{
-			double fisrt = FirstKnotV;
-			double last = LastKnotV;
+			double fisrt = KnotsV[0];
+			double last = KnotsV.Last();
 
 			for (int i = 0; i < KnotsV.Length; i++)
 				KnotsV[i] = MathUtil.Normalize(KnotsV[i], fisrt, last);
 		}
 
+		/// <summary>
+		/// Insert a new knot into the surface and return as a new surface.
+		/// </summary>
+		/// <param name="srf">The surface to insert the knot into.</param>
+		/// <param name="u">The parameter to insert the knot at.</param>
+		/// <param name="repeat">The number of times to repeat the knot.</param>
+		/// <returns>A new surface with the inserted knots.</returns>
 		public static NurbsSurface3d InsertKnotU(NurbsSurface3d srf, double u, int repeat = 1)
 		{
 			return NurbsModify.SurfaceKnotInsertU(srf, u, repeat);
 		}
 
+		/// <summary>
+		/// Insert a new knot into the surface and return as a new surface.
+		/// </summary>
+		/// <param name="srf">The surface to insert the knot into.</param>
+		/// <param name="v">The parameter to insert the knot at.</param>
+		/// <param name="repeat">The number of times to repeat the knot.</param>
+		/// <returns>A new surface with the inserted knots.</returns>
 		public static NurbsSurface3d InsertKnotV(NurbsSurface3d srf, double v, int repeat = 1)
 		{
 			return NurbsModify.SurfaceKnotInsertV(srf, v, repeat);
 		}
 
+		/// <summary>
+		/// Split the surface a the parameter and return the two new surfaces.
+		/// </summary>
+		/// <param name="srf">The surface to split.</param>
+		/// <param name="u">The parameter to split the surface at</param>
+		/// <returns>The two new surfaces.</returns>
 		public static (NurbsSurface3d, NurbsSurface3d) SplitU(NurbsSurface3d srf, double u)
 		{
 			var surfaces = NurbsModify.SurfaceSplitU(srf, u);
@@ -110,6 +235,12 @@ namespace Common.Geometry.Nurbs
 			return surfaces;
 		}
 
+		/// <summary>
+		/// Split the surface a the parameter and return the two new surfaces.
+		/// </summary>
+		/// <param name="srf">The surface to split.</param>
+		/// <param name="v">The parameter to split the surface at</param>
+		/// <returns>The two new surfaces.</returns>
 		public static (NurbsSurface3d, NurbsSurface3d) SplitV(NurbsSurface3d srf, double v)
 		{
 			var surfaces = NurbsModify.SurfaceSplitV(srf, v);
@@ -124,51 +255,101 @@ namespace Common.Geometry.Nurbs
 	/// </summary>
 	public class RationalNurbsSurface3d : NurbsSurface3d
 	{
-
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
 		public RationalNurbsSurface3d()
 		{
 
 		}
 
-		public RationalNurbsSurface3d(NurbsSurface3d srf) :
-			this(srf, null)
+		/// <summary>
+		/// Ceate a new surface.
+		/// </summary>
+		/// <param name="degree_u">The degree on the first dimension.</param>
+		/// <param name="degree_v">The degree on the second dimension.</param>
+		/// <param name="knots_u">The knots on the first dimension.</param>
+		/// <param name="knots_v">The knots on the second dimension.</param>
+		/// <param name="control_points">The control points in cartesion coordinates.</param>
+		/// <param name="weights">The weights.</param>
+		public RationalNurbsSurface3d(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, Vector3d[,] control_points, double[,] weights)
 		{
+			DegreeU = degree_u;
+			DegreeV = degree_v;
+			KnotsU = knots_u.ToArray();
+			KnotsV = knots_v.ToArray();
+
+			int width = control_points.GetLength(0);
+			int height = control_points.GetLength(1);
+
+			ControlPoints = new Vector4d[width, height];
+
+			for (int j = 0; j < height; j++)
+				for (int i = 0; i < width; i++)
+					ControlPoints[i, j] = NurbsUtil.CartesianToHomogenous(control_points[i, j], weights[i, j]);
+
 		}
 
-		public RationalNurbsSurface3d(NurbsSurface3d srf, double[,] weights) :
-			this(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV, srf.ControlPoints, weights)
+		/// <summary>
+		/// Ceate a new surface.
+		/// </summary>
+		/// <param name="degree_u">The degree on the first dimension.</param>
+		/// <param name="degree_v">The degree on the second dimension.</param>
+		/// <param name="knots_u">The knots on the first dimension.</param>
+		/// <param name="knots_v">The knots on the second dimension.</param>
+		/// <param name="control_points">The control points in homogenous coordinates.</param>
+		public RationalNurbsSurface3d(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, Vector4d[,] control_points)
 		{
+			DegreeU = degree_u;
+			DegreeV = degree_v;
+			KnotsU = knots_u.ToArray();
+			KnotsV = knots_v.ToArray();
+
+			ControlPoints = control_points.Copy();
 		}
 
-		public RationalNurbsSurface3d(int degree_u, int degree_v, IList<double> knots_u, IList<double> knots_v, Vector3d[,] control_points, double[,] weights) :
-				base(degree_u, degree_v, knots_u, knots_v, control_points)
+		/// <summary>
+		/// Set the control point.
+		/// </summary>
+		/// <param name="i">The points first index.</param>
+		/// <param name="j">The points second index.</param>
+		/// <param name="point">The control point in cartesian coordinates.</param>
+		/// <param name="weight">The control points weight.</param>
+		public void SetControlPoint(int i, int j, Vector3d point, double weight)
 		{
-			if (weights == null)
-			{
-				int width = control_points.GetLength(0);
-				int height = control_points.GetLength(1);
-				Weights = new double[width, height];
-				Weights.Fill(1);
-			}
-			else
-			{
-				Weights = weights.Copy();
-			}
-
+			ControlPoints[i,j] = NurbsUtil.CartesianToHomogenous(point, weight);
 		}
 
-		public double[,] Weights { get; private set; }
-
+		/// <summary>
+		/// Insert a new knot into the surface and return as a new surface.
+		/// </summary>
+		/// <param name="srf">The surface to insert the knot into.</param>
+		/// <param name="u">The parameter to insert the knot at.</param>
+		/// <param name="repeat">The number of times to repeat the knot.</param>
+		/// <returns>A new surface with the inserted knots.</returns>
 		public static RationalNurbsSurface3d InsertKnotU(RationalNurbsSurface3d srf, double u, int repeat = 1)
 		{
 			return NurbsModify.RationalSurfaceKnotInsertU(srf, u, repeat);
 		}
 
+		/// <summary>
+		/// Insert a new knot into the surface and return as a new surface.
+		/// </summary>
+		/// <param name="srf">The surface to insert the knot into.</param>
+		/// <param name="v">The parameter to insert the knot at.</param>
+		/// <param name="repeat">The number of times to repeat the knot.</param>
+		/// <returns>A new surface with the inserted knots.</returns>
 		public static RationalNurbsSurface3d InsertKnotV(RationalNurbsSurface3d srf, double v, int repeat = 1)
 		{
 			return NurbsModify.RationalSurfaceKnotInsertV(srf, v, repeat);
 		}
 
+		/// <summary>
+		/// Split the surface a the parameter and return the two new surfaces.
+		/// </summary>
+		/// <param name="srf">The surface to split.</param>
+		/// <param name="u">The parameter to split the surface at</param>
+		/// <returns>The two new surfaces.</returns>
 		public static (RationalNurbsSurface3d, RationalNurbsSurface3d) SplitU(RationalNurbsSurface3d srf, double u)
         {
 			var surfaces = NurbsModify.RationalSurfaceSplitU(srf, u);
@@ -177,6 +358,12 @@ namespace Common.Geometry.Nurbs
 			return surfaces;
 		}
 
+		/// <summary>
+		/// Split the surface a the parameter and return the two new surfaces.
+		/// </summary>
+		/// <param name="srf">The surface to split.</param>
+		/// <param name="v">The parameter to split the surface at</param>
+		/// <returns>The two new surfaces.</returns>
 		public static (RationalNurbsSurface3d, RationalNurbsSurface3d) SplitV(RationalNurbsSurface3d srf, double v)
 		{
 			var surfaces = NurbsModify.RationalSurfaceSplitV(srf, v);

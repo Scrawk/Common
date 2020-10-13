@@ -70,16 +70,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Whether closed along u-direction</returns>
 		internal static bool SurfaceIsClosedU(NurbsSurface3d srf)
 		{
-			if (srf.IsRational)
-            {
-				var rsrf = srf as RationalNurbsSurface3d;
-				return IsArray2ClosedU(rsrf.DegreeU, rsrf.ControlPoints) &&
-					IsKnotVectorClosed(rsrf.DegreeU, rsrf.KnotsU) &&
-					IsArray2ClosedU(rsrf.DegreeU, rsrf.Weights);
-			}
-			else
-				return IsArray2ClosedU(srf.DegreeU, srf.ControlPoints) && 
-					IsKnotVectorClosed(srf.DegreeU, srf.KnotsU);
+			return IsArray2ClosedU(srf.DegreeU, srf.ControlPoints) &&
+				IsKnotVectorClosed(srf.DegreeU, srf.KnotsU);
 		}
 
 		/// <summary>
@@ -89,16 +81,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>Whether closed along v-direction</returns>
 		internal static bool SurfaceIsClosedV(NurbsSurface3d srf)
 		{
-			if (srf.IsRational)
-			{
-				var rsrf = srf as RationalNurbsSurface3d;
-				return IsArray2ClosedV(rsrf.DegreeV, rsrf.ControlPoints) &&
-					IsKnotVectorClosed(rsrf.DegreeV, rsrf.KnotsV) &&
-					IsArray2ClosedV(rsrf.DegreeV, rsrf.Weights);
-			}
-			else
-				return IsArray2ClosedV(srf.DegreeV, srf.ControlPoints) &&
-					IsKnotVectorClosed(srf.DegreeV, srf.KnotsV);
+			return IsArray2ClosedV(srf.DegreeV, srf.ControlPoints) &&
+				IsKnotVectorClosed(srf.DegreeV, srf.KnotsV);
 		}
 
 		/// <summary>
@@ -285,14 +269,18 @@ namespace Common.Geometry.Nurbs
 		/// <param name="degree_u">Degree along u-direction</param>
 		/// <param name="arr">2D array of control points / weights</param>
 		/// <returns>Whether closed along u-direction</returns>
-		private static bool IsArray2ClosedU(int degree_u, Vector3d[,] arr)
+		private static bool IsArray2ClosedU(int degree_u, Vector4d[,] arr)
 		{
 			for (int i = 0; i < degree_u; ++i)
 			{
 				for (int j = 0; j < arr.GetLength(1); ++j)
 				{
 					int k = arr.GetLength(1) - degree_u + i;
-					if (!MathUtil.IsZero((arr[i, j] - arr[k, j]).Magnitude))
+
+					var pij = NurbsUtil.HomogenousToCartesian(arr[i, j]);
+					var pkj = NurbsUtil.HomogenousToCartesian(arr[k, j]);
+
+					if (!MathUtil.IsZero((pij - pkj).Magnitude))
 						return false;
 				}
 			}
@@ -306,14 +294,18 @@ namespace Common.Geometry.Nurbs
 		/// <param name="degree_v">Degree along v-direction</param>
 		/// <param name="arr">2D array of control points / weights</param>
 		/// <returns>Whether closed along v-direction</returns>
-		private static bool IsArray2ClosedV(int degree_v, Vector3d[,] arr)
+		private static bool IsArray2ClosedV(int degree_v, Vector4d[,] arr)
 		{
 			for (int i = 0; i < arr.GetLength(0); ++i)
 			{
 				for (int j = 0; j < degree_v; j++)
 				{
 					int k = arr.GetLength(0) - degree_v + i;
-					if (!MathUtil.IsZero((arr[i, j] - arr[i, k]).Magnitude))
+
+					var pij = NurbsUtil.HomogenousToCartesian(arr[i, j]);
+					var pik = NurbsUtil.HomogenousToCartesian(arr[i, k]);
+
+					if (!MathUtil.IsZero((pij - pik).Magnitude))
 						return false;
 				}
 			}
