@@ -7,6 +7,13 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
+	internal struct NurbsSurfaceParams3d
+	{
+		public int degreeU, degreeV;
+		public List<double> knotsU, knotsV;
+		public Vector4d[,] controlPoints;
+	}
+
 	/// <summary>
 	/// Class for representing a non-rational NURBS surface
 	/// </summary>
@@ -206,7 +213,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new surface with the inserted knots.</returns>
 		public static NurbsSurface3d InsertKnotU(NurbsSurface3d srf, double u, int repeat = 1)
 		{
-			return NurbsModify.SurfaceKnotInsertU(srf, u, repeat);
+			var x = NurbsModify.SurfaceKnotInsertU(srf, u, repeat);
+			return new NurbsSurface3d(x.degreeU, x.degreeV, x.knotsU, x.knotsV, x.controlPoints);
 		}
 
 		/// <summary>
@@ -218,7 +226,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new surface with the inserted knots.</returns>
 		public static NurbsSurface3d InsertKnotV(NurbsSurface3d srf, double v, int repeat = 1)
 		{
-			return NurbsModify.SurfaceKnotInsertV(srf, v, repeat);
+			var x = NurbsModify.SurfaceKnotInsertV(srf, v, repeat);
+			return new NurbsSurface3d(x.degreeU, x.degreeV, x.knotsU, x.knotsV, x.controlPoints);
 		}
 
 		/// <summary>
@@ -227,12 +236,17 @@ namespace Common.Geometry.Nurbs
 		/// <param name="srf">The surface to split.</param>
 		/// <param name="u">The parameter to split the surface at</param>
 		/// <returns>The two new surfaces.</returns>
-		public static (NurbsSurface3d, NurbsSurface3d) SplitU(NurbsSurface3d srf, double u)
+		public static (NurbsSurface3d left, NurbsSurface3d right) SplitU(NurbsSurface3d srf, double u)
 		{
-			var surfaces = NurbsModify.SurfaceSplitU(srf, u);
-			surfaces.Item1.NormalizeKnotsU();
-			surfaces.Item2.NormalizeKnotsU();
-			return surfaces;
+			var x = NurbsModify.SurfaceSplitU(srf, u);
+
+			var left = new NurbsSurface3d(x.left.degreeU, x.left.degreeV, x.left.knotsU, x.left.knotsV, x.left.controlPoints);
+			var right = new NurbsSurface3d(x.right.degreeU, x.right.degreeV, x.right.knotsU, x.right.knotsV, x.right.controlPoints);
+
+			left.NormalizeKnotsU();
+			right.NormalizeKnotsU();
+
+			return (left, right);
 		}
 
 		/// <summary>
@@ -243,10 +257,15 @@ namespace Common.Geometry.Nurbs
 		/// <returns>The two new surfaces.</returns>
 		public static (NurbsSurface3d, NurbsSurface3d) SplitV(NurbsSurface3d srf, double v)
 		{
-			var surfaces = NurbsModify.SurfaceSplitV(srf, v);
-			surfaces.Item1.NormalizeKnotsV();
-			surfaces.Item2.NormalizeKnotsV();
-			return surfaces;
+			var x = NurbsModify.SurfaceSplitV(srf, v);
+
+			var left = new NurbsSurface3d(x.left.degreeU, x.left.degreeV, x.left.knotsU, x.left.knotsV, x.left.controlPoints);
+			var right = new NurbsSurface3d(x.right.degreeU, x.right.degreeV, x.right.knotsU, x.right.knotsV, x.right.controlPoints);
+
+			left.NormalizeKnotsV();
+			right.NormalizeKnotsV();
+
+			return (left, right);
 		}
 	}
 
@@ -329,7 +348,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new surface with the inserted knots.</returns>
 		public static RationalNurbsSurface3d InsertKnotU(RationalNurbsSurface3d srf, double u, int repeat = 1)
 		{
-			return NurbsModify.RationalSurfaceKnotInsertU(srf, u, repeat);
+			var x = NurbsModify.SurfaceKnotInsertU(srf, u, repeat);
+			return new RationalNurbsSurface3d(x.degreeU, x.degreeV, x.knotsU, x.knotsV, x.controlPoints);
 		}
 
 		/// <summary>
@@ -341,7 +361,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new surface with the inserted knots.</returns>
 		public static RationalNurbsSurface3d InsertKnotV(RationalNurbsSurface3d srf, double v, int repeat = 1)
 		{
-			return NurbsModify.RationalSurfaceKnotInsertV(srf, v, repeat);
+			var x = NurbsModify.SurfaceKnotInsertV(srf, v, repeat);
+			return new RationalNurbsSurface3d(x.degreeU, x.degreeV, x.knotsU, x.knotsV, x.controlPoints);
 		}
 
 		/// <summary>
@@ -352,10 +373,15 @@ namespace Common.Geometry.Nurbs
 		/// <returns>The two new surfaces.</returns>
 		public static (RationalNurbsSurface3d, RationalNurbsSurface3d) SplitU(RationalNurbsSurface3d srf, double u)
         {
-			var surfaces = NurbsModify.RationalSurfaceSplitU(srf, u);
-			surfaces.Item1.NormalizeKnotsU();
-			surfaces.Item2.NormalizeKnotsU();
-			return surfaces;
+			var x = NurbsModify.SurfaceSplitU(srf, u);
+
+			var left = new RationalNurbsSurface3d(x.left.degreeU, x.left.degreeV, x.left.knotsU, x.left.knotsV, x.left.controlPoints);
+			var right = new RationalNurbsSurface3d(x.right.degreeU, x.right.degreeV, x.right.knotsU, x.right.knotsV, x.right.controlPoints);
+
+			left.NormalizeKnotsU();
+			right.NormalizeKnotsU();
+
+			return (left, right);
 		}
 
 		/// <summary>
@@ -366,10 +392,15 @@ namespace Common.Geometry.Nurbs
 		/// <returns>The two new surfaces.</returns>
 		public static (RationalNurbsSurface3d, RationalNurbsSurface3d) SplitV(RationalNurbsSurface3d srf, double v)
 		{
-			var surfaces = NurbsModify.RationalSurfaceSplitV(srf, v);
-			surfaces.Item1.NormalizeKnotsV();
-			surfaces.Item2.NormalizeKnotsV();
-			return surfaces;
+			var x = NurbsModify.SurfaceSplitV(srf, v);
+
+			var left = new RationalNurbsSurface3d(x.left.degreeU, x.left.degreeV, x.left.knotsU, x.left.knotsV, x.left.controlPoints);
+			var right = new RationalNurbsSurface3d(x.right.degreeU, x.right.degreeV, x.right.knotsU, x.right.knotsV, x.right.controlPoints);
+
+			left.NormalizeKnotsV();
+			right.NormalizeKnotsV();
+
+			return (left, right);
 		}
 
 	}

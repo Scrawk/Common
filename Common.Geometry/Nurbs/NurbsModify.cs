@@ -50,40 +50,17 @@ namespace Common.Geometry.Nurbs
 		/// <param name="u">Knot value to insert</param>
 		/// <param name="repeat">Number of times to insert</param>
 		/// <returns>New Surface object after knot insertion</returns>
-		internal static NurbsSurface3d SurfaceKnotInsertU(NurbsSurface3d srf, double u, int repeat = 1)
+		internal static NurbsSurfaceParams3d SurfaceKnotInsertU(NurbsSurface3d srf, double u, int repeat = 1)
 		{
-			List<double> knots_u;
-			Vector4d[,] control_points;
+			var param = new NurbsSurfaceParams3d();
+			param.degreeU = srf.DegreeU;
+			param.degreeV = srf.DegreeV;
+			param.knotsV = new List<double>(srf.KnotsV);
+
 			SurfaceKnotInsert(srf.DegreeU, srf.KnotsU, srf.ControlPoints, u, repeat, true,
-				out knots_u, out control_points);
+				out param.knotsU, out param.controlPoints);
 
-			int degree_u = srf.DegreeU;
-			int degree_v = srf.DegreeV;
-			var knots_v = srf.KnotsV;
-
-			return new NurbsSurface3d(degree_u, degree_v, knots_u, knots_v, control_points);
-		}
-
-		/// <summary>
-		/// Insert knots in the surface along u-direction
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="u">Knot value to insert</param>
-		/// <param name="repeat">Number of times to insert</param>
-		/// <returns>New Surface object after knot insertion</returns>
-		internal static RationalNurbsSurface3d RationalSurfaceKnotInsertU(RationalNurbsSurface3d srf, double u, int repeat = 1)
-		{
-
-			// New knots and new homogenous control points after knot insertion
-			List<double> knots_u;
-			Vector4d[,] new_Cw;
-			SurfaceKnotInsert(srf.DegreeU, srf.KnotsU, srf.ControlPoints, u, repeat, true, out knots_u, out new_Cw);
-
-			int degree_u = srf.DegreeU;
-			int degree_v = srf.DegreeV;
-			var knots_v = srf.KnotsV;
-
-			return new RationalNurbsSurface3d(degree_u, degree_v, knots_u, knots_v, new_Cw);
+			return param;
 		}
 
 		/// <summary>
@@ -93,41 +70,17 @@ namespace Common.Geometry.Nurbs
 		/// <param name="v">Knot value to insert</param>
 		/// <param name="repeat">Number of times to insert</param>
 		/// <returns>New Surface object after knot insertion</returns>
-		internal static NurbsSurface3d SurfaceKnotInsertV(NurbsSurface3d srf, double v, int repeat = 1)
+		internal static NurbsSurfaceParams3d SurfaceKnotInsertV(NurbsSurface3d srf, double v, int repeat = 1)
 		{
+			var param = new NurbsSurfaceParams3d();
+			param.degreeU = srf.DegreeU;
+			param.degreeV = srf.DegreeV;
+			param.knotsU = new List<double>(srf.KnotsU);
 
-			List<double> knots_v;
-			Vector4d[,] control_points;
 			SurfaceKnotInsert(srf.DegreeV, srf.KnotsV, srf.ControlPoints, v, repeat, false,
-				out knots_v, out control_points);
+				out param.knotsV, out param.controlPoints);
 
-			int degree_u = srf.DegreeU;
-			int degree_v = srf.DegreeV;
-			var knots_u = srf.KnotsU;
-
-			return new NurbsSurface3d(degree_u, degree_v, knots_u, knots_v, control_points);
-		}
-
-		/// <summary>
-		/// Insert knots in the surface along v-direction
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="v">Knot value to insert</param>
-		/// <param name="repeat">Number of times to insert</param>
-		/// <returns>New Surface object after knot insertion</returns>
-		internal static RationalNurbsSurface3d RationalSurfaceKnotInsertV(RationalNurbsSurface3d srf, double v, int repeat = 1)
-		{
-
-			// New knots and new homogenous control points after knot insertion
-			List<double> knots_v;
-			Vector4d[,] new_Cw;
-			SurfaceKnotInsert(srf.DegreeV, srf.KnotsV, srf.ControlPoints, v, repeat, false, out knots_v, out new_Cw);
-
-			int degree_u = srf.DegreeU;
-			int degree_v = srf.DegreeV;
-			var knots_u = srf.KnotsU;
-
-			return new RationalNurbsSurface3d(degree_u, degree_v, knots_u, knots_v, new_Cw);
+			return param;
 		}
 
 		/// <summary>
@@ -178,50 +131,23 @@ namespace Common.Geometry.Nurbs
 		/// <param name="srf">Surface object</param>
 		/// <param name="u">Parameter along u-direction to split the surface</param>
 		/// <returns>Tuple with first and second half of the surfaces</returns>
-		internal static (NurbsSurface3d, NurbsSurface3d) SurfaceSplitU(NurbsSurface3d srf, double u)
+		internal static (NurbsSurfaceParams3d left, NurbsSurfaceParams3d right) SurfaceSplitU(NurbsSurface3d srf, double u)
 		{
-			List<double> left_knots_u, right_knots_u;
-			Vector4d[,] left_controlPoints, right_controlPoints;
+			var leftParam = new NurbsSurfaceParams3d();
+			leftParam.degreeU = srf.DegreeU;
+			leftParam.degreeV = srf.DegreeV;
+			leftParam.knotsV = new List<double>(srf.KnotsV);
+
+			var rightParam = new NurbsSurfaceParams3d();
+			rightParam.degreeU = srf.DegreeU;
+			rightParam.degreeV = srf.DegreeV;
+			rightParam.knotsV = new List<double>(srf.KnotsV);
 
 			SurfaceSplit(srf.DegreeU, srf.KnotsU, srf.ControlPoints, u, true,
-				out left_knots_u, out left_controlPoints,
-				out right_knots_u, out right_controlPoints);
+				out leftParam.knotsU, out leftParam.controlPoints,
+				out rightParam.knotsU, out rightParam.controlPoints);
 
-			int degreeU = srf.DegreeU;
-			int degreeV = srf.DegreeV;
-			var left_knots_v = srf.KnotsV;
-			var right_knots_v = srf.KnotsV;
-
-			var left = new NurbsSurface3d(degreeU, degreeV, left_knots_u, left_knots_v, left_controlPoints);
-			var right = new NurbsSurface3d(degreeU, degreeV, right_knots_u, right_knots_v, right_controlPoints);
-
-			return (left, right);
-		}
-
-		/// <summary>
-		/// Split a surface into two along u-direction
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="u">Parameter along u-direction to split the surface</param>
-		/// <returns>Tuple with first and second half of the surfaces</returns>
-		internal static (RationalNurbsSurface3d, RationalNurbsSurface3d) RationalSurfaceSplitU(RationalNurbsSurface3d srf, double u)
-		{
-			// Split surface with homogenous coordinates
-			Vector4d[,] left_Cw, right_Cw;
-			List<double> left_knots_u, right_knots_u;
-
-			SurfaceSplit(srf.DegreeU, srf.KnotsU, srf.ControlPoints, u, true,
-				out left_knots_u, out left_Cw, out right_knots_u, out right_Cw);
-
-			int degreeU = srf.DegreeU;
-			int degreeV = srf.DegreeV;
-			var left_knots_v = srf.KnotsV;
-			var right_knots_v = srf.KnotsV;
-
-			var left = new RationalNurbsSurface3d(degreeU, degreeV, left_knots_u, left_knots_v, left_Cw);
-			var right = new RationalNurbsSurface3d(degreeU, degreeV, right_knots_u, right_knots_v, right_Cw);
-
-			return (left, right);
+			return (leftParam, rightParam);
 		}
 
 		/// <summary>
@@ -230,50 +156,23 @@ namespace Common.Geometry.Nurbs
 		/// <param name="srf">Surface object</param>
 		/// <param name="v">Parameter along v-direction to split the surface</param>
 		/// <returns>Tuple with first and second half of the surfaces</returns>
-		internal static (NurbsSurface3d, NurbsSurface3d) SurfaceSplitV(NurbsSurface3d srf, double v)
+		internal static (NurbsSurfaceParams3d left, NurbsSurfaceParams3d right) SurfaceSplitV(NurbsSurface3d srf, double v)
 		{
-			List<double> left_knots_v, right_knots_v;
-			Vector4d[,] left_controlPoints, right_controlPoints;
+			var leftParam = new NurbsSurfaceParams3d();
+			leftParam.degreeU = srf.DegreeU;
+			leftParam.degreeV = srf.DegreeV;
+			leftParam.knotsU = new List<double>(srf.KnotsU);
+
+			var rightParam = new NurbsSurfaceParams3d();
+			rightParam.degreeU = srf.DegreeU;
+			rightParam.degreeV = srf.DegreeV;
+			rightParam.knotsU = new List<double>(srf.KnotsU);
 
 			SurfaceSplit(srf.DegreeV, srf.KnotsV, srf.ControlPoints, v, false,
-				out left_knots_v, out left_controlPoints,
-				out right_knots_v, out right_controlPoints);
+				out leftParam.knotsV, out leftParam.controlPoints,
+				out rightParam.knotsV, out rightParam.controlPoints);
 
-			int degreeU = srf.DegreeU;
-			int degreeV = srf.DegreeV;
-			var left_knots_u = srf.KnotsU;
-			var right_knots_u = srf.KnotsU;
-
-			var left = new NurbsSurface3d(degreeU, degreeV, left_knots_u, left_knots_v, left_controlPoints);
-			var right = new NurbsSurface3d(degreeU, degreeV, right_knots_u, right_knots_v, right_controlPoints);
-
-			return (left, right);
-		}
-
-		/// <summary>
-		/// Split a surface into two along v-direction
-		/// </summary>
-		/// <param name="srf">Surface object</param>
-		/// <param name="v">Parameter along v-direction to split the surface</param>
-		/// <returns>Tuple with first and second half of the surfaces</returns>
-		internal static (RationalNurbsSurface3d, RationalNurbsSurface3d) RationalSurfaceSplitV(RationalNurbsSurface3d srf, double v)
-		{
-			// Split surface with homogenous coordinates
-			Vector4d[,] left_Cw, right_Cw;
-			List<double> left_knots_v, right_knots_v;
-
-			SurfaceSplit(srf.DegreeV, srf.KnotsV, srf.ControlPoints, v, false,
-				out left_knots_v, out left_Cw, out right_knots_v, out right_Cw);
-
-			int degreeU = srf.DegreeU;
-			int degreeV = srf.DegreeV;
-			var left_knots_u = srf.KnotsU;
-			var right_knots_u = srf.KnotsU;
-
-			var left = new RationalNurbsSurface3d(degreeU, degreeV, left_knots_u, left_knots_v, left_Cw);
-			var right = new RationalNurbsSurface3d(degreeU, degreeV, right_knots_u, right_knots_v, right_Cw);
-
-			return (left, right);
+			return (leftParam, rightParam);
 		}
 
 		/// <summary>
