@@ -190,7 +190,7 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="degree">Degree of curve</param>
 		/// <param name="knots">Knot vector of curve</param>
-		/// <param name="control_point">Control points of curve</param>
+		/// <param name="control_points">Control points of curve</param>
 		/// <returns>Whether valid</returns>
 		private static bool CurveIsValid(int degree, IList<double> knots, IList<Vector3d> control_points)
 		{
@@ -212,7 +212,7 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="degree">Degree of curve</param>
 		/// <param name="knots">Knot vector of curve</param>
-		/// <param name="control_point">Control points of curve</param>
+		/// <param name="control_points">Control points of curve</param>
 		/// <param name="weights">Weights of curve</param>
 		/// <returns>Whether valid</returns>
 		private static bool CurveIsValid(int degree, IList<double> knots, IList<Vector3d> control_points, IList<double> weights)

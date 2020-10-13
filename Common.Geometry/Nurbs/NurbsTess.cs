@@ -16,7 +16,7 @@ namespace Common.Geometry.Nurbs
         /// <param name="start">start parameter for sampling</param>
         /// <param name="end">end parameter for sampling</param>
         /// <param name="numSamples">integer number of samples</param>
-        /// <returns></returns>
+        /// <returns>The list of sampled points.</returns>
         internal static List<Vector3d> Regular(NurbsCurve3d curve, double start, double end, int numSamples)
         {
             if (numSamples < 2)
@@ -32,6 +32,38 @@ namespace Common.Geometry.Nurbs
             }
 
             return points;
+        }
+
+        /// <summary>
+        /// Estimate the length of the curve.
+        /// </summary>
+        /// <param name="curve">NurbsCurveData object</param>
+        /// <param name="start">start parameter for sampling</param>
+        /// <param name="end">end parameter for sampling</param>
+        /// <param name="numSamples">integer number of samples</param>
+        /// <returns>The curves estmated length.</returns>
+        internal static double EstimateLength(NurbsCurve3d curve, double start, double end, int numSamples)
+        {
+            if (numSamples < 2)
+                numSamples = 2;
+
+            double span = (end - start) / (numSamples - 1);
+
+            double len = 0;
+            Vector3d previous = new Vector3d();
+
+            for (int i = 0; i < numSamples; i++)
+            {
+                double u = start + span * i;
+                var point = curve.Point(u);
+
+                if (i > 0)
+                    len += Vector3d.Distance(previous, point);
+
+                previous = point;
+            }
+
+            return len;
         }
 
     }

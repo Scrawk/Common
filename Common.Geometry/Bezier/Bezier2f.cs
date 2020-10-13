@@ -147,7 +147,7 @@ namespace Common.Geometry.Bezier
         /// <summary>
         /// Length of curve.
         /// </summary>
-        public float Length(int steps, float tmax = 1.0f)
+        public float EstimateLength(int steps, float tmax = 1.0f)
         {
             if (tmax <= 0) return 0;
             if (tmax > 1) tmax = 1;

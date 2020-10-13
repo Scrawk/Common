@@ -165,11 +165,11 @@ namespace Common.Geometry.Nurbs
 		/// <param name="radius">the radius</param>
 		/// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
 		/// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
-		public static RationalNurbsCurve3d Arc(Vector3d center, double radius, double minAngle, double maxAngle)
+		public static RationalNurbsCurve3d Arc(Vector3d center, double radius, double startAngle, double endAngle)
 		{
 			var unitX = Vector3d.UnitX;
 			var unitY = Vector3d.UnitY;
-			return EllipseArc(center, radius, radius, minAngle, maxAngle, unitX, unitY);
+			return EllipseArc(center, radius, radius, startAngle, endAngle, unitX, unitY);
 		}
 
 		/// <summary>
@@ -193,11 +193,11 @@ namespace Common.Geometry.Nurbs
 		/// <param name="yradius">the y radius</param>
 		/// <param name="startAngle">start angle of the ellipse arc, between 0 and 2pi, where 0 points at the xaxis</param>
 		/// <param name="endAngle">end angle of the arc, between 0 and 2pi, greater than the start angle</param>
-		public static RationalNurbsCurve3d EllipseArc(Vector3d center, double xradius, double yradius, double minAngle, double maxAngle)
+		public static RationalNurbsCurve3d EllipseArc(Vector3d center, double xradius, double yradius, double startAngle, double endAngle)
 		{
 			var unitX = Vector3d.UnitX;
 			var unitY = Vector3d.UnitY;
-			return EllipseArc(center, xradius, yradius, minAngle, maxAngle, unitX, unitY);
+			return EllipseArc(center, xradius, yradius, startAngle, endAngle, unitX, unitY);
 		}
 
 		/// <summary>

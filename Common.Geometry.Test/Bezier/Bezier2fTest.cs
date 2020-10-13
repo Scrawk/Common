@@ -107,7 +107,7 @@ namespace Common.Geometry.Test.Bezier
             bezier.Control[2] = quadratic.C2;
 
             float len0 = quadratic.Length;
-            float len1 = bezier.Length(100);
+            float len1 = bezier.EstimateLength(100);
 
             Assert.AreEqual(Math.Round(len0, 4), Math.Round(len1, 4));
 
@@ -138,7 +138,7 @@ namespace Common.Geometry.Test.Bezier
             Assert.AreEqual(p, b0.Control[3]);
             Assert.AreEqual(p, b1.Control[0]);
 
-            Assert.AreEqual(Math.Round(bezier.Length(100), 4), Math.Round(b0.Length(50) + b1.Length(50), 4));
+            Assert.AreEqual(Math.Round(bezier.EstimateLength(100), 4), Math.Round(b0.EstimateLength(50) + b1.EstimateLength(50), 4));
 
         }
     }
