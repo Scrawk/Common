@@ -36,6 +36,16 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="crv">Curve object</param>
 		/// <returns>Whether valid</returns>
+		internal static bool CurveIsValid(NurbsCurve2d crv)
+		{
+			return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints.Length);
+		}
+
+		/// <summary>
+		/// Returns whether the curve is valid
+		/// </summary>
+		/// <param name="crv">Curve object</param>
+		/// <returns>Whether valid</returns>
 		internal static bool CurveIsValid(NurbsCurve3d crv)
 		{
 			return CurveIsValid(crv.Degree, crv.Knots, crv.ControlPoints.Length);
@@ -50,6 +60,17 @@ namespace Common.Geometry.Nurbs
 		{
 			return SurfaceIsValid(srf.DegreeU, srf.DegreeV, srf.KnotsU, srf.KnotsV,
 				srf.ControlPoints.GetLength(0), srf.ControlPoints.GetLength(1));
+		}
+
+		/// <summary>
+		/// Checks whether the curve is closed
+		/// </summary>
+		/// <param name="crv">Curve object</param>
+		/// <returns>Whether closed</returns>
+		internal static bool CurveIsClosed(NurbsCurve2d crv)
+		{
+			return IsArray1Closed(crv.Degree, crv.ControlPoints) &&
+				IsKnotVectorClosed(crv.Degree, crv.Knots);
 		}
 
 		/// <summary>
@@ -185,14 +206,23 @@ namespace Common.Geometry.Nurbs
 		/// periodicity of knot vectors near the start and end
 		/// </summary>
 		/// <param name="degree">Degree of curve/surface</param>
-		/// <param name="vec">Array of any weights</param>
+		/// <param name="vec">Array of any control points</param>
 		/// <returns>Whether knot vector is closed</returns>
-		private static bool IsArray1Closed(int degree, IList<double> vec)
+		private static bool IsArray1Closed(int degree, IList<Vector3d> vec)
 		{
 			for (int i = 0; i < degree; ++i)
 			{
 				int j = vec.Count - degree + i;
-				if (!MathUtil.IsZero(vec[i] - vec[j]))
+
+				var pi = NurbsUtil.HomogenousToCartesian(vec[i]);
+				var pj = NurbsUtil.HomogenousToCartesian(vec[j]);
+
+				//check the weights
+				if (!MathUtil.IsZero(vec[i].z - vec[j].z))
+					return false;
+
+				//check the control points
+				if (!MathUtil.IsZero((pi - pj).Magnitude))
 					return false;
 			}
 			return true;
@@ -214,50 +244,13 @@ namespace Common.Geometry.Nurbs
 				var pi = NurbsUtil.HomogenousToCartesian(vec[i]);
 				var pj = NurbsUtil.HomogenousToCartesian(vec[j]);
 
+				//check the weights
+				if (!MathUtil.IsZero(vec[i].w - vec[j].w))
+					return false;
+
+				//check the control points
 				if (!MathUtil.IsZero((pi - pj).Magnitude))
 					return false;
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Returns whether the 2D array is closed along the u-direction
-		/// i.e., along rows.
-		/// </summary>
-		/// <param name="degree_u">Degree along u-direction</param>
-		/// <param name="arr">2D array of control points / weights</param>
-		/// <returns>Whether closed along u-direction</returns>
-		private static bool IsArray2ClosedU(int degree_u, double[,] arr)
-		{
-			for (int i = 0; i < degree_u; ++i)
-			{
-				for (int j = 0; j < arr.GetLength(1); ++j)
-				{
-					int k = arr.GetLength(1) - degree_u + i;
-					if (!MathUtil.IsZero(arr[i, j] - arr[k, j]))
-						return false;
-				}
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Returns whether the 2D array is closed along the v-direction
-		/// i.e., along columns.
-		/// </summary>
-		/// <param name="degree_v">Degree along v-direction</param>
-		/// <param name="arr">2D array of control points / weights</param>
-		/// <returns>Whether closed along v-direction</returns>
-		private static bool IsArray2ClosedV(int degree_v, double[,] arr)
-		{
-			for (int i = 0; i < arr.GetLength(0); ++i)
-			{
-				for (int j = 0; j < degree_v; j++)
-				{
-					int k = arr.GetLength(0) - degree_v + i;
-					if (!MathUtil.IsZero(arr[i, j] - arr[i, k]))
-						return false;
-				}
 			}
 			return true;
 		}
@@ -280,6 +273,11 @@ namespace Common.Geometry.Nurbs
 					var pij = NurbsUtil.HomogenousToCartesian(arr[i, j]);
 					var pkj = NurbsUtil.HomogenousToCartesian(arr[k, j]);
 
+					//Check the weights
+					if (!MathUtil.IsZero(arr[i, j].w - arr[k, j].w))
+						return false;
+
+					//Check the control points
 					if (!MathUtil.IsZero((pij - pkj).Magnitude))
 						return false;
 				}
@@ -304,6 +302,10 @@ namespace Common.Geometry.Nurbs
 
 					var pij = NurbsUtil.HomogenousToCartesian(arr[i, j]);
 					var pik = NurbsUtil.HomogenousToCartesian(arr[i, k]);
+
+					//Check the weights
+					if (!MathUtil.IsZero(arr[i, j].w - arr[i, k].w))
+						return false;
 
 					if (!MathUtil.IsZero((pij - pik).Magnitude))
 						return false;

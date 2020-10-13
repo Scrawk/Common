@@ -6,7 +6,12 @@ using Common.Core.Numerics;
 
 namespace Common.Geometry.Nurbs
 {
-	/*
+	internal struct NurbsCurveParams2d
+	{
+		public int degree;
+		public List<double> knots;
+		public List<Vector3d> controlPoints;
+	}
 
 	/// <summary>
 	/// Class for holding a polynomial B-spline curve
@@ -23,16 +28,6 @@ namespace Common.Geometry.Nurbs
 		}
 
 		/// <summary>
-		/// Create a curve using the properties of another curve.
-		/// </summary>
-		/// <param name="crv">The other curve.</param>
-		public NurbsCurve2d(RationalNurbsCurve2d crv) :
-			this(crv.Degree, crv.Knots, crv.ControlPoints)
-		{
-
-		}
-
-		/// <summary>
 		/// Create a curve new curve.
 		/// </summary>
 		/// <param name="degree">The curves degree.</param>
@@ -42,7 +37,27 @@ namespace Common.Geometry.Nurbs
 		{
 			Degree = degree;
 			Knots = knots.ToArray();
-			ControlPoints = control_points.ToArray();
+
+			ControlPoints = new Vector3d[control_points.Count];
+			for (int i = 0; i < control_points.Count; i++)
+				SetControlPoint(i, control_points[i]);
+		}
+
+		/// <summary>
+		/// Create a curve new curve.
+		/// </summary>
+		/// <param name="degree">The curves degree.</param>
+		/// <param name="knots">The curves knots.</param>
+		/// <param name="control_points">The curves control points in cartesian coordinates.</param>
+		internal NurbsCurve2d(int degree, IList<double> knots, IList<Vector3d> control_points)
+		{
+			Degree = degree;
+			Knots = knots.ToArray();
+
+			ControlPoints = new Vector3d[control_points.Count];
+			for (int i = 0; i < control_points.Count; i++)
+				ControlPoints[i] = new Vector3d(control_points[i].xy, 1);
+
 		}
 
 		/// <summary>
@@ -53,27 +68,24 @@ namespace Common.Geometry.Nurbs
 		/// <summary>
 		/// The curves degree.
 		/// </summary>
-		public int Degree { get; private set; }
-
-		/// <summary>
-		/// The value of the first knot.
-		/// </summary>
-		public double FirstKnot => Knots[0];
-
-		/// <summary>
-		/// The value of the last knot.
-		/// </summary>
-		public double LastKnot => Knots.Last();
+		public int Degree { get; protected set; }
 
 		/// <summary>
 		/// The curves knots.
 		/// </summary>
-		public double[] Knots { get; private set; }
+		public double[] Knots { get; protected set; }
 
 		/// <summary>
-		/// The curves control points.
+		/// The number of control points.
 		/// </summary>
-		public Vector2d[] ControlPoints { get; private set; }
+		public int ControlCount => ControlPoints.Length;
+
+		/// <summary>
+		/// The curves control points in homogenous coordinates.
+		/// The w coordinate stores the weight.
+		/// If the curve is not rational then this is 1 by default.
+		/// </summary>
+		internal Vector3d[] ControlPoints { get; set; }
 
 		/// <summary>
 		/// Is this a valid curve.
@@ -84,6 +96,36 @@ namespace Common.Geometry.Nurbs
 		/// Is this a closed curve.
 		/// </summary>
 		public bool IsClosed => NurbsCheck.CurveIsClosed(this);
+
+		/// <summary>
+		/// Get the control point.
+		/// </summary>
+		/// <param name="i">The points index.</param>
+		/// <returns>The control point in cartesian coordinates.</returns>
+		public Vector2d GetControlPoint(int i)
+		{
+			return NurbsUtil.HomogenousToCartesian(ControlPoints[i]);
+		}
+
+		/// <summary>
+		/// Get the control points
+		/// </summary>
+		/// <param name="points">The list to copy the points into.</param>
+		public void GetControlPoints(List<Vector2d> points)
+		{
+			for (int i = 0; i < ControlPoints.Length; i++)
+				points.Add(NurbsUtil.HomogenousToCartesian(ControlPoints[i]));
+		}
+
+		/// <summary>
+		/// Set the control point.
+		/// </summary>
+		/// <param name="i">The points index.</param>
+		/// <param name="point">The control point in cartesian coordinates.</param>
+		public void SetControlPoint(int i, Vector2d point)
+		{
+			ControlPoints[i] = new Vector3d(point, 1);
+		}
 
 		/// <summary>
 		/// Get the point at parameter u.
@@ -106,27 +148,35 @@ namespace Common.Geometry.Nurbs
 		}
 
 		/// <summary>
-		/// Create a tessellation of the curve with a 
-		/// given number of samples.
+		/// Sample a curves points in a range of equally spaced parametric intervals.
 		/// </summary>
 		/// <param name="samples">The numbers times to sample the curve.</param>
 		/// <param name="points">The list of sampled points.</param>
-		public void Tessellate(List<Vector2d> points, int samples)
+		public void GetPoints(List<Vector2d> points, int samples)
 		{
-			NurbsTess.Regular(this, points, 0, 1, samples);
+			NurbsTess.GetPoints(this, points, 0, 1, samples);
 		}
 
 		/// <summary>
-		/// Create a tessellation of the curve with a 
-		/// given number of samples and range.
+		/// Sample a curves points in a range of equally spaced parametric intervals.
 		/// </summary>
 		/// <param name="start">The parameter to start sampling.</param>
 		/// <param name="end">The parameter to end sampling.</param>
 		/// <param name="samples">The numbers times to sample the curve.</param>
 		/// <param name="points">The list of sampled points.</param>
-		public void Tessellate(List<Vector2d> points, double start, double end, int samples)
+		public void GetPoints(List<Vector2d> points, double start, double end, int samples)
 		{
-			NurbsTess.Regular(this, points, start, end, samples);
+			NurbsTess.GetPoints(this, points, start, end, samples);
+		}
+
+		/// <summary>
+		/// Sample a curves tangents in a range of equally spaced parametric intervals.
+		/// </summary>
+		/// <param name="samples">The numbers times to sample the curve.</param>
+		/// <param name="tangents">The list of sampled points.</param>
+		public void GetTangents(List<Vector2d> tangents, int samples)
+		{
+			NurbsTess.GetTangents(this, tangents, 0, 1, samples);
 		}
 
 		/// <summary>
@@ -145,8 +195,8 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		public void NormalizeKnots()
 		{
-			double fisrt = FirstKnot;
-			double last = LastKnot;
+			double fisrt = Knots[0];
+			double last = Knots.Last();
 
 			for (int i = 0; i < Knots.Length; i++)
 				Knots[i] = MathUtil.Normalize(Knots[i], fisrt, last);
@@ -161,7 +211,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new curve with the inserted knots.</returns>
 		public static NurbsCurve2d InsertKnot(NurbsCurve2d crv, double u, int repeat = 1)
 		{
-			return NurbsModify.CurveKnotInsert(crv, u, repeat);
+			var x = NurbsModify.CurveKnotInsert(crv, u, repeat);
+			return new NurbsCurve2d(x.degree, x.knots, x.controlPoints);
 		}
 
 		/// <summary>
@@ -170,12 +221,17 @@ namespace Common.Geometry.Nurbs
 		/// <param name="crv">The curve to split.</param>
 		/// <param name="u">The parameter to split the curve at</param>
 		/// <returns>The two new curves.</returns>
-		public static (NurbsCurve2d, NurbsCurve2d) Split(NurbsCurve2d crv, double u)
+		public static (NurbsCurve2d left, NurbsCurve2d right) Split(NurbsCurve2d crv, double u)
 		{
-			var curves = NurbsModify.CurveSplit(crv, u);
-			curves.Item1.NormalizeKnots();
-			curves.Item2.NormalizeKnots();
-			return curves;
+			var x = NurbsModify.CurveSplit(crv, u);
+
+			var left = new NurbsCurve2d(x.left.degree, x.left.knots, x.left.controlPoints);
+			var right = new NurbsCurve2d(x.right.degree, x.right.knots, x.right.controlPoints);
+
+			left.NormalizeKnots();
+			right.NormalizeKnots();
+
+			return (left, right);
 		}
 
 	}
@@ -195,12 +251,20 @@ namespace Common.Geometry.Nurbs
 		}
 
 		/// <summary>
-		/// Create a curve using the properties of another curve.
+		/// Create a curve new curve.
 		/// </summary>
-		/// <param name="crv">The other curve.</param>
-		public RationalNurbsCurve2d(RationalNurbsCurve2d crv) :
-			this(crv.Degree, crv.Knots, crv.ControlPoints, crv.Weights)
+		/// <param name="degree">The curves degree.</param>
+		/// <param name="knots">The curves knots.</param>
+		/// <param name="control_points">The curves control points.</param>
+		/// <param name="weights">The curves weights.</param>
+		public RationalNurbsCurve2d(int degree, IList<double> knots, IList<Vector2d> control_points, IList<double> weights)
 		{
+			Degree = degree;
+			Knots = knots.ToArray();
+
+			ControlPoints = new Vector3d[control_points.Count];
+			for (int i = 0; i < control_points.Count; i++)
+				SetControlPoint(i, control_points[i], weights[i]);
 		}
 
 		/// <summary>
@@ -208,26 +272,28 @@ namespace Common.Geometry.Nurbs
 		/// </summary>
 		/// <param name="degree">The curves degree.</param>
 		/// <param name="knots">The curves knots.</param>
-		/// <param name="control_points">The curves control points.</param>
-		/// <param name="weights">The curves weights.</param>
-		public RationalNurbsCurve2d(int degree, IList<double> knots, IList<Vector2d> control_points, IList<double> weights) :
-			base(degree, knots, control_points)
+		/// <param name="control_points">The curves control points in homogenous coordinates 
+		/// with the weight as the w coordinate.</param>
+		public RationalNurbsCurve2d(int degree, IList<double> knots, IList<Vector3d> control_points)
 		{
-			if (weights == null)
-			{
-				Weights = new double[control_points.Count];
-				Weights.Fill(1);
-			}
-			else
-			{
-				Weights = weights.ToArray();
-			}
+			Degree = degree;
+			Knots = knots.ToArray();
+
+			ControlPoints = new Vector3d[control_points.Count];
+			for (int i = 0; i < control_points.Count; i++)
+				ControlPoints[i] = control_points[i];
 		}
 
 		/// <summary>
-		/// The curve weights.
+		/// Set the control point.
 		/// </summary>
-		public double[] Weights { get; private set; }
+		/// <param name="i">The points index.</param>
+		/// <param name="point">The control point in cartesian coordinates.</param>
+		/// <param name="weight">The control points weight.</param>
+		public void SetControlPoint(int i, Vector2d point, double weight)
+		{
+			ControlPoints[i] = NurbsUtil.CartesianToHomogenous(point, weight);
+		}
 
 		/// <summary>
 		/// Insert a new knot into the curve and return as a new curve.
@@ -238,7 +304,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new curve with the inserted knots.</returns>
 		public static RationalNurbsCurve2d InsertKnot(RationalNurbsCurve2d crv, double u, int repeat = 1)
 		{
-			return NurbsModify.RationalCurveKnotInsert(crv, u, repeat);
+			var x = NurbsModify.CurveKnotInsert(crv, u, repeat);
+			return new RationalNurbsCurve2d(x.degree, x.knots, x.controlPoints);
 		}
 
 		/// <summary>
@@ -247,17 +314,20 @@ namespace Common.Geometry.Nurbs
 		/// <param name="crv">The curve to split.</param>
 		/// <param name="u">The parameter to split the curve at</param>
 		/// <returns>The two new curves.</returns>
-		public static (RationalNurbsCurve2d, RationalNurbsCurve2d) Split(RationalNurbsCurve2d crv, double u)
+		public static (RationalNurbsCurve2d left, RationalNurbsCurve2d right) Split(RationalNurbsCurve2d crv, double u)
 		{
-			var curves = NurbsModify.RationalCurveSplit(crv, u);
-			curves.Item1.NormalizeKnots();
-			curves.Item2.NormalizeKnots();
-			return curves;
+			var x = NurbsModify.CurveSplit(crv, u);
+
+			var left = new RationalNurbsCurve2d(x.left.degree, x.left.knots, x.left.controlPoints);
+			var right = new RationalNurbsCurve2d(x.right.degree, x.right.knots, x.right.controlPoints);
+
+			left.NormalizeKnots();
+			right.NormalizeKnots();
+
+			return (left, right);
 		}
 
 	}
-
-	*/
 
 }
 

@@ -7,6 +7,12 @@ using Common.Core.Numerics;
 namespace Common.Geometry.Nurbs
 {
 
+	internal struct NurbsCurveParams3d
+    {
+		public int degree;
+		public List<double> knots;
+		public List<Vector4d> controlPoints;
+	}
 
 	/// <summary>
 	/// Class for holding a polynomial B-spline curve
@@ -206,7 +212,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new curve with the inserted knots.</returns>
 		public static NurbsCurve3d InsertKnot(NurbsCurve3d crv, double u, int repeat = 1)
 		{
-			return NurbsModify.CurveKnotInsert(crv, u, repeat);
+			var x = NurbsModify.CurveKnotInsert(crv, u, repeat);
+			return new NurbsCurve3d(x.degree, x.knots, x.controlPoints);
         }
 
 		/// <summary>
@@ -215,12 +222,17 @@ namespace Common.Geometry.Nurbs
 		/// <param name="crv">The curve to split.</param>
 		/// <param name="u">The parameter to split the curve at</param>
 		/// <returns>The two new curves.</returns>
-		public static (NurbsCurve3d, NurbsCurve3d) Split(NurbsCurve3d crv, double u)
+		public static (NurbsCurve3d left, NurbsCurve3d right) Split(NurbsCurve3d crv, double u)
 		{
-			var curves = NurbsModify.CurveSplit(crv, u);
-			curves.Item1.NormalizeKnots();
-			curves.Item2.NormalizeKnots();
-			return curves;
+			var x = NurbsModify.CurveSplit(crv, u);
+
+			var left = new NurbsCurve3d(x.left.degree, x.left.knots, x.left.controlPoints);
+			var right = new NurbsCurve3d(x.right.degree, x.right.knots, x.right.controlPoints);
+
+			left.NormalizeKnots();
+			right.NormalizeKnots();
+
+			return (left, right);
 		}
 
 	}
@@ -293,7 +305,8 @@ namespace Common.Geometry.Nurbs
 		/// <returns>A new curve with the inserted knots.</returns>
 		public static RationalNurbsCurve3d InsertKnot(RationalNurbsCurve3d crv, double u, int repeat = 1)
 		{
-			return NurbsModify.RationalCurveKnotInsert(crv, u, repeat);
+			var x = NurbsModify.CurveKnotInsert(crv, u, repeat);
+			return new RationalNurbsCurve3d(x.degree, x.knots, x.controlPoints);
 		}
 
 		/// <summary>
@@ -302,12 +315,17 @@ namespace Common.Geometry.Nurbs
 		/// <param name="crv">The curve to split.</param>
 		/// <param name="u">The parameter to split the curve at</param>
 		/// <returns>The two new curves.</returns>
-		public static (RationalNurbsCurve3d, RationalNurbsCurve3d) Split(RationalNurbsCurve3d crv, double u)
+		public static (RationalNurbsCurve3d left, RationalNurbsCurve3d right) Split(RationalNurbsCurve3d crv, double u)
 		{
-			var curves = NurbsModify.RationalCurveSplit(crv, u);
-			curves.Item1.NormalizeKnots();
-			curves.Item2.NormalizeKnots();
-			return curves;
+			var x = NurbsModify.CurveSplit(crv, u);
+
+			var left = new RationalNurbsCurve3d(x.left.degree, x.left.knots, x.left.controlPoints);
+			var right = new RationalNurbsCurve3d(x.right.degree, x.right.knots, x.right.controlPoints);
+
+			left.NormalizeKnots();
+			right.NormalizeKnots();
+
+			return (left, right);
 		}
 
 	}

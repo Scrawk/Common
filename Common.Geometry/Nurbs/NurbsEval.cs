@@ -15,6 +15,30 @@ namespace Common.Geometry.Nurbs
 		/// <param name="crv">Curve object</param>
 		/// <param name="u">Parameter to evaluate the curve at.</param>
 		/// <returns>Resulting point on the curve at parameter u.</returns>
+		internal static Vector2d CurvePoint(NurbsCurve2d crv, double u)
+		{
+			if (crv.IsRational)
+			{
+				// Compute point using homogenous coordinates
+				Vector3d pointw = CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
+				// Convert back to cartesian coordinates
+				return NurbsUtil.HomogenousToCartesian(pointw);
+			}
+			else
+			{
+				// Compute point using homogenous coordinates but since curve is not
+				// rational the points xyz position will end up cartesian.
+				Vector3d pointw = CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
+				return pointw.xy;
+			}
+		}
+
+		/// <summary>
+		/// Evaluate point on a nonrational NURBS curve
+		/// </summary>
+		/// <param name="crv">Curve object</param>
+		/// <param name="u">Parameter to evaluate the curve at.</param>
+		/// <returns>Resulting point on the curve at parameter u.</returns>
 		internal static Vector3d CurvePoint(NurbsCurve3d crv, double u)
 		{
 			if (crv.IsRational)
@@ -30,6 +54,60 @@ namespace Common.Geometry.Nurbs
 				// rational the points xyz position will end up cartesian.
 				Vector4d pointw = CurvePoint(crv.Degree, crv.Knots, crv.ControlPoints, u);
 				return pointw.xyz;
+			}
+		}
+
+		/// <summary>
+		/// Evaluate derivatives of a non-rational NURBS curve
+		/// E.g. curve_ders[n] is the nth derivative at u, where 0 <= n <= num_ders.
+		/// </summary>
+		/// <param name="crv">Curve object</param>
+		/// <param name="num_ders">Number of times to derivate.</param>
+		/// <param name="u">Parameter to evaluate the derivatives at.</param>
+		/// <returns>Derivatives of the curve at u.</returns>
+		internal static Vector2d[] CurveDerivatives(NurbsCurve2d crv, int num_ders, double u)
+		{
+			if (crv.IsRational)
+			{
+				// Derivatives of Cw
+				var Cwders = CurveDerivatives(crv.Degree, crv.Knots, crv.ControlPoints, num_ders, u);
+
+				// Split Cwders into coordinates and weights
+				var Aders = new List<Vector2d>(Cwders.Length);
+				var wders = new List<double>(Cwders.Length);
+
+				foreach (var val in Cwders)
+				{
+					Aders.Add(NurbsUtil.TruncateHomogenous(val));
+					wders.Add(val.z);
+				}
+
+				var curve_ders = new Vector2d[num_ders + 1];
+
+				// Compute rational derivatives
+				for (int k = 0; k <= num_ders; k++)
+				{
+					var v = Aders[k];
+					for (int i = 1; i <= k; i++)
+						v -= curve_ders[k - i] * NurbsUtil.Binomial(k, i) * wders[i];
+
+					curve_ders[k] = v / wders[0];
+				}
+
+				return curve_ders;
+			}
+			else
+			{
+				// Compute rational derivatives but since curve is not
+				// rational the points xyz position will end up cartesian.
+				var Cwders = CurveDerivatives(crv.Degree, crv.Knots, crv.ControlPoints, num_ders, u);
+
+				var curve_ders = new Vector2d[num_ders + 1];
+
+				for (int k = 0; k <= num_ders; k++)
+					curve_ders[k] = Cwders[k].xy;
+
+				return curve_ders;
 			}
 		}
 
@@ -85,6 +163,17 @@ namespace Common.Geometry.Nurbs
 
 				return curve_ders;
 			}
+		}
+
+		/// <summary>
+		/// Evaluate the tangent of a B-spline curve
+		/// </summary>
+		/// <param name="crv">Curve object</param>
+		/// <returns>Unit tangent of the curve at u.</returns>
+		internal static Vector2d CurveTangent(NurbsCurve2d crv, double u)
+		{
+			var ders = CurveDerivatives(crv, 1, u);
+			return ders[1].Normalized;
 		}
 
 		/// <summary>
@@ -228,6 +317,29 @@ namespace Common.Geometry.Nurbs
 		/// <param name="control_points">Control points of the curve.</param>
 		/// <param name="u">Parameter to evaluate the curve at.</param>
 		/// <returns>Resulting point on the curve at parameter u.</returns>
+		private static Vector3d CurvePoint(int degree, IList<double> knots, IList<Vector3d> control_points, double u)
+		{
+			var point = new Vector3d();
+
+			// Find span and corresponding non-zero basis functions
+			int span = NurbsBasis.FindSpan(degree, knots, u);
+			var N = NurbsBasis.BSplineBasis(degree, span, knots, u);
+
+			// Compute point
+			for (int j = 0; j <= degree; j++)
+				point += control_points[span - degree + j] * N[j];
+
+			return point;
+		}
+
+		/// <summary>
+		/// Evaluate point on a nonrational NURBS curve
+		/// </summary>
+		/// <param name="degree">Degree of the given curve.</param>
+		/// <param name="knots">Knot vector of the curve.</param>
+		/// <param name="control_points">Control points of the curve.</param>
+		/// <param name="u">Parameter to evaluate the curve at.</param>
+		/// <returns>Resulting point on the curve at parameter u.</returns>
 		private static Vector4d CurvePoint(int degree, IList<double> knots, IList<Vector4d> control_points, double u)
 		{
 			var point = new Vector4d();
@@ -241,6 +353,35 @@ namespace Common.Geometry.Nurbs
 				point += control_points[span - degree + j] * N[j];
 
 			return point;
+		}
+
+		/// <summary>
+		/// Evaluate derivatives of a non-rational NURBS curve
+		/// </summary>
+		/// <param name="degree">Degree of the curve</param>
+		/// <param name="knots">Knot vector of the curve.</param>
+		/// <param name="control_points">Control points of the curve.</param>
+		/// <param name="num_ders">Number of times to derivate.</param>
+		/// <param name="u">Parameter to evaluate the derivatives at.</param>
+		/// <returns>Derivatives of the curve at u.</returns>
+		private static Vector3d[] CurveDerivatives(int degree, IList<double> knots, IList<Vector3d> control_points, int num_ders, double u)
+		{
+			var curve_ders = new Vector3d[num_ders + 1];
+
+			// Find the span and corresponding non-zero basis functions & derivatives
+			int span = NurbsBasis.FindSpan(degree, knots, u);
+			var ders = NurbsBasis.BSplineDerBasis(degree, span, knots, u, num_ders);
+
+			// Compute first num_ders derivatives
+			int du = num_ders < degree ? num_ders : degree;
+			for (int k = 0; k <= du; k++)
+			{
+				//curve_ders[k] = new Vector4d();
+				for (int j = 0; j <= degree; j++)
+					curve_ders[k] += control_points[span - degree + j] * ders[k, j];
+			}
+
+			return curve_ders;
 		}
 
 		/// <summary>

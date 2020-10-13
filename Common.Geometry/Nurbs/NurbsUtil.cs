@@ -7,6 +7,17 @@ namespace Common.Geometry.Nurbs
 {
 	internal static class NurbsUtil
 	{
+		/// <summary>
+		/// Convert an nd point in homogenous coordinates to an (n-1)d point in cartesian
+		/// coordinates by perspective division
+		/// </summary>
+		/// <param name="pt">Point in homogenous coordinates</param>
+		/// <returns>Point in cartesian coordinates</returns>
+		internal static Vector2d HomogenousToCartesian(Vector3d pt)
+		{
+			return pt.xy / pt.z;
+		}
+
 
 		/// <summary>
 		/// Convert an nd point in homogenous coordinates to an (n-1)d point in cartesian
@@ -25,9 +36,31 @@ namespace Common.Geometry.Nurbs
 		/// <param name="pt">Point in cartesian coordinates</param>
 		/// <param name="w">Weight</param>
 		/// <returns>point in homogenous coordinates</returns>
+		internal static Vector3d CartesianToHomogenous(Vector2d pt, double w)
+		{
+			return new Vector3d(pt * w, w);
+		}
+
+		/// <summary>
+		/// Convert an nd point in cartesian coordinates to an (n+1)d point in homogenous coordinates
+		/// </summary>
+		/// <param name="pt">Point in cartesian coordinates</param>
+		/// <param name="w">Weight</param>
+		/// <returns>point in homogenous coordinates</returns>
 		internal static Vector4d CartesianToHomogenous(Vector3d pt, double w)
 		{
 			return new Vector4d(pt * w, w);
+		}
+
+		/// <summary>
+		/// Convert an (n+1)d point to an nd point without perspective division
+		/// by truncating the last dimension
+		/// </summary>
+		/// <param name="pt">Point in homogenous coordinates</param>
+		/// <returns>Input point in cartesian coordinates</returns>
+		internal static Vector2d TruncateHomogenous(Vector3d pt)
+		{
+			return pt.xy;
 		}
 
 		/// <summary>
