@@ -123,21 +123,20 @@ namespace Common.Geometry.Bezier
         /// <summary>
         /// Fills the array with positions on the curve.
         /// </summary>
-        public void GetPositions(IList<Vector2f> points)
+        public void Tessellate(List<Vector2f> points, int samples)
         {
-            int count = points.Count;
             int n = Control.Length;
             int degree = Degree;
 
             float t = 0;
-            float step = 1.0f / (count - 1.0f);
+            float step = 1.0f / (samples - 1.0f);
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < samples; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
                     float basis = Bernstein(degree, j, t);
-                    points[i] += basis * Control[j];
+                    points.Add(basis * Control[j]);
                 }
 
                 t += step;

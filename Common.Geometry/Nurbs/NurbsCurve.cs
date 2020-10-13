@@ -110,10 +110,10 @@ namespace Common.Geometry.Nurbs
 		/// given number of samples.
 		/// </summary>
 		/// <param name="samples">The numbers times to sample the curve.</param>
-		/// <returns>The sampled points.</returns>
-		public List<Vector3d> Tessellate(int samples)
+		/// <param name="points">The list of sampled points.</param>
+		public void Tessellate(List<Vector3d> points, int samples)
         {
-			return NurbsTess.Regular(this, 0, 1, samples);
+			NurbsTess.Regular(this, points, 0, 1, samples);
         }
 
 		/// <summary>
@@ -123,10 +123,10 @@ namespace Common.Geometry.Nurbs
 		/// <param name="start">The parameter to start sampling.</param>
 		/// <param name="end">The parameter to end sampling.</param>
 		/// <param name="samples">The numbers times to sample the curve.</param>
-		/// <returns>The sampled points.</returns>
-		public List<Vector3d> Tessellate(double start, double end, int samples)
+		/// <param name="points">The list of sampled points.</param>
+		public void Tessellate(List<Vector3d> points, double start, double end, int samples)
 		{
-			return NurbsTess.Regular(this, start, end, samples);
+			NurbsTess.Regular(this, points, start, end, samples);
 		}
 
 		/// <summary>

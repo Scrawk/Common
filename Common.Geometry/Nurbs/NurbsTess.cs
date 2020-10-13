@@ -16,13 +16,12 @@ namespace Common.Geometry.Nurbs
         /// <param name="start">start parameter for sampling</param>
         /// <param name="end">end parameter for sampling</param>
         /// <param name="numSamples">integer number of samples</param>
-        /// <returns>The list of sampled points.</returns>
-        internal static List<Vector3d> Regular(NurbsCurve3d curve, double start, double end, int numSamples)
+        /// <param name="points">The list of sampled points.</param>
+        internal static  void Regular(NurbsCurve3d curve, List<Vector3d> points, double start, double end, int numSamples)
         {
             if (numSamples < 2)
                 numSamples = 2;
 
-            var points = new List<Vector3d>(numSamples);
             double span = (end - start) / (numSamples - 1);
 
             for (int i = 0; i < numSamples; i++)
@@ -30,8 +29,6 @@ namespace Common.Geometry.Nurbs
                 double u = start + span * i;
                 points.Add(curve.Point(u));
             }
-
-            return points;
         }
 
         /// <summary>
