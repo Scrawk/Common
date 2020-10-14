@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 
-using REAL = System.Single;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
+using REAL = System.Double;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
 
 namespace Common.Geometry.Bezier
 {
     /// <summary>
     /// A bezier curve of arbitrary degree using a Bernstein Polynominal.
     /// </summary>
-    public class Bezier3f : Bezier
+    public class Bezier3d : Bezier
     {
 
         /// <summary>
@@ -24,13 +24,13 @@ namespace Common.Geometry.Bezier
         /// </summary>
         public VECTOR3[] Control { get; private set; }
 
-        public Bezier3f(BEZIER_DEGREE degree)
+        public Bezier3d(BEZIER_DEGREE degree)
             : this((int)degree)
         {
 
         }
 
-        public Bezier3f(int degree)
+        public Bezier3d(int degree)
         {
             if (degree > MAX_DEGREE || degree < MIN_DEGREE)
                 throw new ArgumentException(string.Format("Degree can not be greater than {0} or less than {1}.", MAX_DEGREE, MIN_DEGREE));
@@ -38,7 +38,7 @@ namespace Common.Geometry.Bezier
             Control = new VECTOR3[degree + 1];
         }
 
-        public Bezier3f(IList<VECTOR3> control)
+        public Bezier3d(IList<VECTOR3> control)
         {
             int degree = control.Count - 1;
             if (degree > MAX_DEGREE || degree < MIN_DEGREE)
@@ -55,7 +55,7 @@ namespace Common.Geometry.Bezier
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Bezier3f: Degree={0}]", Degree);
+            return string.Format("[Bezier3d: Degree={0}]", Degree);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Common.Geometry.Bezier
 
             int n = Control.Length;
             int degree = Degree;
-            REAL inv = 1.0f / degree;
+            REAL inv = 1.0 / degree;
             VECTOR3 d = new VECTOR3();
 
             for (int i = 0; i < n - 1; i++)
@@ -122,7 +122,7 @@ namespace Common.Geometry.Bezier
             int degree = Degree;
 
             REAL t = 0;
-            REAL step = 1.0f / (samples - 1.0f);
+            REAL step = 1.0 / (samples - 1.0);
 
             for (int i = 0; i < samples; i++)
             {
@@ -151,7 +151,7 @@ namespace Common.Geometry.Bezier
 
                 for (int i = 1; i < steps; i++)
                 {
-                    REAL t = i / (steps - 1.0f);
+                    REAL t = i / (steps - 1.0);
                     VECTOR3 p = Point(t);
 
                     len += VECTOR3.Distance(previous, p);
@@ -175,7 +175,7 @@ namespace Common.Geometry.Bezier
             for (int k = 1; k < count; k++)
             {
                 for (int i = 0; i < count - k; i++)
-                    Q[i] = (1.0f - t) * Q[i] + t * Q[i + 1];
+                    Q[i] = (1.0 - t) * Q[i] + t * Q[i + 1];
             }
 
             return Q[0];
@@ -186,14 +186,14 @@ namespace Common.Geometry.Bezier
         /// </summary>
         /// <param name="t">Position to split (0 to 1).</param>
         /// <returns>The curve from 0 to t and from t to 1.</returns>
-        public (Bezier3f left, Bezier3f right) Split(REAL t)
+        public (Bezier3d left, Bezier3d right) Split(REAL t)
         {
             int count = Control.Length;
             VECTOR3[] Q = new VECTOR3[count];
             Array.Copy(Control, Q, count);
 
-            var b0 = new Bezier3f(Degree);
-            var b1 = new Bezier3f(Degree);
+            var b0 = new Bezier3d(Degree);
+            var b1 = new Bezier3d(Degree);
 
             b0.Control[0] = Control[0];
             b1.Control[count - 1] = Control[count - 1];
