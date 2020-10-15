@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
 
 namespace Common.Geometry.Collections
 {
-    public interface IStaticShapeCollection2f<T> : IEnumerable<T>
-        where T : class, IShape2f
+    public interface IStaticShapeCollection2d<T> : IEnumerable<T>
+        where T : class, IShape2d
     {
         /// <summary>
         /// The number of shapes in the collection.
@@ -63,8 +63,8 @@ namespace Common.Geometry.Collections
         List<T> ToList();
     }
 
-    public interface IShapeCollection2f<T> : IStaticShapeCollection2f<T>
-        where T : class, IShape2f
+    public interface IShapeCollection2d<T> : IStaticShapeCollection2d<T>
+        where T : class, IShape2d
     {
 
         /// <summary>

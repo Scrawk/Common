@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
 
 namespace Common.Geometry.Collections
 {
@@ -16,11 +16,11 @@ namespace Common.Geometry.Collections
     /// A BVH tree using based on the implementation found here.
     /// http://allenchou.net/2014/02/game-physics-broadphase-dynamic-aabb-tree/
     /// </summary>
-    public class BVHTree2f<T> : IShapeCollection2f<T>
-        where T : class, IShape2f
+    public class BVHTree2d<T> : IShapeCollection2d<T>
+        where T : class, IShape2d
     {
 
-        public BVHTree2f()
+        public BVHTree2d()
         {
 
         }
@@ -45,7 +45,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// The root node of the tree.
         /// </summary>
-        public BVHTreeNode2f<T> Root { get; private set; }
+        public BVHTreeNode2d<T> Root { get; private set; }
 
         /// <summary>
         /// 
@@ -53,7 +53,7 @@ namespace Common.Geometry.Collections
         public override string ToString()
         {
             var bounds = (Root != null) ? Root.Bounds : new BOX2();
-            return string.Format("[BVHTree2f: Count={0}, Depth={1}, Bounds={2}]", Count, Depth, bounds);
+            return string.Format("[BVHTree2d: Count={0}, Depth={1}, Bounds={2}]", Count, Depth, bounds);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Find the node that contains this shape.
         /// </summary>
-        public BVHTreeNode2f<T> FindNode(T shape)
+        public BVHTreeNode2d<T> FindNode(T shape)
         {
             return FindNode(Root, shape, shape.Bounds);
         }
@@ -96,11 +96,11 @@ namespace Common.Geometry.Collections
         {
             if (Root != null)
             {
-                var node = new BVHTreeNode2f<T>(shape);
+                var node = new BVHTreeNode2d<T>(shape);
                 Add(Root, node);
             }
             else
-                Root = new BVHTreeNode2f<T>(shape);
+                Root = new BVHTreeNode2d<T>(shape);
         }
 
         /// <summary>
@@ -202,12 +202,12 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Add a node to the tree.
         /// </summary>
-        private void Add(BVHTreeNode2f<T> parent, BVHTreeNode2f<T> node)
+        private void Add(BVHTreeNode2d<T> parent, BVHTreeNode2d<T> node)
         {
             if (parent.IsLeaf)
             {
                 parent.Left = node;
-                parent.Right = new BVHTreeNode2f<T>(parent.Shape);
+                parent.Right = new BVHTreeNode2d<T>(parent.Shape);
                 parent.Shape = null;
 
                 parent.Left.Parent = parent;
@@ -239,7 +239,7 @@ namespace Common.Geometry.Collections
         /// Remove a node from the tree.
         /// All its children will be remove as well.
         /// </summary>
-        private void Remove(BVHTreeNode2f<T> node)
+        private void Remove(BVHTreeNode2d<T> node)
         {
             var parent = node.Parent;
             var sibling = node.Sibling;
@@ -265,7 +265,7 @@ namespace Common.Geometry.Collections
         /// throught the nodes if the shapes aabb is contains
         /// in the nodes bounds.
         /// </summary>
-        private BVHTreeNode2f<T> FindNode(BVHTreeNode2f<T> node, IShape2f shape, BOX2 aabb)
+        private BVHTreeNode2d<T> FindNode(BVHTreeNode2d<T> node, IShape2d shape, BOX2 aabb)
         {
             if (node == null) return null;
             if (shape == null) return null;
@@ -291,7 +291,7 @@ namespace Common.Geometry.Collections
         /// Find the leaf node that has a shape containing
         /// this point.
         /// </summary>
-        private BVHTreeNode2f<T> NodeContains(BVHTreeNode2f<T> node, VECTOR2 point)
+        private BVHTreeNode2d<T> NodeContains(BVHTreeNode2d<T> node, VECTOR2 point)
         {
             if (node != null && node.Bounds.Contains(point))
             {
@@ -317,7 +317,7 @@ namespace Common.Geometry.Collections
         /// Find all the shapes that contain the point and 
         /// add them to the list.
         /// </summary>
-        private void NodeContaining(BVHTreeNode2f<T> node, VECTOR2 point, List<T> shapes)
+        private void NodeContaining(BVHTreeNode2d<T> node, VECTOR2 point, List<T> shapes)
         {
             if (node != null && node.Bounds.Contains(point))
             {
@@ -338,7 +338,7 @@ namespace Common.Geometry.Collections
         /// Find the leaf node that has a shape intersecting
         /// this box.
         /// </summary>
-        private bool NodeIntersects(BVHTreeNode2f<T> node, BOX2 box)
+        private bool NodeIntersects(BVHTreeNode2d<T> node, BOX2 box)
         {
             if (node != null && node.Bounds.Intersects(box))
             {
@@ -360,7 +360,7 @@ namespace Common.Geometry.Collections
         /// Find all the shapes that intersect the box and 
         /// add them to the list.
         /// </summary>
-        private bool NodeIntersecting(BVHTreeNode2f<T> node, BOX2 box, List<T> shapes)
+        private bool NodeIntersecting(BVHTreeNode2d<T> node, BOX2 box, List<T> shapes)
         {
             if (node != null && node.Bounds.Intersects(box))
             {
@@ -382,7 +382,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Find the smallest signed distance to the point.
         /// </summary>
-        private REAL NodeSignedDistance(BVHTreeNode2f<T> node, VECTOR2 point, REAL sd)
+        private REAL NodeSignedDistance(BVHTreeNode2d<T> node, VECTOR2 point, REAL sd)
         {
             if (node != null)
             {
@@ -401,7 +401,7 @@ namespace Common.Geometry.Collections
                     if (node.Right != null)
                         rightSD = node.Right.Bounds.SignedDistance(point);
 
-                    if(leftSD <= sd)
+                    if (leftSD <= sd)
                         sd = NodeSignedDistance(node.Left, point, sd);
 
                     if (rightSD <= sd)
@@ -415,7 +415,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Find the node that is center most in the tree.
         /// </summary>
-        private BVHTreeNode2f<T> NodeCenterMost(BVHTreeNode2f<T> node, bool left)
+        private BVHTreeNode2d<T> NodeCenterMost(BVHTreeNode2d<T> node, bool left)
         {
             if (node != null)
             {
@@ -425,7 +425,7 @@ namespace Common.Geometry.Collections
                 }
                 else
                 {
-                    if(left || node.Right == null)
+                    if (left || node.Right == null)
                     {
                         var n = NodeCenterMost(node.Left, !left);
                         if (n != null) return n;
@@ -442,13 +442,13 @@ namespace Common.Geometry.Collections
             return null;
         }
 
-        private int MaxDepth(BVHTreeNode2f<T> node, int depth)
+        private int MaxDepth(BVHTreeNode2d<T> node, int depth)
         {
             if (node == null || node.IsLeaf) return depth;
             return Math.Max(MaxDepth(node.Left, depth + 1), MaxDepth(node.Right, depth + 1));
         }
 
-        private int CountLeaves(BVHTreeNode2f<T> node, int count)
+        private int CountLeaves(BVHTreeNode2d<T> node, int count)
         {
             if (node == null || node.IsLeaf) return count + 1;
             return CountLeaves(node.Left, count) + CountLeaves(node.Right, count);

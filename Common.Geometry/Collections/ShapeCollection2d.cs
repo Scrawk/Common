@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
-using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using BOX2 = Common.Geometry.Shapes.Box2d;
 
 namespace Common.Geometry.Collections
 {
@@ -16,23 +16,23 @@ namespace Common.Geometry.Collections
     /// A naive implementation of a shape collection
     /// where all operations are O(n2).
     /// </summary>
-    public class ShapeCollection2f<T> : IShapeCollection2f<T>
-        where T : class, IShape2f
+    public class ShapeCollection2d<T> : IShapeCollection2d<T>
+        where T : class, IShape2d
     {
 
         private List<T> m_shapes;
 
-        public ShapeCollection2f()
+        public ShapeCollection2d()
         {
             m_shapes = new List<T>();
         }
 
-        public ShapeCollection2f(int size)
+        public ShapeCollection2d(int size)
         {
             m_shapes = new List<T>(size);
         }
 
-        public ShapeCollection2f(IEnumerable<T> shapes)
+        public ShapeCollection2d(IEnumerable<T> shapes)
         {
             m_shapes = new List<T>(shapes);
         }
@@ -65,7 +65,7 @@ namespace Common.Geometry.Collections
 
         public override string ToString()
         {
-            return string.Format("[ShapeCollection2f: Count={0}]", Count);
+            return string.Format("[ShapeCollection2d: Count={0}]", Count);
         }
 
         /// <summary>
