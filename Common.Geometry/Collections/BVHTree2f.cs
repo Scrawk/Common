@@ -122,9 +122,9 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does a shape contain the point.
         /// </summary>
-        public bool Contains(VECTOR2 point)
+        public T Contains(VECTOR2 point)
         {
-            return NodeContains(Root, point) != null;
+            return NodeContains(Root, point)?.Shape;
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does a shape intersect the box.
         /// </summary>
-        public bool Intersects(BOX2 box)
+        public T Intersects(BOX2 box)
         {
-            return NodeIntersects(Root, box);
+            return NodeIntersects(Root, box)?.Shape;
         }
 
         /// <summary>
@@ -338,22 +338,26 @@ namespace Common.Geometry.Collections
         /// Find the leaf node that has a shape intersecting
         /// this box.
         /// </summary>
-        private bool NodeIntersects(BVHTreeNode2f<T> node, BOX2 box)
+        private BVHTreeNode2f<T> NodeIntersects(BVHTreeNode2f<T> node, BOX2 box)
         {
             if (node != null && node.Bounds.Intersects(box))
             {
                 if (node.IsLeaf)
                 {
-                    return node.Shape.Intersects(box);
+                    if (node.Shape.Intersects(box))
+                        return node;
                 }
                 else
                 {
-                    if (NodeIntersects(node.Left, box)) return true;
-                    if (NodeIntersects(node.Right, box)) return true;
+                    var left = NodeIntersects(node.Left, box);
+                    if (left != null) return left;
+
+                    var right = NodeIntersects(node.Right, box);
+                    if (right != null) return right;
                 }
             }
 
-            return false;
+            return null;
         }
 
         /// <summary>

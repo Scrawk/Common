@@ -23,7 +23,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        bool Contains(VECTOR2 point);
+        T Contains(VECTOR2 point);
 
         /// <summary>
         /// Find all the shapes that contain the point and 
@@ -38,7 +38,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         /// <param name="box"></param>
         /// <returns></returns>
-        bool Intersects(BOX2 box);
+        T Intersects(BOX2 box);
 
         /// <summary>
         /// Find all the shapes that intersect the box and 

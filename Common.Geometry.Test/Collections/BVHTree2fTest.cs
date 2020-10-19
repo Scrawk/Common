@@ -12,19 +12,22 @@ namespace Common.Geometry.Test.Collections
     public class BVHTree2fTest
     {
         [TestMethod]
-        public void Containing()
+        public void Remove()
         {
 
-            var shape = new Circle2f((0, 0), 10);
+            IShape2f shape0 = new Circle2f((0, 0), 10);
+
+            IShape2f shape1 = new Circle2f((1, 2), 2);
 
             var bvh = new BVHTree2f<IShape2f>();
-            bvh.Add(shape);
+            bvh.Add(shape0);
+            //bvh.Add(shape1);
 
-            var containing = new List<IShape2f>();
-            bvh.Containing((100,0), containing);
+            Console.WriteLine(bvh.Root.Shape);
 
-            foreach (var s in containing)
-                Console.WriteLine(s);
+            var removed = bvh.Remove(shape0);
+
+            Console.WriteLine("Removed = " + removed);
 
         }
     }

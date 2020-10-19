@@ -97,6 +97,22 @@ namespace Common.Geometry.Collections
         }
 
         /// <summary>
+        /// Does the collection have a shape that contains the point.
+        /// </summary>
+        public T Contains(Vector3f point)
+        {
+            int count = Count;
+            for (int i = 0; i < count; i++)
+            {
+                var shape = m_shapes[i];
+                if (shape.Contains(point))
+                    return shape;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Return the signed distance field from 
         /// the union of all shapes in the collection.
         /// </summary>
@@ -115,21 +131,6 @@ namespace Common.Geometry.Collections
             }
 
             return dist;
-        }
-
-        /// <summary>
-        /// Does the collection have a shape that contains the point.
-        /// </summary>
-        public bool Contains(Vector3f point)
-        {
-            int count = Count;
-            for (int i = 0; i < count; i++)
-            {
-                var shape = m_shapes[i];
-                if (shape.Contains(point)) return true;
-            }
-
-            return false;
         }
 
         /// <summary>

@@ -125,8 +125,9 @@ namespace Common.Geometry.Test.Bezier
 
             float split = 0.5f;
 
-            Bezier2f b0, b1;
-            bezier.Split(split, out b0, out b1);
+            var pair = bezier.Split(split);
+            var b0 = pair.left;
+            var b1 = pair.right;
 
             Assert.AreEqual(bezier.Degree, b0.Degree);
             Assert.AreEqual(bezier.Degree, b1.Degree);

@@ -67,6 +67,18 @@ namespace Common.Geometry.Collections
         internal BVHTreeNode2f<T> Sibling => Parent.Left == this ? Parent.Right : Parent.Left;
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            if (IsLeaf)
+                return string.Format("[BVHNode2f: IsLeaf={0}, Shape={1}]", IsLeaf, Shape);
+            else
+                return string.Format("[BVHNode2f: IsLeaf={0}, Bounds={1}]", IsLeaf, Bounds);
+        }
+
+        /// <summary>
         /// Enumerate all leaf nodes.
         /// </summary>
         public IEnumerator<BVHTreeNode2f<T>> GetEnumerator()

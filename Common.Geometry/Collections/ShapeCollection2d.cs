@@ -103,16 +103,16 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does the collection have a shape that contains the point.
         /// </summary>
-        public bool Contains(VECTOR2 point)
+        public T Contains(VECTOR2 point)
         {
             for (int i = 0; i < Count; i++)
             {
                 var shape = m_shapes[i];
                 if (shape.Contains(point))
-                    return true;
+                    return shape;
             }
 
-            return false;
+            return null;
         }
 
         /// <summary>
@@ -136,16 +136,16 @@ namespace Common.Geometry.Collections
         /// </summary>
         /// <param name="box"></param>
         /// <returns></returns>
-        public bool Intersects(BOX2 box)
+        public T Intersects(BOX2 box)
         {
             for (int i = 0; i < Count; i++)
             {
                 var shape = m_shapes[i];
                 if (shape.Intersects(box))
-                    return true;
+                    return shape;
             }
 
-            return false;
+            return null;
         }
 
         /// <summary>
