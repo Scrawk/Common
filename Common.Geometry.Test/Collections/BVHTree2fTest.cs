@@ -23,8 +23,6 @@ namespace Common.Geometry.Test.Collections
             bvh.Add(shape0);
             //bvh.Add(shape1);
 
-            Console.WriteLine(bvh.Root.Shape);
-
             var removed = bvh.Remove(shape0);
 
             Console.WriteLine("Removed = " + removed);

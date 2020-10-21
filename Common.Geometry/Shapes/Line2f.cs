@@ -11,7 +11,7 @@ namespace Common.Geometry.Shapes
 {
 
     /// <summary>
-    ///  Represents a line by means of three coefficients
+    ///  Represents a line from three coefficients
     ///  a, b and c, where ax + by + c = 0 holds.
     /// </summary>
     [Serializable]
@@ -21,6 +21,13 @@ namespace Common.Geometry.Shapes
 
         public REAL A, B, C;
 
+        /// <summary>
+        ///  Create a new line from three coefficients
+        ///  a, b and c, where ax + by + c = 0 holds.
+        /// </summary>
+        /// <param name="a">The constant in ax.</param>
+        /// <param name="b">The constant in by</param>
+        /// <param name="c">The constant c</param>
         public Line2f(REAL a, REAL b, REAL c)
         {
             A = a;
@@ -28,6 +35,24 @@ namespace Common.Geometry.Shapes
             C = c;
         }
 
+        /// <summary>
+        ///  Create a new line from the slope and the y 
+        ///  intercept, where y = mx + b holds.
+        /// </summary>
+        /// <param name="m">The lines slope.</param>
+        /// <param name="b">The y intercept.</param>
+        public Line2f(REAL m, REAL b)
+        {
+            A = m;
+            B = 1;
+            C = b;
+        }
+
+        /// <summary>
+        /// Create a new line that passes through the two points.
+        /// </summary>
+        /// <param name="p1">Point 1.</param>
+        /// <param name="p2">Point 2.</param>
         public Line2f(VECTOR2 p1, VECTOR2 p2)
         {
             A = p1.y - p2.y;
