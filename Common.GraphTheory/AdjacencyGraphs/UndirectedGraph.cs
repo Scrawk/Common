@@ -55,7 +55,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
-        /// <param name="w">The edges weight</param>
         public void AddEdge(int from, int to)
         {
             AddEdge(from, to, 0, 0);
@@ -79,8 +78,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
-        /// <param name="w0">The edge going from-to weight</param>
-        /// <param name="w1">The edge going to-from weigh</param>
+        /// <param name="weight0">The edge going from-to weight</param>
+        /// <param name="weight1">The edge going to-from weigh</param>
         public void AddEdge(int from, int to, float weight0, float weight1)
         {
             var edge = new GraphEdge();
