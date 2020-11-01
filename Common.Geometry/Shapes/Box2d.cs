@@ -211,6 +211,17 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
+        /// Return a new box expanded by the amount.
+        /// </summary>
+        /// <param name="box">The box to expand.</param>
+        /// <param name="amount">The amount to expand.</param>
+        /// <returns>The expanded box.</returns>
+        public static Box2d Expand(Box2d box, REAL amount)
+        {
+            return new Box2d(box.Min - amount, box.Max + amount);
+        }
+
+        /// <summary>
         /// Returns true if this box intersects the other box.
         /// </summary>
         public bool Intersects(Box2d a)

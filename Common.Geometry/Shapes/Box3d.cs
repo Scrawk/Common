@@ -222,11 +222,13 @@ namespace Common.Geometry.Shapes
         }
 
         /// <summary>
-        /// Enlarge the box by a given percent.
+        /// Return a new box expanded by the amount.
         /// </summary>
-        public static Box3d Enlarge(Box3d box, REAL percent)
+        /// <param name="box">The box to expand.</param>
+        /// <param name="amount">The amount to expand.</param>
+        /// <returns>The expanded box.</returns>
+        public static Box3d Expand(Box3d box, REAL amount)
         {
-            var amount = box.Size * percent * 0.5;
             return new Box3d(box.Min - amount, box.Max + amount);
         }
 
