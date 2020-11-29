@@ -8,7 +8,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
     public abstract partial class AdjacencyGraph
     {
 
-        public GraphOrder DepthFirstOrder(int root)
+        public List<int> DepthFirstOrder(int root)
         {
             TagVertices(NOT_VISITED_TAG);
             int count = VertexCount;
@@ -18,12 +18,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             Vertices[root].Tag = IS_VISITED_TAG;
 
-            var ordering = new GraphOrder(count);
+            var ordering = new List<int>(count);
 
             while (queue.Count != 0)
             {
                 int u = queue.Pop();
-                ordering.Vertices.Add(u);
+                ordering.Add(u);
 
                 var edges = Edges[u];
                 if (edges == null) continue;

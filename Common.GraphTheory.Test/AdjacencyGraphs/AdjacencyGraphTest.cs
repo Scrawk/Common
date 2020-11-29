@@ -17,7 +17,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
             int[] order = new int[] { 5, 7, 8, 11, 10, 2, 1, 9, 6, 4, 3, 0 };
 
-            CollectionAssert.AreEquivalent(order, ordering.Vertices);
+            CollectionAssert.AreEquivalent(order, ordering);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
             int[] order = new int[] { 5, 0, 3, 4, 6, 7, 1, 2, 8, 10, 9, 11 };
 
-            CollectionAssert.AreEquivalent(order, ordering.Vertices);
+            CollectionAssert.AreEquivalent(order, ordering);
         }
 
         [TestMethod]
@@ -36,11 +36,12 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = CreateCitiesDirectedGraph();
             var tree = graph.DijkstrasShortestPathTree(5);
+            tree.CreateChildren();
             var ordering = tree.DepthFirstOrder();
 
             int[] order = new int[] { 5, 7, 6, 4, 10, 11, 8, 9, 3, 2, 1, 0 };
 
-            CollectionAssert.AreEquivalent(order, ordering.Vertices);
+            CollectionAssert.AreEquivalent(order, ordering);
 
             Assert.AreEqual(2097, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Seattle"))));
             Assert.AreEqual(2270, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("San Francisco"))));
@@ -62,11 +63,12 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = CreateCitiesUndirectedGraph();
             var tree = graph.PrimsMinimumSpanningTree(0);
+            tree.CreateChildren();
             var ordering = tree.DepthFirstOrder();
 
             int[] order = new int[] { 0, 1, 2, 3, 4, 10, 11, 8, 9, 5, 7, 6 };
 
-            CollectionAssert.AreEquivalent(order, ordering.Vertices);
+            CollectionAssert.AreEquivalent(order, ordering);
 
             var sum = tree.FindWeightSum();
             Assert.AreEqual(6513, sum);
@@ -85,11 +87,12 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             {
                 int[] order = new int[] { 9, 8, 10, 11, 4, 5, 7, 6, 3, 2, 1, 0 };
 
+                tree.CreateChildren();
                 sum += tree.FindWeightSum();
 
                 var ordering = tree.DepthFirstOrder();
 
-                CollectionAssert.AreEquivalent(order, ordering.Vertices);
+                CollectionAssert.AreEquivalent(order, ordering);
             }
 
             Assert.AreEqual(6513, sum);

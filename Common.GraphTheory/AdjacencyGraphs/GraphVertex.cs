@@ -51,7 +51,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public override string ToString()
         {
-            return string.Format("[GraphVertex: Index={0}, Cost={1}]", Index, Cost);
+            return string.Format("[GraphVertex: Index={0}, Cost={1}, Data={2}]", 
+                Index, Cost, Data != null ? Data.ToString() : "Null");
         }
 
         /// <summary>

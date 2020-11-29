@@ -43,8 +43,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 }
             }
 
-            tree.CreateChildren();
-
             return tree;
         }
     }

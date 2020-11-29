@@ -68,6 +68,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = AdjacencyGraphTest.CreateCitiesDirectedGraph();
             var tree = graph.DijkstrasShortestPathTree(5);
+            tree.CreateChildren();
 
             Assert.AreEqual(0, tree.GetDegree(0));
             Assert.AreEqual(0, tree.GetDegree(1));
@@ -88,6 +89,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = AdjacencyGraphTest.CreateCitiesDirectedGraph();
             var tree = graph.DijkstrasShortestPathTree(5);
+            tree.CreateChildren();
 
             Assert.AreEqual(true, tree.IsLeaf(0));
             Assert.AreEqual(true, tree.IsLeaf(1));
@@ -108,12 +110,13 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = AdjacencyGraphTest.CreateCitiesDirectedGraph();
             var tree = graph.DijkstrasShortestPathTree(5);
+            tree.CreateChildren();
 
             tree.RemoveBranch(4);
             var ordering = tree.DepthFirstOrder();
 
             int[] order = new int[] { 5, 7, 6, 3, 2, 1, 0 };
-            CollectionAssert.AreEquivalent(order, ordering.Vertices);
+            CollectionAssert.AreEquivalent(order, ordering);
         }
 
     }

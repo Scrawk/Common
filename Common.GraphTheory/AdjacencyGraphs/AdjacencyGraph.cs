@@ -81,7 +81,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// Clear the graph edges and leave the vertices.
+        /// Clear the edges and leave the vertices.
         /// </summary>
         public void ClearEdges()
         {
@@ -91,6 +91,15 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 if (Edges[i] == null) continue;
                 Edges[i].Clear();
             }
+        }
+
+        /// <summary>
+        /// Clear the edges for the vertex at the index.
+        /// </summary>
+        public void ClearEdges(int index)
+        {
+            if (Edges[index] == null) return;
+            Edges[index].Clear();
         }
 
         /// <summary>

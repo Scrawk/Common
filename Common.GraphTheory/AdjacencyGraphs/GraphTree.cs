@@ -27,7 +27,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             Graph = graph;
             Root = root;
             Parent = new int[size];
-            Children = new List<int>[size];
+            Children = null;
 
             for (int i = 0; i < size; i++)
                 Parent[i] = -1;
@@ -236,6 +236,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public void CreateChildren()
         {
+            if(Children == null)
+                Children = new List<int>[Count];
+
             for (int i = 0; i < Children.Length; i++)
             {
                 if (Children[i] != null)
@@ -258,7 +261,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Returns the vertices of the tree in depth first order.
         /// </summary>
-        public GraphOrder DepthFirstOrder()
+        public List<int> DepthFirstOrder()
         {
             int count = Parent.Length;
             var queue = new Stack<int>(count);
@@ -267,12 +270,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
             TagAll(0);
             Graph.Vertices[Root].Tag = 1;
 
-            var ordering = new GraphOrder(count);
+            var ordering = new List<int>(count);
 
             while (queue.Count != 0)
             {
                 int u = queue.Pop();
-                ordering.Vertices.Add(u);
+                ordering.Add(u);
 
                 var edges = Children[u];
                 if (edges == null) continue;
@@ -294,7 +297,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Returns the vertices of the tree in breadth first order.
         /// </summary>
-        public GraphOrder BreadthFirstOrder()
+        public List<int> BreadthFirstOrder()
         {
             int count = Parent.Length;
             var queue = new Queue<int>(count);
@@ -303,12 +306,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
             TagAll(0);
             Graph.Vertices[Root].Tag = 1;
 
-            var ordering = new GraphOrder(count);
+            var ordering = new List<int>(count);
 
             while (queue.Count != 0)
             {
                 int u = queue.Dequeue();
-                ordering.Vertices.Add(u);
+                ordering.Add(u);
 
                 var edges = Children[u];
                 if (edges == null) continue;
