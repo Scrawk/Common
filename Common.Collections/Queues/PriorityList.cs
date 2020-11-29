@@ -7,7 +7,9 @@ namespace Common.Collections.Queues
 
     /// <summary>
     /// A naive implementation of a priority queue
-    /// using a list.
+    /// using a list. Stores the items in reverse
+    /// so removing first item is really removing from 
+    /// end which is faster.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class PriorityList<T> : IPriorityQueue<T>
@@ -70,12 +72,12 @@ namespace Common.Collections.Queues
             get 
             {
                 Sort();
-                return m_list[i]; 
+                return m_list[Count - 1 - i];
             }
             set 
             {
                 m_isDirty = true;
-                m_list[i] = value; 
+                m_list[Count - 1 - i] = value; 
             }
         }
 
@@ -125,7 +127,7 @@ namespace Common.Collections.Queues
         public T Peek()
         {
             Sort();
-            return m_list[0];
+            return m_list[Count-1];
         }
 
         /// <summary>
@@ -135,8 +137,8 @@ namespace Common.Collections.Queues
         public T Pop()
         {
             Sort();
-            T item = m_list[0];
-            m_list.RemoveAt(0);
+            T item = m_list[Count-1];
+            m_list.RemoveAt(Count - 1);
             return item;
         }
 
@@ -157,7 +159,9 @@ namespace Common.Collections.Queues
         public List<T> ToList()
         {
             Sort();
-            return new List<T>(m_list);
+            var list = new List<T>(m_list);
+            list.Reverse();
+            return list;
         }
 
         /// <summary>
@@ -167,7 +171,8 @@ namespace Common.Collections.Queues
         public IEnumerator<T> GetEnumerator()
         {
             Sort();
-            return m_list.GetEnumerator();
+            for (int i = Count - 1; i >= 0; i--)
+                yield return m_list[i];
         }
 
         /// <summary>
@@ -186,14 +191,29 @@ namespace Common.Collections.Queues
         {
             if (!m_isDirty) return;
 
-            if (Comparer != null)
-                m_list.Sort(Comparer);
-            else
-            {
-                m_list.Sort();
-            }
-
+            m_list.Sort(ReverseCompare);
             m_isDirty = false;
         }
+
+        /// <summary>
+        /// The function used to compare the items.
+        /// Will reverse the order so end of list
+        /// contains the lowest values.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private int ReverseCompare(T x, T y)
+        {
+            int i;
+
+            if (Comparer != null)
+                i = Comparer.Compare(x, y);
+            else
+                i = Comparer<T>.Default.Compare(x, y);
+
+            return i * -1;
+        }
+
     }
 }
