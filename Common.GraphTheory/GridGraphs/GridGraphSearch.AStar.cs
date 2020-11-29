@@ -22,13 +22,13 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
-        public static void AStar(GridGraph graph, GridSearch search, Vector2i start, Vector2i target, Func<Vector2i, Vector2i, float> GetWeight = null)
+        public static void AStar(GridGraph graph, GridSearch search, Vector2i start, Vector2i target, Func<Vector2i, Vector2i, float> Heuristic = null)
         {
             int width = graph.Width;
             int height = graph.Height;
 
-            if (GetWeight == null)
-                GetWeight = ManhattanDistance;
+            if (Heuristic == null)
+                Heuristic = ManhattanDistance;
 
             search.Parent[start.x, start.y] = start;
 
@@ -61,12 +61,12 @@ namespace Common.GraphTheory.GridGraphs
                     if ((edge & 1 << i) == 0) continue;
                     if (search.IsVisited[xi, yi]) continue;
 
-                    int idx = Contains(xi, yi, open);
+                    int idx = Contains(open, xi, yi);
                     if (idx == -1)
                     {
                         var n = new AStarNode(xi, yi);
                         n.g = g;
-                        n.h = GetWeight(target, new Vector2i(xi, yi));
+                        n.h = Heuristic(target, new Vector2i(xi, yi));
                         n.f = n.g + n.h;
 
                         search.Parent[n.x, n.y] = new Vector2i(u.x, u.y);
@@ -102,7 +102,7 @@ namespace Common.GraphTheory.GridGraphs
             return Math.Max(Math.Abs(a.x - b.x), Math.Abs(a.y - b.y));
         }
 
-        private static int Contains(int x, int y, List<AStarNode> open)
+        private static int Contains(List<AStarNode> open, int x, int y)
         {
             for (int i = 0; i < open.Count; i++)
                 if (open[i].x == x && open[i].y == y) return i;
