@@ -31,8 +31,6 @@ namespace Common.Console.Collections
         {
             Run(new PriorityList<TestComparer>());
 
-            Run(new PriorityLinkedList<TestComparer>());
-
             Run(new BinaryHeap<TestComparer>());
 
             Run(new BinaryTree<TestComparer>());
@@ -45,20 +43,12 @@ namespace Common.Console.Collections
             double addTime = RunAddTest(queue, 1000000);
             queue.Clear();
 
-            double removeTime = RunRemoveTest(queue, 10000);
-            queue.Clear();
-
-            double removeFirstTime = RunRemoveFirstTest(queue, 10000);
-            queue.Clear();
-
-            double findPredecessorTime = RunFindPredecessorTest(queue, 10000);
+            double popTime = RunPopTest(queue, 1000000);
             queue.Clear();
 
             CONSOLE.WriteLine(queue.ToString());
             CONSOLE.WriteLine("Add = " + addTime + "s");
-            CONSOLE.WriteLine("Remove = " + removeTime + "s");
-            CONSOLE.WriteLine("RemoveFirst = " + removeFirstTime + "s");
-            CONSOLE.WriteLine("FindPredecessor = " + findPredecessorTime + "s");
+            CONSOLE.WriteLine("Pop = " + popTime + "s");
             CONSOLE.WriteLine("");
         }
 
@@ -76,7 +66,7 @@ namespace Common.Console.Collections
             return timer.ElapsedSeconds;
         }
 
-        private static double RunRemoveTest(IPriorityQueue<TestComparer> queue, int count)
+        private static double RunPopTest(IPriorityQueue<TestComparer> queue, int count)
         {
             var list = CreateUniqueTestList(count);
             queue.Add(list);
@@ -85,37 +75,7 @@ namespace Common.Console.Collections
             timer.Start();
 
             for (int i = 0; i < count; i++)
-                queue.RemoveValue(new TestComparer(i));
-
-            timer.Stop();
-            return timer.ElapsedSeconds;
-        }
-
-        private static double RunRemoveFirstTest(IPriorityQueue<TestComparer> queue, int count)
-        {
-            var list = CreateUniqueTestList(count);
-            queue.Add(list);
-
-            var timer = new Timer();
-            timer.Start();
-
-            for (int i = 0; i < count; i++)
-                queue.RemoveFirst();
-
-            timer.Stop();
-            return timer.ElapsedSeconds;
-        }
-
-        private static double RunFindPredecessorTest(IPriorityQueue<TestComparer> queue, int count)
-        {
-            var list = CreateUniqueTestList(count);
-            queue.Add(list);
-
-            var timer = new Timer();
-            timer.Start();
-
-            for (int i = 0; i < count; i++)
-                queue.FindPredecessor(new TestComparer(i), out _);
+                queue.Pop();
 
             timer.Stop();
             return timer.ElapsedSeconds;

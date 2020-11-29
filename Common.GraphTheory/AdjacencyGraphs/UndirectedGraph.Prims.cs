@@ -25,7 +25,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             while (queue.Count != 0)
             {
-                var edge = queue.RemoveFirst();
+                var edge = queue.Pop();
 
                 int v = edge.To;
                 if (Vertices[v].Tag == IS_VISITED_TAG) continue;

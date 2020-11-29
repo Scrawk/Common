@@ -49,16 +49,6 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// Do nothing. Tree has no set capacity.
-        /// Needed for IPriorityQueue<T>.
-        /// </summary>
-        public int Capacity
-        {
-            get { return 0; }
-            set { ; }
-        }
-
-        /// <summary>
         /// The root element of the tree
         /// </summary>
         public BinaryTreeNode<T> Root { get; protected set; }
@@ -96,26 +86,17 @@ namespace Common.Collections.Trees
         }
 
         /// <summary>
-        /// Does the tree contain the item.
+        /// Remove first item in tree.
         /// </summary>
-        /// <param name="value">the item</param>
-        /// <returns>If the item is in the tree</returns>
-        public bool ContainsValue(T value)
+        /// <returns>First item</returns>
+        public T Pop()
         {
-            BinaryTreeNode<T> current = Root;
+            if (Count == 0)
+                throw new InvalidOperationException("Queue is empty.");
 
-            while(current != null)
-            {
-                int c = Compare(value, current.Item);
-                if (c < 0)
-                    current = current.Left;
-                else if (c > 0)
-                    current = current.Right;
-                else
-                    return true;
-            }
-
-            return false;
+            T item = FindMinimum();
+            RemoveValue(item);
+            return item;
         }
 
         /// <summary>
@@ -168,6 +149,29 @@ namespace Common.Collections.Trees
 
             Count++;
             return true;
+        }
+
+        /// <summary>
+        /// Does the tree contain the item.
+        /// </summary>
+        /// <param name="value">the item</param>
+        /// <returns>If the item is in the tree</returns>
+        public bool ContainsValue(T value)
+        {
+            BinaryTreeNode<T> current = Root;
+
+            while (current != null)
+            {
+                int c = Compare(value, current.Item);
+                if (c < 0)
+                    current = current.Left;
+                else if (c > 0)
+                    current = current.Right;
+                else
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -242,20 +246,6 @@ namespace Common.Collections.Trees
 
             Count--;
             return true;
-        }
-
-        /// <summary>
-        /// Remove first item in tree.
-        /// </summary>
-        /// <returns>First item</returns>
-        public T RemoveFirst()
-        {
-            if (Count == 0)
-                throw new InvalidOperationException("Queue is empty.");
-
-            T item = FindMinimum();
-            RemoveValue(item);
-            return item;
         }
 
         /// <summary>

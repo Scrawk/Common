@@ -8,7 +8,6 @@ namespace Common.Collections.Queues
     /// A binary heap, useful for sorting data and priority queues.
     /// </summary>
     public class BinaryHeap<T> : IPriorityQueue<T>
-        where T : IComparable<T>
     {
 
         private const int DEFAULT_SIZE = 4;
@@ -91,6 +90,15 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
+        /// Removes all items from the heap.
+        /// </summary>
+        public void Clear()
+        {
+            Count = 0;
+            m_data = new T[m_capacity];
+        }
+
+        /// <summary>
         /// Gets the first value in the heap without removing it.
         /// </summary>
         /// <returns>The lowest value of type T.</returns>
@@ -103,12 +111,20 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Removes all items from the heap.
+        /// Removes and returns the first item in the heap.
         /// </summary>
-        public void Clear()
+        /// <returns>The next value in the heap.</returns>
+        public T Pop()
         {
-            Count = 0;
-            m_data = new T[m_capacity];
+            if (Count == 0)
+                throw new InvalidOperationException("Cannot remove item, heap is empty.");
+
+            T v = m_data[0];
+            Count--;
+            m_data[0] = m_data[Count];
+            m_data[Count] = default(T); //Clears the Last Node
+            DownHeap();
+            return v;
         }
 
         /// <summary>
@@ -137,20 +153,18 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Removes and returns the first item in the heap.
+        /// Checks to see if the binary heap contains 
+        /// the specified item.
+        /// This utilizes the type T's Comparer 
+        /// and will consider items the 
+        /// same order the same object.
         /// </summary>
-        /// <returns>The next value in the heap.</returns>
-        public T RemoveFirst()
+        /// <param name="value">The item to search the binary heap for.</param>
+        /// <returns>A boolean, true if binary heap contains item.</returns>
+        public bool ContainsValue(T value)
         {
-            if (Count == 0)
-                throw new InvalidOperationException("Cannot remove item, heap is empty.");
-
-            T v = m_data[0];
-            Count--;
-            m_data[0] = m_data[Count];
-            m_data[Count] = default(T); //Clears the Last Node
-            DownHeap();
-            return v;
+            EnsureSort();
+            return IndexOfValue(value) >= 0;
         }
 
         /// <summary>
@@ -187,21 +201,6 @@ namespace Common.Collections.Queues
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        /// <summary>
-        /// Checks to see if the binary heap contains 
-        /// the specified item.
-        /// This utilizes the type T's Comparer 
-        /// and will consider items the 
-        /// same order the same object.
-        /// </summary>
-        /// <param name="value">The item to search the binary heap for.</param>
-        /// <returns>A boolean, true if binary heap contains item.</returns>
-        public bool ContainsValue(T value)
-        {
-            EnsureSort();
-            return IndexOfValue(value) >= 0;
         }
 
         /// <summary>
@@ -334,21 +333,8 @@ namespace Common.Collections.Queues
             if (Comparer != null)
                 return Comparer.Compare(item1, item2);
             else
-                return item1.CompareTo(item2);
+                return Comparer<T>.Default.Compare(item1, item2);
         }
 
-        public bool FindSuccesor(T item, out T succesor)
-        {
-            succesor = default(T);
-            return false;
-            //throw new NotImplementedException();
-        }
-
-        public bool FindPredecessor(T item, out T predecessor)
-        {
-            predecessor = default(T);
-            return false;
-            //throw new NotImplementedException();
-        }
     }
 }

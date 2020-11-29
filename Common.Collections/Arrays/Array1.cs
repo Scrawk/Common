@@ -159,31 +159,6 @@ namespace Common.Collections.Arrays
             }
         }
 
-        /*
-        /// <summary>
-        /// Iterate over the array with the action in parallel.
-        /// </summary>
-        public void ParallelIterate(Action<int> func)
-        {
-            ParallelIterate(BlockSize(), func);
-        }
-
-        /// <summary>
-        /// Iterate over the array with the action in parallel.
-        /// </summary>
-        public void ParallelIterate(int blockSize, Action<int> func)
-        {
-            var blocks = ThreadingBlock1D.CreateBlocks(Count, blockSize);
-            Parallel.ForEach(blocks, (block) =>
-            {
-                for (int x = block.Min; x < block.Max; x++)
-                {
-                    func(x);
-                }
-            });
-        }
-        */
-
         /// <summary>
         /// Fill the array with the value.
         /// </summary>
@@ -203,31 +178,6 @@ namespace Common.Collections.Arrays
                 }
         }
 
-        /*
-        /// <summary>
-        /// Fill the array with the value from the function in parallel.
-        /// </summary>
-        public void ParallelFill(Func<int, T> func)
-        {
-            ParallelFill(BlockSize(), func);
-        }
-
-        /// <summary>
-        /// Fill the array with the value from the function in parallel.
-        /// </summary>
-        public void ParallelFill(int blockSize, Func<int, T> func)
-        {
-            var blocks = ThreadingBlock1D.CreateBlocks(Count, blockSize);
-            Parallel.ForEach(blocks, (block) =>
-            {
-                    for (int x = block.Min; x < block.Max; x++)
-                    {
-                        Data[x] = func(x);
-                    }
-            });
-        }
-        */
-
         /// <summary>
         /// Modify the array with the function.
         /// </summary>
@@ -239,29 +189,5 @@ namespace Common.Collections.Arrays
             }
         }
 
-        /*
-        /// <summary>
-        /// Modify the array with the function in parallel.
-        /// </summary>
-        public void ParallelModify(Func<T, T> func)
-        {
-            ParallelModify(BlockSize(), func);
-        }
-
-        /// <summary>
-        /// Modify the array with the function in parallel.
-        /// </summary>
-        public void ParallelModify(int blockSize, Func<T, T> func)
-        {
-            var blocks = ThreadingBlock1D.CreateBlocks(Count, blockSize);
-            Parallel.ForEach(blocks, (block) =>
-            {
-                for (int x = block.Min; x < block.Max; x++)
-                {
-                    Data[x] = func(Data[x]);
-                }
-            });
-        }
-        */
     }
 }

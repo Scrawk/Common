@@ -11,28 +11,46 @@ namespace Common.Collections.Queues
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class PriorityList<T> : IPriorityQueue<T>
-        where T : IComparable<T>
     {
 
+        /// <summary>
+        /// The list that contains the data.
+        /// </summary>
         private List<T> m_list;
 
+        /// <summary>
+        /// Does the list need to be resorted.
+        /// </summary>
         private bool m_isDirty = true;
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public PriorityList()
         {
             m_list = new List<T>();
         }
 
+        /// <summary>
+        /// Construct a list with a capacity size.
+        /// </summary>
+        /// <param name="size"></param>
         public PriorityList(int  size)
         {
             m_list = new List<T>(size);
         }
 
+        /// <summary>
+        /// The number of elements in the list.
+        /// </summary>
         public int Count
         {
             get { return m_list.Count; }
         }
 
+        /// <summary>
+        /// The capacity of the list.
+        /// </summary>
         public int Capacity
         {
             get { return m_list.Capacity;  }
@@ -70,12 +88,29 @@ namespace Common.Collections.Queues
             return string.Format("[PriorityList: Count={0}]", Count);
         }
 
+        /// <summary>
+        /// Clear the list.
+        /// </summary>
+        public void Clear()
+        {
+            m_list.Clear();
+        }
+
+        /// <summary>
+        /// Add a range of items to the list.
+        /// </summary>
+        /// <param name="items"></param>
         public void Add(IEnumerable<T> items)
         {
             m_isDirty = true;
             m_list.AddRange(items);
         }
 
+        /// <summary>
+        /// Add a item to the list.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public bool Add(T item)
         {
             m_isDirty = true;
@@ -84,91 +119,20 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Find if the item is in the list.
-        /// This utilizes the type T's Comparer 
-        /// and will consider items  the same 
-        /// order the same object.
+        /// Return the first item in the list.
         /// </summary>
-        /// <param name="value"></param>
         /// <returns></returns>
-        public bool ContainsValue(T value)
-        {
-            return IndexOfValue(value) >= 0;
-        }
-
-        /// <summary>
-        /// Find the index of the value in the list.
-        /// This utilizes the type T's Comparer 
-        /// and will consider items  the same 
-        /// order the same object.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public int IndexOfValue(T value)
-        {
-            Sort();
-
-            int i = 0;
-            if(Comparer != null)
-                i = m_list.BinarySearch(value, Comparer);
-            else
-                i = m_list.BinarySearch(value);
-
-            return (i < 0) ? -1 : i;
-        }
-
-        public bool FindPredecessor(T value, out T predecessor)
-        {
-            Sort();
-            int i = IndexOfValue(value);
-            if (i <= 0)
-            {
-                predecessor = default(T);
-                return false;
-            }
-            else
-            {
-                predecessor = m_list[i - 1];
-                return true;
-            }
-        }
-
-        public bool FindSuccesor(T value, out T succesor)
-        {
-            Sort();
-            int i = IndexOfValue(value);
-            if (i < 0 || i >= Count - 1)
-            {
-                succesor = default(T);
-                return false;
-            }
-            else
-            {
-                succesor = m_list[i + 1];
-                return true;
-            }
-        }
-
         public T Peek()
         {
             Sort();
             return m_list[0];
         }
 
-        public bool RemoveValue(T value)
-        {
-            int i = IndexOfValue(value);
-            if (i < 0) return false;
-            m_list.RemoveAt(i);
-            return true;
-        }
-
-        public bool RemoveObject(T item)
-        {
-            return m_list.Remove(item);
-        }
-
-        public T RemoveFirst()
+        /// <summary>
+        /// Return and remove the first item in the list.
+        /// </summary>
+        /// <returns></returns>
+        public T Pop()
         {
             Sort();
             T item = m_list[0];
@@ -176,36 +140,58 @@ namespace Common.Collections.Queues
             return item;
         }
 
+        /// <summary>
+        /// Remove the item from the list.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public bool Remove(T item)
+        {
+            return m_list.Remove(item);
+        }
+
+        /// <summary>
+        /// Return a list of the items.
+        /// </summary>
+        /// <returns></returns>
         public List<T> ToList()
         {
             Sort();
             return new List<T>(m_list);
         }
 
-        public void Clear()
-        {
-            m_list.Clear();
-        }
-
+        /// <summary>
+        /// Enumerate through the items.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
             Sort();
             return m_list.GetEnumerator();
         }
 
+        /// <summary>
+        /// Enumerate through the items.
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
+        /// <summary>
+        /// Sort the list.
+        /// </summary>
         private void Sort()
         {
             if (!m_isDirty) return;
 
-            if(Comparer != null)
+            if (Comparer != null)
                 m_list.Sort(Comparer);
             else
+            {
                 m_list.Sort();
+            }
 
             m_isDirty = false;
         }

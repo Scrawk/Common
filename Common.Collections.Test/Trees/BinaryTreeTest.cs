@@ -77,6 +77,16 @@ namespace Common.Collections.Test.Trees
         }
 
         [TestMethod]
+        public void Pop()
+        {
+            var tree = TestTree();
+
+            Assert.AreEqual("Adam", tree.Pop());
+            Assert.AreEqual("Daniel", tree.Pop());
+            Assert.AreEqual("George", tree.Pop());
+        }
+
+        [TestMethod]
         public void Order()
         {
             var tree = TestTree();
@@ -118,16 +128,6 @@ namespace Common.Collections.Test.Trees
             Assert.AreEqual("Tom", tree.Root.Right.Right.Item);
             Assert.AreEqual("Peter", tree.Root.Right.Right.Left.Item);
             Assert.AreEqual(4, tree.Count);
-        }
-
-        [TestMethod]
-        public void RemoveFirst()
-        {
-            var tree = TestTree();
-
-            Assert.AreEqual("Adam", tree.RemoveFirst());
-            Assert.AreEqual("Daniel", tree.RemoveFirst());
-            Assert.AreEqual("George", tree.RemoveFirst());
         }
 
         [TestMethod]
@@ -181,7 +181,6 @@ namespace Common.Collections.Test.Trees
         public void FindMinimum()
         {
             var tree = TestTree();
-
             Assert.AreEqual("Adam", tree.FindMinimum());
         }
 
@@ -189,7 +188,6 @@ namespace Common.Collections.Test.Trees
         public void FindMaximum()
         {
             var tree = TestTree();
-
             Assert.AreEqual("Tom", tree.FindMaximum());
         }
 

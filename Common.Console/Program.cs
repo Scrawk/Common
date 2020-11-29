@@ -16,7 +16,7 @@ namespace Common.Console
         static void Main(string[] args)
         {
 
-
+            PriorityQueuePerformanceTest.Run();
 
         }
     }

@@ -15,7 +15,7 @@ namespace Common.Collections.Test.Queues
             var list = new PriorityList<float>();
             list.Add(0);
             Assert.AreEqual(1, list.Count);
-            list.RemoveValue(0);
+            list.Remove(0);
             Assert.AreEqual(0, list.Count);
         }
 
@@ -39,6 +39,21 @@ namespace Common.Collections.Test.Queues
         }
 
         [TestMethod]
+        public void Pop()
+        {
+            var list = TestQueue();
+
+            Assert.AreEqual(0.5f, list.Pop());
+            Assert.AreEqual(2, list.Count);
+
+            Assert.AreEqual(1.0f, list.Pop());
+            Assert.AreEqual(1, list.Count);
+
+            Assert.AreEqual(1.5f, list.Pop());
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [TestMethod]
         public void Add()
         {
             var list = TestQueue();
@@ -53,26 +68,9 @@ namespace Common.Collections.Test.Queues
             CollectionAssert.AreEqual(new float[] { 0.5f, 1.0f, 1.5f }, list.ToList());
         }
 
-        [TestMethod]
-        public void RemoveValue()
-        {
-            var list = TestQueue();
-
-            list.RemoveValue(0.5f);
-            Assert.IsFalse(list.ContainsValue(0.5f));
-            CollectionAssert.AreEqual(new float[] { 1.0f, 1.5f }, list.ToList());
-
-            list.RemoveValue(1.5f);
-            Assert.IsFalse(list.ContainsValue(1.5f));
-            CollectionAssert.AreEqual(new float[] { 1.0f }, list.ToList());
-
-            list.RemoveValue(1.0f);
-            Assert.IsFalse(list.ContainsValue(1.0f));
-            Assert.AreEqual(0, list.Count);
-        }
 
         [TestMethod]
-        public void RemoveObject()
+        public void Remove()
         {
             var list = new PriorityList<TestComparable>();
 
@@ -86,69 +84,9 @@ namespace Common.Collections.Test.Queues
             list.Add(c);
 
             Assert.AreEqual(3, list.Count);
-            Assert.IsFalse(list.RemoveObject(d));
-            Assert.IsTrue(list.RemoveObject(b));
+            Assert.IsFalse(list.Remove(d));
+            Assert.IsTrue(list.Remove(b));
             Assert.AreEqual(2, list.Count);
-        }
-
-        [TestMethod]
-        public void RemoveFirst()
-        {
-            var list = TestQueue();
-
-            list.RemoveFirst();
-            Assert.IsFalse(list.ContainsValue(0.5f));
-
-            list.RemoveFirst();
-            Assert.IsFalse(list.ContainsValue(1.0f));
-
-            list.RemoveFirst();
-            Assert.IsFalse(list.ContainsValue(1.5f));
-
-            Assert.AreEqual(0, list.Count);
-        }
-
-        [TestMethod]
-        public void ContainsValue()
-        {
-            var list = TestQueue();
-
-            Assert.IsTrue(list.ContainsValue(1));
-            Assert.IsTrue(list.ContainsValue(0.5f));
-            Assert.IsTrue(list.ContainsValue(1.5f));
-            Assert.IsFalse(list.ContainsValue(-1));
-            Assert.IsFalse(list.ContainsValue(0));
-            Assert.IsFalse(list.ContainsValue(2.5f));
-        }
-
-        [TestMethod]
-        public void FindSuccesor()
-        {
-            var list = TestQueue();
-
-            float v;
-            Assert.IsTrue(list.FindSuccesor(0.5f, out v));
-            Assert.AreEqual(1f, v);
-
-            Assert.IsTrue(list.FindSuccesor(1f, out v));
-            Assert.AreEqual(1.5f, v);
-
-            Assert.IsFalse(list.FindSuccesor(1.5f, out v));
-        }
-
-        [TestMethod]
-        public void FindPredecessor()
-        {
-            var list = TestQueue();
-
-            float v;
-            Assert.IsFalse(list.FindPredecessor(0.5f, out v));
-
-            Assert.IsTrue(list.FindPredecessor(1f, out v));
-            Assert.AreEqual(0.5f, v);
-
-            Assert.IsTrue(list.FindPredecessor(1.5f, out v));
-            Assert.AreEqual(1f, v);
         }
 
         [TestMethod]
@@ -165,29 +103,6 @@ namespace Common.Collections.Test.Queues
 
             list.Clear();
             Assert.AreEqual(0, list.Count);
-        }
-
-        [TestMethod]
-        public void Order()
-        {
-            int num = 1000;
-            Random rnd = new Random(0);
-
-            var list = new PriorityList<double>();
-
-            for (int i = 0; i < num; i++)
-                list.Add(rnd.NextDouble());
-
-            double v = list.Peek();
-            list.RemoveValue(v);
-
-            while (list.Count != 0)
-            {
-                double next = list.Peek();
-                list.RemoveValue(next);
-                Assert.IsTrue(v <= next);
-                v = next;
-            }
         }
 
         private PriorityList<float> TestQueue()

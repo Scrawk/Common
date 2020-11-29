@@ -33,7 +33,7 @@ namespace Common.GraphTheory.GridGraphs
 
             while (queue.Count != 0)
             {
-                GridEdge edge = queue.RemoveFirst();
+                GridEdge edge = queue.Pop();
 
                 Vector2i v = edge.To;
                 if (search.IsVisited[v.x, v.y]) continue;
