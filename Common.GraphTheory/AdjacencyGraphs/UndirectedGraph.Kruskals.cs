@@ -8,7 +8,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
     public partial class UndirectedGraph : AdjacencyGraph
     {
-
+        /// <summary>
+        /// Create a forest of trees from the graph.
+        /// Each tree represents connected sets of vertices
+        /// ordered as a minimum spanning tree.
+        /// </summary>
+        /// <returns></returns>
         public GraphForest KruskalsMinimumSpanningForest()
         {
             var set = new DisjointSet(VertexCount);

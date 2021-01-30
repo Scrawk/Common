@@ -10,17 +10,29 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// </summary>
     public partial class UndirectedGraph : AdjacencyGraph
     {
-
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public UndirectedGraph()
         {
 
         }
 
+        /// <summary>
+        /// Create a graph with a fixed number of vertices.
+        /// </summary>
+        /// <param name="size">The number of vertices.</param>
         public UndirectedGraph(int size) : base(size)
         {
 
         }
 
+        /// <summary>
+        /// Create a graph from a set of vertices.
+        /// These vertices must have already had there
+        /// index set correctly.
+        /// </summary>
+        /// <param name="vertices">The graphs vertices.</param>
         public UndirectedGraph(IEnumerable<GraphVertex> vertices) : base(vertices)
         {
 

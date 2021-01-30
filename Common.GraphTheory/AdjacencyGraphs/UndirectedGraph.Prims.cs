@@ -7,6 +7,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
 {
     public partial class UndirectedGraph : AdjacencyGraph
     {
+        /// <summary>
+        /// Create a graph tree representing the minimum 
+        /// spanning tree between the vertices in the graph.
+        /// </summary>
+        /// <param name="root">The vertex index to start at.</param>
+        /// <returns>The minimum  spanning tree.</returns>
         public GraphTree PrimsMinimumSpanningTree(int root)
         {
             TagVertices(NOT_VISITED_TAG);

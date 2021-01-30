@@ -7,7 +7,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
     public partial class DirectedGraph : AdjacencyGraph
     {
-
+        /// <summary>
+        /// Presuming the edges represent the order the 
+        /// vertices must be iterated return a list of
+        /// vertex indices that conform to this order.
+        /// </summary>
+        /// <returns></returns>
         public List<GraphVertex> KhansTopologicalSort()
         {
             var list = new List<GraphVertex>();
@@ -60,6 +65,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 return list;
         }
 
+        /// <summary>
+        /// Find the number of vertices that go to this vertex.
+        /// </summary>
+        /// <param name="Edges">A list of the edges for each vertex.</param>
+        /// <param name="i">The vertex index.</param>
+        /// <returns></returns>
         private int Khans_GetInverseDegree(List<GraphEdge>[] Edges, int i)
         {
             int degree = 0;
@@ -77,6 +88,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return degree;
         }
 
+        /// <summary>
+        /// Count the number of edges in the list of lists.
+        /// </summary>
+        /// <param name="Edges">A list of the edges for each vertex.</param>
+        /// <returns></returns>
         private int Khans_CountEdges(List<GraphEdge>[] Edges)
         {
             int count = 0;

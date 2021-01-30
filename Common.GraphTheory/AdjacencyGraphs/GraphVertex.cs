@@ -6,17 +6,28 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
     public sealed class GraphVertex : IComparable<GraphVertex>
     {
-
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public GraphVertex()
         {
             Index = -1;
         }
 
+        /// <summary>
+        /// Create a vertex with a index.
+        /// </summary>
+        /// <param name="index">The index of the vertex in its graph.</param>
         public GraphVertex(int index)
         {
             Index = index;
         }
 
+        /// <summary>
+        /// Create a vertex with a index and data.
+        /// </summary>
+        /// <param name="index">The index of the vertex in its graph.</param>
+        /// <param name="data">The vertices data.</param>
         public GraphVertex(int index, object data)
         {
             Index = index;

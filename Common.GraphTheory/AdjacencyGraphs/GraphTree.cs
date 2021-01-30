@@ -8,8 +8,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// The tree only holds the indices of
     /// the vertices from the graph it was 
     /// created from. A tree may not contain 
-    /// all the vertices in the graph if the
-    /// graph is not completely connected.
+    /// all the vertices in the graph even 
+    /// if the graph is not completely connected.
     /// </summary>
     public class GraphTree
     {

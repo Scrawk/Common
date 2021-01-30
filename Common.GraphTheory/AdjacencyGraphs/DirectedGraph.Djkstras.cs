@@ -7,6 +7,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
 {
     public partial class DirectedGraph : AdjacencyGraph
     {
+        /// <summary>
+        /// Create a graph tree representing the shortest paths
+        /// between the vertices in the graph.
+        /// </summary>
+        /// <param name="root">The vertex index to start at.</param>
+        /// <returns>The shortest path tree.</returns>
         public GraphTree DijkstrasShortestPathTree(int root)
         {
             TagVertices(NOT_VISITED_TAG);

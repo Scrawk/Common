@@ -7,7 +7,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
     public abstract partial class AdjacencyGraph
     {
-
+        /// <summary>
+        /// Return a list of vertex indices ordered breadth first.
+        /// </summary>
+        /// <param name="root">The vertex index to start at.</param>
+        /// <returns>The vertices in breadth first order.</returns>
         public List<int> BreadthFirstOrder(int root)
         {
             TagVertices(NOT_VISITED_TAG);
@@ -42,6 +46,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return ordering;
         }
 
+        /// <summary>
+        /// Return a tree of vertex indices ordered breadth first.
+        /// </summary>
+        /// <param name="root">The vertex index to start at.</param>
+        /// <returns>The vertices in breadth first order.</returns>
         public GraphTree BreadthFirstTree(int root)
         {
             TagVertices(NOT_VISITED_TAG);

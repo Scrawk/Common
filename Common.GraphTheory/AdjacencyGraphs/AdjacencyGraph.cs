@@ -10,15 +10,25 @@ namespace Common.GraphTheory.AdjacencyGraphs
     /// </summary>
     public abstract partial class AdjacencyGraph
     {
+        /// <summary>
+        /// Use to tag if vertices have been visited or not.
+        /// </summary>
         protected const int NOT_VISITED_TAG = 0;
         protected const int IS_VISITED_TAG = 1;
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public AdjacencyGraph()
         {
             Vertices = new List<GraphVertex>();
             Edges = new List<List<GraphEdge>>();
         }
 
+        /// <summary>
+        /// Create a graph with a fixed number of vertices.
+        /// </summary>
+        /// <param name="size">The number of vertices.</param>
         public AdjacencyGraph(int size)
         {
             Vertices = new List<GraphVertex>(size);
@@ -26,6 +36,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
             Fill(size);
         }
 
+        /// <summary>
+        /// Create a graph from a set of vertices.
+        /// These vertices must have already had there
+        /// index set correctly.
+        /// </summary>
+        /// <param name="vertices">The graphs vertices.</param>
         public AdjacencyGraph(IEnumerable<GraphVertex> vertices)
         {
             Vertices = new List<GraphVertex>(vertices);

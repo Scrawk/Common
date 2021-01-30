@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Common.GraphTheory.AdjacencyGraphs
 {
     /// <summary>
-    /// 
+    /// A list of graph trees.
     /// </summary>
     public class GraphForest
     {
@@ -24,22 +24,22 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// The number of trees in the forest.
         /// </summary>
         public int Count => m_forest.Count;
 
         /// <summary>
-        /// 
+        /// The graph the trees were constructed from.
         /// </summary>
         public AdjacencyGraph Graph { get; private set; }
 
         /// <summary>
-        /// 
+        /// The vertex indices of the tree roots.
         /// </summary>
         public IEnumerable<int> Roots => m_forest.Keys;
 
         /// <summary>
-        /// 
+        /// The trees in the forest.
         /// </summary>
         public IEnumerable<GraphTree> Trees => m_forest.Values;
 
@@ -53,7 +53,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Does the forest contain this tree.
         /// </summary>
         public bool ContainsTree(int root)
         {
@@ -61,7 +61,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Get the tree with this root.
         /// </summary>
         public GraphTree GetTree(int root)
         {
@@ -69,7 +69,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Add a tree to the forest.
         /// </summary>
         public void AddTree(GraphTree tree)
         {
@@ -77,11 +77,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Remove a tree from the forest.
         /// </summary>
-        public void RemoveTree(int root)
+        public bool RemoveTree(int root)
         {
-            m_forest.Remove(root);
+            return m_forest.Remove(root);
         }
 
     }

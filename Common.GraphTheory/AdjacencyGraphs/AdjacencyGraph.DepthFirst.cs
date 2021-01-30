@@ -7,7 +7,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
     public abstract partial class AdjacencyGraph
     {
-
+        /// <summary>
+        /// Return a list of vertex indices ordered depth first.
+        /// </summary>
+        /// <param name="root">The vertex index to start at.</param>
+        /// <returns>The vertices in depth first order.</returns>
         public List<int> DepthFirstOrder(int root)
         {
             TagVertices(NOT_VISITED_TAG);

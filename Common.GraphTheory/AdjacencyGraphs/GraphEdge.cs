@@ -10,17 +10,32 @@ namespace Common.GraphTheory.AdjacencyGraphs
     public sealed class GraphEdge : IComparable<GraphEdge>
     {
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public GraphEdge()
         {
 
         }
 
+        /// <summary>
+        /// Create a edge going from and to these vertex indices.
+        /// </summary>
+        /// <param name="from">The from vertex index.</param>
+        /// <param name="to">The to vertex index.</param>
         public GraphEdge(int from, int to)
         {
             From = from;
             To = to;
         }
 
+        /// <summary>
+        /// Create a edge going from and to these vertex indices
+        /// with a edge weight.
+        /// </summary>
+        /// <param name="from">The from vertex index.</param>
+        /// <param name="to">The to vertex index.</param>
+        /// <param name="weight">The weight of the edge.</param>
         public GraphEdge(int from, int to, float weight)
         {
             From = from;
