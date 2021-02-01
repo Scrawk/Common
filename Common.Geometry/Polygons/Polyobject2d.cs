@@ -190,7 +190,7 @@ namespace Common.Geometry.Polygons
         public abstract REAL SignedDistance(VECTOR2 point);
 
         /// <summary>
-        /// Given the number (0 >= t <= 1) interpolate 
+        /// Given the number normalized interpolate 
         /// along the object to find the value in the array.
         /// </summary>
         public VECTOR2 Interpolate(REAL t, IList<VECTOR2> array)
@@ -200,7 +200,7 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
-        /// Given the number (0 >= t <= 1) interpolate 
+        /// Given the number normalized interpolate 
         /// along the object to find the value in the array.
         /// </summary>
         public REAL Interpolate(REAL t, IList<REAL> array)
@@ -250,10 +250,13 @@ namespace Common.Geometry.Polygons
         }
 
         /// <summary>
-        /// Given the number (0 >= t <= 1) find this length on the 
+        /// Given the normalized number find this length on the 
         /// object and return the index before this point and the 
-        /// distance (0 >= s <= 1) from this point to the next.
+        /// distance from this point to the next.
         /// </summary>
+        /// <param name="t">The normalized param representing length between first and last point.</param>
+        /// <param name="idx">The index of the point.</param>
+        /// <param name="s">The normalized param representing length between idx and idx+1.</param>
         private void FindInterpolationPoint(REAL t, out int idx, out REAL s)
         {
             t = MathUtil.Clamp01(t) * Length;

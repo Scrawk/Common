@@ -99,6 +99,18 @@ namespace Common.Core.Data
         }
 
         /// <summary>
+        /// Remove the value associated with a key.
+        /// <param name="key">The values key.</param>
+        /// <returns>True if the value was removed.</returns>
+        public bool RemoveBool(KEY key)
+        {
+            if (m_bools == null)
+                return false;
+
+            return m_bools.Remove(key);
+        }
+
+        /// <summary>
         /// Get the value associated with a key.
         /// </summary>
         /// <param name="key">The values key.</param>
@@ -125,6 +137,18 @@ namespace Common.Core.Data
                 return false;
             else
                 return m_ints.TryGetValue(key, out value);
+        }
+
+        /// <summary>
+        /// Remove the value associated with a key.
+        /// <param name="key">The values key.</param>
+        /// <returns>True if the value was removed.</returns>
+        public bool RemoveInt(KEY key)
+        {
+            if (m_ints == null)
+                return false;
+
+            return m_ints.Remove(key);
         }
 
         /// <summary>
@@ -181,6 +205,18 @@ namespace Common.Core.Data
         }
 
         /// <summary>
+        /// Remove the value associated with a key.
+        /// <param name="key">The values key.</param>
+        /// <returns>True if the value was removed.</returns>
+        public bool RemoveFloat(KEY key)
+        {
+            if (m_floats == null)
+                return false;
+
+            return m_floats.Remove(key);
+        }
+
+        /// <summary>
         /// Get the value associated with a key.
         /// </summary>
         /// <param name="key">The values key.</param>
@@ -222,6 +258,18 @@ namespace Common.Core.Data
         }
 
         /// <summary>
+        /// Remove the value associated with a key.
+        /// <param name="key">The values key.</param>
+        /// <returns>True if the value was removed.</returns>
+        public bool RemoveString(KEY key)
+        {
+            if (m_strings == null)
+                return false;
+
+            return m_strings.Remove(key);
+        }
+
+        /// <summary>
         /// Get the value associated with a key.
         /// </summary>
         /// <param name="key">The values key.</param>
@@ -260,6 +308,18 @@ namespace Common.Core.Data
                 m_vectors = new Dictionary<KEY, Vector3f>();
 
             m_vectors[key] = value;
+        }
+
+        /// <summary>
+        /// Remove the value associated with a key.
+        /// <param name="key">The values key.</param>
+        /// <returns>True if the value was removed.</returns>
+        public bool RemoveVector3f(KEY key)
+        {
+            if (m_vectors == null)
+                return false;
+
+            return m_vectors.Remove(key);
         }
 
         /// <summary>
@@ -347,6 +407,18 @@ namespace Common.Core.Data
         }
 
         /// <summary>
+        /// Remove the value associated with a key.
+        /// <param name="key">The values key.</param>
+        /// <returns>True if the value was removed.</returns>
+        public bool RemoveObject(KEY key)
+        {
+            if (m_objects == null)
+                return false;
+
+            return m_objects.Remove(key);
+        }
+
+        /// <summary>
         /// Get the value associated with a key.
         /// </summary>
         /// <param name="key">The values key.</param>
@@ -385,6 +457,18 @@ namespace Common.Core.Data
                 m_lists = new Dictionary<KEY, List<object>>();
 
             m_lists[key] = value;
+        }
+
+        /// <summary>
+        /// Remove the value associated with a key.
+        /// <param name="key">The values key.</param>
+        /// <returns>True if the value was removed.</returns>
+        public bool RemoveList(KEY key)
+        {
+            if (m_lists == null)
+                return false;
+
+            return m_lists.Remove(key);
         }
 
         /// <summary>

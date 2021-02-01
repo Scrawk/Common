@@ -17,21 +17,40 @@ namespace Common.Geometry.Polygons
     /// </summary>
     public class Polyline2d : Polyobject2d, IShape2d
     {
-
+        /// <summary>
+        /// Create a polyline.
+        /// </summary>
+        /// <param name="width">The lines width.</param>
+        /// <param name="count">The number points in the line.</param>
         public Polyline2d(REAL width, int count) : base(count)
         {
             Width = width;
         }
 
+        /// <summary>
+        /// Create a polyline.
+        /// </summary>
+        /// <param name="width">The lines width.</param>
+        /// <param name="positions">The lines positions.</param>
         public Polyline2d(REAL width, IList<VECTOR2> positions) : base(positions)
         {
             Width = width;
         }
 
+        /// <summary>
+        /// The width of the line.
+        /// </summary>
         public REAL Width { get; set; }
 
+        /// <summary>
+        /// The radius of the line segments capsules.
+        /// </summary>
         public REAL Radius => Width * 0.5;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("[Polyline2d: Count={0}, Length={1}]", Count, Length);
@@ -152,7 +171,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public override bool Contains(VECTOR2 point)
         {
-            REAL radius = Width * 0.5;
+            REAL radius = Radius;
 
             for (int i = 0; i < Count - 1; i++)
             {
@@ -199,7 +218,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public bool Intersects(BOX2 box)
         {
-            REAL radius = Width * 0.5;
+            REAL radius = Radius;
             var seg = new SEGMENT2();
 
             for (int i = 0; i < Count - 1; i++)
@@ -225,7 +244,7 @@ namespace Common.Geometry.Polygons
         public override REAL SignedDistance(VECTOR2 point)
         {
             REAL sdf = REAL.PositiveInfinity;
-            REAL radius = Width * 0.5;
+            REAL radius = Radius;
 
             for (int i = 0; i < Count - 1; i++)
             {

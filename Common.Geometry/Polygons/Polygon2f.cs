@@ -18,27 +18,58 @@ namespace Common.Geometry.Polygons
     public class Polygon2f : Polyobject2f
     {
 
+        /// <summary>
+        /// Create a polygon.
+        /// </summary>
+        /// <param name="count">The number of points in polygon.</param>
         public Polygon2f(int count) : base(count)
         {
         }
 
+        /// <summary>
+        /// Create a polygon.
+        /// </summary>
+        /// <param name="positions">The polygons positions.</param>
         public Polygon2f(IList<VECTOR2> positions) : base(positions)
         {
 
         }
 
+        /// <summary>
+        /// The signed area of the polygon.
+        /// CCW polygons have a positive area.
+        /// </summary>
         public REAL SignedArea { get; private set; }
 
+        /// <summary>
+        /// The polygons area.
+        /// </summary>
         public REAL Area => Math.Abs(SignedArea);
 
+        /// <summary>
+        /// The polygons centroid.
+        /// </summary>
         public VECTOR2 Centroid { get; private set; }
 
+        /// <summary>
+        /// Is the polygon points ordered clockwise.
+        /// </summary>
         public bool IsCW => SignedArea < 0;
 
+        /// <summary>
+        /// Is the polygon points ordered counter clockwise.
+        /// </summary>
         public bool IsCCW => SignedArea > 0;
 
+        /// <summary>
+        /// Are the polygon points degenerate.
+        /// </summary>
         public bool IsDegenerate => SignedArea == 0;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("[Polygon2f: Count={0}, Length={1}, Area={2}, IsCCW={3}]",
@@ -275,6 +306,9 @@ namespace Common.Geometry.Polygons
             return s * MathUtil.Sqrt(d);
         }
 
+        /// <summary>
+        /// Create a triangle polygon from the 3 points.
+        /// </summary>
         public static Polygon2f FromTriangle(VECTOR2 a, VECTOR2 b, VECTOR2 c)
         {
             var polygon = new Polygon2f(3);
@@ -286,6 +320,9 @@ namespace Common.Geometry.Polygons
             return polygon;
         }
 
+        /// <summary>
+        /// Create a box polygon from the 4 points.
+        /// </summary>
         public static Polygon2f FromBox(VECTOR2 min, VECTOR2 max)
         {
             var polygon = new Polygon2f(4);
@@ -298,6 +335,9 @@ namespace Common.Geometry.Polygons
             return polygon;
         }
 
+        /// <summary>
+        /// Create a circle polygon.
+        /// </summary>
         public static Polygon2f FromCircle(VECTOR2 center, REAL radius, int segments)
         {
             var polygon = new Polygon2f(segments);
