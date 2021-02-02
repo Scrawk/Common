@@ -14,19 +14,19 @@ namespace Common.Core.Data
     public class DataSet<KEY>
     {
 
-        private Dictionary<KEY, bool> m_bools;
+        public Dictionary<KEY, bool> Bools { get; private set; }
 
-        private Dictionary<KEY, int> m_ints;
+        public Dictionary<KEY, int> Ints { get; private set; }
 
-        private Dictionary<KEY, float> m_floats;
+        public Dictionary<KEY, float> Floats { get; private set; }
 
-        private Dictionary<KEY, string> m_strings;
+        public Dictionary<KEY, string> Strings { get; private set; }
 
-        private Dictionary<KEY, Vector3f> m_vectors;
+        public Dictionary<KEY, Vector3f> Vectors { get; private set; }
 
-        private Dictionary<KEY, object> m_objects;
+        public Dictionary<KEY, object> Objects { get; private set; }
 
-        private Dictionary<KEY, List<object>> m_lists;
+        public Dictionary<KEY, List<object>> Lists { get; private set; }
 
         /// <summary>
         /// The number of data elements in the set.
@@ -36,13 +36,13 @@ namespace Common.Core.Data
             get
             {
                 int count = 0;
-                if (m_bools != null) count += m_bools.Count;
-                if (m_ints != null) count += m_ints.Count;
-                if (m_floats != null) count += m_floats.Count;
-                if (m_strings != null) count += m_strings.Count;
-                if (m_vectors != null) count += m_vectors.Count;
-                if (m_objects != null) count += m_objects.Count;
-                if (m_lists != null) count += m_lists.Count;
+                if (Bools != null) count += Bools.Count;
+                if (Ints != null) count += Ints.Count;
+                if (Floats != null) count += Floats.Count;
+                if (Strings != null) count += Strings.Count;
+                if (Vectors != null) count += Vectors.Count;
+                if (Objects != null) count += Objects.Count;
+                if (Lists != null) count += Lists.Count;
 
                 return count;
             }
@@ -58,6 +58,19 @@ namespace Common.Core.Data
         }
 
         /// <summary>
+        /// Is there a value associated with a key.
+        /// </summary>
+        /// <param name="key">The values key.</param>
+        /// <returns>True if there is a value for this key</returns>
+        public bool HasBool(KEY key)
+        {
+            if (Bools == null)
+                return false;
+            else
+                return Bools.ContainsKey(key);
+        }
+
+        /// <summary>
         /// Get the value associated with a key.
         /// </summary>
         /// <param name="key">The values key.</param>
@@ -65,7 +78,7 @@ namespace Common.Core.Data
         public bool GetBool(KEY key)
         {
             bool value = false;
-            if (m_bools == null || !m_bools.TryGetValue(key, out value))
+            if (Bools == null || !Bools.TryGetValue(key, out value))
                     throw new Exception("Bool named " + key + " does not exist.");
             else
                 return value;
@@ -80,10 +93,10 @@ namespace Common.Core.Data
         public bool TryGetBool(KEY key, out bool value)
         {
             value = false;
-            if (m_bools == null)
+            if (Bools == null)
                 return false;
             else
-                return m_bools.TryGetValue(key, out value);
+                return Bools.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -92,10 +105,10 @@ namespace Common.Core.Data
         /// <param name="value">The value.</param>
         public void SetBool(KEY key, bool value)
         {
-            if (m_bools == null)
-                m_bools = new Dictionary<KEY, bool>();
+            if (Bools == null)
+                Bools = new Dictionary<KEY, bool>();
 
-            m_bools[key] = value;
+            Bools[key] = value;
         }
 
         /// <summary>
@@ -104,10 +117,23 @@ namespace Common.Core.Data
         /// <returns>True if the value was removed.</returns>
         public bool RemoveBool(KEY key)
         {
-            if (m_bools == null)
+            if (Bools == null)
                 return false;
 
-            return m_bools.Remove(key);
+            return Bools.Remove(key);
+        }
+
+        /// <summary>
+        /// Is there a value associated with a key.
+        /// </summary>
+        /// <param name="key">The values key.</param>
+        /// <returns>True if there is a value for this key</returns>
+        public bool HasInt(KEY key)
+        {
+            if (Ints == null)
+                return false;
+            else
+                return Ints.ContainsKey(key);
         }
 
         /// <summary>
@@ -118,7 +144,7 @@ namespace Common.Core.Data
         public int GetInt(KEY key)
         {
             int value = 0;
-            if (m_ints == null || !m_ints.TryGetValue(key, out value))
+            if (Ints == null || !Ints.TryGetValue(key, out value))
                     throw new Exception("Int named " + key + " does not exist.");
             else
                 return value;
@@ -133,10 +159,10 @@ namespace Common.Core.Data
         public bool TryGetInt(KEY key, out int value)
         {
             value = 0;
-            if (m_ints == null)
+            if (Ints == null)
                 return false;
             else
-                return m_ints.TryGetValue(key, out value);
+                return Ints.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -145,10 +171,10 @@ namespace Common.Core.Data
         /// <returns>True if the value was removed.</returns>
         public bool RemoveInt(KEY key)
         {
-            if (m_ints == null)
+            if (Ints == null)
                 return false;
 
-            return m_ints.Remove(key);
+            return Ints.Remove(key);
         }
 
         /// <summary>
@@ -157,10 +183,23 @@ namespace Common.Core.Data
         /// <param name="value">The value.</param>
         public void SetInt(KEY key, int value)
         {
-            if (m_ints == null)
-                m_ints = new Dictionary<KEY, int>();
+            if (Ints == null)
+                Ints = new Dictionary<KEY, int>();
 
-            m_ints[key] = value;
+            Ints[key] = value;
+        }
+
+        /// <summary>
+        /// Is there a value associated with a key.
+        /// </summary>
+        /// <param name="key">The values key.</param>
+        /// <returns>True if there is a value for this key</returns>
+        public bool HasFloat(KEY key)
+        {
+            if (Floats == null)
+                return false;
+            else
+                return Floats.ContainsKey(key);
         }
 
         /// <summary>
@@ -171,7 +210,7 @@ namespace Common.Core.Data
         public float GetFloat(KEY key)
         {
             float value = 0;
-            if (m_floats == null || !m_floats.TryGetValue(key, out value))
+            if (Floats == null || !Floats.TryGetValue(key, out value))
                     throw new Exception("Float named " + key + " does not exist.");
             else
                 return value;
@@ -186,10 +225,10 @@ namespace Common.Core.Data
         public bool TryGetFloat(KEY key, out float value)
         {
             value = 0;
-            if (m_floats == null)
+            if (Floats == null)
                 return false;
             else
-                return m_floats.TryGetValue(key, out value);
+                return Floats.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -198,10 +237,10 @@ namespace Common.Core.Data
         /// <param name="value">The value.</param>
         public void SetFloat(KEY key, float value)
         {
-            if (m_floats == null)
-                m_floats = new Dictionary<KEY, float>();
+            if (Floats == null)
+                Floats = new Dictionary<KEY, float>();
 
-            m_floats[key] = value;
+            Floats[key] = value;
         }
 
         /// <summary>
@@ -210,10 +249,23 @@ namespace Common.Core.Data
         /// <returns>True if the value was removed.</returns>
         public bool RemoveFloat(KEY key)
         {
-            if (m_floats == null)
+            if (Floats == null)
                 return false;
 
-            return m_floats.Remove(key);
+            return Floats.Remove(key);
+        }
+
+        /// <summary>
+        /// Is there a value associated with a key.
+        /// </summary>
+        /// <param name="key">The values key.</param>
+        /// <returns>True if there is a value for this key</returns>
+        public bool HasString(KEY key)
+        {
+            if (Strings == null)
+                return false;
+            else
+                return Strings.ContainsKey(key);
         }
 
         /// <summary>
@@ -224,7 +276,7 @@ namespace Common.Core.Data
         public string GetString(KEY key)
         {
             string value = "";
-            if (m_strings == null || !m_strings.TryGetValue(key, out value))
+            if (Strings == null || !Strings.TryGetValue(key, out value))
                     throw new Exception("String named " + key + " does not exist.");
             else
                 return value;
@@ -239,10 +291,10 @@ namespace Common.Core.Data
         public bool TryGetString(KEY key, out string value)
         {
             value = "";
-            if (m_strings == null)
+            if (Strings == null)
                 return false;
             else
-                return m_strings.TryGetValue(key, out value);
+                return Strings.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -251,10 +303,10 @@ namespace Common.Core.Data
         /// <param name="value">The value.</param>
         public void SetString(KEY key, string value)
         {
-            if (m_strings == null)
-                m_strings = new Dictionary<KEY, string>();
+            if (Strings == null)
+                Strings = new Dictionary<KEY, string>();
 
-            m_strings[key] = value;
+            Strings[key] = value;
         }
 
         /// <summary>
@@ -263,10 +315,23 @@ namespace Common.Core.Data
         /// <returns>True if the value was removed.</returns>
         public bool RemoveString(KEY key)
         {
-            if (m_strings == null)
+            if (Strings == null)
                 return false;
 
-            return m_strings.Remove(key);
+            return Strings.Remove(key);
+        }
+
+        /// <summary>
+        /// Is there a value associated with a key.
+        /// </summary>
+        /// <param name="key">The values key.</param>
+        /// <returns>True if there is a value for this key</returns>
+        public bool HasVector(KEY key)
+        {
+            if (Vectors == null)
+                return false;
+            else
+                return Vectors.ContainsKey(key);
         }
 
         /// <summary>
@@ -274,11 +339,11 @@ namespace Common.Core.Data
         /// </summary>
         /// <param name="key">The values key.</param>
         /// <returns>The value.</returns>
-        public Vector3f GetVector3f(KEY key)
+        public Vector3f GetVector(KEY key)
         {
             Vector3f value = Vector3f.Zero;
-            if (m_vectors == null || !m_vectors.TryGetValue(key, out value))
-                    throw new Exception("Vector3f named " + key + " does not exist.");
+            if (Vectors == null || !Vectors.TryGetValue(key, out value))
+                    throw new Exception("Vector named " + key + " does not exist.");
             else
                 return value;
         }
@@ -289,37 +354,50 @@ namespace Common.Core.Data
         /// <param name="key">The values key.</param>
         /// <param name="value">The value.</param>
         /// <returns>True if the set contains the key value pair.</returns>
-        public bool TryGetVector3f(KEY key, out Vector3f value)
+        public bool TryGetVector(KEY key, out Vector3f value)
         {
             value = Vector3f.Zero;
-            if (m_vectors == null)
+            if (Vectors == null)
                 return false;
             else
-                return m_vectors.TryGetValue(key, out value);
+                return Vectors.TryGetValue(key, out value);
         }
 
         /// <summary>
         /// Set the value associated with a key.
         /// <param name="key">The values key.</param>
         /// <param name="value">The value.</param>
-        public void SetVector3f(KEY key, Vector3f value)
+        public void SetVector(KEY key, Vector3f value)
         {
-            if (m_vectors == null)
-                m_vectors = new Dictionary<KEY, Vector3f>();
+            if (Vectors == null)
+                Vectors = new Dictionary<KEY, Vector3f>();
 
-            m_vectors[key] = value;
+            Vectors[key] = value;
         }
 
         /// <summary>
         /// Remove the value associated with a key.
         /// <param name="key">The values key.</param>
         /// <returns>True if the value was removed.</returns>
-        public bool RemoveVector3f(KEY key)
+        public bool RemoveVector(KEY key)
         {
-            if (m_vectors == null)
+            if (Vectors == null)
                 return false;
 
-            return m_vectors.Remove(key);
+            return Vectors.Remove(key);
+        }
+
+        /// <summary>
+        /// Is there a value associated with a key.
+        /// </summary>
+        /// <param name="key">The values key.</param>
+        /// <returns>True if there is a value for this key</returns>
+        public bool HasObject(KEY key)
+        {
+            if (Objects == null)
+                return false;
+            else
+                return Objects.ContainsKey(key);
         }
 
         /// <summary>
@@ -330,7 +408,7 @@ namespace Common.Core.Data
         public object GetObject(KEY key)
         {
             object value = null;
-            if (m_objects == null || !m_objects.TryGetValue(key, out value))
+            if (Objects == null || !Objects.TryGetValue(key, out value))
                     throw new Exception("Object named " + key + " does not exist.");
             else
                 return value;
@@ -345,10 +423,10 @@ namespace Common.Core.Data
         public bool TryGetObject(KEY key, out object value)
         {
             value = null;
-            if (m_objects == null)
+            if (Objects == null)
                 return false;
             else
-                return m_objects.TryGetValue(key, out value);
+                return Objects.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -359,7 +437,7 @@ namespace Common.Core.Data
         public T GetObject<T>(KEY key) where T : class
         {
             object obj = null;
-            if (m_objects == null || !m_objects.TryGetValue(key, out obj))
+            if (Objects == null || !Objects.TryGetValue(key, out obj))
                     throw new Exception("Object named " + key + " does not exist.");
             else if (obj == null)
                 return null;
@@ -383,7 +461,7 @@ namespace Common.Core.Data
         {
             value = null;
             object obj = null;
-            if (m_objects == null || !m_objects.TryGetValue(key, out obj))
+            if (Objects == null || !Objects.TryGetValue(key, out obj))
                 return false;
             else if (obj == null)
                 return true;
@@ -400,10 +478,10 @@ namespace Common.Core.Data
         /// <param name="value">The value.</param>
         public void SetObject<T>(KEY key, T value) where T : class
         {
-            if (m_objects == null)
-                m_objects = new Dictionary<KEY, object>();
+            if (Objects == null)
+                Objects = new Dictionary<KEY, object>();
 
-            m_objects[key] = value;
+            Objects[key] = value;
         }
 
         /// <summary>
@@ -412,10 +490,23 @@ namespace Common.Core.Data
         /// <returns>True if the value was removed.</returns>
         public bool RemoveObject(KEY key)
         {
-            if (m_objects == null)
+            if (Objects == null)
                 return false;
 
-            return m_objects.Remove(key);
+            return Objects.Remove(key);
+        }
+
+        /// <summary>
+        /// Is there a value associated with a key.
+        /// </summary>
+        /// <param name="key">The values key.</param>
+        /// <returns>True if there is a value for this key</returns>
+        public bool HasList(KEY key)
+        {
+            if (Lists == null)
+                return false;
+            else
+                return Lists.ContainsKey(key);
         }
 
         /// <summary>
@@ -426,7 +517,7 @@ namespace Common.Core.Data
         public List<object> GetList(KEY key)
         {
             List<object> value = null;
-            if (m_lists == null || !m_lists.TryGetValue(key, out value))
+            if (Lists == null || !Lists.TryGetValue(key, out value))
                 throw new Exception("List named " + key + " does not exist.");
             else
                 return value;
@@ -441,10 +532,10 @@ namespace Common.Core.Data
         public bool TryGetList(KEY key, out List<object> value)
         {
             value = null;
-            if (m_lists == null)
+            if (Lists == null)
                 return false;
             else
-                return m_lists.TryGetValue(key, out value);
+                return Lists.TryGetValue(key, out value);
         }
 
         /// <summary>
@@ -453,10 +544,10 @@ namespace Common.Core.Data
         /// <param name="value">The value.</param>
         public void SetList(KEY key, List<object> value)
         {
-            if (m_lists == null)
-                m_lists = new Dictionary<KEY, List<object>>();
+            if (Lists == null)
+                Lists = new Dictionary<KEY, List<object>>();
 
-            m_lists[key] = value;
+            Lists[key] = value;
         }
 
         /// <summary>
@@ -465,194 +556,12 @@ namespace Common.Core.Data
         /// <returns>True if the value was removed.</returns>
         public bool RemoveList(KEY key)
         {
-            if (m_lists == null)
+            if (Lists == null)
                 return false;
 
-            return m_lists.Remove(key);
+            return Lists.Remove(key);
         }
 
-        /// <summary>
-        /// Is this set a subset of the other set.
-        /// ie the other set contains the same data as this set and maybe more.
-        /// </summary>
-        /// <param name="set">The other set.</param>
-        /// <returns></returns>
-        public bool IsSubsetOf(DataSet<KEY> set)
-        {
-
-            if (Count > set.Count)
-                return false;
-
-            if (m_bools != null)
-            {
-                if (set.m_bools == null)
-                    return false;
-
-                foreach (var kvp in m_bools)
-                {
-                    if (set.TryGetBool(kvp.Key, out bool value))
-                        return value == kvp.Value;
-                    else
-                        return false;
-                }
-            }
-
-            if (m_ints != null)
-            {
-                if (set.m_ints == null)
-                    return false;
-
-                foreach (var kvp in m_ints)
-                {
-                    if (set.TryGetInt(kvp.Key, out int value))
-                        return value == kvp.Value;
-                    else
-                        return false;
-                }
-            }
-
-            if (m_floats != null)
-            {
-                if (set.m_floats == null)
-                    return false;
-
-                foreach (var kvp in m_floats)
-                {
-                    if (set.TryGetFloat(kvp.Key, out float value))
-                        return value == kvp.Value;
-                    else
-                        return false;
-                }
-            }
-
-            if (m_strings != null)
-            {
-                if (set.m_strings == null)
-                    return false;
-
-                foreach (var kvp in m_strings)
-                {
-                    if (set.TryGetString(kvp.Key, out string value))
-                        return value == kvp.Value;
-                    else
-                        return false;
-                }
-            }
-
-            if (m_vectors != null)
-            {
-                if (set.m_vectors == null)
-                    return false;
-
-                foreach (var kvp in m_vectors)
-                {
-                    if (set.TryGetVector3f(kvp.Key, out Vector3f value))
-                        return value == kvp.Value;
-                    else
-                        return false;
-                }
-            }
-
-            if (m_objects != null)
-            {
-                if (set.m_objects == null)
-                    return false;
-
-                foreach (var kvp in m_objects)
-                {
-                    if (set.TryGetObject(kvp.Key, out object value))
-                        return value == kvp.Value;
-                    else
-                        return false;
-                }
-            }
-
-            if(m_lists != null)
-            {
-                if (set.m_lists == null)
-                    return false;
-
-                foreach (var kvp in m_lists)
-                {
-                    List<object> list1 = kvp.Value;
-                    List<object> list2;
-
-                    if (!set.TryGetList(kvp.Key, out list2))
-                        return false;
-
-                    int count1 = list1 != null ? list1.Count : 0;
-                    int count2 = list2 != null ? list2.Count : 0;
-                    if (count1 > count2) return false;
-
-                    for(int i = 0; i < count1; i++)
-                    {
-                        if (list1[i] != list2[i])
-                            return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Print the sets data into the string builder.
-        /// </summary>
-        /// <param name="builder"></param>
-        public void Print(StringBuilder builder)
-        {
-            if (m_bools != null)
-            {
-                foreach (var kvp in m_bools)
-                    builder.AppendLine(kvp.Key + ": " + kvp.Value);
-            }
-
-            if (m_ints != null)
-            {
-                foreach (var kvp in m_ints)
-                    builder.AppendLine(kvp.Key + ": " + kvp.Value);
-            }
-
-            if (m_floats != null)
-            {
-                foreach (var kvp in m_floats)
-                    builder.AppendLine(kvp.Key + ": " + kvp.Value);
-            }
-
-            if (m_strings != null)
-            {
-                foreach (var kvp in m_strings)
-                    builder.AppendLine(kvp.Key + ": " + kvp.Value);
-            }
-
-            if (m_vectors != null)
-            {
-                foreach (var kvp in m_vectors)
-                    builder.AppendLine(kvp.Key + ": " + kvp.Value);
-            }
-
-            if (m_objects != null)
-            {
-                foreach (var kvp in m_objects)
-                {
-                    if (kvp.Value == null)
-                        builder.AppendLine(kvp.Key + ": Null");
-                    else
-                        builder.AppendLine(kvp.Key + ": " + kvp.Value);
-                }
-            }
-
-            if (m_lists != null)
-            {
-                foreach (var kvp in m_lists)
-                {
-                    if (kvp.Value == null)
-                        builder.AppendLine(kvp.Key + ": Null");
-                    else
-                        builder.AppendLine(kvp.Key + ": " + kvp.Value.Count);
-                }
-            }
-        }
     }
 }
 
