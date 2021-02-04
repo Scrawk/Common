@@ -476,7 +476,7 @@ namespace Common.Core.Data
         /// Set the value associated with a key.
         /// <param name="key">The values key.</param>
         /// <param name="value">The value.</param>
-        public void SetObject<T>(KEY key, T value) where T : class
+        public void SetObject(KEY key, object value)
         {
             if (Objects == null)
                 Objects = new Dictionary<KEY, object>();
