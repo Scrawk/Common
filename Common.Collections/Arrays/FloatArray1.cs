@@ -42,7 +42,7 @@ namespace Common.Collections.Arrays
         /// </summary>
         public float GetClamped(float u)
         {
-            float x = u * (Count-1);
+            float x = u * (Count - 1);
 
             int xi = (int)MathUtil.Floor(x);
 
@@ -80,6 +80,19 @@ namespace Common.Collections.Arrays
             var v1 = base.GetMirrored(xi + 1);
 
             return MathUtil.Lerp(v0, v1, x - xi);
+        }
+
+        /// <summary>
+        /// The sum of all the values in the array.
+        /// </summary>
+        /// <returns></returns>
+        public float Sum()
+        {
+            float sum = 0;
+            for (int i = 0; i < Count; i++)
+                sum += Data[i];
+
+            return sum;
         }
 
     }

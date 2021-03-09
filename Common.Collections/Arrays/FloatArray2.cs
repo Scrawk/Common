@@ -104,5 +104,19 @@ namespace Common.Collections.Arrays
             return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
         }
 
+        /// <summary>
+        /// The sum of all the values in the array.
+        /// </summary>
+        /// <returns></returns>
+        public float Sum()
+        {
+            float sum = 0;
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
+                    sum += Data[x, y];
+
+            return sum;
+        }
+
     }
 }

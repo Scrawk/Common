@@ -215,6 +215,24 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Iterate over the array with the action in parallel.
+        /// </summary>
+        public void ParallelIterate(int blockSize, Action<int, int> func)
+        {
+            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        func(x, y);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
         /// Fill the array with the value.
         /// </summary>
         public void Fill(T value)
@@ -237,6 +255,24 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Fill the array with the value from the function in parallel.
+        /// </summary>
+        public void ParallelFill(int blockSize, Func<int, int, T> func)
+        {
+            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        Data[x, y] = func(x, y);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
         /// Modify the array with the function.
         /// </summary>
         public void Modify(Func<T, T> func)
@@ -248,6 +284,24 @@ namespace Common.Collections.Arrays
                     Data[x, y] = func(Data[x, y]);
                 }
             }
+        }
+
+        /// <summary>
+        /// Modify the array with the function in parallel.
+        /// </summary>
+        public void ParallelModify(int blockSize, Func<T, T> func)
+        {
+            var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
+            Parallel.ForEach(blocks, (block) =>
+            {
+                for (int y = block.Min.y; y < block.Max.y; y++)
+                {
+                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    {
+                        Data[x, y] = func(Data[x, y]);
+                    }
+                }
+            });
         }
 
     }
