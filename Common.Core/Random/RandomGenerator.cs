@@ -14,8 +14,8 @@ namespace Common.Core.Random
         /// </summary>
         public RandomGenerator()
         {
-            var rnd = new System.Random();
-            UpdateSeed(rnd.Next());
+            var seed = Guid.NewGuid().GetHashCode();
+            UpdateSeed(seed);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Common.Core.Random
         }
 
         /// <summary>
-        /// A random double between 0 and 1.
+        /// A random double greater than or equal to 0 and less than 1.
         /// </summary>
         public double Value
         {
@@ -56,12 +56,12 @@ namespace Common.Core.Random
         public abstract void UpdateSeed(int seed);
 
         /// <summary>
-        /// A random int between 0 - MaxInt.
+        /// A random int greater than or equal to 0 and less than MaxInt.
         /// </summary>
         public abstract int Next();
 
         /// <summary>
-        /// Returns a non-negative random integer that is less than the specified maximum.
+        /// A random int greater than or equal to 0 and less than max.
         /// </summary>
         public int Next(int max)
         {
@@ -69,7 +69,7 @@ namespace Common.Core.Random
         }
 
         /// <summary>
-        /// Returns a random integer that is within a specified range.
+        /// A random int greater than or equal to min and less than max.
         /// </summary>
         public int Next(int min, int max)
         {
@@ -77,7 +77,7 @@ namespace Common.Core.Random
         }
 
         /// <summary>
-        /// Returns a random double that is within a specified range.
+        /// A random double greater than or equal to min and less than max.
         /// </summary>
         public double NextDouble(double min, double max)
         {
@@ -85,7 +85,7 @@ namespace Common.Core.Random
         }
 
         /// <summary>
-        /// A random double between 0 - 1.
+        /// A random double greater than or equal to 0 and less than 1.
         /// </summary>
         public double NextDouble()
         {

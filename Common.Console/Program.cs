@@ -6,6 +6,7 @@ using Common.Geometry.Nurbs;
 
 using Common.Console.Collections;
 using Common.Console.Geometry;
+using Common.Console.Core;
 
 using CONSOLE = System.Console;
 
@@ -16,7 +17,7 @@ namespace Common.Console
         static void Main(string[] args)
         {
 
-            PriorityQueuePerformanceTest.Run();
+            RandomnessTest.Run();
 
         }
     }

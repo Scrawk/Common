@@ -7,7 +7,7 @@ namespace Common.Core.Random
     public interface IRandomGenerator
     {
         /// <summary>
-        /// A random double between 0 and 1.
+        /// A random double greater than or equal to 0 and less than 1.
         /// </summary>
         double Value { get; }
 
@@ -23,27 +23,27 @@ namespace Common.Core.Random
         void UpdateSeed(int seed);
 
         /// <summary>
-        /// A random int between 0 - MaxInt.
+        /// A random int greater than or equal to 0 and less than MaxInt.
         /// </summary>
         int Next();
 
         /// <summary>
-        /// Returns a non-negative random integer that is less than the specified maximum.
+        /// A random int greater than or equal to 0 and less than max.
         /// </summary>
         int Next(int max);
 
         /// <summary>
-        /// Returns a random integer that is within a specified range.
+        /// A random int greater than or equal to min and less than max.
         /// </summary>
         int Next(int min, int max);
 
         /// <summary>
-        /// Returns a random double that is within a specified range.
+        /// A random double greater than or equal to min and less than max.
         /// </summary>
         double NextDouble(double min, double max);
 
         /// <summary>
-        /// A random double between 0 - 1.
+        /// A random double greater than or equal to 0 and less than 1.
         /// </summary>
         double NextDouble();
     }

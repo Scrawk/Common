@@ -50,7 +50,7 @@ namespace Common.Core.Random
         }
 
         /// <summary>
-        /// A random int between 0 - MaxInt.
+        /// A random int greater than or equal to 0 and less than MaxInt.
         /// </summary>
         public override int Next()
         {
