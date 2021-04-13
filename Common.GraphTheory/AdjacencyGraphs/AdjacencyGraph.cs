@@ -146,6 +146,20 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Set the edges tag.
+        /// </summary>
+        public void TagEdges(int tag)
+        {
+            for (int i = 0; i < VertexCount; i++)
+            {
+                if (Edges[i] == null) continue;
+
+                for (int j = 0; j < Edges[i].Count; j++)
+                    Edges[i][j].Tag = tag;
+            }
+        }
+
+        /// <summary>
         /// Get the data belonging to
         /// the vertex at index i.
         /// </summary>

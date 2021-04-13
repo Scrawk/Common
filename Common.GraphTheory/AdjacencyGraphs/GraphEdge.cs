@@ -60,6 +60,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public float Weight { get; set; }
 
         /// <summary>
+        ///Use to tempory mark the edge.
+        /// </summary>
+        public int Tag { get; set; }
+
+        /// <summary>
         /// The edges data.
         /// </summary>
         public object Data { get; set; }

@@ -40,7 +40,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public int Index { get; set; }
 
         /// <summary>
-        ///
+        ///Use to tempory mark the vertex.
         /// </summary>
         public int Tag { get; set; }
 
