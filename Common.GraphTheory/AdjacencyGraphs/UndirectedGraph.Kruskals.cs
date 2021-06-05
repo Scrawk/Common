@@ -61,7 +61,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 {
                     int from = edge.From;
                     int to = edge.To;
-                    graph.AddEdge(from, to);
+                    graph.AddUndirectedEdge(from, to);
                 }
 
                 var tree = Kruskals_BuildTree(root, graph);

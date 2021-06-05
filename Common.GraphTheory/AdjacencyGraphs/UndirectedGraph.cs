@@ -49,7 +49,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Add a edge to the graph.
         /// </summary>
-        public void AddEdge(GraphEdge edge, GraphEdge opposite)
+        public void AddUndirectedEdge(GraphEdge edge, GraphEdge opposite)
         {
             if (edge.From != opposite.To)
                 throw new ArgumentException("Edge does not go to opposite.");
@@ -67,9 +67,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
-        public void AddEdge(int from, int to)
+        public void AddUndirectedEdge(int from, int to)
         {
-            AddEdge(from, to, 0, 0);
+            AddUndirectedEdge(from, to, 0, 0);
         }
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edges weight</param>
-        public void AddEdge(int from, int to, float weight)
+        public void AddUndirectedEdge(int from, int to, float weight)
         {
-            AddEdge(from, to, weight, weight);
+            AddUndirectedEdge(from, to, weight, weight);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         /// <param name="weight0">The edge going from-to weight</param>
         /// <param name="weight1">The edge going to-from weigh</param>
-        public void AddEdge(int from, int to, float weight0, float weight1)
+        public void AddUndirectedEdge(int from, int to, float weight0, float weight1)
         {
             var edge = new GraphEdge();
             edge.From = from;

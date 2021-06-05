@@ -49,7 +49,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Add a edge to the graph.
         /// </summary>
-        public void AddEdge(GraphEdge edge)
+        public void AddDirectedEdge(GraphEdge edge)
         {
             AddEdgeInternal(edge);
         }
@@ -59,9 +59,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
-        public void AddEdge(int from, int to)
+        public void AddDirectedEdge(int from, int to)
         {
-            AddEdge(from, to, 0);
+            AddDirectedEdge(from, to, 0);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edge weight</param>
-        public void AddEdge(int from, int to, float weight)
+        public void AddDirectedEdge(int from, int to, float weight)
         {
             var edge = new GraphEdge();
             edge.From = from;
@@ -78,6 +78,53 @@ namespace Common.GraphTheory.AdjacencyGraphs
             edge.Weight = weight;
 
             AddEdgeInternal(edge);
+        }
+
+        /// <summary>
+        /// Add a undirected edge.
+        /// A undirected edge has a edge going both ways
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        public void AddUndirectedEdge(int from, int to)
+        {
+            AddUndirectedEdge(from, to, 0, 0);
+        }
+
+        /// <summary>
+        /// Add a undirected edge.
+        /// A undirected edge has a edge going both ways
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        /// <param name="weight">The edges weight</param>
+        public void AddUndirectedEdge(int from, int to, float weight)
+        {
+            AddUndirectedEdge(from, to, weight, weight);
+        }
+
+        /// <summary>
+        /// Add a undirected edge.
+        /// A undirected edge has a edge going both ways
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        /// <param name="weight0">The edge going from-to weight</param>
+        /// <param name="weight1">The edge going to-from weigh</param>
+        public void AddUndirectedEdge(int from, int to, float weight0, float weight1)
+        {
+            var edge = new GraphEdge();
+            edge.From = from;
+            edge.To = to;
+            edge.Weight = weight0;
+
+            var opposite = new GraphEdge();
+            opposite.From = to;
+            opposite.To = from;
+            opposite.Weight = weight1;
+
+            AddEdgeInternal(edge);
+            AddEdgeInternal(opposite);
         }
 
         /// <summary>
@@ -122,7 +169,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     var e0 = new GraphEdge(e.From, e.To, e.Weight);
                     var e1 = new GraphEdge(e.To, e.From, e.Weight);
 
-                    graph.AddEdge(e0, e1);
+                    graph.AddUndirectedEdge(e0, e1);
                 }
             }
 
