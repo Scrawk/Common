@@ -102,6 +102,7 @@ namespace Common.Core.Directions
             128
         };
 
+        /// <summary>
         /// The two adjacent directions.
         /// ADJACENT[LEFT, 0] == LEFT_BOTTOM
         /// ADJACENT[LEFT, 1] == LEFT_TOP

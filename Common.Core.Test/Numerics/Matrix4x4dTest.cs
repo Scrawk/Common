@@ -211,7 +211,7 @@ namespace Common.Core.Test.Numerics
 
         Matrix4x4d Random4x4(int seed)
         {
-            Random rnd = new Random(seed);
+            Random rnd = new RandomNum(seed);
             Matrix4x4d m = new Matrix4x4d();
 
             for (int i = 0; i < HALF_SIZE; i++)

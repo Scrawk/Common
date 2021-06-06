@@ -17,7 +17,7 @@ namespace Common.Console
         static void Main(string[] args)
         {
 
-            RandomnessTest.Run();
+            CONSOLE.WriteLine("Hello world");
 
         }
     }

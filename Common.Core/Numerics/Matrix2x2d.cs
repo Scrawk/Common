@@ -349,7 +349,7 @@ namespace Common.Core.Numerics
 
         /// <summary>
         /// Get the ith row as a vector.
-        /// </summar
+        /// </summary>
         public Vector2d GetRow(int iRow)
         {
 			return new Vector2d(this[iRow, 0], this[iRow, 1]);

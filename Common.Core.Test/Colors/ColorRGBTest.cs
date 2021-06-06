@@ -113,7 +113,7 @@ namespace Common.Core.Test.Colors
 
         ColorRGB Random(int seed)
         {
-            Random rnd = new Random(seed);
+            Random rnd = new RandomNum(seed);
             return new ColorRGB((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble());
         }
     }

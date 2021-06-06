@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common.Core.Random
+namespace Common.Core.RandomNum
 {
     /// <summary>
     /// A base class for generating a random number.

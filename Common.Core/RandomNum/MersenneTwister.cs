@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Common.Core.Random
+namespace Common.Core.RandomNum
 {
     /// <summary>
     /// The Mersenne Twister is a pseudorandom number generator (PRNG). 

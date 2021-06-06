@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-using Common.Core.Random;
+using Common.Core.RandomNum;
 
 namespace Common.Console.Core
 {

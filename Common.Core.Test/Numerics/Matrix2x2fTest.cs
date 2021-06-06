@@ -193,7 +193,7 @@ namespace Common.Core.Test.Numerics
 
         Matrix2x2f Random2x2(int seed)
         {
-            Random rnd = new Random(seed);
+            Random rnd = new RandomNum(seed);
             Matrix2x2f m = new Matrix2x2f();
 
             for (int i = 0; i < HALF_SIZE; i++)

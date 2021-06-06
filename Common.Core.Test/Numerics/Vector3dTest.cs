@@ -208,7 +208,7 @@ namespace Common.Core.Test.Numerics
 
         VECTOR Random3(int seed)
         {
-            Random rnd = new Random(seed);
+            Random rnd = new RandomNum(seed);
             return new VECTOR(rnd.NextDouble(), rnd.NextDouble(), rnd.NextDouble());
         }
 

@@ -7,12 +7,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>F:\Projects\Visual Studio Projects\Common\Common.Core\bin\Release\Common.Core.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\Justin Hawkins\Documents\Visual Studio 2019\Common\Common.GraphTheory\bin\Release\Common.Core.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.dll&quot; &quot;F:\Projects\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.pdb&quot; &quot;F:\Projects\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.xml&quot; &quot;F:\Projects\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;" />
+    <Exec Command="xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.dll&quot; &quot;C:\Users\Justin Hawkins\Documents\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.pdb&quot; &quot;C:\Users\Justin Hawkins\Documents\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Core.xml&quot; &quot;C:\Users\Justin Hawkins\Documents\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;" />
   </Target>
 </Project>

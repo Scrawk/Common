@@ -399,7 +399,6 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
-        /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

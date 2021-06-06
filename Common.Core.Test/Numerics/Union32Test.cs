@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Common.Core.Data;
+using Common.Core.Numerics;
 
-namespace Common.Core.Test.Data
+namespace Common.Core.Test.Numerics
 {
     [TestClass]
     public class Union32Test

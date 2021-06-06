@@ -98,7 +98,7 @@ namespace Common.Core.Test.Colors
 
         ColorRGBA Random(int seed)
         {
-            Random rnd = new Random(seed);
+            Random rnd = new RandomNum(seed);
             return new ColorRGBA((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble());
         }
     }
