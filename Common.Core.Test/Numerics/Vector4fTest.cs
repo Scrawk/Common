@@ -155,7 +155,7 @@ namespace Common.Core.Test.Numerics
 
         VECTOR Random4(int seed)
         {
-            Random rnd = new RandomNum(seed);
+            Random rnd = new Random(seed);
             return new VECTOR(rnd.NextFloat(), rnd.NextFloat(), rnd.NextFloat(), rnd.NextFloat());
         }
 

@@ -16,7 +16,7 @@ namespace Common.Core.Test.IO
         [TestMethod]
         public void SaveLoad_32Bit()
         {
-            Random rnd = new RandomNum(0);
+            Random rnd = new Random(0);
 
             int size = 1024;
 
@@ -46,7 +46,7 @@ namespace Common.Core.Test.IO
         [TestMethod]
         public void StaticSaveLoad_32Bit()
         {
-            Random rnd = new RandomNum(0);
+            Random rnd = new Random(0);
 
             int size = 1024;
             float[] data = new float[size];
@@ -67,7 +67,7 @@ namespace Common.Core.Test.IO
         [TestMethod]
         public void SaveLoad_16Bit()
         {
-            Random rnd = new RandomNum(0);
+            Random rnd = new Random(0);
 
             int size = 1024;
 
@@ -97,7 +97,7 @@ namespace Common.Core.Test.IO
         [TestMethod]
         public void StaticSaveLoad_16Bit()
         {
-            Random rnd = new RandomNum(0);
+            Random rnd = new Random(0);
 
             int size = 1024;
             float[] data = new float[size];
@@ -118,7 +118,7 @@ namespace Common.Core.Test.IO
         [TestMethod]
         public void SaveLoad_8Bit()
         {
-            Random rnd = new RandomNum(0);
+            Random rnd = new Random(0);
 
             int size = 1024;
 
@@ -148,7 +148,7 @@ namespace Common.Core.Test.IO
         [TestMethod]
         public void StaticSaveLoad_8Bit()
         {
-            Random rnd = new RandomNum(0);
+            Random rnd = new Random(0);
 
             int size = 1024;
             float[] data = new float[size];

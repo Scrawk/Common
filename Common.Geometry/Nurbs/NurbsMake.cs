@@ -390,7 +390,7 @@ namespace Common.Geometry.Nurbs
 
 		/// <summary>
 		/// Generate the control points, weights, and knots of an elliptical arc.
-		/// (Corresponds to Algorithm A7.1 from Piegl & Tiller)
+		/// (Corresponds to Algorithm A7.1 from Piegl and Tiller)
 		/// </summary>
 		/// <param name="center"></param>
 		/// <param name="xradius">the x radius</param>
@@ -495,7 +495,7 @@ namespace Common.Geometry.Nurbs
 
 		/// <summary>
 		/// Generate the control points, weights, and knots of an elliptical arc.
-		/// (Corresponds to Algorithm A7.1 from Piegl & Tiller)
+		/// (Corresponds to Algorithm A7.1 from Piegl and Tiller)
 		/// </summary>
 		/// <param name="center"></param>
 		/// <param name="xradius">the x radius</param>

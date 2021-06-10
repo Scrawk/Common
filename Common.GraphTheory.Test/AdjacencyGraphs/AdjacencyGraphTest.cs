@@ -104,8 +104,9 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = CreateVectorDirectedGraph();
 
-            var path = graph.AStar(7, 0, DistanceFunc);
+            var path = graph.AStar(0, 0, DistanceFunc);
 
+            /*
             if(path.Count > 0)
             {
                 foreach (var i in path)
@@ -115,7 +116,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             {
                 Console.WriteLine("Path not found");
             }
-
+            */
         }
 
         private float DistanceFunc(GraphVertex a, GraphVertex b)

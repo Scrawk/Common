@@ -197,7 +197,7 @@ namespace Common.Core.Test.Numerics
 
         Matrix3x3f Random3x3(int seed)
         {
-            Random rnd = new RandomNum(seed);
+            Random rnd = new Random(seed);
             Matrix3x3f m = new Matrix3x3f();
 
             for (int i = 0; i < HALF_SIZE; i++)

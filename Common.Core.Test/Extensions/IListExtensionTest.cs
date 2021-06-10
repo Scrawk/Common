@@ -15,7 +15,7 @@ namespace Common.Core.Test.Extensions
             for (int i = 0; i < 10; i++)
                 array[i] = i;
 
-            Random rnd = new RandomNum(0);
+            Random rnd = new Random(0);
             array.Shuffle(rnd);
 
             int[] result = new int[]

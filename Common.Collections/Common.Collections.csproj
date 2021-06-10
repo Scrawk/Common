@@ -6,12 +6,12 @@
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Users\Justin Hawkins\Documents\Visual Studio 2019\Common\Common.GraphTheory\bin\Release\Common.Collections.xml</DocumentationFile>
+    <DocumentationFile>F:\Projects\Visual Studio Projects\Common\Common.Collections\bin\Release\Common.Collections.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Core\Common.Core.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Collections.dll&quot; &quot;C:\Users\Justin Hawkins\Documents\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Collections.pdb&quot; &quot;C:\Users\Justin Hawkins\Documents\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Collections.xml&quot; &quot;C:\Users\Justin Hawkins\Documents\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;" />
+    <Exec Command="xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Collections.dll&quot; &quot;F:\Projects\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Collections.pdb&quot; &quot;F:\Projects\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)bin\$(ConfigurationName)\netstandard2.0\Common.Collections.xml&quot; &quot;F:\Projects\Unity Projects\CommonUnity\Assets\Common\Plugins&quot; /y&#xD;&#xA;" />
   </Target>
 </Project>

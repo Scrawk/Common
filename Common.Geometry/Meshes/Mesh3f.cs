@@ -91,7 +91,6 @@ namespace Common.Meshes
         /// <summary>
         /// Create the position array.
         /// </summary>
-        /// <param name="indices">Array to copy from.</param>
         public void SetPositions(IList<VECTOR3> positions)
         {
             CreatePositions(positions.Count);
@@ -101,7 +100,6 @@ namespace Common.Meshes
         /// <summary>
         /// Creates the normals array.
         /// </summary>
-        /// <param name="size">The size of the array.</param>
         public void CreateNormals()
         {
             int size = PositionCount;
@@ -112,7 +110,6 @@ namespace Common.Meshes
         /// <summary>
         /// Create the normal array.
         /// </summary>
-        /// <param name="indices">Array to copy from.</param>
         public void SetNormals(IList<VECTOR3> normals)
         {
             if (normals.Count != PositionCount)
@@ -125,7 +122,6 @@ namespace Common.Meshes
         /// <summary>
         /// Creates the uv array.
         /// </summary>
-        /// <param name="size">The size of the array.</param>
         public void CreateTexCoords()
         {
             int size = PositionCount;
@@ -136,7 +132,6 @@ namespace Common.Meshes
         /// <summary>
         /// Create the uv array.
         /// </summary>
-        /// <param name="indices">Array to copy from.</param>
         public void SetTexCoords(IList<VECTOR2> texCoords)
         {
             if (texCoords.Count != PositionCount)

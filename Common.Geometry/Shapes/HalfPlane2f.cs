@@ -10,7 +10,7 @@ namespace Common.Geometry.Shapes
     /// <summary>
     /// Represents a halfplane by means of the boundary line
     /// ax + by = c, where one accepts that
-    /// for the halfplane ax + by + c <= 0 holds.
+    /// for the halfplane ax + by + c less tha or equal 0 holds.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]

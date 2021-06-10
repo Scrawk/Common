@@ -14,7 +14,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="degree">Degree of the curve.</param>
 		/// <param name="knots">Knot vector of the curve.</param>
 		/// <param name="u">Parameter value.</param>
-		/// <returns>Span index into the knot vector such that (span - 1) < u <= span</returns>
+		/// <returns>Span index into the knot vector such that (span - 1) less than u less tha or equal span</returns>
 		internal static int FindSpan(int degree, IList<double> knots, double u)
 		{
 			// index of last control point
@@ -141,7 +141,7 @@ namespace Common.Geometry.Nurbs
 		/// <param name="span">Index obtained from findSpan() corresponding the u and knots.</param>
 		/// <param name="knots">Knot vector corresponding to the basis functions.</param>
 		/// <param name="u">Parameter to evaluate the basis functions at.</param>
-		/// <param name="num_ders">Number of derivatives to compute (num_ders <= deg)</param>
+		/// <param name="num_ders">Number of derivatives to compute (num_ders less tha or equal deg)</param>
 		/// <returns>Values of non-zero derivatives of basis functions.</returns>
 		internal static double[,] BSplineDerBasis(int deg, int span, IList<double> knots, double u, int num_ders)
 		{

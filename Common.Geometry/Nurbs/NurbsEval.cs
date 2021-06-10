@@ -59,7 +59,7 @@ namespace Common.Geometry.Nurbs
 
 		/// <summary>
 		/// Evaluate derivatives of a non-rational NURBS curve
-		/// E.g. curve_ders[n] is the nth derivative at u, where 0 <= n <= num_ders.
+		/// E.g. curve_ders[n] is the nth derivative at u, where 0 less than n less than or equal num_ders.
 		/// </summary>
 		/// <param name="crv">Curve object</param>
 		/// <param name="num_ders">Number of times to derivate.</param>
@@ -113,7 +113,7 @@ namespace Common.Geometry.Nurbs
 
 		/// <summary>
 		/// Evaluate derivatives of a non-rational NURBS curve
-		/// E.g. curve_ders[n] is the nth derivative at u, where 0 <= n <= num_ders.
+		/// E.g. curve_ders[n] is the nth derivative at u, where 0 less or equal than n less than or equal num_ders.
 		/// </summary>
 		/// <param name="crv">Curve object</param>
 		/// <param name="num_ders">Number of times to derivate.</param>

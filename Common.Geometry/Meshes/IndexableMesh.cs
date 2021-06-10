@@ -43,7 +43,6 @@ namespace Common.Meshes
         /// <summary>
         /// Creates the color array.
         /// </summary>
-        /// <param name="size">The size of the array.</param>
         public void CreateColors()
         {
             int size = PositionCount;
@@ -54,7 +53,7 @@ namespace Common.Meshes
         /// <summary>
         /// Create the color array.
         /// </summary>
-        /// <param name="indices">Array to copy from.</param>
+        /// <param name="colors">Array to copy from.</param>
         public void SetColors(IList<ColorRGBA> colors)
         {
             if (colors.Count != PositionCount)

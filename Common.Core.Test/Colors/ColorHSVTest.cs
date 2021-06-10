@@ -96,7 +96,7 @@ namespace Common.Core.Test.Colors
 
         ColorHSV Random(int seed)
         {
-            Random rnd = new RandomNum(seed);
+            Random rnd = new Random(seed);
             return new ColorHSV((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble());
         }
     }
