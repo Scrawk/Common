@@ -443,23 +443,27 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Vector from a string.
+        /// Convert from a string.
         /// </summary>
-        static public Vector2d FromString(string s)
+        /// <param name="text">A string in fromat x,y,z</param>
+        /// <returns>A vector</returns>
+        public static Vector2d FromString(string text)
         {
-            Vector2d v = new Vector2d();
+            text = text.RemoveWhitespaces();
+            var split = text.Split(',');
 
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
+            if (split.Length != 2)
+                throw new Exception("Vector text must contain 2 numbers.");
 
-                v.x = REAL.Parse(result[0]);
-                v.y = REAL.Parse(result[1]);
-            }
-            catch { }
+            REAL x, y;
 
-            return v;
+            if (!REAL.TryParse(split[0], out x))
+                throw new Exception("x value is not a double.");
+
+            if (!REAL.TryParse(split[1], out y))
+                throw new Exception("y value is not a double.");
+
+            return new Vector2d(x, y);
         }
 
         /// <summary>

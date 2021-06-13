@@ -404,6 +404,36 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert from a string.
+        /// </summary>
+        /// <param name="text">A string in fromat x,y,z,w</param>
+        /// <returns>A vector</returns>
+        public static Vector4i FromString(string text)
+        {
+            text = text.RemoveWhitespaces();
+            var split = text.Split(',');
+
+            if (split.Length != 4)
+                throw new Exception("Vector text must contain 4 numbers.");
+
+            REAL x, y, z, w;
+
+            if (!REAL.TryParse(split[0], out x))
+                throw new Exception("x value is not a int.");
+
+            if (!REAL.TryParse(split[1], out y))
+                throw new Exception("y value is not a int.");
+
+            if (!REAL.TryParse(split[2], out z))
+                throw new Exception("z value is not a int.");
+
+            if (!REAL.TryParse(split[3], out w))
+                throw new Exception("w value is not a int.");
+
+            return new Vector4i(x, y, z, w);
+        }
+
+        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

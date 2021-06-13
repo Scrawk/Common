@@ -384,24 +384,28 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Vector from a string.
+        /// Convert from a string.
         /// </summary>
-        public static Vector2i FromString(string s)
-		{
-            Vector2i v = new Vector2i();
+        /// <param name="text">A string in fromat x,y</param>
+        /// <returns>A vector</returns>
+        public static Vector2i FromString(string text)
+        {
+            text = text.RemoveWhitespaces();
+            var split = text.Split(',');
 
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
+            if (split.Length != 2)
+                throw new Exception("Vector text must contain 2 numbers.");
 
-                v.x = REAL.Parse(result[0]);
-                v.y = REAL.Parse(result[1]);
-            }
-            catch { }
+            REAL x, y;
 
-			return v;
-		}
+            if (!REAL.TryParse(split[0], out x))
+                throw new Exception("x value is not a int.");
+
+            if (!REAL.TryParse(split[1], out y))
+                throw new Exception("y value is not a int.");
+
+            return new Vector2i(x, y);
+        }
 
         /// <summary>
         /// The dot product of two vectors.

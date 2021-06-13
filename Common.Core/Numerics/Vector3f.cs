@@ -478,6 +478,33 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert from a string.
+        /// </summary>
+        /// <param name="text">A string in fromat x,y,z</param>
+        /// <returns>A vector</returns>
+        public static Vector3f FromString(string text)
+        {
+            text = text.RemoveWhitespaces();
+            var split = text.Split(',');
+
+            if (split.Length != 3)
+                throw new Exception("Vector text must contain 3 numbers.");
+
+            REAL x, y, z;
+
+            if (!REAL.TryParse(split[0], out x))
+                throw new Exception("x value is not a float.");
+
+            if (!REAL.TryParse(split[1], out y))
+                throw new Exception("y value is not a float.");
+
+            if (!REAL.TryParse(split[2], out z))
+                throw new Exception("z value is not a float.");
+
+            return new Vector3f(x, y, z);
+        }
+
+        /// <summary>
         /// Vector as a string.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

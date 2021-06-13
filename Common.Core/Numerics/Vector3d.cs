@@ -476,25 +476,31 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Vector from a string.
+        /// Convert from a string.
         /// </summary>
-        static public Vector3d FromString(string s)
-		{
-            Vector3d v = new Vector3d();
+        /// <param name="text">A string in fromat x,y,z</param>
+        /// <returns>A vector</returns>
+        public static Vector3d FromString(string text)
+        {
+            text = text.RemoveWhitespaces();
+            var split = text.Split(',');
 
-            try
-            {
-                string[] separators = new string[] { "," };
-                string[] result = s.Split(separators, StringSplitOptions.None);
+            if (split.Length != 3)
+                throw new Exception("Vector text must contain 3 numbers.");
 
-                v.x = REAL.Parse(result[0]);
-                v.y = REAL.Parse(result[1]);
-                v.z = REAL.Parse(result[2]);
-            }
-            catch { }
-			
-			return v;
-		}
+            REAL x, y, z;
+
+            if (!REAL.TryParse(split[0], out x))
+                throw new Exception("x value is not a double.");
+
+            if (!REAL.TryParse(split[1], out y))
+                throw new Exception("y value is not a double.");
+
+            if (!REAL.TryParse(split[2], out z))
+                throw new Exception("z value is not a double.");
+
+            return new Vector3d(x, y, z);
+        }
 
         /// <summary>
         /// The dot product of two vectors.

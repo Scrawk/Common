@@ -453,6 +453,30 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert from a string.
+        /// </summary>
+        /// <param name="text">A string in fromat x,y</param>
+        /// <returns>A vector</returns>
+        public static Vector2f FromString(string text)
+        {
+            text = text.RemoveWhitespaces();
+            var split = text.Split(',');
+
+            if (split.Length != 2)
+                throw new Exception("Vector text must contain 2 numbers.");
+
+            REAL x, y;
+
+            if (!REAL.TryParse(split[0], out x))
+                throw new Exception("x value is not a float.");
+
+            if (!REAL.TryParse(split[1], out y))
+                throw new Exception("y value is not a float.");
+
+            return new Vector2f(x, y);
+        }
+
+        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

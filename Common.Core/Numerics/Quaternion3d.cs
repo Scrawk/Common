@@ -270,6 +270,36 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert from a string.
+        /// </summary>
+        /// <param name="text">A string in fromat x,y,z,w</param>
+        /// <returns>A vector</returns>
+        public static Quaternion3d FromString(string text)
+        {
+            text = text.RemoveWhitespaces();
+            var split = text.Split(',');
+
+            if (split.Length != 4)
+                throw new Exception("Quaternion text must contain 4 numbers.");
+
+            REAL x, y, z, w;
+
+            if (!REAL.TryParse(split[0], out x))
+                throw new Exception("x value is not a double.");
+
+            if (!REAL.TryParse(split[1], out y))
+                throw new Exception("y value is not a double.");
+
+            if (!REAL.TryParse(split[2], out z))
+                throw new Exception("z value is not a double.");
+
+            if (!REAL.TryParse(split[3], out w))
+                throw new Exception("w value is not a double.");
+
+            return new Quaternion3d(x, y, z, w);
+        }
+
+        /// <summary>
         /// Convert to a single precision 3 dimension matrix.
         /// </summary>
         public MATRIX3 ToMatrix3x3d()
