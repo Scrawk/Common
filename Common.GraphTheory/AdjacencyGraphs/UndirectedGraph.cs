@@ -67,9 +67,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
-        public void AddUndirectedEdge(int from, int to)
+        public GraphEdge AddUndirectedEdge(int from, int to)
         {
-            AddUndirectedEdge(from, to, 0, 0);
+            return AddUndirectedEdge (from, to, 0, 0);
         }
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edges weight</param>
-        public void AddUndirectedEdge(int from, int to, float weight)
+        public GraphEdge AddUndirectedEdge(int from, int to, float weight)
         {
-            AddUndirectedEdge(from, to, weight, weight);
+            return AddUndirectedEdge(from, to, weight, weight);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         /// <param name="weight0">The edge going from-to weight</param>
         /// <param name="weight1">The edge going to-from weigh</param>
-        public void AddUndirectedEdge(int from, int to, float weight0, float weight1)
+        public GraphEdge AddUndirectedEdge(int from, int to, float weight0, float weight1)
         {
             var edge = new GraphEdge();
             edge.From = from;
@@ -106,6 +106,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             AddEdgeInternal(edge);
             AddEdgeInternal(opposite);
+
+            return edge;
         }
 
         /// <summary>

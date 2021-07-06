@@ -143,6 +143,17 @@ namespace Common.Geometry.Shapes
                 yield return new Vector2i(Min.x, y);
         }
 
+        public IEnumerable<Vector2i> EnumerateBounds()
+        {
+            for (int y = Min.y; y < Max.y; y++)
+            {
+                for (int x = Min.x; x < Max.x; x++)
+                {
+                    yield return new Vector2i(x, y);
+                }
+            }
+        }
+
         public override bool Equals(object obj)
         {
             if (!(obj is Box2i)) return false;
