@@ -482,10 +482,10 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Point3f Rounded(int digits = 0)
         {
-            x = MathUtil.Round(this.x, digits);
-            y = MathUtil.Round(this.y, digits);
-            z = MathUtil.Round(this.z, digits);
-            return new Point3f(x, y, z);
+            var _x = MathUtil.Round(x, digits);
+            var _y = MathUtil.Round(y, digits);
+            var _z = MathUtil.Round(z, digits);
+            return new Point3f(_x, _y, _z);
         }
 
         /// <summary>

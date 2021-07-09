@@ -460,9 +460,9 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Point2f Rounded(int digits = 0)
         {
-            x = MathUtil.Round(this.x, digits);
-            y = MathUtil.Round(this.y, digits);
-            return new Point2f(x, y);
+            var _x = MathUtil.Round(x, digits);
+            var _y = MathUtil.Round(y, digits);
+            return new Point2f(_x, _y);
         }
 
         /// <summary>
