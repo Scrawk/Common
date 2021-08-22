@@ -43,11 +43,6 @@ namespace Common.Collections.Queues
         }
 
         /// <summary>
-        /// Optional comparer to use.
-        /// </summary>
-        public IComparer<T> Comparer { get; set; }
-
-        /// <summary>
         /// Creates a new binary heap.
         /// </summary>
         public BinaryHeap()
@@ -205,18 +200,12 @@ namespace Common.Collections.Queues
 
         /// <summary>
         /// Find the index of the item in the list.
-        /// This utilizes the type T's Comparer 
-        /// and will consider items 
-        /// the same order the same object.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         private int IndexOfValue(T value)
         {
-            if (Comparer != null)
-                return Array.BinarySearch<T>(m_data, 0, Count, value, Comparer);
-            else
-                return Array.BinarySearch<T>(m_data, 0, Count, value);
+            return Array.BinarySearch<T>(m_data, 0, Count, value);
         }
 
         /// <summary>
@@ -290,10 +279,7 @@ namespace Common.Collections.Queues
         {
             if (m_sorted) return;
 
-            if(Comparer != null)
-                Array.Sort(m_data, 0, Count, Comparer);
-            else
-                Array.Sort(m_data, 0, Count);
+           Array.Sort(m_data, 0, Count);
 
             m_sorted = true;
         }
@@ -330,8 +316,11 @@ namespace Common.Collections.Queues
         /// <returns></returns>
         private int Compare(T item1, T item2)
         {
-            if (Comparer != null)
-                return Comparer.Compare(item1, item2);
+            var c1 = item1 as IComparable<T>;
+            var c2 = item2 as IComparable<T>;
+
+            if (c1 != null && c2 != null)
+                return c1.CompareTo(item2);
             else
                 return Comparer<T>.Default.Compare(item1, item2);
         }

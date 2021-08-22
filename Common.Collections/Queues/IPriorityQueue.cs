@@ -13,11 +13,6 @@ namespace Common.Collections.Queues
     {
 
         /// <summary>
-        /// Optional comparer to use.
-        /// </summary>
-        IComparer<T> Comparer { get; set; }
-
-        /// <summary>
         /// The number of items in queue.
         /// </summary>
         int Count { get; }
