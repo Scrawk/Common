@@ -455,13 +455,41 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// Create a palette of colors..
+        /// </summary>
+        /// <returns></returns>
+        public static ColorRGB[] Palette()
+        {
+            var palette = new ColorRGB[]
+            {
+                Red,
+                Orange,
+                Olive,
+                VividGreen,
+                Yellow,
+                Green,
+                SpringGreen,
+                Cyan,
+                Azure,
+                Teal,
+                Blue,
+                Indigo,
+                Violet,
+                Purple,
+                Magenta,
+            };
+
+            return palette;
+        }
+
+        /// <summary>
         /// Create a custom palette of hues with the same saturation and value.
         /// </summary>
         /// <param name="hues">The number of hues in the palette.</param>
         /// <param name="saturation">The saturation of the colors.</param>
         /// <param name="value">The values of the colors.</param>
         /// <returns></returns>
-        public static ColorRGB[] CustomPalatte(int hues, float saturation, float value)
+        public static ColorRGB[] CustomPalette(int hues, float saturation, float value)
         {
             var palette = new ColorRGB[hues];
             for(int i = 0; i < hues; i++)
