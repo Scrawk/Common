@@ -10,9 +10,9 @@ namespace Common.Collections.DCEL
     public partial class DCELFace
     {
 
-        internal DCELFace()
+        internal DCELFace(int index)
         {
-
+            Index = index;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// The faces index in the mesh.
         /// </summary>
-        public int Index { get; internal set; }
+        public int Index { get; private set; }
 
         /// <summary>
         /// The edge this face connects to. 
@@ -64,6 +64,7 @@ namespace Common.Collections.DCEL
         {
             Data = null;
             Edge = null;
+            Index = -1;
         }
 
     }

@@ -20,6 +20,36 @@ namespace Common.Collections.DCEL
         }
 
         /// <summary>
+        /// The number of vertices in the mesh.
+        /// </summary>
+        public int VertexCount { get; private set; }
+
+        /// <summary>
+        /// The number of edges in the mesh.
+        /// </summary>
+        public int EdgeCount { get; private set; }
+
+        /// <summary>
+        /// The number of faces in the mesh.
+        /// </summary>
+        public int FaceCount { get; private set; }
+
+        /// <summary>
+        /// The vertex capacity in the mesh.
+        /// </summary>
+        public int VertexCapacity => Vertices.Capacity;
+
+        /// <summary>
+        /// The edge capacity in the mesh.
+        /// </summary>
+        public int EdgeCapacity => Edges.Capacity;
+
+        /// <summary>
+        /// The face capacity in the mesh.
+        /// </summary>
+        public int FaceCapacity => Faces.Capacity;
+
+        /// <summary>
         /// All the vertices in the mesh.
         /// </summary>
         private List<DCELVertex> Vertices { get; set; }
@@ -41,7 +71,7 @@ namespace Common.Collections.DCEL
         public override string ToString()
         {
             return string.Format("[DCELMesh: Vertices={0}, Edges={1}, Faces={2}]",
-                Vertices.Count, Edges.Count, Faces.Count);
+                VertexCount, EdgeCount, FaceCount);
         }
 
         /// <summary>
@@ -147,6 +177,136 @@ namespace Common.Collections.DCEL
             Vertices.Clear();
             Edges.Clear();
             Faces.Clear();
+        }
+
+        /// <summary>
+        /// Get the next index to add a new vertex.
+        /// </summary>
+        /// <returns>The index in the list to add the vertex.</returns>
+        private int NextVertexIndex()
+        {
+            Vertices.Add(null);
+            return Vertices.Count - 1;
+        }
+
+        /// <summary>
+        /// Get the next index to add a new edge.
+        /// </summary>
+        /// <returns>The index in the list to add the edge.</returns>
+        private int NextEdgeIndex()
+        {
+            Edges.Add(null);
+            return Edges.Count - 1;
+        }
+
+        /// <summary>
+        /// Get the next index to add a new face.
+        /// </summary>
+        /// <returns>The index in the list to add the face.</returns>
+        private int NextFaceIndex()
+        {
+            Faces.Add(null);
+            return Faces.Count - 1;
+        }
+
+        /// <summary>
+        /// Add a new vertex to the mesh.
+        /// </summary>
+        /// <param name="point">The vertices point.</param>
+        /// <returns>The new vertex.</returns>
+        public DCELVertex InsertVertex(Vector2d point)
+        {
+            int i = NextVertexIndex();
+            var vert = new DCELVertex(i, point);
+
+            Vertices[i] = vert;
+            VertexCount++;
+
+            return vert;
+        }
+
+        /// <summary>
+        /// Add a new edge connecting the two vertices.
+        /// </summary>
+        /// <returns>The new edge that goes from v0 and to v1.</returns>
+        public DCELHalfedge InsertEdge(DCELVertex v0, DCELVertex v1)
+        {
+            if (v0 == v1)
+                throw new Exception("Can not connect the same vertex objects.");
+
+            if (v0.Point == v1.Point)
+                throw new Exception("Can not connect the same vertex positions.");
+
+            int count0 = v0.EdgeCount;
+            int count1 = v1.EdgeCount;
+
+            int i = NextEdgeIndex();
+  
+            var e0 = new DCELHalfedge(i);
+            var e1 = new DCELHalfedge(i);
+            e0.Opposite = e1;
+            e1.Opposite = e0;
+
+            if (count0 == 0 && count1 == 0)
+            {
+
+            }
+            else if (count0 <= 1 && count1 <= 1)
+            {
+                DCELHalfedge.SetPrevious(e0, v0.Edge?.Opposite);
+                DCELHalfedge.SetNext(e0, v1?.Edge);
+
+                DCELHalfedge.SetPrevious(e1, v1.Edge?.Opposite);
+                DCELHalfedge.SetNext(e1, v0?.Edge);
+            }
+            else if (count0 > 1 && count1 <= 1)
+            {
+                var edge = v0.FindInBetweenEdges(v1.Point);
+                var previous = edge.Previous;
+
+                DCELHalfedge.SetPrevious(e0, previous);
+                DCELHalfedge.SetNext(e0, v1?.Edge);
+
+                DCELHalfedge.SetPrevious(e1, v1.Edge?.Opposite);
+                DCELHalfedge.SetNext(e1, edge);
+            }
+            else if (count0 <= 1 && count1 > 1)
+            {
+                var edge = v1.FindInBetweenEdges(v0.Point);
+                var previous = edge.Previous;
+
+                DCELHalfedge.SetPrevious(e0, v0.Edge?.Opposite);
+                DCELHalfedge.SetNext(e0, edge);
+
+                DCELHalfedge.SetPrevious(e1, previous);
+                DCELHalfedge.SetNext(e1, v0?.Edge);
+            }
+            else if (count0 > 1 && count1 > 1)
+            {
+                var edge0 = v0.FindInBetweenEdges(v1.Point);
+                var previous0 = edge0.Previous;
+
+                var edge1 = v1.FindInBetweenEdges(v0.Point);
+                var previous1 = edge1.Previous;
+
+                DCELHalfedge.SetPrevious(e0, previous0);
+                DCELHalfedge.SetNext(e0, edge1);
+
+                DCELHalfedge.SetPrevious(e1, previous1);
+                DCELHalfedge.SetNext(e1, edge0);
+            }
+            else
+            {
+                throw new Exception("Unhandled case connecting vertices.");
+            }
+
+            DCELHalfedge.SetFrom(e0, v0);
+            DCELHalfedge.SetFrom(e1, v1);
+
+            Edges[i] = e0;
+            EdgeCount++;
+
+            return e0;
         }
 
         /// <summary>
@@ -296,7 +456,7 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// Translate all vertices.
         /// </summary>
-        public void Translate(Vector3d translate)
+        public void Translate(Vector2d translate)
         {
             foreach (var vert in EnumerateVertices())
                 vert.Point += translate;
@@ -306,7 +466,7 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// Scale all vertices.
         /// </summary>
-        public void Scale(Vector3d scale)
+        public void Scale(Vector2d scale)
         {
             foreach (var vert in EnumerateVertices())
                 vert.Point *= scale;
@@ -316,19 +476,10 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// Transform all vertices.
         /// </summary>
-        public void Transform(Matrix3x3d matrix)
-        {
-            foreach (var vert in EnumerateVertices())
-                vert.Point = matrix * vert.Point;
-        }
-
-        /// <summary>
-        /// Transform all vertices.
-        /// </summary>
         public void Transform(Matrix4x4d matrix)
         {
             foreach (var vert in EnumerateVertices())
-                vert.Point = (matrix * vert.Point.xyz1).xyz;
+                vert.Point = (matrix * vert.Point.xy01).xy;
         }
 
     }

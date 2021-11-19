@@ -12,12 +12,9 @@ namespace Common.Collections.DCEL
     public partial class DCELHalfedge
     {
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        internal DCELHalfedge()
+        internal DCELHalfedge(int index)
         {
-
+            Index = index;
         }
 
         /// <summary>
@@ -28,7 +25,7 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// The edges index in the mesh.
         /// </summary>
-        public int Index { get; internal set; }
+        public int Index { get; private set; }
 
         /// <summary>
         /// The vertex the edge starts from.
@@ -235,12 +232,12 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// The length of the edge.
         /// </summary>
-        public double Length => Vector3d.Distance(From.Point, To.Point);
+        public double Length => Vector2d.Distance(From.Point, To.Point);
 
         /// <summary>
         /// The square length of the edge.
         /// </summary>
-        public double SqrLength => Vector3d.SqrDistance(From.Point, To.Point);
+        public double SqrLength => Vector2d.SqrDistance(From.Point, To.Point);
 
         /// <summary>
         /// Clear edge of all connections.
@@ -252,6 +249,7 @@ namespace Common.Collections.DCEL
             Next = null;
             Previous = null;
             Opposite = null;
+            Index = -1;
         }
 
         /// <summary>

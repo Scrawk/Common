@@ -12,20 +12,16 @@ namespace Common.Collections.DCEL
     public partial class DCELVertex
     {
 
-        internal DCELVertex()
+        internal DCELVertex(int index, Vector2d point)
         {
-
-        }
-
-        internal DCELVertex(Vector3d point)
-        {
+            Index = index;
             Point = point;
         }
 
         /// <summary>
         /// The vertex position.
         /// </summary>
-        public Vector3d Point;
+        public Vector2d Point;
 
         /// <summary>
         /// Used for temporary making the vertex.
@@ -35,7 +31,7 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// The vertices index in the mesh.
         /// </summary>
-        public int Index { get; internal set; }
+        public int Index { get; private set; }
 
         /// <summary>
         /// The vertex edge.
@@ -80,6 +76,7 @@ namespace Common.Collections.DCEL
         {
             Data = null;
             Edge = null;
+            Index = -1;
         }
 
         /// <summary>
@@ -122,6 +119,46 @@ namespace Common.Collections.DCEL
                 e = e.Previous.Opposite;
             }
             while (!ReferenceEquals(start, e));
+        }
+
+        /// <summary>
+        /// Find which two edges belonging to this vertex
+        /// the point b is inbetween.
+        /// </summary>
+        /// <param name="b">Any position.</param>
+        /// <returns>The edge where b is between and previous.</returns>
+        internal DCELHalfedge FindInBetweenEdges(Vector2d b)
+        {
+            Vector2d zero = Vector2d.Zero;
+
+            foreach (var e in EnumerateEdges())
+            {
+                if (e.Previous == null)
+                    throw new BetweenEdgeNotFoundException("e.Previous == null");
+
+                if (e.Opposite == null)
+                    throw new BetweenEdgeNotFoundException("e.Opposite == null");
+
+                var a = e.From.Point;
+
+                var ab = a - b;
+                var a0 = a - e.Previous.From.Point;
+                var a1 = a - e.Opposite.From.Point;
+
+                ab.Normalize();
+                a0.Normalize();
+                a1.Normalize();
+
+                if (DCELGeometry.Collinear(a0, zero, a1) && DCELGeometry.Collinear(a0, zero, ab))
+                    throw new BetweenEdgeNotFoundException("Collinear");
+
+                if (DCELGeometry.InCone(a0, zero, a1, ab))
+                    return e;
+            }
+
+            //Will happen if b collinear to a edge around the vertex
+            // or if b is same point as vertex.
+            throw new BetweenEdgeNotFoundException("Not found");
         }
 
 
