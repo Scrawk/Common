@@ -57,7 +57,7 @@ namespace Common.Collections.DCEL
         /// The number of edges connecting to this vertex.
         /// Edges must have a opposite member.
         /// </summary>
-        public int EdgeCount
+        public int Degree
         {
             get
             {
@@ -161,6 +161,31 @@ namespace Common.Collections.DCEL
             throw new BetweenEdgeNotFoundException("Not found");
         }
 
+        /// <summary>
+        /// Finds the edge that goes from this vert to the 
+        /// other vert or null if there is no such edge.
+        /// </summary>
+        /// <param name="v">The other vert.</param>
+        /// <returns>The connecting edge if found.</returns>
+        public DCELHalfedge FindConnectingEdge(DCELVertex v)
+        {
+            if (Edge == null) return null;
+            if (v.Edge == null) return null;
 
+            foreach (var e in EnumerateEdges())
+                if (e.To == v) return e;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Are these two vertices connected by a edge.
+        /// </summary>
+        /// <param name="v">The other vert.</param>
+        /// <returns>True is are connected by a edge</returns>
+        public bool AreConnected(DCELVertex v)
+        {
+            return FindConnectingEdge(v) != null;
+        }
     }
 }
