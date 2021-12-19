@@ -117,11 +117,6 @@ namespace Common.Geometry.Shapes
             return new Box3d(m * box.Min, m * box.Max);
         }
 
-        public static implicit operator Box3d(Box3i box)
-        {
-            return new Box3d(box.Min, box.Max);
-        }
-
         public static implicit operator Box3d(Box3f box)
         {
             return new Box3d(box.Min, box.Max);

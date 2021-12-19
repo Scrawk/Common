@@ -1,96 +1,78 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Numerics;
-
 using REAL = System.Single;
-using CIRCLE = Common.Geometry.Shapes.Sphere3f;
-using BOX = Common.Geometry.Shapes.Box3f;
 
-namespace Common.Geometry.Points
+namespace Common.Core.Numerics
 {
-    public interface IPoint3f
-    {
-        REAL x { get; set; }
-        REAL y { get; set; }
-        REAL z { get; set; }
-    }
-
-    /// <summary>
-    /// Generic helper class for common point operations.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public static class PointOps3f<T>
-        where T : IPoint3f
-    {
-        /// <summary>
-        /// The distance between two points.
-        /// </summary>
-        public static REAL Distance(T p0, T p1)
-        {
-            return MathUtil.SafeSqrt(SqrDistance(p0, p1));
-        }
-
-        /// <summary>
-        /// The square distance between two points.
-        /// </summary>
-        public static REAL SqrDistance(T p0, T p1)
-        {
-            var x = p0.x - p1.x;
-            var y = p0.y - p1.y;
-            var z = p0.z - p1.z;
-            return x * x + y * y + z * z;
-        }
-
-        /// <summary>
-        /// Does the circle contain the point.
-        /// </summary>
-        public static bool Contains(CIRCLE circle, T point)
-        {
-            var x = circle.Center.x - point.x;
-            var y = circle.Center.y - point.y;
-            var z = circle.Center.z - point.z;
-            return (x*x + y*y + z*z) <= circle.Radius2;
-        }
-
-        /// <summary>
-        /// Does the box contain the point.
-        /// </summary>
-        public static bool Contains(BOX box, T point)
-        {
-            if (point.x > box.Max.x || point.x < box.Min.x) return false;
-            if (point.y > box.Max.y || point.y < box.Min.y) return false;
-            if (point.z > box.Max.z || point.z < box.Min.z) return false;
-            return true;
-        }
-    }
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Point3f : IEquatable<Point3f>, IComparable<Point3f>, IPoint3f
+    public struct Point3f : IEquatable<Point3f>
     {
-        private REAL _x, _y, _z;
+        public REAL x, y, z;
 
-        public REAL x
-        {
-            get => _x;
-            set => _x = value;
-        }
+        /// <summary>
+        /// The unit x point.
+        /// </summary>
+	    public readonly static Point3f UnitX = new Point3f(1, 0, 0);
 
-        public REAL y
-        {
-            get => _y;
-            set => _y = value;
-        }
+        /// <summary>
+        /// The unit y point.
+        /// </summary>
+	    public readonly static Point3f UnitY = new Point3f(0, 1, 0);
 
-        public REAL z
-        {
-            get => _z;
-            set => _z = value;
-        }
+        /// <summary>
+        /// The unit z point.
+        /// </summary>
+        public readonly static Point3f UnitZ = new Point3f(0, 0, 1);
+
+        /// <summary>
+        /// A point of zeros.
+        /// </summary>
+	    public readonly static Point3f Zero = new Point3f(0);
+
+        /// <summary>
+        /// A point of ones.
+        /// </summary>
+	    public readonly static Point3f One = new Point3f(1);
+
+        /// <summary>
+        /// A point of 0.5.
+        /// </summary>
+        public readonly static Point3f Half = new Point3f(0.5f);
+
+        /// <summary>
+        /// A point of positive infinity.
+        /// </summary>
+        public readonly static Point3f PositiveInfinity = new Point3f(REAL.PositiveInfinity);
+
+        /// <summary>
+        /// A point of negative infinity.
+        /// </summary>
+        public readonly static Point3f NegativeInfinity = new Point3f(REAL.NegativeInfinity);
+
+        /// <summary>
+        /// 3D point to 3D swizzle point.
+        /// </summary>
+        public Point3f xzy => new Point3f(x, z, y);
+
+        /// <summary>
+        /// 3D point to 2D point.
+        /// </summary>
+        public Point2d xy => new Point2d(x, y);
+
+        /// <summary>
+        /// 3D point to 4D point with w as 0.
+        /// </summary>
+        public Point4d xyz0 => new Point4d(x, y, z, 0);
+
+        /// <summary>
+        /// 3D point to 4D point with w as 1.
+        /// </summary>
+        public Point4d xyz1 => new Point4d(x, y, z, 1);
 
         /// <summary>
         /// A point all with the value v.
@@ -98,9 +80,9 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Point3f(REAL v)
         {
-            _x = v;
-            _y = v;
-            _z = v;
+            this.x = v;
+            this.y = v;
+            this.z = v;
         }
 
         /// <summary>
@@ -109,22 +91,16 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Point3f(REAL x, REAL y, REAL z)
         {
-            _x = x;
-            _y = y;
-            _z = z;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
 
         /// <summary>
-        /// A point from the varibles.
+        /// Array accessor for variables. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Point3f(double x, double y, double z)
-        {
-            _x = (float)x;
-            _y = (float)y;
-            _z = (float)z;
-        }
-
+        /// <param name="i">The variables index.</param>
+        /// <returns>The variable value</returns>
         unsafe public REAL this[int i]
         {
             get
@@ -139,8 +115,64 @@ namespace Common.Geometry.Points
                 if ((uint)i >= 3)
                     throw new IndexOutOfRangeException("Point3f index out of range.");
 
-                fixed (REAL* array = &_x) { array[i] = value; }
+                fixed (REAL* array = &x) { array[i] = value; }
             }
+        }
+
+        /// <summary>
+        /// Point as vector.
+        /// </summary>
+        public Vector3f Vector3f => new Vector3f(x, y, z);
+
+        /// <summary>
+        /// Point as vector.
+        /// </summary>
+        public Vector4d Vector4d => new Vector4d(x, y, z, 1);
+
+        /// <summary>
+        /// The length of the point from the origin.
+        /// </summary>
+        public REAL Magnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                REAL sqm = SqrMagnitude;
+                if (sqm != 0)
+                    return MathUtil.Sqrt(sqm);
+                else
+                    return 0;
+            }
+        }
+
+        /// <summary>
+        /// The length of the point from the origin squared.
+        /// </summary>
+		public REAL SqrMagnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return (x * x + y * y + z * z);
+            }
+        }
+
+        /// <summary>
+        /// Add two point and vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point3f operator +(Point3f v1, Vector3f v2)
+        {
+            return new Point3f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+        }
+
+        /// <summary>
+        /// Add two point and vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point3f operator +(Vector3f v1, Point3f v2)
+        {
+            return new Point3f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
         }
 
         /// <summary>
@@ -167,7 +199,7 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3f operator +(REAL s, Point3f v1)
         {
-            return new Point3f(v1.x + s, v1.y + s, v1.z + s);
+            return new Point3f(s + v1.x, s + v1.y, s + v1.z);
         }
 
         /// <summary>
@@ -251,28 +283,14 @@ namespace Common.Geometry.Points
             return new Point3f(v.x / s, v.y / s, v.z / s);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator Point3f(Vector3d v)
-        {
-            return new Point3f((REAL)v.x, (REAL)v.y, (REAL)v.z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Point3f(Vector3i v)
-        {
-            return new Point3f(v.x, v.y, v.z);
-        }
-
+        /// <summary>
+        /// Implict cast from vector.
+        /// </summary>
+        /// <param name="v">The vector to cast from</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Point3f(Vector3f v)
         {
             return new Point3f(v.x, v.y, v.z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Point3f(ValueTuple<REAL, REAL, REAL> v)
-        {
-            return new Point3f(v.Item1, v.Item2, v.Item3);
         }
 
         /// <summary>
@@ -314,7 +332,7 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Points hash code. 
+        /// Vectors hash code. 
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
@@ -330,22 +348,7 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Compare two points by axis.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int CompareTo(Point3f other)
-        {
-            if (x != other.x)
-                return x < other.x ? -1 : 1;
-            else if (y != other.y)
-                return y < other.y ? -1 : 1;
-            else if (z != other.z)
-                return z < other.z ? -1 : 1;
-            return 0;
-        }
-
-        /// <summary>
-        /// Point as a string.
+        /// Vector as a string.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
@@ -354,7 +357,7 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
-        /// Point as a string.
+        /// Vector as a string.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
@@ -368,7 +371,7 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Distance(Point3f v0, Point3f v1)
         {
-            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
+            return MathUtil.Sqrt(SqrDistance(v0, v1));
         }
 
         /// <summary>
@@ -384,14 +387,23 @@ namespace Common.Geometry.Points
         }
 
         /// <summary>
+        /// Direction between two points.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3f Direction(Point3f v0, Point3f v1)
+        {
+            return (v1 - v0).Vector3f.Normalized;
+        }
+
+        /// <summary>
         /// The minimum value between s and each component in point.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3f Min(Point3f v, REAL s)
         {
-            v.x = Math.Min(v.x, s);
-            v.y = Math.Min(v.y, s);
-            v.z = Math.Min(v.z, s);
+            v.x = MathUtil.Min(v.x, s);
+            v.y = MathUtil.Min(v.y, s);
+            v.z = MathUtil.Min(v.z, s);
             return v;
         }
 
@@ -401,9 +413,9 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3f Min(Point3f v0, Point3f v1)
         {
-            v0.x = Math.Min(v0.x, v1.x);
-            v0.y = Math.Min(v0.y, v1.y);
-            v0.z = Math.Min(v0.z, v1.z);
+            v0.x = MathUtil.Min(v0.x, v1.x);
+            v0.y = MathUtil.Min(v0.y, v1.y);
+            v0.z = MathUtil.Min(v0.z, v1.z);
             return v0;
         }
 
@@ -413,9 +425,9 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3f Max(Point3f v, REAL s)
         {
-            v.x = Math.Max(v.x, s);
-            v.y = Math.Max(v.y, s);
-            v.z = Math.Max(v.z, s);
+            v.x = MathUtil.Max(v.x, s);
+            v.y = MathUtil.Max(v.y, s);
+            v.z = MathUtil.Max(v.z, s);
             return v;
         }
 
@@ -425,34 +437,34 @@ namespace Common.Geometry.Points
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3f Max(Point3f v0, Point3f v1)
         {
-            v0.x = Math.Max(v0.x, v1.x);
-            v0.y = Math.Max(v0.y, v1.y);
-            v0.z = Math.Max(v0.z, v1.z);
+            v0.x = MathUtil.Max(v0.x, v1.x);
+            v0.y = MathUtil.Max(v0.y, v1.y);
+            v0.z = MathUtil.Max(v0.z, v1.z);
             return v0;
         }
 
         /// <summary>
-        /// Clamp the each component to specified min and max.
+        /// Clamp each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Point3f Clamp(Point3f p, REAL min, REAL max)
+        public static Point3f Clamp(Point3f v, REAL min, REAL max)
         {
-            p.x = Math.Max(Math.Min(p.x, max), min);
-            p.y = Math.Max(Math.Min(p.y, max), min);
-            p.z = Math.Max(Math.Min(p.z, max), min);
-            return p;
+            v.x = MathUtil.Max(MathUtil.Min(v.x, max), min);
+            v.y = MathUtil.Max(MathUtil.Min(v.y, max), min);
+            v.z = MathUtil.Max(MathUtil.Min(v.z, max), min);
+            return v;
         }
 
         /// <summary>
-        /// Clamp the each component to specified min and max.
+        /// Clamp each component to specified min and max.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Point3f Clamp(Point3f p, Point3f min, Point3f max)
+        public static Point3f Clamp(Point3f v, Point3f min, Point3f max)
         {
-            p.x = Math.Max(Math.Min(p.x, max.x), min.x);
-            p.y = Math.Max(Math.Min(p.y, max.y), min.y);
-            p.z = Math.Max(Math.Min(p.z, max.z), min.z);
-            return p;
+            v.x = MathUtil.Max(MathUtil.Min(v.x, max.x), min.x);
+            v.y = MathUtil.Max(MathUtil.Min(v.y, max.y), min.y);
+            v.z = MathUtil.Max(MathUtil.Min(v.z, max.z), min.z);
+            return v;
         }
 
         /// <summary>
@@ -463,11 +475,11 @@ namespace Common.Geometry.Points
             if (t < 0.0f) t = 0.0f;
             if (t > 1.0f) t = 1.0f;
 
-            if (t == 0.0f) return from;
-            if (t == 1.0f) return to;
+            if (t == 0.0) return from;
+            if (t == 1.0) return to;
 
             REAL t1 = 1.0f - t;
-            Point3f v = new Point3f();
+            var v = new Point3f();
             v.x = from.x * t1 + to.x * t;
             v.y = from.y * t1 + to.y * t;
             v.z = from.z * t1 + to.z * t;
@@ -477,61 +489,28 @@ namespace Common.Geometry.Points
         /// <summary>
         /// A rounded point.
         /// </summary>
-        /// <param name="digits"></param>
-        /// <returns></returns>
+        /// <param name="digits">The number of digits to round to.</param>
+        /// <returns>The rounded point</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Point3f Rounded(int digits = 0)
         {
-            var _x = MathUtil.Round(x, digits);
-            var _y = MathUtil.Round(y, digits);
-            var _z = MathUtil.Round(z, digits);
-            return new Point3f(_x, _y, _z);
+            REAL x = MathUtil.Round(this.x, digits);
+            REAL y = MathUtil.Round(this.y, digits);
+            REAL z = MathUtil.Round(this.z, digits);
+            return new Point3f(x, y, z);
         }
 
         /// <summary>
-        /// Convert to vector.
+        /// Round the point.
         /// </summary>
+        /// <param name="digits">The number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3f ToVector3f()
+        public void Round(int digits = 0)
         {
-            return new Vector3f(x, y, z);
+            x = MathUtil.Round(x, digits);
+            y = MathUtil.Round(y, digits);
+            z = MathUtil.Round(z, digits);
         }
 
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

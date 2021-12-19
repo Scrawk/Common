@@ -10,36 +10,31 @@ namespace Common.Geometry.Shapes
     [StructLayout(LayoutKind.Sequential)]
     public struct Box3i : IEquatable<Box3i>
     {
-        public Vector3i Min;
+        public Point3i Min;
 
-        public Vector3i Max;
+        public Point3i Max;
 
         public Box3i(int min, int max)
         {
-            Min = new Vector3i(min);
-            Max = new Vector3i(max);
+            Min = new Point3i(min);
+            Max = new Point3i(max);
         }
 
         public Box3i(int minX, int maxX, int minY, int maxY, int minZ, int maxZ)
         {
-            Min = new Vector3i(minX, minY, minZ);
-            Max = new Vector3i(maxX, maxY, maxZ);
+            Min = new Point3i(minX, minY, minZ);
+            Max = new Point3i(maxX, maxY, maxZ);
         }
 
-        public Box3i(Vector3i min, Vector3i max)
+        public Box3i(Point3i min, Point3i max)
         {
             Min = min;
             Max = max;
         }
 
-        public Vector3f Center 
+        public Point3i Size 
         { 
-            get { return (Vector3f)(Min + Max) * 0.5f; } 
-        }
-
-        public Vector3i Size 
-        { 
-            get { return new Vector3i(Width, Height, Depth); } 
+            get { return new Point3i(Width, Height, Depth); } 
         }
 
         public int Width 
@@ -69,7 +64,7 @@ namespace Common.Geometry.Shapes
         {
             get
             {
-                Vector3i d = Max - Min;
+                Point3i d = Max - Min;
                 return 2 * (d.x * d.y + d.x * d.z + d.y * d.z);
             }
         }
@@ -79,7 +74,7 @@ namespace Common.Geometry.Shapes
             return new Box3i(box.Min + s, box.Max + s);
         }
 
-        public static Box3i operator +(Box3i box, Vector3i v)
+        public static Box3i operator +(Box3i box, Point3i v)
         {
             return new Box3i(box.Min + v, box.Max + v);
         }
@@ -89,7 +84,7 @@ namespace Common.Geometry.Shapes
             return new Box3i(box.Min - s, box.Max - s);
         }
 
-        public static Box3i operator -(Box3i box, Vector3i v)
+        public static Box3i operator -(Box3i box, Point3i v)
         {
             return new Box3i(box.Min - v, box.Max - v);
         }
@@ -102,11 +97,6 @@ namespace Common.Geometry.Shapes
         public static Box3i operator /(Box3i box, int s)
         {
             return new Box3i(box.Min / s, box.Max / s);
-        }
-
-        public static explicit operator Box3i(Box3f box)
-        {
-            return new Box3i((Vector3i)box.Min, (Vector3i)box.Max);
         }
 
         public static bool operator ==(Box3i b1, Box3i b2)
@@ -147,17 +137,17 @@ namespace Common.Geometry.Shapes
             return string.Format("[Box3i: Min={0}, Max={1}, Width={2}, Height={3}, Depth={4}]", Min, Max, Width, Height, Depth);
         }
 
-        public void GetCorners(IList<Vector3i> corners)
+        public void GetCorners(IList<Point3i> corners)
         {
-            corners[0] = new Vector3i(Min.x, Min.y, Min.z);
-            corners[1] = new Vector3i(Max.x, Min.y, Min.z);
-            corners[2] = new Vector3i(Max.x, Min.y, Max.z);
-            corners[3] = new Vector3i(Min.x, Min.y, Max.z);
+            corners[0] = new Point3i(Min.x, Min.y, Min.z);
+            corners[1] = new Point3i(Max.x, Min.y, Min.z);
+            corners[2] = new Point3i(Max.x, Min.y, Max.z);
+            corners[3] = new Point3i(Min.x, Min.y, Max.z);
 
-            corners[4] = new Vector3i(Min.x, Max.y, Min.z);
-            corners[5] = new Vector3i(Max.x, Max.y, Min.z);
-            corners[6] = new Vector3i(Max.x, Max.y, Max.z);
-            corners[7] = new Vector3i(Min.x, Max.y, Max.z);
+            corners[4] = new Point3i(Min.x, Max.y, Min.z);
+            corners[5] = new Point3i(Max.x, Max.y, Min.z);
+            corners[6] = new Point3i(Max.x, Max.y, Max.z);
+            corners[7] = new Point3i(Min.x, Max.y, Max.z);
         }
 
         public void GetCorners(IList<Vector3f> corners)
@@ -189,7 +179,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns the bounding box containing this box and the given point.
         /// </summary>
-        public static Box3i Enlarge(Box3i box, Vector3i p)
+        public static Box3i Enlarge(Box3i box, Point3i p)
         {
             var b = new Box3i();
             b.Min.x = Math.Min(box.Min.x, p.x);
@@ -252,7 +242,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Returns true if this bounding box contains the given point.
         /// </summary>
-        public bool Contains(Vector3i p)
+        public bool Contains(Point3i p)
         {
             if (p.x > Max.x || p.x < Min.x) return false;
             if (p.y > Max.y || p.y < Min.y) return false;
@@ -264,9 +254,9 @@ namespace Common.Geometry.Shapes
         /// Find the closest point to the box.
         /// If point inside box return point.
         /// </summary>
-        public Vector3i Closest(Vector3i p)
+        public Point3i Closest(Point3i p)
         {
-            Vector3i c;
+            Point3i c;
 
             if (p.x < Min.x)
                 c.x = Min.x;
@@ -292,10 +282,10 @@ namespace Common.Geometry.Shapes
             return c;
         }
 
-        public static Box3i CalculateBounds(IList<Vector3i> vertices)
+        public static Box3i CalculateBounds(IList<Point3i> vertices)
         {
-            Vector3i min = Vector3i.MaxInt;
-            Vector3i max = Vector3i.MinInt;
+            Point3i min = Point3i.MaxValue;
+            Point3i max = Point3i.MinValue;
 
             int count = vertices.Count;
             for (int i = 0; i < count; i++)
@@ -313,7 +303,7 @@ namespace Common.Geometry.Shapes
             return new Box3i(min, max);
         }
 
-        public static Box3i CalculateBounds(Vector3i a, Vector3i b)
+        public static Box3i CalculateBounds(Point3i a, Point3i b)
         {
             int xmin = Math.Min(a.x, b.x);
             int xmax = Math.Max(a.x, b.x);

@@ -10,21 +10,21 @@ namespace Common.Core.Threading
     {
         public ThreadingBlock2D(int minX, int maxX, int minY, int maxY)
         {
-            Min = new Vector2i(minX, minY);
-            Max = new Vector2i(maxX, maxY);
+            Min = new Point2i(minX, minY);
+            Max = new Point2i(maxX, maxY);
         }
 
-        public ThreadingBlock2D(Vector2i min, Vector2i max)
+        public ThreadingBlock2D(Point2i min, Point2i max)
         {
             Min = min;
             Max = max;
         }
 
-        public Vector2i Min;
+        public Point2i Min;
 
-        public Vector2i Max;
+        public Point2i Max;
 
-        public static int BlockSize(Vector2i size, int divisions = 4)
+        public static int BlockSize(Point2i size, int divisions = 4)
         {
             if (divisions <= 0) divisions = 4;
             return Math.Max(64, Math.Max(size.x, size.y) / divisions);
@@ -36,7 +36,7 @@ namespace Common.Core.Threading
             return Math.Max(64, Math.Max(width, height) / divisions);
         }
 
-        public static List<ThreadingBlock2D> CreateBlocks(Vector2i size, int blockSize)
+        public static List<ThreadingBlock2D> CreateBlocks(Point2i size, int blockSize)
         {
             return CreateBlocks(size.x, size.y, blockSize);
         }
@@ -52,7 +52,7 @@ namespace Common.Core.Threading
                 for (int x = 0; x < width; x += blockSize)
                 {
                     var box = new ThreadingBlock2D();
-                    box.Min = new Vector2i(x, y);
+                    box.Min = new Point2i(x, y);
                     box.Max.x = Math.Min(x + blockSize, width);
                     box.Max.y = Math.Min(y + blockSize, height);
 
@@ -63,7 +63,7 @@ namespace Common.Core.Threading
             return blocks;
         }
 
-        public static void ParallelAction(Vector2i size, int blockSize, Action<int, int> action)
+        public static void ParallelAction(Point2i size, int blockSize, Action<int, int> action)
         {
             ParallelAction(size.x, size.y, blockSize, action);
         }

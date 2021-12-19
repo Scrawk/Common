@@ -9,7 +9,7 @@ namespace Common.GraphTheory.GridGraphs
 {
     public static partial class GridGraphSearch
     {
-        public static Dictionary<Vector2i, List<GridEdge>> KruskalsMinimumSpanningForest(GridGraph graph, Func<Vector2i, Vector2i, float> GetWeight)
+        public static Dictionary<Point2i, List<GridEdge>> KruskalsMinimumSpanningForest(GridGraph graph, Func<Point2i, Point2i, float> GetWeight)
         {
             int width = graph.Width;
             int height = graph.Height;
@@ -33,19 +33,19 @@ namespace Common.GraphTheory.GridGraphs
 
             for (int i = 0; i < edgeCount; i++)
             {
-                Vector2i from = sorted[i].From;
-                Vector2i to = sorted[i].To;
+                Point2i from = sorted[i].From;
+                Point2i to = sorted[i].To;
 
                 if (set.Union(to.x, to.y, from.x, from.y))
                     edges.Add(sorted[i]);
             }
 
-            Dictionary<Vector2i, List<GridEdge>> forest = new Dictionary<Vector2i, List<GridEdge>>();
+            Dictionary<Point2i, List<GridEdge>> forest = new Dictionary<Point2i, List<GridEdge>>();
 
             edgeCount = edges.Count;
             for (int i = 0; i < edgeCount; i++)
             {
-                Vector2i root = set.FindParent(edges[i].From.x, edges[i].From.y);
+                Point2i root = set.FindParent(edges[i].From.x, edges[i].From.y);
 
                 if (!forest.ContainsKey(root))
                     forest.Add(root, new List<GridEdge>());

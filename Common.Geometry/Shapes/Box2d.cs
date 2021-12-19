@@ -125,11 +125,6 @@ namespace Common.Geometry.Shapes
             return new Box2d(box.Min, box.Max);
         }
 
-        public static implicit operator Box2d(Box2i box)
-        {
-            return new Box2d(box.Min, box.Max);
-        }
-
         public static bool operator ==(Box2d b1, Box2d b2)
         {
             return b1.Min == b2.Min && b1.Max == b2.Max;

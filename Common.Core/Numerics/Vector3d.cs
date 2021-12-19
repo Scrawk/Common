@@ -365,12 +365,6 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector3d(Vector3i v)
-        {
-            return new Vector3d(v.x, v.y, v.z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector3d(ValueTuple<REAL, REAL, REAL> v)
         {
             return new Vector3d(v.Item1, v.Item2, v.Item3);

@@ -13,15 +13,15 @@ namespace Common.GraphTheory.GridGraphs
             int width = graph.Width;
             int height = graph.Height;
 
-            Stack<Vector2i> queue = new Stack<Vector2i>();
-            queue.Push(new Vector2i(x, y));
+            Stack<Point2i> queue = new Stack<Point2i>();
+            queue.Push(new Point2i(x, y));
 
-            search.Parent[x, y] = new Vector2i(x, y);
+            search.Parent[x, y] = new Point2i(x, y);
             search.IsVisited[x, y] = true;
 
             while (queue.Count != 0)
             {
-                Vector2i u = queue.Pop();
+                Point2i u = queue.Pop();
                 search.Order.Add(u);
 
                 int edge = graph.Edges[u.x, u.y];
@@ -37,7 +37,7 @@ namespace Common.GraphTheory.GridGraphs
                     if ((edge & 1 << i) == 0) continue;
                     if (search.IsVisited[xi, yi]) continue;
 
-                    queue.Push(new Vector2i(xi, yi));
+                    queue.Push(new Point2i(xi, yi));
                     search.IsVisited[xi, yi] = true;
                     search.Parent[xi, yi] = u;
                 }

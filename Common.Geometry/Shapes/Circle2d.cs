@@ -294,10 +294,10 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Finds which axis contains the two most extreme points
         /// </summary>
-        private static Vector2i ExtremePoints(IList<VECTOR2> points)
+        private static Point2i ExtremePoints(IList<VECTOR2> points)
         {
-            Vector2i min = new Vector2i();
-            Vector2i max = new Vector2i();
+            Point2i min = new Point2i();
+            Point2i max = new Point2i();
 
             int count = points.Count;
             for (int i = 0; i < count; i++)
@@ -314,9 +314,9 @@ namespace Common.Geometry.Shapes
             var d2y = VECTOR2.SqrDistance(points[max.y], points[min.y]);
 
             if (d2x > d2y)
-                return new Vector2i(min.x, max.x);
+                return new Point2i(min.x, max.x);
             else
-                return new Vector2i(min.y, max.y);
+                return new Point2i(min.y, max.y);
         }
     }
 }

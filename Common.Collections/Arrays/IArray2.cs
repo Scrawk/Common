@@ -34,7 +34,7 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Access a element at index x,y.
         /// </summary>
-        T this[Vector2i i] { get; set; }
+        T this[Point2i i] { get; set; }
 
         /// <summary>
         /// Sets all elements in the array to default value.

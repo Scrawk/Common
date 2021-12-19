@@ -29,7 +29,7 @@ namespace Common.Collections.Arrays
         /// Create a new array.
         /// </summary>
         /// <param name="size">The size of the array.</param>
-        public Array2(Vector2i size)
+        public Array2(Point2i size)
         {
             Data = new T[size.x, size.y];
         }
@@ -72,7 +72,7 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Access a element at index x,y.
         /// </summary>
-        public T this[Vector2i i]
+        public T this[Point2i i]
         {
             get { return Data[i.x, i.y]; }
             set { Data[i.x, i.y] = value; }
@@ -155,7 +155,7 @@ namespace Common.Collections.Arrays
         /// <summary>
         /// Resize the array. Will clear any existing data.
         /// </summary>
-        public void Resize(Vector2i size)
+        public void Resize(Point2i size)
         {
             Data = new T[size.x, size.y];
         }

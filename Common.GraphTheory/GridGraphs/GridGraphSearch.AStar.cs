@@ -22,7 +22,7 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
-        public static void AStar(GridGraph graph, GridSearch search, Vector2i start, Vector2i target, Func<Vector2i, Vector2i, float> Heuristic = null)
+        public static void AStar(GridGraph graph, GridSearch search, Point2i start, Point2i target, Func<Point2i, Point2i, float> Heuristic = null)
         {
             int width = graph.Width;
             int height = graph.Height;
@@ -66,10 +66,10 @@ namespace Common.GraphTheory.GridGraphs
                     {
                         var n = new AStarNode(xi, yi);
                         n.g = g;
-                        n.h = Heuristic(target, new Vector2i(xi, yi));
+                        n.h = Heuristic(target, new Point2i(xi, yi));
                         n.f = n.g + n.h;
 
-                        search.Parent[n.x, n.y] = new Vector2i(u.x, u.y);
+                        search.Parent[n.x, n.y] = new Point2i(u.x, u.y);
                         open.Add(n);
                     }
                     else
@@ -79,7 +79,7 @@ namespace Common.GraphTheory.GridGraphs
                         {
                             n.g = g;
                             n.f = n.g + n.h;
-                            search.Parent[n.x, n.y] = new Vector2i(u.x, u.y);
+                            search.Parent[n.x, n.y] = new Point2i(u.x, u.y);
                             open[idx] = n;
                         }
                     }
@@ -87,17 +87,17 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
-        public static float EuclideanDistance(Vector2i a, Vector2i b)
+        public static float EuclideanDistance(Point2i a, Point2i b)
         {
-            return (float)Vector2i.Distance(a, b);
+            return (float)Point2i.Distance(a, b);
         }
 
-        public static float ManhattanDistance(Vector2i a, Vector2i b)
+        public static float ManhattanDistance(Point2i a, Point2i b)
         {
             return Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
         }
 
-        public static float ChebyshevDistance(Vector2i a, Vector2i b)
+        public static float ChebyshevDistance(Point2i a, Point2i b)
         {
             return Math.Max(Math.Abs(a.x - b.x), Math.Abs(a.y - b.y));
         }

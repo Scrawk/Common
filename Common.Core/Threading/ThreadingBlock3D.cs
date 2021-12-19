@@ -10,21 +10,21 @@ namespace Common.Core.Threading
     {
         public ThreadingBlock3D(int minX, int maxX, int minY, int maxY, int minZ, int maxZ)
         {
-            Min = new Vector3i(minX, minY, minZ);
-            Max = new Vector3i(maxX, maxY, maxZ);
+            Min = new Point3i(minX, minY, minZ);
+            Max = new Point3i(maxX, maxY, maxZ);
         }
 
-        public ThreadingBlock3D(Vector3i min, Vector3i max)
+        public ThreadingBlock3D(Point3i min, Point3i max)
         {
             Min = min;
             Max = max;
         }
 
-        public Vector3i Min;
+        public Point3i Min;
 
-        public Vector3i Max;
+        public Point3i Max;
 
-        public static int BlockSize(Vector3i size, int divisions = 2)
+        public static int BlockSize(Point3i size, int divisions = 2)
         {
             if (divisions <= 0) divisions = 2;
             return Math.Max(16, MathUtil.Max(size.x, size.y, size.z) / divisions);
@@ -36,7 +36,7 @@ namespace Common.Core.Threading
             return Math.Max(16, MathUtil.Max(width, height, depth) / divisions);
         }
 
-        public static List<ThreadingBlock3D> CreateBlocks(Vector3i size, int blockSize)
+        public static List<ThreadingBlock3D> CreateBlocks(Point3i size, int blockSize)
         {
             return CreateBlocks(size.x, size.y, size.z, blockSize);
         }
@@ -55,7 +55,7 @@ namespace Common.Core.Threading
                     for (int x = 0; x < width; x += blockSize)
                     {
                         var box = new ThreadingBlock3D();
-                        box.Min = new Vector3i(x, y, z);
+                        box.Min = new Point3i(x, y, z);
                         box.Max.x = Math.Min(x + blockSize, width);
                         box.Max.y = Math.Min(y + blockSize, height);
                         box.Max.z = Math.Min(z + blockSize, depth);
@@ -68,7 +68,7 @@ namespace Common.Core.Threading
             return blocks;
         }
 
-        public static void ParallelAction(Vector3i size, int blockSize, Action<int, int, int> action)
+        public static void ParallelAction(Point3i size, int blockSize, Action<int, int, int> action)
         {
             ParallelAction(size.x, size.y, size.z, blockSize, action);
         }

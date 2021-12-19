@@ -28,7 +28,7 @@ namespace Common.GraphTheory.GridGraphs
             }
 
             search.IsVisited[x, y] = true;
-            search.Parent[x, y] = new Vector2i(x, y);
+            search.Parent[x, y] = new Point2i(x, y);
             vertexGrid[x, y].Cost = 0;
 
             while (queue.Count != 0)
@@ -59,7 +59,7 @@ namespace Common.GraphTheory.GridGraphs
                         if (search.IsVisited[xi, yi]) continue;
 
                         var v = vertexGrid[xi, yi];
-                        float alt = cost + (float)Vector2i.Distance(u, v.Index);
+                        float alt = cost + (float)Point2i.Distance(u, v.Index);
 
                         if (alt < v.Cost)
                         {

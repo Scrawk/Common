@@ -16,7 +16,7 @@ namespace Common.Core.Test.Directions
 
             Assert.AreEqual(26, D26.OFFSETS.GetLength(0));
 
-            var set = new HashSet<Vector3i>();
+            var set = new HashSet<Point3i>();
 
             for (int i = 0; i < 26; i++)
             {
@@ -24,7 +24,7 @@ namespace Common.Core.Test.Directions
                 int y = D26.OFFSETS[i, 1];
                 int z = D26.OFFSETS[i, 2];
 
-                var idx = new Vector3i(x, y, z);
+                var idx = new Point3i(x, y, z);
 
                 Assert.IsFalse(set.Contains(idx));
 

@@ -16,12 +16,12 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// The index of the vertex this edge starts at.
         /// </summary>
-        public Vector2i From { get; set; }
+        public Point2i From { get; set; }
 
         /// <summary>
         /// The index of the vertex this edge ends at.
         /// </summary>
-        public Vector2i To { get; set; }
+        public Point2i To { get; set; }
 
         /// <summary>
         /// The weight of this edge.
@@ -34,7 +34,7 @@ namespace Common.GraphTheory.GridGraphs
 
         }
 
-        public GridEdge(Vector2i from, Vector2i to)
+        public GridEdge(Point2i from, Point2i to)
         {
             From = from;
             To = to;
@@ -42,8 +42,8 @@ namespace Common.GraphTheory.GridGraphs
 
         public GridEdge(int fx, int fy, int tx, int ty)
         {
-            From = new Vector2i(fx, fy);
-            To = new Vector2i(tx, ty);
+            From = new Point2i(fx, fy);
+            To = new Point2i(tx, ty);
         }
 
         public override string ToString()

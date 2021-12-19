@@ -9,14 +9,14 @@ namespace Common.GraphTheory.GridGraphs
 {
     public static partial class GridGraphSearch
     {
-        internal static void PrimsMinimumSpanningTree(GridGraph graph, GridSearch search, int x, int y, Func<Vector2i, Vector2i, float> GetWeight)
+        internal static void PrimsMinimumSpanningTree(GridGraph graph, GridSearch search, int x, int y, Func<Point2i, Point2i, float> GetWeight)
         {
             int width = graph.Width;
             int height = graph.Height;
 
             search.IsVisited[x, y] = true;
-            search.Order.Add(new Vector2i(x, y));
-            search.Parent[x, y] = new Vector2i(x, y);
+            search.Order.Add(new Point2i(x, y));
+            search.Parent[x, y] = new Point2i(x, y);
 
             var queue = new BinaryHeap<GridEdge>(8);
 
@@ -35,7 +35,7 @@ namespace Common.GraphTheory.GridGraphs
             {
                 GridEdge edge = queue.Pop();
 
-                Vector2i v = edge.To;
+                Point2i v = edge.To;
                 if (search.IsVisited[v.x, v.y]) continue;
 
                 search.Order.Add(v);

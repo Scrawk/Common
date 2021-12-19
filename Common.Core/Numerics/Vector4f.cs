@@ -364,12 +364,6 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector4f(Vector4i v)
-        {
-            return new Vector4f(v.x, v.y, v.z, v.w);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector4f(ValueTuple<REAL, REAL, REAL, REAL> v)
         {
             return new Vector4f(v.Item1, v.Item2, v.Item3, v.Item4);

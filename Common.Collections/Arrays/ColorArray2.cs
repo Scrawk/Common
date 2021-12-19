@@ -24,7 +24,7 @@ namespace Common.Collections.Arrays
         /// Create a new array.
         /// </summary>
         /// <param name="size">The size of the array.</param>
-        public ColorArray2(Vector2i size)
+        public ColorArray2(Point2i size)
             : base(size.x, size.y)
         {
 

@@ -22,7 +22,7 @@ namespace Common.Collections.Arrays
         /// Create a new array.
         /// </summary>
         /// <param name="size">The size of the array.</param>
-        public FloatArray2(Vector2i size)
+        public FloatArray2(Point2i size)
             : base(size.x, size.y)
         {
 

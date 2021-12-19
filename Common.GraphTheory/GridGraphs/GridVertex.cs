@@ -17,7 +17,7 @@ namespace Common.GraphTheory.GridGraphs
         /// The index in the grid this vertex
         /// belongs to.
         /// </summary>
-        public Vector2i Index { get; set; }
+        public Point2i Index { get; set; }
 
         /// <summary>
         /// The cost of the vertex. used in
@@ -30,12 +30,12 @@ namespace Common.GraphTheory.GridGraphs
 
         }
 
-        public GridVertex(Vector2i index)
+        public GridVertex(Point2i index)
         {
             Index = index;
         }
 
-        public GridVertex(Vector2i index, float cost)
+        public GridVertex(Point2i index, float cost)
         {
             Index = index;
             Cost = cost;

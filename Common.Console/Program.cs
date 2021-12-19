@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Geometry.Nurbs;
 
 using Common.Console.Collections;
 using Common.Console.Geometry;

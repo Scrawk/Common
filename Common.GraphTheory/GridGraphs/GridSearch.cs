@@ -18,11 +18,11 @@ namespace Common.GraphTheory.GridGraphs
 
         public int Count { get { return Order.Count; } }
 
-        public Vector2i Root { get { return Order[0]; } }
+        public Point2i Root { get { return Order[0]; } }
 
-        public IList<Vector2i> Order { get; private set; }
+        public IList<Point2i> Order { get; private set; }
 
-        public Vector2i[,] Parent { get; private set; }
+        public Point2i[,] Parent { get; private set; }
 
         public bool[,] IsVisited { get; private set; }
 
@@ -31,9 +31,9 @@ namespace Common.GraphTheory.GridGraphs
             Width = width;
             Height = height;
 
-            Order = new List<Vector2i>();
+            Order = new List<Point2i>();
             IsVisited = new bool[width, height];
-            Parent = new Vector2i[width, height];
+            Parent = new Point2i[width, height];
 
             Clear();
         }
@@ -41,7 +41,7 @@ namespace Common.GraphTheory.GridGraphs
         public override string ToString()
         {
             return string.Format("[GridGraph: Count={0}, Root={1}, Width={2}, Height={3}]",
-                Count, (Count > 0) ? Root : new Vector2i(-1), Width, Height);
+                Count, (Count > 0) ? Root : new Point2i(-1), Width, Height);
         }
 
         public void Clear()
@@ -70,7 +70,7 @@ namespace Common.GraphTheory.GridGraphs
                 if (xi < 0 || xi > Width - 1) continue;
                 if (yi < 0 || yi > Height - 1) continue;
 
-                Vector2i p = Parent[xi, yi];
+                Point2i p = Parent[xi, yi];
 
                 if (p.x == x && p.y == y) return false;
             }
@@ -80,27 +80,27 @@ namespace Common.GraphTheory.GridGraphs
 
         public bool IsRoot(int x, int y)
         {
-            Vector2i p = Parent[x, y];
+            Point2i p = Parent[x, y];
             return p.x == x && p.y == y;
         }
 
-        public void GetPath(Vector2i dest, List<Vector2i> path)
+        public void GetPath(Point2i dest, List<Point2i> path)
         {
             int x = dest.x;
             int y = dest.y;
 
             while (Parent[x, y].x != -1)
             {
-                path.Add(new Vector2i(x, y));
+                path.Add(new Point2i(x, y));
                 if (IsRoot(x, y)) return;
 
-                Vector2i p = Parent[x, y];
+                Point2i p = Parent[x, y];
                 x = p.x;
                 y = p.y;
             }
         }
 
-        public void GetPath(Vector2i dest, List<Vector3f> path)
+        public void GetPath(Point2i dest, List<Vector3f> path)
         {
             int x = dest.x;
             int y = dest.y;
@@ -110,7 +110,7 @@ namespace Common.GraphTheory.GridGraphs
                 path.Add(new Vector3f(x, y, 0));
                 if (IsRoot(x, y)) return;
 
-                Vector2i p = Parent[x, y];
+                Point2i p = Parent[x, y];
                 x = p.x;
                 y = p.y;
             }

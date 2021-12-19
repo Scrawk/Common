@@ -246,11 +246,11 @@ namespace Common.GraphTheory.GridGraphs
                         }
 
                         if (hasEdge)
-                            vertices.Add(new GridVertex(new Vector2i(x, y)));
+                            vertices.Add(new GridVertex(new Point2i(x, y)));
                     }
                     else
                     {
-                        vertices.Add(new GridVertex(new Vector2i(x, y)));
+                        vertices.Add(new GridVertex(new Point2i(x, y)));
                     }
 
                 }
@@ -258,7 +258,7 @@ namespace Common.GraphTheory.GridGraphs
 
         }
 
-        public void GetAllEdges(List<GridEdge> edges, Func<Vector2i, Vector2i, float> GetWeight)
+        public void GetAllEdges(List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeight)
         {
 
             for (int y = 0; y < Height; y++)
@@ -288,7 +288,7 @@ namespace Common.GraphTheory.GridGraphs
 
         }
 
-        public void GetEdges(int x, int y, List<GridEdge> edges, Func<Vector2i, Vector2i, float> GetWeight)
+        public void GetEdges(int x, int y, List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeight)
         {
 
             int edge = Edges[x, y];

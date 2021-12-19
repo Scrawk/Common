@@ -336,12 +336,6 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector2d(Vector2i v)
-        {
-            return new Vector2d(v.x, v.y);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector2d(ValueTuple<REAL, REAL> v)
         {
             return new Vector2d(v.Item1, v.Item2);
