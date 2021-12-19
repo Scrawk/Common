@@ -4,7 +4,7 @@ using System.Text;
 
 using Common.Core.Numerics;
 
-namespace Common.Collections.DCEL
+namespace Common.Geometry.DCEL
 {
     public partial class DCELMesh
     {

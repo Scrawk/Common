@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 
-namespace Common.Collections.DCEL
+namespace Common.Geometry.DCEL
 {
     /// <summary>
     /// A half edge vertex. Presumes edges are connected in CCW order.
@@ -12,7 +12,7 @@ namespace Common.Collections.DCEL
     public partial class DCELVertex
     {
 
-        internal DCELVertex(int index, Vector2d point)
+        internal DCELVertex(int index, Point2d point)
         {
             Index = index;
             Point = point;
@@ -21,7 +21,7 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// The vertex position.
         /// </summary>
-        public Vector2d Point;
+        public Point2d Point;
 
         /// <summary>
         /// Used for temporary making the vertex.
@@ -127,7 +127,7 @@ namespace Common.Collections.DCEL
         /// </summary>
         /// <param name="b">Any position.</param>
         /// <returns>The edge where b is between and previous.</returns>
-        internal DCELHalfedge FindInBetweenEdges(Vector2d b)
+        internal DCELHalfedge FindInBetweenEdges(Point2d b)
         {
             Vector2d zero = Vector2d.Zero;
 
@@ -141,13 +141,9 @@ namespace Common.Collections.DCEL
 
                 var a = e.From.Point;
 
-                var ab = a - b;
-                var a0 = a - e.Previous.From.Point;
-                var a1 = a - e.Opposite.From.Point;
-
-                ab.Normalize();
-                a0.Normalize();
-                a1.Normalize();
+                var ab = Point2d.Direction(b, a);
+                var a0 = Point2d.Direction(e.Previous.From.Point, a);
+                var a1 = Point2d.Direction(e.Opposite.From.Point, a);
 
                 if (DCELGeometry.Collinear(a0, zero, a1) && DCELGeometry.Collinear(a0, zero, ab))
                     throw new BetweenEdgeNotFoundException("Collinear");

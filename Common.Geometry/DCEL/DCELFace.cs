@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Collections.DCEL
+namespace Common.Geometry.DCEL
 {
     /// <summary>
     /// A half edge based face. Presumes face is CCW.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Collections.DCEL
+namespace Common.Geometry.DCEL
 {
 
     public class InvalidDCELException : Exception

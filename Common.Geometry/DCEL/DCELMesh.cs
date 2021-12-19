@@ -4,7 +4,7 @@ using System.Text;
 
 using Common.Core.Numerics;
 
-namespace Common.Collections.DCEL
+namespace Common.Geometry.DCEL
 {
     /// <summary>
     /// A half edge based mesh.
@@ -371,15 +371,6 @@ namespace Common.Collections.DCEL
             foreach (var vert in EnumerateVertices())
                 vert.Point *= scale;
 
-        }
-
-        /// <summary>
-        /// Transform all vertices.
-        /// </summary>
-        public void Transform(Matrix4x4d matrix)
-        {
-            foreach (var vert in EnumerateVertices())
-                vert.Point = (matrix * vert.Point.xy01).xy;
         }
 
     }

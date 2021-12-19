@@ -4,7 +4,7 @@ using System.Text;
 
 using Common.Core.Numerics;
 
-namespace Common.Collections.DCEL
+namespace Common.Geometry.DCEL
 {
     /// <summary>
     /// Half edge. Presumes edges are connected in CCW order.
@@ -232,12 +232,12 @@ namespace Common.Collections.DCEL
         /// <summary>
         /// The length of the edge.
         /// </summary>
-        public double Length => Vector2d.Distance(From.Point, To.Point);
+        public double Length => Point2d.Distance(From.Point, To.Point);
 
         /// <summary>
         /// The square length of the edge.
         /// </summary>
-        public double SqrLength => Vector2d.SqrDistance(From.Point, To.Point);
+        public double SqrLength => Point2d.SqrDistance(From.Point, To.Point);
 
         /// <summary>
         /// Clear edge of all connections.
