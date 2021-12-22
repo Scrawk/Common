@@ -46,22 +46,27 @@ namespace Common.Core.Numerics
         /// <summary>
         /// 2D point to 3D point with z as 0.
         /// </summary>
-        public Point3d xy0 => new Point3d(x, y, 0);
+        public Point3i xy0 => new Point3i(x, y, 0);
+
+        /// <summary>
+        /// 2D point to 3D point with y as z.
+        /// </summary>
+        public Point3i x0y => new Point3i(x,0, y);
 
         /// <summary>
         /// 2D point to 3D point with z as 1.
         /// </summary>
-        public Point3d xy1 => new Point3d(x, y, 1);
+        public Point3i xy1 => new Point3i(x, y, 1);
 
         /// <summary>
         /// 2D point to 4D point with z as 0 and w as 0.
         /// </summary>
-        public Point4d xy00 => new Point4d(x, y, 0, 0);
+        public Point4i xy00 => new Point4i(x, y, 0, 0);
 
         /// <summary>
         /// 2D point to 4D point with z as 0 and w as 1.
         /// </summary>
-        public Point4d xy01 => new Point4d(x, y, 0, 1);
+        public Point4i xy01 => new Point4i(x, y, 0, 1);
 
         /// <summary>
         /// A point all with the value v.

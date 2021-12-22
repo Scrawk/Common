@@ -6,6 +6,7 @@ using Common.Core.Numerics;
 
 using REAL = System.Single;
 using VECTOR3 = Common.Core.Numerics.Vector3f;
+using POINT3 = Common.Core.Numerics.Point3f;
 using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4f;
 
@@ -450,6 +451,7 @@ namespace Common.Core.Numerics
 
             return q;
         }
+
 
         /// <summary>
         /// Returns a 4x4 matrix that rotates around the x-axis by a given number of degrees.

@@ -197,6 +197,19 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Multiply a point by a matrix.
+        /// </summary>
+        public static Point2d operator *(Matrix2x2d m, Point2d v)
+        {
+            Point2d kProd = new Point2d();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y;
+            kProd.y = m.m10 * v.x + m.m11 * v.y;
+
+            return kProd;
+        }
+
+        /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
         public static Matrix2x2d operator *(Matrix2x2d m, double s)

@@ -6,6 +6,7 @@ using Common.Core.Numerics;
 
 using REAL = System.Double;
 using VECTOR3 = Common.Core.Numerics.Vector3d;
+using POINT3 = Common.Core.Numerics.Point3d;
 using MATRIX3 = Common.Core.Numerics.Matrix3x3d;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4d;
 

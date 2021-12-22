@@ -242,6 +242,20 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Multiply a point by a matrix.
+        /// </summary>
+        public static Point3d operator *(Matrix3x3d m, Point3d v)
+        {
+            Point3d kProd = new Point3d();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
+            kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z;
+
+            return kProd;
+        }
+
+        /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
         public static Matrix3x3d operator *(Matrix3x3d m1, double s)
@@ -481,9 +495,30 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Create a translation out of a point.
+        /// </summary>
+        static public Matrix3x3d Translate(Point2d v)
+        {
+            return new Matrix3x3d(1, 0, v.x,
+                                  0, 1, v.y,
+                                  0, 0, 1);
+        }
+
+        /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
         static public Matrix3x3d Scale(Vector2d v)
+        {
+            return new Matrix3x3d(v.x, 0, 0,
+                                  0, v.y, 0,
+                                  0, 0, 1);
+
+        }
+
+        /// <summary>
+        /// Create a scale out of a point.
+        /// </summary>
+        static public Matrix3x3d Scale(Point2d v)
         {
             return new Matrix3x3d(v.x, 0, 0,
                                   0, v.y, 0,
@@ -505,10 +540,10 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle.
         /// </summary>
-        static public Matrix3x3d RotateX(double angle)
+        static public Matrix3x3d RotateX(Radian radian)
         {
-            double ca = Math.Cos(angle * Math.PI / 180.0);
-            double sa = Math.Sin(angle * Math.PI / 180.0);
+            double ca = Math.Cos(radian.angle);
+            double sa = Math.Sin(radian.angle);
 
             return new Matrix3x3d(1, 0, 0,
                                   0, ca, -sa,
@@ -518,10 +553,10 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle.
         /// </summary>
-        static public Matrix3x3d RotateY(double angle)
+        static public Matrix3x3d RotateY(Radian radian)
         {
-            double ca = Math.Cos(angle * Math.PI / 180.0);
-            double sa = Math.Sin(angle * Math.PI / 180.0);
+            double ca = Math.Cos(radian.angle);
+            double sa = Math.Sin(radian.angle);
 
             return new Matrix3x3d(ca, 0, sa,
                                   0, 1, 0,
@@ -531,10 +566,10 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle.
         /// </summary>
-        static public Matrix3x3d RotateZ(double angle)
+        static public Matrix3x3d RotateZ(Radian radian)
         {
-            double ca = Math.Cos(angle * Math.PI / 180.0);
-            double sa = Math.Sin(angle * Math.PI / 180.0);
+            double ca = Math.Cos(radian.angle);
+            double sa = Math.Sin(radian.angle);
 
             return new Matrix3x3d(ca, -sa, 0,
                                   sa, ca, 0,

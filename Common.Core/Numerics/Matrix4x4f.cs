@@ -309,7 +309,23 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Multiply  a vector by a matrix.
+        /// Multiply a point by a matrix.
+        /// </summary>
+        public static Point3f operator *(Matrix4x4f m, Point3f v)
+        {
+            Point3f kProd = new Point3f();
+
+            float invW = MathUtil.SafeInv(m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33);
+
+            kProd.x = (m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03) * invW;
+            kProd.y = (m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13) * invW;
+            kProd.z = (m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23) * invW;
+
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a vector by a matrix.
         /// </summary>
         public static Vector4f operator *(Matrix4x4f m, Vector4f v)
         {
@@ -319,6 +335,21 @@ namespace Common.Core.Numerics
 			kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13 * v.w;
 			kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23 * v.w;
 			kProd.w = m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33 * v.w;
+
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a point by a matrix.
+        /// </summary>
+        public static Point4f operator *(Matrix4x4f m, Point4f v)
+        {
+            Point4f kProd = new Point4f();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03 * v.w;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13 * v.w;
+            kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23 * v.w;
+            kProd.w = m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33 * v.w;
 
             return kProd;
         }
@@ -591,7 +622,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation, rotation and scale.
         /// </summary>
-        static public Matrix4x4f TranslateRotateScale(Vector3f t, Quaternion3f r, Vector3f s)
+        static public Matrix4x4f TranslateRotateScale(Point3f t, Quaternion3f r, Point3f s)
         {
             Matrix4x4f T = Translate(t);
             Matrix4x4f R = r.ToMatrix4x4f();
@@ -603,7 +634,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation and rotation.
         /// </summary>
-        static public Matrix4x4f TranslateRotate(Vector3f t, Quaternion3f r)
+        static public Matrix4x4f TranslateRotate(Point3f t, Quaternion3f r)
         {
             Matrix4x4f T = Translate(t);
             Matrix4x4f R = r.ToMatrix4x4f();
@@ -614,7 +645,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation and scale.
         /// </summary>
-        static public Matrix4x4f TranslateScale(Vector3f t, Vector3f s)
+        static public Matrix4x4f TranslateScale(Point3f t, Point3f s)
         {
             Matrix4x4f T = Translate(t);
             Matrix4x4f S = Scale(s);
@@ -625,7 +656,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation and scale.
         /// </summary>
-        static public Matrix4x4f RotateScale(Quaternion3f r, Vector3f s)
+        static public Matrix4x4f RotateScale(Quaternion3f r, Point3f s)
         {
             Matrix4x4f R = r.ToMatrix4x4f();
             Matrix4x4f S = Scale(s);
@@ -636,7 +667,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation out of a vector.
         /// </summary>
-        static public Matrix4x4f Translate(Vector3f v)
+        static public Matrix4x4f Translate(Point3f v)
         {
             return new Matrix4x4f(	1, 0, 0, v.x,
                                     0, 1, 0, v.y,
@@ -647,7 +678,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
-        static public Matrix4x4f Scale(Vector3f v)
+        static public Matrix4x4f Scale(Point3f v)
         {
             return new Matrix4x4f(	v.x, 0, 0, 0,
                                     0, v.y, 0, 0,
@@ -669,9 +700,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle in degrees.
         /// </summary>
-        static public Matrix4x4f RotateX(float angle)
+        static public Matrix4x4f RotateX(Radian radian)
         {
-            float a = MathUtil.ToRadians(angle);
+            float a = (float)radian.angle;
 			float ca = MathUtil.Cos(a);
 			float sa = MathUtil.Sin(a);
 
@@ -684,9 +715,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle in degrees.
         /// </summary>
-        static public Matrix4x4f RotateY(float angle)
+        static public Matrix4x4f RotateY(Radian radian)
         {
-            float a = MathUtil.ToRadians(angle);
+            float a = (float)radian.angle;
             float ca = MathUtil.Cos(a);
             float sa = MathUtil.Sin(a);
 
@@ -699,9 +730,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle in degrees.
         /// </summary>
-        static public Matrix4x4f RotateZ(float angle)
+        static public Matrix4x4f RotateZ(Radian radian)
         {
-            float a = MathUtil.ToRadians(angle);
+            float a = (float)radian.angle;
             float ca = MathUtil.Cos(a);
             float sa = MathUtil.Sin(a);
 
@@ -749,16 +780,16 @@ namespace Common.Core.Numerics
 		/// <summary>
 		/// Creates the matrix need to look at target from position.
 		/// </summary>
-		static public Matrix4x4f LookAt(Vector3f position, Vector3f target, Vector3f Up)
+		static public Matrix4x4f LookAt(Point3f position, Point3f target, Vector3f Up)
 		{
 			
-			Vector3f zaxis = (position - target).Normalized;
+			Vector3f zaxis = Point3f.Direction(target, position);
 			Vector3f xaxis = Vector3f.Cross(Up, zaxis).Normalized;
 			Vector3f yaxis = Vector3f.Cross(zaxis, xaxis);
 			
-			return new Matrix4x4f(	xaxis.x, xaxis.y, xaxis.z, -Vector3f.Dot(xaxis, position),
-			                      	yaxis.x, yaxis.y, yaxis.z, -Vector3f.Dot(yaxis, position),
-			                      	zaxis.x, zaxis.y, zaxis.z, -Vector3f.Dot(zaxis, position),
+			return new Matrix4x4f(	xaxis.x, xaxis.y, xaxis.z, -Vector3f.Dot(xaxis, position.Vector3f),
+			                      	yaxis.x, yaxis.y, yaxis.z, -Vector3f.Dot(yaxis, position.Vector3f),
+			                      	zaxis.x, zaxis.y, zaxis.z, -Vector3f.Dot(zaxis, position.Vector3f),
 			                      	0, 0, 0, 1);
 		}
 

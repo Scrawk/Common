@@ -228,7 +228,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Multiply  a vector by a matrix.
+        /// Multiply a vector by a matrix.
         /// </summary>
         public static Vector3f operator *(Matrix3x3f m, Vector3f v)
         {
@@ -237,6 +237,20 @@ namespace Common.Core.Numerics
 			kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
 			kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
 			kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z;
+
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a point by a matrix.
+        /// </summary>
+        public static Point3f operator *(Matrix3x3f m, Point3f v)
+        {
+            Point3f kProd = new Point3f();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
+            kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z;
 
             return kProd;
         }
@@ -481,13 +495,35 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Create a translation out of a point.
+        /// </summary>
+        static public Matrix3x3f Translate(Point2f v)
+        {
+            return new Matrix3x3f(1, 0, v.x,
+                                  0, 1, v.y,
+                                  0, 0, 1);
+        }
+
+        /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
         static public Matrix3x3f Scale(Vector2f v)
         {
             return new Matrix3x3f(v.x, 0, 0,
-                                  0, v.y, 0, 
-                                  0, 0, 1);                      
+                                  0, v.y, 0,
+                                  0, 0, 1);
+
+        }
+
+        /// <summary>
+        /// Create a scale out of a point.
+        /// </summary>
+        static public Matrix3x3f Scale(Point2f v)
+        {
+            return new Matrix3x3f(v.x, 0, 0,
+                                  0, v.y, 0,
+                                  0, 0, 1);
+
         }
 
         /// <summary>
@@ -498,15 +534,16 @@ namespace Common.Core.Numerics
             return new Matrix3x3f(s, 0, 0,
                                   0, s, 0,
                                   0, 0, 1);
+
         }
 
         /// <summary>
         /// Create a rotation out of a angle.
         /// </summary>
-        static public Matrix3x3f RotateX(float angle)
+        static public Matrix3x3f RotateX(Radian radian)
         {
-            float ca = (float)Math.Cos(angle * Math.PI / 180.0);
-            float sa = (float)Math.Sin(angle * Math.PI / 180.0);
+            float ca = (float)Math.Cos(radian.angle);
+            float sa = (float)Math.Sin(radian.angle);
 
             return new Matrix3x3f(1, 0, 0,
                                   0, ca, -sa,
@@ -516,10 +553,10 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle.
         /// </summary>
-        static public Matrix3x3f RotateY(float angle)
+        static public Matrix3x3f RotateY(Radian radian)
         {
-            float ca = (float)Math.Cos(angle * Math.PI / 180.0);
-            float sa = (float)Math.Sin(angle * Math.PI / 180.0);
+            float ca = (float)Math.Cos(radian.angle);
+            float sa = (float)Math.Sin(radian.angle);
 
             return new Matrix3x3f(ca, 0, sa,
                                   0, 1, 0,
@@ -529,10 +566,10 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a angle.
         /// </summary>
-        static public Matrix3x3f RotateZ(float angle)
+        static public Matrix3x3f RotateZ(Radian radian)
         {
-            float ca = (float)Math.Cos(angle * Math.PI / 180.0);
-            float sa = (float)Math.Sin(angle * Math.PI / 180.0);
+            float ca = (float)Math.Cos(radian.angle);
+            float sa = (float)Math.Sin(radian.angle);
 
             return new Matrix3x3f(ca, -sa, 0,
                                   sa, ca, 0,
