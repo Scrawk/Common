@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
 using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
+using POINT2 = Common.Core.Numerics.Point2f;
 using BOX2 = Common.Geometry.Shapes.Box2f;
 
 namespace Common.Geometry.Collections
@@ -122,7 +122,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does a shape contain the point.
         /// </summary>
-        public T Contains(VECTOR2 point)
+        public T Contains(POINT2 point)
         {
             return NodeContains(Root, point)?.Shape;
         }
@@ -131,7 +131,7 @@ namespace Common.Geometry.Collections
         /// Find all the shapes that contain the point and 
         /// add them to the list.
         /// </summary>
-        public void Containing(VECTOR2 point, List<T> shapes)
+        public void Containing(POINT2 point, List<T> shapes)
         {
             NodeContaining(Root, point, shapes);
         }
@@ -156,7 +156,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// The signed distance to the closest shape.
         /// </summary>
-        public REAL SignedDistance(VECTOR2 point)
+        public REAL SignedDistance(POINT2 point)
         {
             REAL sd = REAL.PositiveInfinity;
 
@@ -291,7 +291,7 @@ namespace Common.Geometry.Collections
         /// Find the leaf node that has a shape containing
         /// this point.
         /// </summary>
-        private BVHTreeNode2f<T> NodeContains(BVHTreeNode2f<T> node, VECTOR2 point)
+        private BVHTreeNode2f<T> NodeContains(BVHTreeNode2f<T> node, POINT2 point)
         {
             if (node != null && node.Bounds.Contains(point))
             {
@@ -317,7 +317,7 @@ namespace Common.Geometry.Collections
         /// Find all the shapes that contain the point and 
         /// add them to the list.
         /// </summary>
-        private void NodeContaining(BVHTreeNode2f<T> node, VECTOR2 point, List<T> shapes)
+        private void NodeContaining(BVHTreeNode2f<T> node, POINT2 point, List<T> shapes)
         {
             if (node != null && node.Bounds.Contains(point))
             {
@@ -386,7 +386,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Find the smallest signed distance to the point.
         /// </summary>
-        private REAL NodeSignedDistance(BVHTreeNode2f<T> node, VECTOR2 point, REAL sd)
+        private REAL NodeSignedDistance(BVHTreeNode2f<T> node, POINT2 point, REAL sd)
         {
             if (node != null)
             {

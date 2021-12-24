@@ -21,8 +21,8 @@ namespace Common.Geometry.Test.Shapes
 
             Assert.IsTrue(MathUtil.AlmostEqual(1, s));
             Assert.IsTrue(MathUtil.AlmostEqual(2, t));
-            Assert.IsTrue(Vector2f.AlmostEqual((1, 0), ray1.GetPosition(s)));
-            Assert.IsTrue(Vector2f.AlmostEqual((1, 0), ray2.GetPosition(t)));
+            Assert.IsTrue(Point2f.AlmostEqual((1, 0), ray1.GetPosition(s)));
+            Assert.IsTrue(Point2f.AlmostEqual((1, 0), ray2.GetPosition(t)));
         }
     }
 }

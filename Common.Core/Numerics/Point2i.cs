@@ -123,6 +123,54 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// The sum of the points components.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y;
+            }
+        }
+
+        /// <summary>
+        /// The product of the points components.
+        /// </summary>
+        public REAL Product
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y;
+            }
+        }
+
+        /// <summary>
+        /// The points absolute values.
+        /// </summary>
+        public Point2i Absolute
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return new Point2i(Math.Abs(x), Math.Abs(y));
+            }
+        }
+
+        /// <summary>
+        /// The length of the point squared.
+        /// </summary>
+		public REAL SqrMagnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return (x * x + y * y);
+            }
+        }
+
+        /// <summary>
         /// Add two points.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -228,6 +276,16 @@ namespace Common.Core.Numerics
         public static Point2i operator /(Point2i v, REAL s)
         {
             return new Point2i(v.x / s, v.y / s);
+        }
+
+        /// <summary>
+        /// Implict cast from a tuple.
+        /// </summary>
+        /// <param name="v">The vector to cast from</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point2i(ValueTuple<REAL, REAL> v)
+        {
+            return new Point2i(v.Item1, v.Item2);
         }
 
         /// <summary>

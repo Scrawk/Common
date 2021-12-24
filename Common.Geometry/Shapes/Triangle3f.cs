@@ -10,13 +10,13 @@ namespace Common.Geometry.Shapes
     public struct Triangle3f : IEquatable<Triangle3f>
     {
 
-        public Vector3f A;
+        public Point3f A;
 
-        public Vector3f B;
+        public Point3f B;
 
-        public Vector3f C;
+        public Point3f C;
 
-        public Triangle3f(Vector3f a, Vector3f b, Vector3f c)
+        public Triangle3f(Point3f a, Point3f b, Point3f c)
         {
             A = a;
             B = b;
@@ -25,12 +25,12 @@ namespace Common.Geometry.Shapes
 
         public Triangle3f(float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz)
         {
-            A = new Vector3f(ax, ay, az);
-            B = new Vector3f(bx, by, bz);
-            C = new Vector3f(cx, cy, cz);
+            A = new Point3f(ax, ay, az);
+            B = new Point3f(bx, by, bz);
+            C = new Point3f(cx, cy, cz);
         }
 
-        public Vector3f Center
+        public Point3f Center
         {
             get { return (A + B + C) / 3.0f; }
         }
@@ -54,21 +54,21 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        unsafe public Vector3f this[int i]
+        unsafe public Point3f this[int i]
         {
             get
             {
                 if ((uint)i >= 3)
                     throw new IndexOutOfRangeException("Triangle3f index out of range.");
 
-                fixed (Triangle3f* array = &this) { return ((Vector3f*)array)[i]; }
+                fixed (Triangle3f* array = &this) { return ((Point3f*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 3)
                     throw new IndexOutOfRangeException("Triangle3f index out of range.");
 
-                fixed (Vector3f* array = &A) { array[i] = value; }
+                fixed (Point3f* array = &A) { array[i] = value; }
             }
         }
 
@@ -77,7 +77,7 @@ namespace Common.Geometry.Shapes
             return new Triangle3f(tri.A + s, tri.B + s, tri.C + s);
         }
 
-        public static Triangle3f operator +(Triangle3f tri, Vector3f v)
+        public static Triangle3f operator +(Triangle3f tri, Point3f v)
         {
             return new Triangle3f(tri.A + v, tri.B + v, tri.C + v);
         }
@@ -97,7 +97,7 @@ namespace Common.Geometry.Shapes
             return new Triangle3f(tri.A / s, tri.B / s, tri.C / s);
         }
 
-        public static Triangle3f operator /(Triangle3f tri, Vector3f v)
+        public static Triangle3f operator /(Triangle3f tri, Point3f v)
         {
             return new Triangle3f(tri.A / v, tri.B / v, tri.C / v);
         }

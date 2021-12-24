@@ -11,9 +11,9 @@ namespace Common.Geometry.Collections
     {
         int Count { get; }
 
-        float SignedDistance(Vector3f point);
+        float SignedDistance(Point3f point);
 
-       T Contains(Vector3f point);
+       T Contains(Point3f point);
 
         List<T> ToList();
     }

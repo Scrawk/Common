@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
 using REAL = System.Double;
-using VECTOR2 = Common.Core.Numerics.Vector2d;
+using POINT2 = Common.Core.Numerics.Point2d;
 using BOX2 = Common.Geometry.Shapes.Box2d;
 
 namespace Common.Geometry.Collections
@@ -103,7 +103,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does the collection have a shape that contains the point.
         /// </summary>
-        public T Contains(VECTOR2 point)
+        public T Contains(POINT2 point)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -121,7 +121,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         /// <param name="point"></param>
         /// <param name="shapes"></param>
-        public void Containing(VECTOR2 point, List<T> shapes)
+        public void Containing(POINT2 point, List<T> shapes)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -168,7 +168,7 @@ namespace Common.Geometry.Collections
         /// Return the signed distance field from 
         /// the union of all shapes in the collection.
         /// </summary>
-        public REAL SignedDistance(VECTOR2 point)
+        public REAL SignedDistance(POINT2 point)
         {
             var dist = REAL.PositiveInfinity;
 

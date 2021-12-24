@@ -5,7 +5,7 @@ using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
 using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
+using POINT2 = Common.Core.Numerics.Point2f;
 using BOX2 = Common.Geometry.Shapes.Box2f;
 using SEGMENT2 = Common.Geometry.Shapes.Segment2f;
 
@@ -32,7 +32,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         /// <param name="width">The lines width.</param>
         /// <param name="positions">The lines positions.</param>
-        public Polyline2f(REAL width, IList<VECTOR2> positions) : base(positions)
+        public Polyline2f(REAL width, IList<POINT2> positions) : base(positions)
         {
             Width = width;
         }
@@ -59,7 +59,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Get the position with a clamped index.
         /// </summary>
-        public VECTOR2 GetPosition(int i)
+        public POINT2 GetPosition(int i)
         {
             return Positions.GetClamped(i);
         }
@@ -160,7 +160,7 @@ namespace Common.Geometry.Polygons
                 var p0 = GetPosition(i - 1);
                 var p1 = GetPosition(i);
 
-                Lengths[i] = Length + VECTOR2.Distance(p0, p1);
+                Lengths[i] = Length + POINT2.Distance(p0, p1);
                 Length = Lengths[i];
             }
         }
@@ -169,7 +169,7 @@ namespace Common.Geometry.Polygons
         /// Does the line contain the point.
         /// The line has some thickness from its width.
         /// </summary>
-        public override bool Contains(VECTOR2 point)
+        public override bool Contains(POINT2 point)
         {
             REAL radius = Radius;
 
@@ -190,18 +190,18 @@ namespace Common.Geometry.Polygons
         /// Find the closest point on the line
         /// to the other point.
         /// </summary>
-        public VECTOR2 Closest(VECTOR2 p)
+        public POINT2 Closest(POINT2 p)
         {
             REAL min = REAL.PositiveInfinity;
             var seg = new SEGMENT2();
-            var closest = new VECTOR2();
+            var closest = new POINT2();
 
             for (int i = 0; i < Count - 1; i++)
             {
                 seg.A = Positions[i];
                 seg.B = Positions[i + 1];
                 var c = seg.Closest(p);
-                var d2 = VECTOR2.SqrDistance(c, p);
+                var d2 = POINT2.SqrDistance(c, p);
 
                 if (d2 < min)
                 {
@@ -241,7 +241,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// The signed distance from the line to the point.
         /// </summary>
-        public override REAL SignedDistance(VECTOR2 point)
+        public override REAL SignedDistance(POINT2 point)
         {
             REAL sdf = REAL.PositiveInfinity;
             REAL radius = Radius;

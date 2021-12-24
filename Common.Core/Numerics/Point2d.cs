@@ -128,23 +128,55 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// The length of the point from the origin.
+        /// The sum of the points components.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y;
+            }
+        }
+
+        /// <summary>
+        /// The product of the points components.
+        /// </summary>
+        public REAL Product
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y;
+            }
+        }
+
+        /// <summary>
+        /// The points absolute values.
+        /// </summary>
+        public Point2d Absolute
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return new Point2d(Math.Abs(x), Math.Abs(y));
+            }
+        }
+
+        /// <summary>
+        /// The length of the vector.
         /// </summary>
         public REAL Magnitude
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL sqm = SqrMagnitude;
-                if (sqm != 0)
-                    return MathUtil.Sqrt(sqm);
-                else
-                    return 0;
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
         /// <summary>
-        /// The length of the point from the origin squared.
+        /// The length of the vector squared.
         /// </summary>
 		public REAL SqrMagnitude
         {
@@ -282,13 +314,13 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Implict cast from vector.
+        /// Implict cast from a tuple.
         /// </summary>
         /// <param name="v">The vector to cast from</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Point2d(Vector2d v)
+        public static implicit operator Point2d(ValueTuple<REAL, REAL> v)
         {
-            return new Point2d(v.x, v.y);
+            return new Point2d(v.Item1, v.Item2);
         }
 
         /// <summary>
@@ -318,6 +350,17 @@ namespace Common.Core.Numerics
             if (!(obj is Point2d)) return false;
             Point2d v = (Point2d)obj;
             return this == v;
+        }
+
+        /// <summary>
+        /// Are these points equal given the error.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AlmostEqual(Point2d v0, Point2d v1, REAL eps = MathUtil.EPS_64)
+        {
+            if (Math.Abs(v0.x - v1.x) > eps) return false;
+            if (Math.Abs(v0.y - v1.y) > eps) return false;
+            return true;
         }
 
         /// <summary>

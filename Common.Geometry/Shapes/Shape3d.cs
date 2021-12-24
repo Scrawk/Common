@@ -10,13 +10,13 @@ namespace Common.Geometry.Shapes
     {
         Box3d Bounds { get; }
 
-        bool Contains(Vector3d p);
+        bool Contains(Point3d p);
 
         bool Intersects(Box3d box);
 
-        Vector3d Closest(Vector3d p);
+        Point3d Closest(Point3d p);
 
-        double SignedDistance(Vector3d p);
+        double SignedDistance(Point3d p);
 
     }
 
@@ -24,12 +24,12 @@ namespace Common.Geometry.Shapes
     {
         public abstract Box3d Bounds { get; }
 
-        public virtual Vector3d Closest(Vector3d p)
+        public virtual Point3d Closest(Point3d p)
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool Contains(Vector3d p)
+        public virtual bool Contains(Point3d p)
         {
             throw new NotImplementedException();
         }
@@ -39,7 +39,7 @@ namespace Common.Geometry.Shapes
             throw new NotImplementedException();
         }
 
-        public virtual double SignedDistance(Vector3d p)
+        public virtual double SignedDistance(Point3d p)
         {
             throw new NotImplementedException();
         }

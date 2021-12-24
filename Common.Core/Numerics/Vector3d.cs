@@ -162,6 +162,17 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert the vector to a point.
+        /// </summary>
+        public Point3d Point3d
+        {
+            get
+            {
+                return new Point3d(x, y, z);
+            }
+        }
+
+        /// <summary>
         /// The sum of the vectors components.
         /// </summary>
         public REAL Sum

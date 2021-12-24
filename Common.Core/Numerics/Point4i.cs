@@ -57,12 +57,12 @@ namespace Common.Core.Numerics
         /// <summary>
         /// 4D point to 2D point.
         /// </summary>
-        public Point2d xy => new Point2d(x, y);
+        public Point2i xy => new Point2i(x, y);
 
         /// <summary>
         /// 4D point to 3D point.
         /// </summary>
-        public Point3d xyz => new Point3d(x, y, z);
+        public Point3i xyz => new Point3i(x, y, z);
 
         /// <summary>
         /// A point all with the value v.
@@ -108,6 +108,54 @@ namespace Common.Core.Numerics
                     throw new IndexOutOfRangeException("Point4i index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// The sum of the points components.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y + z + w;
+            }
+        }
+
+        /// <summary>
+        /// The product of the points components.
+        /// </summary>
+        public REAL Product
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y * z * w;
+            }
+        }
+
+        /// <summary>
+        /// The points absolute values.
+        /// </summary>
+        public Point4i Absolute
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return new Point4i(Math.Abs(x), Math.Abs(y), Math.Abs(z), Math.Abs(w));
+            }
+        }
+
+        /// <summary>
+        /// The length of the vector squared.
+        /// </summary>
+		public REAL SqrMagnitude
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return (x * x + y * y + z * z + w * w);
             }
         }
 
@@ -217,6 +265,16 @@ namespace Common.Core.Numerics
         public static Point4i operator /(Point4i v, REAL s)
         {
             return new Point4i(v.x / s, v.y / s, v.z / s, v.w / s);
+        }
+
+        /// <summary>
+        /// Implict cast from a tuple.
+        /// </summary>
+        /// <param name="v">The vector to cast from</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point4i(ValueTuple<REAL, REAL, REAL, REAL> v)
+        {
+            return new Point4i(v.Item1, v.Item2, v.Item3, v.Item4);
         }
 
         /// <summary>

@@ -125,6 +125,17 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert the vector to a point.
+        /// </summary>
+        public Point2d Point2d
+        {
+            get
+            {
+                return new Point2d(x, y);
+            }
+        }
+
+        /// <summary>
         /// The sum of the vectors components.
         /// </summary>
         public REAL Sum

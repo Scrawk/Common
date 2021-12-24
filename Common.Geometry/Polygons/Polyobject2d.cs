@@ -6,7 +6,7 @@ using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
 using REAL = System.Double;
-using VECTOR2 = Common.Core.Numerics.Vector2d;
+using POINT2 = Common.Core.Numerics.Point2d;
 using BOX2 = Common.Geometry.Shapes.Box2d;
 using MATRIX2 = Common.Core.Numerics.Matrix2x2d;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4d;
@@ -25,7 +25,7 @@ namespace Common.Geometry.Polygons
             CreatePositions(count);
         }
 
-        public Polyobject2d(IList<VECTOR2> positions)
+        public Polyobject2d(IList<POINT2> positions)
         {
             SetPositions(positions);
         }
@@ -36,7 +36,7 @@ namespace Common.Geometry.Polygons
 
         public REAL Length { get; protected set; }
 
-        public VECTOR2[] Positions { get; private set; }
+        public POINT2[] Positions { get; private set; }
 
         public REAL[] Params { get; private set; }
 
@@ -47,7 +47,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Get the position with a interpolated index.
         /// </summary>
-        public VECTOR2 GetPosition(REAL t)
+        public POINT2 GetPosition(REAL t)
         {
             return Interpolate(t, Positions);
         }
@@ -81,14 +81,14 @@ namespace Common.Geometry.Polygons
         public void CreatePositions(int size)
         {
             if (Positions == null || Positions.Length != size)
-                Positions = new VECTOR2[size];
+                Positions = new POINT2[size];
         }
 
         /// <summary>
         /// Create the position array.
         /// </summary>
         /// <param name="positions">Array to copy from.</param>
-        public void SetPositions(IList<VECTOR2> positions)
+        public void SetPositions(IList<POINT2> positions)
         {
             CreatePositions(positions.Count);
             positions.CopyTo(Positions, 0);
@@ -148,8 +148,8 @@ namespace Common.Geometry.Polygons
             Bounds = new BOX2();
             if (Count == 0) return;
 
-            var min = VECTOR2.PositiveInfinity;
-            var max = VECTOR2.NegativeInfinity;
+            var min = POINT2.PositiveInfinity;
+            var max = POINT2.NegativeInfinity;
 
             for (int i = 0; i < Count; i++)
             {
@@ -182,21 +182,21 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Does the shape contain the points.
         /// </summary>
-        public abstract bool Contains(VECTOR2 point);
+        public abstract bool Contains(POINT2 point);
 
         /// <summary>
         /// The signed distance to the point.
         /// </summary>
-        public abstract REAL SignedDistance(VECTOR2 point);
+        public abstract REAL SignedDistance(POINT2 point);
 
         /// <summary>
         /// Given the number normalized interpolate 
         /// along the object to find the value in the array.
         /// </summary>
-        public VECTOR2 Interpolate(REAL t, IList<VECTOR2> array)
+        public POINT2 Interpolate(REAL t, IList<POINT2> array)
         {
             FindInterpolationPoint(t, out int idx, out REAL s);
-            return VECTOR2.Lerp(array[idx], array.GetCircular(idx + 1), s);
+            return POINT2.Lerp(array[idx], array.GetCircular(idx + 1), s);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Translate the positions.
         /// </summary>
-        public void Translate(VECTOR2 translate)
+        public void Translate(POINT2 translate)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
@@ -222,7 +222,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Scale the positions.
         /// </summary>
-        public void Scale(VECTOR2 scale)
+        public void Scale(POINT2 scale)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)

@@ -12,9 +12,9 @@ namespace Common.Geometry.Test.Shapes
         [TestMethod]
         public void Area()
         {
-            var a = new Vector2f(0, 1);
-            var b = new Vector2f(0, 0);
-            var c = new Vector2f(1, 0);
+            var a = new Point2f(0, 1);
+            var b = new Point2f(0, 0);
+            var c = new Point2f(1, 0);
             var triangle = new Triangle2f(a, b, c);
 
             Assert.AreEqual(0.5f, triangle.SignedArea);
@@ -24,18 +24,18 @@ namespace Common.Geometry.Test.Shapes
         [TestMethod]
         public void IntersectsBox()
         {
-            var a = new Vector2f(-2, -1);
-            var b = new Vector2f(1, -1);
-            var c = new Vector2f(1, 1);
+            var a = new Point2f(-2, -1);
+            var b = new Point2f(1, -1);
+            var c = new Point2f(1, 1);
             var triangle = new Triangle2f(a, b, c);
 
-            var box = new Box2f(new Vector2f(-3, -3), new Vector2f(-2,-2));
+            var box = new Box2f(new Point2f(-3, -3), new Point2f(-2,-2));
             //Assert.IsFalse(triangle.Intersects(box));
 
-            box = new Box2f(new Vector2f(-2, -1), new Vector2f(1, 2));
+            box = new Box2f(new Point2f(-2, -1), new Point2f(1, 2));
             //Assert.IsFalse(triangle.Intersects(box));
 
-            box = new Box2f(new Vector2f(1, -3), new Vector2f(2, -2));
+            box = new Box2f(new Point2f(1, -3), new Point2f(2, -2));
             //Assert.IsFalse(triangle.Intersects(box));
         }
 

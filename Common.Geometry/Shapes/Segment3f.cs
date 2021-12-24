@@ -10,11 +10,11 @@ namespace Common.Geometry.Shapes
     public struct Segment3f : IEquatable<Segment3f>, IShape3f
     {
 
-        public Vector3f A;
+        public Point3f A;
 
-        public Vector3f B;
+        public Point3f B;
 
-        public Segment3f(Vector3f a, Vector3f b)
+        public Segment3f(Point3f a, Point3f b)
         {
             A = a;
             B = b;
@@ -22,23 +22,23 @@ namespace Common.Geometry.Shapes
 
         public Segment3f(float ax, float ay, float az, float bx, float by, float bz)
         {
-            A = new Vector3f(ax, ay, az);
-            B = new Vector3f(bx, by, bz);
+            A = new Point3f(ax, ay, az);
+            B = new Point3f(bx, by, bz);
         }
 
-        public Vector3f Center
+        public Point3f Center
         {
             get { return (A + B) * 0.5f; }
         }
 
         public float Length
         {
-            get { return Vector3f.Distance(A, B); }
+            get { return Point3f.Distance(A, B); }
         }
 
         public float SqrLength
         {
-            get { return Vector3f.SqrDistance(A, B); }
+            get { return Point3f.SqrDistance(A, B); }
         }
 
         public Box3f Bounds
@@ -56,21 +56,21 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        unsafe public Vector3f this[int i]
+        unsafe public Point3f this[int i]
         {
             get
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment3f index out of range.");
 
-                fixed (Segment3f* array = &this) { return ((Vector3f*)array)[i]; }
+                fixed (Segment3f* array = &this) { return ((Point3f*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment3f index out of range.");
 
-                fixed (Vector3f* array = &A) { array[i] = value; }
+                fixed (Point3f* array = &A) { array[i] = value; }
             }
         }
 
@@ -79,7 +79,7 @@ namespace Common.Geometry.Shapes
             return new Segment3f(seg.A + s, seg.B + s);
         }
 
-        public static Segment3f operator +(Segment3f seg, Vector3f v)
+        public static Segment3f operator +(Segment3f seg, Point3f v)
         {
             return new Segment3f(seg.A + v, seg.B + v);
         }
@@ -89,7 +89,7 @@ namespace Common.Geometry.Shapes
             return new Segment3f(seg.A - s, seg.B - s);
         }
 
-        public static Segment3f operator -(Segment3f seg, Vector3f v)
+        public static Segment3f operator -(Segment3f seg, Point3f v)
         {
             return new Segment3f(seg.A - v, seg.B - v);
         }
@@ -152,7 +152,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public bool Contains(Vector3f p)
+        public bool Contains(Point3f p)
         {
             throw new NotImplementedException();
         }
@@ -162,10 +162,10 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool Intersects(Box3f box)
         {
-            Vector3f c = box.Center;
-            Vector3f e = box.Max - c; //Box half length extents
-            Vector3f m = Center;
-            Vector3f d = B - m; //Segment halflength vector.
+            Point3f c = box.Center;
+            Point3f e = box.Max - c; //Box half length extents
+            Point3f m = Center;
+            Point3f d = B - m; //Segment halflength vector.
             m = m - c; //translate box and segment to origin.
 
             //try world coordinate axes as seperating axes.
@@ -193,7 +193,7 @@ namespace Common.Geometry.Shapes
         /// The closest point on segment to point.
         /// </summary>
         /// <param name="p">point</param>
-        public Vector3f Closest(Vector3f p)
+        public Point3f Closest(Point3f p)
         {
             float t;
             Closest(p, out t);
@@ -205,11 +205,11 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <param name="t">closest point = A + t * (B - A)</param>
-        public void Closest(Vector3f p, out float t)
+        public void Closest(Point3f p, out float t)
         {
             t = 0.0f;
-            Vector3f ab = B - A;
-            Vector3f ap = p - A;
+            Point3f ab = B - A;
+            Point3f ap = p - A;
 
             float len = ab.x * ab.x + ab.y * ab.y;
             if (MathUtil.IsZero(len)) return;
@@ -222,9 +222,9 @@ namespace Common.Geometry.Shapes
         /// Return the signed distance to the point. 
         /// Always positive.
         /// </summary>
-        public float SignedDistance(Vector3f p)
+        public float SignedDistance(Point3f p)
         {
-            return Vector3f.Distance(Closest(p), p);
+            return Point3f.Distance(Closest(p), p);
         }
 
     }

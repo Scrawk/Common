@@ -6,6 +6,7 @@ using Common.Geometry.Shapes;
 
 using REAL = System.Double;
 using VECTOR2 = Common.Core.Numerics.Vector2d;
+using POINT2 = Common.Core.Numerics.Point2d;
 using BOX2 = Common.Geometry.Shapes.Box2d;
 using SEGMENT2 = Common.Geometry.Shapes.Segment2d;
 
@@ -30,7 +31,7 @@ namespace Common.Geometry.Polygons
         /// Create a polygon.
         /// </summary>
         /// <param name="positions">The polygons positions.</param>
-        public Polygon2d(IList<VECTOR2> positions) : base(positions)
+        public Polygon2d(IList<POINT2> positions) : base(positions)
         {
 
         }
@@ -49,7 +50,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// The polygons centroid.
         /// </summary>
-        public VECTOR2 Centroid { get; private set; }
+        public POINT2 Centroid { get; private set; }
 
         /// <summary>
         /// Is the polygon points ordered clockwise.
@@ -79,7 +80,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Get the position with a circular index.
         /// </summary>
-        public VECTOR2 GetPosition(int i)
+        public POINT2 GetPosition(int i)
         {
             return Positions.GetCircular(i);
         }
@@ -171,7 +172,7 @@ namespace Common.Geometry.Polygons
         public void CalculateCentroid()
         {
             REAL det = 0;
-            Centroid = VECTOR2.Zero;
+            Centroid = POINT2.Zero;
 
             for (int i = 0; i < Count; i++)
             {
@@ -234,7 +235,7 @@ namespace Common.Geometry.Polygons
                 var p0 = GetPosition(i - 1);
                 var p1 = GetPosition(i);
 
-                Lengths[i] = Length + VECTOR2.Distance(p0, p1);
+                Lengths[i] = Length + POINT2.Distance(p0, p1);
                 Length = Lengths[i];
             }
         }
@@ -244,13 +245,13 @@ namespace Common.Geometry.Polygons
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public override bool Contains(VECTOR2 point)
+        public override bool Contains(POINT2 point)
         {
             if (Count < 3) return false;
             if (!Bounds.Contains(point)) return false;
 
             var ab = new SEGMENT2();
-            ab.A = new VECTOR2(Bounds.Min.x - Bounds.Width, point.y);
+            ab.A = new POINT2(Bounds.Min.x - Bounds.Width, point.y);
             ab.B = point;
 
             int windingNumber = 0;
@@ -271,23 +272,23 @@ namespace Common.Geometry.Polygons
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public override REAL SignedDistance(VECTOR2 point)
+        public override REAL SignedDistance(POINT2 point)
         {
             if (Count < 3)
                 return REAL.PositiveInfinity;
 
             var v0 = Positions[0];
 
-            REAL d = VECTOR2.Dot(point - v0, point - v0);
+            REAL d = VECTOR2.Dot((point - v0).Vector2d, (point - v0).Vector2d);
             REAL s = 1.0f;
 
             for (int i = 0; i < Count; i++)
             {
-                VECTOR2 vj = GetPosition(i - 1);
-                VECTOR2 vi = GetPosition(i);
+                POINT2 vj = GetPosition(i - 1);
+                POINT2 vi = GetPosition(i);
 
-                VECTOR2 e = vj - vi;
-                VECTOR2 w = point - vi;
+                VECTOR2 e = (vj - vi).Vector2d;
+                VECTOR2 w = (point - vi).Vector2d;
 
                 REAL we = VECTOR2.Dot(w, e);
                 REAL ee = VECTOR2.Dot(e, e);
@@ -309,7 +310,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Create a triangle polygon from the 3 points.
         /// </summary>
-        public static Polygon2d FromTriangle(VECTOR2 a, VECTOR2 b, VECTOR2 c)
+        public static Polygon2d FromTriangle(POINT2 a, POINT2 b, POINT2 c)
         {
             var polygon = new Polygon2d(3);
 
@@ -323,14 +324,14 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Create a box polygon from the 4 points.
         /// </summary>
-        public static Polygon2d FromBox(VECTOR2 min, VECTOR2 max)
+        public static Polygon2d FromBox(POINT2 min, POINT2 max)
         {
             var polygon = new Polygon2d(4);
 
             polygon.Positions[0] = min;
-            polygon.Positions[1] = new VECTOR2(max.x, min.y);
+            polygon.Positions[1] = new POINT2(max.x, min.y);
             polygon.Positions[2] = max;
-            polygon.Positions[3] = new VECTOR2(min.x, max.y);
+            polygon.Positions[3] = new POINT2(min.x, max.y);
 
             return polygon;
         }
@@ -338,7 +339,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Create a circle polygon.
         /// </summary>
-        public static Polygon2d FromCircle(VECTOR2 center, REAL radius, int segments)
+        public static Polygon2d FromCircle(POINT2 center, REAL radius, int segments)
         {
             var polygon = new Polygon2d(segments);
 
@@ -352,7 +353,7 @@ namespace Common.Geometry.Polygons
                 REAL x = -radius * MathUtil.Cos(theta);
                 REAL y = -radius * MathUtil.Sin(theta);
 
-                polygon.Positions[i] = center + new VECTOR2(x, y);
+                polygon.Positions[i] = center + new POINT2(x, y);
             }
 
             return polygon;

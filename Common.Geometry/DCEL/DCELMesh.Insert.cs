@@ -13,7 +13,7 @@ namespace Common.Geometry.DCEL
         /// </summary>
         /// <param name="point">The vertices point.</param>
         /// <returns>The new vertex.</returns>
-        public DCELVertex InsertVertex(Vector2d point)
+        public DCELVertex InsertVertex(Point2d point)
         {
             int i = NextVertexIndex();
             var vert = new DCELVertex(i, point);

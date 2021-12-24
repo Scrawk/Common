@@ -5,7 +5,7 @@ using Common.Core.Numerics;
 using Common.Geometry.Shapes;
 
 using REAL = System.Single;
-using VECTOR2 = Common.Core.Numerics.Vector2f;
+using POINT2 = Common.Core.Numerics.Point2f;
 using BOX2 = Common.Geometry.Shapes.Box2f;
 
 namespace Common.Geometry.Collections
@@ -23,7 +23,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        T Contains(VECTOR2 point);
+        T Contains(POINT2 point);
 
         /// <summary>
         /// Find all the shapes that contain the point and 
@@ -31,7 +31,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         /// <param name="point"></param>
         /// <param name="shapes"></param>
-        void Containing(VECTOR2 point, List<T> shapes);
+        void Containing(POINT2 point, List<T> shapes);
 
         /// <summary>
         /// Does a shape intersect the box.
@@ -54,7 +54,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        REAL SignedDistance(VECTOR2 point);
+        REAL SignedDistance(POINT2 point);
 
         /// <summary>
         /// Return a list of all the shapes in the collection.

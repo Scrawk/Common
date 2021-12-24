@@ -175,20 +175,12 @@ namespace Common.Geometry.Shapes
             corners[3] = new Point2i(Min.x, Max.y);
         }
 
-        public void GetCorners(IList<Vector2f> corners)
+        public void GetCornersXZ(IList<Point3f> corners, int y = 0)
         {
-            corners[0] = new Vector2f(Min.x, Min.y);
-            corners[1] = new Vector2f(Max.x, Min.y);
-            corners[2] = new Vector2f(Max.x, Max.y);
-            corners[3] = new Vector2f(Min.x, Max.y);
-        }
-
-        public void GetCornersXZ(IList<Vector3f> corners, int y = 0)
-        {
-            corners[0] = new Vector3f(Min.x, y, Min.y);
-            corners[1] = new Vector3f(Max.x, y, Min.y);
-            corners[2] = new Vector3f(Max.x, y, Max.y);
-            corners[3] = new Vector3f(Min.x, y, Max.y);
+            corners[0] = new Point3f(Min.x, y, Min.y);
+            corners[1] = new Point3f(Max.x, y, Min.y);
+            corners[2] = new Point3f(Max.x, y, Max.y);
+            corners[3] = new Point3f(Min.x, y, Max.y);
         }
 
         /// <summary>

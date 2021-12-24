@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using Common.Core.Numerics;
 
 using REAL = System.Double;
-using VECTOR2 = Common.Core.Numerics.Vector2d;
+using POINT2 = Common.Core.Numerics.Point2d;
 
 namespace Common.Geometry.Shapes
 {
@@ -53,7 +53,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p1">Point 1.</param>
         /// <param name="p2">Point 2.</param>
-        public Line2d(VECTOR2 p1, VECTOR2 p2)
+        public Line2d(POINT2 p1, POINT2 p2)
         {
             A = p1.y - p2.y;
             B = p2.x - p1.x;
@@ -221,7 +221,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns>if the point lies on the line</returns>
-        public bool PointOnLine(VECTOR2 p)
+        public bool PointOnLine(POINT2 p)
         {
             return MathUtil.IsZero(A * p.x + B * p.y + C);
         }
@@ -230,7 +230,7 @@ namespace Common.Geometry.Shapes
         /// Calculates the perpendicular line that
         /// passes through the given point.
         /// </summary>
-        public Line2d PerpendicularLine(VECTOR2 p)
+        public Line2d PerpendicularLine(POINT2 p)
         {
             return new Line2d(B, -A, -B * p.x + A * p.y);
         }
@@ -239,7 +239,7 @@ namespace Common.Geometry.Shapes
         /// Determines whether the point lies
         /// on the left side of the line.
         /// </summary>
-        public bool IsLeftPoint(VECTOR2 p)
+        public bool IsLeftPoint(POINT2 p)
         {
             return p.x < X(p.y);
         }
@@ -248,7 +248,7 @@ namespace Common.Geometry.Shapes
         /// Determines whether the point lies
         /// on the right side of the line.
         /// </summary>
-        public bool IsRightPoint(VECTOR2 p)
+        public bool IsRightPoint(POINT2 p)
         {
             return p.x > X(p.y);
         }
@@ -281,7 +281,7 @@ namespace Common.Geometry.Shapes
         /// <param name="line">the other line</param>
         /// <param name="p">intersection point</param>
         /// <returns>if lines intersect</returns>
-        public bool Intersects(Line2d line, out VECTOR2 p)
+        public bool Intersects(Line2d line, out POINT2 p)
         {
 
             if (!MathUtil.IsZero(B))
@@ -289,7 +289,7 @@ namespace Common.Geometry.Shapes
                 REAL f = line.A - line.B * A / B;
                 if (MathUtil.IsZero(f))
                 {
-                    p = VECTOR2.Zero;
+                    p = POINT2.Zero;
                     return false;
                 }
                 else
@@ -297,7 +297,7 @@ namespace Common.Geometry.Shapes
                     REAL x = (-line.C + line.B * C / B) / f;
                     REAL y = (-C - A * x) / B;
 
-                    p = new VECTOR2(x, y);
+                    p = new POINT2(x, y);
                     return true;
                 }
             }
@@ -305,7 +305,7 @@ namespace Common.Geometry.Shapes
             {
                 if (MathUtil.IsZero(A))
                 {
-                    p = VECTOR2.Zero;
+                    p = POINT2.Zero;
                     return false;
                 }
                 else
@@ -313,7 +313,7 @@ namespace Common.Geometry.Shapes
                     REAL f = line.B - line.A * B / A;
                     if (MathUtil.IsZero(f))
                     {
-                        p = VECTOR2.Zero;
+                        p = POINT2.Zero;
                         return false;
                     }
                     else
@@ -321,7 +321,7 @@ namespace Common.Geometry.Shapes
                         REAL y = (-line.C + line.A * C / A) / f;
                         REAL x = (-C - B * y) / A;
 
-                        p = new VECTOR2(x, y);
+                        p = new POINT2(x, y);
                         return true;
                     }
                 }

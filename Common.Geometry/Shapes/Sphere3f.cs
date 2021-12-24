@@ -11,17 +11,17 @@ namespace Common.Geometry.Shapes
     public struct Sphere3f : IEquatable<Sphere3f>, IShape3f
     {
 
-        public Vector3f Center;
+        public Point3f Center;
 
         public float Radius;
 
         public Sphere3f(float x, float y, float z, float radius)
         {
-            Center = new Vector3f(x,y,z);
+            Center = new Point3f(x,y,z);
             Radius = radius;
         }
 
-        public Sphere3f(Vector3f center, float radius)
+        public Sphere3f(Point3f center, float radius)
         {
             Center = center;
             Radius = radius;
@@ -118,9 +118,9 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Enlarge the sphere so it contains the point p.
         /// </summary>
-        public void Enlarge(Vector3f p)
+        public void Enlarge(Point3f p)
         {
-            Vector3f d = p - Center;
+            Point3f d = p - Center;
             float dist2 = d.SqrMagnitude;
 
             if (dist2 > Radius2)
@@ -138,11 +138,11 @@ namespace Common.Geometry.Shapes
         /// Find the closest point to the sphere.
         /// If point inside sphere return point.
         /// </summary>
-        public Vector3f Closest(Vector3f p)
+        public Point3f Closest(Point3f p)
         {
-            Vector3f d = Center - p;
+            Point3f d = Center - p;
             if (d.SqrMagnitude <= Radius2) return p;
-            return Center + Radius * d.Normalized;
+            return Center + Radius * d.Vector3f.Normalized;
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Common.Geometry.Shapes
         /// If point is outside sphere field is positive.
         /// If point is inside spher field is negative.
         /// </summary>
-        public float SignedDistance(Vector3f p)
+        public float SignedDistance(Point3f p)
         {
             p = p - Center;
             return p.Magnitude - Radius;
@@ -161,9 +161,9 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">The point</param>
         /// <returns>true if sphere contains point</returns>
-        public bool Contains(Vector3f p)
+        public bool Contains(Point3f p)
         {
-            return Vector3f.SqrDistance(Center, p) <= Radius2;
+            return Point3f.SqrDistance(Center, p) <= Radius2;
         }
 
         /// <summary>
@@ -171,14 +171,14 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool Contains(Box3f box)
         {
-            if (!Contains(new Vector3f(box.Min.x, box.Min.y, box.Min.z))) return false;
-            if (!Contains(new Vector3f(box.Max.x, box.Min.y, box.Min.z))) return false;
-            if (!Contains(new Vector3f(box.Max.x, box.Min.y, box.Max.z))) return false;
-            if (!Contains(new Vector3f(box.Min.x, box.Min.y, box.Max.z))) return false;
-            if (!Contains(new Vector3f(box.Min.x, box.Max.y, box.Min.z))) return false;
-            if (!Contains(new Vector3f(box.Max.x, box.Max.y, box.Min.z))) return false;
-            if (!Contains(new Vector3f(box.Max.x, box.Max.y, box.Max.z))) return false;
-            if (!Contains(new Vector3f(box.Min.x, box.Max.y, box.Max.z))) return false;
+            if (!Contains(new Point3f(box.Min.x, box.Min.y, box.Min.z))) return false;
+            if (!Contains(new Point3f(box.Max.x, box.Min.y, box.Min.z))) return false;
+            if (!Contains(new Point3f(box.Max.x, box.Min.y, box.Max.z))) return false;
+            if (!Contains(new Point3f(box.Min.x, box.Min.y, box.Max.z))) return false;
+            if (!Contains(new Point3f(box.Min.x, box.Max.y, box.Min.z))) return false;
+            if (!Contains(new Point3f(box.Max.x, box.Max.y, box.Min.z))) return false;
+            if (!Contains(new Point3f(box.Max.x, box.Max.y, box.Max.z))) return false;
+            if (!Contains(new Point3f(box.Min.x, box.Max.y, box.Max.z))) return false;
             return true;
         }
 
@@ -190,7 +190,7 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Sphere3f sphere)
         {
             float r = Radius + sphere.Radius;
-            return Vector3f.SqrDistance(Center, sphere.Center) <= r * r;
+            return Point3f.SqrDistance(Center, sphere.Center) <= r * r;
         }
 
         /// <summary>
@@ -199,16 +199,16 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Box3f box)
         {
             var p = box.Closest(Center);
-            return Vector3f.SqrDistance(p, Center) <= Radius2;
+            return Point3f.SqrDistance(p, Center) <= Radius2;
         }
 
         /// <summary>
         /// Creates a sphere that has both points on its surface.
         /// </summary>
-        public static Sphere3f CircumSphere(Vector3f p0, Vector3f p1)
+        public static Sphere3f CircumSphere(Point3f p0, Point3f p1)
         {
             var centre = (p0 + p1) * 0.5f;
-            var radius = Vector3f.Distance(p0, p1) * 0.5f;
+            var radius = Point3f.Distance(p0, p1) * 0.5f;
             var bounds = new Sphere3f(centre, radius);
             return bounds;
         }
@@ -218,15 +218,15 @@ namespace Common.Geometry.Shapes
         /// From MathWorld: http://mathworld.wolfram.com/Circumsphere.html.
         /// Fails if the points are colinear.
         /// </summary>
-        public static Sphere3f CircumSphere(Vector3f p0, Vector3f p1, Vector3f p2, Vector3f p3)
+        public static Sphere3f CircumSphere(Point3f p0, Point3f p1, Point3f p2, Point3f p3)
         {
             var m = new Matrix4x4f();
 
             // x, y, z, 1
-            m.SetRow(0, new Vector4f(p0, 1));
-            m.SetRow(1, new Vector4f(p1, 1));
-            m.SetRow(2, new Vector4f(p2, 1));
-            m.SetRow(3, new Vector4f(p3, 1));
+            m.SetRow(0, new Vector4f(p0.Vector3f, 1));
+            m.SetRow(1, new Vector4f(p1.Vector3f, 1));
+            m.SetRow(2, new Vector4f(p2.Vector3f, 1));
+            m.SetRow(3, new Vector4f(p3.Vector3f, 1));
             float a = m.Determinant;
 
             // size, y, z, 1
@@ -247,7 +247,7 @@ namespace Common.Geometry.Shapes
 
             float s = -1.0f / (2.0f * a);
 
-            var circumCenter = new Vector3f(s * dx, s * dy, s * dz);
+            var circumCenter = new Point3f(s * dx, s * dy, s * dz);
             float radius = Math.Abs(s) * MathUtil.Sqrt(dx * dx + dy * dy + dz * dz - 4.0f * a * c);
 
             return new Sphere3f(circumCenter, radius);
@@ -256,7 +256,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Creates a sphere that contains all three points.
         /// </summary>
-        public static Sphere3f CalculateBounds(Vector3f p0, Vector3f p1, Vector3f p2)
+        public static Sphere3f CalculateBounds(Point3f p0, Point3f p1, Point3f p2)
         {
             var bounds = CircumSphere(p0, p1);
             bounds.Enlarge(p2);
@@ -267,7 +267,7 @@ namespace Common.Geometry.Shapes
         /// Calculate the minimum bounding sphere that contains 
         /// all the points in the list.
         /// </summary>
-        public static Sphere3f CalculateBounds(IList<Vector3f> points)
+        public static Sphere3f CalculateBounds(IList<Point3f> points)
         {
             var idx = ExtremePoints(points);
 
@@ -283,7 +283,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Finds which axis contains the two most extreme points
         /// </summary>
-        private static Point2i ExtremePoints(IList<Vector3f> points)
+        private static Point2i ExtremePoints(IList<Point3f> points)
         {
             Point3i min = new Point3i();
             Point3i max = new Point3i();
@@ -301,9 +301,9 @@ namespace Common.Geometry.Shapes
                 if (v.z > points[max.z].z) max.z = i;
             }
 
-            var d2x = Vector3f.SqrDistance(points[max.x], points[min.x]);
-            var d2y = Vector3f.SqrDistance(points[max.y], points[min.y]);
-            var d2z = Vector3f.SqrDistance(points[max.z], points[min.z]);
+            var d2x = Point3f.SqrDistance(points[max.x], points[min.x]);
+            var d2y = Point3f.SqrDistance(points[max.y], points[min.y]);
+            var d2z = Point3f.SqrDistance(points[max.z], points[min.z]);
 
             if (d2x > d2y && d2x > d2z)
                 return new Point2i(min.x, max.x);

@@ -112,8 +112,8 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2f(double x, double y)
         {
-            this.x = (float)x;
-            this.y = (float)y;
+            this.x = (REAL)x;
+            this.y = (REAL)y;
         }
 
         unsafe public REAL this[int i]
@@ -131,6 +131,17 @@ namespace Common.Core.Numerics
                     throw new IndexOutOfRangeException("Vector2f index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// Convert the vector to a point.
+        /// </summary>
+        public Point2f Point2f
+        {
+            get
+            {
+                return new Point2f(x, y);
             }
         }
 

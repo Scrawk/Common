@@ -104,7 +104,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns>if the point lies in the left halfplane, false otherwise</returns>
-        public bool Contains(Vector2f p)
+        public bool Contains(Point2f p)
         {
             if (IsLeftBoundary)
             {

@@ -5,7 +5,9 @@ using Common.Core.Numerics;
 
 using REAL = System.Double;
 using VECTOR2 = Common.Core.Numerics.Vector2d;
+using POINT2 = Common.Core.Numerics.Point2d;
 using CIRCLE2 = Common.Geometry.Shapes.Circle2d;
+using SEGMENT2 = Common.Geometry.Shapes.Segment2d;
 using BOX2 = Common.Geometry.Shapes.Box2d;
 
 namespace Common.Geometry.Shapes
@@ -15,11 +17,11 @@ namespace Common.Geometry.Shapes
     public struct Ray2d : IEquatable<Ray2d>
     {
 
-        public VECTOR2 Position;
+        public POINT2 Position;
 
         public VECTOR2 Direction;
 
-        public Ray2d(VECTOR2 position, VECTOR2 direction)
+        public Ray2d(POINT2 position, VECTOR2 direction)
         {
             Position = position;
             Direction = direction;
@@ -68,7 +70,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="t">The amount to offset.</param>
         /// <returns>The position at t.</returns>
-        public VECTOR2 GetPosition(REAL t)
+        public POINT2 GetPosition(REAL t)
         {
             return Position + t * Direction;
         }
@@ -79,7 +81,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="ray">The other ray.</param>
         /// <returns></returns>
-        public VECTOR2 Intersection(Ray2d ray)
+        public POINT2 Intersection(Ray2d ray)
         {
             REAL s, t;
             Intersects(ray, out s, out t);
@@ -116,14 +118,14 @@ namespace Common.Geometry.Shapes
         /// <param name="s">Intersection point = Position + s * Direction</param>
         /// <param name="t">Intersection point = A + t * (B - A)</param>
         /// <returns>If rays intersect</returns>
-        public bool Intersects(Segment2d seg, out REAL s, out REAL t)
+        public bool Intersects(SEGMENT2 seg, out REAL s, out REAL t)
         {
             s = t = 0;
 
             REAL dx = seg.A.x - Position.x;
             REAL dy = seg.A.y - Position.y;
 
-            REAL len = VECTOR2.Distance(seg.A, seg.B);
+            REAL len = POINT2.Distance(seg.A, seg.B);
             if (MathUtil.IsZero(len)) return false;
 
             VECTOR2 n1;
@@ -149,7 +151,7 @@ namespace Common.Geometry.Shapes
         public bool Intersects(CIRCLE2 circle, out REAL t)
         {
             t = 0;
-            VECTOR2 m = Position - circle.Center;
+            VECTOR2 m = (Position - circle.Center).Vector2d;
             REAL b = VECTOR2.Dot(m, Direction);
             REAL c = VECTOR2.Dot(m, m) - circle.Radius2;
 

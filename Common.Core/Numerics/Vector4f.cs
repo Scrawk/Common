@@ -177,6 +177,17 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert the vector to a point.
+        /// </summary>
+        public Point4f Point4f
+        {
+            get
+            {
+                return new Point4f(x, y, z, w);
+            }
+        }
+
+        /// <summary>
         /// The sum of the vectors components.
         /// </summary>
         public REAL Sum

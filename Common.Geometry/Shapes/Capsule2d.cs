@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using Common.Core.Numerics;
 
 using REAL = System.Double;
-using VECTOR2 = Common.Core.Numerics.Vector2d;
+using POINT2 = Common.Core.Numerics.Point2d;
 using BOX2 = Common.Geometry.Shapes.Box2d;
 using SEGMENT2 = Common.Geometry.Shapes.Segment2d;
 
@@ -14,13 +14,13 @@ namespace Common.Geometry.Shapes
     [StructLayout(LayoutKind.Sequential)]
     public struct Capsule2d : IEquatable<Capsule2d>, IShape2d
     {
-        public VECTOR2 A;
+        public POINT2 A;
 
-        public VECTOR2 B;
+        public POINT2 B;
 
         public REAL Radius;
 
-        public Capsule2d(VECTOR2 a, VECTOR2 b, REAL radius)
+        public Capsule2d(POINT2 a, POINT2 b, REAL radius)
         {
             A = a;
             B = b;
@@ -29,15 +29,15 @@ namespace Common.Geometry.Shapes
 
         public Capsule2d(REAL ax, REAL ay, REAL bx, REAL by, REAL radius)
         {
-            A = new VECTOR2(ax, ay);
-            B = new VECTOR2(bx, by);
+            A = new POINT2(ax, ay);
+            B = new POINT2(bx, by);
             Radius = radius;
         }
 
         /// <summary>
         /// The center position of the capsule.
         /// </summary>
-        public VECTOR2 Center => (A + B) * 0.5;
+        public POINT2 Center => (A + B) * 0.5;
 
         /// <summary>
         /// The capsules squared radius at the end points.
@@ -75,30 +75,22 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="i">A index of 0 or 1.</param>
         /// <returns>The point at index i.</returns>
-        unsafe public VECTOR2 this[int i]
+        unsafe public POINT2 this[int i]
         {
             get
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Capsule2d index out of range.");
 
-                fixed (Capsule2d* array = &this) { return ((VECTOR2*)array)[i]; }
+                fixed (Capsule2d* array = &this) { return ((POINT2*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Capsule2d index out of range.");
 
-                fixed (VECTOR2* array = &A) { array[i] = value; }
+                fixed (POINT2* array = &A) { array[i] = value; }
             }
-        }
-
-        /// <summary>
-        /// Cast the capsule.
-        /// </summary>
-        public static implicit operator Capsule2d(Capsule2f cap)
-        {
-            return new Capsule2d(cap.A, cap.B, cap.Radius);
         }
 
         /// <summary>
@@ -162,19 +154,19 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// Does the capsule contain the point.
         /// </summary>
-        public bool Contains(VECTOR2 p)
+        public bool Contains(POINT2 p)
         {
             REAL r2 = Radius * Radius;
 
-            VECTOR2 ap = p - A;
+            POINT2 ap = p - A;
 
             if (ap.x * ap.x + ap.y * ap.y <= r2) return true;
 
-            VECTOR2 bp = p - B.x;
+            POINT2 bp = p - B.x;
 
             if (bp.x * bp.x + bp.y * bp.y <= r2) return true;
 
-            VECTOR2 ab = B - A;
+            POINT2 ab = B - A;
 
             REAL t = (ab.x * A.x + ab.y * A.y) / (ab.x * ab.x + ab.y * ab.y);
 
@@ -192,7 +184,7 @@ namespace Common.Geometry.Shapes
         /// Find the closest point to the capsule
         /// If point inside capsule return point.
         /// </summary>
-        public VECTOR2 Closest(VECTOR2 p)
+        public POINT2 Closest(POINT2 p)
         {
             var seg = Segment;
             REAL sd = seg.SignedDistance(p) - Radius;
@@ -202,7 +194,7 @@ namespace Common.Geometry.Shapes
             else
             {
                 var c = seg.Closest(p);
-                return (c - p).Normalized * Radius;
+                return POINT2.Direction(p, c).Point2d * Radius;
             }
         }
 
@@ -234,7 +226,7 @@ namespace Common.Geometry.Shapes
         /// <summary>
         /// The signed distance to the point.
         /// </summary>
-        public REAL SignedDistance(VECTOR2 p)
+        public REAL SignedDistance(POINT2 p)
         {
             return Segment.SignedDistance(p) - Radius;
         }

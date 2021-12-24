@@ -52,7 +52,7 @@ namespace Common.Console.Geometry
 
             for (int i = 0; i < count; i++)
             {
-                var p = rnd.NextVector2f(-Range, Range);
+                var p = rnd.NextVector2f(-Range, Range).Point2f;
 
                 collection.Contains(p);
             }
@@ -82,8 +82,8 @@ namespace Common.Console.Geometry
        
             for (int i = 0; i < count; i++)
             {
-                var a = rnd.NextVector2f(-Range, Range);
-                var b = a + rnd.NextVector2f(-10, 10);
+                var a = rnd.NextVector2f(-Range, Range).Point2f;
+                var b = a + rnd.NextVector2f(-10, 10).Point2f;
 
                 var seg = new Segment2f(a, b);
                 if (seg.Length < 0.1f) continue;

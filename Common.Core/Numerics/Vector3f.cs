@@ -173,6 +173,17 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert the vector to a point.
+        /// </summary>
+        public Point3f Point3f
+        {
+            get
+            {
+                return new Point3f(x, y, z);
+            }
+        }
+
+        /// <summary>
         /// The sum of the vectors components.
         /// </summary>
         public REAL Sum

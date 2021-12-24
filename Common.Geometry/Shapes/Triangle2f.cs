@@ -4,8 +4,9 @@ using System.Runtime.InteropServices;
 using Common.Core.Numerics;
 
 using REAL = System.Single;
+using POINT2 = Common.Core.Numerics.Point2f;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
-using VECTOR3 = Common.Core.Numerics.Vector3f;
+using POINT3 = Common.Core.Numerics.Point3f;
 using BOX2 = Common.Geometry.Shapes.Box2f;
 using CIRCLE2 = Common.Geometry.Shapes.Circle2f;
 using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
@@ -17,13 +18,13 @@ namespace Common.Geometry.Shapes
     public struct Triangle2f : IEquatable<Triangle2f>, IShape2f
     {
 
-        public VECTOR2 A;
+        public POINT2 A;
 
-        public VECTOR2 B;
+        public POINT2 B;
 
-        public VECTOR2 C;
+        public POINT2 C;
 
-        public Triangle2f(VECTOR2 a, VECTOR2 b, VECTOR2 c)
+        public Triangle2f(POINT2 a, POINT2 b, POINT2 c)
         {
             A = a;
             B = b;
@@ -32,15 +33,15 @@ namespace Common.Geometry.Shapes
 
         public Triangle2f(REAL ax, REAL ay, REAL bx, REAL by, REAL cx, REAL cy)
         {
-            A = new VECTOR2(ax, ay);
-            B = new VECTOR2(bx, by);
-            C = new VECTOR2(cx, cy);
+            A = new POINT2(ax, ay);
+            B = new POINT2(bx, by);
+            C = new POINT2(cx, cy);
         }
 
         /// <summary>
         /// The average of the triangles positions.
         /// </summary>
-        public VECTOR2 Center => (A + B + C) / 3.0f;
+        public POINT2 Center => (A + B + C) / 3.0f;
 
         /// <summary>
         /// Is the triangle orientated ccw.
@@ -63,14 +64,14 @@ namespace Common.Geometry.Shapes
         /// b = sqrt((cx - ax)^2 + (cy - ay)^2) -- side CA opposite of B
         /// c = sqrt((ax - bx)^2 + (ay - by)^2) -- side AB opposite of C
         /// </summary>
-        public VECTOR3 SideLengths
+        public POINT3 SideLengths
         {
             get
             {
                 var a = MathUtil.Sqrt(MathUtil.Sqr(C.x - B.x) + MathUtil.Sqr(C.y - B.y));
                 var b = MathUtil.Sqrt(MathUtil.Sqr(C.x - A.x) + MathUtil.Sqr(C.y - A.y));
                 var c = MathUtil.Sqrt(MathUtil.Sqr(A.x - B.x) + MathUtil.Sqr(A.y - B.y));
-                return new VECTOR3(a, b, c);
+                return new POINT3(a, b, c);
             }
         }
 
@@ -80,7 +81,7 @@ namespace Common.Geometry.Shapes
         /// ang_b = acos((c^2 + a^2 - b^2)  / (2 * c * a)) -- angle at B
         /// ang_c = acos((a^2 + b^2 - c^2)  / (2 * a * b)) -- angle at C
         /// </summary>
-        public VECTOR3 Angles
+        public POINT3 Angles
         {
             get
             {
@@ -91,7 +92,7 @@ namespace Common.Geometry.Shapes
                 var a = MathUtil.Acos((b2 + c2 - a2) * (2 * len.y * len.z));
                 var b = MathUtil.Acos((c2 + a2 - b2) * (2 * len.z * len.x));
                 var c = MathUtil.Acos((a2 + b2 - c2) * (2 * len.x * len.y));
-                return new VECTOR3(a, b, c);
+                return new POINT3(a, b, c);
             }
         }
 
@@ -99,7 +100,7 @@ namespace Common.Geometry.Shapes
         /// The semiperimeter is given as
         /// s = (a + b + c) / 2
         /// </summary>
-        public REAL SemiPerimeter => SideLengths.Sum / 2;
+        public REAL SemiPerimeter => SideLengths.Vector3f.Sum / 2;
 
         /// <summary>
         /// The inradius is given as
@@ -114,7 +115,7 @@ namespace Common.Geometry.Shapes
         /// The circumradius is given as
         ///   R = a * b * c / (4 * D)
         /// </summary>
-        public REAL CircumRadius => SideLengths.Product / (4 * Area);
+        public REAL CircumRadius => SideLengths.Vector3f.Product / (4 * Area);
 
         /// <summary>
         /// The circum circle formed by the 
@@ -128,14 +129,14 @@ namespace Common.Geometry.Shapes
         ///   alt_b = 2 * D / b -- altitude above side b
         ///   alt_c = 2 * D / c -- altitude above side c
         /// </summary>
-        public VECTOR3 Altitudes
+        public POINT3 Altitudes
         {
             get
             {
                 var a = 2 * Area / SideLengths.x;
                 var b = 2 * Area / SideLengths.y;
                 var c = 2 * Area / SideLengths.z;
-                return new VECTOR3(a, b, c);
+                return new POINT3(a, b, c);
             }
         }
 
@@ -162,21 +163,21 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        unsafe public VECTOR2 this[int i]
+        unsafe public POINT2 this[int i]
         {
             get
             {
                 if ((uint)i >= 3)
                     throw new IndexOutOfRangeException("Triangle2f index out of range.");
 
-                fixed (Triangle2f* array = &this) { return ((VECTOR2*)array)[i]; }
+                fixed (Triangle2f* array = &this) { return ((POINT2*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 3)
                     throw new IndexOutOfRangeException("Triangle2f index out of range.");
 
-                fixed (VECTOR2* array = &A) { array[i] = value; }
+                fixed (POINT2* array = &A) { array[i] = value; }
             }
         }
 
@@ -185,7 +186,7 @@ namespace Common.Geometry.Shapes
             return new Triangle2f(tri.A + s, tri.B + s, tri.C + s);
         }
 
-        public static Triangle2f operator +(Triangle2f tri, VECTOR2 v)
+        public static Triangle2f operator +(Triangle2f tri, POINT2 v)
         {
             return new Triangle2f(tri.A + v, tri.B + v, tri.C + v);
         }
@@ -195,7 +196,7 @@ namespace Common.Geometry.Shapes
             return new Triangle2f(tri.A - s, tri.B - s, tri.C - s);
         }
 
-        public static Triangle2f operator -(Triangle2f tri, VECTOR2 v)
+        public static Triangle2f operator -(Triangle2f tri, POINT2 v)
         {
             return new Triangle2f(tri.A - v, tri.B - v, tri.C - v);
         }
@@ -213,11 +214,6 @@ namespace Common.Geometry.Shapes
         public static Triangle2f operator *(Triangle2f tri, MATRIX2 m)
         {
             return new Triangle2f(m * tri.A, m * tri.B, m * tri.C);
-        }
-
-        public static explicit operator Triangle2f(Triangle2d tri)
-        {
-            return new Triangle2f((Vector2f)tri.A, (Vector2f)tri.B, (Vector2f)tri.C);
         }
 
         public static bool operator ==(Triangle2f t1, Triangle2f t2)
@@ -263,7 +259,7 @@ namespace Common.Geometry.Shapes
         /// The cross product area which is the 
         /// same as double the signed area.
         /// </summary>
-        public static REAL CrossProductArea(VECTOR2 a, VECTOR2 b, VECTOR2 c)
+        public static REAL CrossProductArea(POINT2 a, POINT2 b, POINT2 c)
         {
             return (a.x - c.x) * (b.y - c.y) - (a.y - c.y) * (b.x - c.x);
         }
@@ -272,9 +268,12 @@ namespace Common.Geometry.Shapes
         /// Return th barycentric coordinates
         /// with respect to p.
         /// </summary>
-        public VECTOR3 Barycentric(VECTOR2 p)
+        public POINT3 Barycentric(POINT2 p)
         {
-            VECTOR2 v0 = B - A, v1 = C - A, v2 = p - A;
+            VECTOR2 v0 = (B - A).Vector2f;
+            VECTOR2 v1 = (C - A).Vector2f;
+            VECTOR2 v2 = (p - A).Vector2f;
+
             REAL d00 = VECTOR2.Dot(v0, v0);
             REAL d01 = VECTOR2.Dot(v0, v1);
             REAL d11 = VECTOR2.Dot(v1, v1);
@@ -284,18 +283,18 @@ namespace Common.Geometry.Shapes
             REAL v = (d11 * d20 - d01 * d21) / denom;
             REAL w = (d00 * d21 - d01 * d20) / denom;
             REAL u = 1.0f - v - w;
-            return new VECTOR3(u, v, w);
+            return new POINT3(u, v, w);
         }
 
         /// <summary>
         /// Find the closest point to the triangle.
         /// If point inside triangle return point.
         /// </summary>
-        public VECTOR2 Closest(VECTOR2 p)
+        public POINT2 Closest(POINT2 p)
         {
-            VECTOR2 ab = B - A;
-            VECTOR2 ac = C - A;
-            VECTOR2 ap = p - A;
+            VECTOR2 ab = (B - A).Vector2f;
+            VECTOR2 ac = (C - A).Vector2f;
+            VECTOR2 ap = (p - A).Vector2f;
 
             // Check if P in vertex region outside A
             REAL d1 = VECTOR2.Dot(ab, ap);
@@ -309,7 +308,7 @@ namespace Common.Geometry.Shapes
             REAL v, w;
 
             // Check if P in vertex region outside B
-            VECTOR2 bp = p - B;
+            VECTOR2 bp = (p - B).Vector2f;
             REAL d3 = VECTOR2.Dot(ab, bp);
             REAL d4 = VECTOR2.Dot(ac, bp);
             if (d3 >= 0.0 && d4 <= d3)
@@ -328,7 +327,7 @@ namespace Common.Geometry.Shapes
             }
 
             // Check if P in vertex region outside C
-            VECTOR2 cp = p - C;
+            VECTOR2 cp = (p - C).Vector2f;
             REAL d5 = VECTOR2.Dot(ab, cp);
             REAL d6 = VECTOR2.Dot(ac, cp);
             if (d6 >= 0.0f && d5 <= d6)
@@ -368,16 +367,17 @@ namespace Common.Geometry.Shapes
         /// Returns the signed distance to surface of triangle.
         /// </summary>
         /// <returns>positive if outside triangle, negative if inside and 0 on boundary</returns>
-        public REAL SignedDistance(VECTOR2 p)
+        public REAL SignedDistance(POINT2 p)
         {
-            VECTOR2 center = Center;
-            p = p - center;
-            VECTOR2 a = A - center;
-            VECTOR2 b = B - center;
-            VECTOR2 c = C - center;
+            POINT2 center = Center;
+            VECTOR2 P = (p - center).Vector2f;
+
+            VECTOR2 a = (A - center).Vector2f;
+            VECTOR2 b = (B - center).Vector2f;
+            VECTOR2 c = (C - center).Vector2f;
 
             VECTOR2 e0 = b - a, e1 = c - b, e2 = a - c;
-            VECTOR2 v0 = p - a, v1 = p - b, v2 = p - c;
+            VECTOR2 v0 = P - a, v1 = P - b, v2 = P - c;
 
             VECTOR2 pq0 = v0 - e0 * MathUtil.Clamp01(VECTOR2.Dot(v0, e0) / VECTOR2.Dot(e0, e0));
             VECTOR2 pq1 = v1 - e1 * MathUtil.Clamp01(VECTOR2.Dot(v1, e1) / VECTOR2.Dot(e1, e1));
@@ -389,7 +389,7 @@ namespace Common.Geometry.Shapes
             VECTOR2 d1 = new VECTOR2(VECTOR2.Dot(pq1, pq1), s * (v1.x * e1.y - v1.y * e1.x));
             VECTOR2 d2 = new VECTOR2(VECTOR2.Dot(pq2, pq2), s * (v2.x * e2.y - v2.y * e2.x));
 
-            VECTOR2 d = new VECTOR2();
+            POINT2 d = new POINT2();
             d.x = MathUtil.Min(d0.x, d1.x, d2.x);
             d.y = MathUtil.Min(d0.y, d1.y, d2.y);
 
@@ -401,14 +401,15 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <returns>true if triangle contains point</returns>
-        public bool Contains(VECTOR2 p)
+        public bool Contains(POINT2 p)
         {
-            REAL pab = VECTOR2.Cross(p - A, B - A);
-            REAL pbc = VECTOR2.Cross(p - B, C - B);
+
+            REAL pab = VECTOR2.Cross((p - A).Vector2f, (B - A).Vector2f);
+            REAL pbc = VECTOR2.Cross((p - B).Vector2f, (C - B).Vector2f);
 
             if (Math.Sign(pab) != Math.Sign(pbc)) return false;
 
-            REAL pca = VECTOR2.Cross(p - C, A - C);
+            REAL pca = VECTOR2.Cross((p - C).Vector2f, (A - C).Vector2f);
 
             if (Math.Sign(pab) != Math.Sign(pca)) return false;
 
@@ -421,11 +422,11 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <returns>true if triangle contains point</returns>
-        public bool ContainsCCW(VECTOR2 p)
+        public bool ContainsCCW(POINT2 p)
         {
-            if (VECTOR2.Cross(p - A, B - A) > 0.0) return false;
-            if (VECTOR2.Cross(p - B, C - B) > 0.0) return false;
-            if (VECTOR2.Cross(p - C, A - C) > 0.0) return false;
+            if (VECTOR2.Cross((p - A).Vector2f, (B - A).Vector2f) > 0.0) return false;
+            if (VECTOR2.Cross((p - B).Vector2f, (C - B).Vector2f) > 0.0) return false;
+            if (VECTOR2.Cross((p - C).Vector2f, (A - C).Vector2f) > 0.0) return false;
 
             return true;
         }

@@ -11,11 +11,11 @@ namespace Common.Geometry.Shapes
     public struct Plane3f : IEquatable<Plane3f>
     {
 
+        public Point3f Position;
+
         public Vector3f Normal;
 
-        public Vector3f Position;
-
-        public Plane3f(Vector3f position, Vector3f normal)
+        public Plane3f(Point3f position, Vector3f normal)
         {
             Normal = normal;
             Position = position;
@@ -24,17 +24,17 @@ namespace Common.Geometry.Shapes
         public Plane3f(Vector3f normal, float distance)
         {
             Normal = normal;
-            Position = Normal * distance;
+            Position = (Normal * distance).Point3f;
         }
 
         /// <summary>
         /// From three noncollinear points (ordered ccw).
         /// </summary>
-        public Plane3f(Vector3f a, Vector3f b, Vector3f c)
+        public Plane3f(Point3f a, Point3f b, Point3f c)
         {
-            Normal = Vector3f.Cross(b - a, c - a);
+            Normal = Vector3f.Cross((b - a).Vector3f, (c - a).Vector3f);
             Normal.Normalize();
-            Position = Normal * Vector3f.Dot(Normal, a);
+            Position = (Normal * Vector3f.Dot(Normal, a.Vector3f)).Point3f;
         }
 
         public float Distance
@@ -85,10 +85,10 @@ namespace Common.Geometry.Shapes
             return string.Format("[Plane3f: Positions{0}, Normal={1}]", Position, Normal);
         }
 
-        public Vector3f Closest(Vector3f p)
+        public Point3f Closest(Point3f p)
         {
-            float t = Vector3f.Dot(Normal, p) - Distance;
-            return p - t * Normal;
+            float t = Vector3f.Dot(Normal, p.Vector3f) - Distance;
+            return (p - t * Normal.Point3f);
         }
 
     }

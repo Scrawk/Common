@@ -16,9 +16,9 @@ namespace Common.Geometry.Test.Bezier
         {
 
             QuadraticBezier2f quadratic = new QuadraticBezier2f();
-            quadratic.C0 = new Vector2f(0.027f, 0.065f);
-            quadratic.C1 = new Vector2f(1.234f, 0.012f);
-            quadratic.C2 = new Vector2f(0.816f, 1.298f);
+            quadratic.C0 = new Point2f(0.027f, 0.065f);
+            quadratic.C1 = new Point2f(1.234f, 0.012f);
+            quadratic.C2 = new Point2f(0.816f, 1.298f);
 
             Bezier2f bezier = new Bezier2f(2);
             bezier.Control[0] = quadratic.C0;
@@ -30,8 +30,8 @@ namespace Common.Geometry.Test.Bezier
             {
                 float t = i / (count - 1.0f);
 
-                Vector2f p0 = quadratic.Position(t);
-                Vector2f p1 = bezier.Point(t);
+                Point2f p0 = quadratic.Position(t);
+                Point2f p1 = bezier.Point(t);
 
                 Assert.AreEqual(Math.Round(p0.x, PRECISION), Math.Round(p1.x, PRECISION));
                 Assert.AreEqual(Math.Round(p0.y, PRECISION), Math.Round(p1.y, PRECISION));
@@ -43,9 +43,9 @@ namespace Common.Geometry.Test.Bezier
         {
 
             QuadraticBezier2f quadratic = new QuadraticBezier2f();
-            quadratic.C0 = new Vector2f(0.027f, 0.065f);
-            quadratic.C1 = new Vector2f(1.234f, 0.012f);
-            quadratic.C2 = new Vector2f(0.816f, 1.298f);
+            quadratic.C0 = new Point2f(0.027f, 0.065f);
+            quadratic.C1 = new Point2f(1.234f, 0.012f);
+            quadratic.C2 = new Point2f(0.816f, 1.298f);
 
             Bezier2f bezier = new Bezier2f(2);
             bezier.Control[0] = quadratic.C0;
@@ -70,9 +70,9 @@ namespace Common.Geometry.Test.Bezier
         {
 
             QuadraticBezier2f quadratic = new QuadraticBezier2f();
-            quadratic.C0 = new Vector2f(0.027f, 0.065f);
-            quadratic.C1 = new Vector2f(1.234f, 0.012f);
-            quadratic.C2 = new Vector2f(0.816f, 1.298f);
+            quadratic.C0 = new Point2f(0.027f, 0.065f);
+            quadratic.C1 = new Point2f(1.234f, 0.012f);
+            quadratic.C2 = new Point2f(0.816f, 1.298f);
 
             Bezier2f bezier = new Bezier2f(2);
             bezier.Control[0] = quadratic.C0;
@@ -97,9 +97,9 @@ namespace Common.Geometry.Test.Bezier
         {
 
             QuadraticBezier2f quadratic = new QuadraticBezier2f();
-            quadratic.C0 = new Vector2f(0.027f, 0.065f);
-            quadratic.C1 = new Vector2f(1.234f, 0.012f);
-            quadratic.C2 = new Vector2f(0.816f, 1.298f);
+            quadratic.C0 = new Point2f(0.027f, 0.065f);
+            quadratic.C1 = new Point2f(1.234f, 0.012f);
+            quadratic.C2 = new Point2f(0.816f, 1.298f);
 
             Bezier2f bezier = new Bezier2f(2);
             bezier.Control[0] = quadratic.C0;
@@ -118,10 +118,10 @@ namespace Common.Geometry.Test.Bezier
         {
 
             Bezier2f bezier = new Bezier2f(3);
-            bezier.Control[0] = new Vector2f(0.0f, 0.0f);
-            bezier.Control[1] = new Vector2f(0.0f, 2.5f);
-            bezier.Control[2] = new Vector2f(2.5f, 5.0f);
-            bezier.Control[3] = new Vector2f(5, 5);
+            bezier.Control[0] = new Point2f(0.0f, 0.0f);
+            bezier.Control[1] = new Point2f(0.0f, 2.5f);
+            bezier.Control[2] = new Point2f(2.5f, 5.0f);
+            bezier.Control[3] = new Point2f(5, 5);
 
             float split = 0.5f;
 
@@ -135,7 +135,7 @@ namespace Common.Geometry.Test.Bezier
             Assert.AreEqual(bezier.Control[0], b0.Control[0]);
             Assert.AreEqual(bezier.Control[3], b1.Control[3]);
 
-            Vector2f p = bezier.Point(split);
+            Point2f p = bezier.Point(split);
             Assert.AreEqual(p, b0.Control[3]);
             Assert.AreEqual(p, b1.Control[0]);
 

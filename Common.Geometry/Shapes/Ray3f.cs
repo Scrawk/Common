@@ -10,11 +10,11 @@ namespace Common.Geometry.Shapes
     public struct Ray3f : IEquatable<Ray3f>
     {
 
-        public Vector3f Position;
+        public Point3f Position;
 
         public Vector3f Direction;
 
-        public Ray3f(Vector3f position, Vector3f direction)
+        public Ray3f(Point3f position, Vector3f direction)
         {
             Position = position;
             Direction = direction;
@@ -67,7 +67,7 @@ namespace Common.Geometry.Shapes
         public bool Intersects(Sphere3f sphere, out float t)
         {
             t = 0;
-            Vector3f m = Position - sphere.Center;
+            Vector3f m = (Position - sphere.Center).Vector3f;
 
             float b = Vector3f.Dot(m, Direction);
             float c = Vector3f.Dot(m, m) - sphere.Radius2;

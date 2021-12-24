@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 
+using REAL = System.Single;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
+using POINT2 = Common.Core.Numerics.Point2f;
+
 namespace Common.Geometry.Bezier
 {
     /// <summary>
@@ -14,16 +18,16 @@ namespace Common.Geometry.Bezier
         /// <summary>
         /// The control points.
         /// </summary>
-        public Vector2f C0 { get; set; }
-        public Vector2f C1 { get; set; }
-        public Vector2f C2 { get; set; }
+        public POINT2 C0 { get; set; }
+        public POINT2 C1 { get; set; }
+        public POINT2 C2 { get; set; }
 
         public QuadraticBezier2f()
         {
 
         }
 
-        public QuadraticBezier2f(Vector2f c0, Vector2f c1, Vector2f c2)
+        public QuadraticBezier2f(POINT2 c0, POINT2 c1, POINT2 c2)
         {
             C0 = c0;
             C1 = c1;
@@ -33,24 +37,24 @@ namespace Common.Geometry.Bezier
         /// <summary>
         /// The length of the curve.
         /// </summary>
-        public float Length
+        public REAL Length
         {
             get
             {
-                float ax = C0.x - 2.0f * C1.x + C2.x;
-                float az = C0.y - 2.0f * C1.y + C2.y;
-                float bx = 2.0f * (C1.x - C0.x);
-                float bz = 2.0f * (C1.y - C0.y);
+                REAL ax = C0.x - 2.0f * C1.x + C2.x;
+                REAL az = C0.y - 2.0f * C1.y + C2.y;
+                REAL bx = 2.0f * (C1.x - C0.x);
+                REAL bz = 2.0f * (C1.y - C0.y);
 
-                float A = 4.0f * (ax * ax + az * az);
-                float B = 4.0f * (ax * bx + az * bz);
-                float C = bx * bx + bz * bz;
+                REAL A = 4.0f * (ax * ax + az * az);
+                REAL B = 4.0f * (ax * bx + az * bz);
+                REAL C = bx * bx + bz * bz;
 
-                float Sabc = 2.0f * MathUtil.Sqrt(A + B + C);
-                float A2 = MathUtil.Sqrt(A);
-                float A32 = 2.0f * A * A2;
-                float CSQ = 2.0f * MathUtil.Sqrt(C);
-                float BA = B / A2;
+                REAL Sabc = 2.0f * MathUtil.Sqrt(A + B + C);
+                REAL A2 = MathUtil.Sqrt(A);
+                REAL A32 = 2.0f * A * A2;
+                REAL CSQ = 2.0f * MathUtil.Sqrt(C);
+                REAL BA = B / A2;
 
                 return (A32 * Sabc + A2 * B * (Sabc - CSQ) + (4 * C * A - B * B) * MathUtil.Log((2 * A2 + BA + Sabc) / (BA + CSQ))) / (4 * A32);
             }
@@ -60,14 +64,14 @@ namespace Common.Geometry.Bezier
         /// The position on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2f Position(float t)
+        public POINT2 Position(REAL t)
         {
             if (t < 0.0f) t = 0.0f;
             if (t > 1.0f) t = 1.0f;
 
-            float t1 = 1.0f - t;
+            REAL t1 = 1.0f - t;
 
-            Vector2f p = new Vector2f();
+            POINT2 p = new POINT2();
             p.x = t1 * (t1 * C0.x + t * C1.x) + t * (t1 * C1.x + t * C2.x);
             p.y = t1 * (t1 * C0.y + t * C1.y) + t * (t1 * C1.y + t * C2.y);
 
@@ -78,9 +82,9 @@ namespace Common.Geometry.Bezier
         /// The tangent on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2f Tangent(float t)
+        public VECTOR2 Tangent(REAL t)
         {
-            Vector2f d = FirstDerivative(t);
+            VECTOR2 d = FirstDerivative(t);
             return d.Normalized;
         }
 
@@ -88,9 +92,9 @@ namespace Common.Geometry.Bezier
         /// The normal on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2f Normal(float t)
+        public VECTOR2 Normal(REAL t)
         {
-            Vector2f d = FirstDerivative(t);
+            VECTOR2 d = FirstDerivative(t);
             return d.Normalized.PerpendicularCW;
         }
 
@@ -98,14 +102,14 @@ namespace Common.Geometry.Bezier
         /// The first derivative on the curve at t.
         /// </summary>
         /// <param name="t">Number between 0 and 1.</param>
-        public Vector2f FirstDerivative(float t)
+        public VECTOR2 FirstDerivative(REAL t)
         {
             if (t < 0.0) t = 0.0f;
             if (t > 1.0) t = 1.0f;
 
-            float t1 = 1.0f - t;
+            REAL t1 = 1.0f - t;
 
-            Vector2f p = new Vector2f();
+            VECTOR2 p = new VECTOR2();
             p.x = 2.0f * t1 * (C1.x - C0.x) + 2.0f * t * (C2.x - C1.x);
             p.y = 2.0f * t1 * (C1.y - C0.y) + 2.0f * t * (C2.y - C1.y);
 
@@ -115,31 +119,31 @@ namespace Common.Geometry.Bezier
         /// <summary>
         /// The closest point on the curve to the point p.
         /// </summary>
-        public Vector2f Closest(Vector2f p)
+        public POINT2 Closest(POINT2 p)
         {
-            float px = C0.x - p.x;
-            float pz = C0.y - p.y;
-            float ax = C1.x - C0.x;
-            float az = C1.y - C0.y;
-            float bx = C0.x - 2.0f * C1.x + C2.x;
-            float bz = C0.y - 2.0f * C1.y + C2.y;
+            REAL px = C0.x - p.x;
+            REAL pz = C0.y - p.y;
+            REAL ax = C1.x - C0.x;
+            REAL az = C1.y - C0.y;
+            REAL bx = C0.x - 2.0f * C1.x + C2.x;
+            REAL bz = C0.y - 2.0f * C1.y + C2.y;
 
-            float a = bx * bx + bz * bz;
-            float b = 3 * (ax * bx + az * bz);
-            float c = 2 * (ax * ax + az * az) + px * bx + pz * bz;
-            float d = px * ax + pz * az;
+            REAL a = bx * bx + bz * bz;
+            REAL b = 3 * (ax * bx + az * bz);
+            REAL c = 2 * (ax * ax + az * az) + px * bx + pz * bz;
+            REAL d = px * ax + pz * az;
 
             var roots = Polynomial3f.Solve(a, b, c, d);
 
-            float min = float.PositiveInfinity;
-            Vector2f closest = new Vector2f(min, min);
+            REAL min = REAL.PositiveInfinity;
+            POINT2 closest = new POINT2(min, min);
 
             for(int i = 0; i < roots.real; i++)
             {
-                float t = roots[i];
+                REAL t = roots[i];
 
-                Vector2f v = Position(t);
-                float dist = Vector2f.SqrDistance(v, p);
+                POINT2 v = Position(t);
+                REAL dist = POINT2.SqrDistance(v, p);
                 if (dist < min)
                 {
                     min = dist;
@@ -153,23 +157,23 @@ namespace Common.Geometry.Bezier
         /// <summary>
         /// If the segment ab intersects the curve.
         /// </summary>
-        public bool Intersects(Vector2f a, Vector2f b)
+        public bool Intersects(POINT2 a, POINT2 b)
         {
             //coefficients of quadratic
-            Vector2f c2 = C0 + C1 * -2.0f + C2;
-            Vector2f c1 = C0 * -2.0f + C1 * 2.0f;
+            VECTOR2 c2 = (C0 + C1 * -2.0f + C2).Vector2f;
+            VECTOR2 c1 = (C0 * -2.0f + C1 * 2.0f).Vector2f;
 
             //Convert line to normal form: ax + by + c = 0
             //Find normal to line: negative inverse of original line's slope
-            Vector2f n = new Vector2f(a.y - b.y, b.x - a.x);
+            VECTOR2 n = new VECTOR2(a.y - b.y, b.x - a.x);
 
             //c coefficient for normal form of line
-            float c = a.x * b.y - b.x * a.y;
+            REAL c = a.x * b.y - b.x * a.y;
 
             //Transform coefficients to line's coordinate system and find roots of cubic
-            var roots = Polynomial3f.Solve(1, Vector2f.Dot(n, c2), Vector2f.Dot(n, c1), Vector2f.Dot(n, C0) + c);
+            var roots = Polynomial3f.Solve(1, VECTOR2.Dot(n, c2), VECTOR2.Dot(n, c1), VECTOR2.Dot(n, C0.Vector2f) + c);
 
-            Vector2f min, max;
+            VECTOR2 min, max;
             min.x = Math.Min(a.x, b.x);
             min.y = Math.Min(a.y, b.y);
 
@@ -178,10 +182,10 @@ namespace Common.Geometry.Bezier
 
             for (int i = 0; i < roots.real; i++)
             {
-                float t = roots[i];
+                REAL t = roots[i];
                 if (t < 0.0 || t > 1.0) continue;
 
-                Vector2f v0 = Position(t);
+                POINT2 v0 = Position(t);
 
                 if (a.x == b.x)
                 {

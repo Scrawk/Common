@@ -117,23 +117,65 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// The length of the point from the origin.
+        /// Point as vector.
+        /// </summary>
+        public Vector3d Vector3d => new Vector3d(x, y, z);
+
+        /// <summary>
+        /// Point as vector.
+        /// </summary>
+        public Vector4d Vector4d => new Vector4d(x, y, z, w);
+
+        /// <summary>
+        /// The sum of the points components.
+        /// </summary>
+        public REAL Sum
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x + y + z + w;
+            }
+        }
+
+        /// <summary>
+        /// The product of the points components.
+        /// </summary>
+        public REAL Product
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return x * y * z * w;
+            }
+        }
+
+        /// <summary>
+        /// The points absolute values.
+        /// </summary>
+        public Point4d Absolute
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return new Point4d(Math.Abs(x), Math.Abs(y), Math.Abs(z), Math.Abs(w));
+            }
+        }
+
+        /// <summary>
+        /// The length of the vector.
         /// </summary>
         public REAL Magnitude
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
-                REAL sqm = SqrMagnitude;
-                if (sqm != 0)
-                    return MathUtil.Sqrt(sqm);
-                else
-                    return 0;
+                return MathUtil.SafeSqrt(SqrMagnitude);
             }
         }
 
         /// <summary>
-        /// The length of the point from the origin squared.
+        /// The length of the vector squared.
         /// </summary>
 		public REAL SqrMagnitude
         {
@@ -250,6 +292,16 @@ namespace Common.Core.Numerics
         public static Point4d operator /(Point4d v, REAL s)
         {
             return new Point4d(v.x / s, v.y / s, v.z / s, v.w / s);
+        }
+
+        /// <summary>
+        /// Implict cast from a tuple.
+        /// </summary>
+        /// <param name="v">The vector to cast from</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point4d(ValueTuple<REAL, REAL, REAL, REAL> v)
+        {
+            return new Point4d(v.Item1, v.Item2, v.Item3, v.Item4);
         }
 
         /// <summary>

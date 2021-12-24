@@ -20,7 +20,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        bool Contains(Vector2d p);
+        bool Contains(Point2d p);
 
         /// <summary>
         /// Does the shape intersect the box.
@@ -35,14 +35,14 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        Vector2d Closest(Vector2d p);
+        Point2d Closest(Point2d p);
 
         /// <summary>
         /// The signed distance between the shapes surface and the point.
         /// </summary>
         /// <param name="p"></param>
         /// <returns>Positive if outside shape, negative if inside and 0 on boundary</returns>
-        double SignedDistance(Vector2d p);
+        double SignedDistance(Point2d p);
     }
 
     public abstract class Shape2d : IShape2d
@@ -60,7 +60,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public virtual bool Contains(Vector2d p)
+        public virtual bool Contains(Point2d p)
         {
             throw new NotImplementedException();
         }
@@ -81,7 +81,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public virtual Vector2d Closest(Vector2d p)
+        public virtual Point2d Closest(Point2d p)
         {
             throw new NotImplementedException();
         }
@@ -91,7 +91,7 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns>Positive if outside shape, negative if inside and 0 on boundary</returns>
-        public virtual double SignedDistance(Vector2d p)
+        public virtual double SignedDistance(Point2d p)
         {
             throw new NotImplementedException();
         }

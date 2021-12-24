@@ -356,7 +356,7 @@ namespace Common.Geometry.DCEL
         /// <summary>
         /// Translate all vertices.
         /// </summary>
-        public void Translate(Vector2d translate)
+        public void Translate(Point2d translate)
         {
             foreach (var vert in EnumerateVertices())
                 vert.Point += translate;
@@ -366,7 +366,7 @@ namespace Common.Geometry.DCEL
         /// <summary>
         /// Scale all vertices.
         /// </summary>
-        public void Scale(Vector2d scale)
+        public void Scale(Point2d scale)
         {
             foreach (var vert in EnumerateVertices())
                 vert.Point *= scale;

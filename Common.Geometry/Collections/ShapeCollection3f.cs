@@ -99,7 +99,7 @@ namespace Common.Geometry.Collections
         /// <summary>
         /// Does the collection have a shape that contains the point.
         /// </summary>
-        public T Contains(Vector3f point)
+        public T Contains(Point3f point)
         {
             int count = Count;
             for (int i = 0; i < count; i++)
@@ -116,7 +116,7 @@ namespace Common.Geometry.Collections
         /// Return the signed distance field from 
         /// the union of all shapes in the collection.
         /// </summary>
-        public float SignedDistance(Vector3f point)
+        public float SignedDistance(Point3f point)
         {
             var dist = float.PositiveInfinity;
 

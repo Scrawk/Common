@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Common.Core.Numerics;
 
 using REAL = System.Double;
+using POINT2 = Common.Core.Numerics.Point2d;
 using VECTOR2 = Common.Core.Numerics.Vector2d;
 using BOX2 = Common.Geometry.Shapes.Box2d;
 using MATRIX2 = Common.Core.Numerics.Matrix2x2d;
@@ -15,19 +16,19 @@ namespace Common.Geometry.Shapes
     public struct Segment2d : IEquatable<Segment2d>, IShape2d
     {
 
-        public VECTOR2 A;
+        public POINT2 A;
 
-        public VECTOR2 B;
+        public POINT2 B;
 
         /// <summary>
         /// Alternative names for a and b to make
         /// it more clear when comparing two segments 
         /// named ab and cd.
         /// </summary>
-        public VECTOR2 C => A;
-        public VECTOR2 D => B;
+        public POINT2 C => A;
+        public POINT2 D => B;
 
-        public Segment2d(VECTOR2 a, VECTOR2 b)
+        public Segment2d(POINT2 a, POINT2 b)
         {
             A = a;
             B = b;
@@ -35,17 +36,17 @@ namespace Common.Geometry.Shapes
 
         public Segment2d(REAL ax, REAL ay, REAL bx, REAL by)
         {
-            A = new VECTOR2(ax, ay);
-            B = new VECTOR2(bx, by);
+            A = new POINT2(ax, ay);
+            B = new POINT2(bx, by);
         }
 
-        public VECTOR2 Center => (A + B) * 0.5;
+        public POINT2 Center => (A + B) * 0.5f;
 
-        public REAL Length => VECTOR2.Distance(A, B);
+        public REAL Length => POINT2.Distance(A, B);
 
-        public REAL SqrLength => VECTOR2.SqrDistance(A, B);
+        public REAL SqrLength => POINT2.SqrDistance(A, B);
 
-        public VECTOR2 Normal => (B - A).Normalized.PerpendicularCW;
+        public VECTOR2 Normal => POINT2.Direction(A, B).PerpendicularCW;
 
         public REAL LeftMost => Math.Min(A.x, B.x);
 
@@ -70,21 +71,21 @@ namespace Common.Geometry.Shapes
             }
         }
 
-        unsafe public VECTOR2 this[int i]
+        unsafe public POINT2 this[int i]
         {
             get
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment2d index out of range.");
 
-                fixed (Segment2d* array = &this) { return ((VECTOR2*)array)[i]; }
+                fixed (Segment2d* array = &this) { return ((POINT2*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 2)
                     throw new IndexOutOfRangeException("Segment2d index out of range.");
 
-                fixed (VECTOR2* array = &A) { array[i] = value; }
+                fixed (POINT2* array = &A) { array[i] = value; }
             }
         }
 
@@ -94,7 +95,7 @@ namespace Common.Geometry.Shapes
             return new Segment2d(seg.A + s, seg.B + s);
         }
 
-        public static Segment2d operator +(Segment2d seg, VECTOR2 v)
+        public static Segment2d operator +(Segment2d seg, POINT2 v)
         {
             return new Segment2d(seg.A + v, seg.B + v);
         }
@@ -104,7 +105,7 @@ namespace Common.Geometry.Shapes
             return new Segment2d(seg.A - s, seg.B - s);
         }
 
-        public static Segment2d operator -(Segment2d seg, VECTOR2 v)
+        public static Segment2d operator -(Segment2d seg, POINT2 v)
         {
             return new Segment2d(seg.A - v, seg.B - v);
         }
@@ -122,11 +123,6 @@ namespace Common.Geometry.Shapes
         public static Segment2d operator *(Segment2d seg, MATRIX2 m)
         {
             return new Segment2d(m * seg.A, m * seg.B);
-        }
-
-        public static implicit operator Segment2d(Segment2f seg)
-        {
-            return new Segment2d(seg.A, seg.B);
         }
 
         public static bool operator ==(Segment2d s1, Segment2d s2)
@@ -172,10 +168,10 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public bool Contains(VECTOR2 p)
+        public bool Contains(POINT2 p)
         {
             var c = Closest(p);
-            return VECTOR2.AlmostEqual(c, p);
+            return POINT2.AlmostEqual(c, p);
         }
 
         /// <summary>
@@ -184,19 +180,19 @@ namespace Common.Geometry.Shapes
         /// <param name="p"></param>
         /// <param name="eps"></param>
         /// <returns></returns>
-        public bool Contains(VECTOR2 p, REAL eps)
+        public bool Contains(POINT2 p, REAL eps)
         {
             var c = Closest(p);
-            return VECTOR2.AlmostEqual(c, p, eps);
+            return POINT2.AlmostEqual(c, p, eps);
         }
 
         /// <summary>
         /// Return the signed distance to the point. 
         /// Always positive.
         /// </summary>
-        public REAL SignedDistance(VECTOR2 p)
+        public REAL SignedDistance(POINT2 p)
         {
-            return VECTOR2.Distance(Closest(p), p);
+            return POINT2.Distance(Closest(p), p);
         }
 
         /// <summary>
@@ -218,14 +214,14 @@ namespace Common.Geometry.Shapes
         {
             REAL area1 = Triangle2d.CrossProductArea(A, B, seg.B);
             REAL area2 = Triangle2d.CrossProductArea(A, B, seg.A);
-            t = 0.0;
+            t = 0.0f;
 
-            if (area1 * area2 < 0.0)
+            if (area1 * area2 < 0.0f)
             {
                 REAL area3 = Triangle2d.CrossProductArea(seg.A, seg.B, A);
                 REAL area4 = area3 + area2 - area1;
 
-                if (area3 * area4 < 0.0)
+                if (area3 * area4 < 0.0f)
                 {
                     t = area3 / (area3 - area4);
                     return true;
@@ -244,17 +240,18 @@ namespace Common.Geometry.Shapes
         /// <returns>If they intersect</returns>
         public bool Intersects(Segment2d seg, out REAL s, out REAL t)
         {
+
             REAL area1 = Triangle2d.CrossProductArea(A, B, seg.B);
             REAL area2 = Triangle2d.CrossProductArea(A, B, seg.A);
-            s = 0.0;
-            t = 0.0;
+            s = 0.0f;
+            t = 0.0f;
 
-            if (area1 * area2 < 0.0)
+            if (area1 * area2 < 0.0f)
             {
                 REAL area3 = Triangle2d.CrossProductArea(seg.A, seg.B, A);
                 REAL area4 = area3 + area2 - area1;
 
-                if (area3 * area4 < 0.0)
+                if (area3 * area4 < 0.0f)
                 {
                     s = area3 / (area3 - area4);
 
@@ -278,10 +275,10 @@ namespace Common.Geometry.Shapes
         /// </summary>
         public bool Intersects(BOX2 box)
         {
-            VECTOR2 c = box.Center;
-            VECTOR2 e = box.Max - c; //Box half length extents
-            VECTOR2 m = Center;
-            VECTOR2 d = B - m; //Segment halflength vector.
+            POINT2 c = box.Center;
+            POINT2 e = box.Max - c; //Box half length extents
+            POINT2 m = Center;
+            POINT2 d = B - m; //Segment halflength vector.
             m = m - c; //translate box and segment to origin.
 
             //try world coordinate axes as seperating axes.
@@ -292,8 +289,8 @@ namespace Common.Geometry.Shapes
 
             //add in an epsilon term to counteract arithmetic errors 
             //when segment is near parallel to a coordinate axis.
-            adx += MathUtil.EPS_64;
-            ady += MathUtil.EPS_64;
+            adx += MathUtil.EPS_32;
+            ady += MathUtil.EPS_32;
 
             if (Math.Abs(m.x * d.y - m.y * d.x) > e.x * ady + e.y * adx) return false;
 
@@ -304,7 +301,7 @@ namespace Common.Geometry.Shapes
         /// The closest point on segment to point.
         /// </summary>
         /// <param name="p">point</param>
-        public VECTOR2 Closest(VECTOR2 p)
+        public POINT2 Closest(POINT2 p)
         {
             REAL t;
             Closest(p, out t);
@@ -316,11 +313,11 @@ namespace Common.Geometry.Shapes
         /// </summary>
         /// <param name="p">point</param>
         /// <param name="t">closest point = A + t * (B - A)</param>
-        public void Closest(VECTOR2 p, out REAL t)
+        public void Closest(POINT2 p, out REAL t)
         {
-            t = 0.0;
-            VECTOR2 ab = B - A;
-            VECTOR2 ap = p - A;
+            t = 0.0f;
+            POINT2 ab = B - A;
+            POINT2 ap = p - A;
 
             REAL len = ab.x * ab.x + ab.y * ab.y;
             if (MathUtil.IsZero(len)) return;
@@ -349,9 +346,9 @@ namespace Common.Geometry.Shapes
         public void Closest(Segment2d seg, out REAL s, out REAL t)
         {
 
-            VECTOR2 ab0 = B - A;
-            VECTOR2 ab1 = seg.B - seg.A;
-            VECTOR2 a01 = A - seg.A;
+            VECTOR2 ab0 = (B - A).Vector2d;
+            VECTOR2 ab1 = (seg.B - seg.A).Vector2d;
+            VECTOR2 a01 = (A - seg.A).Vector2d;
 
             REAL d00 = VECTOR2.Dot(ab0, ab0);
             REAL d11 = VECTOR2.Dot(ab1, ab1);
