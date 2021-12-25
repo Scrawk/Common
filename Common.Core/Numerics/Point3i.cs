@@ -60,6 +60,11 @@ namespace Common.Core.Numerics
         public Point2i xy => new Point2i(x, y);
 
         /// <summary>
+        /// 3D point to 2D point.
+        /// </summary>
+        public Point2i xz => new Point2i(x, z);
+
+        /// <summary>
         /// 3D point to 4D point with w as 0.
         /// </summary>
         public Point4i xyz0 => new Point4i(x, y, z, 0);
