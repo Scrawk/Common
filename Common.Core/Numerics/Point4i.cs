@@ -112,6 +112,26 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Convert to float vector.
+        /// </summary>
+        public Vector4f Vector4f => new Vector4f(x, y, z, y);
+
+        /// <summary>
+        /// Convert to double vector.
+        /// </summary>
+        public Vector4d Vector4d => new Vector4d(x, y, z, y);
+
+        /// <summary>
+        /// Convert to float point.
+        /// </summary>
+        public Point4f Point4f => new Point4f(x, y, z, y);
+
+        /// <summary>
+        /// Convert to double point.
+        /// </summary>
+        public Point4d Point4d => new Point4d(x, y, z, y);
+
+        /// <summary>
         /// The sum of the points components.
         /// </summary>
         public REAL Sum
@@ -268,6 +288,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Divide a scalar and a point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point4i operator /(REAL s, Point4i v)
+        {
+            return new Point4i(s / v.x, s / v.y, s / v.z, s / v.w);
+        }
+
+        /// <summary>
         /// Implict cast from a tuple.
         /// </summary>
         /// <param name="v">The vector to cast from</param>
@@ -275,6 +304,26 @@ namespace Common.Core.Numerics
         public static implicit operator Point4i(ValueTuple<REAL, REAL, REAL, REAL> v)
         {
             return new Point4i(v.Item1, v.Item2, v.Item3, v.Item4);
+        }
+
+        /// <summary>
+        /// Cast from Point4f to Point4i.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point4i(Point4f v)
+        {
+            return new Point4i((REAL)v.x, (REAL)v.y, (REAL)v.z, (REAL)v.w);
+        }
+
+        /// <summary>
+        /// Cast from Point4d to Point4i.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point4i(Point4d v)
+        {
+            return new Point4i((REAL)v.x, (REAL)v.y, (REAL)v.z, (REAL)v.w);
         }
 
         /// <summary>
@@ -323,11 +372,11 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
-                hash = (hash * 16777619) ^ z.GetHashCode();
-                hash = (hash * 16777619) ^ w.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ z.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ w.GetHashCode();
                 return hash;
             }
         }

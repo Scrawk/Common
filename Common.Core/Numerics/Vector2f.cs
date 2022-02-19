@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Numerics;
-
 using REAL = System.Single;
 
 namespace Common.Core.Numerics
@@ -131,6 +129,60 @@ namespace Common.Core.Numerics
                     throw new IndexOutOfRangeException("Vector2f index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// Are all the components of vector finite.
+        /// </summary>
+        public bool IsFinite
+        {
+            get
+            {
+                if (!MathUtil.IsFinite(x)) return false;
+                if (!MathUtil.IsFinite(y)) return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Make a vector with no non finite conponents.
+        /// </summary>
+        public Vector2f Finite
+        {
+            get
+            {
+                var v = new Vector2f(x, y);
+                if (!MathUtil.IsFinite(v.x)) v.x = 0;
+                if (!MathUtil.IsFinite(v.y)) v.y = 0;
+                return v;
+            }
+        }
+
+        /// <summary>
+        /// Are any of the vectors components nan.
+        /// </summary>
+        public bool IsNAN
+        {
+            get
+            {
+                if (REAL.IsNaN(x)) return true;
+                if (REAL.IsNaN(y)) return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Make a vector with no nan conponents.
+        /// </summary>
+        public Vector2f NoNAN
+        {
+            get
+            {
+                var v = new Vector2f(x, y);
+                if (REAL.IsNaN(v.x)) v.x = 0;
+                if (REAL.IsNaN(v.y)) v.y = 0;
+                return v;
             }
         }
 
@@ -350,16 +402,33 @@ namespace Common.Core.Numerics
             return new Vector2f(v.x / s, v.y / s);
         }
 
+        /// <summary>
+        /// Divide a scalar and a vector.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator Vector2f(Vector2d v)
+        public static Vector2f operator /(REAL s, Vector2f v)
         {
-            return new Vector2f((REAL)v.x, (REAL)v.y);
+            return new Vector2f(s / v.x, s / v.y);
         }
 
+        /// <summary>
+        /// Implict cast from a tuple.
+        /// </summary>
+        /// <param name="v">The vector to cast from</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector2f(ValueTuple<REAL, REAL> v)
         {
             return new Vector2f(v.Item1, v.Item2);
+        }
+
+        /// <summary>
+        /// Cast from Vector2d to Vector2f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector2f(Vector2d v)
+        {
+            return new Vector2f(v.x, v.y);
         }
 
         /// <summary>
@@ -419,9 +488,9 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
                 return hash;
             }
         }
@@ -458,30 +527,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Convert from a string.
-        /// </summary>
-        /// <param name="text">A string in fromat x,y</param>
-        /// <returns>A vector</returns>
-        public static Vector2f FromString(string text)
-        {
-            text = text.RemoveWhitespaces();
-            var split = text.Split(',');
-
-            if (split.Length != 2)
-                throw new Exception("Vector text must contain 2 numbers.");
-
-            REAL x, y;
-
-            if (!REAL.TryParse(split[0], out x))
-                throw new Exception("x value is not a float.");
-
-            if (!REAL.TryParse(split[1], out y))
-                throw new Exception("y value is not a float.");
-
-            return new Vector2f(x, y);
-        }
-
-        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -489,6 +534,15 @@ namespace Common.Core.Numerics
 		{
 			return v0.x * v1.x + v0.y * v1.y;
 		}
+
+        /// <summary>
+        /// The dot product of vector and point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static REAL Dot(Vector2f v0, Point2f v1)
+        {
+            return (v0.x * v1.x + v0.y * v1.y);
+        }
 
         /// <summary>
         /// The abs dot product of two vectors.
@@ -517,26 +571,6 @@ namespace Common.Core.Numerics
         public static REAL Cross(Vector2f v0, Vector2f v1)
         {
             return v0.x * v1.y - v0.y * v1.x;
-        }
-
-        /// <summary>
-        /// Distance between two vectors.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Distance(Vector2f v0, Vector2f v1)
-        {
-            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
-        }
-
-        /// <summary>
-        /// Square distance between two vectors.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL SqrDistance(Vector2f v0, Vector2f v1)
-        {
-            REAL x = v0.x - v1.x;
-            REAL y = v0.y - v1.y;
-            return x * x + y * y;
         }
 
         /// <summary>
@@ -726,19 +760,32 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Returns if list of verts make a CCW polygon.
-        /// Presumes polygon is simple.
+        /// Round the vector.
         /// </summary>
-        public static bool IsCCW(IList<Vector2f> vertices)
+        /// <param name="digits">The number of digits to round to.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Round(int digits)
         {
-            REAL sum = 0.0f;
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                Vector2f v1 = vertices[i];
-                Vector2f v2 = vertices[(i + 1) % vertices.Count];
-                sum += (v2.x - v1.x) * (v2.y + v1.y);
-            }
-            return sum < 0.0f;
+            x = MathUtil.Round(x, digits);
+            y = MathUtil.Round(y, digits);
+        }
+
+        /// <summary>
+        /// Floor each component of vector.
+        /// </summary>
+        public void Floor()
+        {
+            x = MathUtil.Floor(x);
+            y = MathUtil.Floor(y);
+        }
+
+        /// <summary>
+        /// Ceilling each component of vector.
+        /// </summary>
+        public void Ceilling()
+        {
+            x = MathUtil.Ceilling(x);
+            y = MathUtil.Ceilling(y);
         }
 
     }

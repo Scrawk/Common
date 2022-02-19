@@ -94,6 +94,18 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// A point from the varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Point4f(double x, double y, double z, double w)
+        {
+            this.x = (REAL)x;
+            this.y = (REAL)y;
+            this.z = (REAL)z;
+            this.w = (REAL)w;
+        }
+
+        /// <summary>
         /// Array accessor for variables. 
         /// </summary>
         /// <param name="i">The variables index.</param>
@@ -113,6 +125,68 @@ namespace Common.Core.Numerics
                     throw new IndexOutOfRangeException("Point4f index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// Are all the components of point finite.
+        /// </summary>
+        public bool IsFinite
+        {
+            get
+            {
+                if (!MathUtil.IsFinite(x)) return false;
+                if (!MathUtil.IsFinite(y)) return false;
+                if (!MathUtil.IsFinite(z)) return false;
+                if (!MathUtil.IsFinite(w)) return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Make a point with no non finite conponents.
+        /// </summary>
+        public Point4f Finite
+        {
+            get
+            {
+                var p = new Point4f(x,y,z,w);
+                if (!MathUtil.IsFinite(p.x)) p.x = 0;
+                if (!MathUtil.IsFinite(p.y)) p.y = 0;
+                if (!MathUtil.IsFinite(p.z)) p.z = 0;
+                if (!MathUtil.IsFinite(p.w)) p.w = 0;
+                return p;
+            }
+        }
+
+        /// <summary>
+        /// Are any of the points components nan.
+        /// </summary>
+        public bool IsNAN
+        {
+            get
+            {
+                if (REAL.IsNaN(x)) return true;
+                if (REAL.IsNaN(y)) return true;
+                if (REAL.IsNaN(z)) return true;
+                if (REAL.IsNaN(w)) return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Make a point with no nan conponents.
+        /// </summary>
+        public Point4f NoNAN
+        {
+            get
+            {
+                var p = new Point4f(x, y, z, w);
+                if (REAL.IsNaN(p.x)) p.x = 0;
+                if (REAL.IsNaN(p.y)) p.y = 0;
+                if (REAL.IsNaN(p.z)) p.z = 0;
+                if (REAL.IsNaN(p.w)) p.w = 0;
+                return p;
             }
         }
 
@@ -196,6 +270,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Add a point and a vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point4f operator +(Point4f v1, Vector4f v2)
+        {
+            return new Point4f(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z, v1.w + v2.w);
+        }
+
+        /// <summary>
         /// Add point and scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -227,6 +310,15 @@ namespace Common.Core.Numerics
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point4f operator -(Point4f v1, Point4f v2)
+        {
+            return new Point4f(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w);
+        }
+
+        /// <summary>
+        /// Subtract a point and a vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point4f operator -(Point4f v1, Vector4f v2)
         {
             return new Point4f(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w);
         }
@@ -294,6 +386,16 @@ namespace Common.Core.Numerics
             return new Point4f(v.x / s, v.y / s, v.z / s, v.w / s);
         }
 
+
+        /// <summary>
+        /// Divide a scalar and a point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point4f operator /(REAL s, Point4f v)
+        {
+            return new Point4f(s / v.x, s / v.y, s / v.z, s / v.w);
+        }
+
         /// <summary>
         /// Implict cast from a tuple.
         /// </summary>
@@ -302,6 +404,26 @@ namespace Common.Core.Numerics
         public static implicit operator Point4f(ValueTuple<REAL, REAL, REAL, REAL> v)
         {
             return new Point4f(v.Item1, v.Item2, v.Item3, v.Item4);
+        }
+
+        /// <summary>
+        /// Cast from Point4d to Point4f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point4f(Point4d v)
+        {
+            return new Point4f((REAL)v.x, (REAL)v.y, (REAL)v.z, (REAL)v.w);
+        }
+
+        /// <summary>
+        /// Cast from Point4i to Point4f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point4f(Point4i v)
+        {
+            return new Point4f(v.x, v.y, v.z, v.w);
         }
 
         /// <summary>
@@ -343,6 +465,19 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Are these points equal given the error.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AlmostEqual(Point4f v0, Point4f v1, REAL eps = MathUtil.EPS_32)
+        {
+            if (Math.Abs(v0.x - v1.x) > eps) return false;
+            if (Math.Abs(v0.y - v1.y) > eps) return false;
+            if (Math.Abs(v0.z - v1.z) > eps) return false;
+            if (Math.Abs(v0.w - v1.w) > eps) return false;
+            return true;
+        }
+
+        /// <summary>
         /// Vectors hash code. 
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -350,11 +485,11 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
-                hash = (hash * 16777619) ^ z.GetHashCode();
-                hash = (hash * 16777619) ^ w.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ z.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ w.GetHashCode();
                 return hash;
             }
         }
@@ -397,6 +532,22 @@ namespace Common.Core.Numerics
             REAL z = v0.z - v1.z;
             REAL w = v0.w - v1.w;
             return x * x + y * y + z * z + w * w;
+        }
+
+        /// <summary>
+        /// Direction between two points.
+        /// </summary>
+        /// <param name="v0">The first point.</param>
+        /// <param name="v1">The second point.</param>
+        /// <param name="normalize">Should the vector be normalized.</param>
+        /// <returns>The vector from v0 to v1.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector4f Direction(Point4f v0, Point4f v1, bool normalize = true)
+        {
+            if (normalize)
+                return (v1 - v0).Vector4f.Normalized;
+            else
+                return (v1 - v0).Vector4f;
         }
 
         /// <summary>
@@ -503,7 +654,7 @@ namespace Common.Core.Numerics
         /// <param name="digits">The number of digits to round to.</param>
         /// <returns>The rounded point</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Point4f Rounded(int digits = 0)
+        public Point4f Rounded(int digits)
         {
             REAL x = MathUtil.Round(this.x, digits);
             REAL y = MathUtil.Round(this.y, digits);
@@ -517,12 +668,34 @@ namespace Common.Core.Numerics
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round(int digits = 0)
+        public void Round(int digits)
         {
             x = MathUtil.Round(x, digits);
             y = MathUtil.Round(y, digits);
             z = MathUtil.Round(z, digits);
             w = MathUtil.Round(w, digits);
+        }
+
+        /// <summary>
+        /// Floor each component if point.
+        /// </summary>
+        public void Floor()
+        {
+            x = MathUtil.Floor(x);
+            y = MathUtil.Floor(y);
+            z = MathUtil.Floor(z);
+            w = MathUtil.Floor(w);
+        }
+
+        /// <summary>
+        /// Ceilling each component if point.
+        /// </summary>
+        public void Ceilling()
+        {
+            x = MathUtil.Ceilling(x);
+            y = MathUtil.Ceilling(y);
+            z = MathUtil.Ceilling(z);
+            w = MathUtil.Ceilling(w);
         }
 
     }

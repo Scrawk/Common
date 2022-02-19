@@ -121,7 +121,10 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
         private float DistanceFunc(GraphVertex a, GraphVertex b)
         {
-            return Vector2f.Distance((Vector2f)a.Data, (Vector2f)b.Data);
+            var A = (Vector2f)a.Data;
+            var B = (Vector2f)b.Data;
+
+            return Point2f.Distance(A.Point2f, B.Point2f);
         }
 
         [TestMethod]

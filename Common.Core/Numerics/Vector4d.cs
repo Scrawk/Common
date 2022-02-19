@@ -3,8 +3,6 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Numerics;
-
 using REAL = System.Double;
 
 namespace Common.Core.Numerics
@@ -161,6 +159,68 @@ namespace Common.Core.Numerics
                     throw new IndexOutOfRangeException("Vector4d index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// Are all the components of vector finite.
+        /// </summary>
+        public bool IsFinite
+        {
+            get
+            {
+                if (!MathUtil.IsFinite(x)) return false;
+                if (!MathUtil.IsFinite(y)) return false;
+                if (!MathUtil.IsFinite(z)) return false;
+                if (!MathUtil.IsFinite(w)) return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Make a vector with no non finite conponents.
+        /// </summary>
+        public Vector4d Finite
+        {
+            get
+            {
+                var v = new Vector4d(x, y, z, w);
+                if (!MathUtil.IsFinite(v.x)) v.x = 0;
+                if (!MathUtil.IsFinite(v.y)) v.y = 0;
+                if (!MathUtil.IsFinite(v.z)) v.z = 0;
+                if (!MathUtil.IsFinite(v.w)) v.w = 0;
+                return v;
+            }
+        }
+
+        /// <summary>
+        /// Are any of the vectors components nan.
+        /// </summary>
+        public bool IsNAN
+        {
+            get
+            {
+                if (REAL.IsNaN(x)) return true;
+                if (REAL.IsNaN(y)) return true;
+                if (REAL.IsNaN(z)) return true;
+                if (REAL.IsNaN(w)) return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Make a vector with no nan conponents.
+        /// </summary>
+        public Vector4d NoNAN
+        {
+            get
+            {
+                var v = new Vector4d(x, y, z, w);
+                if (REAL.IsNaN(v.x)) v.x = 0;
+                if (REAL.IsNaN(v.y)) v.y = 0;
+                if (REAL.IsNaN(v.z)) v.z = 0;
+                if (REAL.IsNaN(v.w)) v.w = 0;
+                return v;
             }
         }
 
@@ -356,16 +416,33 @@ namespace Common.Core.Numerics
             return new Vector4d(v.x / s, v.y / s, v.z / s, v.w / s);
         }
 
+        /// <summary>
+        /// Divide a scalar and a vector.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector4d(Vector4f v)
+        public static Vector4d operator /(REAL s, Vector4d v)
         {
-            return new Vector4d(v.x, v.y, v.z, v.w);
+            return new Vector4d(s / v.x, s / v.y, s / v.z, s / v.w);
         }
 
+        /// <summary>
+        /// Implict cast from a tuple.
+        /// </summary>
+        /// <param name="v">The vector to cast from</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector4d(ValueTuple<REAL, REAL, REAL, REAL> v)
         {
             return new Vector4d(v.Item1, v.Item2, v.Item3, v.Item4);
+        }
+
+        /// <summary>
+        /// Cast from Vector4f to Vector4d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector4d(Vector4f v)
+        {
+            return new Vector4d(v.x, v.y, v.z, v.w);
         }
 
         /// <summary>
@@ -427,11 +504,11 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
-                hash = (hash * 16777619) ^ z.GetHashCode();
-                hash = (hash * 16777619) ^ w.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ z.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ w.GetHashCode();
                 return hash;
             }
         }
@@ -472,36 +549,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Convert from a string.
-        /// </summary>
-        /// <param name="text">A string in fromat x,y,z,w</param>
-        /// <returns>A vector</returns>
-        public static Vector4d FromString(string text)
-        {
-            text = text.RemoveWhitespaces();
-            var split = text.Split(',');
-
-            if (split.Length != 4)
-                throw new Exception("Vector text must contain 4 numbers.");
-
-            REAL x, y, z, w;
-
-            if (!REAL.TryParse(split[0], out x))
-                throw new Exception("x value is not a double.");
-
-            if (!REAL.TryParse(split[1], out y))
-                throw new Exception("y value is not a double.");
-
-            if (!REAL.TryParse(split[2], out z))
-                throw new Exception("z value is not a double.");
-
-            if (!REAL.TryParse(split[3], out w))
-                throw new Exception("w value is not a double.");
-
-            return new Vector4d(x, y, z, w);
-        }
-
-        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -509,6 +556,16 @@ namespace Common.Core.Numerics
         {
 			return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z + v0.w*v1.w);
 		}
+
+        /// <summary>
+        /// The dot product of vector and point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static REAL Dot(Vector4d v0, Point4d v1)
+        {
+            return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
+        }
+
         /// <summary>
         /// The abs dot product of two vectors.
         /// </summary>
@@ -516,28 +573,6 @@ namespace Common.Core.Numerics
         public static REAL AbsDot(Vector4d v0, Vector4d v1)
         {
             return Math.Abs(v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
-        }
-
-        /// <summary>
-        /// Distance between two vectors.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Distance(Vector4d v0, Vector4d v1)
-        {
-            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
-        }
-
-        /// <summary>
-        /// Square distance between two vectors.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL SqrDistance(Vector4d v0, Vector4d v1)
-        {
-            REAL x = v0.x - v1.x;
-            REAL y = v0.y - v1.y;
-            REAL z = v0.z - v1.z;
-            REAL w = v0.w - v1.w;
-            return x * x + y * y + z * z + w * w;
         }
 
         /// <summary>
@@ -663,6 +698,41 @@ namespace Common.Core.Numerics
             REAL z = MathUtil.Round(this.z, digits);
             REAL w = MathUtil.Round(this.w, digits);
             return new Vector4d(x, y, z,  w);
+        }
+
+        /// <summary>
+        /// Round the vector.
+        /// </summary>
+        /// <param name="digits">The number of digits to round to.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Round(int digits)
+        {
+            x = MathUtil.Round(x, digits);
+            y = MathUtil.Round(y, digits);
+            z = MathUtil.Round(z, digits);
+            w = MathUtil.Round(w, digits);
+        }
+
+        /// <summary>
+        /// Floor each component of vector.
+        /// </summary>
+        public void Floor()
+        {
+            x = MathUtil.Floor(x);
+            y = MathUtil.Floor(y);
+            z = MathUtil.Floor(z);
+            w = MathUtil.Floor(w);
+        }
+
+        /// <summary>
+        /// Ceilling each component of vector.
+        /// </summary>
+        public void Ceilling()
+        {
+            x = MathUtil.Ceilling(x);
+            y = MathUtil.Ceilling(y);
+            z = MathUtil.Ceilling(z);
+            w = MathUtil.Ceilling(w);
         }
 
     }

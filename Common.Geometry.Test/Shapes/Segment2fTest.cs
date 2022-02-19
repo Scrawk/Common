@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 namespace Common.Geometry.Test.Shapes
 {

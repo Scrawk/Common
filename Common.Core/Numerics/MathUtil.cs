@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Numerics;
+using System.Linq;
 
 namespace Common.Core.Numerics
 {
     public static class MathUtil
     {
+        public const int NULL_INDEX = -1;
+
+        public const uint HASH_PRIME_1 = 2166136261;
+
+        public const int HASH_PRIME_2 = 16777619;
+
         public const int PRECISION = 9;
 
         public const double EPS_64 = 1e-9;
@@ -81,6 +88,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Sin(Radian a)
+        {
+            return Math.Sin(a.angle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Asin(float a)
         {
             return (float)Math.Asin(a);
@@ -90,6 +103,12 @@ namespace Common.Core.Numerics
         public static double Asin(double a)
         {
             return Math.Asin(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Asin(Radian a)
+        {
+            return Math.Asin(a.angle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -105,6 +124,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double SafeAsin(Radian r)
+        {
+            return Asin(Clamp(r.angle, -1.0, 1.0));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Cos(float a)
         {
             return (float)Math.Cos(a);
@@ -114,6 +139,12 @@ namespace Common.Core.Numerics
         public static double Cos(double a)
         {
             return Math.Cos(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Cos(Radian a)
+        {
+            return Math.Cos(a.angle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -129,6 +160,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Acos(Radian a)
+        {
+            return Math.Acos(a.angle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float SafeAcos(float r)
         {
             return Acos(Clamp(r, -1.0f, 1.0f));
@@ -138,6 +175,12 @@ namespace Common.Core.Numerics
         public static double SafeAcos(double r)
         {
             return Acos(Clamp(r, -1.0, 1.0));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double SafeAcos(Radian r)
+        {
+            return Acos(Clamp(r.angle, -1.0, 1.0));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,6 +196,12 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Tan(Radian a)
+        {
+            return Math.Tan(a.angle);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Atan(float a)
         {
             return (float)Math.Atan(a);
@@ -162,6 +211,12 @@ namespace Common.Core.Numerics
         public static double Atan(double a)
         {
             return Math.Atan(a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Atan(Radian a)
+        {
+            return Math.Atan(a.angle);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -578,6 +633,24 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Min(int a, int b, int c, int d)
+        {
+            return Math.Min(a, Math.Min(Math.Min(b, c), Math.Min(c, d)));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Min(float a, float b, float c, float d)
+        {
+            return Math.Min(a, Math.Min(Math.Min(b, c), Math.Min(c, d)));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Min(double a, double b, double c, double d)
+        {
+            return Math.Min(a, Math.Min(Math.Min(b, c), Math.Min(c, d)));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Max(int a, int b)
         {
             return Math.Max(a, b);
@@ -611,6 +684,24 @@ namespace Common.Core.Numerics
         public static double Max(double a, double b, double c)
         {
             return Math.Max(a, Math.Max(b, c));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Max(int a, int b, int c, int d)
+        {
+            return Math.Max(a, Math.Max(Math.Max(b, c), Math.Max(c, d)));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Max(float a, float b, float c, float d)
+        {
+            return Math.Max(a, Math.Max(Math.Max(b, c), Math.Max(c, d)));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double Max(double a, double b, double c, double d)
+        {
+            return Math.Max(a, Math.Max(Math.Max(b, c), Math.Max(c, d)));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

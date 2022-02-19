@@ -2,8 +2,6 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Numerics;
-
 using REAL = System.Single;
 using VECTOR3 = Common.Core.Numerics.Vector3f;
 using POINT3 = Common.Core.Numerics.Point3f;
@@ -173,7 +171,70 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Multiply two quternions together.
+        /// Subtract a quaternion and a scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator -(Quaternion3f q, REAL s)
+        {
+            return new Quaternion3f(q.x - s, q.y - s, q.z - s, q.w - s);
+        }
+
+        /// <summary>
+        /// Subtract two quaternions.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator -(Quaternion3f q1, Quaternion3f q2)
+        {
+            return new Quaternion3f(q1.x - q2.x, q1.y - q2.y, q1.z - q2.z, q1.w - q2.w);
+        }
+
+        /// <summary>
+        /// Negate a quaternion.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator -(Quaternion3f q)
+        {
+            return new Quaternion3f(-q.x, -q.y, -q.z, -q.w);
+        }
+
+        /// <summary>
+        /// Add a quaternion and a scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator +(Quaternion3f q, REAL s)
+        {
+            return new Quaternion3f(q.x + s, q.y + s, q.z + s, q.w + s);
+        }
+
+        /// <summary>
+        /// Add two quaternions.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator +(Quaternion3f q1, Quaternion3f q2)
+        {
+            return new Quaternion3f(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
+        }
+
+        /// <summary>
+        /// Multiply a quaternion and a scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator *(Quaternion3f q, REAL s)
+        {
+            return new Quaternion3f(q.x * s, q.y * s, q.z * s, q.w * s);
+        }
+
+        /// <summary>
+        /// Divide a quaternion and a scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Quaternion3f operator /(Quaternion3f q, REAL s)
+        {
+            return new Quaternion3f(q.x / s, q.y / s, q.z / s, q.w / s);
+        }
+
+        /// <summary>
+        /// Multiply two quaternions together.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Quaternion3f operator *(Quaternion3f q1, Quaternion3f q2)
@@ -256,10 +317,11 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
-                hash = (hash * 16777619) ^ z.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ z.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ w.GetHashCode();
                 return hash;
             }
         }
@@ -280,36 +342,6 @@ namespace Common.Core.Numerics
         public string ToString(string f)
         {
             return string.Format("{0},{1},{2},{3}", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
-        }
-
-        /// <summary>
-        /// Convert from a string.
-        /// </summary>
-        /// <param name="text">A string in fromat x,y,z,w</param>
-        /// <returns>A vector</returns>
-        public static Quaternion3f FromString(string text)
-        {
-            text = text.RemoveWhitespaces();
-            var split = text.Split(',');
-
-            if (split.Length != 4)
-                throw new Exception("Quaternion text must contain 4 numbers.");
-
-            REAL x, y, z, w;
-
-            if (!REAL.TryParse(split[0], out x))
-                throw new Exception("x value is not a float.");
-
-            if (!REAL.TryParse(split[1], out y))
-                throw new Exception("y value is not a float.");
-
-            if (!REAL.TryParse(split[2], out z))
-                throw new Exception("z value is not a float.");
-
-            if (!REAL.TryParse(split[3], out w))
-                throw new Exception("w value is not a float.");
-
-            return new Quaternion3f(x, y, z, w);
         }
 
         /// <summary>

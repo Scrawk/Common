@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 using REAL = System.Single;
+using BOX2 = Common.Core.Shapes.Box2f;
 
 namespace Common.Core.Numerics
 {
@@ -94,6 +95,16 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// A point from the varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Point2f(double x, double y)
+        {
+            this.x = (REAL)x;
+            this.y = (REAL)y;
+        }
+
+        /// <summary>
         /// Array accessor for variables. 
         /// </summary>
         /// <param name="i">The variables index.</param>
@@ -113,6 +124,60 @@ namespace Common.Core.Numerics
                     throw new IndexOutOfRangeException("Point2f index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// Are all the components of point finite.
+        /// </summary>
+        public bool IsFinite
+        {
+            get
+            {
+                if (!MathUtil.IsFinite(x)) return false;
+                if (!MathUtil.IsFinite(y)) return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Make a point with no non finite conponents.
+        /// </summary>
+        public Point2f Finite
+        {
+            get
+            {
+                var p = new Point2f(x, y);
+                if (!MathUtil.IsFinite(p.x)) p.x = 0;
+                if (!MathUtil.IsFinite(p.y)) p.y = 0;
+                return p;
+            }
+        }
+
+        /// <summary>
+        /// Are any of the points components nan.
+        /// </summary>
+        public bool IsNAN
+        {
+            get
+            {
+                if (REAL.IsNaN(x)) return true;
+                if (REAL.IsNaN(y)) return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Make a point with no nan conponents.
+        /// </summary>
+        public Point2f NoNAN
+        {
+            get
+            {
+                var p = new Point2f(x, y);
+                if (REAL.IsNaN(p.x)) p.x = 0;
+                if (REAL.IsNaN(p.y)) p.y = 0;
+                return p;
             }
         }
 
@@ -197,15 +262,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Add two point and vector.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Point2f operator +(Vector2f v1, Point2f v2)
-        {
-            return new Point2f(v1.x + v2.x, v1.y + v2.y);
-        }
-
-        /// <summary>
         /// Add two points.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -248,6 +304,15 @@ namespace Common.Core.Numerics
         public static Point2f operator -(Point2f v1, Point2f v2)
         {
             return new Point2f(v1.x - v2.x, v1.y - v2.y);
+        }
+
+        /// <summary>
+        /// Subtract a point and a vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point2d operator -(Point2f v1, Vector2f v2)
+        {
+            return new Point2d(v1.x - v2.x, v1.y - v2.y);
         }
 
         /// <summary>
@@ -314,6 +379,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Divide a scalar and a point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point2f operator /(REAL s, Point2f v)
+        {
+            return new Point2f(s / v.x, s / v.y);
+        }
+
+        /// <summary>
         /// Implict cast from a tuple.
         /// </summary>
         /// <param name="v">The vector to cast from</param>
@@ -321,6 +395,26 @@ namespace Common.Core.Numerics
         public static implicit operator Point2f(ValueTuple<REAL, REAL> v)
         {
             return new Point2f(v.Item1, v.Item2);
+        }
+
+        /// <summary>
+        /// Cast from Point2d to Point2f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point2f(Point2d v)
+        {
+            return new Point2f((REAL)v.x, (REAL)v.y);
+        }
+
+        /// <summary>
+        /// Cast from Point2i to Point2f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point2f(Point2i v)
+        {
+            return new Point2f(v.x, v.y);
         }
 
         /// <summary>
@@ -380,9 +474,9 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
                 return hash;
             }
         }
@@ -428,10 +522,17 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Direction between two points.
         /// </summary>
+        /// <param name="v0">The first point.</param>
+        /// <param name="v1">The second point.</param>
+        /// <param name="normalize">Should the vector be normalized.</param>
+        /// <returns>The vector from v0 to v1.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f Direction(Point2f v0, Point2f v1)
+        public static Vector2f Direction(Point2f v0, Point2f v1, bool normalize = true)
         {
-            return (v1 - v0).Vector2f.Normalized;
+            if (normalize)
+                return (v1 - v0).Vector2f.Normalized;
+            else
+                return (v1 - v0).Vector2f;
         }
 
         /// <summary>
@@ -524,7 +625,7 @@ namespace Common.Core.Numerics
         /// <param name="digits">The number of digits to round to.</param>
         /// <returns>The rounded point</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Point2f Rounded(int digits = 0)
+        public Point2f Rounded(int digits)
         {
             REAL x = MathUtil.Round(this.x, digits);
             REAL y = MathUtil.Round(this.y, digits);
@@ -536,10 +637,51 @@ namespace Common.Core.Numerics
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round(int digits = 0)
+        public void Round(int digits)
         {
             x = MathUtil.Round(x, digits);
             y = MathUtil.Round(y, digits);
+        }
+
+        /// <summary>
+        /// Floor each component if point.
+        /// </summary>
+        public void Floor()
+        {
+            x = MathUtil.Floor(x);
+            y = MathUtil.Floor(y);
+        }
+
+        /// <summary>
+        /// Ceilling each component if point.
+        /// </summary>
+        public void Ceilling()
+        {
+            x = MathUtil.Ceilling(x);
+            y = MathUtil.Ceilling(y);
+        }
+
+        /// <summary>
+        /// Create a array of random points.
+        /// </summary>
+        /// <param name="seed">The seed</param>
+        /// <param name="count">The number of points to create.</param>
+        /// <param name="range">The range of the points.</param>
+        /// <returns>The point array.</returns>
+        public static Point2f[] RandomPoints(int seed, int count, BOX2 range)
+        {
+            var points = new Point2f[count];
+            var rnd = new Random(seed);
+
+            for (int i = 0; i < count; i++)
+            {
+                REAL x = (REAL)(range.Min.x + rnd.NextDouble() * range.Max.x);
+                REAL y = (REAL)(range.Min.y + rnd.NextDouble() * range.Max.y);
+
+                points[i] = new Point2f(x, y);
+            }
+
+            return points;
         }
 
     }

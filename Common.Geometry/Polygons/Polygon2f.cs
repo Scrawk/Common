@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 using REAL = System.Single;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
 using POINT2 = Common.Core.Numerics.Point2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
-using SEGMENT2 = Common.Geometry.Shapes.Segment2f;
+using BOX2 = Common.Core.Shapes.Box2f;
+using SEGMENT2 = Common.Core.Shapes.Segment2f;
 
 namespace Common.Geometry.Polygons
 {
@@ -245,7 +245,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public override bool Contains(POINT2 point)
+        public override bool Contains(POINT2 point, bool includeBorder = true)
         {
             if (Count < 3) return false;
             if (!Bounds.Contains(point)) return false;

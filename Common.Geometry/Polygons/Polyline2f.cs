@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 using REAL = System.Single;
 using POINT2 = Common.Core.Numerics.Point2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
-using SEGMENT2 = Common.Geometry.Shapes.Segment2f;
+using BOX2 = Common.Core.Shapes.Box2f;
+using SEGMENT2 = Common.Core.Shapes.Segment2f;
 
 namespace Common.Geometry.Polygons
 {
@@ -169,7 +169,7 @@ namespace Common.Geometry.Polygons
         /// Does the line contain the point.
         /// The line has some thickness from its width.
         /// </summary>
-        public override bool Contains(POINT2 point)
+        public override bool Contains(POINT2 point, bool includeBorder = true)
         {
             REAL radius = Radius;
 
@@ -216,7 +216,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Does the line intersect with the box.
         /// </summary>
-        public bool Intersects(BOX2 box)
+        public bool Intersects(BOX2 box, bool includeBorder = true)
         {
             REAL radius = Radius;
             var seg = new SEGMENT2();

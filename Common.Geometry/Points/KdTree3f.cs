@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 namespace Common.Geometry.Points
 {
@@ -79,14 +79,14 @@ namespace Common.Geometry.Points
             else if (count == 1)
             {
                 var p = list[0];
-                m_bounds = new Box3f(p.x, p.x, p.y, p.y, p.z, p.z);
+                m_bounds = new Box3f(p, p);
                 Root = new KdTreeNode3f(p, 0);
                 Count = 1;
             }
             else
             {
                 var p = list[0];
-                m_bounds = new Box3f(p.x, p.x, p.y, p.y, p.z, p.z);
+                m_bounds = new Box3f(p, p);
                 Root = Build(list, 0);
             }
         }

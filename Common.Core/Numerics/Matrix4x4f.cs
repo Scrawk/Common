@@ -2,7 +2,13 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using Common.Core.Numerics;
+using REAL = System.Single;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
+using VECTOR3 = Common.Core.Numerics.Vector3f;
+using VECTOR4 = Common.Core.Numerics.Vector4f;
+using POINT2 = Common.Core.Numerics.Point2f;
+using POINT3 = Common.Core.Numerics.Point3f;
+using POINT4 = Common.Core.Numerics.Point4f;
 
 namespace Common.Core.Numerics
 {
@@ -20,10 +26,10 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The matrix
         /// </summary>
-        public float m00, m10, m20, m30;
-        public float m01, m11, m21, m31;
-        public float m02, m12, m22, m32;
-        public float m03, m13, m23, m33;
+        public REAL m00, m10, m20, m30;
+        public REAL m01, m11, m21, m31;
+        public REAL m02, m12, m22, m32;
+        public REAL m03, m13, m23, m33;
 
         /// <summary>
         /// The Matrix Idenity.
@@ -36,10 +42,10 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix4x4f(float m00, float m01, float m02, float m03,
-                          float m10, float m11, float m12, float m13,
-                          float m20, float m21, float m22, float m23,
-                          float m30, float m31, float m32, float m33)
+        public Matrix4x4f(REAL m00, REAL m01, REAL m02, REAL m03,
+                          REAL m10, REAL m11, REAL m12, REAL m13,
+                          REAL m20, REAL m21, REAL m22, REAL m23,
+                          REAL m30, REAL m31, REAL m32, REAL m33)
         {
 			this.m00 = m00; this.m01 = m01; this.m02 = m02; this.m03 = m03;
 			this.m10 = m10; this.m11 = m11; this.m12 = m12; this.m13 = m13;
@@ -50,7 +56,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following column vectors.
         /// </summary>
-        public Matrix4x4f(Vector4f c0, Vector4f c1, Vector4f c2, Vector4f c3)
+        public Matrix4x4f(VECTOR4 c0, VECTOR4 c1, VECTOR4 c2, VECTOR4 c3)
         {
             m00 = c0.x; m01 = c1.x; m02 = c2.x; m03 = c3.x;
             m10 = c0.y; m11 = c1.y; m12 = c2.y; m13 = c3.y;
@@ -61,7 +67,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix4x4f(float v)
+        public Matrix4x4f(REAL v)
         {
 			m00 = v; m01 = v; m02 = v; m03 = v;
 			m10 = v; m11 = v; m12 = v; m13 = v;
@@ -72,7 +78,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix copied from a array of varibles.
         /// </summary>
-        public Matrix4x4f(float[,] m)
+        public Matrix4x4f(REAL[,] m)
         {
             m00 = m[0,0]; m01 = m[0,1]; m02 = m[0,2]; m03 = m[0,3];
 			m10 = m[1,0]; m11 = m[1,1]; m12 = m[1,2]; m13 = m[1,3];
@@ -83,31 +89,75 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Access the varible at index i
         /// </summary>
-        unsafe public float this[int i]
+        unsafe public REAL this[int i]
         {
             get
             {
                 if ((uint)i >= 16)
                     throw new IndexOutOfRangeException("Matrix4x4f index out of range.");
 
-                fixed (Matrix4x4f* array = &this) { return ((float*)array)[i]; }
+                fixed (Matrix4x4f* array = &this) { return ((REAL*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 16)
                     throw new IndexOutOfRangeException("Matrix4x4f index out of range.");
 
-                fixed (float* array = &m00) { array[i] = value; }
+                fixed (REAL* array = &m00) { array[i] = value; }
             }
         }
 
         /// <summary>
         /// Access the varible at index ij
         /// </summary>
-        public float this[int i, int j]
+        public REAL this[int i, int j]
         {
             get => this[i + j * 4];
             set => this[i + j * 4] = value;
+        }
+
+        /// <summary>
+        /// Is this the identity matrix.
+        /// </summary>
+        public bool IsIdentity
+        {
+            get
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    for (int x = 0; x < 4; x++)
+                    {
+                        if (x == y)
+                        {
+                            if (!MathUtil.IsOne(this[x, y]))
+                                return false;
+                        }
+                        else
+                        {
+                            if (!MathUtil.IsZero(this[x, y]))
+                                return false;
+                        }
+
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Does the matric have scale.
+        /// </summary>
+        public bool HasScale
+        {
+            get
+            {
+                if (!MathUtil.IsOne((this * VECTOR3.UnitX).SqrMagnitude)) return true;
+                if (!MathUtil.IsOne((this * VECTOR3.UnitY).SqrMagnitude)) return true;
+                if (!MathUtil.IsOne((this * VECTOR3.UnitZ).SqrMagnitude)) return true;
+
+                return false;
+            }
         }
 
         /// <summary>
@@ -145,7 +195,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The determinate of a matrix. 
         /// </summary>
-        public float Determinant
+        public REAL Determinant
         {
             get
             {
@@ -198,7 +248,7 @@ namespace Common.Core.Numerics
             }
         }
 
-        public float Trace
+        public REAL Trace
         {
             get
             {
@@ -293,33 +343,59 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Multiply  a vector by a matrix.
+        /// Multiply a vector by a matrix.
+        /// Acts like z is 0, and w is 0.
         /// </summary>
-        public static Vector3f operator *(Matrix4x4f m, Vector3f v)
+        public static VECTOR2 operator *(Matrix4x4f m, VECTOR2 v)
         {
-            Vector3f kProd = new Vector3f();
+            VECTOR2 kProd = new VECTOR2();
 
-			float invW = MathUtil.SafeInv(m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33);
+            kProd.x = m.m00 * v.x + m.m01 * v.y;
+            kProd.y = m.m10 * v.x + m.m11 * v.y;
 
-			kProd.x = (m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03) * invW;
-			kProd.y = (m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13) * invW;
-			kProd.z = (m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23) * invW;
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a vector by a matrix.
+        /// Acts like w is 0.
+        /// </summary>
+        public static VECTOR3 operator *(Matrix4x4f m, VECTOR3 v)
+        {
+            VECTOR3 kProd = new VECTOR3();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
+            kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z;
 
             return kProd;
         }
 
         /// <summary>
         /// Multiply a point by a matrix.
+        /// Acts like z is 0, and w is 1.
         /// </summary>
-        public static Point3f operator *(Matrix4x4f m, Point3f v)
+        public static POINT2 operator *(Matrix4x4f m, POINT2 v)
         {
-            Point3f kProd = new Point3f();
+            POINT2 kProd = new POINT2();
 
-            float invW = MathUtil.SafeInv(m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33);
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m03;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m13;
 
-            kProd.x = (m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03) * invW;
-            kProd.y = (m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13) * invW;
-            kProd.z = (m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23) * invW;
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a point by a matrix.
+        /// Acts like w is 1.
+        /// </summary>
+        public static POINT3 operator *(Matrix4x4f m, POINT3 v)
+        {
+            POINT3 kProd = new POINT3();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13;
+            kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23;
 
             return kProd;
         }
@@ -327,14 +403,14 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a vector by a matrix.
         /// </summary>
-        public static Vector4f operator *(Matrix4x4f m, Vector4f v)
+        public static VECTOR4 operator *(Matrix4x4f m, VECTOR4 v)
         {
-            Vector4f kProd = new Vector4f();
+            VECTOR4 kProd = new VECTOR4();
 
-			kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03 * v.w;
-			kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13 * v.w;
-			kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23 * v.w;
-			kProd.w = m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33 * v.w;
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03 * v.w;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13 * v.w;
+            kProd.z = m.m20 * v.x + m.m21 * v.y + m.m22 * v.z + m.m23 * v.w;
+            kProd.w = m.m30 * v.x + m.m31 * v.y + m.m32 * v.z + m.m33 * v.w;
 
             return kProd;
         }
@@ -342,9 +418,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a point by a matrix.
         /// </summary>
-        public static Point4f operator *(Matrix4x4f m, Point4f v)
+        public static POINT4 operator *(Matrix4x4f m, POINT4 v)
         {
-            Point4f kProd = new Point4f();
+            POINT4 kProd = new POINT4();
 
             kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z + m.m03 * v.w;
             kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z + m.m13 * v.w;
@@ -357,7 +433,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix4x4f operator *(Matrix4x4f m1, float s)
+        public static Matrix4x4f operator *(Matrix4x4f m1, REAL s)
         {
             Matrix4x4f kProd = new Matrix4x4f();
             kProd.m00 = m1.m00 * s;
@@ -385,7 +461,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix4x4f operator *(float s, Matrix4x4f m1)
+        public static Matrix4x4f operator *(REAL s, Matrix4x4f m1)
         {
             Matrix4x4f kProd = new Matrix4x4f();
             kProd.m00 = m1.m00 * s;
@@ -408,6 +484,19 @@ namespace Common.Core.Numerics
             kProd.m32 = m1.m32 * s;
             kProd.m33 = m1.m33 * s;
             return kProd;
+        }
+
+        /// <summary>
+        /// Cast to float matrix from a double matrix.
+        /// </summary>
+        /// <param name="m">The other matrix</param>
+        public static explicit operator Matrix4x4f(Matrix4x4d m)
+        {
+            var m2 = new Matrix4x4f();
+            for (int i = 0; i < 16; i++)
+                m2[i] = (REAL)m[i];
+
+            return m2;
         }
 
         /// <summary>
@@ -489,7 +578,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix4x4f m0, Matrix4x4f m1, float eps = MathUtil.EPS_32)
+        public static bool AlmostEqual(Matrix4x4f m0, Matrix4x4f m1, REAL eps = MathUtil.EPS_32)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;
@@ -521,11 +610,9 @@ namespace Common.Core.Numerics
 		{
             unchecked
             {
-                int hash = (int)2166136261;
-
+                int hash = (int)MathUtil.HASH_PRIME_1;
                 for (int i = 0; i < 16; i++)
-                    hash = (hash * 16777619) ^ this[i].GetHashCode();
-
+                    hash = (hash * MathUtil.HASH_PRIME_2) ^ this[i].GetHashCode();
                 return hash;
             }
 		}
@@ -544,7 +631,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minor of a matrix. 
         /// </summary>
-        private float Minor(int r0, int r1, int r2, int c0, int c1, int c2)
+        private REAL Minor(int r0, int r1, int r2, int c0, int c1, int c2)
         {
 			return 	this[r0, c0] * (this[r1, c1] * this[r2, c2] - this[r2, c1] * this[r1, c2]) -
 					this[r0, c1] * (this[r1, c0] * this[r2, c2] - this[r2, c0] * this[r1, c2]) +
@@ -558,7 +645,7 @@ namespace Common.Core.Numerics
         public bool TryInverse(ref Matrix4x4f mInv)
         {
 
-            float det = Determinant;
+            REAL det = Determinant;
 
             if (MathUtil.IsZero(det))
                 return false;
@@ -570,15 +657,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Get the ith column as a vector.
         /// </summary>
-        public Vector4f GetColumn(int iCol)
+        public VECTOR4 GetColumn(int iCol)
         {
-			return new Vector4f(this[0, iCol], this[1, iCol], this[2, iCol], this[3, iCol]);
+			return new VECTOR4(this[0, iCol], this[1, iCol], this[2, iCol], this[3, iCol]);
         }
 
         /// <summary>
         /// Set the ith column from a vector.
         /// </summary>
-        public void SetColumn(int iCol, Vector4f v)
+        public void SetColumn(int iCol, VECTOR4 v)
         {
 			this[0, iCol] = v.x;
 			this[1, iCol] = v.y;
@@ -589,15 +676,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Get the ith row as a vector.
         /// </summary>
-        public Vector4f GetRow(int iRow)
+        public VECTOR4 GetRow(int iRow)
         {
-			return new Vector4f(this[iRow, 0], this[iRow, 1], this[iRow, 2], this[iRow, 3]);
+			return new VECTOR4(this[iRow, 0], this[iRow, 1], this[iRow, 2], this[iRow, 3]);
         }
 
         /// <summary>
         /// Set the ith row from a vector.
         /// </summary>
-        public void SetRow(int iRow, Vector4f v)
+        public void SetRow(int iRow, VECTOR4 v)
         {
 			this[iRow, 0] = v.x;
 			this[iRow, 1] = v.y;
@@ -689,7 +776,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
-        static public Matrix4x4f Scale(float s)
+        static public Matrix4x4f Scale(REAL s)
         {
             return new Matrix4x4f(s, 0, 0, 0,
                                   0, s, 0, 0,
@@ -702,9 +789,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4f RotateX(Radian radian)
         {
-            float a = (float)radian.angle;
-			float ca = MathUtil.Cos(a);
-			float sa = MathUtil.Sin(a);
+            REAL a = (REAL)radian.angle;
+			REAL ca = MathUtil.Cos(a);
+			REAL sa = MathUtil.Sin(a);
 
             return new Matrix4x4f(	1, 0, 0, 0,
                                     0, ca, -sa, 0,
@@ -717,9 +804,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4f RotateY(Radian radian)
         {
-            float a = (float)radian.angle;
-            float ca = MathUtil.Cos(a);
-            float sa = MathUtil.Sin(a);
+            REAL a = (REAL)radian.angle;
+            REAL ca = MathUtil.Cos(a);
+            REAL sa = MathUtil.Sin(a);
 
             return new Matrix4x4f(	ca, 0, sa, 0,
                                     0, 1, 0, 0,
@@ -732,9 +819,9 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4f RotateZ(Radian radian)
         {
-            float a = (float)radian.angle;
-            float ca = MathUtil.Cos(a);
-            float sa = MathUtil.Sin(a);
+            REAL a = (REAL)radian.angle;
+            REAL ca = MathUtil.Cos(a);
+            REAL sa = MathUtil.Sin(a);
 
             return new Matrix4x4f(	ca, -sa, 0, 0,
                                     sa, ca, 0, 0,
@@ -745,7 +832,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a vector.
         /// </summary>
-        static public Matrix4x4f Rotate(Vector3f euler)
+        static public Matrix4x4f Rotate(VECTOR3 euler)
         {
             return Quaternion3f.FromEuler(euler).ToMatrix4x4f();
         }
@@ -753,9 +840,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a perspective matrix.
         /// </summary>
-        static public Matrix4x4f Perspective(float fovy, float aspect, float zNear, float zFar)
+        static public Matrix4x4f Perspective(REAL fovy, REAL aspect, REAL zNear, REAL zFar)
         {
-			float f = 1.0f / (float)Math.Tan((fovy * Math.PI / 180.0) / 2.0);
+			REAL f = 1.0f / (REAL)Math.Tan((fovy * Math.PI / 180.0) / 2.0);
             return new Matrix4x4f(	f / aspect, 0, 0, 0,
                                     0, f, 0, 0,
                                     0, 0, (zFar + zNear) / (zNear - zFar), (2.0f * zFar * zNear) / (zNear - zFar),
@@ -765,9 +852,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a ortho matrix.
         /// </summary>
-        static public Matrix4x4f Ortho(float xRight, float xLeft, float yTop, float yBottom, float zNear, float zFar)
+        static public Matrix4x4f Ortho(REAL xRight, REAL xLeft, REAL yTop, REAL yBottom, REAL zNear, REAL zFar)
         {
-            float tx, ty, tz;
+            REAL tx, ty, tz;
             tx = -(xRight + xLeft) / (xRight - xLeft);
             ty = -(yTop + yBottom) / (yTop - yBottom);
             tz = -(zFar + zNear) / (zFar - zNear);
@@ -780,16 +867,16 @@ namespace Common.Core.Numerics
 		/// <summary>
 		/// Creates the matrix need to look at target from position.
 		/// </summary>
-		static public Matrix4x4f LookAt(Point3f position, Point3f target, Vector3f Up)
+		static public Matrix4x4f LookAt(Point3f position, Point3f target, VECTOR3 Up)
 		{
 			
-			Vector3f zaxis = Point3f.Direction(target, position);
-			Vector3f xaxis = Vector3f.Cross(Up, zaxis).Normalized;
-			Vector3f yaxis = Vector3f.Cross(zaxis, xaxis);
+			VECTOR3 zaxis = Point3f.Direction(target, position);
+			VECTOR3 xaxis = VECTOR3.Cross(Up, zaxis).Normalized;
+			VECTOR3 yaxis = VECTOR3.Cross(zaxis, xaxis);
 			
-			return new Matrix4x4f(	xaxis.x, xaxis.y, xaxis.z, -Vector3f.Dot(xaxis, position.Vector3f),
-			                      	yaxis.x, yaxis.y, yaxis.z, -Vector3f.Dot(yaxis, position.Vector3f),
-			                      	zaxis.x, zaxis.y, zaxis.z, -Vector3f.Dot(zaxis, position.Vector3f),
+			return new Matrix4x4f(	xaxis.x, xaxis.y, xaxis.z, -VECTOR3.Dot(xaxis, position),
+			                      	yaxis.x, yaxis.y, yaxis.z, -VECTOR3.Dot(yaxis, position),
+			                      	zaxis.x, zaxis.y, zaxis.z, -VECTOR3.Dot(zaxis, position),
 			                      	0, 0, 0, 1);
 		}
 

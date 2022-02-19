@@ -18,6 +18,11 @@ namespace Common.Core.Numerics
         public double angle;
 
         /// <summary>
+        /// The radian angle in degees.
+        /// </summary>
+        public double degree => angle * MathUtil.RAD_TO_DEG_64;
+
+        /// <summary>
         /// Pi.
         /// </summary>
         public readonly static Radian PI = new Radian(Math.PI);
@@ -141,6 +146,78 @@ namespace Common.Core.Numerics
         public static Radian operator *(Radian v, double s)
         {
             return new Radian(v.angle * s);
+        }
+
+        /// <summary>
+        /// Is the radian less than the scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator <(Radian v, double s)
+        {
+            return v.angle < s;
+        }
+
+        /// <summary>
+        /// Is the radian less than or equal to the scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator <=(Radian v, double s)
+        {
+            return v.angle <= s;
+        }
+
+        /// <summary>
+        /// Is the radian greater than the scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator >(Radian v, double s)
+        {
+            return v.angle > s;
+        }
+
+        /// <summary>
+        /// Is the radian greater than or equal to the scalar.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator >=(Radian v, double s)
+        {
+            return v.angle >= s;
+        }
+
+        /// <summary>
+        /// Is the radian less than the other radian.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator <(Radian v, Radian v2)
+        {
+            return v.angle < v2.angle;
+        }
+
+        /// <summary>
+        /// Is the radian less than or equal to the other radian.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator <=(Radian v, Radian v2)
+        {
+            return v.angle <= v2.angle;
+        }
+
+        /// <summary>
+        /// Is the radian greater than the other radian.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator >(Radian v, Radian v2)
+        {
+            return v.angle > v2.angle;
+        }
+
+        /// <summary>
+        /// Is the radian greater than or equal to the other radian.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator >=(Radian v, Radian v2)
+        {
+            return v.angle > v2.angle;
         }
 
         /// <summary>

@@ -2,7 +2,11 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using Common.Core.Numerics;
+using REAL = System.Double;
+using VECTOR2 = Common.Core.Numerics.Vector2d;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
+using POINT2 = Common.Core.Numerics.Point2d;
+using POINT3 = Common.Core.Numerics.Point3d;
 
 namespace Common.Core.Numerics
 {
@@ -19,9 +23,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The matrix
         /// </summary>
-        public double m00, m10, m20;
-        public double m01, m11, m21;
-        public double m02, m12, m22;
+        public REAL m00, m10, m20;
+        public REAL m01, m11, m21;
+        public REAL m02, m12, m22;
 
         /// <summary>
         /// The Matrix Idenity.
@@ -31,9 +35,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix3x3d(double m00, double m01, double m02,
-                          double m10, double m11, double m12,
-                          double m20, double m21, double m22)
+        public Matrix3x3d(REAL m00, REAL m01, REAL m02,
+                          REAL m10, REAL m11, REAL m12,
+                          REAL m20, REAL m21, REAL m22)
         {
             this.m00 = m00; this.m01 = m01; this.m02 = m02;
             this.m10 = m10; this.m11 = m11; this.m12 = m12;
@@ -43,7 +47,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following column vectors.
         /// </summary>
-        public Matrix3x3d(Vector3d c0, Vector3d c1, Vector3d c2)
+        public Matrix3x3d(VECTOR3 c0, VECTOR3 c1, VECTOR3 c2)
         {
             m00 = c0.x; m01 = c1.x; m02 = c2.x;
             m10 = c0.y; m11 = c1.y; m12 = c2.y;
@@ -53,7 +57,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix3x3d(double v)
+        public Matrix3x3d(REAL v)
         {
             m00 = v; m01 = v; m02 = v;
             m10 = v; m11 = v; m12 = v;
@@ -63,7 +67,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix copied from a array of varibles.
         /// </summary>
-        public Matrix3x3d(double[,] m)
+        public Matrix3x3d(REAL[,] m)
         {
             m00 = m[0, 0]; m01 = m[0, 1]; m02 = m[0, 2];
             m10 = m[1, 0]; m11 = m[1, 1]; m12 = m[1, 2];
@@ -71,30 +75,73 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Is this the identity matrix.
+        /// </summary>
+        public bool IsIdentity
+        {
+            get
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int x = 0; x < 3; x++)
+                    {
+                        if (x == y)
+                        {
+                            if (!MathUtil.IsOne(this[x, y]))
+                                return false;
+                        }
+                        else
+                        {
+                            if (!MathUtil.IsZero(this[x, y]))
+                                return false;
+                        }
+
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Does the matric have scale.
+        /// </summary>
+        public bool HasScale
+        {
+            get
+            {
+                if (!MathUtil.IsOne((this * VECTOR2.UnitX).SqrMagnitude)) return true;
+                if (!MathUtil.IsOne((this * VECTOR2.UnitY).SqrMagnitude)) return true;
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Access the varible at index i
         /// </summary>
-        unsafe public double this[int i]
+        unsafe public REAL this[int i]
         {
             get
             {
                 if ((uint)i >= 9)
                     throw new IndexOutOfRangeException("Matrix3x3d index out of range.");
 
-                fixed (Matrix3x3d* array = &this) { return ((double*)array)[i]; }
+                fixed (Matrix3x3d* array = &this) { return ((REAL*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 9)
                     throw new IndexOutOfRangeException("Matrix3x3d index out of range.");
 
-                fixed (double* array = &m00) { array[i] = value; }
+                fixed (REAL* array = &m00) { array[i] = value; }
             }
         }
 
         /// <summary>
         /// Access the varible at index ij
         /// </summary>
-        public double this[int i, int j]
+        public REAL this[int i, int j]
         {
             get => this[i + j * 3];
             set => this[i + j * 3] = value;
@@ -128,15 +175,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The determinate of a matrix. 
         /// </summary>
-        public double Determinant
+        public REAL Determinant
         {
             get
             {
-                double cofactor00 = m11 * m22 - m12 * m21;
-                double cofactor10 = m12 * m20 - m10 * m22;
-                double cofactor20 = m10 * m21 - m11 * m20;
+                REAL cofactor00 = m11 * m22 - m12 * m21;
+                REAL cofactor10 = m12 * m20 - m10 * m22;
+                REAL cofactor20 = m10 * m21 - m11 * m20;
 
-                double det = m00 * cofactor00 + m01 * cofactor10 + m02 * cofactor20;
+                REAL det = m00 * cofactor00 + m01 * cofactor10 + m02 * cofactor20;
 
                 return det;
             }
@@ -156,7 +203,7 @@ namespace Common.Core.Numerics
             }
         }
 
-        public double Trace
+        public REAL Trace
         {
             get
             {
@@ -228,11 +275,24 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Multiply a vector by a matrix.
+        /// </summary>
+        public static VECTOR2 operator *(Matrix3x3d m, VECTOR2 v)
+        {
+            VECTOR2 kProd = new VECTOR2();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y;
+            kProd.y = m.m10 * v.x + m.m11 * v.y;
+
+            return kProd;
+        }
+
+        /// <summary>
         /// Multiply  a vector by a matrix.
         /// </summary>
-        public static Vector3d operator *(Matrix3x3d m, Vector3d v)
+        public static VECTOR3 operator *(Matrix3x3d m, VECTOR3 v)
         {
-            Vector3d kProd = new Vector3d();
+            VECTOR3 kProd = new VECTOR3();
 
             kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
             kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
@@ -244,9 +304,22 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a point by a matrix.
         /// </summary>
-        public static Point3d operator *(Matrix3x3d m, Point3d v)
+        public static POINT2 operator *(Matrix3x3d m, POINT2 v)
         {
-            Point3d kProd = new Point3d();
+            POINT2 kProd = new POINT2();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12;
+
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a point by a matrix.
+        /// </summary>
+        public static POINT3 operator *(Matrix3x3d m, POINT3 v)
+        {
+            POINT3 kProd = new POINT3();
 
             kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
             kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
@@ -258,7 +331,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix3x3d operator *(Matrix3x3d m1, double s)
+        public static Matrix3x3d operator *(Matrix3x3d m1, REAL s)
         {
             Matrix3x3d kProd = new Matrix3x3d();
             kProd.m00 = m1.m00 * s;
@@ -279,7 +352,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix3x3d operator *(double s, Matrix3x3d m1)
+        public static Matrix3x3d operator *(REAL s, Matrix3x3d m1)
         {
             Matrix3x3d kProd = new Matrix3x3d();
             kProd.m00 = m1.m00 * s;
@@ -295,6 +368,19 @@ namespace Common.Core.Numerics
             kProd.m22 = m1.m22 * s;
 
             return kProd;
+        }
+
+        /// <summary>
+        /// Cast to double matrix from a float matrix.
+        /// </summary>
+        /// <param name="m">The other matrix</param>
+        public static implicit operator Matrix3x3d(Matrix3x3f m)
+        {
+            var m2 = new Matrix3x3d();
+            for (int i = 0; i < 9; i++)
+                m2[i] = m[i];
+
+            return m2;
         }
 
         /// <summary>
@@ -361,7 +447,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix3x3d m0, Matrix3x3d m1, double eps = MathUtil.EPS_64)
+        public static bool AlmostEqual(Matrix3x3d m0, Matrix3x3d m1, REAL eps = MathUtil.EPS_64)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;
@@ -385,11 +471,9 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-
+                int hash = (int)MathUtil.HASH_PRIME_1;
                 for (int i = 0; i < 9; i++)
-                    hash = (hash * 16777619) ^ this[i].GetHashCode();
-
+                    hash = (hash * MathUtil.HASH_PRIME_2) ^ this[i].GetHashCode();
                 return hash;
             }
         }
@@ -423,12 +507,12 @@ namespace Common.Core.Numerics
             mInv.m21 = m01 * m20 - m00 * m21;
             mInv.m22 = m00 * m11 - m01 * m10;
 
-            double det = m00 * mInv.m00 + m01 * mInv.m10 + m02 * mInv.m20;
+            REAL det = m00 * mInv.m00 + m01 * mInv.m10 + m02 * mInv.m20;
 
             if (MathUtil.IsZero(det))
                 return false;
 
-            double invDet = 1.0 / det;
+            REAL invDet = 1.0 / det;
 
             mInv.m00 *= invDet; mInv.m01 *= invDet; mInv.m02 *= invDet;
             mInv.m10 *= invDet; mInv.m11 *= invDet; mInv.m12 *= invDet;
@@ -440,15 +524,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Get the ith column as a vector.
         /// </summary>
-        public Vector3d GetColumn(int iCol)
+        public VECTOR3 GetColumn(int iCol)
         {
-			return new Vector3d(this[0, iCol], this[1, iCol], this[2, iCol]);
+			return new VECTOR3(this[0, iCol], this[1, iCol], this[2, iCol]);
         }
 
         /// <summary>
         /// Set the ith column from avector.
         /// </summary>
-        public void SetColumn(int iCol, Vector3d v)
+        public void SetColumn(int iCol, VECTOR3 v)
         {
 			this[0, iCol] = v.x;
 			this[1, iCol] = v.y;
@@ -458,15 +542,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Get the ith row as a vector.
         /// </summary>
-        public Vector3d GetRow(int iRow)
+        public VECTOR3 GetRow(int iRow)
         {
-			return new Vector3d(this[iRow, 0], this[iRow, 1], this[iRow, 2]);
+			return new VECTOR3(this[iRow, 0], this[iRow, 1], this[iRow, 2]);
         }
 
         /// <summary>
         /// Set the ith row from avector.
         /// </summary>
-        public void SetRow(int iRow, Vector3d v)
+        public void SetRow(int iRow, VECTOR3 v)
         {
 			this[iRow, 0] = v.x;
 			this[iRow, 1] = v.y;
@@ -474,7 +558,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Convert to a double precision 4 dimension matrix.
+        /// Convert to a REAL precision 4 dimension matrix.
         /// </summary>
         public Matrix4x4d ToMatrix4x4d()
         {
@@ -487,7 +571,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation out of a vector.
         /// </summary>
-        static public Matrix3x3d Translate(Vector2d v)
+        static public Matrix3x3d Translate(VECTOR2 v)
         {
             return new Matrix3x3d(1, 0, v.x,
                                   0, 1, v.y,
@@ -497,7 +581,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation out of a point.
         /// </summary>
-        static public Matrix3x3d Translate(Point2d v)
+        static public Matrix3x3d Translate(POINT2 v)
         {
             return new Matrix3x3d(1, 0, v.x,
                                   0, 1, v.y,
@@ -507,7 +591,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
-        static public Matrix3x3d Scale(Vector2d v)
+        static public Matrix3x3d Scale(VECTOR2 v)
         {
             return new Matrix3x3d(v.x, 0, 0,
                                   0, v.y, 0,
@@ -518,7 +602,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a point.
         /// </summary>
-        static public Matrix3x3d Scale(Point2d v)
+        static public Matrix3x3d Scale(POINT2 v)
         {
             return new Matrix3x3d(v.x, 0, 0,
                                   0, v.y, 0,
@@ -529,7 +613,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
-        static public Matrix3x3d Scale(double s)
+        static public Matrix3x3d Scale(REAL s)
         {
             return new Matrix3x3d(s, 0, 0,
                                   0, s, 0,
@@ -542,8 +626,8 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix3x3d RotateX(Radian radian)
         {
-            double ca = Math.Cos(radian.angle);
-            double sa = Math.Sin(radian.angle);
+            REAL ca = Math.Cos(radian.angle);
+            REAL sa = Math.Sin(radian.angle);
 
             return new Matrix3x3d(1, 0, 0,
                                   0, ca, -sa,
@@ -555,8 +639,8 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix3x3d RotateY(Radian radian)
         {
-            double ca = Math.Cos(radian.angle);
-            double sa = Math.Sin(radian.angle);
+            REAL ca = Math.Cos(radian.angle);
+            REAL sa = Math.Sin(radian.angle);
 
             return new Matrix3x3d(ca, 0, sa,
                                   0, 1, 0,
@@ -568,8 +652,8 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix3x3d RotateZ(Radian radian)
         {
-            double ca = Math.Cos(radian.angle);
-            double sa = Math.Sin(radian.angle);
+            REAL ca = Math.Cos(radian.angle);
+            REAL sa = Math.Sin(radian.angle);
 
             return new Matrix3x3d(ca, -sa, 0,
                                   sa, ca, 0,
@@ -579,7 +663,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a vector.
         /// </summary>
-        static public Matrix3x3d Rotate(Vector3d euler)
+        static public Matrix3x3d Rotate(VECTOR3 euler)
         {
             return Quaternion3d.FromEuler(euler).ToMatrix3x3d();
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Common.Core.Time;
 using Common.Geometry.Collections;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 using CONSOLE = System.Console;
 
 namespace Common.Console.Geometry
@@ -88,7 +88,7 @@ namespace Common.Console.Geometry
                 var seg = new Segment2f(a, b);
                 if (seg.Length < 0.1f) continue;
 
-                collection.Add(seg);
+                //collection.Add(seg);
             }
         }
     }

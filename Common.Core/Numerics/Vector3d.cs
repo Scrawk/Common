@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-using Common.Core.Numerics;
-
 using REAL = System.Double;
 
 namespace Common.Core.Numerics
@@ -58,49 +56,34 @@ namespace Common.Core.Numerics
         public readonly static Vector3d NegativeInfinity = new Vector3d(REAL.NegativeInfinity);
 
         /// <summary>
-        /// Convert to a 2 dimension vector.
+        /// 3D vector to 3D swizzle vector.
         /// </summary>
-	    public Vector2d xy
-	    {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2d(x, y); }
-	    }
+        public Vector3d xzy => new Vector3d(x, z, y);
 
         /// <summary>
-        /// Convert to a 2 dimension vector.
+        /// 3D vector to 2D vector.
         /// </summary>
-        public Vector2d xz
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2d(x, z); }
-        }
+        public Vector2d xy => new Vector2d(x, y);
 
         /// <summary>
-        /// Convert to a 2 dimension vector.
+        /// 3D vector to 2D vector.
         /// </summary>
-        public Vector2d zy
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector2d(z, y); }
-        }
+        public Vector2d xz => new Vector2d(x, z);
 
         /// <summary>
-        /// Convert to a 4 dimension vector.
+        /// 3D vector to 2D vector.
         /// </summary>
-        public Vector4d xyz0
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector4d(x, y, z, 0); }
-        }
+        public Vector2d zy => new Vector2d(z, y);
 
         /// <summary>
-        /// Convert to a 4 dimension vector.
+        /// 3D vector to 4D vector with w as 0.
         /// </summary>
-        public Vector4d xyz1
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get { return new Vector4d(x, y, z, 1); }
-        }
+        public Vector4d xyz0 => new Vector4d(x, y, z, 0);
+
+        /// <summary>
+        /// 3D vector to 4D vector with w as 1.
+        /// </summary>
+        public Vector4d xyz1 => new Vector4d(x, y, z, 1);
 
         /// <summary>
         /// A vector all with the value v.
@@ -158,6 +141,64 @@ namespace Common.Core.Numerics
                     throw new IndexOutOfRangeException("Vector3d index out of range.");
 
                 fixed (REAL* array = &x) { array[i] = value; }
+            }
+        }
+
+        /// <summary>
+        /// Are all the components of vector finite.
+        /// </summary>
+        public bool IsFinite
+        {
+            get
+            {
+                if (!MathUtil.IsFinite(x)) return false;
+                if (!MathUtil.IsFinite(y)) return false;
+                if (!MathUtil.IsFinite(z)) return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Make a vector with no non finite conponents.
+        /// </summary>
+        public Vector3d Finite
+        {
+            get
+            {
+                var v = new Vector3d(x, y, z);
+                if (!MathUtil.IsFinite(v.x)) v.x = 0;
+                if (!MathUtil.IsFinite(v.y)) v.y = 0;
+                if (!MathUtil.IsFinite(v.z)) v.z = 0;
+                return v;
+            }
+        }
+
+        /// <summary>
+        /// Are any of the vectors components nan.
+        /// </summary>
+        public bool IsNAN
+        {
+            get
+            {
+                if (REAL.IsNaN(x)) return true;
+                if (REAL.IsNaN(y)) return true;
+                if (REAL.IsNaN(z)) return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Make a vector with no nan conponents.
+        /// </summary>
+        public Vector3d NoNAN
+        {
+            get
+            {
+                var v = new Vector3d(x, y, z);
+                if (REAL.IsNaN(v.x)) v.x = 0;
+                if (REAL.IsNaN(v.y)) v.y = 0;
+                if (REAL.IsNaN(v.z)) v.z = 0;
+                return v;
             }
         }
 
@@ -369,16 +410,33 @@ namespace Common.Core.Numerics
             return new Vector3d(v.x / s, v.y / s, v.z / s);
         }
 
+        /// <summary>
+        /// Divide a scalar and a vector.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector3d(Vector3f v)
+        public static Vector3d operator /(REAL s, Vector3d v)
         {
-            return new Vector3d(v.x, v.y, v.z);
+            return new Vector3d(s / v.x, s / v.y, s / v.z);
         }
 
+        /// <summary>
+        /// Implict cast from a tuple.
+        /// </summary>
+        /// <param name="v">The vector to cast from</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector3d(ValueTuple<REAL, REAL, REAL> v)
         {
             return new Vector3d(v.Item1, v.Item2, v.Item3);
+        }
+
+        /// <summary>
+        /// Cast from Vector3f to Vector3d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector3d(Vector3f v)
+        {
+            return new Vector3d(v.x, v.y, v.z);
         }
 
         /// <summary>
@@ -439,10 +497,10 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
-                hash = (hash * 16777619) ^ z.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ z.GetHashCode();
                 return hash;
             }
         }
@@ -481,33 +539,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Convert from a string.
-        /// </summary>
-        /// <param name="text">A string in fromat x,y,z</param>
-        /// <returns>A vector</returns>
-        public static Vector3d FromString(string text)
-        {
-            text = text.RemoveWhitespaces();
-            var split = text.Split(',');
-
-            if (split.Length != 3)
-                throw new Exception("Vector text must contain 3 numbers.");
-
-            REAL x, y, z;
-
-            if (!REAL.TryParse(split[0], out x))
-                throw new Exception("x value is not a double.");
-
-            if (!REAL.TryParse(split[1], out y))
-                throw new Exception("y value is not a double.");
-
-            if (!REAL.TryParse(split[2], out z))
-                throw new Exception("z value is not a double.");
-
-            return new Vector3d(x, y, z);
-        }
-
-        /// <summary>
         /// The dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -515,6 +546,15 @@ namespace Common.Core.Numerics
 		{
 			return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 		}
+
+        /// <summary>
+        /// The dot product of vector and point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static REAL Dot(Vector3d v0, Point3d v1)
+        {
+            return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z);
+        }
 
         /// <summary>
         /// The abs dot product of two vectors.
@@ -568,24 +608,21 @@ namespace Common.Core.Numerics
 		}
 
         /// <summary>
-        /// Distance between two vectors.
+        /// Cross a vector andpoint.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Distance(Vector3d v0, Vector3d v1)
+        public static Vector3d Cross(Vector3d v0, Point3d v1)
         {
-            return MathUtil.SafeSqrt(SqrDistance(v0, v1));
+            return new Vector3d(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x);
         }
 
         /// <summary>
-        /// Square distance between two vectors.
+        /// Cross two points.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL SqrDistance(Vector3d v0, Vector3d v1)
+        public static Vector3d Cross(Point3d v0, Point3d v1)
         {
-            REAL x = v0.x - v1.x;
-            REAL y = v0.y - v1.y;
-            REAL z = v0.z - v1.z;
-            return x * x + y * y + z * z;
+            return new Vector3d(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x);
         }
 
         /// <summary>
@@ -768,6 +805,38 @@ namespace Common.Core.Numerics
             REAL y = MathUtil.Round(this.y, digits);
             REAL z = MathUtil.Round(this.z, digits);
             return new Vector3d(x, y, z);
+        }
+
+        /// <summary>
+        /// Round the vector.
+        /// </summary>
+        /// <param name="digits">The number of digits to round to.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Round(int digits)
+        {
+            x = MathUtil.Round(x, digits);
+            y = MathUtil.Round(y, digits);
+            z = MathUtil.Round(z, digits);
+        }
+
+        /// <summary>
+        /// Floor each component of vector.
+        /// </summary>
+        public void Floor()
+        {
+            x = MathUtil.Floor(x);
+            y = MathUtil.Floor(y);
+            z = MathUtil.Floor(z);
+        }
+
+        /// <summary>
+        /// Ceilling each component of vector.
+        /// </summary>
+        public void Ceilling()
+        {
+            x = MathUtil.Ceilling(x);
+            y = MathUtil.Ceilling(y);
+            z = MathUtil.Ceilling(z);
         }
 
     }

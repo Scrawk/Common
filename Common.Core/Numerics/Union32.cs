@@ -24,6 +24,18 @@ namespace Common.Core.Numerics
         public byte Byte3;
 
         [FieldOffset(0)]
+        public ushort UShort0;
+
+        [FieldOffset(2)]
+        public ushort UShort1;
+
+        [FieldOffset(0)]
+        public short Short0;
+
+        [FieldOffset(2)]
+        public short Short1;
+
+        [FieldOffset(0)]
         public bool Bool;
 
         [FieldOffset(0)]

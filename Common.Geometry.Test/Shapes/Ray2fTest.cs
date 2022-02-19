@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 
 namespace Common.Geometry.Test.Shapes
@@ -13,8 +13,8 @@ namespace Common.Geometry.Test.Shapes
         [TestMethod]
         public void IntersectRay()
         {
-            var ray1 = new Ray2f((0, 0), (1, 0));
-            var ray2 = new Ray2f((1, 2), (0, -1));
+            var ray1 = new Ray2f((0, 0), new Vector2f(1, 0));
+            var ray2 = new Ray2f((1, 2), new Vector2f(0, -1));
 
             float s, t;
             ray1.Intersects(ray2, out s, out t);

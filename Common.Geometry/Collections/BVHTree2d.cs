@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 using REAL = System.Double;
 using POINT2 = Common.Core.Numerics.Point2d;
-using BOX2 = Common.Geometry.Shapes.Box2d;
+using BOX2 = Common.Core.Shapes.Box2d;
 
 namespace Common.Geometry.Collections
 {

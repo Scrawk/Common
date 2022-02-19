@@ -89,7 +89,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
         public static float EuclideanDistance(Vector3f a, Vector3f b)
         {
-            return Vector3f.Distance(a, b);
+            return (a - b).Magnitude;
         }
 
         private static int Contains(List<AStarNode> open, int idx)

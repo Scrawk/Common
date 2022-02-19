@@ -120,14 +120,24 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Point as vector.
+        /// Convert to float vector.
+        /// </summary>
+        public Vector3f Vector3f => new Vector3f(x, y, z);
+
+        /// <summary>
+        /// Convert to double vector.
         /// </summary>
         public Vector3d Vector3d => new Vector3d(x, y, z);
 
         /// <summary>
-        /// Point as vector.
+        /// Convert to float point.
         /// </summary>
-        public Vector4d Vector4d => new Vector4d(x, y, z, 1);
+        public Point3f Point3f => new Point3f(x, y, z);
+
+        /// <summary>
+        /// Convert to double point.
+        /// </summary>
+        public Point3d Point3d => new Point3d(x, y, z);
 
         /// <summary>
         /// The sum of the points components.
@@ -286,6 +296,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Divide a scalar and a point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point3i operator /(REAL s, Point3i v)
+        {
+            return new Point3i(s / v.x, s / v.y, s / v.z);
+        }
+
+        /// <summary>
         /// Implict cast from a tuple.
         /// </summary>
         /// <param name="v">The vector to cast from</param>
@@ -293,6 +312,26 @@ namespace Common.Core.Numerics
         public static implicit operator Point3i(ValueTuple<REAL, REAL, REAL> v)
         {
             return new Point3i(v.Item1, v.Item2, v.Item3);
+        }
+
+        /// <summary>
+        /// Cast from Point3f to Point3i.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point3i(Point3f v)
+        {
+            return new Point3i((REAL)v.x, (REAL)v.y, (REAL)v.z);
+        }
+
+        /// <summary>
+        /// Cast from Point3d to Point3i.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point3i(Point3d v)
+        {
+            return new Point3i((REAL)v.x, (REAL)v.y, (REAL)v.z);
         }
 
         /// <summary>
@@ -341,10 +380,10 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
-                hash = (hash * 16777619) ^ z.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ z.GetHashCode();
                 return hash;
             }
         }

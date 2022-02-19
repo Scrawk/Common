@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 using REAL = System.Single;
 using POINT2 = Common.Core.Numerics.Point2f;
-using BOX2 = Common.Geometry.Shapes.Box2f;
+using BOX2 = Common.Core.Shapes.Box2f;
 using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4f;
 
@@ -182,7 +182,7 @@ namespace Common.Geometry.Polygons
         /// <summary>
         /// Does the shape contain the points.
         /// </summary>
-        public abstract bool Contains(POINT2 point);
+        public abstract bool Contains(POINT2 point, bool includeBorder = true);
 
         /// <summary>
         /// The signed distance to the point.

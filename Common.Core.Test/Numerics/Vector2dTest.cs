@@ -124,29 +124,6 @@ namespace Common.Core.Test.Numerics
         }
 
         [TestMethod]
-        public void Distance()
-        {
-            VECTOR a = new VECTOR(1, 1);
-            VECTOR b = new VECTOR(2, 2);
-
-            REAL len = Math.Sqrt(2);
-
-            Assert.IsTrue(NearlyEqual(len, VECTOR.Distance(a, b)));
-        }
-
-        [TestMethod]
-        public void SqrDistance()
-        {
-            VECTOR a = new VECTOR(1, 1);
-            VECTOR b = new VECTOR(2, 2);
-
-            REAL len = Math.Sqrt(2);
-            len = len * len;
-
-            Assert.IsTrue(NearlyEqual(len, VECTOR.SqrDistance(a, b)));
-        }
-
-        [TestMethod]
         public void Angle180()
         {
             REAL error = 1e-4f;

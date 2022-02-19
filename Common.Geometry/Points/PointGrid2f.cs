@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
 namespace Common.Geometry.Points
 {
@@ -18,7 +18,7 @@ namespace Common.Geometry.Points
         private List<Point2f>[,] m_grid;
 
         public PointGrid2f(float width, float height, float cellsize, IEnumerable<Point2f> points = null)
-            : this(new Box2f(0, width, 0, height), cellsize, points)
+            : this(new Box2f(new Point2f(0, 0), new Point2f(width, height)), cellsize, points)
         {
 
         }
@@ -301,7 +301,7 @@ namespace Common.Geometry.Points
             int maxx = (int)Math.Floor(max.x * InvCellSize);
             int maxy = (int)Math.Floor(max.y * InvCellSize);
 
-            var box = new Box2i(minx, maxx, miny, maxy);
+            var box = new Box2i(new Point2i(minx, miny), new Point2i(maxx, maxy));
             box.Min = Point2i.Clamp(box.Min, Point2i.Zero, GridSize - 1);
             box.Max = Point2i.Clamp(box.Max, Point2i.Zero, GridSize - 1);
             return box;

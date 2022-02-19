@@ -2,7 +2,11 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 
-using Common.Core.Numerics;
+using REAL = System.Single;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
+using VECTOR3 = Common.Core.Numerics.Vector3f;
+using POINT2 = Common.Core.Numerics.Point2f;
+using POINT3 = Common.Core.Numerics.Point3f;
 
 namespace Common.Core.Numerics
 {
@@ -19,9 +23,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The matrix
         /// </summary>
-        public float m00, m10, m20;
-        public float m01, m11, m21;
-        public float m02, m12, m22;
+        public REAL m00, m10, m20;
+        public REAL m01, m11, m21;
+        public REAL m02, m12, m22;
 
         /// <summary>
         /// The Matrix Idenity.
@@ -31,9 +35,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix3x3f(float m00, float m01, float m02,
-                          float m10, float m11, float m12,
-                          float m20, float m21, float m22)
+        public Matrix3x3f(REAL m00, REAL m01, REAL m02,
+                          REAL m10, REAL m11, REAL m12,
+                          REAL m20, REAL m21, REAL m22)
         {
 			this.m00 = m00; this.m01 = m01; this.m02 = m02;
 			this.m10 = m10; this.m11 = m11; this.m12 = m12;
@@ -43,7 +47,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following column vectors.
         /// </summary>
-        public Matrix3x3f(Vector3f c0, Vector3f c1, Vector3f c2)
+        public Matrix3x3f(VECTOR3 c0, VECTOR3 c1, VECTOR3 c2)
         {
             m00 = c0.x; m01 = c1.x; m02 = c2.x;
             m10 = c0.y; m11 = c1.y; m12 = c2.y;
@@ -53,7 +57,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix from the following varibles.
         /// </summary>
-        public Matrix3x3f(float v)
+        public Matrix3x3f(REAL v)
         {
             m00 = v; m01 = v; m02 = v;
             m10 = v; m11 = v; m12 = v;
@@ -63,14 +67,14 @@ namespace Common.Core.Numerics
         /// <summary>
         /// A matrix copied from a array of varibles.
         /// </summary>
-        public Matrix3x3f(float[,] m)
+        public Matrix3x3f(REAL[,] m)
         {
             m00 = m[0, 0]; m01 = m[0, 1]; m02 = m[0, 2];
             m10 = m[1, 0]; m11 = m[1, 1]; m12 = m[1, 2];
             m20 = m[2, 0]; m21 = m[2, 1]; m22 = m[2, 2];
         }
 
-        public float Trace
+        public REAL Trace
         {
             get
             {
@@ -81,31 +85,74 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Access the varible at index i
         /// </summary>
-        unsafe public float this[int i]
+        unsafe public REAL this[int i]
         {
             get
             {
                 if ((uint)i >= 9)
                     throw new IndexOutOfRangeException("Matrix3x3f index out of range.");
 
-                fixed (Matrix3x3f* array = &this) { return ((float*)array)[i]; }
+                fixed (Matrix3x3f* array = &this) { return ((REAL*)array)[i]; }
             }
             set
             {
                 if ((uint)i >= 9)
                     throw new IndexOutOfRangeException("Matrix3x3f index out of range.");
 
-                fixed (float* array = &m00) { array[i] = value; }
+                fixed (REAL* array = &m00) { array[i] = value; }
             }
         }
 
         /// <summary>
         /// Access the varible at index ij
         /// </summary>
-        public float this[int i, int j]
+        public REAL this[int i, int j]
         {
             get => this[i + j * 3];
             set => this[i + j * 3] = value;
+        }
+
+        /// <summary>
+        /// Is this the identity matrix.
+        /// </summary>
+        public bool IsIdentity
+        {
+            get
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    for (int x = 0; x < 3; x++)
+                    {
+                        if (x == y)
+                        {
+                            if (!MathUtil.IsOne(this[x, y]))
+                                return false;
+                        }
+                        else
+                        {
+                            if (!MathUtil.IsZero(this[x, y]))
+                                return false;
+                        }
+
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Does the matric have scale.
+        /// </summary>
+        public bool HasScale
+        {
+            get
+            {
+                if (!MathUtil.IsOne((this * VECTOR2.UnitX).SqrMagnitude)) return true;
+                if (!MathUtil.IsOne((this * VECTOR2.UnitY).SqrMagnitude)) return true;
+
+                return false;
+            }
         }
 
         /// <summary>
@@ -136,15 +183,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The determinate of a matrix. 
         /// </summary>
-        public float Determinant
+        public REAL Determinant
         {
             get
             {
-                float cofactor00 = m11 * m22 - m12 * m21;
-                float cofactor10 = m12 * m20 - m10 * m22;
-                float cofactor20 = m10 * m21 - m11 * m20;
+                REAL cofactor00 = m11 * m22 - m12 * m21;
+                REAL cofactor10 = m12 * m20 - m10 * m22;
+                REAL cofactor20 = m10 * m21 - m11 * m20;
 
-                float det = m00 * cofactor00 + m01 * cofactor10 + m02 * cofactor20;
+                REAL det = m00 * cofactor00 + m01 * cofactor10 + m02 * cofactor20;
 
                 return det;
             }
@@ -230,9 +277,22 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a vector by a matrix.
         /// </summary>
-        public static Vector3f operator *(Matrix3x3f m, Vector3f v)
+        public static VECTOR2 operator *(Matrix3x3f m, VECTOR2 v)
         {
-            Vector3f kProd = new Vector3f();
+            VECTOR2 kProd = new VECTOR2();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y;
+            kProd.y = m.m10 * v.x + m.m11 * v.y;
+
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a vector by a matrix.
+        /// </summary>
+        public static VECTOR3 operator *(Matrix3x3f m, VECTOR3 v)
+        {
+            VECTOR3 kProd = new VECTOR3();
 
 			kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
 			kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
@@ -244,9 +304,22 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a point by a matrix.
         /// </summary>
-        public static Point3f operator *(Matrix3x3f m, Point3f v)
+        public static POINT2 operator *(Matrix3x3f m, POINT2 v)
         {
-            Point3f kProd = new Point3f();
+            POINT2 kProd = new POINT2();
+
+            kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02;
+            kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12;
+
+            return kProd;
+        }
+
+        /// <summary>
+        /// Multiply a point by a matrix.
+        /// </summary>
+        public static POINT3 operator *(Matrix3x3f m, POINT3 v)
+        {
+            POINT3 kProd = new POINT3();
 
             kProd.x = m.m00 * v.x + m.m01 * v.y + m.m02 * v.z;
             kProd.y = m.m10 * v.x + m.m11 * v.y + m.m12 * v.z;
@@ -258,7 +331,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix3x3f operator *(Matrix3x3f m1, float s)
+        public static Matrix3x3f operator *(Matrix3x3f m1, REAL s)
         {
             Matrix3x3f kProd = new Matrix3x3f();
             kProd.m00 = m1.m00 * s;
@@ -279,7 +352,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Multiply a matrix by a scalar.
         /// </summary>
-        public static Matrix3x3f operator *(float s, Matrix3x3f m1)
+        public static Matrix3x3f operator *(REAL s, Matrix3x3f m1)
         {
             Matrix3x3f kProd = new Matrix3x3f();
             kProd.m00 = m1.m00 * s;
@@ -295,6 +368,19 @@ namespace Common.Core.Numerics
             kProd.m22 = m1.m22 * s;
 
             return kProd;
+        }
+
+        /// <summary>
+        /// Cast to float matrix from a double matrix.
+        /// </summary>
+        /// <param name="m">The other matrix</param>
+        public static explicit operator Matrix3x3f(Matrix3x3d m)
+        {
+            var m2 = new Matrix3x3f();
+            for (int i = 0; i < 9; i++)
+                m2[i] = (REAL)m[i];
+
+            return m2;
         }
 
         /// <summary>
@@ -361,7 +447,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these matrices equal.
         /// </summary>
-        public static bool AlmostEqual(Matrix3x3f m0, Matrix3x3f m1, float eps = MathUtil.EPS_32)
+        public static bool AlmostEqual(Matrix3x3f m0, Matrix3x3f m1, REAL eps = MathUtil.EPS_32)
         {
             if (Math.Abs(m0.m00 - m1.m00) > eps) return false;
             if (Math.Abs(m0.m10 - m1.m10) > eps) return false;
@@ -385,11 +471,9 @@ namespace Common.Core.Numerics
 		{
             unchecked
             {
-                int hash = (int)2166136261;
-
+                int hash = (int)MathUtil.HASH_PRIME_1;
                 for (int i = 0; i < 9; i++)
-                    hash = (hash * 16777619) ^ this[i].GetHashCode();
-
+                    hash = (hash * MathUtil.HASH_PRIME_2) ^ this[i].GetHashCode();
                 return hash;
             }
         }
@@ -423,12 +507,12 @@ namespace Common.Core.Numerics
 			mInv.m21 = m01 * m20 - m00 * m21;
 			mInv.m22 = m00 * m11 - m01 * m10;
 
-			float det = m00 * mInv.m00 + m01 * mInv.m10 + m02 * mInv.m20;
+			REAL det = m00 * mInv.m00 + m01 * mInv.m10 + m02 * mInv.m20;
 
             if (MathUtil.IsZero(det))
                 return false;
 
-            float invDet = 1.0f / det;
+            REAL invDet = 1.0f / det;
 
             mInv.m00 *= invDet; mInv.m01 *= invDet; mInv.m02 *= invDet;
             mInv.m10 *= invDet; mInv.m11 *= invDet; mInv.m12 *= invDet;
@@ -440,15 +524,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Get the ith column as a vector.
         /// </summary>
-        public Vector3f GetColumn(int iCol)
+        public VECTOR3 GetColumn(int iCol)
         {
-			return new Vector3f(this[0, iCol], this[1, iCol], this[2, iCol]);
+			return new VECTOR3(this[0, iCol], this[1, iCol], this[2, iCol]);
         }
 
         /// <summary>
         /// Set the ith column from avector.
         /// </summary>
-        public void SetColumn(int iCol, Vector3f v)
+        public void SetColumn(int iCol, VECTOR3 v)
         {
 			this[0, iCol] = v.x;
 			this[1, iCol] = v.y;
@@ -458,15 +542,15 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Get the ith row as a vector.
         /// </summary>
-        public Vector3f GetRow(int iRow)
+        public VECTOR3 GetRow(int iRow)
         {
-			return new Vector3f(this[iRow, 0], this[iRow, 1], this[iRow, 2]);
+			return new VECTOR3(this[iRow, 0], this[iRow, 1], this[iRow, 2]);
         }
 
         /// <summary>
         /// Set the ith row from avector.
         /// </summary>
-        public void SetRow(int iRow, Vector3f v)
+        public void SetRow(int iRow, VECTOR3 v)
         {
 			this[iRow, 0] = v.x;
 			this[iRow, 1] = v.y;
@@ -487,7 +571,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation out of a vector.
         /// </summary>
-        static public Matrix3x3f Translate(Vector2f v)
+        static public Matrix3x3f Translate(VECTOR2 v)
         {
             return new Matrix3x3f(1, 0, v.x,
                                   0, 1, v.y,
@@ -497,7 +581,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation out of a point.
         /// </summary>
-        static public Matrix3x3f Translate(Point2f v)
+        static public Matrix3x3f Translate(POINT2 v)
         {
             return new Matrix3x3f(1, 0, v.x,
                                   0, 1, v.y,
@@ -507,7 +591,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
-        static public Matrix3x3f Scale(Vector2f v)
+        static public Matrix3x3f Scale(VECTOR2 v)
         {
             return new Matrix3x3f(v.x, 0, 0,
                                   0, v.y, 0,
@@ -518,7 +602,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a point.
         /// </summary>
-        static public Matrix3x3f Scale(Point2f v)
+        static public Matrix3x3f Scale(POINT2 v)
         {
             return new Matrix3x3f(v.x, 0, 0,
                                   0, v.y, 0,
@@ -529,7 +613,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
-        static public Matrix3x3f Scale(float s)
+        static public Matrix3x3f Scale(REAL s)
         {
             return new Matrix3x3f(s, 0, 0,
                                   0, s, 0,
@@ -542,8 +626,8 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix3x3f RotateX(Radian radian)
         {
-            float ca = (float)Math.Cos(radian.angle);
-            float sa = (float)Math.Sin(radian.angle);
+            REAL ca = (REAL)Math.Cos(radian.angle);
+            REAL sa = (REAL)Math.Sin(radian.angle);
 
             return new Matrix3x3f(1, 0, 0,
                                   0, ca, -sa,
@@ -555,8 +639,8 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix3x3f RotateY(Radian radian)
         {
-            float ca = (float)Math.Cos(radian.angle);
-            float sa = (float)Math.Sin(radian.angle);
+            REAL ca = (REAL)Math.Cos(radian.angle);
+            REAL sa = (REAL)Math.Sin(radian.angle);
 
             return new Matrix3x3f(ca, 0, sa,
                                   0, 1, 0,
@@ -568,8 +652,8 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix3x3f RotateZ(Radian radian)
         {
-            float ca = (float)Math.Cos(radian.angle);
-            float sa = (float)Math.Sin(radian.angle);
+            REAL ca = (REAL)Math.Cos(radian.angle);
+            REAL sa = (REAL)Math.Sin(radian.angle);
 
             return new Matrix3x3f(ca, -sa, 0,
                                   sa, ca, 0,
@@ -579,7 +663,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation out of a vector.
         /// </summary>
-        static public Matrix3x3f Rotate(Vector3f euler)
+        static public Matrix3x3f Rotate(VECTOR3 euler)
         {
             return Quaternion3f.FromEuler(euler).ToMatrix3x3f();
         }

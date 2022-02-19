@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
-using Common.Geometry.Shapes;
+using Common.Core.Shapes;
 
-using BOX2 = Common.Geometry.Shapes.Box2f;
+using BOX2 = Common.Core.Shapes.Box2f;
 
 namespace Common.Geometry.Collections
 {

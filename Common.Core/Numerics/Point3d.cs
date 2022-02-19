@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 using REAL = System.Double;
+using BOX3 = Common.Core.Shapes.Box3d;
 
 namespace Common.Core.Numerics
 {
@@ -70,6 +71,11 @@ namespace Common.Core.Numerics
         public Point2d xz => new Point2d(x, z);
 
         /// <summary>
+        /// 3D point to 2D point.
+        /// </summary>
+        public Point2d zy => new Point2d(z, y);
+
+        /// <summary>
         /// 3D point to 4D point with w as 0.
         /// </summary>
         public Point4d xyz0 => new Point4d(x, y, z, 0);
@@ -125,6 +131,64 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Are all the components ofpoint finite.
+        /// </summary>
+        public bool IsFinite
+        {
+            get
+            {
+                if (!MathUtil.IsFinite(x)) return false;
+                if (!MathUtil.IsFinite(y)) return false;
+                if (!MathUtil.IsFinite(z)) return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Make a point with no non finite conponents.
+        /// </summary>
+        public Point3d Finite
+        {
+            get
+            {
+                var p = new Point3d(x, y, z);
+                if (!MathUtil.IsFinite(p.x)) p.x = 0;
+                if (!MathUtil.IsFinite(p.y)) p.y = 0;
+                if (!MathUtil.IsFinite(p.z)) p.z = 0;
+                return p;
+            }
+        }
+
+        /// <summary>
+        /// Are any of the points components nan.
+        /// </summary>
+        public bool IsNAN
+        {
+            get
+            {
+                if (REAL.IsNaN(x)) return true;
+                if (REAL.IsNaN(y)) return true;
+                if (REAL.IsNaN(z)) return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Make a point with no nan conponents.
+        /// </summary>
+        public Point3d NoNAN
+        {
+            get
+            {
+                var p = new Point3d(x, y, z);
+                if (REAL.IsNaN(p.x)) p.x = 0;
+                if (REAL.IsNaN(p.y)) p.y = 0;
+                if (REAL.IsNaN(p.z)) p.z = 0;
+                return p;
+            }
+        }
+
+        /// <summary>
         /// Point as vector.
         /// </summary>
         public Vector3d Vector3d => new Vector3d(x, y, z);
@@ -133,6 +197,19 @@ namespace Common.Core.Numerics
         /// Point as vector.
         /// </summary>
         public Vector4d Vector4d => new Vector4d(x, y, z, 1);
+
+        /// <summary>
+        /// Point as a homogenous point.
+        /// </summary>
+        public HPoint3d Homogenous => new HPoint3d(x, y, z, 1);
+
+        /// <summary>
+        /// Point as a homogenous point.
+        /// </summary>
+        public HPoint3d ToHomogenous(REAL w)
+        {
+            return new HPoint3d(x, y, z, w);
+        }
 
         /// <summary>
         /// The sum of the points components.
@@ -204,15 +281,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Add two point and vector.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Point3d operator +(Vector3d v1, Point3d v2)
-        {
-            return new Point3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
-        }
-
-        /// <summary>
         /// Add two points.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -253,6 +321,15 @@ namespace Common.Core.Numerics
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point3d operator -(Point3d v1, Point3d v2)
+        {
+            return new Point3d(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+        }
+
+        /// <summary>
+        /// Subtract a point and a vector.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point3d operator -(Point3d v1, Vector3d v2)
         {
             return new Point3d(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
         }
@@ -312,6 +389,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Divide a scalar and a point.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Point3d operator /(REAL s, Point3d v)
+        {
+            return new Point3d(s / v.x, s / v.y, s / v.z);
+        }
+
+        /// <summary>
         /// Divide a point and a scalar.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -328,6 +414,26 @@ namespace Common.Core.Numerics
         public static implicit operator Point3d(ValueTuple<REAL, REAL, REAL> v)
         {
             return new Point3d(v.Item1, v.Item2, v.Item3);
+        }
+
+        /// <summary>
+        /// Cast from Point43f to Point3d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point3d(Point3f v)
+        {
+            return new Point3d(v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Cast from Point3i to Point3d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point3d(Point3i v)
+        {
+            return new Point3d(v.x, v.y, v.z);
         }
 
         /// <summary>
@@ -369,6 +475,18 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Are these points equal given the error.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool AlmostEqual(Point3d v0, Point3d v1, REAL eps = MathUtil.EPS_64)
+        {
+            if (Math.Abs(v0.x - v1.x) > eps) return false;
+            if (Math.Abs(v0.y - v1.y) > eps) return false;
+            if (Math.Abs(v0.z - v1.z) > eps) return false;
+            return true;
+        }
+
+        /// <summary>
         /// Vectors hash code. 
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -376,10 +494,10 @@ namespace Common.Core.Numerics
         {
             unchecked
             {
-                int hash = (int)2166136261;
-                hash = (hash * 16777619) ^ x.GetHashCode();
-                hash = (hash * 16777619) ^ y.GetHashCode();
-                hash = (hash * 16777619) ^ z.GetHashCode();
+                int hash = (int)MathUtil.HASH_PRIME_1;
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ x.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ y.GetHashCode();
+                hash = (hash * MathUtil.HASH_PRIME_2) ^ z.GetHashCode();
                 return hash;
             }
         }
@@ -426,10 +544,17 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Direction between two points.
         /// </summary>
+        /// <param name="v0">The first point.</param>
+        /// <param name="v1">The second point.</param>
+        /// <param name="normalize">Should the vector be normalized.</param>
+        /// <returns>The vector from v0 to v1.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3d Direction(Point3d v0, Point3d v1)
+        public static Vector3d Direction(Point3d v0, Point3d v1, bool normalize = true)
         {
-            return (v1 - v0).Vector3d.Normalized;
+            if (normalize)
+                return (v1 - v0).Vector3d.Normalized;
+            else
+                return (v1 - v0).Vector3d;
         }
 
         /// <summary>
@@ -529,7 +654,7 @@ namespace Common.Core.Numerics
         /// <param name="digits">The number of digits to round to.</param>
         /// <returns>The rounded point</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Point3d Rounded(int digits = 0)
+        public Point3d Rounded(int digits)
         {
             REAL x = MathUtil.Round(this.x, digits);
             REAL y = MathUtil.Round(this.y, digits);
@@ -542,11 +667,55 @@ namespace Common.Core.Numerics
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Round(int digits = 0)
+        public void Round(int digits)
         {
             x = MathUtil.Round(x, digits);
             y = MathUtil.Round(y, digits);
             z = MathUtil.Round(z, digits);
+        }
+
+        /// <summary>
+        /// Floor each component if point.
+        /// </summary>
+        public void Floor()
+        {
+            x = MathUtil.Floor(x);
+            y = MathUtil.Floor(y);
+            z = MathUtil.Floor(z);
+        }
+
+        /// <summary>
+        /// Ceilling each component if point.
+        /// </summary>
+        public void Ceilling()
+        {
+            x = MathUtil.Ceilling(x);
+            y = MathUtil.Ceilling(y);
+            z = MathUtil.Ceilling(z);
+        }
+
+        /// <summary>
+        /// Create a array of random points.
+        /// </summary>
+        /// <param name="seed">The seed</param>
+        /// <param name="count">The number of points to create.</param>
+        /// <param name="range">The range of the points.</param>
+        /// <returns>The point array.</returns>
+        public static Point3d[] RandomPoints(int seed, int count, BOX3 range)
+        {
+            var points = new Point3d[count];
+            var rnd = new Random(seed);
+
+            for (int i = 0; i < count; i++)
+            {
+                REAL x = range.Min.x + rnd.NextDouble() * range.Max.x;
+                REAL y = range.Min.y + rnd.NextDouble() * range.Max.y;
+                REAL z = range.Min.z + rnd.NextDouble() * range.Max.z;
+
+                points[i] = new Point3d(x, y, z);
+            }
+
+            return points;
         }
 
     }
