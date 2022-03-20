@@ -73,6 +73,25 @@ namespace Common.GraphTheory.AdjacencyGraphs
         {
             return Cost.CompareTo(other.Cost);
         }
+
+        /// <summary>
+        /// Create deep copy of vertex.
+        /// </summary>
+        /// <param name="dataCopy">Function to copy data. If null shallow copy will be used.</param>
+        /// <returns>A copy of the vertex.</returns>
+        public GraphVertex Copy(Func<object, object> dataCopy = null)
+        {
+            GraphVertex copy = new GraphVertex();
+            copy.Index = Index;
+            copy.Cost = Cost;
+
+            if (dataCopy != null)
+                copy.Data = dataCopy.Invoke(Data);
+            else
+                copy.Data = Data;
+
+            return copy;
+        }
     }
 
 

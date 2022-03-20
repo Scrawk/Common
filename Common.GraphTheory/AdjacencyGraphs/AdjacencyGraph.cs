@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
 namespace Common.GraphTheory.AdjacencyGraphs
 {
@@ -85,6 +85,29 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public override string ToString()
         {
             return string.Format("[AdjacencyGraph: VertexCount={0}, EdgeCount={1}]", VertexCount, EdgeCount);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        public void Print(StringBuilder builder)
+        {
+            builder.AppendLine(this.ToString());
+
+            builder.AppendLine("Vertices");
+            foreach(var v in Vertices)
+                builder.AppendLine(v.ToString());
+
+            builder.AppendLine("Edges");
+            foreach (var edges in Edges)
+            {
+                if (edges == null) continue;
+
+                foreach (var e in edges)
+                    builder.AppendLine(e.ToString());
+            }
+                
         }
 
         /// <summary>
@@ -199,7 +222,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// Does the graph contain a edge going
         /// from and to vertices at the indexs.
         /// </summary>
-        public bool ContainsEdge(int from, int to)
+        public bool HasEdge(int from, int to)
         {
             return GetEdge(from, to) != null;
         }

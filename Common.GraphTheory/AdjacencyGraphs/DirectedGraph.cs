@@ -47,6 +47,39 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Create a deep copy of the graph.
+        /// </summary>
+        /// <param name="edgeDataCopy">Optonal func to copy edge data.</param>
+        /// <param name="vertDataCopy">ptonal func to copy vertex data.</param>
+        /// <returns></returns>
+        public DirectedGraph Copy(Func<object, object> edgeDataCopy = null, Func<object, object> vertDataCopy = null)
+        {
+            var copy = new DirectedGraph(VertexCount);
+
+            for (int i = 0; i < VertexCount; i++)
+            {
+                copy.Vertices[i] = Vertices[i].Copy(vertDataCopy);
+            }
+
+            for (int i = 0; i < Edges.Count; i++)
+            {
+                var edges = Edges[i];
+                if (edges == null) continue;
+
+                var list = new List<GraphEdge>(edges.Count);
+
+                for (int j = 0; j < edges.Count; j++)
+                {
+                    list.Add(edges[j].Copy(edgeDataCopy));
+                }
+
+                copy.Edges[i] = list;
+            }
+
+            return copy;
+        }
+
+        /// <summary>
         /// Add a edge to the graph.
         /// </summary>
         public void AddDirectedEdge(GraphEdge edge)
@@ -61,7 +94,17 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         public GraphEdge AddDirectedEdge(int from, int to)
         {
-            return AddDirectedEdge(from, to, 0);
+            return AddDirectedEdge(from, to, 0, null);
+        }
+
+        /// <summary>
+        /// Add a directed edge.
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        public GraphEdge AddDirectedEdge(int from, int to, float weight)
+        {
+            return AddDirectedEdge(from, to, weight, null);
         }
 
         /// <summary>
@@ -70,12 +113,13 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edge weight</param>
-        public GraphEdge AddDirectedEdge(int from, int to, float weight)
+        public GraphEdge AddDirectedEdge(int from, int to, float weight, object data)
         {
             var edge = new GraphEdge();
             edge.From = from;
             edge.To = to;
             edge.Weight = weight;
+            edge.Data = data;
 
             AddEdgeInternal(edge);
 
@@ -90,7 +134,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         public GraphEdge AddUndirectedEdge(int from, int to)
         {
-            return AddUndirectedEdge(from, to, 0, 0);
+            return AddUndirectedEdge(from, to, 0, 0, null, null);
         }
 
         /// <summary>
@@ -102,7 +146,19 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="weight">The edges weight</param>
         public GraphEdge AddUndirectedEdge(int from, int to, float weight)
         {
-            return AddUndirectedEdge(from, to, weight, weight);
+            return AddUndirectedEdge(from, to, weight, weight, null, null);
+        }
+
+        /// <summary>
+        /// Add a undirected edge.
+        /// A undirected edge has a edge going both ways
+        /// </summary>
+        /// <param name="from">The from vertex index</param>
+        /// <param name="to">The to vertex index</param>
+        /// <param name="weight">The edges weight</param>
+        public GraphEdge AddUndirectedEdge(int from, int to, float weight, object data)
+        {
+            return AddUndirectedEdge(from, to, weight, weight, data, data);
         }
 
         /// <summary>
@@ -113,17 +169,19 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         /// <param name="weight0">The edge going from-to weight</param>
         /// <param name="weight1">The edge going to-from weigh</param>
-        public GraphEdge AddUndirectedEdge(int from, int to, float weight0, float weight1)
+        public GraphEdge AddUndirectedEdge(int from, int to, float weight0, float weight1, object data1, object data2)
         {
             var edge = new GraphEdge();
             edge.From = from;
             edge.To = to;
             edge.Weight = weight0;
+            edge.Data = data1;
 
             var opposite = new GraphEdge();
             opposite.From = to;
             opposite.To = from;
             opposite.Weight = weight1;
+            opposite.Data = data2;
 
             AddEdgeInternal(edge);
             AddEdgeInternal(opposite);
@@ -168,12 +226,44 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
                 foreach (var e in neighbours)
                 {
-                    if (graph.ContainsEdge(e.From, e.To)) continue;
+                    if (graph.HasEdge(e.From, e.To)) continue;
 
                     var e0 = new GraphEdge(e.From, e.To, e.Weight);
                     var e1 = new GraphEdge(e.To, e.From, e.Weight);
 
                     graph.AddUndirectedEdge(e0, e1);
+                }
+            }
+
+            return graph;
+        }
+
+        /// <summary>
+        /// Create a graph from a matrix.
+        /// Non zero entries represent a edge with the value being the edges weight.
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static DirectedGraph FromMatrix(int[,] matrix)
+        {
+            if (matrix.GetLength(0) != matrix.GetLength(1))
+                throw new ArgumentException("Matrix must be square");
+
+            int vertices = matrix.GetLength(0);
+
+            var graph = new DirectedGraph(vertices);
+
+            for(int x = 0; x < vertices; x++)
+            {
+                for (int y = 0; y < vertices; y++)
+                {
+                    int weight = matrix[x, y];  
+
+                    if(weight != 0)
+                    {
+                        graph.AddDirectedEdge(x, y, weight);
+                    }
                 }
             }
 

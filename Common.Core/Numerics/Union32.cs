@@ -36,9 +36,6 @@ namespace Common.Core.Numerics
         public short Short1;
 
         [FieldOffset(0)]
-        public bool Bool;
-
-        [FieldOffset(0)]
         public int Int;
 
         [FieldOffset(0)]
@@ -46,14 +43,6 @@ namespace Common.Core.Numerics
 
         [FieldOffset(0)]
         public float Float;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Union32(bool b)
-        {
-            var u = new Union32();
-            u.Bool = b;
-            return u;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Union32(int i)
@@ -113,7 +102,7 @@ namespace Common.Core.Numerics
 
         public override string ToString()
         {
-            return string.Format("[Union32: Bool={0}, Int={1}, UInt={2}, Float={3}]", Bool, Int, UInt, Float);
+            return string.Format("[Union32: Int={0}, UInt={1}, Float={2}]", Int, UInt, Float);
         }
 
     }

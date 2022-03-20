@@ -69,7 +69,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public override string ToString()
         {
-            return string.Format("[GraphEdge: From={0}, To={1}, Weight={2}]", From, To, Weight);
+            return string.Format("[GraphEdge: From={0}, To={1}, Weight={2}, Data={3}]", 
+                From, To, Weight, Data != null ? Data.ToString() : "Null");
         }
 
         /// <summary>
@@ -78,6 +79,27 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public int CompareTo(GraphEdge other)
         {
             return Weight.CompareTo(other.Weight);
+        }
+
+
+        /// <summary>
+        /// Create deep copy of edge.
+        /// </summary>
+        /// <param name="dataCopy">Function to copy data. If null shallow copy will be used.</param>
+        /// <returns>A copy of the edge.</returns>
+        public GraphEdge Copy(Func<object, object> dataCopy = null)
+        {
+            GraphEdge copy = new GraphEdge();
+            copy.From = From;
+            copy.To = To;
+            copy.Weight = Weight;
+
+            if(dataCopy != null)
+                copy.Data = dataCopy.Invoke(Data);
+            else
+                copy.Data = Data;
+
+            return copy;
         }
     }
 

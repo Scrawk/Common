@@ -1,9 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text;
 
 using Common.Core.Numerics;
 using Common.GraphTheory.AdjacencyGraphs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Common.GraphTheory.Test.AdjacencyGraphs
 {
@@ -99,32 +101,45 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             Assert.AreEqual(6513, sum);
         }
 
+       
         [TestMethod]
-        public void AStar()
+        public void MaxFlow()
         {
-            var graph = CreateVectorDirectedGraph();
+            int[,] graph1 = new int[,] 
+            { 
+             {0, 16, 13, 0, 0, 0},
+             {0, 0, 10, 12, 0, 0},
+             {0, 4, 0, 0, 14, 0},
+             {0, 0, 9, 0, 0, 20},
+             {0, 0, 0, 7, 0, 4},
+             {0, 0, 0, 0, 0, 0}
+            };
 
-            var path = graph.AStar(0, 0, DistanceFunc);
+            var g = DirectedGraph.FromMatrix(graph1);
 
-            /*
-            if(path.Count > 0)
+            var builder = new StringBuilder();
+            g.Print(builder);
+            Console.WriteLine(builder.ToString());
+
+            MaxFlow max_flow = new MaxFlow();
+
+
+            Console.WriteLine("The maximum possible flow is " + max_flow.fordFulkerson(graph1, 0, 5));
+
+            // Let us create a graph shown in the above example 
+            int[,] graph2 = 
             {
-                foreach (var i in path)
-                    Console.WriteLine(i);
-            }
-            else
-            {
-                Console.WriteLine("Path not found");
-            }
-            */
-        }
+             { 0, 16, 13, 0, 0, 0}, 
+             { 0, 0, 10, 12, 0, 0}, 
+             { 0, 4, 0, 0, 14, 0}, 
+             { 0, 0, 9, 0, 0, 20}, 
+             { 0, 0, 0, 7, 0, 4}, 
+             { 0, 0, 0, 0, 0, 0}
+            };
 
-        private float DistanceFunc(GraphVertex a, GraphVertex b)
-        {
-            var A = (Vector2f)a.Data;
-            var B = (Vector2f)b.Data;
+            var min_cut = new MinCut();
 
-            return Point2f.Distance(A.Point2f, B.Point2f);
+            min_cut.minCut(graph2, 0, 5);
         }
 
         [TestMethod]
