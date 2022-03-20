@@ -90,6 +90,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// 
         /// </summary>
+        public void Print()
+        {
+            var builder = new StringBuilder();
+            Print(builder);
+            Console.WriteLine(builder.ToString());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="builder"></param>
         public void Print(StringBuilder builder)
         {
@@ -186,6 +196,38 @@ namespace Common.GraphTheory.AdjacencyGraphs
             var edge = GetEdge(from, to);
             if (edge == null) return default(T);
             return (T)edge.Data;
+        }
+
+        /// <summary>
+        /// Get The edges weight or 0 if edge not found.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public float GetEdgeWeight(int from, int to)
+        {
+            var edge = GetEdge(from, to);
+            if (edge == null) return 0;
+            return edge.Weight;
+        }
+
+        /// <summary>
+        /// Get the edge and if edge
+        /// does not already exist create a new one.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public GraphEdge GetEdgeOrCreateEdge(int from, int to)
+        {
+            var edge = GetEdge(from, to);
+
+            if (edge == null) 
+                edge = new GraphEdge(from, to);
+
+            AddEdgeInternal(edge);
+
+            return edge;
         }
 
         /// <summary>

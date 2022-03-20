@@ -105,7 +105,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         [TestMethod]
         public void MaxFlow()
         {
-            int[,] graph1 = new int[,] 
+            int[,] graph = new int[,] 
             { 
              {0, 16, 13, 0, 0, 0},
              {0, 0, 10, 12, 0, 0},
@@ -115,31 +115,19 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
              {0, 0, 0, 0, 0, 0}
             };
 
-            var g = DirectedGraph.FromMatrix(graph1);
+            var g = DirectedGraph.FromMatrix(graph);
 
-            var builder = new StringBuilder();
-            g.Print(builder);
-            Console.WriteLine(builder.ToString());
+            float max_flow = g.MaxFlow(0, 5);
+            Assert.AreEqual(23, max_flow);
 
-            MaxFlow max_flow = new MaxFlow();
+            var cut = g.MinCut(0, 5);
 
+            max_flow = 0;
+            foreach (var e in cut)
+                max_flow += e.Weight;
 
-            Console.WriteLine("The maximum possible flow is " + max_flow.fordFulkerson(graph1, 0, 5));
+            Assert.AreEqual(23, max_flow);
 
-            // Let us create a graph shown in the above example 
-            int[,] graph2 = 
-            {
-             { 0, 16, 13, 0, 0, 0}, 
-             { 0, 0, 10, 12, 0, 0}, 
-             { 0, 4, 0, 0, 14, 0}, 
-             { 0, 0, 9, 0, 0, 20}, 
-             { 0, 0, 0, 7, 0, 4}, 
-             { 0, 0, 0, 0, 0, 0}
-            };
-
-            var min_cut = new MinCut();
-
-            min_cut.minCut(graph2, 0, 5);
         }
 
         [TestMethod]

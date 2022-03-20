@@ -5,6 +5,195 @@ using System.Text;
 namespace Common.GraphTheory.AdjacencyGraphs
 {
 
+    public partial class DirectedGraph : AdjacencyGraph
+    {
+        /// <summary>
+        /// https://tutorialspoint.dev/data-structure/graph-data-structure/ford-fulkerson-algorithm-for-maximum-flow-problem
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public int MaxFlow(int source, int target)
+        {
+            int V = VertexCount;
+            int u, v;
+
+            // Create a residual graph and fill  
+            // the residual graph with given  
+            // capacities in the original graph as 
+            // residual capacities in residual graph 
+
+            // Residual graph where rGraph[i,j]  
+            // indicates residual capacity of  
+            // edge from i to j (if there is an  
+            // edge. If rGraph[i,j] is 0, then  
+            // there is not) 
+            var rGraph = Copy();
+
+            // This array is filled by BFS and to store path 
+            int[] parent = new int[V];
+
+            int max_flow = 0; // There is no flow initially 
+
+            // Augment the flow while tere is path from source 
+            // to sink 
+            while (bfs(rGraph, source, target, parent))
+            {
+                // Find minimum residual capacity of the edhes 
+                // along the path filled by BFS. Or we can say 
+                // find the maximum flow through the path found. 
+                int path_flow = int.MaxValue;
+                for (v = target; v != source; v = parent[v])
+                {
+                    u = parent[v];
+                    path_flow = Math.Min(path_flow, (int)rGraph.GetEdgeWeight(u,v));
+                }
+
+                // update residual capacities of the edges and 
+                // reverse edges along the path 
+                for (v = target; v != source; v = parent[v])
+                {
+                    u = parent[v];
+
+                    var edgeUV = rGraph.GetEdgeOrCreateEdge(u, v);
+                    var edgeVU = rGraph.GetEdgeOrCreateEdge(v, u);
+
+                    edgeUV.Weight -= path_flow;
+                    edgeVU.Weight += path_flow;
+                }
+
+                // Add path flow to overall flow 
+                max_flow += path_flow;
+            }
+
+            // Return the overall flow 
+            return max_flow;
+        }
+
+        public List<GraphEdge> MinCut(int s, int t)
+        {
+            int V = VertexCount;
+            int u, v;
+
+            // Create a residual graph and fill the residual graph with 
+            // given capacities in the original graph as residual capacities 
+            // in residual graph 
+            var rGraph = Copy();
+
+            int[] parent = new int[V];  // This array is filled by BFS and to store path 
+
+            // Augment the flow while there is a path from source to sink 
+            while (bfs(rGraph, s, t, parent))
+            {
+                // Find minimum residual capacity of the edhes along the 
+                // path filled by BFS. Or we can say find the maximum flow 
+                // through the path found. 
+                int path_flow = int.MaxValue;
+                for (v = t; v != s; v = parent[v])
+                {
+                    u = parent[v];
+
+                    float flow = rGraph.GetEdgeWeight(u, v);
+
+                    path_flow = Math.Min(path_flow, (int)flow);
+                }
+
+                // update residual capacities of the edges and reverse edges 
+                // along the path 
+                for (v = t; v != s; v = parent[v])
+                {
+                    u = parent[v];
+
+                    var edgeUV = rGraph.GetEdgeOrCreateEdge(u, v);
+                    var edgeVU = rGraph.GetEdgeOrCreateEdge(v, u);
+
+                    edgeUV.Weight -= path_flow;
+                    edgeVU.Weight += path_flow;
+                }
+            }
+
+            // Flow is maximum now, find vertices reachable from s 
+            bool[] visited = new bool[V];
+            dfs(rGraph, s, visited);
+
+            var cut = new List<GraphEdge>();
+
+            // Print all edges that are from a reachable vertex to 
+            // non-reachable vertex in the original graph 
+            for (int i = 0; i < V; i++)
+            {
+                for (int j = 0; j < V; j++)
+                {
+                    if (visited[i] && !visited[j])
+                    {
+                        var e = GetEdge(i, j);
+                        if (e == null || e.Weight <= 0) continue;
+
+                        cut.Add(e);
+                    }
+                }
+            }
+
+            return cut;
+        }
+
+        private void dfs(DirectedGraph rGraph, int s, bool[] visited)
+        {
+            visited[s] = true;
+            for (int i = 0; i < visited.Length; i++)
+            {
+                float flow = rGraph.GetEdgeWeight(s, i);
+
+                if (flow > 0 && !visited[i])
+                    dfs(rGraph, i, visited);
+            }
+          
+        }
+
+        private bool bfs(DirectedGraph rGraph, int s, int t, int[] parent)
+        {
+            int V = parent.Length;
+
+            // Create a visited array and mark  
+            // all vertices as not visited 
+            bool[] visited = new bool[V];
+            for (int i = 0; i < V; ++i)
+                visited[i] = false;
+
+            // Create a queue, enqueue source vertex and mark 
+            // source vertex as visited 
+            List<int> queue = new List<int>();
+            queue.Add(s);
+            visited[s] = true;
+            parent[s] = -1;
+
+            // Standard BFS Loop 
+            while (queue.Count != 0)
+            {
+                int u = queue[0];
+                queue.RemoveAt(0);
+
+                for (int v = 0; v < V; v++)
+                {
+                    var flow = rGraph.GetEdgeWeight(u, v);
+
+                    if (visited[v] == false && flow > 0)
+                    {
+                        queue.Add(v);
+                        parent[v] = u;
+                        visited[v] = true;
+                    }
+                }
+            }
+
+            // If we reached sink in BFS  
+            // starting from source, then 
+            // return true, else false 
+            return (visited[t] == true);
+        }
+
+    }
+
     public class MaxFlow
     {
 
