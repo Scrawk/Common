@@ -8,17 +8,19 @@ using Common.GraphTheory.AdjacencyGraphs;
 
 namespace Common.GraphTheory.GridGraphs
 {
+    /// <summary>
+    /// https://tutorialspoint.dev/data-structure/graph-data-structure/ford-fulkerson-algorithm-for-maximum-flow-problem
+    /// </summary>
     public partial class GridGraph
     {
 
         /// <summary>
-        /// https://tutorialspoint.dev/data-structure/graph-data-structure/ford-fulkerson-algorithm-for-maximum-flow-problem
+        /// 
         /// </summary>
-        /// <param name="search"></param>
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public int MaxFlow(GridSearch search, Point2i source, Point2i target)
+        public int MaxFlow(Point2i source, Point2i target)
         {
             // Create a residual graph and fill  
             // the residual graph with given  
@@ -30,6 +32,22 @@ namespace Common.GraphTheory.GridGraphs
             // edge from i to j (if there is an  
             // edge. If rGraph[i,j] is 0, then  
             // there is not) 
+
+            var rGraph = Copy();
+            var search = new GridSearch(Width, Height);
+            return MaxFlow(rGraph, search, source, target);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public int MaxFlow(GridSearch search, Point2i source, Point2i target)
+        {
+
 
             var rGraph = Copy();
             return MaxFlow(rGraph, search, source, target);
@@ -59,7 +77,6 @@ namespace Common.GraphTheory.GridGraphs
                 for (Point2i v = target; v != source; v = search.GetParent(v))
                 {
                     var u = search.GetParent(v);
-
                     path_flow = Math.Min(path_flow, (int)rGraph.GetWeight(u, v));
                 }
 
@@ -147,6 +164,25 @@ namespace Common.GraphTheory.GridGraphs
            
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public List<GraphEdge> MinCut2(Point2i source, Point2i target)
+        {
+            var search = new GridSearch(Width, Height);
+            return MinCut2(search, source, target);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         public List<GraphEdge> MinCut2(GridSearch search, Point2i source, Point2i target)
         {
 

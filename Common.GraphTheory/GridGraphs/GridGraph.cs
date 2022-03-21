@@ -749,8 +749,6 @@ namespace Common.GraphTheory.GridGraphs
                         if (xi < 0 || xi > Width - 1) continue;
                         if (yi < 0 || yi > Height - 1) continue;
 
-                        //if ((edge & 1 << i) == 0) continue;
-
                         if(!Bit.IsSet(edge, i)) continue;
 
                         var e = new GridEdge(x, y, xi, yi);
@@ -769,8 +767,8 @@ namespace Common.GraphTheory.GridGraphs
         /// 
         /// </summary>
         /// <param name="edges"></param>
-        /// <param name="GetWeight"></param>
-        public void GetAllEdges(List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeight)
+        /// <param name="GetWeightFunc"></param>
+        public void GetAllEdges(List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeightFunc = null)
         {
 
             for (int y = 0; y < Height; y++)
@@ -792,7 +790,9 @@ namespace Common.GraphTheory.GridGraphs
 
                         var e = new GridEdge(x, y, xi, yi);
 
-                        if (HasWeights)
+                        if(GetWeightFunc != null)
+                            e.Weight = GetWeightFunc(e.From, e.To);
+                        else if (HasWeights)
                             e.Weight = GetWeight(e.From, e.To);
 
                         edges.Add(e);
@@ -808,8 +808,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="edges"></param>
-        /// <param name="GetWeight"></param>
-        public void GetEdges(int x, int y, List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeight)
+        /// <param name="GetWeightFunc"></param>
+        public void GetEdges(int x, int y, List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeightFunc  = null)
         {
 
             int edge = Edges[x, y];
@@ -827,7 +827,9 @@ namespace Common.GraphTheory.GridGraphs
 
                 var e = new GridEdge(x, y, xi, yi);
 
-                if(HasWeights)
+                if (GetWeightFunc != null)
+                    e.Weight = GetWeightFunc(e.From, e.To);
+                else if (HasWeights)
                     e.Weight = GetWeight(e.From, e.To);
 
                 edges.Add(e);

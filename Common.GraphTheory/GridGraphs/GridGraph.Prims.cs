@@ -9,7 +9,7 @@ namespace Common.GraphTheory.GridGraphs
 {
     public partial class GridGraph
     {
-        public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, Func<Point2i, Point2i, float> GetWeight)
+        public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, Func<Point2i, Point2i, float> GetWeight = null)
         {
             int width = Width;
             int height = Height;
