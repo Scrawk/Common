@@ -6,12 +6,12 @@ using Common.Core.Numerics;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public static partial class GridGraphSearch
+    public partial class GridGraph
     {
-        public static void BreadthFirst(GridGraph graph, GridSearch search, int x, int y)
+        public void BreadthFirst(GridSearch search, int x, int y)
         {
-            int width = graph.Width;
-            int height = graph.Height;
+            int width = Width;
+            int height = Height;
 
             Queue<Point2i> queue = new Queue<Point2i>();
             queue.Enqueue(new Point2i(x, y));
@@ -24,7 +24,7 @@ namespace Common.GraphTheory.GridGraphs
                 Point2i u = queue.Dequeue();
                 search.Order.Add(u);
 
-                int edge = graph.Edges[u.x, u.y];
+                int edge = Edges[u.x, u.y];
 
                 for (int i = 0; i < 8; i++)
                 {

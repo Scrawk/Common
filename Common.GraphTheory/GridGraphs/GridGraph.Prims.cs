@@ -7,12 +7,12 @@ using Common.Core.Numerics;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public static partial class GridGraphSearch
+    public partial class GridGraph
     {
-        internal static void PrimsMinimumSpanningTree(GridGraph graph, GridSearch search, int x, int y, Func<Point2i, Point2i, float> GetWeight)
+        public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, Func<Point2i, Point2i, float> GetWeight)
         {
-            int width = graph.Width;
-            int height = graph.Height;
+            int width = Width;
+            int height = Height;
 
             search.IsVisited[x, y] = true;
             search.Order.Add(new Point2i(x, y));
@@ -21,7 +21,7 @@ namespace Common.GraphTheory.GridGraphs
             var queue = new BinaryHeap<GridEdge>(8);
 
             List<GridEdge> edges = new List<GridEdge>(8);
-            graph.GetEdges(x, y, edges, GetWeight);
+            GetEdges(x, y, edges, GetWeight);
 
             if (edges.Count != 0)
             {
@@ -42,9 +42,9 @@ namespace Common.GraphTheory.GridGraphs
                 search.IsVisited[v.x, v.y] = true;
                 search.Parent[v.x, v.y] = edge.From;
 
-                if (graph.Edges[v.x, v.y] == 0) continue;
+                if (Edges[v.x, v.y] == 0) continue;
 
-                graph.GetEdges(v.x, v.y, edges, GetWeight);
+                GetEdges(v.x, v.y, edges, GetWeight);
 
                 foreach (GridEdge e in edges)
                 {

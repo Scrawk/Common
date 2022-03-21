@@ -11,6 +11,11 @@ namespace Common.Core.Bits
             return value | (1 << position);
         }
 
+        public static byte Set(byte value, int position)
+        {
+            return (byte)(value | (1 << position));
+        }
+
         public static void Set(ref int value, int position)
         {
             value |= (1 << position);
@@ -26,6 +31,11 @@ namespace Common.Core.Bits
             return value & ~(1 << position);
         }
 
+        public static byte Clear(byte value, int position)
+        {
+            return (byte)(value & ~(1 << position));
+        }
+
         public static void Clear(ref int value, int position)
         {
             value &= ~(1 << position);
@@ -34,6 +44,11 @@ namespace Common.Core.Bits
         public static int Flip(int value, int position)
         {
             return value ^ (1 << position);
+        }
+
+        public static byte Flip(byte value, int position)
+        {
+            return (byte)(value ^ (1 << position));
         }
 
         public static void Flip(ref int value, int position)

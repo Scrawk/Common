@@ -40,8 +40,58 @@ namespace Common.GraphTheory.GridGraphs
 
         public override string ToString()
         {
-            return string.Format("[GridGraph: Count={0}, Root={1}, Width={2}, Height={3}]",
+            return string.Format("[GridSearch: Count={0}, Root={1}, Width={2}, Height={3}]",
                 Count, (Count > 0) ? Root : new Point2i(-1), Width, Height);
+        }
+
+        public void Print()
+        {
+            Console.WriteLine(ToString());
+
+            Console.WriteLine("IsVisited");
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    int Y = (Height - y - 1);
+                    Console.Write(IsVisited[x, Y] + " ");
+                }
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Parent");
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    int Y = (Height - y - 1);
+                    Console.Write(Parent[x, Y] + " ");
+                }
+
+                Console.WriteLine();
+            }
+
+        }
+
+        public Point2i GetParent(Point2i i)
+        {
+            return Parent[i.x, i.y];
+        }
+
+        public void SetParent(Point2i i, Point2i p)
+        {
+            Parent[i.x, i.y] = p;
+        }
+
+        public bool GetIsVisited(Point2i i)
+        {
+            return IsVisited[i.x, i.y];
+        }
+
+        public void SetIsVisited(Point2i i, bool v)
+        {
+            IsVisited[i.x, i.y] = v;
         }
 
         public void Clear()
@@ -82,6 +132,23 @@ namespace Common.GraphTheory.GridGraphs
         {
             Point2i p = Parent[x, y];
             return p.x == x && p.y == y;
+        }
+
+        public bool HasPath(Point2i dest)
+        {
+            int x = dest.x;
+            int y = dest.y;
+
+            while (Parent[x, y].x != -1)
+            {
+                if (IsRoot(x, y)) return true;
+
+                Point2i p = Parent[x, y];
+                x = p.x;
+                y = p.y;
+            }
+
+            return false;
         }
 
         public void GetPath(Point2i dest, List<Point2i> path)

@@ -84,7 +84,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public void AddDirectedEdge(GraphEdge edge)
         {
-            AddEdgeInternal(edge);
+            AddEdge(edge);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             edge.Weight = weight;
             edge.Data = data;
 
-            AddEdgeInternal(edge);
+            AddEdge(edge);
 
             return edge;
         }
@@ -183,8 +183,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
             opposite.Weight = weight1;
             opposite.Data = data2;
 
-            AddEdgeInternal(edge);
-            AddEdgeInternal(opposite);
+            AddEdge(edge);
+            AddEdge(opposite);
 
             return edge;
         }

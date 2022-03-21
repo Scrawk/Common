@@ -13,11 +13,6 @@ namespace Common.Core.Test.Numerics
         {
             Union32 data;
 
-            data = true;
-            Assert.AreEqual(true, data.Bool);
-            data = false;
-            Assert.AreEqual(false, data.Bool);
-
             data = -1;
             Assert.AreEqual(-1, data.Int);
             data = 123456789;

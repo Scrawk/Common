@@ -44,6 +44,22 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Create a edge going from and to these vertex indices
+        /// with a edge weight and data.
+        /// </summary>
+        /// <param name="from">The from vertex index.</param>
+        /// <param name="to">The to vertex index.</param>
+        /// <param name="weight">The weight of the edge.</param>
+        /// <param name="data">The edges data</param>
+        public GraphEdge(int from, int to, float weight, object data)
+        {
+            From = from;
+            To = to;
+            Weight = weight;
+            Data = data;
+        }
+
+        /// <summary>
         /// The vertex index the edge starts at.
         /// </summary>
         public int From { get; set; }

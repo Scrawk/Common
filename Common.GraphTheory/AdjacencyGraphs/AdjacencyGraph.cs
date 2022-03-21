@@ -225,7 +225,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             if (edge == null) 
                 edge = new GraphEdge(from, to);
 
-            AddEdgeInternal(edge);
+            AddEdge(edge);
 
             return edge;
         }
@@ -299,7 +299,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// Used as a short cut when adding multiple 
         /// edges in derived classes.
         /// </summary>
-        protected void AddEdgeInternal(GraphEdge edge)
+        public void AddEdge(GraphEdge edge)
         {
             int i = edge.From;
 

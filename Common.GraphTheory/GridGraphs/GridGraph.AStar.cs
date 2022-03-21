@@ -7,7 +7,7 @@ using Common.Core.Numerics;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public static partial class GridGraphSearch
+    public partial class GridGraph
     {
         private struct AStarNode
         {
@@ -22,10 +22,10 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
-        public static void AStar(GridGraph graph, GridSearch search, Point2i start, Point2i target, Func<Point2i, Point2i, float> Heuristic = null)
+        public void AStar(GridSearch search, Point2i start, Point2i target, Func<Point2i, Point2i, float> Heuristic = null)
         {
-            int width = graph.Width;
-            int height = graph.Height;
+            int width = Width;
+            int height = Height;
 
             if (Heuristic == null)
                 Heuristic = ManhattanDistance;
@@ -47,7 +47,7 @@ namespace Common.GraphTheory.GridGraphs
 
                 if (search.IsVisited[target.x, target.y]) break;
 
-                int edge = graph.Edges[u.x, u.y];
+                int edge = Edges[u.x, u.y];
                 g++;
 
                 for (int i = 0; i < 8; i++)

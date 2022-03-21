@@ -7,12 +7,12 @@ using Common.Core.Numerics;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public static partial class GridGraphSearch
+    public partial class GridGraph
     {
-        public static Dictionary<Point2i, List<GridEdge>> KruskalsMinimumSpanningForest(GridGraph graph, Func<Point2i, Point2i, float> GetWeight)
+        public Dictionary<Point2i, List<GridEdge>> KruskalsMinimumSpanningForest(Func<Point2i, Point2i, float> GetWeight)
         {
-            int width = graph.Width;
-            int height = graph.Height;
+            int width = Width;
+            int height = Height;
 
             DisjointGridSet2 set = new DisjointGridSet2(width, height);
 
@@ -25,7 +25,7 @@ namespace Common.GraphTheory.GridGraphs
             }
 
             var sorted = new List<GridEdge>(width * height);
-            graph.GetAllEdges(sorted, GetWeight);
+            GetAllEdges(sorted, GetWeight);
             sorted.Sort();
 
             int edgeCount = sorted.Count;

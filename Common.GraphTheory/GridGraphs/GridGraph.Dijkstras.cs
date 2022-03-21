@@ -6,15 +6,15 @@ using Common.Core.Numerics;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public static partial class GridGraphSearch
+    public partial class GridGraph
     {
-        public static void DijkstrasShortestPathTree(GridGraph graph, GridSearch search, int x, int y)
+        public void DijkstrasShortestPathTree(GridSearch search, int x, int y)
         {
-            int width = graph.Width;
-            int height = graph.Height;
+            int width = Width;
+            int height = Height;
 
             var queue = new List<GridVertex>(width * height);
-            graph.GetAllVertices(queue);
+            GetAllVertices(queue);
             var vertexGrid = new GridVertex[width, height];
 
             for (int i = 0; i < queue.Count; i++)
@@ -42,7 +42,7 @@ namespace Common.GraphTheory.GridGraphs
                 search.Order.Add(u);
                 search.IsVisited[u.x, u.y] = true;
 
-                int edge = graph.Edges[u.x, u.y];
+                int edge = Edges[u.x, u.y];
                 if (edge != 0)
                 {
                     float cost = vertexGrid[u.x, u.y].Cost;

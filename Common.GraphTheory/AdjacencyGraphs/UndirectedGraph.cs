@@ -90,8 +90,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
             if (opposite.From != edge.To)
                 throw new ArgumentException("Opposite does not go to edge.");
 
-            AddEdgeInternal(edge);
-            AddEdgeInternal(opposite);
+            AddEdge(edge);
+            AddEdge(opposite);
         }
 
         /// <summary>
@@ -150,8 +150,8 @@ namespace Common.GraphTheory.AdjacencyGraphs
             opposite.Weight = weight1;
             opposite.Data = data1;
 
-            AddEdgeInternal(edge);
-            AddEdgeInternal(opposite);
+            AddEdge(edge);
+            AddEdge(opposite);
 
             return edge;
         }
