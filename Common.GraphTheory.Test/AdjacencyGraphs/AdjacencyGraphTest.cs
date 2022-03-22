@@ -135,14 +135,14 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = new DirectedGraph(8);
 
-            graph.Vertices[0].Data = 7;
-            graph.Vertices[1].Data = 5;
-            graph.Vertices[2].Data = 3;
-            graph.Vertices[3].Data = 11;
-            graph.Vertices[4].Data = 8;
-            graph.Vertices[5].Data = 2;
-            graph.Vertices[6].Data = 9;
-            graph.Vertices[7].Data = 10;
+            graph.GetVertex(0).Data = 7;
+            graph.GetVertex(1).Data = 5;
+            graph.GetVertex(2).Data = 3;
+            graph.GetVertex(3).Data = 11;
+            graph.GetVertex(4).Data = 8;
+            graph.GetVertex(5).Data = 2;
+            graph.GetVertex(6).Data = 9;
+            graph.GetVertex(7).Data = 10;
 
             graph.AddDirectedEdge(1, 3);
             graph.AddDirectedEdge(0, 3);
@@ -195,18 +195,18 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = new DirectedGraph(12);
 
-            graph.Vertices[0].Data = "Seattle";
-            graph.Vertices[1].Data = "San Francisco";
-            graph.Vertices[2].Data = "Los Angeles";
-            graph.Vertices[3].Data = "Denver";
-            graph.Vertices[4].Data = "Kansas City";
-            graph.Vertices[5].Data = "Chicago";
-            graph.Vertices[6].Data = "Boston";
-            graph.Vertices[7].Data = "New York";
-            graph.Vertices[8].Data = "Atlanta";
-            graph.Vertices[9].Data = "Miami";
-            graph.Vertices[10].Data = "Dallas";
-            graph.Vertices[11].Data = "Houston";
+            graph.GetVertex(0).Data = "Seattle";
+            graph.GetVertex(1).Data = "San Francisco";
+            graph.GetVertex(2).Data = "Los Angeles";
+            graph.GetVertex(3).Data = "Denver";
+            graph.GetVertex(4).Data = "Kansas City";
+            graph.GetVertex(5).Data = "Chicago";
+            graph.GetVertex(6).Data = "Boston";
+            graph.GetVertex(7).Data = "New York";
+            graph.GetVertex(8).Data = "Atlanta";
+            graph.GetVertex(9).Data = "Miami";
+            graph.GetVertex(10).Data = "Dallas";
+            graph.GetVertex(11).Data = "Houston";
 
             graph.AddDirectedEdge(new GraphEdge(0, 1, 807));
             graph.AddDirectedEdge(new GraphEdge(0, 3, 1331));
@@ -273,19 +273,19 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         {
             var graph = new DirectedGraph(13);
 
-            graph.Vertices[0].Data = new Vector2f(0,0);
-            graph.Vertices[1].Data = new Vector2f(0,2);
-            graph.Vertices[2].Data = new Vector2f(0,4);
-            graph.Vertices[3].Data = new Vector2f(0,6);
-            graph.Vertices[4].Data = new Vector2f(4,4);
-            graph.Vertices[5].Data = new Vector2f(3,0);
-            graph.Vertices[6].Data = new Vector2f(6,0);
-            graph.Vertices[7].Data = new Vector2f(3,-3);
-            graph.Vertices[8].Data = new Vector2f(-4,0);
-            graph.Vertices[9].Data = new Vector2f(-4,2);
-            graph.Vertices[10].Data = new Vector2f(-7,0);
-            graph.Vertices[11].Data = new Vector2f(-7,-3);
-            graph.Vertices[12].Data = new Vector2f(-4, -3);
+            graph.GetVertex(0).Data = new Vector2f(0,0);
+            graph.GetVertex(1).Data = new Vector2f(0,2);
+            graph.GetVertex(2).Data = new Vector2f(0,4);
+            graph.GetVertex(3).Data = new Vector2f(0,6);
+            graph.GetVertex(4).Data = new Vector2f(4,4);
+            graph.GetVertex(5).Data = new Vector2f(3,0);
+            graph.GetVertex(6).Data = new Vector2f(6,0);
+            graph.GetVertex(7).Data = new Vector2f(3,-3);
+            graph.GetVertex(8).Data = new Vector2f(-4,0);
+            graph.GetVertex(9).Data = new Vector2f(-4,2);
+            graph.GetVertex(10).Data = new Vector2f(-7,0);
+            graph.GetVertex(11).Data = new Vector2f(-7,-3);
+            graph.GetVertex(12).Data = new Vector2f(-4, -3);
 
             graph.AddUndirectedEdge(0, 1);
             graph.AddUndirectedEdge(1, 2);

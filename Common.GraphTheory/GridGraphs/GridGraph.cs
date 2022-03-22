@@ -148,7 +148,23 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         public void Clear()
         {
+            m_weights = null;
             Array.Clear(Edges, 0, Edges.Length);
+        }
+
+        /// <summary>
+        /// Iterate over the graph using a lambda.
+        /// </summary>
+        /// <param name="func"></param>
+        public void Iterate(Action<int, int> func)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    func(x, y);
+                }
+            }
         }
 
         /// <summary>

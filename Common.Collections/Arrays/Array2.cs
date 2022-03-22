@@ -118,6 +118,23 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Are the x and y index in the bounds of the array.
+        /// </summary>
+        public bool InBounds(Point2i i)
+        {
+            return InBounds(i.x, i.y);
+        }
+
+        /// <summary>
+        /// Are the x and y index not in the bounds of the array.
+        /// </summary>
+        public bool NotInBounds(Point2i i)
+        {
+            return !InBounds(i.x, i.y);
+        }
+
+
+        /// <summary>
         /// Enumerate all elements in the array.
         /// </summary>
         /// <returns></returns>

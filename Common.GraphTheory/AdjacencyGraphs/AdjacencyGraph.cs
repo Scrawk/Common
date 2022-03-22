@@ -70,14 +70,14 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// The graph vertices.
         /// The vertex index must match its position in array.
         /// </summary>
-        public List<GraphVertex> Vertices { get; set; }
+        internal List<GraphVertex> Vertices { get; set; }
 
         /// <summary>
         /// The graph edges.
         /// Each vertex index is used to look up
         /// all the edges going from that vertex.
         /// </summary>
-        public List<List<GraphEdge>> Edges { get; set; }
+        internal List<List<GraphEdge>> Edges { get; set; }
 
         /// <summary>
         /// 
@@ -118,6 +118,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     builder.AppendLine(e.ToString());
             }
                 
+        }
+
+        /// <summary>
+        /// Is the index in the graph vertices bounds.
+        /// </summary>
+        /// <param name="i">The index</param>
+        /// <returns>Is the index in the graph vertices bounds.</returns>
+        public bool InBounds(int i)
+        {
+            return (i >= 0 && i < VertexCount);
         }
 
         /// <summary>
@@ -176,6 +186,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
         {
             for (int i = 0; i < VertexCount; i++)
                 Vertices[i].Tag = tag;
+        }
+
+        /// <summary>
+        /// Get the vertex at index i.
+        /// </summary>
+        /// <param name="i">The vertices index.</param>
+        /// <returns>The vertex</returns>
+        public GraphVertex GetVertex(int i)
+        {
+            return Vertices[i]; 
         }
 
         /// <summary>
@@ -247,6 +267,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Get all the edges of vertex.
+        /// </summary>
+        /// <param name="v">The vertex index.</param>
+        /// <returns>A list of all the edges. Maybe null.</returns>
+        public List<GraphEdge> GetEdges(int v)
+        {
+            return Edges[v];
+        }
+
+        /// <summary>
         /// Find the vertex index belonging to this data.
         /// </summary>
         public int IndexOf<T>(T data)
@@ -308,6 +338,31 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             EdgeCount++;
             Edges[i].Add(edge);
+        }
+
+        /// <summary>
+        /// Add a vertex to graph
+        /// </summary>
+        /// <param name="vert"></param>
+        public void AddVertex(GraphVertex vert)
+        {
+            vert.Index = Vertices.Count;
+            Vertices.Add(vert);
+            Edges.Add(null);
+        }
+
+        /// <summary>
+        /// Create and add a vertex to graph.
+        /// </summary>
+        /// <returns>The new vertex.</returns>
+        public GraphVertex AddVertex()
+        {
+            var vert = new GraphVertex();
+            vert.Index = Vertices.Count;
+            Vertices.Add(vert);
+            Edges.Add(null);
+
+            return vert;
         }
 
     }

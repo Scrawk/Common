@@ -8,6 +8,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
     public partial class DirectedGraph : AdjacencyGraph
     {
 
+        private static bool[] visited;
+
+        private static Queue<int> queue;
+
+        private static int[] parent;
+
         /// <summary>
         /// 
         /// </summary>
@@ -40,33 +46,33 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <returns></returns>
         private int MaxFlow(DirectedGraph rGraph, int source, int target)
         {
-            int V = VertexCount;
-            int u, v;
 
-            // This array is filled by BFS and to store path 
-            int[] parent = new int[V];
+            parent = new int[VertexCount];
+            queue = new Queue<int>();
+            visited = new bool[VertexCount];
 
             int max_flow = 0; // There is no flow initially 
 
-            // Augment the flow while tere is path from source 
-            // to sink 
+            // Augment the flow while tere is path from source to sink 
+
             while (bfs(rGraph, source, target, parent))
             {
+
                 // Find minimum residual capacity of the edhes 
                 // along the path filled by BFS. Or we can say 
                 // find the maximum flow through the path found. 
                 int path_flow = int.MaxValue;
-                for (v = target; v != source; v = parent[v])
+                for (int v = target; v != source; v = parent[v])
                 {
-                    u = parent[v];
+                    int u = parent[v];
                     path_flow = Math.Min(path_flow, (int)rGraph.GetEdgeWeight(u,v));
                 }
 
                 // update residual capacities of the edges and 
                 // reverse edges along the path 
-                for (v = target; v != source; v = parent[v])
+                for (int v = target; v != source; v = parent[v])
                 {
-                    u = parent[v];
+                    int u = parent[v];
 
                     var edgeUV = rGraph.GetEdgeOrCreateEdge(u, v);
                     var edgeVU = rGraph.GetEdgeOrCreateEdge(v, u);
@@ -87,9 +93,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         {
             var rGraph = Copy();
             MaxFlow(rGraph, source, target);
-      
+
             // Flow is maximum now, find vertices reachable from s 
-            bool[] visited = new bool[VertexCount];
+            visited = new bool[VertexCount];
             dfs(rGraph, source, visited);
 
             var cut = new List<GraphEdge>();
@@ -134,30 +140,28 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             // Create a visited array and mark  
             // all vertices as not visited 
-            bool[] visited = new bool[V];
             for (int i = 0; i < V; ++i)
                 visited[i] = false;
 
             // Create a queue, enqueue source vertex and mark 
             // source vertex as visited 
-            List<int> queue = new List<int>();
-            queue.Add(s);
+            queue.Clear();
+            queue.Enqueue(s);
             visited[s] = true;
             parent[s] = -1;
 
             // Standard BFS Loop 
             while (queue.Count != 0)
             {
-                int u = queue[0];
-                queue.RemoveAt(0);
-
+                int u = queue.Dequeue();
+ 
                 for (int v = 0; v < V; v++)
                 {
                     var flow = graph.GetEdgeWeight(u, v);
 
                     if (visited[v] == false && flow > 0)
                     {
-                        queue.Add(v);
+                        queue.Enqueue(v);
                         parent[v] = u;
                         visited[v] = true;
                     }
