@@ -40,28 +40,28 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
                 open.Remove(u);
                 path.Add(u.idx);
-                Vertices[u.idx].Tag = IS_VISITED_TAG;
+                base.Vertices[u.idx].Tag = IS_VISITED_TAG;
 
-                if (Vertices[end].Tag == IS_VISITED_TAG)
+                if (base.Vertices[end].Tag == IS_VISITED_TAG)
                 {
                     found = true;
                     break;
                 }
 
-                var edges = Edges[u.idx];
+                var edges = base.Edges[u.idx];
                 if (edges == null) continue;
 
                 for (int i = 0; i < edges.Count; i++)
                 {
                     int to = edges[i].To;
-                    if (Vertices[to].Tag == IS_VISITED_TAG) continue;
+                    if (base.Vertices[to].Tag == IS_VISITED_TAG) continue;
 
                     int idx = Contains(open, to);
                     if (idx == -1)
                     {
                         var n = new AStarNode(to);
                         n.g = g;
-                        n.h = Heuristic(Vertices[end], Vertices[to]);
+                        n.h = Heuristic(base.Vertices[end], base.Vertices[to]);
                         n.f = n.g + n.h;
 
                         open.Add(n);

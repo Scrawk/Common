@@ -18,21 +18,21 @@ namespace Common.GraphTheory.AdjacencyGraphs
             var list = new List<GraphVertex>();
             var vertices = new LinkedList<GraphVertex>();
 
-            int edgeCount = Edges.Count;
+            int edgeCount = base.Edges.Count;
             var edges = new List<GraphEdge>[edgeCount];
 
             for (int i = 0; i < edgeCount; i++)
             {
-                if (Edges[i] == null) continue;
-                edges[i] = new List<GraphEdge>(Edges[i]);
+                if (base.Edges[i] == null) continue;
+                edges[i] = new List<GraphEdge>(base.Edges[i]);
             }
 
-            for (int i = 0; i < Vertices.Count; i++)
+            for (int i = 0; i < base.Vertices.Count; i++)
             {
                 int idegree = Khans_GetInverseDegree(edges, i);
 
                 if (idegree == 0)
-                    vertices.AddLast(Vertices[i]);
+                    vertices.AddLast(base.Vertices[i]);
             }
 
             while (vertices.Count > 0)
@@ -52,7 +52,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     int idegree = Khans_GetInverseDegree(edges, to);
                     if (idegree == 1)
                     {
-                        vertices.AddLast(Vertices[to]);
+                        vertices.AddLast(base.Vertices[to]);
                     }
                 }
 

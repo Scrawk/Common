@@ -481,8 +481,6 @@ namespace Common.GraphTheory.GridGraphs
             if (yi < 0 || yi > Height - 1) return;
 
             Edges[x, y] = Bit.Set(Edges[x, y], i);
-
-            //Edges[x, y] = (byte)(Edges[x, y] | 1 << i);
             EdgeCount++;
         }
 
@@ -516,8 +514,6 @@ namespace Common.GraphTheory.GridGraphs
             int i = D8.DIRECTION[x + 1, y + 1];
 
             Edges[fx, fy] = Bit.Set(Edges[fx, fy], i);
-
-            //Edges[fx, fy] = (byte)(Edges[fx, fy] | 1 << i);
             EdgeCount++;
 
             return true;
@@ -553,8 +549,6 @@ namespace Common.GraphTheory.GridGraphs
             if (yi < 0 || yi > Height - 1) return;
 
             Edges[x, y] = Bit.Clear(Edges[x, y], i);
-
-            //Edges[x, y] = (byte)(Edges[x, y] & ~(1 << i));
             EdgeCount--;
         }
 
@@ -578,9 +572,6 @@ namespace Common.GraphTheory.GridGraphs
 
             Edges[x, y] = Bit.Set(Edges[x, y], i);
             Edges[xi, yi] = Bit.Set(Edges[xi, yi], D8.OPPOSITES[i]);
-
-            //Edges[x, y] = (byte)(Edges[x, y] | 1 << i);
-            //Edges[xi, yi] = (byte)(Edges[xi, yi] | 1 << D8.OPPOSITES[i]);
             EdgeCount += 2;
         }
 
@@ -615,9 +606,6 @@ namespace Common.GraphTheory.GridGraphs
 
             Edges[fx, fy] = Bit.Set(Edges[fx, fy], i);
             Edges[tx, ty] = Bit.Set(Edges[tx, ty], D8.OPPOSITES[i]);
-
-            //Edges[fx, fy] = (byte)(Edges[fx, fy] | 1 << i);
-            //Edges[tx, ty] = (byte)(Edges[tx, ty] | 1 << D8.OPPOSITES[i]);
             EdgeCount += 2;
 
             return true;

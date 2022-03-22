@@ -45,6 +45,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             return ordering;
         }
+
     }
 
 }

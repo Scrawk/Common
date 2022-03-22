@@ -199,6 +199,15 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Get a list of all the vertices.
+        /// </summary>
+        /// <returns></returns>
+        public List<GraphVertex> GetVertices()
+        {
+            return new List<GraphVertex>(Vertices);
+        }
+
+        /// <summary>
         /// Get the data belonging to
         /// the vertex at index i.
         /// </summary>
@@ -267,6 +276,48 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
+        /// Get the first edge fo the vertex.
+        /// </summary>
+        /// <param name="v">The verts index</param>
+        /// <returns>THe first edge.</returns>
+        public GraphEdge GetFirstEdge(int v)
+        {
+            var edges = GetEdges(v);
+            if(edges == null) return null;
+
+            return edges[0];
+        }
+
+        /// <summary>
+        /// Randomize all the edges order in graph
+        /// </summary>
+        /// <param name="seed">The random generators seed</param>
+        public void Randomize(int seed)
+        {
+            var rnd = new Random(seed);
+            foreach(var edges in Edges)
+            {
+                if(edges == null)
+                    continue;
+
+                edges.Shuffle(rnd);
+            }
+        }
+
+        /// <summary>
+        /// Randomize all the edges order for a vertex.
+        /// </summary>
+        /// <param name="v">The vertices index.</param>
+        /// <param name="rnd">The random generator.</param>
+        public void RandomizeEdges(int v, Random rnd)
+        {
+            var edges = GetEdges(v);
+            if (edges == null) return ;
+
+            edges.Shuffle(rnd);
+        }
+
+        /// <summary>
         /// Get all the edges of vertex.
         /// </summary>
         /// <param name="v">The vertex index.</param>
@@ -322,6 +373,17 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 if (Edges[i] == null || Edges[i].Count == 0) continue;
                 edges.AddRange(Edges[i]);
             }
+        }
+
+        /// <summary>
+        /// Get a flattened list of all edges in the graph.
+        /// </summary>
+        /// <returns>The edges</returns>
+        public List<GraphEdge> GetAllEdges()
+        {
+            var edges = new List<GraphEdge>();
+            GetAllEdges(edges);
+            return edges;
         }
 
         /// <summary>

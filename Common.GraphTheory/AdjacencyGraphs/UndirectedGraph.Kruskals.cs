@@ -80,7 +80,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             graph.Vertices[root].Tag = IS_VISITED_TAG;
 
-            var tree = new GraphTree(this, root, count);
+            var tree = new GraphTree(this, root);
             tree.Parent[root] = root;
 
             while (queue.Count != 0)

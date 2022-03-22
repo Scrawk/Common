@@ -61,9 +61,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 copy.Vertices[i] = Vertices[i].Copy(vertDataCopy);
             }
 
-            for (int i = 0; i < Edges.Count; i++)
+            for (int i = 0; i < base.Edges.Count; i++)
             {
-                var edges = Edges[i];
+                var edges = base.Edges[i];
                 if (edges == null) continue;
 
                 var list = new List<GraphEdge>(edges.Count);
@@ -94,7 +94,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         public GraphEdge AddDirectedEdge(int from, int to)
         {
-            return AddDirectedEdge(from, to, 0, null);
+            return AddDirectedWeightedEdge(from, to, 0, null);
         }
 
         /// <summary>
@@ -102,9 +102,21 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
-        public GraphEdge AddDirectedEdge(int from, int to, float weight)
+        public GraphEdge AddDirectedWeightedEdge(int from, int to, float weight)
         {
-            return AddDirectedEdge(from, to, weight, null);
+            return AddDirectedWeightedEdge(from, to, weight, null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public GraphEdge AddDirectedEdge(int from, int to, object data)
+        {
+            return AddDirectedWeightedEdge(from, to, 0, data);
         }
 
         /// <summary>
@@ -113,7 +125,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edge weight</param>
-        public GraphEdge AddDirectedEdge(int from, int to, float weight, object data)
+        public GraphEdge AddDirectedWeightedEdge(int from, int to, float weight, object data)
         {
             var edge = new GraphEdge();
             edge.From = from;
@@ -134,7 +146,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         public GraphEdge AddUndirectedEdge(int from, int to)
         {
-            return AddUndirectedEdge(from, to, 0, 0, null, null);
+            return AddUndirectedWeightedEdge(from, to, 0, 0, null, null);
         }
 
         /// <summary>
@@ -144,9 +156,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edges weight</param>
-        public GraphEdge AddUndirectedEdge(int from, int to, float weight)
+        public GraphEdge AddUndirectedWeightedEdge(int from, int to, float weight)
         {
-            return AddUndirectedEdge(from, to, weight, weight, null, null);
+            return AddUndirectedWeightedEdge(from, to, weight, weight, null, null);
         }
 
         /// <summary>
@@ -156,9 +168,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edges weight</param>
-        public GraphEdge AddUndirectedEdge(int from, int to, float weight, object data)
+        public GraphEdge AddUndirectedWeightedEdge(int from, int to, float weight, object data)
         {
-            return AddUndirectedEdge(from, to, weight, weight, data, data);
+            return AddUndirectedWeightedEdge(from, to, weight, weight, data, data);
         }
 
         /// <summary>
@@ -169,7 +181,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         /// <param name="weight0">The edge going from-to weight</param>
         /// <param name="weight1">The edge going to-from weigh</param>
-        public GraphEdge AddUndirectedEdge(int from, int to, float weight0, float weight1, object data1, object data2)
+        public GraphEdge AddUndirectedWeightedEdge(int from, int to, float weight0, float weight1, object data1, object data2)
         {
             var edge = new GraphEdge();
             edge.From = from;
@@ -218,9 +230,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public UndirectedGraph ToUndirectedGraph()
         {
-            var graph = new UndirectedGraph(Vertices);
+            var graph = new UndirectedGraph(base.Vertices);
 
-            foreach (var neighbours in Edges)
+            foreach (var neighbours in base.Edges)
             {
                 if (neighbours == null) continue;
 
@@ -262,7 +274,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
                     if(weight != 0)
                     {
-                        graph.AddDirectedEdge(x, y, weight);
+                        graph.AddDirectedWeightedEdge(x, y, weight);
                     }
                 }
             }

@@ -12,8 +12,9 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
     [TestClass]
     public class AdjacencyGraphTest
     {
+
         [TestMethod]
-        public void DepthFirstSearch()
+        public void DepthFirstOrder()
         {
             var graph = CreateCitiesDirectedGraph();
             var ordering = graph.DepthFirstOrder(5);
@@ -24,7 +25,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
         }
 
         [TestMethod]
-        public void BreadthFirstSearch()
+        public void BreadthFirstOrder()
         {
             var graph = CreateCitiesDirectedGraph();
             var ordering = graph.BreadthFirstOrder(5);
@@ -33,6 +34,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
             CollectionAssert.AreEquivalent(order, ordering);
         }
+
 
         [TestMethod]
         public void DijkstrasShortestPath()
@@ -103,7 +105,7 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
        
         [TestMethod]
-        public void MaxFlow()
+        public void FordFulkersonMaxFlow()
         {
             int[,] graph = new int[,] 
             { 
@@ -117,10 +119,10 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
             var g = DirectedGraph.FromMatrix(graph);
 
-            float max_flow = g.MaxFlow(0, 5);
+            float max_flow = g.FordFulkersonMaxFlow(0, 5);
             Assert.AreEqual(23, max_flow);
 
-            var cut = g.MinCut(0, 5);
+            var cut = g.FordFulkersonMinCut(0, 5);
 
             max_flow = 0;
             foreach (var e in cut)

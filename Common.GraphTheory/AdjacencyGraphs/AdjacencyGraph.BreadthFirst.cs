@@ -104,7 +104,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             TagVertices(NOT_VISITED_TAG);
             int count = VertexCount;
 
-            var tree = new GraphTree(this, root, count);
+            var tree = new GraphTree(this, root);
             var queue = new Queue<int>(count);
             queue.Enqueue(root);
 

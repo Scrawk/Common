@@ -21,15 +21,14 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// not in the tree.
         /// </summary>
         /// <param name="root">The trees root.</param>
-        /// <param name="size">The size of the tree and graph</param>
-        public GraphTree(AdjacencyGraph graph, int root, int size)
+        public GraphTree(AdjacencyGraph graph, int root)
         {
             Graph = graph;
             Root = root;
-            Parent = new int[size];
+            Parent = new int[graph.VertexCount];
             Children = null;
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < Parent.Length; i++)
                 Parent[i] = -1;
 
             //The root is its own parent.
@@ -121,6 +120,19 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the parent vertex of the child vertex.
+        /// </summary>
+        /// <param name="child"></param>
+        /// <returns></returns>
+        public GraphVertex GetParent(int child)
+        {
+            var p = Parent[child];
+            if(p == child || p == -1) return null;
+
+            return Graph.Vertices[p];
         }
 
         /// <summary>

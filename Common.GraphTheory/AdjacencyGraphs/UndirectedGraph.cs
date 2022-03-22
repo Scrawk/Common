@@ -102,7 +102,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         public GraphEdge AddUndirectedEdge(int from, int to)
         {
-            return AddUndirectedEdge (from, to, 0, 0, null, null);
+            return AddUndirectedWeightedEdge (from, to, 0, 0, null, null);
         }
 
         /// <summary>
@@ -111,9 +111,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
-        public GraphEdge AddUndirectedEdge(int from, int to, float weight)
+        public GraphEdge AddUndirectedWeightedEdge(int from, int to, float weight)
         {
-            return AddUndirectedEdge(from, to, weight, weight);
+            return AddUndirectedWeightedEdge(from, to, weight, weight);
         }
 
         /// <summary>
@@ -123,9 +123,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="from">The from vertex index</param>
         /// <param name="to">The to vertex index</param>
         /// <param name="weight">The edges weight</param>
-        public GraphEdge AddUndirectedEdge(int from, int to, float weight, object data)
+        public GraphEdge AddUndirectedWeightedEdge(int from, int to, float weight, object data)
         {
-            return AddUndirectedEdge(from, to, weight, weight, data, data);
+            return AddUndirectedWeightedEdge(from, to, weight, weight, data, data);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="to">The to vertex index</param>
         /// <param name="weight0">The edge going from-to weight</param>
         /// <param name="weight1">The edge going to-from weigh</param>
-        public GraphEdge AddUndirectedEdge(int from, int to, float weight0, float weight1, object data0, object data1)
+        public GraphEdge AddUndirectedWeightedEdge(int from, int to, float weight0, float weight1, object data0, object data1)
         {
             var edge = new GraphEdge();
             edge.From = from;

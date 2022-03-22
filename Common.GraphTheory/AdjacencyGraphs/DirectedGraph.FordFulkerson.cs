@@ -20,7 +20,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public int MaxFlow(int source, int target)
+        public int FordFulkersonMaxFlow(int source, int target)
         {
             // Create a residual graph and fill  
             // the residual graph with given  
@@ -89,7 +89,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return max_flow;
         }
 
-        public List<GraphEdge> MinCut(int source, int target)
+        public List<GraphEdge> FordFulkersonMinCut(int source, int target)
         {
             var rGraph = Copy();
             MaxFlow(rGraph, source, target);
