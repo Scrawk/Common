@@ -74,7 +74,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             for (int i = 0; i < Count; i++)
             {
                 if (InTree(i))
-                    Graph.Vertices[i].Tag = tag;
+                    Graph.GetVertex(i).Tag = tag;
             }
         }
 
@@ -132,7 +132,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             var p = Parent[child];
             if(p == child || p == -1) return null;
 
-            return Graph.Vertices[p];
+            return Graph.GetVertex(p);
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             queue.Push(Root);
 
             TagAll(0);
-            Graph.Vertices[Root].Tag = 1;
+            Graph.GetVertex(Root).Tag = 1;
 
             var ordering = new List<int>(count);
 
@@ -296,10 +296,10 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 {
                     int to = edges[i];
 
-                    if (Graph.Vertices[to].Tag == 1) continue;
+                    if (Graph.GetVertex(to).Tag == 1) continue;
 
                     queue.Push(to);
-                    Graph.Vertices[to].Tag = 1;
+                    Graph.GetVertex(to).Tag = 1;
                 }
             }
 
@@ -316,7 +316,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             queue.Enqueue(Root);
 
             TagAll(0);
-            Graph.Vertices[Root].Tag = 1;
+            Graph.GetVertex(Root).Tag = 1;
 
             var ordering = new List<int>(count);
 
@@ -332,10 +332,10 @@ namespace Common.GraphTheory.AdjacencyGraphs
                 {
                     int to = edges[i];
 
-                    if (Graph.Vertices[to].Tag == 1) continue;
+                    if (Graph.GetVertex(to).Tag == 1) continue;
 
                     queue.Enqueue(to);
-                    Graph.Vertices[to].Tag = 1;
+                    Graph.GetVertex(to).Tag = 1;
                 }
             }
 

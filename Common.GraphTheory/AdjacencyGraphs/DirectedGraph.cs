@@ -58,12 +58,12 @@ namespace Common.GraphTheory.AdjacencyGraphs
 
             for (int i = 0; i < VertexCount; i++)
             {
-                copy.Vertices[i] = Vertices[i].Copy(vertDataCopy);
+                copy.SetVertex(i, GetVertex(i).Copy(vertDataCopy));
             }
 
-            for (int i = 0; i < base.Edges.Count; i++)
+            for (int i = 0; i < VertexCount; i++)
             {
-                var edges = base.Edges[i];
+                var edges = GetEdges(i);
                 if (edges == null) continue;
 
                 var list = new List<GraphEdge>(edges.Count);
@@ -73,7 +73,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     list.Add(edges[j].Copy(edgeDataCopy));
                 }
 
-                copy.Edges[i] = list;
+                copy.SetEdges(i, list);
             }
 
             return copy;

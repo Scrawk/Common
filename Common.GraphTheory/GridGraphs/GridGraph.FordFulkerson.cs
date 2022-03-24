@@ -45,10 +45,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public int MaxFlow(GridSearch search, Point2i source, Point2i target)
+        public int FordFulkersonMaxFlow(GridSearch search, Point2i source, Point2i target)
         {
-
-
             var rGraph = Copy();
             return MaxFlow(rGraph, search, source, target);
         }
@@ -107,7 +105,7 @@ namespace Common.GraphTheory.GridGraphs
             return max_flow;
         }
 
-        public List<GridEdge> MinCut(GridSearch search, Point2i source, Point2i target)
+        public List<GridEdge> FordFulkersonMinCut(GridSearch search, Point2i source, Point2i target)
         {
 
             // Create a residual graph and fill the residual graph with 
@@ -170,10 +168,10 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public List<GraphEdge> MinCut2(Point2i source, Point2i target)
+        public List<GraphEdge> FordFulkersonMinCut2(Point2i source, Point2i target)
         {
             var search = new GridSearch(Width, Height);
-            return MinCut2(search, source, target);
+            return FordFulkersonMinCut2(search, source, target);
         }
 
         /// <summary>
@@ -183,7 +181,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="source"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public List<GraphEdge> MinCut2(GridSearch search, Point2i source, Point2i target)
+        public List<GraphEdge> FordFulkersonMinCut2(GridSearch search, Point2i source, Point2i target)
         {
 
             // Create a residual graph and fill the residual graph with 

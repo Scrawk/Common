@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Common.Core.Directions;
 using Common.Core.Numerics;
@@ -92,7 +93,17 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         public void Print()
         {
-            Console.WriteLine(ToString());
+            var builder = new StringBuilder();
+            Print(builder);
+            Console.WriteLine(builder.ToString());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Print(StringBuilder builder)
+        {
+            builder.AppendLine(ToString());
 
             for (int y = 0; y < Height; y++)
             {
@@ -100,17 +111,17 @@ namespace Common.GraphTheory.GridGraphs
                 {
                     int Y = (Height - y - 1);
                     int e = Edges[x, Y];
-                    Console.Write(e + " ");
+                    builder.AppendLine(e + " ");
                 }
 
-                Console.WriteLine();
+                builder.AppendLine();
             }
 
             var edges = new List<GridEdge>();
             GetAllEdges(edges);
 
-            foreach(var edge in edges)  
-                Console.WriteLine(edge.ToString());
+            foreach(var edge in edges)
+                builder.AppendLine(edge.ToString());
 
         }
 

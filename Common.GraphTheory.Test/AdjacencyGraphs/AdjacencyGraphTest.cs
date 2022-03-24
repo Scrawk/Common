@@ -48,18 +48,18 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
 
             CollectionAssert.AreEquivalent(order, ordering);
 
-            Assert.AreEqual(2097, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Seattle"))));
-            Assert.AreEqual(2270, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("San Francisco"))));
-            Assert.AreEqual(2018, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Los Angeles"))));
-            Assert.AreEqual(1003, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Denver"))));
-            Assert.AreEqual(533, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Kansas City"))));
-            Assert.AreEqual(0, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Chicago"))));
-            Assert.AreEqual(983, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Boston"))));
-            Assert.AreEqual(787, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("New York"))));
-            Assert.AreEqual(1397, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Atlanta"))));
-            Assert.AreEqual(2058, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Miami"))));
-            Assert.AreEqual(1029, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Dallas"))));
-            Assert.AreEqual(1268, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOf("Houston"))));
+            Assert.AreEqual(2097, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Seattle"))));
+            Assert.AreEqual(2270, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("San Francisco"))));
+            Assert.AreEqual(2018, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Los Angeles"))));
+            Assert.AreEqual(1003, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Denver"))));
+            Assert.AreEqual(533, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Kansas City"))));
+            Assert.AreEqual(0, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Chicago"))));
+            Assert.AreEqual(983, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Boston"))));
+            Assert.AreEqual(787, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("New York"))));
+            Assert.AreEqual(1397, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Atlanta"))));
+            Assert.AreEqual(2058, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Miami"))));
+            Assert.AreEqual(1029, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Dallas"))));
+            Assert.AreEqual(1268, tree.FindWeightSum(tree.GetPathToRoot(graph.IndexOfVertexData("Houston"))));
         }
        
 

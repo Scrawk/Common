@@ -70,14 +70,14 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// The graph vertices.
         /// The vertex index must match its position in array.
         /// </summary>
-        internal List<GraphVertex> Vertices { get; set; }
+        protected List<GraphVertex> Vertices { get; set; }
 
         /// <summary>
         /// The graph edges.
         /// Each vertex index is used to look up
         /// all the edges going from that vertex.
         /// </summary>
-        internal List<List<GraphEdge>> Edges { get; set; }
+        protected List<List<GraphEdge>> Edges { get; set; }
 
         /// <summary>
         /// 
@@ -118,6 +118,32 @@ namespace Common.GraphTheory.AdjacencyGraphs
                     builder.AppendLine(e.ToString());
             }
                 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<GraphVertex> EnumerateVertices()
+        {
+            foreach(var v in Vertices)
+                yield return v;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<GraphEdge> EnumerateEdges()
+        {
+            foreach (var edges in Edges)
+            {
+                if(edges == null || edges.Count == 0) 
+                    continue;
+
+                foreach (var edge in edges)
+                    yield return edge;  
+            }  
         }
 
         /// <summary>
@@ -179,6 +205,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             }
         }
 
+
         /// <summary>
         /// Set the vertices tag.
         /// </summary>
@@ -196,6 +223,16 @@ namespace Common.GraphTheory.AdjacencyGraphs
         public GraphVertex GetVertex(int i)
         {
             return Vertices[i]; 
+        }
+
+        /// <summary>
+        /// Set the vertex at index i.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="vert"></param>
+        public void SetVertex(int i, GraphVertex vert)
+        {
+            Vertices[i] = vert;
         }
 
         /// <summary>
@@ -251,12 +288,13 @@ namespace Common.GraphTheory.AdjacencyGraphs
         {
             var edge = GetEdge(from, to);
 
-            if (edge == null) 
+            if (edge == null)
+            {
                 edge = new GraphEdge(from, to);
+                AddEdge(edge);
+            }
 
-            AddEdge(edge);
-
-            return edge;
+             return edge;
         }
 
         /// <summary>
@@ -292,7 +330,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// Randomize all the edges order in graph
         /// </summary>
         /// <param name="seed">The random generators seed</param>
-        public void Randomize(int seed)
+        public void RandomizeEdges(int seed)
         {
             var rnd = new Random(seed);
             foreach(var edges in Edges)
@@ -320,17 +358,27 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <summary>
         /// Get all the edges of vertex.
         /// </summary>
-        /// <param name="v">The vertex index.</param>
+        /// <param name="i">The vertex index.</param>
         /// <returns>A list of all the edges. Maybe null.</returns>
-        public List<GraphEdge> GetEdges(int v)
+        public List<GraphEdge> GetEdges(int i)
         {
-            return Edges[v];
+            return Edges[i];
+        }
+
+        /// <summary>
+        /// Set the edges for a vertex.
+        /// </summary>
+        /// <param name="i">The vertices index.</param>
+        /// <param name="edges">The vertices edges</param>
+        public void SetEdges(int i, List<GraphEdge> edges)
+        {
+             Edges[i] = edges;
         }
 
         /// <summary>
         /// Find the vertex index belonging to this data.
         /// </summary>
-        public int IndexOf<T>(T data)
+        public int IndexOfVertexData<T>(T data)
         {
             foreach (var v in Vertices)
             {
@@ -339,6 +387,19 @@ namespace Common.GraphTheory.AdjacencyGraphs
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// Does the graph contain a vertex at the index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns>Does the graph contain a vertex at the index.</returns>
+        public bool HasVertex(int index)
+        {
+            for(int i = 0; i < VertexCount; i++)
+                if(Vertices[i].Index == i) return true;
+
+            return false;
         }
 
         /// <summary>
@@ -393,6 +454,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// </summary>
         public void AddEdge(GraphEdge edge)
         {
+            if (HasEdge(edge.From, edge.To))
+                throw new InvalidOperationException("Edge already exists.");
+;
             int i = edge.From;
 
             if (Edges[i] == null)
@@ -408,6 +472,9 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// <param name="vert"></param>
         public void AddVertex(GraphVertex vert)
         {
+            if (HasVertex(vert.Index))
+                throw new InvalidOperationException("Vertex already exists.");
+
             vert.Index = Vertices.Count;
             Vertices.Add(vert);
             Edges.Add(null);
@@ -417,10 +484,11 @@ namespace Common.GraphTheory.AdjacencyGraphs
         /// Create and add a vertex to graph.
         /// </summary>
         /// <returns>The new vertex.</returns>
-        public GraphVertex AddVertex()
+        public GraphVertex AddVertex(object data = null)
         {
             var vert = new GraphVertex();
             vert.Index = Vertices.Count;
+            vert.Data = data;
             Vertices.Add(vert);
             Edges.Add(null);
 

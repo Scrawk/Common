@@ -14,18 +14,18 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             var graph = AdjacencyGraphTest.CreateCitiesDirectedGraph();
             var tree = graph.DijkstrasShortestPathTree(5);
 
-            CollectionAssert.AreEquivalent(new int[] { 0, 5 }, tree.GetPathToRoot(graph.IndexOf("Seattle")));
-            CollectionAssert.AreEquivalent(new int[] { 1, 3, 5 }, tree.GetPathToRoot(graph.IndexOf("San Francisco")));
-            CollectionAssert.AreEquivalent(new int[] { 2, 3, 5 }, tree.GetPathToRoot(graph.IndexOf("Los Angeles")));
-            CollectionAssert.AreEquivalent(new int[] { 3, 5 }, tree.GetPathToRoot(graph.IndexOf("Denver")));
-            CollectionAssert.AreEquivalent(new int[] { 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Kansas City")));
-            CollectionAssert.AreEquivalent(new int[] { }, tree.GetPathToRoot(graph.IndexOf("Chicago")));
-            CollectionAssert.AreEquivalent(new int[] { 6, 5 }, tree.GetPathToRoot(graph.IndexOf("Boston")));
-            CollectionAssert.AreEquivalent(new int[] { 7, 5 }, tree.GetPathToRoot(graph.IndexOf("New York")));
-            CollectionAssert.AreEquivalent(new int[] { 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Atlanta")));
-            CollectionAssert.AreEquivalent(new int[] { 9, 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Miami")));
-            CollectionAssert.AreEquivalent(new int[] { 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Dallas")));
-            CollectionAssert.AreEquivalent(new int[] { 11, 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Houston")));
+            CollectionAssert.AreEquivalent(new int[] { 0, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Seattle")));
+            CollectionAssert.AreEquivalent(new int[] { 1, 3, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("San Francisco")));
+            CollectionAssert.AreEquivalent(new int[] { 2, 3, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Los Angeles")));
+            CollectionAssert.AreEquivalent(new int[] { 3, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Denver")));
+            CollectionAssert.AreEquivalent(new int[] { 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Kansas City")));
+            CollectionAssert.AreEquivalent(new int[] { }, tree.GetPathToRoot(graph.IndexOfVertexData("Chicago")));
+            CollectionAssert.AreEquivalent(new int[] { 6, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Boston")));
+            CollectionAssert.AreEquivalent(new int[] { 7, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("New York")));
+            CollectionAssert.AreEquivalent(new int[] { 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Atlanta")));
+            CollectionAssert.AreEquivalent(new int[] { 9, 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Miami")));
+            CollectionAssert.AreEquivalent(new int[] { 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Dallas")));
+            CollectionAssert.AreEquivalent(new int[] { 11, 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Houston")));
         }
 
         [TestMethod]
@@ -49,18 +49,18 @@ namespace Common.GraphTheory.Test.AdjacencyGraphs
             tree.SetParent(10, 4);
             tree.SetParent(11, 10);
 
-            CollectionAssert.AreEquivalent(new int[] { 0, 5 }, tree.GetPathToRoot(graph.IndexOf("Seattle")));
-            CollectionAssert.AreEquivalent(new int[] { 1, 3, 5 }, tree.GetPathToRoot(graph.IndexOf("San Francisco")));
-            CollectionAssert.AreEquivalent(new int[] { 2, 3, 5 }, tree.GetPathToRoot(graph.IndexOf("Los Angeles")));
-            CollectionAssert.AreEquivalent(new int[] { 3, 5 }, tree.GetPathToRoot(graph.IndexOf("Denver")));
-            CollectionAssert.AreEquivalent(new int[] { 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Kansas City")));
-            CollectionAssert.AreEquivalent(new int[] { }, tree.GetPathToRoot(graph.IndexOf("Chicago")));
-            CollectionAssert.AreEquivalent(new int[] { 6, 5 }, tree.GetPathToRoot(graph.IndexOf("Boston")));
-            CollectionAssert.AreEquivalent(new int[] { 7, 5 }, tree.GetPathToRoot(graph.IndexOf("New York")));
-            CollectionAssert.AreEquivalent(new int[] { 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Atlanta")));
-            CollectionAssert.AreEquivalent(new int[] { 9, 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Miami")));
-            CollectionAssert.AreEquivalent(new int[] { 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Dallas")));
-            CollectionAssert.AreEquivalent(new int[] { 11, 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOf("Houston")));
+            CollectionAssert.AreEquivalent(new int[] { 0, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Seattle")));
+            CollectionAssert.AreEquivalent(new int[] { 1, 3, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("San Francisco")));
+            CollectionAssert.AreEquivalent(new int[] { 2, 3, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Los Angeles")));
+            CollectionAssert.AreEquivalent(new int[] { 3, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Denver")));
+            CollectionAssert.AreEquivalent(new int[] { 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Kansas City")));
+            CollectionAssert.AreEquivalent(new int[] { }, tree.GetPathToRoot(graph.IndexOfVertexData("Chicago")));
+            CollectionAssert.AreEquivalent(new int[] { 6, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Boston")));
+            CollectionAssert.AreEquivalent(new int[] { 7, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("New York")));
+            CollectionAssert.AreEquivalent(new int[] { 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Atlanta")));
+            CollectionAssert.AreEquivalent(new int[] { 9, 8, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Miami")));
+            CollectionAssert.AreEquivalent(new int[] { 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Dallas")));
+            CollectionAssert.AreEquivalent(new int[] { 11, 10, 4, 5 }, tree.GetPathToRoot(graph.IndexOfVertexData("Houston")));
         }
 
         [TestMethod]

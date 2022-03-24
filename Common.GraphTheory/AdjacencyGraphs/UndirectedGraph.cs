@@ -178,5 +178,28 @@ namespace Common.GraphTheory.AdjacencyGraphs
             return graph;
         }
 
+
+        /// <summary>
+        /// Convert to a directed graph.
+        /// No new edges are added.
+        /// </summary>
+        public DirectedGraph ToDirectedGraph()
+        {
+            var graph = new DirectedGraph(Vertices);
+
+            foreach (var neighbours in Edges)
+            {
+                if (neighbours == null) continue;
+
+                foreach (var e in neighbours)
+                {
+                    var e0 = new GraphEdge(e.From, e.To, e.Weight);
+                    graph.AddEdge(e0);
+                }
+            }
+
+            return graph;
+        }
+
     }
 }

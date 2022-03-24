@@ -31,14 +31,11 @@ namespace Common.GraphTheory.Test.GridGraphs
             graph.AddDirectedWeightedEdge(2, 0, D8.TOP, 7);
             graph.AddDirectedWeightedEdge(2, 0, D8.RIGHT, 4);
 
-            //Console.WriteLine("Graph");
-            //graph.Print();
+            int max_flow = graph.FordFulkersonMaxFlow(search, source, target);
 
-            int max_flow = graph.MaxFlow(search, source, target);
+            var cut = graph.FordFulkersonMinCut(search, source, target);
 
-            var cut = graph.MinCut(search, source, target);
-
-            var cut2 = graph.MinCut2(search, source, target);
+            var cut2 = graph.FordFulkersonMinCut2(search, source, target);
 
             Console.WriteLine(max_flow);
 
