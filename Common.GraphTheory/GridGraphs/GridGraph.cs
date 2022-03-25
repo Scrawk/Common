@@ -42,7 +42,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        public byte[,] Edges { get; private set; }
+        private byte[,] Edges { get; set; }
 
         /// <summary>
         /// 
@@ -740,6 +740,16 @@ namespace Common.GraphTheory.GridGraphs
         public GridEdge GetEdge(Point2i from, Point2i to)
         {
             return GetEdge(from.x, from.y, to.x, to.y);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public byte GetEdges(Point2i index)
+        {
+            return Edges[index.x, index.y];
         }
 
         /// <summary>

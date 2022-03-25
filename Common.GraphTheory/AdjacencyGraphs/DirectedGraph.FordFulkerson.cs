@@ -8,12 +8,6 @@ namespace Common.GraphTheory.AdjacencyGraphs
     public partial class DirectedGraph : AdjacencyGraph
     {
 
-        private static bool[] visited;
-
-        private static Queue<int> queue;
-
-        private static int[] parent;
-
         /// <summary>
         /// 
         /// </summary>
@@ -47,15 +41,15 @@ namespace Common.GraphTheory.AdjacencyGraphs
         private int MaxFlow(DirectedGraph rGraph, int source, int target)
         {
 
-            parent = new int[VertexCount];
-            queue = new Queue<int>();
-            visited = new bool[VertexCount];
+            int[] parent = new int[VertexCount];
+            bool[] visited = new bool[VertexCount];
+            Queue<int> queue = new Queue<int>();
 
             int max_flow = 0; // There is no flow initially 
 
             // Augment the flow while tere is path from source to sink 
 
-            while (bfs(rGraph, source, target, parent))
+            while (bfs(rGraph, source, target, parent, visited, queue))
             {
 
                 // Find minimum residual capacity of the edhes 
@@ -95,7 +89,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
             MaxFlow(rGraph, source, target);
 
             // Flow is maximum now, find vertices reachable from s 
-            visited = new bool[VertexCount];
+            bool[] visited = new bool[VertexCount];
             dfs(rGraph, source, visited);
 
             var cut = new List<GraphEdge>();
@@ -134,15 +128,18 @@ namespace Common.GraphTheory.AdjacencyGraphs
           
         }
 
-        private static bool bfs(DirectedGraph graph, int s, int t, int[] parent)
+        private static bool bfs(DirectedGraph graph, int s, int t, int[] parent, bool[] visited, Queue<int> queue)
         {
             int V = parent.Length;
 
             // Create a visited array and mark  
             // all vertices as not visited 
             for (int i = 0; i < V; ++i)
+            {
+                parent[i] = -1;
                 visited[i] = false;
-
+            }
+                
             // Create a queue, enqueue source vertex and mark 
             // source vertex as visited 
             queue.Clear();

@@ -21,6 +21,10 @@ namespace Common.Console
 
         static void Main(string[] args)
         {
+
+
+
+
             /*
             float[,] matrix =
                 {{ 0, 16, 13, 0, 0, 0},
@@ -46,7 +50,7 @@ namespace Common.Console
                 CONSOLE.WriteLine(edge);
             */
 
-            
+            /*
             var graph = new DirectedGraph(6);
 
             for (int i = 0; i < graph.VertexCount; i++)
@@ -73,7 +77,7 @@ namespace Common.Console
             CONSOLE.WriteLine("Maximum flow is " + graph.PushRelabelMaxFlow(s, t));
 
             //graph.Print();
-            
+            */
             
         }
     }

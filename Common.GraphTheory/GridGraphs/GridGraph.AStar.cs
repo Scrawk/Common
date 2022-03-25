@@ -11,13 +11,12 @@ namespace Common.GraphTheory.GridGraphs
     {
         private struct AStarNode
         {
-            public int x, y;
+            public Point2i point;
             public float g, h, f;
 
             public AStarNode(int x, int y)
             {
-                this.x = x;
-                this.y = y;
+                point = new Point2i(x, y);
                 g = h = f = 0;
             }
         }
@@ -30,7 +29,7 @@ namespace Common.GraphTheory.GridGraphs
             if (Heuristic == null)
                 Heuristic = ManhattanDistance;
 
-            search.Parent[start.x, start.y] = start;
+            search.SetParent(start, start);
 
             var open = new List<AStarNode>();
             open.Add(new AStarNode(start.x, start.y));
@@ -43,23 +42,23 @@ namespace Common.GraphTheory.GridGraphs
                 var u = open.First(n => n.f == lowest);
 
                 open.Remove(u);
-                search.IsVisited[u.x, u.y] = true;
+                search.SetIsVisited(u.point, true);
 
-                if (search.IsVisited[target.x, target.y]) break;
+                if (search.GetIsVisited(target)) break;
 
-                int edge = Edges[u.x, u.y];
+                int edge = GetEdges(u.point);
                 g++;
 
                 for (int i = 0; i < 8; i++)
                 {
-                    int xi = u.x + D8.OFFSETS[i, 0];
-                    int yi = u.y + D8.OFFSETS[i, 1];
+                    int xi = u.point.x + D8.OFFSETS[i, 0];
+                    int yi = u.point.y + D8.OFFSETS[i, 1];
 
                     if (xi < 0 || xi > width - 1) continue;
                     if (yi < 0 || yi > height - 1) continue;
 
                     if ((edge & 1 << i) == 0) continue;
-                    if (search.IsVisited[xi, yi]) continue;
+                    if (search.GetIsVisited(xi, yi)) continue;
 
                     int idx = Contains(open, xi, yi);
                     if (idx == -1)
@@ -69,7 +68,7 @@ namespace Common.GraphTheory.GridGraphs
                         n.h = Heuristic(target, new Point2i(xi, yi));
                         n.f = n.g + n.h;
 
-                        search.Parent[n.x, n.y] = new Point2i(u.x, u.y);
+                        search.SetParent(n.point, u.point);
                         open.Add(n);
                     }
                     else
@@ -79,7 +78,7 @@ namespace Common.GraphTheory.GridGraphs
                         {
                             n.g = g;
                             n.f = n.g + n.h;
-                            search.Parent[n.x, n.y] = new Point2i(u.x, u.y);
+                            search.SetParent(n.point, u.point);
                             open[idx] = n;
                         }
                     }
@@ -105,7 +104,7 @@ namespace Common.GraphTheory.GridGraphs
         private static int Contains(List<AStarNode> open, int x, int y)
         {
             for (int i = 0; i < open.Count; i++)
-                if (open[i].x == x && open[i].y == y) return i;
+                if (open[i].point.x == x && open[i].point.y == y) return i;
 
             return -1;
         }

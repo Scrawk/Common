@@ -121,7 +121,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Enumerate through all the vertices in th graph.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<GraphVertex> EnumerateVertices()
@@ -131,7 +131,7 @@ namespace Common.GraphTheory.AdjacencyGraphs
         }
 
         /// <summary>
-        /// 
+        /// Enumerate through all the edges in th graph.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<GraphEdge> EnumerateEdges()

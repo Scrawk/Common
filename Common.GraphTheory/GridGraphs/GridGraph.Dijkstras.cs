@@ -27,8 +27,8 @@ namespace Common.GraphTheory.GridGraphs
                 vertexGrid[xi, yi] = v;
             }
 
-            search.IsVisited[x, y] = true;
-            search.Parent[x, y] = new Point2i(x, y);
+            search.SetIsVisited(x, y, true);
+            search.SetParent(x, y, new Point2i(x, y));
             vertexGrid[x, y].Cost = 0;
 
             while (queue.Count != 0)
@@ -39,8 +39,8 @@ namespace Common.GraphTheory.GridGraphs
                 queue.RemoveAt(0);
                 var u = vertex.Index;
 
-                search.Order.Add(u);
-                search.IsVisited[u.x, u.y] = true;
+                search.AddOrder(u);
+                search.SetIsVisited(u,  true);
 
                 int edge = Edges[u.x, u.y];
                 if (edge != 0)
@@ -56,7 +56,7 @@ namespace Common.GraphTheory.GridGraphs
                         if (yi < 0 || yi > height - 1) continue;
 
                         if ((edge & 1 << i) == 0) continue;
-                        if (search.IsVisited[xi, yi]) continue;
+                        if (search.GetIsVisited(xi, yi)) continue;
 
                         var v = vertexGrid[xi, yi];
                         float alt = cost + (float)Point2i.Distance(u, v.Index);
@@ -67,7 +67,7 @@ namespace Common.GraphTheory.GridGraphs
                                 throw new ArithmeticException("Cost is not finite.");
 
                             v.Cost = alt;
-                            search.Parent[xi, yi] = u;
+                            search.SetParent(xi, yi, u);
                         }
                     }
                 }

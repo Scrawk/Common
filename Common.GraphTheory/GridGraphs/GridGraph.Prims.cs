@@ -14,9 +14,9 @@ namespace Common.GraphTheory.GridGraphs
             int width = Width;
             int height = Height;
 
-            search.IsVisited[x, y] = true;
-            search.Order.Add(new Point2i(x, y));
-            search.Parent[x, y] = new Point2i(x, y);
+            search.SetIsVisited(x, y, true);;
+            search.AddOrder(new Point2i(x, y));
+            search.SetParent(x, y,  new Point2i(x, y));
 
             var queue = new BinaryHeap<GridEdge>(8);
 
@@ -36,11 +36,11 @@ namespace Common.GraphTheory.GridGraphs
                 GridEdge edge = queue.Pop();
 
                 Point2i v = edge.To;
-                if (search.IsVisited[v.x, v.y]) continue;
+                if (search.GetIsVisited(v)) continue;
 
-                search.Order.Add(v);
-                search.IsVisited[v.x, v.y] = true;
-                search.Parent[v.x, v.y] = edge.From;
+                search.AddOrder(v);
+                search.SetIsVisited(v, true);
+                search.SetParent(v, edge.From);
 
                 if (Edges[v.x, v.y] == 0) continue;
 
@@ -48,7 +48,7 @@ namespace Common.GraphTheory.GridGraphs
 
                 foreach (GridEdge e in edges)
                 {
-                    if (search.IsVisited[e.To.x, e.To.y]) continue;
+                    if (search.GetIsVisited(e.To)) continue;
                     queue.Add(e);
                 }
 

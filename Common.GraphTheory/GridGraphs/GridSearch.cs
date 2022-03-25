@@ -20,11 +20,11 @@ namespace Common.GraphTheory.GridGraphs
 
         public Point2i Root { get { return Order[0]; } }
 
-        public IList<Point2i> Order { get; private set; }
+        private List<Point2i> Order { get; set; }
 
-        public Point2i[,] Parent { get; private set; }
+        private Point2i[,] Parent { get;  set; }
 
-        public bool[,] IsVisited { get; private set; }
+        private bool[,] IsVisited { get; set; }
 
         public GridSearch(int width, int height)
         {
@@ -79,9 +79,19 @@ namespace Common.GraphTheory.GridGraphs
             return Parent[i.x, i.y];
         }
 
+        public Point2i GetParent(int x, int y)
+        {
+            return Parent[x, y];
+        }
+
         public void SetParent(Point2i i, Point2i p)
         {
             Parent[i.x, i.y] = p;
+        }
+
+        public void SetParent(int x, int y, Point2i p)
+        {
+            Parent[x, y] = p;
         }
 
         public bool GetIsVisited(Point2i i)
@@ -89,9 +99,34 @@ namespace Common.GraphTheory.GridGraphs
             return IsVisited[i.x, i.y];
         }
 
+        public bool GetIsVisited(int x, int y)
+        {
+            return IsVisited[x, y];
+        }
+
         public void SetIsVisited(Point2i i, bool v)
         {
             IsVisited[i.x, i.y] = v;
+        }
+
+        public void SetIsVisited(int x, int y, bool v)
+        {
+            IsVisited[x, y] = v;
+        }
+
+        public Point2i GetOrder(int i)
+        {
+            return Order[i];
+        }
+
+        public void AddOrder(Point2i p)
+        {
+            Order.Add(p);
+        }
+
+        public void SetOrder(int i, Point2i p)
+        {
+            Order[i] = p;
         }
 
         public void Clear()
