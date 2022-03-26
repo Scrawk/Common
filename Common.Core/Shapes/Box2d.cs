@@ -42,11 +42,18 @@ namespace Common.Core.Shapes
             Max = new POINT2(max);
         }
 
-        //public Box2d(REAL minX, REAL minY, REAL maxX, REAL maxY)
-        //{
-        //    Min = new POINT2(minX, minY);
-        //    Max = new POINT2(maxX, maxY);
-        //}
+        /// <summary>
+        /// Construct a new box.
+        /// </summary>
+        /// <param name="minX">The boxes min x value.</param>
+        /// <param name="minY">The boxes min y value.</param>
+        /// <param name="maxX">The boxes max x value.</param>
+        /// <param name="maxY">The boxes max y value.</param>
+        public Box2d(REAL minX, REAL minY, REAL maxX, REAL maxY)
+        {
+            Min = new POINT2(minX, minY);
+            Max = new POINT2(maxX, maxY);
+        }
 
         /// <summary>
         /// Construct a new box.
