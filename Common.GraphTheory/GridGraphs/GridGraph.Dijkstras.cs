@@ -8,6 +8,21 @@ namespace Common.GraphTheory.GridGraphs
 {
     public partial class GridGraph
     {
+
+        public GridSearch DijkstrasShortestPathTree(Point2i root)
+        {
+            var search = new GridSearch(Width, Height);
+            DijkstrasShortestPathTree(search, root.x, root.y);
+            return search;
+        }
+
+        public GridSearch DijkstrasShortestPathTree(int x, int y)
+        {
+            var search = new GridSearch(Width, Height);
+            DijkstrasShortestPathTree(search, x, y);
+            return search;
+        }
+
         public void DijkstrasShortestPathTree(GridSearch search, int x, int y)
         {
             int width = Width;
@@ -59,6 +74,12 @@ namespace Common.GraphTheory.GridGraphs
                         if (search.GetIsVisited(xi, yi)) continue;
 
                         var v = vertexGrid[xi, yi];
+                        if (v == null)
+                        {
+                            v = new GridVertex(xi, yi, 0);
+                            vertexGrid[xi, yi] = v;
+                        }
+
                         float alt = cost + (float)Point2i.Distance(u, v.Index);
 
                         if (alt < v.Cost)

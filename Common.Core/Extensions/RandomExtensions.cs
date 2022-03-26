@@ -24,6 +24,11 @@ namespace System
             return (float)rnd.NextDouble();
         }
 
+        public static bool NextBool(this Random rnd)
+        {
+            return rnd.NextDouble() > 0.5;
+        }
+
         public static Vector2f NextVector2f(this Random rnd, Vector2f min, Vector2f max)
         {
             float x = rnd.NextFloat(min.x, max.x);

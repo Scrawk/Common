@@ -8,6 +8,21 @@ namespace Common.GraphTheory.GridGraphs
 {
     public partial class GridGraph
     {
+
+        public GridSearch BreadthFirst(Point2i root)
+        {
+            var search = new GridSearch(Width, Height);
+            BreadthFirst(search, root.x, root.y);
+            return search;
+        }
+
+        public GridSearch BreadthFirst(int x, int y)
+        {
+            var search = new GridSearch(Width, Height);
+            BreadthFirst(search, x, y);
+            return search;
+        }
+
         public void BreadthFirst(GridSearch search, int x, int y)
         {
             int width = Width;

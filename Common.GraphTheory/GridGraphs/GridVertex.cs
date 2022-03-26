@@ -41,6 +41,12 @@ namespace Common.GraphTheory.GridGraphs
             Cost = cost;
         }
 
+        public GridVertex(int x, int y, float cost)
+        {
+            Index = new Point2i(x, y);
+            Cost = cost;
+        }
+
         public override string ToString()
         {
             return string.Format("[GridVertex: Index={0}, Cost={1}]", Index, Cost);

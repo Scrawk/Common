@@ -66,11 +66,23 @@ namespace Common.GraphTheory.GridGraphs
                 for (int x = 0; x < Width; x++)
                 {
                     int Y = (Height - y - 1);
-                    Console.Write(Parent[x, Y] + " ");
+                    //Console.Write("(" + x + "," + Y + ") ");
+                    Console.Write("("+Parent[x, Y] + ") ");
                 }
 
                 Console.WriteLine();
             }
+
+            Console.WriteLine("Order");
+            for (int x = 0; x < Order.Count; x++)
+            {
+                if(x != Order.Count - 1)
+                    Console.Write("("+Order[x]+"), ");
+                else
+                    Console.Write("(" + Order[x] + ")");
+            }
+
+            Console.WriteLine();
 
         }
 
@@ -184,6 +196,13 @@ namespace Common.GraphTheory.GridGraphs
             }
 
             return false;
+        }
+
+        public List<Point2i> GetPath(Point2i dest)
+        {
+            var path = new List<Point2i>();
+            GetPath(dest, path);
+            return path;
         }
 
         public void GetPath(Point2i dest, List<Point2i> path)

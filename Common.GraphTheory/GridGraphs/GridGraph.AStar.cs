@@ -21,6 +21,13 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
+        public GridSearch AStar(Point2i start, Point2i target, Func<Point2i, Point2i, float> Heuristic = null)
+        {
+            var search = new GridSearch(Width, Height);
+            AStar(search, start, target, Heuristic);
+            return search;
+        }
+
         public void AStar(GridSearch search, Point2i start, Point2i target, Func<Point2i, Point2i, float> Heuristic = null)
         {
             int width = Width;

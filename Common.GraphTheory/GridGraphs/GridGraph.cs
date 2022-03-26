@@ -91,17 +91,44 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        public void Print()
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool InBounds(int x, int y)
+        {
+            if (x < 0 || x >= Width) return false;
+            if (y < 0 || y >= Height) return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public bool InBounds(Point2i p)
+        {
+            if(p.x < 0 || p.x >= Width) return false;
+            if (p.y < 0 || p.y >= Height) return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Print(bool printEdges = false)
         {
             var builder = new StringBuilder();
-            Print(builder);
+            Print(builder, printEdges);
             Console.WriteLine(builder.ToString());
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public void Print(StringBuilder builder)
+        public void Print(StringBuilder builder, bool printEdges = false)
         {
             builder.AppendLine(ToString());
 
@@ -111,17 +138,20 @@ namespace Common.GraphTheory.GridGraphs
                 {
                     int Y = (Height - y - 1);
                     int e = Edges[x, Y];
-                    builder.AppendLine(e + " ");
+                    builder.Append(e + " ");
                 }
 
                 builder.AppendLine();
             }
 
-            var edges = new List<GridEdge>();
-            GetAllEdges(edges);
+            if (printEdges)
+            {
+                var edges = new List<GridEdge>();
+                GetAllEdges(edges);
 
-            foreach(var edge in edges)
-                builder.AppendLine(edge.ToString());
+                foreach (var edge in edges)
+                    builder.AppendLine(edge.ToString());
+            }
 
         }
 
@@ -174,6 +204,24 @@ namespace Common.GraphTheory.GridGraphs
                 for (int x = 0; x < Width; x++)
                 {
                     func(x, y);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="func"></param>
+        public void Iterate(Action<int, int, int> func)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        func(x, y, i);
+                    }
                 }
             }
         }
@@ -444,6 +492,18 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="w"></param>
+        public void AddDirectedWeightedEdge(Point2i from, Point2i to, float w)
+        {
+            AddDirectedEdge(from.x, from.y, to.x, to.y);
+            SetWeight(from.x, from.y, to.x, to.y, w);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="w"></param>
         public void AddDirectedWeightedEdge(Point2i from, int to, float w)
         {
             AddDirectedWeightedEdge(from.x, from.y, to, w);
@@ -454,12 +514,24 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        /// <param name="i"></param>
+        /// <param name="to"></param>
         /// <param name="w"></param>
-        public void AddUndirectedWeightedEdge(int x, int y, int i, float w)
+        public void AddUndirectedWeightedEdge(int x, int y, int to, float w)
         {
-            AddUndirectedEdge(x, y, i);
-            SetWeight(x, y, i, w);
+            AddUndirectedEdge(x, y, to);
+            SetWeight(x, y, to, w);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="w"></param>
+        public void AddUndirectedWeightedEdge(Point2i from, Point2i to, float w)
+        {
+            AddUndirectedEdge(from.x, from.y, to.x, to.y);
+            SetWeight(from.x, from.y, to.x, to.y, w);
         }
 
         /// <summary>
@@ -472,6 +544,7 @@ namespace Common.GraphTheory.GridGraphs
         {
             AddUndirectedWeightedEdge(from.x, from.y, to, w);
         }
+
 
         /// <summary>
         /// 
@@ -745,11 +818,43 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public byte GetEdges(int x, int y)
+        {
+            return Edges[x, y];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         public byte GetEdges(Point2i index)
         {
             return Edges[index.x, index.y];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="edges"></param>
+        public void SetEdges(int x, int y, byte edges)
+        {
+            Edges[x, y] = edges;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="edges"></param>
+        public void SetEdges(Point2i index, byte edges)
+        {
+            Edges[index.x, index.y] = edges;
         }
 
         /// <summary>

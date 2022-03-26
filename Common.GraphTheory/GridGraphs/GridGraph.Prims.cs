@@ -9,6 +9,21 @@ namespace Common.GraphTheory.GridGraphs
 {
     public partial class GridGraph
     {
+
+        public GridSearch PrimsMinimumSpanningTree(Point2i root)
+        {
+            var search = new GridSearch(Width, Height);
+            PrimsMinimumSpanningTree(search, root.x, root.y);
+            return search;
+        }
+
+        public GridSearch PrimsMinimumSpanningTree(int x, int y)
+        {
+            var search = new GridSearch(Width, Height);
+            PrimsMinimumSpanningTree(search, x, y);
+            return search;
+        }
+
         public void PrimsMinimumSpanningTree(GridSearch search, int x, int y, Func<Point2i, Point2i, float> GetWeight = null)
         {
             int width = Width;
