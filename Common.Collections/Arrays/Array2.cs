@@ -212,8 +212,8 @@ namespace Common.Collections.Arrays
         /// </summary>
         public void SetClamped(int x, int y, T value)
         {
-            x = MathUtil.Clamp(x, 0, Count - 1);
-            y = MathUtil.Clamp(y, 0, Count - 1);
+            x = MathUtil.Clamp(x, 0, Width - 1);
+            y = MathUtil.Clamp(y, 0, Height - 1);
             Data[x, y] = value;
         }
 
@@ -222,8 +222,8 @@ namespace Common.Collections.Arrays
         /// </summary>
         public void SetWrapped(int x, int y, T value)
         {
-            x = MathUtil.Wrap(x, Count);
-            y = MathUtil.Wrap(y, Count);
+            x = MathUtil.Wrap(x, Width);
+            y = MathUtil.Wrap(y, Height);
             Data[x, y] = value;
         }
 
@@ -232,8 +232,8 @@ namespace Common.Collections.Arrays
         /// </summary>
         public void SetMirrored(int x, int y, T value)
         {
-            x = MathUtil.Mirror(x, Count);
-            y = MathUtil.Mirror(y, Count);
+            x = MathUtil.Mirror(x, Width);
+            y = MathUtil.Mirror(y, Height);
             Data[x, y] = value;
         }
 
