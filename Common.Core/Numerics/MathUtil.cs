@@ -40,6 +40,18 @@ namespace Common.Core.Numerics
         private static ulong[] m_factorialTable;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsOdd(int i)
+        {
+            return i % 2 != 0;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsEven(int i)
+        {
+            return i % 2 == 0;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToRadians(float a)
         {
             return a * DEG_TO_RAD_32;
