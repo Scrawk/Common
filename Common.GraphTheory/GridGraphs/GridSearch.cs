@@ -198,6 +198,18 @@ namespace Common.GraphTheory.GridGraphs
             return false;
         }
 
+        public float GetPathCost(List<Point2i> path, GridGraph graph)
+        {
+            float cost = 0;
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                float w = graph.GetWeight(path[i], path[i + 1]);
+                cost += w;
+            }
+
+            return cost;
+        }
+
         public List<Point2i> GetPath(Point2i dest)
         {
             var path = new List<Point2i>();

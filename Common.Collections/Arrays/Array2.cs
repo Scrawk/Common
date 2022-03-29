@@ -208,6 +208,36 @@ namespace Common.Collections.Arrays
         }
 
         /// <summary>
+        /// Set the element at clamped index x.
+        /// </summary>
+        public void SetClamped(int x, int y, T value)
+        {
+            x = MathUtil.Clamp(x, 0, Count - 1);
+            y = MathUtil.Clamp(y, 0, Count - 1);
+            Data[x, y] = value;
+        }
+
+        /// <summary>
+        /// Set the element at wrapped index x.
+        /// </summary>
+        public void SetWrapped(int x, int y, T value)
+        {
+            x = MathUtil.Wrap(x, Count);
+            y = MathUtil.Wrap(y, Count);
+            Data[x, y] = value;
+        }
+
+        /// <summary>
+        /// Set the element at mirred index x.
+        /// </summary>
+        public void SetMirrored(int x, int y, T value)
+        {
+            x = MathUtil.Mirror(x, Count);
+            y = MathUtil.Mirror(y, Count);
+            Data[x, y] = value;
+        }
+
+        /// <summary>
         /// Recommended blocks for parallel processing.
         /// </summary>
         /// <param name="divisions">Number of divisions on each axis to make.</param>
