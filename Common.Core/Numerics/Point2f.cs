@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 
 using REAL = System.Single;
 using BOX2 = Common.Core.Shapes.Box2f;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
 
 namespace Common.Core.Numerics
 {
@@ -388,16 +389,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Implict cast from a tuple.
-        /// </summary>
-        /// <param name="v">The vector to cast from</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Point2f(ValueTuple<REAL, REAL> v)
-        {
-            return new Point2f(v.Item1, v.Item2);
-        }
-
-        /// <summary>
         /// Cast from Point2d to Point2f.
         /// </summary>
         /// <param name="v"></param>
@@ -533,6 +524,44 @@ namespace Common.Core.Numerics
                 return (v1 - v0).Vector2f.Normalized;
             else
                 return (v1 - v0).Vector2f;
+        }
+
+        /// <summary>
+        /// Angle between two vectors in degrees from 0 to 180.
+        /// A and b origin treated as 0,0 and do not need to be normalized.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Degree Angle180(Point2f a, Point2f b, Point2f c)
+        {
+            VECTOR2 u = Direction(b, a);
+            VECTOR2 v = Direction(c, a);
+
+            REAL dp = VECTOR2.Dot(u, v);
+            REAL m = u.Magnitude * v.Magnitude;
+            REAL angle = MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
+
+            return new Degree(angle);
+        }
+
+        /// <summary>
+        /// Angle between two vectors in degrees from 0 to 360.
+        /// Angle represents moving ccw from a to b.
+        /// A and b origin treated as 0,0 and do not need to be normalized.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Degree Angle360(Point2f a, Point2f b, Point2f c)
+        {
+            VECTOR2 u = Direction(b, a);
+            VECTOR2 v = Direction(c, a);
+
+            REAL angle = MathUtil.Atan2(u.y, u.x) - MathUtil.Atan2(v.y, v.x);
+
+            if (angle <= 0.0f)
+                angle = MathUtil.PI_32 * 2.0f + angle;
+
+            angle = 360.0f - MathUtil.ToDegrees(angle);
+
+            return new Degree(angle >= 360.0 ? 0 : angle);
         }
 
         /// <summary>

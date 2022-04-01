@@ -41,15 +41,6 @@ namespace Common.Core.Shapes
             Max = new POINT3(max);
         }
 
-        /// <summary>
-        /// Construct a new box.
-        /// </summary>
-        /// <param name="minX">The boxes min x value.</param>
-        /// <param name="minY">The boxes min y value.</param>
-        /// <param name="minZ">The boxes min z value.</param>
-        /// <param name="maxX">The boxes max x value.</param>
-        /// <param name="maxY">The boxes max y value.</param>
-        /// <param name="maxZ">The boxes max z value.</param>
         public Box3f(REAL minX, REAL minY, REAL minZ, REAL maxX, REAL maxY, REAL maxZ)
         {
             Min = new POINT3(minX, minY, minZ);
@@ -65,6 +56,19 @@ namespace Common.Core.Shapes
         {
             Min = min;
             Max = max;
+        }
+
+        /// <summary>
+        /// Does the shape contain no non finite points.
+        /// </summary>
+        public bool IsFinite
+        {
+            get
+            {
+                if (!Min.IsFinite) return false;
+                if (!Max.IsFinite) return false;
+                return true;
+            }
         }
 
         /// <summary>

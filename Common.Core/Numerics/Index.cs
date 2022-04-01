@@ -4,7 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace Common.Core.Numerics
 {
-
+    /// <summary>
+    /// WARNING - Must match layout of unmanaged c++ CGAL struct in Index.h file.
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Index2

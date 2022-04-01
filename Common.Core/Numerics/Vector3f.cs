@@ -431,16 +431,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Implict cast from a tuple.
-        /// </summary>
-        /// <param name="v">The vector to cast from</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector3f(ValueTuple<REAL, REAL, REAL> v)
-        {
-            return new Vector3f(v.Item1, v.Item2, v.Item3);
-        }
-
-        /// <summary>
         /// Cast from Vector3d to Vector3f.
         /// </summary>
         /// <param name="v"></param>
@@ -593,11 +583,12 @@ namespace Common.Core.Numerics
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Angle180(Vector3f a, Vector3f b)
+        public static Degree Angle180(Vector3f a, Vector3f b)
         {
             REAL dp = Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
-            return MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
+            REAL angle = MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
+            return new Degree(angle);
         }
 
         /// <summary>

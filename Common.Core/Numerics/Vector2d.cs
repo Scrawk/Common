@@ -402,16 +402,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Implict cast from a tuple.
-        /// </summary>
-        /// <param name="v">The vector to cast from</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector2d(ValueTuple<REAL, REAL> v)
-        {
-            return new Vector2d(v.Item1, v.Item2);
-        }
-
-        /// <summary>
         /// Cast from Vector2f to Vector2f.
         /// </summary>
         /// <param name="v"></param>
@@ -599,11 +589,12 @@ namespace Common.Core.Numerics
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Angle180(Vector2d a, Vector2d b)
+        public static Degree Angle180(Vector2d a, Vector2d b)
         {
             REAL dp = Dot(a, b);
             REAL m = a.Magnitude * b.Magnitude;
-            return MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
+            REAL angle = MathUtil.ToDegrees(MathUtil.SafeAcos(MathUtil.SafeDiv(dp, m)));
+            return new Degree(angle);
         }
 
         /// <summary>
@@ -612,7 +603,7 @@ namespace Common.Core.Numerics
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static REAL Angle360(Vector2d a, Vector2d b)
+        public static Degree Angle360(Vector2d a, Vector2d b)
         {
             REAL angle = MathUtil.Atan2(a.y, a.x) - MathUtil.Atan2(b.y, b.x);
 
@@ -620,7 +611,7 @@ namespace Common.Core.Numerics
                 angle = MathUtil.PI_64 * 2.0 + angle;
 
             angle = 360.0 - MathUtil.ToDegrees(angle);
-            return angle >= 360.0 ? 0 : angle;
+            return new Degree(angle >= 360.0 ? 0 : angle);
         }
 
         /// <summary>

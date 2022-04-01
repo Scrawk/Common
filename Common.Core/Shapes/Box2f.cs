@@ -19,7 +19,7 @@ namespace Common.Core.Shapes
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Box2f : IEquatable<Box2f>, IShape2f
+    public struct Box2f : IEquatable<Box2f>
     {
         /// <summary>
         /// The boxes min point.
@@ -42,17 +42,10 @@ namespace Common.Core.Shapes
             Max = new POINT2(max);
         }
 
-        /// <summary>
-        /// Construct a new box.
-        /// </summary>
-        /// <param name="minX">The boxes min x value.</param>
-        /// <param name="minY">The boxes min y value.</param>
-        /// <param name="maxX">The boxes max x value.</param>
-        /// <param name="maxY">The boxes max y value.</param>
         public Box2f(REAL minX, REAL minY, REAL maxX, REAL maxY)
         {
             Min = new POINT2(minX, minY);
-            Max = new POINT2(maxX, maxY);
+           Max = new POINT2(maxX, maxY);
         }
 
         /// <summary>
@@ -67,9 +60,17 @@ namespace Common.Core.Shapes
         }
 
         /// <summary>
-        /// The box is its own bounds.
+        /// Does the shape contain no non finite points.
         /// </summary>
-        public Box2f Bounds => this;
+        public bool IsFinite
+        {
+            get
+            {
+                if (!Min.IsFinite) return false;
+                if (!Max.IsFinite) return false;
+                return true;
+            }
+        }
 
         /// <summary>
         /// The boxes lower left corner.

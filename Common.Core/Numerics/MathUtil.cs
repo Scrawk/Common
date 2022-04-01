@@ -40,18 +40,6 @@ namespace Common.Core.Numerics
         private static ulong[] m_factorialTable;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsOdd(int i)
-        {
-            return i % 2 != 0;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEven(int i)
-        {
-            return i % 2 == 0;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float ToRadians(float a)
         {
             return a * DEG_TO_RAD_32;
@@ -454,13 +442,25 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsFinite(float f)
         {
-            return !(float.IsInfinity(f) || float.IsNaN(f));
+            return !float.IsNaN(f) && !float.IsInfinity(f);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNotFinite(float f)
+        {
+            return float.IsNaN(f) || float.IsInfinity(f);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsFinite(double f)
         {
-            return !(double.IsInfinity(f) || double.IsNaN(f));
+            return !double.IsNaN(f) && !double.IsInfinity(f);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNotFinite(double f)
+        {
+            return double.IsNaN(f) || double.IsInfinity(f);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

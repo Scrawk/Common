@@ -22,11 +22,11 @@ namespace Common.GraphTheory.GridGraphs
 
         public int Height { get; private set; }
 
-        public float[,,] Capacity { get; private set; }
+        private float[,,] Capacity { get; set; }
 
-        public float[,,] Flow { get; private set; }
+        private float[,,] Flow { get;  set; }
 
-        public byte[,] Label { get; private set; }
+        private byte[,] Label { get; set; }
 
         public GridFlowGraph(int width, int height)
         {
@@ -38,11 +38,107 @@ namespace Common.GraphTheory.GridGraphs
             Label = new byte[width, height];
         }
 
+        public GridFlowGraph(float[,] array)
+        {
+            Width = array.GetLength(0);
+            Height = array.GetLength(1);
+
+            Capacity = new float[Width, Height, 8];
+            Flow = new float[Width, Height, 8];
+            Label = new byte[Width, Height];
+
+            Fill(array);
+        }
+
         public void Clear()
         {
             Array.Clear(Capacity, 0, Capacity.Length);
             Array.Clear(Flow, 0, Flow.Length);
             Array.Clear(Label, 0, Label.Length);
+        }
+
+        public void Fill(float[,] array)
+        {
+            for(int x = 0; x < Width; x++)
+            {
+                for(int y = 0; y < Height; y++)
+                {
+                    var c1 = array[x, y];
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int xi = x + D8.OFFSETS[i, 0];
+                        int yi = y + D8.OFFSETS[i, 1];
+
+                        if (xi < 0 || xi > Width - 1) continue;
+                        if (yi < 0 || yi > Height - 1) continue;
+
+                        var c2 = array[xi, yi];
+
+                        Capacity[x, y, i] = (c1 + c2) * 0.5f;
+                    }
+                }
+            }
+        }
+
+        public float GetCapacity(int x, int y, int i)
+        {
+            return Capacity[x, y, i];
+        }
+
+        public float GetCapacity(Point2i p, int i)
+        {
+            return Capacity[p.x, p.y, i];
+        }
+
+        public void SetCapacity(int x, int y, int i, float capacity)
+        {
+            Capacity[x, y, i] = capacity;
+        }
+
+        public void SetCapacity(Point2i p, int i, float capacity)
+        {
+            Capacity[p.x, p.y, i] = capacity;
+        }
+
+        public float GetFlow(int x, int y, int i)
+        {
+            return Flow[x, y, i];
+        }
+
+        public float GetFlow(Point2i p, int i)
+        {
+            return Flow[p.x, p.y, i];
+        }
+
+        public void SetFlow(int x, int y, int i, float flow)
+        {
+            Flow[x, y, i] = flow;
+        }
+
+        public void SetFlow(Point2i p, int i, float flow)
+        {
+            Flow[p.x, p.y, i] = flow;
+        }
+
+        public byte GetLabel(int x, int y)
+        {
+            return Label[x, y];
+        }
+
+        public byte GetLabel(Point2i p)
+        {
+            return Label[p.x, p.y];
+        }
+
+        public void SetLabel(int x, int y, byte label)
+        {
+            Label[x, y] = label;
+        }
+
+        public void SetLabel(Point2i p, byte label)
+        {
+            Label[p.x, p.y] = label;
         }
 
         public float Calculate()

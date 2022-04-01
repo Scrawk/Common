@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
+using Common.Core.Shapes;
+
 using REAL = System.Single;
-using BOX2 = Common.Core.Shapes.Box2f;
 
 namespace Common.Core.Numerics
 {
@@ -386,7 +387,7 @@ namespace Common.Core.Numerics
         /// <param name="weight">The number of points weight.</param>
         /// <param name="range">The range of the points.</param>
         /// <returns>The point array.</returns>
-        public static HPoint2f[] RandomPoints(int seed, int count, REAL weight, BOX2 range)
+        public static HPoint2f[] RandomPoints(int seed, int count, REAL weight, Box2f range)
         {
             var points = new HPoint2f[count];
             var rnd = new Random(seed);
