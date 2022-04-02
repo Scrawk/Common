@@ -3,16 +3,18 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 using Common.Core.Directions;
+using Common.GraphTheory.AdjacencyGraphs;
 
 namespace Common.GraphTheory.GridGraphs
 {
+
+    public enum FLOW_GRAPH_LABEL
+    {
+        NONE, SOURCE, SINK
+    }
+
     public class GridFlowGraph
     {
-        public const byte UNLABELED = 0;
-
-        public const byte SOURCE = 1;
-
-        public const byte SINK = 2;
 
         public float MaxFlow { get; private set; }
 
@@ -55,6 +57,47 @@ namespace Common.GraphTheory.GridGraphs
             Array.Clear(Capacity, 0, Capacity.Length);
             Array.Clear(Flow, 0, Flow.Length);
             Array.Clear(Label, 0, Label.Length);
+        }
+
+        public bool InBounds(int x, int y)
+        {
+            if (x < 0 || x >= Width) return false;
+            if (y < 0 || y >= Height) return false;
+
+            return true;
+        }
+
+        public bool InBounds(Point2i p)
+        {
+            if (p.x < 0 || p.x >= Width) return false;
+            if (p.y < 0 || p.y >= Height) return false;
+
+            return true;
+        }
+
+        public void Iterate(Action<int, int> func)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    func(x, y);
+                }
+            }
+        }
+
+        public void Iterate(Action<int, int, int> func)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        func(x, y, i);
+                    }
+                }
+            }
         }
 
         public void Fill(float[,] array)
@@ -121,24 +164,60 @@ namespace Common.GraphTheory.GridGraphs
             Flow[p.x, p.y, i] = flow;
         }
 
-        public byte GetLabel(int x, int y)
+        public FLOW_GRAPH_LABEL GetLabel(int x, int y)
         {
-            return Label[x, y];
+            return (FLOW_GRAPH_LABEL)Label[x, y];
         }
 
-        public byte GetLabel(Point2i p)
+        public FLOW_GRAPH_LABEL GetLabel(Point2i p)
         {
-            return Label[p.x, p.y];
+            return (FLOW_GRAPH_LABEL)Label[p.x, p.y];
         }
 
-        public void SetLabel(int x, int y, byte label)
+        public void SetLabel(int x, int y, FLOW_GRAPH_LABEL label)
         {
-            Label[x, y] = label;
+            Label[x, y] = (byte)label;
         }
 
-        public void SetLabel(Point2i p, byte label)
+        public void SetLabel(Point2i p, FLOW_GRAPH_LABEL label)
         {
-            Label[p.x, p.y] = label;
+            Label[p.x, p.y] = (byte)label;
+        }
+
+        public void SetLabel(int x, int y, FLOW_GRAPH_LABEL label, int capacity)
+        {
+            SetLabel(x, y, label);
+
+            for (int i = 0; i < 8; i++)
+            {
+                int xi = x + D8.OFFSETS[i, 0];
+                int yi = y + D8.OFFSETS[i, 1];
+
+                if (xi < 0 || xi >= Width) continue;
+                if (yi < 0 || yi >= Height) continue;
+
+                SetCapacity(x, y, i, capacity);
+            }
+        }
+
+        public void SetSource(int x, int y, int capacity)
+        {
+            SetLabel(x, y, FLOW_GRAPH_LABEL.SOURCE, capacity);
+        }
+
+        public void SetSink(int x, int y, int capacity)
+        {
+            SetLabel(x, y, FLOW_GRAPH_LABEL.SINK, capacity);
+        }
+
+        public bool IsSource(int x, int y)
+        {
+            return GetLabel(x, y) == FLOW_GRAPH_LABEL.SOURCE;
+        }
+
+        public bool IsSink(int x, int y)
+        {
+            return GetLabel(x, y) == FLOW_GRAPH_LABEL.SINK;
         }
 
         public float Calculate()
@@ -171,7 +250,7 @@ namespace Common.GraphTheory.GridGraphs
                     float residual = Capacity[u.x, u.y, u.z] - Flow[u.x, u.y, u.z];
                     flow = Math.Min(flow, residual);
 
-                    if (Label[u.x, u.y] == GridFlowGraph.SOURCE)
+                    if (Label[u.x, u.y] == (byte)FLOW_GRAPH_LABEL.SOURCE)
                         break;
                     else
                         v = u;
@@ -190,7 +269,7 @@ namespace Common.GraphTheory.GridGraphs
                     Flow[u.x, u.y, u.z] += flow;
                     Flow[v.x, v.y, D8.OPPOSITES[u.z]] -= flow;
 
-                    if (Label[u.x, u.y] == GridFlowGraph.SOURCE)
+                    if (Label[u.x, u.y] == (byte)FLOW_GRAPH_LABEL.SOURCE)
                         break;
                     else
                         v = u;
@@ -210,7 +289,7 @@ namespace Common.GraphTheory.GridGraphs
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    if (Label[x, y] == SOURCE)
+                    if (Label[x, y] == (byte)FLOW_GRAPH_LABEL.SOURCE)
                         queue.Enqueue(new Point2i(x, y));
                 }
             }
@@ -229,9 +308,9 @@ namespace Common.GraphTheory.GridGraphs
 
                     if (xi < 0 || xi >= Width) continue;
                     if (yi < 0 || yi >= Height) continue;
-                    if (Label[xi, yi] == SOURCE) continue;
+                    if (Label[xi, yi] == (byte)FLOW_GRAPH_LABEL.SOURCE) continue;
 
-                    Label[xi, yi] = SOURCE;
+                    Label[xi, yi] = (byte)FLOW_GRAPH_LABEL.SOURCE;
 
                     queue.Enqueue(new Point2i(xi, yi));
                 }
@@ -241,8 +320,8 @@ namespace Common.GraphTheory.GridGraphs
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    if (Label[x, y] != SOURCE)
-                        Label[x, y] = SINK;
+                    if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE)
+                        Label[x, y] = (byte)FLOW_GRAPH_LABEL.SINK;
 
                     for (int i = 0; i < 8; i++)
                         if (Flow[x, y, i] < 0) Flow[x, y, i] = 0;
@@ -261,7 +340,8 @@ namespace Common.GraphTheory.GridGraphs
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    if (Label[x, y] != GridFlowGraph.SOURCE) continue;
+                    if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE) continue;
+
                     queue.Enqueue(new Point2i(x, y));
                     parent[x, y] = new Point3i(x, y, -1);
                     isVisited[x, y] = true;
@@ -288,7 +368,7 @@ namespace Common.GraphTheory.GridGraphs
                     parent[xi, yi] = new Point3i(u.x, u.y, i);
                     isVisited[xi, yi] = true;
 
-                    if (Label[xi, yi] == GridFlowGraph.SINK)
+                    if (Label[xi, yi] == (byte)FLOW_GRAPH_LABEL.SINK)
                     {
                         sink = new Point3i(xi, yi, -1);
                         return true;
@@ -299,5 +379,6 @@ namespace Common.GraphTheory.GridGraphs
             sink = new Point3i(-1, -1, -1);
             return false;
         }
+
     }
 }
