@@ -105,19 +105,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        public bool InBounds(Point2i p)
-        {
-            if(p.x < 0 || p.x >= Width) return false;
-            if (p.y < 0 || p.y >= Height) return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public void Print(bool printEdges = false)
         {
             var builder = new StringBuilder();
@@ -263,17 +250,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="v"></param>
-        /// <param name="w"></param>
-        public void SetWeight(Point2i u, Point2i v, float w)
-        {
-            SetWeight(u.x, u.y, v.x, v.y, w);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="i"></param>
@@ -308,17 +284,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="v"></param>
-        /// <returns></returns>
-        public float GetWeight(Point2i u, Point2i v)
-        {
-            return GetWeight(u.x, u.y, v.x, v.y);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="i"></param>
@@ -330,17 +295,6 @@ namespace Common.GraphTheory.GridGraphs
                 throw new ArgumentException("To must represent a bit and have a range of 0-7.");
 
             return Bit.IsSet(Edges[x, y], i);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool HasDirectedEdge(Point2i from, int to)
-        {
-            return HasDirectedEdge(from.x, from.y, to);
         }
 
         /// <summary>
@@ -404,17 +358,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool HasUndirectedEdge(Point2i from, int to)
-        {
-            return HasUndirectedEdge(from.x, from.y, to);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="fx"></param>
         /// <param name="fy"></param>
         /// <param name="tx"></param>
@@ -435,17 +378,6 @@ namespace Common.GraphTheory.GridGraphs
             if (Bit.IsSet(Edges[tx, ty], D8.OPPOSITES[i])) return true;
 
             return false;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool HasUndirectedEdge(Point2i from, Point2i to)
-        {
-            return HasUndirectedEdge(from.x, from.y, to.x, to.y);
         }
 
         /// <summary>
@@ -489,29 +421,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="w"></param>
-        public void AddDirectedWeightedEdge(Point2i from, Point2i to, float w)
-        {
-            AddDirectedEdge(from.x, from.y, to.x, to.y);
-            SetWeight(from.x, from.y, to.x, to.y, w);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="w"></param>
-        public void AddDirectedWeightedEdge(Point2i from, int to, float w)
-        {
-            AddDirectedWeightedEdge(from.x, from.y, to, w);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="to"></param>
@@ -521,30 +430,6 @@ namespace Common.GraphTheory.GridGraphs
             AddUndirectedEdge(x, y, to);
             SetWeight(x, y, to, w);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="w"></param>
-        public void AddUndirectedWeightedEdge(Point2i from, Point2i to, float w)
-        {
-            AddUndirectedEdge(from.x, from.y, to.x, to.y);
-            SetWeight(from.x, from.y, to.x, to.y, w);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <param name="w"></param>
-        public void AddUndirectedWeightedEdge(Point2i from, int to, float w)
-        {
-            AddUndirectedWeightedEdge(from.x, from.y, to, w);
-        }
-
 
         /// <summary>
         /// 
@@ -571,16 +456,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        public void AddDirectedEdge(Point2i from, int to)
-        {
-            AddDirectedEdge(from.x, from.y, to);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="fx"></param>
         /// <param name="fy"></param>
         /// <param name="tx"></param>
@@ -601,17 +476,6 @@ namespace Common.GraphTheory.GridGraphs
             EdgeCount++;
 
             return true;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool AddDirectedEdge(Point2i from, Point2i to)
-        {
-            return AddDirectedEdge(from.x, from.y, to.x, to.y);
         }
 
         /// <summary>
@@ -662,16 +526,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="u"></param>
-        /// <param name="i"></param>
-        public void AddUndirectedEdge(Point2i u, int i)
-        {
-            AddUndirectedEdge(u.x, u.y, i);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="fx"></param>
         /// <param name="fy"></param>
         /// <param name="tx"></param>
@@ -693,17 +547,6 @@ namespace Common.GraphTheory.GridGraphs
             EdgeCount += 2;
 
             return true;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool AddUndirectedEdge(Point2i from, Point2i to)
-        {
-            return AddUndirectedEdge(from.x, from.y, to.x, to.y);
         }
 
         /// <summary>
@@ -807,17 +650,6 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public GridEdge GetEdge(Point2i from, Point2i to)
-        {
-            return GetEdge(from.x, from.y, to.x, to.y);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
@@ -829,32 +661,12 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public byte GetEdges(Point2i index)
-        {
-            return Edges[index.x, index.y];
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="edges"></param>
         public void SetEdges(int x, int y, byte edges)
         {
             Edges[x, y] = edges;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="edges"></param>
-        public void SetEdges(Point2i index, byte edges)
-        {
-            Edges[index.x, index.y] = edges;
         }
 
         /// <summary>
@@ -923,7 +735,7 @@ namespace Common.GraphTheory.GridGraphs
                         if(GetWeightFunc != null)
                             e.Weight = GetWeightFunc(e.From, e.To);
                         else if (HasWeights)
-                            e.Weight = GetWeight(e.From, e.To);
+                            e.Weight = GetWeight(e.From.x, e.From.y, e.To.x, e.To.y);
 
                         edges.Add(e);
                     }
@@ -960,7 +772,7 @@ namespace Common.GraphTheory.GridGraphs
                 if (GetWeightFunc != null)
                     e.Weight = GetWeightFunc(e.From, e.To);
                 else if (HasWeights)
-                    e.Weight = GetWeight(e.From, e.To);
+                    e.Weight = GetWeight(e.From.x, e.From.y, e.To.x, e.To.y);
 
                 edges.Add(e);
                 edges.Add(new GridEdge(x, y, xi, yi));
@@ -1016,25 +828,6 @@ namespace Common.GraphTheory.GridGraphs
             }
 
             return graph;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
-        /// <exception cref="ArgumentException"></exception>
-        private void Check(int x, int y, int i)
-        {
-            if (i < 0 || i > 7)
-                throw new ArgumentException("i must represent a bit and have a range of 0-7.");
-
-            if (x < 0 || x >= Width)
-                throw new ArgumentException("x must be > 0 and < Width.");
-
-            if (y < 0 || y >= Height)
-                throw new ArgumentException("y must be > 0 and < Height.");
         }
 
     }

@@ -203,7 +203,10 @@ namespace Common.GraphTheory.GridGraphs
             float cost = 0;
             for (int i = 0; i < path.Count - 1; i++)
             {
-                float w = graph.GetWeight(path[i], path[i + 1]);
+                var p1 = path[i];
+                var p2 = path[i + 1];   
+
+                float w = graph.GetWeight(p1.x, p1.y, p2.x, p2.y);
                 cost += w;
             }
 

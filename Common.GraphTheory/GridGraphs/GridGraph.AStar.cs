@@ -53,7 +53,7 @@ namespace Common.GraphTheory.GridGraphs
 
                 if (search.GetIsVisited(target)) break;
 
-                int edge = GetEdges(u.point);
+                int edge = GetEdges(u.point.x, u.point.y);
                 g++;
 
                 for (int i = 0; i < 8; i++)
