@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Collections.Generic
+namespace Common.Core.Extensions
 {
     public static class LinkedListExtensions
     {

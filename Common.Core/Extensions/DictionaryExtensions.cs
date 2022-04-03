@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace System.Collections.Generic
+namespace Common.Core.Extensions
 {
     public static class KeyValuePairExtensions
     {

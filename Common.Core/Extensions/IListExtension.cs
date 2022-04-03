@@ -4,7 +4,7 @@ using System.Linq;
 
 using Common.Core.Numerics;
 
-namespace System.Collections.Generic
+namespace Common.Core.Extensions
 {
     public static class IListExtension
     {
@@ -58,7 +58,7 @@ namespace System.Collections.Generic
         /// </summary>
         /// <param name="i">The index.</param>
         /// <returns>The element at index i.</returns>
-        public static T GetCircular<T>(this IList<T> list, int i)
+        public static T GetWrapped<T>(this IList<T> list, int i)
         {
             return list[MathUtil.Wrap(i, list.Count)];
         }

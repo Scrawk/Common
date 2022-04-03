@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Common.Core.Numerics;
 using Common.Core.Colors;
 
-namespace System
+namespace Common.Core.Extensions
 {
     public static class RandomExtensions
     {
