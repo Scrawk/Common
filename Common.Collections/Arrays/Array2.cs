@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Common.Core.Numerics;
 using Common.Core.Threading;
+using Common.Core.Extensions;
 
 namespace Common.Collections.Arrays
 {

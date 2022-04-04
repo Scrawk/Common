@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
+using Common.Core.Extensions;
+
 using REAL = System.Single;
 using VECTOR = Common.Core.Numerics.Vector4f;
 

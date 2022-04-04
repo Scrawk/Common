@@ -15,16 +15,6 @@ namespace Common.Geometry.Test.Collections
         public void Remove()
         {
 
-            var shape0 = new Circle2f((0, 0), 10);
-            var shape1 = new Circle2f((1, 2), 2);
-
-            var bvh = new BVHTree2f<IShape2f>();
-            //bvh.Add(shape0);
-            //bvh.Add(shape1);
-
-            //var removed = bvh.Remove(shape0);
-
-            //Console.WriteLine("Removed = " + removed);
 
         }
     }

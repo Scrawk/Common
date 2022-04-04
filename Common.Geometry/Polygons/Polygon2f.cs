@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 using Common.Core.Shapes;
+using Common.Core.Extensions;
 
 using REAL = System.Single;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
@@ -82,7 +83,7 @@ namespace Common.Geometry.Polygons
         /// </summary>
         public POINT2 GetPosition(int i)
         {
-            return Positions.GetCircular(i);
+            return Positions.GetWrapped(i);
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace Common.Geometry.Polygons
             if (Params == null)
                 throw new InvalidOperationException("Polygon does not have any params.");
 
-            return Params.GetCircular(i);
+            return Params.GetWrapped(i);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace Common.Geometry.Polygons
             if (Lengths == null)
                 throw new InvalidOperationException("Polygon does not have any lengths.");
 
-            return Lengths.GetCircular(i);
+            return Lengths.GetWrapped(i);
         }
 
         /// <summary>

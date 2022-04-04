@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Common.Core.Numerics;
 using Common.Core.Shapes;
+using Common.Core.Extensions;
 
 using REAL = System.Single;
 using POINT2 = Common.Core.Numerics.Point2f;

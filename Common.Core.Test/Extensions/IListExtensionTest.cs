@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using Common.Core.Extensions;
+
 namespace Common.Core.Test.Extensions
 {
     [TestClass]

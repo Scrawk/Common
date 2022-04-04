@@ -4,6 +4,7 @@ using System.Text;
 
 using Common.Core.Numerics;
 using Common.Core.Shapes;
+using Common.Core.Extensions;
 
 using REAL = System.Double;
 using POINT2 = Common.Core.Numerics.Point2d;
@@ -196,7 +197,7 @@ namespace Common.Geometry.Polygons
         public POINT2 Interpolate(REAL t, IList<POINT2> array)
         {
             FindInterpolationPoint(t, out int idx, out REAL s);
-            return POINT2.Lerp(array[idx], array.GetCircular(idx + 1), s);
+            return POINT2.Lerp(array[idx], array.GetWrapped(idx + 1), s);
         }
 
         /// <summary>
@@ -206,7 +207,7 @@ namespace Common.Geometry.Polygons
         public REAL Interpolate(REAL t, IList<REAL> array)
         {
             FindInterpolationPoint(t, out int idx, out REAL s);
-            return MathUtil.Lerp(array[idx], array.GetCircular(idx + 1), s);
+            return MathUtil.Lerp(array[idx], array.GetWrapped(idx + 1), s);
         }
 
         /// <summary>

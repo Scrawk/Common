@@ -220,6 +220,53 @@ namespace Common.GraphTheory.GridGraphs
             return GetLabel(x, y) == FLOW_GRAPH_LABEL.SINK;
         }
 
+        public List<Point2i> FindBoundaryPoints()
+        {
+            var points = new List<Point2i>();
+
+            Iterate((x, y) =>
+            {
+                if (IsSource(x, y))
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int xi = x + D8.OFFSETS[i, 0];
+                        int yi = y + D8.OFFSETS[i, 1];
+
+                        if (xi < 0 || xi >= Width) continue;
+                        if (yi < 0 || yi >= Height) continue;
+
+                        if (IsSink(xi, yi))
+                        {
+                            points.Add(new Point2i(x, y));
+                            break;
+                        }
+                    }
+                }
+
+                if (IsSink(x, y))
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int xi = x + D8.OFFSETS[i, 0];
+                        int yi = y + D8.OFFSETS[i, 1];
+
+                        if (xi < 0 || xi >= Width) continue;
+                        if (yi < 0 || yi >= Height) continue;
+
+                        if (IsSource(xi, yi))
+                        {
+                            points.Add(new Point2i(x, y));
+                            break;
+                        }
+                    }
+                }
+
+            });
+
+            return points;
+        }
+
         public float Calculate()
         {
             MaxFlow = FordFulkersonMaxFlow();

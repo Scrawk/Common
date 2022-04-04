@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Numerics;
+using Common.Core.Extensions;
 
 using REAL = System.Single;
 using VECTOR = Common.Core.Numerics.Vector2f;
@@ -139,7 +140,7 @@ namespace Common.Core.Test.Numerics
 
                 int j = (i > 180) ? 360 - i : i;
 
-                Assert.IsTrue(NearlyEqual(j, VECTOR.Angle180(v, new VECTOR(x, y)), error));
+                Assert.IsTrue(NearlyEqual(j, (REAL)VECTOR.Angle180(v, new VECTOR(x, y)).angle, error));
             }
 
             v = new VECTOR(1, -1);
@@ -155,7 +156,7 @@ namespace Common.Core.Test.Numerics
                 int j = (i + 45) % 360;
                 j = (j > 180) ? 360 - j : j;
 
-                Assert.IsTrue(NearlyEqual(j, VECTOR.Angle180(v, new VECTOR(x, y)), error));
+                Assert.IsTrue(NearlyEqual(j, (REAL)VECTOR.Angle180(v, new VECTOR(x, y)).angle, error));
             }
         }
 
@@ -173,30 +174,30 @@ namespace Common.Core.Test.Numerics
                 REAL x = MathUtil.Cos(theta);
                 REAL y = MathUtil.Sin(theta);
 
-                Assert.IsTrue(NearlyEqual(i, VECTOR.Angle360(v, new VECTOR(x, y)), error));
+                Assert.IsTrue(NearlyEqual(i, (REAL)VECTOR.Angle360(v, new VECTOR(x, y)).angle, error));
             }
 
-            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle360(v, new VECTOR(1, 0)), error));
-            Assert.IsTrue(NearlyEqual(45, VECTOR.Angle360(v, new VECTOR(1, 1)), error));
-            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle360(v, new VECTOR(0, 1)), error));
-            Assert.IsTrue(NearlyEqual(135, VECTOR.Angle360(v, new VECTOR(-1, 1)), error));
-            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle360(v, new VECTOR(-1, 0)), error));
-            Assert.IsTrue(NearlyEqual(225, VECTOR.Angle360(v, new VECTOR(-1, -1)), error));
-            Assert.IsTrue(NearlyEqual(270, VECTOR.Angle360(v, new VECTOR(0, -1)), error));
+            Assert.IsTrue(NearlyEqual(0, (REAL)VECTOR.Angle360(v, new VECTOR(1, 0)).angle, error));
+            Assert.IsTrue(NearlyEqual(45, (REAL)VECTOR.Angle360(v, new VECTOR(1, 1)).angle, error));
+            Assert.IsTrue(NearlyEqual(90, (REAL)VECTOR.Angle360(v, new VECTOR(0, 1)).angle, error));
+            Assert.IsTrue(NearlyEqual(135, (REAL)VECTOR.Angle360(v, new VECTOR(-1, 1)).angle, error));
+            Assert.IsTrue(NearlyEqual(180, (REAL)VECTOR.Angle360(v, new VECTOR(-1, 0)).angle, error));
+            Assert.IsTrue(NearlyEqual(225, (REAL)VECTOR.Angle360(v, new VECTOR(-1, -1)).angle, error));
+            Assert.IsTrue(NearlyEqual(270, (REAL)VECTOR.Angle360(v, new VECTOR(0, -1)).angle, error));
 
             v = new VECTOR(-1, 0);
 
-            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle360(v, new VECTOR(-1, 0)), error));
-            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle360(v, new VECTOR(0, -1)), error));
-            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle360(v, new VECTOR(1, 0)), error));
-            Assert.IsTrue(NearlyEqual(270, VECTOR.Angle360(v, new VECTOR(0, 1)), error));
+            Assert.IsTrue(NearlyEqual(0, (REAL)VECTOR.Angle360(v, new VECTOR(-1, 0)).angle, error));
+            Assert.IsTrue(NearlyEqual(90, (REAL)VECTOR.Angle360(v, new VECTOR(0, -1)).angle, error));
+            Assert.IsTrue(NearlyEqual(180, (REAL)VECTOR.Angle360(v, new VECTOR(1, 0)).angle, error));
+            Assert.IsTrue(NearlyEqual(270, (REAL)VECTOR.Angle360(v, new VECTOR(0, 1)).angle, error));
 
             v = new VECTOR(0, 1);
 
-            Assert.IsTrue(NearlyEqual(0, VECTOR.Angle360(v, new VECTOR(0, 1)), error));
-            Assert.IsTrue(NearlyEqual(90, VECTOR.Angle360(v, new VECTOR(-1, 0)), error));
-            Assert.IsTrue(NearlyEqual(180, VECTOR.Angle360(v, new VECTOR(0, -1)), error));
-            Assert.IsTrue(NearlyEqual(270, VECTOR.Angle360(v, new VECTOR(1, 0)), error));
+            Assert.IsTrue(NearlyEqual(0, (REAL)VECTOR.Angle360(v, new VECTOR(0, 1)).angle, error));
+            Assert.IsTrue(NearlyEqual(90, (REAL)VECTOR.Angle360(v, new VECTOR(-1, 0)).angle, error));
+            Assert.IsTrue(NearlyEqual(180, (REAL)VECTOR.Angle360(v, new VECTOR(0, -1)).angle, error));
+            Assert.IsTrue(NearlyEqual(270, (REAL)VECTOR.Angle360(v, new VECTOR(1, 0)).angle, error));
         }
 
         [TestMethod]

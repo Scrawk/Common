@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Common.Core.Directions;
 using Common.Core.Numerics;
+using Common.Core.Extensions;
 using Common.GraphTheory.GridGraphs;
 
 namespace Common.GraphTheory.Test.GridGraphs

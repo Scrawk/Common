@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Common.Core.Extensions;
+
 namespace Common.GraphTheory.AdjacencyGraphs
 {
 
