@@ -67,14 +67,6 @@ namespace Common.GraphTheory.GridGraphs
             return true;
         }
 
-        public bool InBounds(Point2i p)
-        {
-            if (p.x < 0 || p.x >= Width) return false;
-            if (p.y < 0 || p.y >= Height) return false;
-
-            return true;
-        }
-
         public void Iterate(Action<int, int> func)
         {
             for (int y = 0; y < Height; y++)
@@ -129,19 +121,9 @@ namespace Common.GraphTheory.GridGraphs
             return Capacity[x, y, i];
         }
 
-        public float GetCapacity(Point2i p, int i)
-        {
-            return Capacity[p.x, p.y, i];
-        }
-
         public void SetCapacity(int x, int y, int i, float capacity)
         {
             Capacity[x, y, i] = capacity;
-        }
-
-        public void SetCapacity(Point2i p, int i, float capacity)
-        {
-            Capacity[p.x, p.y, i] = capacity;
         }
 
         public float GetFlow(int x, int y, int i)
@@ -149,19 +131,9 @@ namespace Common.GraphTheory.GridGraphs
             return Flow[x, y, i];
         }
 
-        public float GetFlow(Point2i p, int i)
-        {
-            return Flow[p.x, p.y, i];
-        }
-
         public void SetFlow(int x, int y, int i, float flow)
         {
             Flow[x, y, i] = flow;
-        }
-
-        public void SetFlow(Point2i p, int i, float flow)
-        {
-            Flow[p.x, p.y, i] = flow;
         }
 
         public FLOW_GRAPH_LABEL GetLabel(int x, int y)
@@ -169,19 +141,9 @@ namespace Common.GraphTheory.GridGraphs
             return (FLOW_GRAPH_LABEL)Label[x, y];
         }
 
-        public FLOW_GRAPH_LABEL GetLabel(Point2i p)
-        {
-            return (FLOW_GRAPH_LABEL)Label[p.x, p.y];
-        }
-
         public void SetLabel(int x, int y, FLOW_GRAPH_LABEL label)
         {
             Label[x, y] = (byte)label;
-        }
-
-        public void SetLabel(Point2i p, FLOW_GRAPH_LABEL label)
-        {
-            Label[p.x, p.y] = (byte)label;
         }
 
         public void SetLabel(int x, int y, FLOW_GRAPH_LABEL label, int capacity)
