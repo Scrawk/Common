@@ -40,17 +40,25 @@ namespace Common.Core.Threading
             return blocks;
         }
 
-        public static void ParallelAction(int width, int blockSize, Action<int> action)
+        public static void ParallelAction(int width, int blockSize, Action<int> action, bool disableThreading = false)
         {
-            var blocks = CreateBlocks(width, blockSize);
-
-            Parallel.ForEach(blocks, (block) =>
+            if(disableThreading)
             {
-                for (int x = block.Min; x < block.Max; x++)
+                for (int i = 0; i < width; i++)
+                    action(i);
+            }
+            else
+            {
+                var blocks = CreateBlocks(width, blockSize);
+                Parallel.ForEach(blocks, (block) =>
                 {
-                    action(x);
-                }
-            });
+                    for (int x = block.Min; x < block.Max; x++)
+                    {
+                        action(x);
+                    }
+                });
+            }
+
         }
 
     }
