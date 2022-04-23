@@ -146,6 +146,14 @@ namespace Common.Core.Shapes
         }
 
         /// <summary>
+        /// Normalize the lines direction.
+        /// </summary>
+        public void Normalize()
+        {
+            Direction.Normalize();
+        }
+
+        /// <summary>
         /// Round the rays components.
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>

@@ -146,6 +146,14 @@ namespace Common.Core.Shapes
         }
 
         /// <summary>
+        /// Normalize the lines direction.
+        /// </summary>
+        public void Normalize()
+        {
+            Direction.Normalize();
+        }
+
+        /// <summary>
         /// Get the position offset along the ray at t.
         /// </summary>
         /// <param name="t">The amount to offset.</param>
