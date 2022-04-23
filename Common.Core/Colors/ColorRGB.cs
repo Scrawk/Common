@@ -113,20 +113,6 @@ namespace Common.Core.Colors
             get { return 0.2126f * r + 0.7152f * g + 0.0722f * b; } 
         }
 
-        public int Integer
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                int R = (int)MathUtil.Clamp(r * 255.0f, 0.0f, 255.0f);
-                int G = (int)MathUtil.Clamp(g * 255.0f, 0.0f, 255.0f);
-                int B = (int)MathUtil.Clamp(b * 255.0f, 0.0f, 255.0f);
-                int A = 255;
-
-                return R | (G << 8) | (B << 16) | (A << 24);
-            }
-        }
-
         unsafe public float this[int i]
         {
             get
@@ -330,10 +316,65 @@ namespace Common.Core.Colors
 
         /// <summary>
         /// color from bytes.
+        /// The values will be converted from a 0-255 range to a 0-1 range.
         /// </summary>
+        /// <returns>A color will values in the 0-1 range.</returns>
         public static ColorRGB FromBytes(int r, int g, int b)
         {
-            return new ColorRGB(r, g, b) / 255.0f;
+            int R = MathUtil.Clamp(r, 0, 255);
+            int G = MathUtil.Clamp(g, 0, 255);
+            int B = MathUtil.Clamp(b, 0, 255);
+            return new ColorRGB(R, G, B) / 255.0f;
+        }
+
+
+        /// <summary>
+        /// Create a color from a integer where each byte in the 
+        /// integer represents a channl in the color.
+        /// </summary>
+        /// <param name="i">The integer.</param>
+        /// <param name="bgr">are the channels packed bgr or rgb.</param>
+        /// <returns>The color.</returns>
+        public static ColorRGB FromInteger(int i, bool bgr = false)
+        {
+            Union32 u = i;
+            if(bgr)
+                return FromBytes(u.Byte0, u.Byte1, u.Byte2);
+            else
+                return FromBytes(u.Byte2, u.Byte1, u.Byte0);
+        }
+
+        /// <summary>
+        /// Convert the color to a integer where each byte 
+        /// represents a channel in the color.
+        /// </summary>
+        /// <param name="bgr">are the channels packed bgr or rgb.</param>
+        /// <returns>A integer where each byte represents a channel in the color.</returns>
+        public int ToInteger(bool abgr = false)
+        {
+            int R = (int)MathUtil.Clamp(r * 255.0f, 0.0f, 255.0f);
+            int G = (int)MathUtil.Clamp(g * 255.0f, 0.0f, 255.0f);
+            int B = (int)MathUtil.Clamp(b * 255.0f, 0.0f, 255.0f);
+            int A = 255;
+
+            if (abgr)
+                return (A << 24) | (B << 16) | (G << 8) | R;
+            else
+                return R | (G << 8) | (B << 16) | (A << 24);
+        }
+
+        /// <summary>
+        /// Apply the gamma function to the color.
+        /// </summary>
+        /// <param name="lambda">The power to raise each channel to.</param>
+        /// <param name="a">The constant the result is multiplied by. Defaults to 1.</param>
+        /// <returns>A color with the gamma function applied to each channel.</returns>
+        public ColorRGB Gamma(float lambda, float a = 1)
+        {
+            float r = MathUtil.Pow(this.r, lambda) * a;
+            float g = MathUtil.Pow(this.g, lambda) * a;
+            float b = MathUtil.Pow(this.b, lambda) * a;
+            return new ColorRGB(r, g, b);
         }
 
         /// <summary>

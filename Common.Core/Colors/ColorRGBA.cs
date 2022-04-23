@@ -167,20 +167,6 @@ namespace Common.Core.Colors
             get { return 0.2126f * r + 0.7152f * g + 0.0722f * b; }
         }
 
-        public int Integer
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                int R = (int)MathUtil.Clamp(r * 255.0f, 0.0f, 255.0f);
-                int G = (int)MathUtil.Clamp(g * 255.0f, 0.0f, 255.0f);
-                int B = (int)MathUtil.Clamp(b * 255.0f, 0.0f, 255.0f);
-                int A = (int)MathUtil.Clamp(a * 255.0f, 0.0f, 255.0f);
-
-                return R | (G << 8) | (B << 16) | (A << 24);
-            }
-        }
-
         /// <summary>
         /// Add two colors.
         /// </summary>
@@ -368,10 +354,67 @@ namespace Common.Core.Colors
 
         /// <summary>
         /// color from bytes.
+        /// The values will be converted from a 0-255 range to a 0-1 range.
         /// </summary>
-        public static ColorRGBA FromBytes(int r, int g, int b)
+        /// <returns>A color will values in the 0-1 range.</returns>
+        public static ColorRGBA FromBytes(int r, int g, int b, int a)
         {
-            return new ColorRGBA(r, g, b, 255) / 255.0f;
+            int R = MathUtil.Clamp(r, 0, 255);
+            int G = MathUtil.Clamp(g, 0, 255);
+            int B = MathUtil.Clamp(b, 0, 255);
+            int A = MathUtil.Clamp(a, 0, 255);
+            return new ColorRGBA(R, G, B, A) / 255.0f;
+        }
+
+
+        /// <summary>
+        /// Create a color from a integer where each byte in the 
+        /// integer represents a channl in the color.
+        /// </summary>
+        /// <param name="i">The integer.</param>
+        /// <param name="abgr">are the channels packed bgr or rgb.</param>
+        /// <returns>The color.</returns>
+        public static ColorRGBA FromInteger(int i, bool abgr = false)
+        {
+            Union32 u = i;
+            if (abgr)
+                return FromBytes(u.Byte0, u.Byte1, u.Byte2, u.Byte3);
+            else
+                return FromBytes(u.Byte3, u.Byte2, u.Byte1, u.Byte0);
+        }
+
+        /// <summary>
+        /// Convert the color to a integer where each byte 
+        /// represents a channel in the color.
+        /// </summary>
+        /// <param name="abgr">are the channels packed bgr or rgb.</param>
+        /// <returns>A integer where each byte represents a channel in the color.</returns>
+        public int ToInteger(bool abgr = false)
+        {
+            int R = (int)MathUtil.Clamp(r * 255.0f, 0.0f, 255.0f);
+            int G = (int)MathUtil.Clamp(g * 255.0f, 0.0f, 255.0f);
+            int B = (int)MathUtil.Clamp(b * 255.0f, 0.0f, 255.0f);
+            int A = (int)MathUtil.Clamp(a * 255.0f, 0.0f, 255.0f);
+
+            if (abgr)
+                return (A << 24) | (B << 16) | (G << 8) | R;
+            else
+                return R | (G << 8) | (B << 16) | (A << 24);
+        }
+
+        /// <summary>
+        /// Apply the gamma function to the color.
+        /// Gamma is not applied to the alpha channel.
+        /// </summary>
+        /// <param name="lambda">The power to raise each channel to.</param>
+        /// <param name="A">The constant the result is multiplied by. Defaults to 1.</param>
+        /// <returns>A color with the gamma function applied to each channel except the alpha channel.</returns>
+        public ColorRGBA Gamma(float lambda, float A = 1)
+        {
+            float r = MathUtil.Pow(this.r, lambda) * A;
+            float g = MathUtil.Pow(this.g, lambda) * A;
+            float b = MathUtil.Pow(this.b, lambda) * A;
+            return new ColorRGBA(r, g, b, a);
         }
 
         /// <summary>
@@ -388,14 +431,6 @@ namespace Common.Core.Colors
         public static float SqrDistance(ColorRGBA c0, ColorRGBA c1)
         {
             return (c0 - c1).SqrMagnitude;
-        }
-
-        /// <summary>
-        /// color from ints.
-        /// </summary>
-        public static ColorRGBA FromBytes(int r, int g, int b, int a)
-        {
-            return new ColorRGBA(r, g, b, a) / 255.0f;
         }
 
         /// <summary>

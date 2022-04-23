@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Common.Core.Numerics;
+using Common.Core.Colors;
+
 namespace Common.Core.RandomNum
 {
     public interface IRandomGenerator
@@ -46,5 +49,33 @@ namespace Common.Core.RandomNum
         /// A random double greater than or equal to 0 and less than 1.
         /// </summary>
         double NextDouble();
+
+        float NextFloat(float min, float max);
+
+        float NextFloat();
+
+        bool NextBool();
+
+        Vector2f NextVector2f(float min, float max);
+
+        Vector2d NextVector2d(double min, double max);
+
+        Vector3f NextVector3f(float min, float max);
+
+        Vector3d NextVector3d(double min, double max);
+
+        Point2f NextPoint2f(float min, float max);
+
+        Point2d NextPoint2d(double min, double max);
+
+        Point3f NextPoint3f(float min, float max);
+
+        Point3d NextPoint3d(double min, double max);
+
+        ColorRGB NextColorRGB();
+
+        ColorRGBA NextColorRGBA();
+
+        ColorHSV NextColorHSV();
     }
 }

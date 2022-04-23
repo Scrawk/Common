@@ -1,5 +1,8 @@
 ﻿using System;
 
+using Common.Core.Numerics;
+using Common.Core.Colors;
+
 namespace Common.Core.RandomNum
 {
     /// <summary>
@@ -90,6 +93,108 @@ namespace Common.Core.RandomNum
         public double NextDouble()
         {
             return Value;
+        }
+
+        public float NextFloat(float min, float max)
+        {
+            return min + (float)NextDouble() * (max - min);
+        }
+
+        public float NextFloat()
+        {
+            return (float)NextDouble();
+        }
+
+        public bool NextBool()
+        {
+            return NextDouble() > 0.5;
+        }
+
+        public Vector2f NextVector2f(float min, float max)
+        {
+            float x = NextFloat(min, max);
+            float y = NextFloat(min, max);
+            return new Vector2f(x, y);
+        }
+
+        public Vector2d NextVector2d(double min, double max)
+        {
+            double x = NextDouble(min, max);
+            double y = NextDouble(min, max);
+            return new Vector2d(x, y);
+        }
+
+        public Vector3f NextVector3f(float min, float max)
+        {
+            float x = NextFloat(min, max);
+            float y = NextFloat(min, max);
+            float z = NextFloat(min, max);
+            return new Vector3f(x, y, z);
+        }
+
+        public Vector3d NextVector3d(double min, double max)
+        {
+            double x = NextDouble(min, max);
+            double y = NextDouble(min, max);
+            double z = NextDouble(min, max);
+            return new Vector3d(x, y, z);
+        }
+
+        public Point2f NextPoint2f(float min, float max)
+        {
+            float x = NextFloat(min, max);
+            float y = NextFloat(min, max);
+            return new Point2f(x, y);
+        }
+
+        public Point2d NextPoint2d(double min, double max)
+        {
+            double x = NextDouble(min, max);
+            double y = NextDouble(min, max);
+            return new Point2d(x, y);
+        }
+
+        public Point3f NextPoint3f(float min, float max)
+        {
+            float x = NextFloat(min, max);
+            float y = NextFloat(min, max);
+            float z = NextFloat(min, max);
+            return new Point3f(x, y, z);
+        }
+
+        public Point3d NextPoint3d(double min, double max)
+        {
+            double x = NextDouble(min, max);
+            double y = NextDouble(min, max);
+            double z = NextDouble(min, max);
+            return new Point3d(x, y, z);
+        }
+
+        public ColorRGB NextColorRGB()
+        {
+            float r = NextFloat();
+            float g = NextFloat();
+            float b = NextFloat();
+
+            return new ColorRGB(r, g, b);
+        }
+
+        public ColorRGBA NextColorRGBA()
+        {
+            float r = NextFloat();
+            float g = NextFloat();
+            float b = NextFloat();
+
+            return new ColorRGBA(r, g, b, 1);
+        }
+
+        public ColorHSV NextColorHSV()
+        {
+            float h = NextFloat();
+            float s = NextFloat();
+            float v = NextFloat();
+
+            return new ColorHSV(h, s, v);
         }
 
     }
