@@ -525,6 +525,15 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// The dot product of two pointss.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static REAL Dot(Point2d v0, Point2d v1)
+        {
+            return (v0.x * v1.x + v0.y * v1.y);
+        }
+
+        /// <summary>
         /// The abs dot product of two vectors.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
