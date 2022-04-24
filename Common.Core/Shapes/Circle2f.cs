@@ -7,6 +7,7 @@ using Common.Core.Numerics;
 using REAL = System.Single;
 using POINT2 = Common.Core.Numerics.Point2f;
 using POINT3 = Common.Core.Numerics.Point3f;
+using VECTOR2 = Common.Core.Numerics.Vector2f;
 using VECTOR3 = Common.Core.Numerics.Vector3f;
 using BOX2 = Common.Core.Shapes.Box2f;
 using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
@@ -140,7 +141,7 @@ namespace Common.Core.Shapes
         {
             POINT2 d = Center - p;
             if (d.SqrMagnitude <= Radius2) return p;
-            return Center + Radius * d.Vector2f.Normalized;
+            return Center + Radius * ((VECTOR2)d).Normalized;
         }
 
         /// <summary>

@@ -478,9 +478,9 @@ namespace Common.Core.Shapes
         public void Closest(Segment2d seg, out REAL s, out REAL t)
         {
 
-            VECTOR2 ab0 = (B - A).Vector2d;
-            VECTOR2 ab1 = (seg.B - seg.A).Vector2d;
-            VECTOR2 a01 = (A - seg.A).Vector2d;
+            VECTOR2 ab0 = B - A;
+            VECTOR2 ab1 = seg.B - seg.A;
+            VECTOR2 a01 = A - seg.A;
 
             REAL d00 = VECTOR2.Dot(ab0, ab0);
             REAL d11 = VECTOR2.Dot(ab1, ab1);

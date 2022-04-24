@@ -187,17 +187,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Convert the vector to a point.
-        /// </summary>
-        public Point2f Point2f
-        {
-            get
-            {
-                return new Point2f(x, y);
-            }
-        }
-
-        /// <summary>
         /// The sum of the vectors components.
         /// </summary>
         public REAL Sum
@@ -417,6 +406,26 @@ namespace Common.Core.Numerics
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Vector2f(Vector2d v)
+        {
+            return new Vector2f(v.x, v.y);
+        }
+
+        /// <summary>
+        /// Cast from Point2d to Vector2f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector2f(Point2d v)
+        {
+            return new Vector2f(v.x, v.y);
+        }
+
+        /// <summary>
+        /// Cast from Point2f to Vector2f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector2f(Point2f v)
         {
             return new Vector2f(v.x, v.y);
         }

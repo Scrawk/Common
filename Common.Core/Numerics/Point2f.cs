@@ -183,17 +183,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Point as a vector.
-        /// </summary>
-        public Vector2f Vector2f
-        {
-            get
-            {
-                return new Vector2f(x, y);
-            }
-        }
-
-        /// <summary>
         /// The sum of the points components.
         /// </summary>
         public REAL Sum
@@ -395,7 +384,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Point2f(Point2d v)
         {
-            return new Point2f((REAL)v.x, (REAL)v.y);
+            return new Point2f(v.x, v.y);
         }
 
         /// <summary>
@@ -404,6 +393,26 @@ namespace Common.Core.Numerics
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Point2f(Point2i v)
+        {
+            return new Point2f(v.x, v.y);
+        }
+
+        /// <summary>
+        /// Cast from Vector2d to Point2f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point2f(Vector2d v)
+        {
+            return new Point2f(v.x, v.y);
+        }
+
+        /// <summary>
+        /// Cast from Vector2f to Point2f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point2f(Vector2f v)
         {
             return new Point2f(v.x, v.y);
         }
@@ -520,10 +529,12 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Direction(Point2f v0, Point2f v1, bool normalize = true)
         {
+            Vector2f v = v1 - v0;
+
             if (normalize)
-                return (v1 - v0).Vector2f.Normalized;
+                return v.Normalized;
             else
-                return (v1 - v0).Vector2f;
+                return v;
         }
 
         /// <summary>

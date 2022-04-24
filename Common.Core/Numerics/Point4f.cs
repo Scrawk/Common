@@ -191,16 +191,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector3f Vector3f => new Vector3f(x, y, z);
-
-        /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector4f Vector4f => new Vector4f(x, y, z, w);
-
-        /// <summary>
         /// The sum of the points components.
         /// </summary>
         public REAL Sum
@@ -403,7 +393,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Point4f(Point4d v)
         {
-            return new Point4f((REAL)v.x, (REAL)v.y, (REAL)v.z, (REAL)v.w);
+            return new Point4f(v.x, v.y, v.z, v.w);
         }
 
         /// <summary>
@@ -412,6 +402,26 @@ namespace Common.Core.Numerics
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Point4f(Point4i v)
+        {
+            return new Point4f(v.x, v.y, v.z, v.w);
+        }
+
+        /// <summary>
+        /// Cast from Vector4f to Point4f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point4f(Vector4f v)
+        {
+            return new Point4f(v.x, v.y, v.z, v.w);
+        }
+
+        /// <summary>
+        /// Cast from Vector4d to Point4f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point4f(Vector4d v)
         {
             return new Point4f(v.x, v.y, v.z, v.w);
         }
@@ -534,10 +544,12 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Direction(Point4f v0, Point4f v1, bool normalize = true)
         {
+            Vector4f v = v1 - v0;
+
             if (normalize)
-                return (v1 - v0).Vector4f.Normalized;
+                return v.Normalized;
             else
-                return (v1 - v0).Vector4f;
+                return v;
         }
 
         /// <summary>

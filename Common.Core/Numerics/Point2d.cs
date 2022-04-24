@@ -173,21 +173,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Point as a vector.
-        /// </summary>
-        public Vector2d Vector2d => new Vector2d(x, y);
-
-        /// <summary>
-        /// Convert to float point.
-        /// </summary>
-        public Point2f Point2f => new Point2f(x, y);
-
-        /// <summary>
-        /// Convert to int point.
-        /// </summary>
-        public Point2i Point2i => new Point2i((int)x, (int)y);
-
-        /// <summary>
         /// Point as a homogenous point.
         /// </summary>
         public HPoint2d Homogenous => new HPoint2d(x, y, 1);
@@ -416,6 +401,26 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Cast from Vector2f to Point2d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point2d(Vector2f v)
+        {
+            return new Point2d(v.x, v.y);
+        }
+
+        /// <summary>
+        /// Cast from Vector2d to Point2d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point2d(Vector2d v)
+        {
+            return new Point2d(v.x, v.y);
+        }
+
+        /// <summary>
         /// Are these points equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -527,10 +532,12 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2d Direction(Point2d v0, Point2d v1, bool normalize = true)
         {
+            Vector2d v = v1 - v0;
+
             if (normalize)
-                return (v1 - v0).Vector2d.Normalized;
+                return v.Normalized;
             else
-                return (v1 - v0).Vector2d;
+                return v;
         }
 
         /// <summary>

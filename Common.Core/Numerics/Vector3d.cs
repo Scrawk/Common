@@ -203,17 +203,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Convert the vector to a point.
-        /// </summary>
-        public Point3d Point3d
-        {
-            get
-            {
-                return new Point3d(x, y, z);
-            }
-        }
-
-        /// <summary>
         /// The sum of the vectors components.
         /// </summary>
         public REAL Sum
@@ -425,6 +414,26 @@ namespace Common.Core.Numerics
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector3d(Vector3f v)
+        {
+            return new Vector3d(v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Cast from Point3f to Vector3d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector3d(Point3f v)
+        {
+            return new Vector3d(v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Cast from Point3d to Vector3d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector3d(Point3d v)
         {
             return new Vector3d(v.x, v.y, v.z);
         }

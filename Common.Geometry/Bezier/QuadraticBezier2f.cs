@@ -160,8 +160,8 @@ namespace Common.Geometry.Bezier
         public bool Intersects(POINT2 a, POINT2 b)
         {
             //coefficients of quadratic
-            VECTOR2 c2 = (C0 + C1 * -2.0f + C2).Vector2f;
-            VECTOR2 c1 = (C0 * -2.0f + C1 * 2.0f).Vector2f;
+            VECTOR2 c2 = C0 + C1 * -2.0f + C2;
+            VECTOR2 c1 = C0 * -2.0f + C1 * 2.0f;
 
             //Convert line to normal form: ax + by + c = 0
             //Find normal to line: negative inverse of original line's slope
@@ -171,7 +171,7 @@ namespace Common.Geometry.Bezier
             REAL c = a.x * b.y - b.x * a.y;
 
             //Transform coefficients to line's coordinate system and find roots of cubic
-            var roots = Polynomial3f.Solve(1, VECTOR2.Dot(n, c2), VECTOR2.Dot(n, c1), VECTOR2.Dot(n, C0.Vector2f) + c);
+            var roots = Polynomial3f.Solve(1, VECTOR2.Dot(n, c2), VECTOR2.Dot(n, c1), VECTOR2.Dot(n, C0) + c);
 
             VECTOR2 min, max;
             min.x = Math.Min(a.x, b.x);

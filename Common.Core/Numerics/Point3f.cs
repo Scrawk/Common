@@ -201,16 +201,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector3f Vector3f => new Vector3f(x, y, z);
-
-        /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector4d Vector4d => new Vector4d(x, y, z, 1);
-
-        /// <summary>
         /// The sum of the points components.
         /// </summary>
         public REAL Sum
@@ -412,7 +402,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Point3f(Point3d v)
         {
-            return new Point3f((REAL)v.x, (REAL)v.y, (REAL)v.z);
+            return new Point3f(v.x, v.y, v.z);
         }
 
         /// <summary>
@@ -421,6 +411,26 @@ namespace Common.Core.Numerics
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Point3f(Point3i v)
+        {
+            return new Point3f(v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Cast from Vector3d to Point3f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point3f(Vector3d v)
+        {
+            return new Point3f(v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Cast from Vector3f to Point3f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point3f(Vector3f v)
         {
             return new Point3f(v.x, v.y, v.z);
         }
@@ -540,10 +550,12 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3f Direction(Point3f v0, Point3f v1, bool normalize = true)
         {
+            Vector3f v = v1 - v0;
+
             if (normalize)
-                return (v1 - v0).Vector3f.Normalized;
+                return v.Normalized;
             else
-                return (v1 - v0).Vector3f;
+                return v;
         }
 
         /// <summary>

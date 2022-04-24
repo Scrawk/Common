@@ -93,7 +93,7 @@ namespace Common.Core.Shapes
         /// </summary>
         public Point2d Center
         {
-            get { return (Min + Max).Point2d * 0.5; }
+            get { return ((Point2d)(Min + Max)) * 0.5; }
         }
 
         /// <summary>

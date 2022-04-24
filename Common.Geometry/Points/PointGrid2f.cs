@@ -112,7 +112,7 @@ namespace Common.Geometry.Points
         /// </summary>
         public bool Add(Point2f point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!Bounds.Contains(point, true)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index, true);
@@ -127,7 +127,7 @@ namespace Common.Geometry.Points
         /// </summary>
         public bool Remove(Point2f point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!Bounds.Contains(point, true)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index);
@@ -176,7 +176,7 @@ namespace Common.Geometry.Points
         /// </summary>
         public void Search(Circle2f region, List<Point2f> points)
         {
-            if (!region.Intersects(Bounds)) return;
+            if (!region.Intersects(Bounds, true)) return;
             var box = ToCellSpace(region.Bounds);
 
             for (int y = box.Min.y; y <= box.Max.y; y++)
@@ -189,7 +189,7 @@ namespace Common.Geometry.Points
                     int count = cell.Count;
                     for (int k = 0; k < count; k++)
                     {
-                        if (region.Contains(cell[k]))
+                        if (region.Contains(cell[k], true))
                             points.Add(cell[k]);
                     }
                 }

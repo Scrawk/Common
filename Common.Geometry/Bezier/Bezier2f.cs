@@ -118,7 +118,8 @@ namespace Common.Geometry.Bezier
             for (int i = 0; i < n - 1; i++)
             {
                 REAL basis = Bernstein(degree - 1, i, t);
-                d += basis * inv * (Control[i + 1] - Control[i]).Vector2f;
+                VECTOR2 c = Control[i + 1] - Control[i];
+                d += basis * inv * c;
             }
 
             return d * 4.0f;

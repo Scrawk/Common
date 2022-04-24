@@ -89,6 +89,26 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// A point from the varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Point2i(float x, float y)
+        {
+            this.x = (REAL)x;
+            this.y = (REAL)y;
+        }
+
+        /// <summary>
+        /// A point from the varibles.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Point2i(double x, double y)
+        {
+            this.x = (REAL)x;
+            this.y = (REAL)y;
+        }
+
+        /// <summary>
         /// Array accessor for variables. 
         /// </summary>
         /// <param name="i">The variables index.</param>
@@ -110,26 +130,6 @@ namespace Common.Core.Numerics
                 fixed (REAL* array = &x) { array[i] = value; }
             }
         }
-
-        /// <summary>
-        /// Convert to float vector.
-        /// </summary>
-        public Vector2f Vector2f => new Vector2f(x, y);
-
-        /// <summary>
-        /// Convert to double vector.
-        /// </summary>
-        public Vector2d Vector2d => new Vector2d(x, y);
-
-        /// <summary>
-        /// Convert to float point.
-        /// </summary>
-        public Point2f Point2f => new Point2f(x, y);
-
-        /// <summary>
-        /// Convert to double point.
-        /// </summary>
-        public Point2d Point2d => new Point2d(x, y);
 
         /// <summary>
         /// The sum of the points components.
@@ -303,7 +303,7 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Point2i(Point2f v)
         {
-            return new Point2i((REAL)v.x, (REAL)v.y);
+            return new Point2i(v.x, v.y);
         }
 
         /// <summary>
@@ -313,7 +313,27 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Point2i(Point2d v)
         {
-            return new Point2i((REAL)v.x, (REAL)v.y);
+            return new Point2i(v.x, v.y);
+        }
+
+        /// <summary>
+        /// Cast from Vector2f to Point2i.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point2i(Vector2f v)
+        {
+            return new Point2i(v.x, v.y);
+        }
+
+        /// <summary>
+        /// Cast from Vector2d to Point2i.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Point2i(Vector2d v)
+        {
+            return new Point2i(v.x, v.y);
         }
 
         /// <summary>
@@ -405,15 +425,6 @@ namespace Common.Core.Numerics
             REAL x = v0.x - v1.x;
             REAL y = v0.y - v1.y;
             return x * x + y * y;
-        }
-
-        /// <summary>
-        /// Direction between two points.
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2d Direction(Point2i v0, Point2i v1)
-        {
-            return (v1 - v0).Vector2d.Normalized;
         }
 
         /// <summary>

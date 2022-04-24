@@ -6,6 +6,7 @@ using Common.Core.Numerics;
 
 using REAL = System.Double;
 using POINT3 = Common.Core.Numerics.Point3d;
+using VECTOR3 = Common.Core.Numerics.Vector3d;
 using VECTOR4 = Common.Core.Numerics.Vector4d;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4d;
 using BOX3 = Common.Core.Shapes.Box3d;
@@ -192,7 +193,7 @@ namespace Common.Core.Shapes
         {
             POINT3 d = Center - p;
             if (d.SqrMagnitude <= Radius2) return p;
-            return Center + Radius * d.Vector3d.Normalized;
+            return Center + Radius * ((VECTOR3)d).Normalized;
         }
 
         /// <summary>
@@ -292,10 +293,10 @@ namespace Common.Core.Shapes
             var m = new MATRIX4();
 
             // x, y, z, 1
-            m.SetRow(0, new VECTOR4(p0.Vector3d, 1));
-            m.SetRow(1, new VECTOR4(p1.Vector3d, 1));
-            m.SetRow(2, new VECTOR4(p2.Vector3d, 1));
-            m.SetRow(3, new VECTOR4(p3.Vector3d, 1));
+            m.SetRow(0, new VECTOR4(p0, 1));
+            m.SetRow(1, new VECTOR4(p1, 1));
+            m.SetRow(2, new VECTOR4(p2, 1));
+            m.SetRow(3, new VECTOR4(p3, 1));
             REAL a = m.Determinant;
 
             // size, y, z, 1

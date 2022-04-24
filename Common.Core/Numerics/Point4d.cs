@@ -179,26 +179,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector3d Vector3d => new Vector3d(x, y, z);
-
-        /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector4d Vector4d => new Vector4d(x, y, z, w);
-
-        /// <summary>
-        /// Convert to float point.
-        /// </summary>
-        public Point4f Point4f => new Point4f(x, y, z, w);
-
-        /// <summary>
-        /// Convert to int point.
-        /// </summary>
-        public Point4i Point4i => new Point4i((int)x, (int)y, (int)z, (int)w);
-
-        /// <summary>
         /// The sum of the points components.
         /// </summary>
         public REAL Sum
@@ -414,6 +394,26 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Cast from Vector4f to Point4d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point4d(Vector4f v)
+        {
+            return new Point4d(v.x, v.y, v.z, v.w);
+        }
+
+        /// <summary>
+        /// Cast from Vector4d to Point4d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point4d(Vector4d v)
+        {
+            return new Point4d(v.x, v.y, v.z, v.w);
+        }
+
+        /// <summary>
         /// Are these points equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -531,10 +531,12 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4d Direction(Point4d v0, Point4d v1, bool normalize = true)
         {
+            Vector4d v = v1 - v0;
+
             if (normalize)
-                return (v1 - v0).Vector4d.Normalized;
+                return v.Normalized;
             else
-                return (v1 - v0).Vector4d;
+                return v;
         }
 
         /// <summary>

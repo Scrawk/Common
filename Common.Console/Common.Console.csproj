@@ -50,9 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\PriorityQueuePerformanceTest.cs" />
-    <Compile Include="Core\RandomnessTest.cs" />
-    <Compile Include="Geometry\ShapeCollectionPerformanceTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

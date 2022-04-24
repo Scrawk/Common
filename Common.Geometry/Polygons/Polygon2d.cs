@@ -249,7 +249,7 @@ namespace Common.Geometry.Polygons
         public override bool Contains(POINT2 point, bool includeBorder = true)
         {
             if (Count < 3) return false;
-            if (!Bounds.Contains(point)) return false;
+            if (!Bounds.Contains(point, true)) return false;
 
             var ab = new SEGMENT2();
             ab.A = new POINT2(Bounds.Min.x - Bounds.Width, point.y);
@@ -280,7 +280,7 @@ namespace Common.Geometry.Polygons
 
             var v0 = Positions[0];
 
-            REAL d = VECTOR2.Dot((point - v0).Vector2d, (point - v0).Vector2d);
+            REAL d = VECTOR2.Dot(point - v0, point - v0);
             REAL s = 1.0f;
 
             for (int i = 0; i < Count; i++)
@@ -288,8 +288,8 @@ namespace Common.Geometry.Polygons
                 POINT2 vj = GetPosition(i - 1);
                 POINT2 vi = GetPosition(i);
 
-                VECTOR2 e = (vj - vi).Vector2d;
-                VECTOR2 w = (point - vi).Vector2d;
+                VECTOR2 e = vj - vi;
+                VECTOR2 w = point - vi;
 
                 REAL we = VECTOR2.Dot(w, e);
                 REAL ee = VECTOR2.Dot(e, e);

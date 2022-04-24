@@ -189,26 +189,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector3d Vector3d => new Vector3d(x, y, z);
-
-        /// <summary>
-        /// Point as vector.
-        /// </summary>
-        public Vector4d Vector4d => new Vector4d(x, y, z, 1);
-
-        /// <summary>
-        /// Convert to float point.
-        /// </summary>
-        public Point3f Point3f => new Point3f(x, y, z);
-
-        /// <summary>
-        /// Convert to int point.
-        /// </summary>
-        public Point3i Point3i => new Point3i((int)x, (int)y, (int)z);
-
-        /// <summary>
         /// Point as a homogenous point.
         /// </summary>
         public HPoint3d Homogenous => new HPoint3d(x, y, z, 1);
@@ -417,7 +397,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Cast from Point43f to Point3d.
+        /// Cast from Point3f to Point3d.
         /// </summary>
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -432,6 +412,26 @@ namespace Common.Core.Numerics
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Point3d(Point3i v)
+        {
+            return new Point3d(v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Cast from Vector3f to Point3d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point3d(Vector3f v)
+        {
+            return new Point3d(v.x, v.y, v.z);
+        }
+
+        /// <summary>
+        /// Cast from Vector3d to Point3d.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Point3d(Vector3d v)
         {
             return new Point3d(v.x, v.y, v.z);
         }
@@ -551,10 +551,12 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Direction(Point3d v0, Point3d v1, bool normalize = true)
         {
+            Vector3d v = v1 - v0;
+
             if (normalize)
-                return (v1 - v0).Vector3d.Normalized;
+                return v.Normalized;
             else
-                return (v1 - v0).Vector3d;
+                return v;
         }
 
         /// <summary>

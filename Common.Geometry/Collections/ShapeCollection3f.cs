@@ -105,7 +105,7 @@ namespace Common.Geometry.Collections
             for (int i = 0; i < count; i++)
             {
                 var shape = m_shapes[i];
-                if (shape.Contains(point))
+                if (shape.Contains(point, true))
                     return shape;
             }
 

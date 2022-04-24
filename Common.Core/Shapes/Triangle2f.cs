@@ -360,9 +360,9 @@ namespace Common.Core.Shapes
         /// </summary>
         public POINT3 Barycentric(POINT2 p)
         {
-            VECTOR2 v0 = (B - A).Vector2f;
-            VECTOR2 v1 = (C - A).Vector2f;
-            VECTOR2 v2 = (p - A).Vector2f;
+            VECTOR2 v0 = B - A;
+            VECTOR2 v1 = C - A;
+            VECTOR2 v2 = p - A;
 
             REAL d00 = VECTOR2.Dot(v0, v0);
             REAL d01 = VECTOR2.Dot(v0, v1);
@@ -382,9 +382,9 @@ namespace Common.Core.Shapes
         /// </summary>
         public POINT2 Closest(POINT2 p)
         {
-            VECTOR2 ab = (B - A).Vector2f;
-            VECTOR2 ac = (C - A).Vector2f;
-            VECTOR2 ap = (p - A).Vector2f;
+            VECTOR2 ab = B - A;
+            VECTOR2 ac = C - A;
+            VECTOR2 ap = p - A;
 
             // Check if P in vertex region outside A
             REAL d1 = VECTOR2.Dot(ab, ap);
@@ -398,7 +398,7 @@ namespace Common.Core.Shapes
             REAL v, w;
 
             // Check if P in vertex region outside B
-            VECTOR2 bp = (p - B).Vector2f;
+            VECTOR2 bp = p - B;
             REAL d3 = VECTOR2.Dot(ab, bp);
             REAL d4 = VECTOR2.Dot(ac, bp);
             if (d3 >= 0.0 && d4 <= d3)
@@ -417,7 +417,7 @@ namespace Common.Core.Shapes
             }
 
             // Check if P in vertex region outside C
-            VECTOR2 cp = (p - C).Vector2f;
+            VECTOR2 cp = p - C;
             REAL d5 = VECTOR2.Dot(ab, cp);
             REAL d6 = VECTOR2.Dot(ac, cp);
             if (d6 >= 0.0f && d5 <= d6)
@@ -460,11 +460,11 @@ namespace Common.Core.Shapes
         public REAL SignedDistance(POINT2 p)
         {
             POINT2 center = Center;
-            VECTOR2 P = (p - center).Vector2f;
+            VECTOR2 P = p - center;
 
-            VECTOR2 a = (A - center).Vector2f;
-            VECTOR2 b = (B - center).Vector2f;
-            VECTOR2 c = (C - center).Vector2f;
+            VECTOR2 a = A - center;
+            VECTOR2 b = B - center;
+            VECTOR2 c = C - center;
 
             VECTOR2 e0 = b - a, e1 = c - b, e2 = a - c;
             VECTOR2 v0 = P - a, v1 = P - b, v2 = P - c;
@@ -493,12 +493,12 @@ namespace Common.Core.Shapes
         /// <returns>true if triangle contains point</returns>
         public bool Contains(POINT2 p)
         {
-            REAL pab = VECTOR2.Cross((p - A).Vector2f, (B - A).Vector2f);
-            REAL pbc = VECTOR2.Cross((p - B).Vector2f, (C - B).Vector2f);
+            REAL pab = VECTOR2.Cross(p - A, B - A);
+            REAL pbc = VECTOR2.Cross(p - B, C - B);
 
             if (Math.Sign(pab) != Math.Sign(pbc)) return false;
 
-            REAL pca = VECTOR2.Cross((p - C).Vector2f, (A - C).Vector2f);
+            REAL pca = VECTOR2.Cross(p - C, A - C);
 
             if (Math.Sign(pab) != Math.Sign(pca)) return false;
 
@@ -524,9 +524,9 @@ namespace Common.Core.Shapes
         /// <returns>true if triangle contains point</returns>
         public bool ContainsCCW(POINT2 p, bool includeBorder)
         {
-            if (VECTOR2.Cross((p - A).Vector2f, (B - A).Vector2f) > 0.0) return false;
-            if (VECTOR2.Cross((p - B).Vector2f, (C - B).Vector2f) > 0.0) return false;
-            if (VECTOR2.Cross((p - C).Vector2f, (A - C).Vector2f) > 0.0) return false;
+            if (VECTOR2.Cross(p - A, B - A) > 0.0) return false;
+            if (VECTOR2.Cross(p - B, C - B) > 0.0) return false;
+            if (VECTOR2.Cross(p - C, A - C) > 0.0) return false;
 
             return true;
         }

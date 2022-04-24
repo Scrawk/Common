@@ -116,7 +116,7 @@ namespace Common.Geometry.Points
         /// </summary>
         public bool Add(Point3f point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!Bounds.Contains(point, true)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index, true);
@@ -131,7 +131,7 @@ namespace Common.Geometry.Points
         /// </summary>
         public bool Remove(Point3f point)
         {
-            if (!Bounds.Contains(point)) return false;
+            if (!Bounds.Contains(point, true)) return false;
 
             var index = ToCellSpace(point);
             var cell = GetGridCell(index);
@@ -184,7 +184,7 @@ namespace Common.Geometry.Points
         /// </summary>
         public void Search(Sphere3f region, List<Point3f> points)
         {
-            if (!region.Intersects(Bounds)) return;
+            if (!region.Intersects(Bounds, true)) return;
             var box = ToCellSpace(region.Bounds);
 
             for (int z = box.Min.z; z <= box.Max.z; z++)
@@ -199,7 +199,7 @@ namespace Common.Geometry.Points
                         int count = cell.Count;
                         for (int k = 0; k < count; k++)
                         {
-                            if (region.Contains(cell[k]))
+                            if (region.Contains(cell[k], true))
                                 points.Add(cell[k]);
                         }
                     }

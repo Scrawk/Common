@@ -106,7 +106,7 @@ namespace Common.Geometry.Points
             int count = Count;
             for (int i = 0; i < count; i++)
             {
-                if (region.Contains(m_points[i]))
+                if (region.Contains(m_points[i], true))
                     points.Add(m_points[i]);
             }
         }

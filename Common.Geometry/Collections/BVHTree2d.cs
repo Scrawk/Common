@@ -269,7 +269,7 @@ namespace Common.Geometry.Collections
             if (node == null) return null;
             if (shape == null) return null;
 
-            if (node.Bounds.Contains(aabb))
+            if (node.Bounds.Contains(aabb, true))
             {
                 if (node.Shape == shape)
                     return node;
@@ -292,7 +292,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         private BVHTreeNode2d<T> NodeContains(BVHTreeNode2d<T> node, POINT2 point)
         {
-            if (node != null && node.Bounds.Contains(point))
+            if (node != null && node.Bounds.Contains(point, true))
             {
                 if (node.IsLeaf)
                 {
@@ -318,7 +318,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         private void NodeContaining(BVHTreeNode2d<T> node, POINT2 point, List<T> shapes)
         {
-            if (node != null && node.Bounds.Contains(point))
+            if (node != null && node.Bounds.Contains(point, true))
             {
                 if (node.IsLeaf)
                 {
@@ -339,7 +339,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         private BVHTreeNode2d<T> NodeIntersects(BVHTreeNode2d<T> node, BOX2 box)
         {
-            if (node != null && node.Bounds.Intersects(box))
+            if (node != null && node.Bounds.Intersects(box, true))
             {
                 if (node.IsLeaf)
                 {
@@ -365,7 +365,7 @@ namespace Common.Geometry.Collections
         /// </summary>
         private bool NodeIntersecting(BVHTreeNode2d<T> node, BOX2 box, List<T> shapes)
         {
-            if (node != null && node.Bounds.Intersects(box))
+            if (node != null && node.Bounds.Intersects(box, true))
             {
                 if (node.IsLeaf)
                 {

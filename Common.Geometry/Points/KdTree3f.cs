@@ -97,7 +97,7 @@ namespace Common.Geometry.Points
         /// </summary>
         public void Search(Sphere3f region, List<Point3f> points)
         {
-            if (!region.Intersects(Bounds)) return;
+            if (!region.Intersects(Bounds, true)) return;
             Search(Root, region, Bounds, points);
         }
 
@@ -212,7 +212,7 @@ namespace Common.Geometry.Points
         {
             if (node == null) return;
 
-            if (region.Contains(node.Point))
+            if (region.Contains(node.Point, true))
                 points.Add(node.Point);
 
             var left = bounds;
@@ -234,14 +234,14 @@ namespace Common.Geometry.Points
                 right.Min.z = node.Point.z;
             }
 
-            if (region.Contains(left))
+            if (region.Contains(left, true))
                 CopyTo(node.Left, points);
-            else if (region.Intersects(left))
+            else if (region.Intersects(left, true))
                 Search(node.Left, region, left, points);
 
-            if (region.Contains(right))
+            if (region.Contains(right, true))
                 CopyTo(node.Right, points);
-            else if (region.Intersects(right))
+            else if (region.Intersects(right, true))
                 Search(node.Right, region, right, points);
         }
 

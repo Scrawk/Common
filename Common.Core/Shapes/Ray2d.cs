@@ -249,7 +249,7 @@ namespace Common.Core.Shapes
         public bool Intersects(CIRCLE2 circle, out REAL t)
         {
             t = 0;
-            VECTOR2 m = (Position - circle.Center).Vector2d;
+            VECTOR2 m = Position - circle.Center;
             REAL b = VECTOR2.Dot(m, Direction);
             REAL c = VECTOR2.Dot(m, m) - circle.Radius2;
 

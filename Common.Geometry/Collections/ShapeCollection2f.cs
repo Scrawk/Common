@@ -108,7 +108,7 @@ namespace Common.Geometry.Collections
             for (int i = 0; i < Count; i++)
             {
                 var shape = m_shapes[i];
-                if (shape.Contains(point))
+                if (shape.Contains(point, true))
                     return shape;
             }
 
@@ -126,7 +126,7 @@ namespace Common.Geometry.Collections
             for (int i = 0; i < Count; i++)
             {
                 var shape = m_shapes[i];
-                if (shape.Contains(point))
+                if (shape.Contains(point, true))
                     shapes.Add(shape);
             }
         }
@@ -141,7 +141,7 @@ namespace Common.Geometry.Collections
             for (int i = 0; i < Count; i++)
             {
                 var shape = m_shapes[i];
-                if (shape.Intersects(box))
+                if (shape.Intersects(box, true))
                     return shape;
             }
 
@@ -159,7 +159,7 @@ namespace Common.Geometry.Collections
             for (int i = 0; i < Count; i++)
             {
                 var shape = m_shapes[i];
-                if (shape.Intersects(box))
+                if (shape.Intersects(box, true))
                     shapes.Add(shape);
             }
         }

@@ -237,17 +237,6 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Convert the vector to a point.
-        /// </summary>
-        public Point4f Point4f
-        {
-            get
-            {
-                return new Point4f(x, y, z, w);
-            }
-        }
-
-        /// <summary>
         /// The sum of the vectors components.
         /// </summary>
         public REAL Sum
@@ -443,6 +432,26 @@ namespace Common.Core.Numerics
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Vector4f(Vector4d v)
+        {
+            return new Vector4f(v.x, v.y, v.z, v.w);
+        }
+
+        /// <summary>
+        /// Cast from Point4d to Vector4f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static explicit operator Vector4f(Point4d v)
+        {
+            return new Vector4f(v.x, v.y, v.z, v.w);
+        }
+
+        /// <summary>
+        /// Cast from Point4f to Vector4f.
+        /// </summary>
+        /// <param name="v"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator Vector4f(Point4f v)
         {
             return new Vector4f(v.x, v.y, v.z, v.w);
         }
