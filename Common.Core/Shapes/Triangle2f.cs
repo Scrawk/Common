@@ -20,7 +20,7 @@ namespace Common.Core.Shapes
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Triangle2f : IEquatable<Triangle2f>
+    public struct Triangle2f : IEquatable<Triangle2f>, IShape2f
     {
 
         /// <summary>
@@ -489,11 +489,10 @@ namespace Common.Core.Shapes
         /// <summary>
         /// Does triangle contain point.
         /// </summary>
-        /// <param name="p">point</param>
+        /// <param name="p">The point</param>
         /// <returns>true if triangle contains point</returns>
         public bool Contains(POINT2 p)
         {
-
             REAL pab = VECTOR2.Cross((p - A).Vector2f, (B - A).Vector2f);
             REAL pbc = VECTOR2.Cross((p - B).Vector2f, (C - B).Vector2f);
 
@@ -508,11 +507,22 @@ namespace Common.Core.Shapes
 
         /// <summary>
         /// Does triangle contain point.
+        /// </summary>
+        /// <param name="p">The point</param>
+        /// <param name="includeBorder"></param>
+        /// <returns></returns>
+        public bool Contains(POINT2 p, bool includeBorder)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Does triangle contain point.
         /// Asumes triangle is CCW;
         /// </summary>
         /// <param name="p">point</param>
         /// <returns>true if triangle contains point</returns>
-        public bool ContainsCCW(POINT2 p)
+        public bool ContainsCCW(POINT2 p, bool includeBorder)
         {
             if (VECTOR2.Cross((p - A).Vector2f, (B - A).Vector2f) > 0.0) return false;
             if (VECTOR2.Cross((p - B).Vector2f, (C - B).Vector2f) > 0.0) return false;
@@ -524,7 +534,11 @@ namespace Common.Core.Shapes
         /// <summary>
         /// Does the triangle intersect this box.
         /// </summary>
-        public bool Intersects(Box2f box)
+        /// <param name="box"></param>
+        /// <param name="includeBorder"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool Intersects(BOX2 box, bool includeBorder)
         {
             throw new NotImplementedException();
         }

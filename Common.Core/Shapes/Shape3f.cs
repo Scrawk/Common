@@ -10,9 +10,9 @@ namespace Common.Core.Shapes
     { 
         Box3f Bounds { get; }
 
-        bool Contains(Point3f p);
+        bool Contains(Point3f p, bool includeBorder);
 
-        bool Intersects(Box3f box);
+        bool Intersects(Box3f box, bool includeBorder);
 
         Point3f Closest(Point3f p);
 
@@ -29,12 +29,12 @@ namespace Common.Core.Shapes
             throw new NotImplementedException();
         }
 
-        public virtual bool Contains(Point3f p)
+        public virtual bool Contains(Point3f p, bool includeBorder)
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool Intersects(Box3f box)
+        public virtual bool Intersects(Box3f box, bool includeBorder)
         {
             throw new NotImplementedException();
         }

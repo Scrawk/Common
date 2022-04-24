@@ -15,7 +15,7 @@ namespace Common.Core.Shapes
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Circle2f : IEquatable<Circle2f>
+    public struct Circle2f : IEquatable<Circle2f>, IShape2f
     {
         public POINT2 Center;
 
@@ -160,7 +160,7 @@ namespace Common.Core.Shapes
         /// <param name="point">The point.</param>
         /// <param name="includeBorder">Does the border conunt as inside the circle.</param>
         /// <returns>true if circle contains point</returns>
-        public bool Contains(POINT2 point, bool includeBorder = true)
+        public bool Contains(POINT2 point, bool includeBorder)
         {
             if (includeBorder)
                 return POINT2.SqrDistance(Center, point) <= Radius2;
@@ -174,7 +174,7 @@ namespace Common.Core.Shapes
         /// <param name="box">The box.</param>
         /// <param name="includeBorder">Does the border conunt as inside the circle.</param>
         /// <returns>Does the circle fully contain the box.</returns>
-        public bool Contains(BOX2 box, bool includeBorder = true)
+        public bool Contains(BOX2 box, bool includeBorder)
         {
             if (!Contains(box.Corner00, includeBorder)) return false;
             if (!Contains(box.Corner01, includeBorder)) return false;
@@ -189,7 +189,7 @@ namespace Common.Core.Shapes
         /// <param name="circle">The other circle</param>
         /// <param name="includeBorder">Does the border conunt as inside the circle.</param>
         /// <returns>True if the circles intersect</returns>
-        public bool Intersects(Circle2f circle, bool includeBorder = true)
+        public bool Intersects(Circle2f circle, bool includeBorder)
         {
             REAL r = Radius + circle.Radius;
 
@@ -205,7 +205,7 @@ namespace Common.Core.Shapes
         /// <param name="box">The box.</param>
         /// <param name="includeBorder">Does the border conunt as inside the circle.</param>
         /// <returns>Does the circle intersect the box.</returns>
-        public bool Intersects(BOX2 box, bool includeBorder = true)
+        public bool Intersects(BOX2 box, bool includeBorder)
         {
             var p = box.Closest(Center);
 

@@ -20,7 +20,7 @@ namespace Common.Core.Shapes
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Triangle2d : IEquatable<Triangle2d>
+    public struct Triangle2d : IEquatable<Triangle2d>, IShape2d
     {
 
         /// <summary>
@@ -494,11 +494,10 @@ namespace Common.Core.Shapes
         /// <summary>
         /// Does triangle contain point.
         /// </summary>
-        /// <param name="p">point</param>
+        /// <param name="p">The point</param>
         /// <returns>true if triangle contains point</returns>
         public bool Contains(POINT2 p)
         {
-
             REAL pab = VECTOR2.Cross((p - A).Vector2d, (B - A).Vector2d);
             REAL pbc = VECTOR2.Cross((p - B).Vector2d, (C - B).Vector2d);
 
@@ -509,6 +508,17 @@ namespace Common.Core.Shapes
             if (Math.Sign(pab) != Math.Sign(pca)) return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Does triangle contain point.
+        /// </summary>
+        /// <param name="p">The point</param>
+        /// <param name="includeBorder"></param>
+        /// <returns></returns>
+        public bool Contains(POINT2 p, bool includeBorder)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -529,7 +539,11 @@ namespace Common.Core.Shapes
         /// <summary>
         /// Does the triangle intersect this box.
         /// </summary>
-        public bool Intersects(Box2d box)
+        /// <param name="box"></param>
+        /// <param name="includeBorder"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool Intersects(BOX2 box, bool includeBorder)
         {
             throw new NotImplementedException();
         }

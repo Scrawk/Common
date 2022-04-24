@@ -17,7 +17,7 @@ namespace Common.Core.Shapes
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Sphere3f : IEquatable<Sphere3f>
+    public struct Sphere3f : IEquatable<Sphere3f>, IShape3f
     {
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Common.Core.Shapes
         /// <param name="point">The point</param>
         /// <param name="inculdeBorder">Does the border count as being in side the sphere.</param>
         /// <returns>true if sphere contains point</returns>
-        public bool Contains(POINT3 point, bool inculdeBorder = true)
+        public bool Contains(POINT3 point, bool inculdeBorder)
         {
             if (inculdeBorder)
                 return POINT3.SqrDistance(Center, point) <= Radius2;
@@ -226,7 +226,7 @@ namespace Common.Core.Shapes
         /// <param name="box">The box.</param>
         /// <param name="inculdeBorder">Does the border count as being in side the sphere.</param>
         /// <returns>oes the sphere fully contain the box.</returns>
-        public bool Contains(BOX3 box, bool inculdeBorder = true)
+        public bool Contains(BOX3 box, bool inculdeBorder)
         {
             if (!Contains(new POINT3(box.Min.x, box.Min.y, box.Min.z), inculdeBorder)) return false;
             if (!Contains(new POINT3(box.Max.x, box.Min.y, box.Min.z), inculdeBorder)) return false;
@@ -245,7 +245,7 @@ namespace Common.Core.Shapes
         /// <param name="sphere">The other sphere</param>
         /// <param name="inculdeBorder">Does the border count as being in side the sphere.</param>
         /// <returns>True if the spheres intersect</returns>
-        public bool Intersects(Sphere3f sphere, bool inculdeBorder = true)
+        public bool Intersects(Sphere3f sphere, bool inculdeBorder)
         {
             REAL r = Radius + sphere.Radius;
 
@@ -261,7 +261,7 @@ namespace Common.Core.Shapes
         /// <param name="box"></param>
         /// <param name="inculdeBorder">Does the border count as being in side the sphere.</param>
         /// <returns>Does the sphere intersect the box.</returns>
-        public bool Intersects(BOX3 box, bool inculdeBorder = true)
+        public bool Intersects(BOX3 box, bool inculdeBorder)
         {
             var p = box.Closest(Center);
 
