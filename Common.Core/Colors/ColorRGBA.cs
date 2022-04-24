@@ -408,13 +408,11 @@ namespace Common.Core.Colors
         /// </summary>
         /// <param name="lambda">The power to raise each channel to.</param>
         /// <param name="A">The constant the result is multiplied by. Defaults to 1.</param>
-        /// <returns>A color with the gamma function applied to each channel except the alpha channel.</returns>
-        public ColorRGBA Gamma(float lambda, float A = 1)
+        public void Gamma(float lambda, float A = 1)
         {
-            float r = MathUtil.Pow(this.r, lambda) * A;
-            float g = MathUtil.Pow(this.g, lambda) * A;
-            float b = MathUtil.Pow(this.b, lambda) * A;
-            return new ColorRGBA(r, g, b, a);
+            r = MathUtil.Pow(r, lambda) * A;
+            g = MathUtil.Pow(g, lambda) * A;
+            b = MathUtil.Pow(b, lambda) * A;
         }
 
         /// <summary>
