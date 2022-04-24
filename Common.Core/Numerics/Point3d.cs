@@ -708,9 +708,9 @@ namespace Common.Core.Numerics
 
             for (int i = 0; i < count; i++)
             {
-                REAL x = range.Min.x + rnd.NextDouble() * range.Max.x;
-                REAL y = range.Min.y + rnd.NextDouble() * range.Max.y;
-                REAL z = range.Min.z + rnd.NextDouble() * range.Max.z;
+                REAL x = (REAL)(range.Min.x + rnd.NextDouble() * range.Max.x);
+                REAL y = (REAL)(range.Min.y + rnd.NextDouble() * range.Max.y);
+                REAL z = (REAL)(range.Min.z + rnd.NextDouble() * range.Max.z);
 
                 points[i] = new Point3d(x, y, z);
             }
