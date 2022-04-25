@@ -667,13 +667,26 @@ namespace Common.Core.Numerics
         /// Returns the refraction vector given the incident vector i, 
         /// the normal vector n and the refraction index eta.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3f Refract(Vector3f i, Vector3f n, REAL eta)
+        /// <param name="i">The incident vector</param>
+        /// <param name="n">The normal vector</param>
+        /// <param name="eta">The refraction index</param>
+        /// <param name="r">The reflected ray.</param>
+        /// <returns>True if there is a solution.</returns>
+        public static bool Refract(Vector3f i, Vector3f n, REAL eta, out Vector3f r)
         {
             REAL ni = Dot(n, i);
             REAL k = 1.0f - eta * eta * (1.0f - ni * ni);
 
-            return (k >= 0) ? eta * i - (eta * ni + MathUtil.SafeSqrt(k)) * n : Zero;
+            if (k > 0)
+            {
+                r = eta * i - (eta * ni + MathUtil.SafeSqrt(k)) * n;
+                return true;
+            }
+            else
+            {
+                r = Zero;
+                return false;
+            }
         }
 
         /// <summary>
