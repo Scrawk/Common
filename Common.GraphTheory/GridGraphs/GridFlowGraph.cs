@@ -198,7 +198,7 @@ namespace Common.GraphTheory.GridGraphs
                         if (xi < 0 || xi >= Width) continue;
                         if (yi < 0 || yi >= Height) continue;
 
-                        if (!IsSink(xi, yi))
+                        if (!IsSource(xi, yi))
                         {
                             points.Add(new Point2i(x, y));
                             break;
