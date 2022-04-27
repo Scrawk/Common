@@ -182,13 +182,13 @@ namespace Common.GraphTheory.GridGraphs
             return GetLabel(x, y) == FLOW_GRAPH_LABEL.SINK;
         }
 
-        public List<Point2i> FindBoundaryPoints()
+        public List<Point2i> FindBoundaryPoints(bool includeSource, bool includeSink)
         {
             var points = new List<Point2i>();
 
             Iterate((x, y) =>
             {
-                if (IsSource(x, y))
+                if (includeSource && IsSource(x, y))
                 {
                     for (int i = 0; i < 8; i++)
                     {
@@ -198,15 +198,14 @@ namespace Common.GraphTheory.GridGraphs
                         if (xi < 0 || xi >= Width) continue;
                         if (yi < 0 || yi >= Height) continue;
 
-                        if (IsSink(xi, yi))
+                        if (!IsSink(xi, yi))
                         {
                             points.Add(new Point2i(x, y));
                             break;
                         }
                     }
                 }
-
-                if (IsSink(x, y))
+                else if (includeSink && IsSink(x, y))
                 {
                     for (int i = 0; i < 8; i++)
                     {
@@ -216,7 +215,7 @@ namespace Common.GraphTheory.GridGraphs
                         if (xi < 0 || xi >= Width) continue;
                         if (yi < 0 || yi >= Height) continue;
 
-                        if (IsSource(xi, yi))
+                        if (!IsSink(xi, yi))
                         {
                             points.Add(new Point2i(x, y));
                             break;
