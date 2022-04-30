@@ -16,6 +16,19 @@ namespace Common.GraphTheory.GridGraphs
     /// has a byte flag where the bits represent 
     /// if a edge is present to a neighbouring
     /// vertex.
+    /// 
+    /// The edge directions are in the folling order.
+    /// See Common.Core.Directions.D8 script.
+    /// 
+    /// LEFT = 0;
+    /// LEFT_TOP = 1;
+    /// TOP = 2;
+    /// RIGHT_TOP = 3;
+    /// RIGHT = 4;
+    /// RIGHT_BOTTOM = 5;
+    /// BOTTOM = 6;
+    /// LEFT_BOTTOM = 7;
+    /// 
     /// </summary>
     public partial class GridGraph
     {
@@ -40,17 +53,22 @@ namespace Common.GraphTheory.GridGraphs
         public int Height { get; private set; }
 
         /// <summary>
-        /// 
+        /// The graphs vertices edge connections.
+        /// A vertex can only connect to any of its 8 neighbours.
+        /// A connection is represented by a bit in the edges byte
+        /// being set to 1.
         /// </summary>
         private byte[,] Edges { get; set; }
 
         /// <summary>
-        /// 
+        /// Does the graph have weights for the edges.
+        /// The weights are optional and are only created if needed.
         /// </summary>
         public bool HasWeights => m_weights != null;
 
         /// <summary>
-        /// 
+        /// The edges weights.
+        /// The weights are optional and are only created if needed.
         /// </summary>
         private float[,,] Weights
         {
@@ -89,7 +107,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Are the x and y indices within the bounds of the graph.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -103,7 +121,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Prints each vertices edge connections.
         /// </summary>
         public void Print(bool printEdges = false)
         {
@@ -113,7 +131,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Prints each vertices edge connections.
         /// </summary>
         public void Print(StringBuilder builder, bool printEdges = false)
         {
@@ -143,7 +161,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Create a deep copy of the graph.
         /// </summary>
         /// <returns></returns>
         public GridGraph Copy()
@@ -172,6 +190,8 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
+        /// Clears the graph.
+        /// All vertices connections and weights are removed.
         /// 
         /// </summary>
         public void Clear()
@@ -181,7 +201,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// Iterate over the graph using a lambda.
+        /// Iterate over the graphs vertices using a lambda.
         /// </summary>
         /// <param name="func"></param>
         public void Iterate(Action<int, int> func)
@@ -196,7 +216,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Iterate over the graphs vertices edge connection using a lambda.
         /// </summary>
         /// <param name="func"></param>
         public void Iterate(Action<int, int, int> func)
@@ -214,25 +234,25 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Set a edges weight.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
-        /// <param name="w"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
+        /// <param name="w">The edges weight.</param>
         public void SetWeight(int x, int y, int i, float w)
         {
             Weights[x, y, i] = w;
         }
 
         /// <summary>
-        /// 
+        /// Set a edges weight.
         /// </summary>
-        /// <param name="fx"></param>
-        /// <param name="fy"></param>
-        /// <param name="tx"></param>
-        /// <param name="ty"></param>
-        /// <param name="w"></param>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <param name="w">The edges weight.</param>
         public void SetWeight(int fx, int fy, int tx, int ty, float w)
         {
             int x = tx - fx;
@@ -248,11 +268,11 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Get a edges weight.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
         /// <returns></returns>
         public float GetWeight(int x, int y, int i)
         {
@@ -260,12 +280,12 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Get a edges weight.
         /// </summary>
-        /// <param name="fx"></param>
-        /// <param name="fy"></param>
-        /// <param name="tx"></param>
-        /// <param name="ty"></param>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
         /// <returns></returns>
         public float GetWeight(int fx, int fy, int tx, int ty)
         {
@@ -282,11 +302,12 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Is there a edge from the vertex at x,y to the 
+        /// neighbour vertex in direction i.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         public bool HasDirectedEdge(int x, int y, int i)
@@ -298,12 +319,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Is the there a edge from the the vertex at fx,fy
+        /// to a neighbour vertex at tx,ty.
         /// </summary>
-        /// <param name="fx"></param>
-        /// <param name="fy"></param>
-        /// <param name="tx"></param>
-        /// <param name="ty"></param>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
         /// <returns></returns>
         public bool HasDirectedEdge(int fx, int fy, int tx, int ty)
         {
@@ -320,22 +342,12 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Is there a edge from the vertex at x,y to the 
+        /// neighbour vertex in direction i is either direction. 
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        public bool HasDirectedEdge(Point2i from, Point2i to)
-        {
-            return HasDirectedEdge(from.x, from.y, to.x, to.y);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         public bool HasUndirectedEdge(int x, int y, int i)
@@ -356,12 +368,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Is the there a edge from the the vertex at fx,fy
+        /// to a neighbour vertex at tx,ty in either direction.
         /// </summary>
-        /// <param name="fx"></param>
-        /// <param name="fy"></param>
-        /// <param name="tx"></param>
-        /// <param name="ty"></param>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
         /// <returns></returns>
         public bool HasUndirectedEdge(int fx, int fy, int tx, int ty)
         {
@@ -381,10 +394,10 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Get the number of edges the vertex at x,y has.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
         /// <returns></returns>
         public int Degree(int x, int y)
         {
@@ -406,12 +419,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Add a edge from the vertex at x,y to the vertices
+        /// neighbour i.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
-        /// <param name="w"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
+        /// <param name="w">The edges weight.</param>
         public void AddDirectedWeightedEdge(int x, int y, int i, float w)
         {
             AddDirectedEdge(x, y, i);
@@ -419,24 +433,26 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Add a edge to and from the vertex at x,y to the vertices
+        /// neighbour i.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="to"></param>
-        /// <param name="w"></param>
-        public void AddUndirectedWeightedEdge(int x, int y, int to, float w)
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
+        /// <param name="w">The edges weight.</param>
+        public void AddUndirectedWeightedEdge(int x, int y, int i, float w)
         {
-            AddUndirectedEdge(x, y, to);
-            SetWeight(x, y, to, w);
+            AddUndirectedEdge(x, y, i);
+            SetWeight(x, y, i, w);
         }
 
         /// <summary>
-        /// 
+        /// Add a edge from the vertex at x,y to the vertices
+        /// neighbour i.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
         /// <exception cref="ArgumentException"></exception>
         public void AddDirectedEdge(int x, int y, int i)
         {
@@ -454,12 +470,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Add a edge from the vertex at x,y to the vertices
+        /// neighbour tx,ty.
         /// </summary>
-        /// <param name="fx"></param>
-        /// <param name="fy"></param>
-        /// <param name="tx"></param>
-        /// <param name="ty"></param>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
         /// <returns></returns>
         public bool AddDirectedEdge(int fx, int fy, int tx, int ty)
         {
@@ -479,12 +496,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Remove the edge from the vertex at x,y to the 
+        /// neighour vertex at i.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
-        /// <exception cref="ArgumentException"></exception>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
         public void RemoveDirectedEdge(int x, int y, int i)
         {
             if (i < 0 || i > 7)
@@ -501,12 +519,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Add a edge to and from the vertex at x,y to the vertices
+        /// neighbour i.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
-        /// <exception cref="ArgumentException"></exception>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
         public void AddUndirectedEdge(int x, int y, int i)
         {
             if (i < 0 || i > 7)
@@ -524,12 +543,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Add a edge to and from the vertex at fx,fy to the vertices
+        /// neighbour tx,ty.
         /// </summary>
-        /// <param name="fx"></param>
-        /// <param name="fy"></param>
-        /// <param name="tx"></param>
-        /// <param name="ty"></param>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
         /// <returns></returns>
         public bool AddUndirectedEdge(int fx, int fy, int tx, int ty)
         {
@@ -550,12 +570,13 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Remove the edge to and from the vertex at x,y to the vertices
+        /// neighbour i.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="i"></param>
-        /// <exception cref="ArgumentException"></exception>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
         public void RemoveUndirectedEdge(int x, int y, int i)
         {
             if (i < 0 || i > 7)
@@ -574,7 +595,8 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// For each vertex in the graph create a GridVertex object
+        /// and add them to the provided list.
         /// </summary>
         /// <param name="vertices"></param>
         public void GetAllVertices(List<GridVertex> vertices)
@@ -584,48 +606,47 @@ namespace Common.GraphTheory.GridGraphs
             {
                 for (int x = 0; x < Width; x++)
                 {
-                   
-                    int edge = Edges[x, y];
-                    if (edge == 0)
-                    {
-                        bool hasEdge = false;
-
-                        for (int i = 0; i < 8; i++)
-                        {
-                            int xi = x + D8.OFFSETS[i, 0];
-                            int yi = y + D8.OFFSETS[i, 1];
-
-                            if (xi < 0 || xi > Width - 1) continue;
-                            if (yi < 0 || yi > Height - 1) continue;
-
-                            var e = Edges[xi, yi];
-                            if (!Bit.IsSet(e, i)) continue;
-
-                            hasEdge = true;
-                            break;
-                        }
-
-                        if (hasEdge)
-                            vertices.Add(new GridVertex(new Point2i(x, y)));
-                    }
-                    else
-                    {
-                        vertices.Add(new GridVertex(new Point2i(x, y)));
-                    }
-
+                    vertices.Add(new GridVertex(new Point2i(x, y)));
                 }
             }
 
         }
 
         /// <summary>
-        /// 
+        /// Create a GridEdge object for the edge
+        /// from the vertex at x,y to the neighbour
+        /// vertex at i.
         /// </summary>
-        /// <param name="fx"></param>
-        /// <param name="fy"></param>
-        /// <param name="tx"></param>
-        /// <param name="ty"></param>
-        /// <returns></returns>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="i">The bit position in the edge connections byte value.</param>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
+        /// <returns>The edge object or null if there is no edge between the vertices.</returns>
+        public GridEdge GetEdge(int x, int y, int i)
+        {
+            if (i < 0 || i > 7)
+                throw new ArgumentException("To must represent a bit and have a range of 0-7.");
+
+            if (!Bit.IsSet(Edges[x, y], i)) return null;
+
+            var edge = new GridEdge(x, y, x, y);
+
+            if (HasWeights)
+                edge.Weight = GetWeight(x, y, i);
+
+            return edge;
+        }
+
+        /// <summary>
+        /// Create a GridEdge object for the edge
+        /// from the vertex at fx,fy to the neighbour
+        /// vertex at tx,ty.
+        /// </summary>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <returns>The edge object or null if there is no edge between the vertices.</returns>
         public GridEdge GetEdge(int fx, int fy, int tx, int ty)
         {
             int x = tx - fx;
@@ -648,10 +669,10 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Get the vertex at x,y edge connections value.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
         /// <returns></returns>
         public byte GetEdges(int x, int y)
         {
@@ -659,10 +680,10 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Set the vertex at x,y edge connections value.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
         /// <param name="edges"></param>
         public void SetEdges(int x, int y, byte edges)
         {
@@ -670,46 +691,12 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// For each edge create a GridEdge object
+        /// and add it to the provided list.
         /// </summary>
-        /// <param name="edges"></param>
-        public void GetAllEdges(List<GridEdge> edges)
-        {
-
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    int edge = Edges[x, y];
-                    if (edge == 0) continue;
-
-                    for (int i = 0; i < 8; i++)
-                    {
-                        int xi = x + D8.OFFSETS[i, 0];
-                        int yi = y + D8.OFFSETS[i, 1];
-
-                        if (xi < 0 || xi > Width - 1) continue;
-                        if (yi < 0 || yi > Height - 1) continue;
-
-                        if(!Bit.IsSet(edge, i)) continue;
-
-                        var e = new GridEdge(x, y, xi, yi);
-
-                        if (HasWeights)
-                            e.Weight = GetWeight(x, y, i);
-
-                        edges.Add(e);
-                    }
-                }
-            }
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="edges"></param>
-        /// <param name="GetWeightFunc"></param>
+        /// <param name="edges">The list of edges to add to.</param>
+        /// <param name="GetWeightFunc">A optional function to provide the edges weight. 
+        /// If null the edges weight in the graph is used.</param>
         public void GetAllEdges(List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeightFunc = null)
         {
 
@@ -745,12 +732,14 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Foreach edge the vertex at x,y has create a GridEdge object
+        /// and add it to the provided list.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="edges"></param>
-        /// <param name="GetWeightFunc"></param>
+        /// <param name="x">The vertices x index.</param>
+        /// <param name="y">The vertices y index.</param>
+        /// <param name="edges">The list of edges to add to.</param>
+        /// <param name="GetWeightFunc">A optional function to provide the edges weight. 
+        /// If null the edges weight in the graph is used.</param>
         public void GetEdges(int x, int y, List<GridEdge> edges, Func<Point2i, Point2i, float> GetWeightFunc  = null)
         {
 
@@ -781,7 +770,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Convert the GridGraph to a adjacency DirectedGraph.
         /// </summary>
         /// <returns></returns>
         public DirectedGraph ToDirectedGraph()
@@ -806,7 +795,7 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Convert the GridGraph to a adjacency UndirectedGraph.
         /// </summary>
         /// <returns></returns>
         public UndirectedGraph ToUndirectedGraph()

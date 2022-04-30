@@ -13,9 +13,35 @@ namespace Common.GraphTheory.GridGraphs
         NONE, SOURCE, SINK
     }
 
+    /// <summary>
+    /// A graph were the vertices make up a grid
+    /// like the pixels in a image. Each vertex
+    /// has a byte flag where the bits represent 
+    /// if a edge is present to a neighbouring
+    /// vertex.
+    /// 
+    /// Each edge has a capacity and a flow value
+    /// and are used to perfrom the max flow / min cut algorithm.
+    /// 
+    /// The edge directions are in the folling order.
+    /// See Common.Core.Directions.D8 script.
+    /// 
+    /// LEFT = 0;
+    /// LEFT_TOP = 1;
+    /// TOP = 2;
+    /// RIGHT_TOP = 3;
+    /// RIGHT = 4;
+    /// RIGHT_BOTTOM = 5;
+    /// BOTTOM = 6;
+    /// LEFT_BOTTOM = 7;
+    /// 
+    /// </summary>
     public class GridFlowGraph
     {
-
+        /// <summary>
+        /// The max flow of the graph.
+        /// Calculate must be called to find this.
+        /// </summary>
         public float MaxFlow { get; private set; }
 
         public int VertexCount { get { return Width * Height; } }
@@ -24,12 +50,26 @@ namespace Common.GraphTheory.GridGraphs
 
         public int Height { get; private set; }
 
+        /// <summary>
+        /// THe vertices edges capacity value.
+        /// </summary>
         private float[,,] Capacity { get; set; }
 
+        /// <summary>
+        /// THe vertices edges flow value.
+        /// </summary>
         private float[,,] Flow { get;  set; }
 
+        /// <summary>
+        /// THe vertices label.
+        /// </summary>
         private byte[,] Label { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public GridFlowGraph(int width, int height)
         {
             Width = width;
@@ -40,25 +80,41 @@ namespace Common.GraphTheory.GridGraphs
             Label = new byte[width, height];
         }
 
-        public GridFlowGraph(float[,] array)
+        /// <summary>
+        /// Create a new graph and set the vertices edge 
+        /// capacities with the values in the araay.
+        /// The graph will have the same dimensions as the array.
+        /// </summary>
+        /// <param name="capacities">The edges capacities.</param>
+        public GridFlowGraph(float[,] capacities)
         {
-            Width = array.GetLength(0);
-            Height = array.GetLength(1);
+            Width = capacities.GetLength(0);
+            Height = capacities.GetLength(1);
 
             Capacity = new float[Width, Height, 8];
             Flow = new float[Width, Height, 8];
             Label = new byte[Width, Height];
 
-            Fill(array);
+            FillCapacity(capacities);
         }
 
+        /// <summary>
+        /// Clear the graph by setting all capacity, flow and labels to 0.
+        /// </summary>
         public void Clear()
         {
+            MaxFlow = 0;
             Array.Clear(Capacity, 0, Capacity.Length);
             Array.Clear(Flow, 0, Flow.Length);
             Array.Clear(Label, 0, Label.Length);
         }
 
+        /// <summary>
+        /// Are the indices within the bounds of the graph.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <returns></returns>
         public bool InBounds(int x, int y)
         {
             if (x < 0 || x >= Width) return false;
@@ -67,6 +123,11 @@ namespace Common.GraphTheory.GridGraphs
             return true;
         }
 
+        /// <summary>
+        /// Iterate over all vertices in the graph
+        /// and apply the function.
+        /// </summary>
+        /// <param name="func"></param>
         public void Iterate(Action<int, int> func)
         {
             for (int y = 0; y < Height; y++)
@@ -78,6 +139,11 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
+        /// <summary>
+        /// Iterate over all vertices edges in the graph
+        /// and apply the function.
+        /// </summary>
+        /// <param name="func"></param>
         public void Iterate(Action<int, int, int> func)
         {
             for (int y = 0; y < Height; y++)
@@ -92,7 +158,11 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
-        public void Fill(float[,] array)
+        /// <summary>
+        /// Fill the capacity off all edges with the values in the array.
+        /// </summary>
+        /// <param name="array"></param>
+        public void FillCapacity(float[,] array)
         {
             for(int x = 0; x < Width; x++)
             {
@@ -116,36 +186,88 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
+        /// <summary>
+        /// Get the capacity of the vertex edge at x,y 
+        /// going to the neighbour vertex at i.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="i">The  neigbour vertices index.</param>
+        /// <returns></returns>
         public float GetCapacity(int x, int y, int i)
         {
             return Capacity[x, y, i];
         }
 
+        /// <summary>
+        /// Set the capacity of the vertex edge at x,y 
+        /// going to the neighbour vertex at i.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="i">The  neigbour vertices index.</param>
+        /// <param name="capacity"></param>
         public void SetCapacity(int x, int y, int i, float capacity)
         {
             Capacity[x, y, i] = capacity;
         }
 
+        /// <summary>
+        /// Get the flow of the vertex edge at x,y 
+        /// going to the neighbour vertex at i.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="i">The  neigbour vertices index.</param>
+        /// <returns></returns>
         public float GetFlow(int x, int y, int i)
         {
             return Flow[x, y, i];
         }
 
+        /// <summary>
+        /// Set the flow of the vertex edge at x,y 
+        /// going to the neighbour vertex at i.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="i">The  neigbour vertices index.</param>
+        /// <param name="flow"></param>
         public void SetFlow(int x, int y, int i, float flow)
         {
             Flow[x, y, i] = flow;
         }
 
+        /// <summary>
+        /// Get the label of the vertex at x,y.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <returns></returns>
         public FLOW_GRAPH_LABEL GetLabel(int x, int y)
         {
             return (FLOW_GRAPH_LABEL)Label[x, y];
         }
 
+        /// <summary>
+        /// Set the label of the vertex at x,y.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="label"></param>
         public void SetLabel(int x, int y, FLOW_GRAPH_LABEL label)
         {
             Label[x, y] = (byte)label;
         }
 
+        /// <summary>
+        /// Set the label of the vertex at x,y.
+        /// Set all edges capacity going from this vertex.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="label">The vertices label.</param>
+        /// <param name="capacity">The vertices edges capacity.</param>
         public void SetLabel(int x, int y, FLOW_GRAPH_LABEL label, int capacity)
         {
             SetLabel(x, y, label);
@@ -162,26 +284,59 @@ namespace Common.GraphTheory.GridGraphs
             }
         }
 
+        /// <summary>
+        /// Set the vertices label at x,y to source.
+        /// Set all edges capacity going from this vertex.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="capacity">The vertices edges capacity.</param>
         public void SetSource(int x, int y, int capacity)
         {
             SetLabel(x, y, FLOW_GRAPH_LABEL.SOURCE, capacity);
         }
 
+        /// <summary>
+        /// Set the vertices label at x,y to sink.
+        /// Set all edges capacity going from this vertex.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="capacity">The vertices edges capacity.</param>
         public void SetSink(int x, int y, int capacity)
         {
             SetLabel(x, y, FLOW_GRAPH_LABEL.SINK, capacity);
         }
 
+        /// <summary>
+        /// Is this vertex labeled as a source.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <returns></returns>
         public bool IsSource(int x, int y)
         {
             return GetLabel(x, y) == FLOW_GRAPH_LABEL.SOURCE;
         }
 
+        /// <summary>
+        /// Is this vertex labeled as a sink.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <returns></returns>
         public bool IsSink(int x, int y)
         {
             return GetLabel(x, y) == FLOW_GRAPH_LABEL.SINK;
         }
 
+        /// <summary>
+        /// Find the vertices that are labeled as source or sink and
+        /// have at least one neighbour that has a different label.
+        /// </summary>
+        /// <param name="includeSource">Should source vertices be checked.</param>
+        /// <param name="includeSink">Should sink vertices be checked.</param>
+        /// <returns>A list of all the vertices.</returns>
         public List<Point2i> FindBoundaryPoints(bool includeSource, bool includeSink)
         {
             var points = new List<Point2i>();
@@ -228,6 +383,10 @@ namespace Common.GraphTheory.GridGraphs
             return points;
         }
 
+        /// <summary>
+        /// Calculate the max flow / min cut of the graph.
+        /// </summary>
+        /// <returns></returns>
         public float Calculate()
         {
             MaxFlow = FordFulkersonMaxFlow();
@@ -236,6 +395,11 @@ namespace Common.GraphTheory.GridGraphs
             return MaxFlow;
         }
 
+        /// <summary>
+        /// Calculate the max flow of the graph using the FordFulkerson algorithm.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         private float FordFulkersonMaxFlow()
         {
 
@@ -289,6 +453,9 @@ namespace Common.GraphTheory.GridGraphs
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void CalculateMinCut()
         {
             Queue<Point2i> queue = new Queue<Point2i>(VertexCount * 8);
@@ -338,6 +505,12 @@ namespace Common.GraphTheory.GridGraphs
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="sink"></param>
+        /// <returns></returns>
         private bool BreadthFirstSearch(Point3i[,] parent, out Point3i sink)
         {
 
