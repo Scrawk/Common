@@ -4,12 +4,46 @@ using System.Diagnostics;
 
 namespace Common.Core.Time
 {
-    public class Timer
+
+    public enum TIME_PERIOD
+    {
+        MILLISECONDS,
+        SECONDS,
+        MINUTES,
+        HOURS,
+        DAYS
+    }
+
+    /// <summary>
+    /// Helper timer class wrapping the Stopwatch class.
+    /// </summary>
+    public class Timer : IDisposable
     {
 
-        public double ElapsedMilliseconds { get; private set; }
+        private Stopwatch m_watch;
 
-        public double ElapsedSeconds { get; private set; }
+        /// <summary>
+        /// A static instance of the timer.
+        /// </summary>
+        private static Timer s_timer;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Timer()
+        {
+            m_watch = new Stopwatch();
+        }
+
+        public double ElapsedMilliseconds => m_watch.ElapsedMilliseconds;
+
+        public double ElapsedSeconds => ElapsedMilliseconds / 1000.0;
+
+        public double ElapsedMinutes => ElapsedMilliseconds / 60.0;
+
+        public double ElapsedHours => ElapsedMinutes / 60.0;
+
+        public double ElapsedDays => ElapsedHours / 24.0;
 
         public long ElapsedTicks => m_watch.ElapsedTicks;
 
@@ -18,15 +52,6 @@ namespace Common.Core.Time
         public bool IsRunning => m_watch.IsRunning;
 
         public long NanoSecondsPerTick => (1000L * 1000L * 1000L) / Stopwatch.Frequency;
-
-        private Stopwatch m_watch;
-
-        private static Timer s_timer;
-
-        public Timer()
-        {
-            m_watch = new Stopwatch();
-        }
 
         /// <summary>
         /// 
@@ -38,46 +63,84 @@ namespace Common.Core.Time
                 IsHighPerformance, NanoSecondsPerTick, ElapsedTicks, ElapsedSeconds);
         }
 
+        /// <summary>
+        /// Get the ellapsed time that has passed since timer was called.
+        /// </summary>
+        /// <param name="period">The time period.</param>
+        /// <returns>Get the ellapsed time that has passed since timer was called.</returns>
+        public double ElapsedTime(TIME_PERIOD period)
+        {
+            switch (period)
+            {
+                case TIME_PERIOD.MILLISECONDS:
+                    return ElapsedMilliseconds;
+
+                case TIME_PERIOD.SECONDS:
+                    return ElapsedSeconds;
+
+                case TIME_PERIOD.MINUTES:
+                    return ElapsedMinutes;
+
+                case TIME_PERIOD.HOURS:
+                    return ElapsedHours;
+
+                case TIME_PERIOD.DAYS:
+                    return ElapsedDays;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Start the timer.
+        /// </summary>
         public void Start()
         {
             m_watch.Start();
         }
 
-        public double Stop()
+        /// <summary>
+        /// Stop the timer.
+        /// </summary>
+        /// <returns>The number of milliseconds that have passsed.</returns>
+        public double Stop(TIME_PERIOD period = TIME_PERIOD.MILLISECONDS)
         {
             m_watch.Stop();
-
-            ElapsedMilliseconds = (ElapsedTicks * NanoSecondsPerTick) / 1000000.0;
-            ElapsedSeconds = ElapsedMilliseconds / 1000.0;
-
-            return ElapsedMilliseconds;
+            return ElapsedTime(period); 
         }
 
-        public double Tick()
-        {
-            ElapsedMilliseconds = (ElapsedTicks * NanoSecondsPerTick) / 1000000.0;
-            ElapsedSeconds = ElapsedMilliseconds / 1000.0;
-
-            return ElapsedMilliseconds;
-        }
-
+        /// <summary>
+        /// Reset the timer.
+        /// </summary>
         public void Reset()
         {
-            ElapsedMilliseconds = 0.0;
-            ElapsedSeconds = 0.0;
             m_watch.Reset();
         }
 
+        /// <summary>
+        /// Start the static instance timer.
+        /// </summary>
         public static void StartTimer()
         {
             s_timer = new Timer();
             s_timer.Start();
         }
 
-        public static double StopTimer()
+        /// <summary>
+        /// Stop the static instance timer.
+        /// </summary>
+        /// <returns>The number of milliseconds that have passsed.</returns>
+        public static double StopTimer(TIME_PERIOD period = TIME_PERIOD.MILLISECONDS)
         {
-            return s_timer.Stop();
+            return s_timer.Stop(period);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Dispose()
+        {
+            m_watch.Stop();
+        }
     }
 }
