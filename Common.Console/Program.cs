@@ -16,6 +16,22 @@ namespace Common.Console
         static void Main(string[] args)
         {
 
+
+            var token = new ThreadingToken(100);
+            token.TimePeriodFormat = Core.Time.TIME_PERIOD.SECONDS;
+            token.StartTimer();
+
+            for(int i = 0; i < 100; i++)
+            {
+                Thread.Sleep(1000);
+
+                token.IncrementProgess();
+
+                CONSOLE.WriteLine(token.EstimatedCompletionTime() + token.TimePeriodUnit);
+            }
+
+
+
         }
     }
 }

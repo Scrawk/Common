@@ -17,20 +17,44 @@ namespace Common.Core.Threading
         /// </summary>
         private Timer timer;
 
-        private volatile int progress;
+        /// <summary>
+        /// Object that can be used as a lock.
+        /// </summary>
+        private object lockObject;
 
-        private volatile int steps;
-
-        private volatile bool cancelled;
-
+        /// <summary>
+        /// The time period between steps in milliseconds.
+        /// </summary>
         private double timePerIncrement;
 
         /// <summary>
-        /// 
+        /// The current number of steps that have elapsed.
+        /// </summary>
+        private volatile int progress;
+
+        /// <summary>
+        /// The total number of steps that need to be performed.
+        /// </summary>
+        private volatile int steps;
+
+        /// <summary>
+        /// Ifg the task should be cancelled.
+        /// </summary>
+        private volatile bool cancelled;
+
+        /// <summary>
+        /// A queue of messages sent by the task.
+        /// </summary>
+        private Queue<string> messages;
+
+        /// <summary>
+        /// Create a new token. Defaults to 100 steps.
         /// </summary>
         public ThreadingToken()
         {
+            lockObject = new object();
             UseThreading = true;
+            Steps = 100;
             TimePeriodFormat = TIME_PERIOD.MILLISECONDS;
         }
 
@@ -40,6 +64,7 @@ namespace Common.Core.Threading
         /// <param name="steps">The number of steps the tasks will perform.</param>
         public ThreadingToken(int steps)
         {
+            lockObject = new object();
             UseThreading = true;
             Steps = steps;
             TimePeriodFormat = TIME_PERIOD.MILLISECONDS;
@@ -77,7 +102,30 @@ namespace Common.Core.Threading
         /// <summary>
         /// What format should the timer use.
         /// </summary>
-        public TIME_PERIOD TimePeriodFormat {  get; set; }  
+        public TIME_PERIOD TimePeriodFormat {  get; set; }
+
+        /// <summary>
+        /// The time periods units.
+        /// </summary>
+        public string TimePeriodUnit => Timer.TimePeriodUnits(TimePeriodFormat);
+
+        /// <summary>
+        /// How many messages have been left by the task.
+        /// </summary>
+        public int NumMessages
+        {
+            get
+            {
+                lock(lockObject)
+                {
+                    if(messages == null)
+                        return 0;
+                    else
+                        return messages.Count;
+                }
+                    
+            }
+        }
 
         /// <summary>
         /// Reset the token to a state it can be reused.
@@ -88,6 +136,7 @@ namespace Common.Core.Threading
             cancelled = false;
             timePerIncrement = 0;
             timer?.Reset();
+            messages?.Clear();
         }
 
         /// <summary>
@@ -115,8 +164,8 @@ namespace Common.Core.Threading
 
             if(timer != null)
             {
-                double t = timer.ElapsedTime(TimePeriodFormat);
-                timePerIncrement = t / progress;
+                double ms = timer.ElapsedMilliseconds;
+                timePerIncrement = ms / progress;
 
                 return EstimatedCompletionTime();
             }
@@ -187,6 +236,48 @@ namespace Common.Core.Threading
                 return 0;
             else
                 return timer.Stop(TimePeriodFormat);
+        }
+
+        /// <summary>
+        /// Add a new message.
+        /// </summary>
+        /// <param name="msg">The message.</param>
+        public void EnqueueMessage(string msg)
+        {
+            lock(lockObject)
+            {
+                if(messages == null)
+                    messages = new Queue<string>();
+
+                messages.Enqueue(msg);
+            }
+        }
+
+        /// <summary>
+        /// Get and remove the next message.
+        /// </summary>
+        /// <returns>The next message.</returns>
+        public string DequeueMessage()
+        {
+            lock (lockObject)
+            {
+                if (messages == null || messages.Count == 0)
+                    return "";
+
+                return messages.Dequeue();
+            }
+        }
+
+        /// <summary>
+        /// Clear the queue of all messages.
+        /// </summary>
+        public void ClearMessages()
+        {
+            lock (lockObject)
+            {
+                if (messages != null)
+                    messages.Clear();
+            }
         }
 
     }

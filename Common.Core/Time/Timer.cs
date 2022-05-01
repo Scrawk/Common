@@ -118,6 +118,14 @@ namespace Common.Core.Time
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public void Dispose()
+        {
+            m_watch.Stop();
+        }
+
+        /// <summary>
         /// Start the static instance timer.
         /// </summary>
         public static void StartTimer()
@@ -136,11 +144,32 @@ namespace Common.Core.Time
         }
 
         /// <summary>
-        /// 
+        /// Get the time period enum as its string units.
         /// </summary>
-        public void Dispose()
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public static string TimePeriodUnits(TIME_PERIOD period)
         {
-            m_watch.Stop();
+            switch (period)
+            {
+                case TIME_PERIOD.MILLISECONDS:
+                    return "ms";
+
+                case TIME_PERIOD.SECONDS:
+                    return "s";
+
+                case TIME_PERIOD.MINUTES:
+                    return "m";
+
+                case TIME_PERIOD.HOURS:
+                    return "hr";
+
+                case TIME_PERIOD.DAYS:
+                    return "d";
+            }
+
+            return "";
         }
+
     }
 }
