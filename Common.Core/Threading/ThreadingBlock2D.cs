@@ -99,8 +99,8 @@ namespace Common.Core.Threading
                 {
                     var box = new ThreadingBlock2D();
                     box.Start = new Point2i(x, y);
-                    box.End.x = Math.Min(x + blockSize - 1, width);
-                    box.End.y = Math.Min(y + blockSize - 1, height);
+                    box.End.x = Math.Min(x + blockSize - 1, width - 1);
+                    box.End.y = Math.Min(y + blockSize - 1, height - 1);
 
                     blocks.Add(box);
                 }

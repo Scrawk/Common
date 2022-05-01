@@ -71,7 +71,7 @@ namespace Common.Core.Threading
             {
                 var box = new ThreadingBlock1D();
                 box.Start = x;
-                box.End = Math.Min(x + blockSize - 1, count);
+                box.End = Math.Min(x + blockSize - 1, count - 1);
                 blocks.Add(box);
             }
 

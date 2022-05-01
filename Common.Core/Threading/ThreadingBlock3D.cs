@@ -104,9 +104,9 @@ namespace Common.Core.Threading
                     {
                         var box = new ThreadingBlock3D();
                         box.Start = new Point3i(x, y, z);
-                        box.End.x = Math.Min(x + blockSize - 1, width);
-                        box.End.y = Math.Min(y + blockSize - 1, height);
-                        box.End.z = Math.Min(z + blockSize - 1, depth);
+                        box.End.x = Math.Min(x + blockSize - 1, width - 1);
+                        box.End.y = Math.Min(y + blockSize - 1, height - 1);
+                        box.End.z = Math.Min(z + blockSize - 1, depth - 1);
 
                         blocks.Add(box);
                     }
