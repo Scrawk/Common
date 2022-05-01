@@ -30,6 +30,7 @@ namespace Common.Core.Threading
         /// </summary>
         public ThreadingToken()
         {
+            UseThreading = true;
             TimePeriodFormat = TIME_PERIOD.MILLISECONDS;
         }
 
@@ -39,7 +40,8 @@ namespace Common.Core.Threading
         /// <param name="steps">The number of steps the tasks will perform.</param>
         public ThreadingToken(int steps)
         {
-            this.steps = steps;
+            UseThreading = true;
+            Steps = steps;
             TimePeriodFormat = TIME_PERIOD.MILLISECONDS;
         }
 
