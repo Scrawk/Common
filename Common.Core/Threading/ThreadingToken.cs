@@ -140,6 +140,15 @@ namespace Common.Core.Threading
         }
 
         /// <summary>
+        /// Only resets the progress and leaves reset of token settings.
+        /// </summary>
+        public void ResetProgress()
+        {
+            progress = 0;
+            timePerIncrement = 0;
+        }
+
+        /// <summary>
         /// The percentage (0-1) of steps the task has completed.
         /// </summary>
         /// <returns>The percentage (0-1) of steps the task has completed.</returns>
