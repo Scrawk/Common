@@ -27,13 +27,13 @@ namespace Common.Core.Threading
         public static int BlockSize(Point3i size, int divisions = 2)
         {
             if (divisions <= 0) divisions = 2;
-            return Math.Max(16, MathUtil.Max(size.x, size.y, size.z) / divisions);
+            return Math.Min(16, MathUtil.Max(size.x, size.y, size.z) / divisions);
         }
 
         public static int BlockSize(int width, int height, int depth, int divisions = 2)
         {
             if (divisions <= 0) divisions = 2;
-            return Math.Max(16, MathUtil.Max(width, height, depth) / divisions);
+            return Math.Min(16, MathUtil.Max(width, height, depth) / divisions);
         }
 
         public static List<ThreadingBlock3D> CreateBlocks(Point3i size, int blockSize)

@@ -33,7 +33,7 @@ namespace Common.Core.Threading
         public static int BlockSize(int width, int height, int divisions = 4)
         {
             if (divisions <= 0) divisions = 4;
-            return Math.Max(64, Math.Max(width, height) / divisions);
+            return Math.Min(64, Math.Max(width, height) / divisions);
         }
 
         public static List<ThreadingBlock2D> CreateBlocks(Point2i size, int blockSize)

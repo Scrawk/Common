@@ -35,23 +35,32 @@ namespace Common.Core.Threading
         public int End;
 
         /// <summary>
-        /// Calculate what the block size should be given the iterations 
-        /// count and how many division its to be divided into.
+        /// 
         /// </summary>
-        /// <param name="count"></param>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return String.Format("[ThreadingBlock1D: Start={0}, End={1}]", Start, End);
+        }
+
+        /// <summary>
+        /// The block size is the number of iterarations in the loop each thread will be assigned.
+        /// A reconmended maximum block size of 4096 will be enforced.
+        /// </summary>
+        /// <param name="count">The number of iterations in the loop.</param>
         /// <param name="divisions"></param>
         /// <returns></returns>
         public static int BlockSize(int count, int divisions = 16)
         {
             if (divisions <= 0) divisions = 16;
-            return Math.Max(4096, count / divisions);
+            return Math.Min(4096, count / divisions);
         }
 
         /// <summary>
-        /// 
+        /// Create the blocks the parallel action will be performed on.
         /// </summary>
-        /// <param name="count"></param>
-        /// <param name="blockSize"></param>
+        /// <param name="count">The number of iterations in the loop.</param>
+        /// <param name="blockSize">The block size is the number of iterarations in the loop each thread will be assigned.</param>
         /// <returns></returns>
         public static List<ThreadingBlock1D> CreateBlocks(int count, int blockSize)
         {
@@ -62,7 +71,7 @@ namespace Common.Core.Threading
             {
                 var box = new ThreadingBlock1D();
                 box.Start = x;
-                box.End = Math.Min(x + blockSize, count);
+                box.End = Math.Min(x + blockSize - 1, count);
                 blocks.Add(box);
             }
 
@@ -70,12 +79,12 @@ namespace Common.Core.Threading
         }
 
         /// <summary>
-        /// 
+        /// Run a action in parallel.
         /// </summary>
-        /// <param name="count"></param>
-        /// <param name="blockSize"></param>
-        /// <param name="action"></param>
-        /// <param name="token"></param>
+        /// <param name="count">The number of iterations in the loop.</param>
+        /// <param name="blockSize">The block size is the number of iterarations in the loop each thread will be assigned.</param>
+        /// <param name="action">The action to perform.</param>
+        /// <param name="token">A optional helper token.</param>
         public static double ParallelAction(int count, int blockSize, Action<int> action, ThreadingToken token = null)
         {
             if(token != null && !token.UseThreading)
@@ -99,7 +108,7 @@ namespace Common.Core.Threading
                 var blocks = CreateBlocks(count, blockSize);
                 Parallel.ForEach(blocks, (block) =>
                 {
-                    for (int x = block.Start; x < block.End; x++)
+                    for (int x = block.Start; x <= block.End; x++)
                     {
                         action(x);
 
