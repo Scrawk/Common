@@ -502,7 +502,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="x">The vertices x index.</param>
         /// <param name="y">The vertices y index.</param>
         /// <param name="i">The bit position in the edge connections byte value.</param>
-        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.</exception>
         public void RemoveDirectedEdge(int x, int y, int i)
         {
             if (i < 0 || i > 7)
@@ -525,7 +525,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="x">The vertices x index.</param>
         /// <param name="y">The vertices y index.</param>
         /// <param name="i">The bit position in the edge connections byte value.</param>
-        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.</exception>
         public void AddUndirectedEdge(int x, int y, int i)
         {
             if (i < 0 || i > 7)
@@ -576,7 +576,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="x">The vertices x index.</param>
         /// <param name="y">The vertices y index.</param>
         /// <param name="i">The bit position in the edge connections byte value.</param>
-        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.</exception>
         public void RemoveUndirectedEdge(int x, int y, int i)
         {
             if (i < 0 || i > 7)
@@ -620,7 +620,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="x">The vertices x index.</param>
         /// <param name="y">The vertices y index.</param>
         /// <param name="i">The bit position in the edge connections byte value.</param>
-        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.<exception>
+        /// <exception cref="ArgumentException">If i less than 0 or greater than 7.</exception>
         /// <returns>The edge object or null if there is no edge between the vertices.</returns>
         public GridEdge GetEdge(int x, int y, int i)
         {

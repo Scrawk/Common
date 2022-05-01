@@ -48,7 +48,7 @@ namespace Common.Core.Threading
         /// A reconmended maximum block size of 4096 will be enforced.
         /// </summary>
         /// <param name="count">The number of iterations in the loop.</param>
-        /// <param name="divisions"></param>
+        /// <param name="divisions">The number of blocks the count is divided into.</param>
         /// <returns></returns>
         public static int BlockSize(int count, int divisions = 16)
         {

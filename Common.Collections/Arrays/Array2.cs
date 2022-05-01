@@ -278,9 +278,9 @@ namespace Common.Collections.Arrays
             var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
             Parallel.ForEach(blocks, (block) =>
             {
-                for (int y = block.Min.y; y < block.Max.y; y++)
+                for (int y = block.Start.y; y < block.End.y; y++)
                 {
-                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    for (int x = block.Start.x; x < block.End.x; x++)
                     {
                         func(x, y);
                     }
@@ -326,9 +326,9 @@ namespace Common.Collections.Arrays
             var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
             Parallel.ForEach(blocks, (block) =>
             {
-                for (int y = block.Min.y; y < block.Max.y; y++)
+                for (int y = block.Start.y; y < block.End.y; y++)
                 {
-                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    for (int x = block.Start.x; x < block.End.x; x++)
                     {
                         Data[x, y] = func(x, y);
                     }
@@ -366,9 +366,9 @@ namespace Common.Collections.Arrays
             var blocks = ThreadingBlock2D.CreateBlocks(Width, Height, blockSize);
             Parallel.ForEach(blocks, (block) =>
             {
-                for (int y = block.Min.y; y < block.Max.y; y++)
+                for (int y = block.Start.y; y < block.End.y; y++)
                 {
-                    for (int x = block.Min.x; x < block.Max.x; x++)
+                    for (int x = block.Start.x; x < block.End.x; x++)
                     {
                         Data[x, y] = func(Data[x, y]);
                     }

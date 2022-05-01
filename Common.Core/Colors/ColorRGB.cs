@@ -348,7 +348,7 @@ namespace Common.Core.Colors
         /// Convert the color to a integer where each byte 
         /// represents a channel in the color.
         /// </summary>
-        /// <param name="bgr">are the channels packed bgr or rgb.</param>
+        /// <param name="abgr">are the channels packed bgr or rgb.</param>
         /// <returns>A integer where each byte represents a channel in the color.</returns>
         public int ToInteger(bool abgr = false)
         {

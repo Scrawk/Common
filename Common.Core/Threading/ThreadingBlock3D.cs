@@ -6,41 +6,89 @@ using Common.Core.Numerics;
 
 namespace Common.Core.Threading
 {
+    /// <summary>
+    /// A helper object to break a iteration into smaller 
+    /// blocks that can be run on seperate tasks. 
+    /// </summary>
     public struct ThreadingBlock3D
     {
-        public ThreadingBlock3D(int minX, int maxX, int minY, int maxY, int minZ, int maxZ)
+        /// <summary>
+        /// Create a new block.
+        /// </summary>
+        /// <param name="start">The blocks start index in the iteration.</param>
+        /// <param name="end">The blocks end index in the iteration.</param>
+        public ThreadingBlock3D(Point3i start, Point3i end)
         {
-            Min = new Point3i(minX, minY, minZ);
-            Max = new Point3i(maxX, maxY, maxZ);
+            Start = start;
+            End = end;
         }
 
-        public ThreadingBlock3D(Point3i min, Point3i max)
+        /// <summary>
+        /// The blocks start index in the iteration.
+        /// </summary>
+        public Point3i Start;
+
+        /// <summary>
+        /// The blocks end index in the iteration.
+        /// </summary>
+        public Point3i End;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
-            Min = min;
-            Max = max;
+            return String.Format("[ThreadingBlock3D: Start={0}, End={1}]", Start, End);
         }
 
-        public Point3i Min;
-
-        public Point3i Max;
-
+        /// <summary>
+        /// The block size is the number of iterarations in the loop each thread will be assigned.
+        /// A reconmended maximum block size of 16 will be enforced.
+        /// </summary>
+        /// <param name="size">The number of iterations in the loop.</param>
+        /// <param name="divisions">The number of blocks the size is divided into.</param>
+        /// <returns></returns>
         public static int BlockSize(Point3i size, int divisions = 2)
         {
             if (divisions <= 0) divisions = 2;
             return Math.Min(16, MathUtil.Max(size.x, size.y, size.z) / divisions);
         }
 
+        /// <summary>
+        /// The block size is the number of iterarations in the loop each thread will be assigned.
+        /// A reconmended maximum block size of 64 will be enforced.
+        /// </summary>
+        /// <param name="width">The number of iterations in the loop on the x axis.</param>
+        /// <param name="height">The number of iterations in the loop on the y axis.</param>
+        /// <param name="depth">The number of iterations in the loop on the z axis.</param>
+        /// <param name="divisions">The number of blocks the size is divided into.</param>
+        /// <returns></returns>
         public static int BlockSize(int width, int height, int depth, int divisions = 2)
         {
             if (divisions <= 0) divisions = 2;
             return Math.Min(16, MathUtil.Max(width, height, depth) / divisions);
         }
 
+        /// <summary>
+        /// Create the blocks the parallel action will be performed on.
+        /// </summary>
+        /// <param name="size">The number of iterations in the loop.</param>
+        /// <param name="blockSize">The block size is the number of iterarations in the loop each thread will be assigned.</param>
+        /// <returns></returns>
         public static List<ThreadingBlock3D> CreateBlocks(Point3i size, int blockSize)
         {
             return CreateBlocks(size.x, size.y, size.z, blockSize);
         }
 
+        /// <summary>
+        /// Create the blocks the parallel action will be performed on.
+        /// </summary>
+        /// <param name="width">The number of iterations in the loop on the x axis.</param>
+        /// <param name="height">The number of iterations in the loop on the y axis.</param>
+        /// <param name="depth">The number of iterations in the loop on the z axis.</param>
+        /// <param name="blockSize">The block size is the number of iterarations in the loop each thread will be assigned.</param>
+        /// <returns></returns>
         public static List<ThreadingBlock3D> CreateBlocks(int width, int height, int depth, int blockSize)
         {
             int sizeX = width / blockSize + 1;
@@ -55,10 +103,10 @@ namespace Common.Core.Threading
                     for (int x = 0; x < width; x += blockSize)
                     {
                         var box = new ThreadingBlock3D();
-                        box.Min = new Point3i(x, y, z);
-                        box.Max.x = Math.Min(x + blockSize, width);
-                        box.Max.y = Math.Min(y + blockSize, height);
-                        box.Max.z = Math.Min(z + blockSize, depth);
+                        box.Start = new Point3i(x, y, z);
+                        box.End.x = Math.Min(x + blockSize - 1, width);
+                        box.End.y = Math.Min(y + blockSize - 1, height);
+                        box.End.z = Math.Min(z + blockSize - 1, depth);
 
                         blocks.Add(box);
                     }
@@ -68,15 +116,31 @@ namespace Common.Core.Threading
             return blocks;
         }
 
-        public static void ParallelAction(Point3i size, int blockSize, Action<int, int, int> action)
+        /// <summary>
+        /// Run a action in parallel.
+        /// </summary>
+        /// <param name="size">The number of iterations in the loop.</param>
+        /// <param name="blockSize">The block size is the number of iterarations in the loop each thread will be assigned.</param>
+        /// <param name="action">The action to perform.</param>
+        /// <param name="token">A optional helper token.</param>
+        public static void ParallelAction(Point3i size, int blockSize, Action<int, int, int> action, ThreadingToken token = null)
         {
-            ParallelAction(size.x, size.y, size.z, blockSize, action);
+            ParallelAction(size.x, size.y, size.z, blockSize, action, token);
         }
 
-        public static void ParallelAction(int width, int height, int depth, int blockSize, Action<int, int, int> action, bool disableThreading = false)
+        /// <summary>
+        /// Run a action in parallel.
+        /// </summary>
+        /// <param name="width">The number of iterations in the loop on the x axis.</param>
+        /// <param name="height">The number of iterations in the loop on the y axis.</param>
+        /// <param name="depth">The number of iterations in the loop on the z axis.</param>
+        /// <param name="blockSize">The block size is the number of iterarations in the loop each thread will be assigned.</param>
+        /// <param name="action">The action to perform.</param>
+        /// <param name="token">A optional helper token.</param>
+        public static double ParallelAction(int width, int height, int depth, int blockSize, Action<int, int, int> action, ThreadingToken token = null)
         {
 
-            if (disableThreading)
+            if (token != null && !token.UseThreading)
             {
                 for (int z = 0; z < depth; z++)
                 {
@@ -85,6 +149,14 @@ namespace Common.Core.Threading
                         for (int x = 0; x < width; x++)
                         {
                             action(x, y, z);
+
+                            if (token != null)
+                            {
+                                if (token.Cancelled)
+                                    return 0;
+
+                                token.IncrementProgess();
+                            }
                         }
                     }
                 }
@@ -94,19 +166,32 @@ namespace Common.Core.Threading
                 var blocks = CreateBlocks(width, height, depth, blockSize);
                 Parallel.ForEach(blocks, (block) =>
                 {
-                    for (int z = block.Min.z; z < block.Max.z; z++)
+                    for (int z = block.Start.z; z <= block.End.z; z++)
                     {
-                        for (int y = block.Min.y; y < block.Max.y; y++)
+                        for (int y = block.Start.y; y <= block.End.y; y++)
                         {
-                            for (int x = block.Min.x; x < block.Max.x; x++)
+                            for (int x = block.Start.x; x <= block.End.x; x++)
                             {
                                 action(x, y, z);
+
+                                if (token != null)
+                                {
+                                    if (token.Cancelled)
+                                        return;
+
+                                    token.IncrementProgess();
+                                }
                             }
                         }
                     }
 
                 });
             }
+
+            if (token != null)
+                return token.ElapsedTime();
+            else
+                return 0;
         }
 
     }

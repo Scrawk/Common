@@ -66,7 +66,6 @@ namespace Common.GraphTheory.GridGraphs
                 for (int x = 0; x < Width; x++)
                 {
                     int Y = (Height - y - 1);
-                    //Console.Write("(" + x + "," + Y + ") ");
                     Console.Write("("+Parent[x, Y] + ") ");
                 }
 

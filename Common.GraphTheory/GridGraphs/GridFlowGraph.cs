@@ -38,13 +38,8 @@ namespace Common.GraphTheory.GridGraphs
     /// </summary>
     public class GridFlowGraph
     {
-        /// <summary>
-        /// The max flow of the graph.
-        /// Calculate must be called to find this.
-        /// </summary>
-        public float MaxFlow { get; private set; }
 
-        public int VertexCount { get { return Width * Height; } }
+        public int VertexCount => Width * Height;
 
         public int Width { get; private set; }
 
@@ -103,7 +98,6 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         public void Clear()
         {
-            MaxFlow = 0;
             Array.Clear(Capacity, 0, Capacity.Length);
             Array.Clear(Flow, 0, Flow.Length);
             Array.Clear(Label, 0, Label.Length);
@@ -313,7 +307,7 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         /// <param name="x">The x axis index.</param>
         /// <param name="y">The y axis index</param>
-        /// <returns></returns>
+        /// <returns>True is this vertex is labeled as a source.</returns>
         public bool IsSource(int x, int y)
         {
             return GetLabel(x, y) == FLOW_GRAPH_LABEL.SOURCE;
@@ -324,10 +318,37 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         /// <param name="x">The x axis index.</param>
         /// <param name="y">The y axis index</param>
-        /// <returns></returns>
+        /// <returns>True this vertex is labeled as a sink.</returns>
         public bool IsSink(int x, int y)
         {
             return GetLabel(x, y) == FLOW_GRAPH_LABEL.SINK;
+        }
+
+        /// <summary>
+        /// Does the vertex at x,y have a neighbour with a different label.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <returns>True if the vertex at x,y have a neighbour with a different label.</returns>
+        public bool IsBoundaryPoint(int x, int y)
+        {
+            var label = Label[x, y];
+
+            for (int i = 0; i < 8; i++)
+            {
+                int xi = x + D8.OFFSETS[i, 0];
+                int yi = y + D8.OFFSETS[i, 1];
+
+                if (xi < 0 || xi >= Width) continue;
+                if (yi < 0 || yi >= Height) continue;
+
+                if (Label[xi, yi] != label)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -345,37 +366,13 @@ namespace Common.GraphTheory.GridGraphs
             {
                 if (includeSource && IsSource(x, y))
                 {
-                    for (int i = 0; i < 8; i++)
-                    {
-                        int xi = x + D8.OFFSETS[i, 0];
-                        int yi = y + D8.OFFSETS[i, 1];
-
-                        if (xi < 0 || xi >= Width) continue;
-                        if (yi < 0 || yi >= Height) continue;
-
-                        if (!IsSource(xi, yi))
-                        {
-                            points.Add(new Point2i(x, y));
-                            break;
-                        }
-                    }
+                    if(IsBoundaryPoint(x, y))
+                        points.Add(new Point2i(x, y));
                 }
                 else if (includeSink && IsSink(x, y))
                 {
-                    for (int i = 0; i < 8; i++)
-                    {
-                        int xi = x + D8.OFFSETS[i, 0];
-                        int yi = y + D8.OFFSETS[i, 1];
-
-                        if (xi < 0 || xi >= Width) continue;
-                        if (yi < 0 || yi >= Height) continue;
-
-                        if (!IsSink(xi, yi))
-                        {
-                            points.Add(new Point2i(x, y));
-                            break;
-                        }
-                    }
+                    if (IsBoundaryPoint(x, y))
+                        points.Add(new Point2i(x, y));
                 }
 
             });
@@ -386,13 +383,24 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// Calculate the max flow / min cut of the graph.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The max flow.</returns>
         public float Calculate()
         {
-            MaxFlow = FordFulkersonMaxFlow();
-            CalculateMinCut();
+            var search = new GridFlowSearch(Width, Height);
+            return Calculate(search);
+        }
 
-            return MaxFlow;
+        /// <summary>
+        /// Calculate the max flow / min cut of the graph.
+        /// </summary>
+        /// <param name="search">The helper search data structure.</param>
+        /// <returns>The max flow.</returns>
+        public float Calculate(GridFlowSearch search)
+        {
+            FordFulkersonMaxFlow(search);
+            CalculateMinCut(search);
+
+            return search.MaxFlow;
         }
 
         /// <summary>
@@ -400,22 +408,22 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        private float FordFulkersonMaxFlow()
+        private void FordFulkersonMaxFlow(GridFlowSearch search)
         {
 
-            Point3i[,] parent = new Point3i[Width, Height];
-
             float maxFlow = 0;
+            int step = 1;
 
             Point3i sink, v;
-            while (BreadthFirstSearch(parent, out sink))
+            while (BreadthFirstSearch(search, step, out sink))
             {
+                step++;
                 float flow = float.PositiveInfinity;
 
                 v = sink;
                 while (true)
                 {
-                    Point3i u = parent[v.x, v.y];
+                    Point3i u = search.GetParent(v.x, v.y);
                     if (u.x == v.x && u.y == v.y)
                         throw new InvalidOperationException("Did not stop at source.");
 
@@ -436,7 +444,7 @@ namespace Common.GraphTheory.GridGraphs
                 v = sink;
                 while (true)
                 {
-                    Point3i u = parent[v.x, v.y];
+                    Point3i u = search.GetParent(v.x, v.y);
 
                     Flow[u.x, u.y, u.z] += flow;
                     Flow[v.x, v.y, D8.OPPOSITES[u.z]] -= flow;
@@ -449,29 +457,31 @@ namespace Common.GraphTheory.GridGraphs
 
             }
 
-            return maxFlow;
+           search.MaxFlow = maxFlow;
 
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
-        private void CalculateMinCut()
+        /// <param name="search"></param>
+        private void CalculateMinCut(GridFlowSearch search)
         {
-            Queue<Point2i> queue = new Queue<Point2i>(VertexCount * 8);
+
+            search.ClearQueue();
 
             for (int y = 0; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
                 {
                     if (Label[x, y] == (byte)FLOW_GRAPH_LABEL.SOURCE)
-                        queue.Enqueue(new Point2i(x, y));
+                        search.Enqueue(new Point2i(x, y));
                 }
             }
 
-            while (queue.Count > 0)
+            while (search.QueueCount > 0)
             {
-                Point2i u = queue.Dequeue();
+                Point2i u = search.Dequeue();
 
                 for (int i = 0; i < 8; i++)
                 {
@@ -487,7 +497,7 @@ namespace Common.GraphTheory.GridGraphs
 
                     Label[xi, yi] = (byte)FLOW_GRAPH_LABEL.SOURCE;
 
-                    queue.Enqueue(new Point2i(xi, yi));
+                    search.Enqueue(new Point2i(xi, yi));
                 }
             }
 
@@ -506,16 +516,15 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
-        /// 
+        /// Find if there exists a path to the sink.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="sink"></param>
+        /// <param name="search">The helper search data structure.</param>
+        /// <param name="step">Used to determine if vertex has been visited.</param>
+        /// <param name="sink">The index of the sink point.</param>
         /// <returns></returns>
-        private bool BreadthFirstSearch(Point3i[,] parent, out Point3i sink)
+        private bool BreadthFirstSearch(GridFlowSearch search, int step, out Point3i sink)
         {
-
-            Queue<Point2i> queue = new Queue<Point2i>();
-            bool[,] isVisited = new bool[Width, Height];
+            search.ClearQueue();
 
             for (int y = 0; y < Height; y++)
             {
@@ -523,15 +532,15 @@ namespace Common.GraphTheory.GridGraphs
                 {
                     if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE) continue;
 
-                    queue.Enqueue(new Point2i(x, y));
-                    parent[x, y] = new Point3i(x, y, -1);
-                    isVisited[x, y] = true;
+                    search.Enqueue(new Point2i(x, y));
+                    search.SetParent(x, y, new Point3i(x, y, -1));
+                    search.SetIsVisited(x, y, step);
                 }
             }
 
-            while (queue.Count != 0)
+            while (search.QueueCount != 0)
             {
-                Point2i u = queue.Dequeue();
+                Point2i u = search.Dequeue();
 
                 for (int i = 0; i < 8; i++)
                 {
@@ -543,11 +552,11 @@ namespace Common.GraphTheory.GridGraphs
 
                     if (xi < 0 || xi >= Width) continue;
                     if (yi < 0 || yi >= Height) continue;
-                    if (isVisited[xi, yi]) continue;
+                    if (search.GetIsVisited(xi, yi) >= step) continue;
 
-                    queue.Enqueue(new Point2i(xi, yi));
-                    parent[xi, yi] = new Point3i(u.x, u.y, i);
-                    isVisited[xi, yi] = true;
+                    search.Enqueue(new Point2i(xi, yi));
+                    search.SetParent(xi, yi, new Point3i(u.x, u.y, i));
+                    search.SetIsVisited(xi, yi, step);
 
                     if (Label[xi, yi] == (byte)FLOW_GRAPH_LABEL.SINK)
                     {
