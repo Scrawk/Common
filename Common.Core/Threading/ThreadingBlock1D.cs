@@ -52,7 +52,12 @@ namespace Common.Core.Threading
         /// <returns></returns>
         public static int BlockSize(int count, int divisions = 16)
         {
-            if (divisions <= 0) divisions = 16;
+            if (divisions <= 0) 
+                divisions = 16;
+
+            if (divisions >= count)
+                return 1;
+
             return Math.Min(4096, count / divisions);
         }
 

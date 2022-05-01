@@ -51,8 +51,15 @@ namespace Common.Core.Threading
         /// <returns></returns>
         public static int BlockSize(Point3i size, int divisions = 2)
         {
-            if (divisions <= 0) divisions = 2;
-            return Math.Min(16, MathUtil.Max(size.x, size.y, size.z) / divisions);
+            if (divisions <= 0) 
+                divisions = 2;
+
+            int count = MathUtil.Max(size.x, size.y, size.z);
+
+            if (divisions >= count)
+                return 1;
+
+            return Math.Min(64, count / divisions);
         }
 
         /// <summary>
@@ -66,8 +73,15 @@ namespace Common.Core.Threading
         /// <returns></returns>
         public static int BlockSize(int width, int height, int depth, int divisions = 2)
         {
-            if (divisions <= 0) divisions = 2;
-            return Math.Min(16, MathUtil.Max(width, height, depth) / divisions);
+            if (divisions <= 0) 
+                divisions = 2;
+
+            int count = MathUtil.Max(width, height, depth);
+
+            if (divisions >= count)
+                return 1;
+
+            return Math.Min(64, count / divisions);
         }
 
         /// <summary>
