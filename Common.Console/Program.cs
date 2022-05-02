@@ -42,8 +42,8 @@ namespace Common.Console
 
             timer.Stop();
 
-            WriteLine(maxflow);
-            WriteLine(timer.ElapsedMilliseconds);
+            WriteLine("Max flow " + maxflow);
+            WriteLine("Time " + timer.ElapsedMilliseconds);
 
         }
 

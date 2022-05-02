@@ -509,9 +509,15 @@ namespace Common.GraphTheory.GridGraphs
 
             float maxFlow = 0;
             int step = 1;
+            var directions = new List<int>(8);
+
+            if (IsOrthogonal)
+                directions.AddRange(D8.ORTHOGONAL);
+            else
+                directions.AddRange(D8.ALL);
 
             Point3i sink, v;
-            while (BreadthFirstSearch(search, step, out sink))
+            while (BreadthFirstSearch(search, step, directions, out sink))
             {
                 step++;
                 float flow = float.PositiveInfinity;
@@ -566,6 +572,13 @@ namespace Common.GraphTheory.GridGraphs
 
             search.ClearQueue();
 
+            var directions = new List<int>(8);
+
+            if (IsOrthogonal)
+                directions.AddRange(D8.ORTHOGONAL);
+            else
+                directions.AddRange(D8.ALL);
+
             for (int y = 0; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
@@ -579,22 +592,10 @@ namespace Common.GraphTheory.GridGraphs
             {
                 Point2i u = search.Dequeue();
 
-                foreach(var i in EnumerateInBoundsDirections(u.x, u.y))
+                for (int j = 0; j < directions.Count; j++)
                 {
+                    int i = directions[j];
 
-                    float residual = Capacity[u.x, u.y, i.z] - Flow[u.x, u.y, i.z];
-                    if (residual <= 0) continue;
-
-                    if (Label[i.x, i.y] == (byte)FLOW_GRAPH_LABEL.SOURCE) continue;
-
-                    Label[i.x, i.y] = (byte)FLOW_GRAPH_LABEL.SOURCE;
-
-                    search.Enqueue(new Point2i(i.x, i.y));
-                }
-
-                /*
-                for (int i = 0; i < 8; i++)
-                {
                     float residual = Capacity[u.x, u.y, i] - Flow[u.x, u.y, i];
                     if (residual <= 0) continue;
 
@@ -609,7 +610,7 @@ namespace Common.GraphTheory.GridGraphs
 
                     search.Enqueue(new Point2i(xi, yi));
                 }
-                */
+               
             }
 
             for (int y = 0; y < Height; y++)
@@ -619,8 +620,13 @@ namespace Common.GraphTheory.GridGraphs
                     if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE)
                         Label[x, y] = (byte)FLOW_GRAPH_LABEL.SINK;
 
-                    foreach (var i in EnumerateDirections())
+                    for (int j = 0; j < directions.Count; j++)
+                    {
+                        int i = directions[j];
+
                         if (Flow[x, y, i] < 0) Flow[x, y, i] = 0;
+                    }
+                        
                 }
             }
 
@@ -633,7 +639,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="step">Used to determine if vertex has been visited.</param>
         /// <param name="sink">The index of the sink point.</param>
         /// <returns></returns>
-        private bool BreadthFirstSearch(GridFlowSearch search, int step, out Point3i sink)
+        private bool BreadthFirstSearch(GridFlowSearch search, int step, IList<int> directions, out Point3i sink)
         {
             search.ClearQueue();
 
@@ -653,28 +659,10 @@ namespace Common.GraphTheory.GridGraphs
             {
                 Point2i u = search.Dequeue();
 
-                foreach (var i in EnumerateInBoundsDirections(u.x, u.y))
+                for (int j = 0; j < directions.Count; j++)
                 {
-  
-                    float residual = Capacity[u.x, u.y, i.z] - Flow[u.x, u.y, i.z];
-                    if (residual <= 0) continue;
+                    int i = directions[j];
 
-                    if (search.GetIsVisited(i.x, i.y) >= step) continue;
-
-                    search.Enqueue(new Point2i(i.x, i.y));
-                    search.SetParent(i.x, i.y, new Point3i(u.x, u.y, i.z));
-                    search.SetIsVisited(i.x, i.y, step);
-
-                    if (Label[i.x, i.y] == (byte)FLOW_GRAPH_LABEL.SINK)
-                    {
-                        sink = new Point3i(i.x, i.y, -1);
-                        return true;
-                    }
-                }
-
-                /*
-                for (int i = 0; i < 8; i++)
-                {
                     float residual = Capacity[u.x, u.y, i] - Flow[u.x, u.y, i];
                     if (residual <= 0) continue;
 
@@ -695,7 +683,7 @@ namespace Common.GraphTheory.GridGraphs
                         return true;
                     }
                 }
-                */
+               
             }
 
             sink = new Point3i(-1, -1, -1);

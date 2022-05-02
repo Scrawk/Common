@@ -31,6 +31,21 @@ namespace Common.Core.Directions
         }
 
         /// <summary>
+        /// All the direction values.
+        /// </summary>
+        public static readonly int[] ALL = new int[]
+        {
+            LEFT,
+            LEFT_TOP,
+            TOP,
+            RIGHT_TOP,
+            RIGHT,
+            RIGHT_BOTTOM,
+            BOTTOM,
+            LEFT_BOTTOM
+        };
+
+        /// <summary>
         /// The directions name.
         /// </summary>
         public static readonly string[] NAME = new string[]
