@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Common.Core.Numerics;
 using Common.Core.Directions;
 using Common.Core.Shapes;
-using Common.GraphTheory.AdjacencyGraphs;
+using Common.Core.Extensions;
 
 namespace Common.GraphTheory.GridGraphs
 {
@@ -515,6 +515,8 @@ namespace Common.GraphTheory.GridGraphs
                 directions.AddRange(D8.ORTHOGONAL);
             else
                 directions.AddRange(D8.ALL);
+
+            directions.Shuffle(0);
 
             Point3i sink, v;
             while (BreadthFirstSearch(search, step, directions, out sink))
