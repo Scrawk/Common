@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Common.Core.Numerics;
 using Common.Core.Directions;
+using Common.Core.Shapes;
 using Common.GraphTheory.AdjacencyGraphs;
 
 namespace Common.GraphTheory.GridGraphs
@@ -44,6 +46,11 @@ namespace Common.GraphTheory.GridGraphs
         public int Width { get; private set; }
 
         public int Height { get; private set; }
+
+        /// <summary>
+        /// Does the graph use only orthogonal and not diagonal directions.
+        /// </summary>
+        public bool IsOrthogonal { get; set; }
 
         /// <summary>
         /// THe vertices edges capacity value.
@@ -93,6 +100,12 @@ namespace Common.GraphTheory.GridGraphs
             FillCapacity(capacities);
         }
 
+        public override string ToString()
+        {
+            return string.Format("[GridGraph: IsOrthogonal={0}, Width={1}, Height={2}]",
+                IsOrthogonal, Width, Height);
+        }
+
         /// <summary>
         /// Clear the graph by setting all capacity, flow and labels to 0.
         /// </summary>
@@ -101,6 +114,16 @@ namespace Common.GraphTheory.GridGraphs
             Array.Clear(Capacity, 0, Capacity.Length);
             Array.Clear(Flow, 0, Flow.Length);
             Array.Clear(Label, 0, Label.Length);
+        }
+
+        /// <summary>
+        /// Creates a new helper search data structure.
+        /// </summary>
+        /// <returns></returns>
+        public GridFlowSearch CreateSearch()
+        {
+            var search = new GridFlowSearch(Width, Height);
+            return search;
         }
 
         /// <summary>
@@ -144,11 +167,71 @@ namespace Common.GraphTheory.GridGraphs
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    for (int i = 0; i < 8; i++)
+                    if (IsOrthogonal)
                     {
-                        func(x, y, i);
+                        for (int i = 0; i < 4; i++)
+                            func(x, y, D8.ORTHOGONAL[i]);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 8; i++)
+                            func(x, y, i);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Iterate over the graphs edge directions.
+        /// </summary>
+        public IEnumerable<int> EnumerateDirections()
+        {
+            if(IsOrthogonal)
+            {
+                for (int i = 0; i < 4; i++)
+                    yield return D8.ORTHOGONAL[i];
+            }
+            else
+            {
+                for (int i = 0; i < 8; i++)
+                    yield return i;
+            }
+        }
+
+        /// <summary>
+        /// Iterate over the graphs edge directions.
+        /// </summary>
+        public IEnumerable<Point3i> EnumerateInBoundsDirections(int x, int y)
+        {
+            if (IsOrthogonal)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    int i = D8.ORTHOGONAL[j];
+
+                    int xi = x + D8.OFFSETS[i, 0];
+                    int yi = y + D8.OFFSETS[i, 1];
+
+                    if (xi < 0 || xi > Width - 1) continue;
+                    if (yi < 0 || yi > Height - 1) continue;
+
+                    yield return new Point3i(xi, yi, i);
+                }
+                    
+            }
+            else
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    int xi = x + D8.OFFSETS[i, 0];
+                    int yi = y + D8.OFFSETS[i, 1];
+
+                    if (xi < 0 || xi > Width - 1) continue;
+                    if (yi < 0 || yi > Height - 1) continue;
+
+                    yield return new Point3i(xi, yi, i);
+                }
+                    
             }
         }
 
@@ -164,17 +247,10 @@ namespace Common.GraphTheory.GridGraphs
                 {
                     var c1 = array[x, y];
 
-                    for (int i = 0; i < 8; i++)
+                    foreach(var i in EnumerateInBoundsDirections(x,y))
                     {
-                        int xi = x + D8.OFFSETS[i, 0];
-                        int yi = y + D8.OFFSETS[i, 1];
-
-                        if (xi < 0 || xi > Width - 1) continue;
-                        if (yi < 0 || yi > Height - 1) continue;
-
-                        var c2 = array[xi, yi];
-
-                        Capacity[x, y, i] = (c1 + c2) * 0.5f;
+                        var c2 = array[i.x, i.y];
+                        Capacity[x, y, i.z] = (c1 + c2) * 0.5f;
                     }
                 }
             }
@@ -207,6 +283,21 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
+        /// Set the capacity of the vertex edge at x,y 
+        /// going to the neighbour vertex.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="capacity"></param>
+        public void SetCapacity(int x, int y, float capacity)
+        {
+            foreach (var i in EnumerateInBoundsDirections(x, y))
+            {
+                SetCapacity(x, y, i.z, capacity);
+            }
+        }
+
+        /// <summary>
         /// Get the flow of the vertex edge at x,y 
         /// going to the neighbour vertex at i.
         /// </summary>
@@ -230,6 +321,19 @@ namespace Common.GraphTheory.GridGraphs
         public void SetFlow(int x, int y, int i, float flow)
         {
             Flow[x, y, i] = flow;
+        }
+
+        /// <summary>
+        /// Set the flow of the vertex edge at x,y 
+        /// going to the neighbour vertex.
+        /// </summary>
+        /// <param name="x">The x axis index.</param>
+        /// <param name="y">The y axis index</param>
+        /// <param name="flow"></param>
+        public void SetFlow(int x, int y, float flow)
+        {
+            foreach (var i in EnumerateInBoundsDirections(x, y))
+                Flow[x, y, i.z] = flow;
         }
 
         /// <summary>
@@ -262,44 +366,42 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="y">The y axis index</param>
         /// <param name="label">The vertices label.</param>
         /// <param name="capacity">The vertices edges capacity.</param>
-        public void SetLabel(int x, int y, FLOW_GRAPH_LABEL label, int capacity)
+        public void SetLabelAndCapacity(int x, int y, FLOW_GRAPH_LABEL label, int capacity)
         {
             SetLabel(x, y, label);
+            SetCapacity(x, y, capacity);
+        }
 
-            for (int i = 0; i < 8; i++)
+        /// <summary>
+        /// Sets the labels of the vertices in the bounds of the box.
+        /// </summary>
+        /// <param name="bounds">The box.</param>
+        /// <param name="label">The label.</param>
+        /// <param name="capacity">The vertices edges capacity.</param>
+        public void SetLabelAndCapacityInBounds(Box2i bounds, FLOW_GRAPH_LABEL label, int capacity)
+        {
+            foreach (var p in bounds.EnumerateBounds())
             {
-                int xi = x + D8.OFFSETS[i, 0];
-                int yi = y + D8.OFFSETS[i, 1];
-
-                if (xi < 0 || xi >= Width) continue;
-                if (yi < 0 || yi >= Height) continue;
-
-                SetCapacity(x, y, i, capacity);
+                SetLabel(p.x, p.y, label);
+                SetCapacity(p.x, p.y, capacity);
             }
         }
 
         /// <summary>
-        /// Set the vertices label at x,y to source.
-        /// Set all edges capacity going from this vertex.
+        /// Sets the labels of the vertices in the perimeter of the box.
         /// </summary>
-        /// <param name="x">The x axis index.</param>
-        /// <param name="y">The y axis index</param>
+        /// <param name="width">The width of the perimeters border.</param>
+        /// <param name="label">The label.</param>
         /// <param name="capacity">The vertices edges capacity.</param>
-        public void SetSource(int x, int y, int capacity)
+        public void SetLabelAndCapacityInPerimeter(int width, FLOW_GRAPH_LABEL label, int capacity)
         {
-            SetLabel(x, y, FLOW_GRAPH_LABEL.SOURCE, capacity);
-        }
+            var bounds = new Box2i(0, 0, Width-1, Height-1);
 
-        /// <summary>
-        /// Set the vertices label at x,y to sink.
-        /// Set all edges capacity going from this vertex.
-        /// </summary>
-        /// <param name="x">The x axis index.</param>
-        /// <param name="y">The y axis index</param>
-        /// <param name="capacity">The vertices edges capacity.</param>
-        public void SetSink(int x, int y, int capacity)
-        {
-            SetLabel(x, y, FLOW_GRAPH_LABEL.SINK, capacity);
+            foreach (var p in bounds.EnumeratePerimeter(width))
+            {
+                SetLabel(p.x, p.y, label);
+                SetCapacity(p.x, p.y, capacity);
+            }
         }
 
         /// <summary>
@@ -334,15 +436,9 @@ namespace Common.GraphTheory.GridGraphs
         {
             var label = Label[x, y];
 
-            for (int i = 0; i < 8; i++)
+            foreach (var i in EnumerateInBoundsDirections(x, y))
             {
-                int xi = x + D8.OFFSETS[i, 0];
-                int yi = y + D8.OFFSETS[i, 1];
-
-                if (xi < 0 || xi >= Width) continue;
-                if (yi < 0 || yi >= Height) continue;
-
-                if (Label[xi, yi] != label)
+                if (Label[i.x, i.y] != label)
                 {
                     return true;
                 }
@@ -483,6 +579,20 @@ namespace Common.GraphTheory.GridGraphs
             {
                 Point2i u = search.Dequeue();
 
+                foreach(var i in EnumerateInBoundsDirections(u.x, u.y))
+                {
+
+                    float residual = Capacity[u.x, u.y, i.z] - Flow[u.x, u.y, i.z];
+                    if (residual <= 0) continue;
+
+                    if (Label[i.x, i.y] == (byte)FLOW_GRAPH_LABEL.SOURCE) continue;
+
+                    Label[i.x, i.y] = (byte)FLOW_GRAPH_LABEL.SOURCE;
+
+                    search.Enqueue(new Point2i(i.x, i.y));
+                }
+
+                /*
                 for (int i = 0; i < 8; i++)
                 {
                     float residual = Capacity[u.x, u.y, i] - Flow[u.x, u.y, i];
@@ -499,6 +609,7 @@ namespace Common.GraphTheory.GridGraphs
 
                     search.Enqueue(new Point2i(xi, yi));
                 }
+                */
             }
 
             for (int y = 0; y < Height; y++)
@@ -508,7 +619,7 @@ namespace Common.GraphTheory.GridGraphs
                     if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE)
                         Label[x, y] = (byte)FLOW_GRAPH_LABEL.SINK;
 
-                    for (int i = 0; i < 8; i++)
+                    foreach (var i in EnumerateDirections())
                         if (Flow[x, y, i] < 0) Flow[x, y, i] = 0;
                 }
             }
@@ -542,6 +653,26 @@ namespace Common.GraphTheory.GridGraphs
             {
                 Point2i u = search.Dequeue();
 
+                foreach (var i in EnumerateInBoundsDirections(u.x, u.y))
+                {
+  
+                    float residual = Capacity[u.x, u.y, i.z] - Flow[u.x, u.y, i.z];
+                    if (residual <= 0) continue;
+
+                    if (search.GetIsVisited(i.x, i.y) >= step) continue;
+
+                    search.Enqueue(new Point2i(i.x, i.y));
+                    search.SetParent(i.x, i.y, new Point3i(u.x, u.y, i.z));
+                    search.SetIsVisited(i.x, i.y, step);
+
+                    if (Label[i.x, i.y] == (byte)FLOW_GRAPH_LABEL.SINK)
+                    {
+                        sink = new Point3i(i.x, i.y, -1);
+                        return true;
+                    }
+                }
+
+                /*
                 for (int i = 0; i < 8; i++)
                 {
                     float residual = Capacity[u.x, u.y, i] - Flow[u.x, u.y, i];
@@ -564,6 +695,7 @@ namespace Common.GraphTheory.GridGraphs
                         return true;
                     }
                 }
+                */
             }
 
             sink = new Point3i(-1, -1, -1);

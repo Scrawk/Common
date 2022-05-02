@@ -129,22 +129,31 @@ namespace Common.Core.Shapes
         }
 
         /// <summary>
-        /// Enumerate each point on the boxes perimeter.
+        /// Enumerate each point on the boxes perimeter in ccw order.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<POINT2> EnumeratePerimeter()
+        /// <param name="width">The width of the perimeter.</param>
+        /// <returns></returns>
+        public IEnumerable<POINT2> EnumeratePerimeter(int width = 1)
         {
-            for (int x = Min.x; x < Max.x; x++)
-                yield return new POINT2(x, Min.y);
+            for (int i = 0; i < width; i++)
+            {
+                var box = this;
+                box.Min += i;
+                box.Max -= i;
 
-            for (int y = Min.y; y < Max.y; y++)
-                yield return new POINT2(Max.x, y);
+                for (int x = box.Min.x; x < box.Max.x; x++)
+                    yield return new POINT2(x, box.Min.y);
 
-            for (int x = Max.x; x > Min.x; x--)
-                yield return new POINT2(x, Max.y);
+                for (int y = box.Min.y; y < box.Max.y; y++)
+                    yield return new POINT2(box.Max.x, y);
 
-            for (int y = Max.y; y > Min.y; y--)
-                yield return new POINT2(Min.x, y);
+                for (int x = box.Max.x; x > box.Min.x; x--)
+                    yield return new POINT2(x, box.Max.y);
+
+                for (int y = box.Max.y; y > box.Min.y; y--)
+                    yield return new POINT2(box.Min.x, y);
+            }
         }
 
         /// <summary>
@@ -153,9 +162,9 @@ namespace Common.Core.Shapes
         /// <returns></returns>
         public IEnumerable<POINT2> EnumerateBounds()
         {
-            for (int y = Min.y; y < Max.y; y++)
+            for (int y = Min.y; y <= Max.y; y++)
             {
-                for (int x = Min.x; x < Max.x; x++)
+                for (int x = Min.x; x <= Max.x; x++)
                 {
                     yield return new POINT2(x, y);
                 }
