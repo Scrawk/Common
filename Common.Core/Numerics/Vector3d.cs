@@ -459,7 +459,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector3d)) return false;
@@ -470,7 +469,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these vectors equal given the error.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AlmostEqual(Vector3d v0, Vector3d v1, REAL eps = MathUtil.EPS_64)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
@@ -482,7 +480,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Vector3d v)
         {
             return this == v;
@@ -491,7 +488,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -507,7 +503,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Compare two vectors by axis.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Vector3d other)
         {
             if (x != other.x)
@@ -522,7 +517,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return string.Format("{0},{1},{2}", x, y, z);
@@ -531,7 +525,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
             return string.Format("{0},{1},{2}", x.ToString(f), y.ToString(f), z.ToString(f));
@@ -540,7 +533,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Vector3d v0, Vector3d v1)
 		{
 			return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
@@ -549,7 +541,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of vector and point.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Vector3d v0, Point3d v1)
         {
             return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z);
@@ -558,7 +549,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of two points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Point3d v0, Point3d v1)
         {
             return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z);
@@ -567,7 +557,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The abs dot product of two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL AbsDot(Vector3d v0, Vector3d v1)
         {
             return Math.Abs(v0.x * v1.x + v0.y * v1.y + v0.z * v1.z);
@@ -576,7 +565,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Normalize the vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
 		{
             REAL invLength = MathUtil.SafeInvSqrt(1.0, x * x + y * y + z * z);
@@ -589,7 +577,6 @@ namespace Common.Core.Numerics
         /// Angle between two vectors in degrees from 0 to 180.
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Degree Angle180(Vector3d a, Vector3d b)
         {
             REAL dp = Dot(a, b);
@@ -601,7 +588,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Cross two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3d Cross(Vector3d v)
 		{
 			return new Vector3d(y*v.z - z*v.y, z*v.x - x*v.z, x*v.y - y*v.x);
@@ -610,7 +596,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Cross two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Cross(Vector3d v0, Vector3d v1)
 		{
 			return new Vector3d(v0.y*v1.z - v0.z*v1.y, v0.z*v1.x - v0.x*v1.z, v0.x*v1.y - v0.y*v1.x);
@@ -619,7 +604,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Cross a vector andpoint.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Cross(Vector3d v0, Point3d v1)
         {
             return new Vector3d(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x);
@@ -628,7 +612,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Cross two points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Cross(Point3d v0, Point3d v1)
         {
             return new Vector3d(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x);
@@ -637,7 +620,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Project vector v onto u.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Project(Vector3d u, Vector3d v)
         {
             return Dot(u, v) / u.SqrMagnitude * u;
@@ -646,7 +628,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Given an incident vector i and a normal vector n.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Reflect(Vector3d i, Vector3d n)
         {
             return i - 2 * n * Dot(i, n);
@@ -681,7 +662,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a set of orthonormal vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Orthonormal(ref Vector3d a, ref Vector3d b, out Vector3d c)
         {
             a.Normalize();
@@ -697,7 +677,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Min(Vector3d v, REAL s)
         {
             v.x = Math.Min(v.x, s);
@@ -709,7 +688,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Min(Vector3d v0, Vector3d v1)
         {
             v0.x = Math.Min(v0.x, v1.x);
@@ -721,7 +699,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Max(Vector3d v, REAL s)
         {
             v.x = Math.Max(v.x, s);
@@ -733,7 +710,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Max(Vector3d v0, Vector3d v1)
         {
             v0.x = Math.Max(v0.x, v1.x);
@@ -745,7 +721,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Clamp(Vector3d v, REAL min, REAL max)
         {
             v.x = Math.Max(Math.Min(v.x, max), min);
@@ -757,7 +732,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d Clamp(Vector3d v, Vector3d min, Vector3d max)
         {
             v.x = Math.Max(Math.Min(v.x, max.x), min.x);
@@ -769,19 +743,25 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector3d Lerp(Vector3d from, Vector3d to, REAL t)
+        public static Vector3d Lerp(Vector3d v0, Vector3d v1, float a)
         {
-            if (t < 0.0) t = 0.0;
-            if (t > 1.0) t = 1.0;
-
-            if (t == 0.0) return from;
-            if (t == 1.0) return to;
-
-            REAL t1 = 1.0 - t;
             Vector3d v = new Vector3d();
-            v.x = from.x * t1 + to.x * t;
-            v.y = from.y * t1 + to.y * t;
-            v.z = from.z * t1 + to.z * t;
+            v.x = MathUtil.Lerp(v0.x, v1.x, a);
+            v.y = MathUtil.Lerp(v0.y, v1.y, a);
+            v.z = MathUtil.Lerp(v0.z, v1.z, a);
+            return v;
+        }
+
+        /// <summary>
+        /// BLerp between four vectors.
+        /// </summary>
+        public static Vector3d BLerp(Vector3d v00, Vector3d v10, Vector3d v01, Vector3d v11, float a0, float a1)
+        {
+            Vector3d v = new Vector3d();
+            v.x = MathUtil.BLerp(v00.x, v10.x, v01.x, v11.x, a0, a1);
+            v.y = MathUtil.BLerp(v00.y, v10.y, v01.y, v11.y, a0, a1);
+            v.z = MathUtil.BLerp(v00.z, v10.z, v01.z, v11.z, a0, a1);
+
             return v;
         }
 
@@ -800,13 +780,13 @@ namespace Common.Core.Numerics
             REAL m = from.Magnitude * to.Magnitude;
             if (MathUtil.IsZero(m)) return Vector3d.Zero;
 
-            REAL theta = Math.Acos(Dot(from, to) / m);
+            REAL theta = MathUtil.Acos(Dot(from, to) / m);
 
             if (theta == 0.0) return to;
 
-            REAL sinTheta = Math.Sin(theta);
-            REAL st1 = Math.Sin((1.0 - t) * theta) / sinTheta;
-            REAL st = Math.Sin(t * theta) / sinTheta;
+            REAL sinTheta = MathUtil.Sin(theta);
+            REAL st1 = MathUtil.Sin((1.0 - t) * theta) / sinTheta;
+            REAL st = MathUtil.Sin(t * theta) / sinTheta;
 
             Vector3d v = new Vector3d();
             v.x = from.x * st1 + to.x * st;
@@ -820,7 +800,6 @@ namespace Common.Core.Numerics
         /// Round vector.
         /// </summary>
         /// <param name="digits">number of digits to round to.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3d Rounded(int digits)
         {
             REAL x = MathUtil.Round(this.x, digits);
@@ -833,7 +812,6 @@ namespace Common.Core.Numerics
         /// Round the vector.
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round(int digits)
         {
             x = MathUtil.Round(x, digits);

@@ -477,7 +477,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals (object obj)
 		{
 			if(!(obj is Vector4f)) return false;
@@ -488,7 +487,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these vectors equal given the error.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AlmostEqual(Vector4f v0, Vector4f v1, REAL eps = MathUtil.EPS_32)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
@@ -501,7 +499,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Vector4f v)
         {
             return this == v;
@@ -510,7 +507,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -527,7 +523,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Compare two vectors by axis.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Vector4f other)
         {
             if (x != other.x)
@@ -544,7 +539,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return string.Format("{0},{1},{2},{3}", x, y, z, w);
@@ -553,7 +547,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
             return string.Format("{0},{1},{2},{3}", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
@@ -562,7 +555,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Vector4f v0, Vector4f v1)
 		{
 			return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
@@ -571,7 +563,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of vector and point.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Vector4f v0, Point4f v1)
         {
             return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
@@ -580,7 +571,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of two points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Point4f v0, Point4f v1)
         {
             return (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
@@ -589,7 +579,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The abs dot product of two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL AbsDot(Vector4f v0, Vector4f v1)
         {
             return Math.Abs(v0.x * v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w);
@@ -598,7 +587,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Normalize the vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
             REAL invLength = MathUtil.SafeInvSqrt(1.0f, x * x + y * y + z * z + w * w);
@@ -611,7 +599,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Min(Vector4f v, REAL s)
         {
             v.x = Math.Min(v.x, s);
@@ -624,7 +611,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Min(Vector4f v0, Vector4f v1)
         {
             v0.x = Math.Min(v0.x, v1.x);
@@ -637,7 +623,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Max(Vector4f v, REAL s)
         {
             v.x = Math.Max(v.x, s);
@@ -650,7 +635,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Max(Vector4f v0, Vector4f v1)
         {
             v0.x = Math.Max(v0.x, v1.x);
@@ -663,7 +647,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Clamp(Vector4f v, REAL min, REAL max)
         {
             v.x = Math.Max(Math.Min(v.x, max), min);
@@ -676,7 +659,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4f Clamp(Vector4f v, Vector4f min, Vector4f max)
         {
             v.x = Math.Max(Math.Min(v.x, max.x), min.x);
@@ -689,20 +671,27 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector4f Lerp(Vector4f from, Vector4f to, REAL t)
+        public static Vector4f Lerp(Vector4f v0, Vector4f v1, float a)
         {
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
-
-            if (t == 0.0f) return from;
-            if (t == 1.0f) return to;
-
-            REAL t1 = 1.0f - t;
             Vector4f v = new Vector4f();
-            v.x = from.x * t1 + to.x * t;
-            v.y = from.y * t1 + to.y * t;
-            v.z = from.z * t1 + to.z * t;
-            v.w = from.w * t1 + to.w * t;
+            v.x = MathUtil.Lerp(v0.x, v1.x, a);
+            v.y = MathUtil.Lerp(v0.y, v1.y, a);
+            v.z = MathUtil.Lerp(v0.z, v1.z, a);
+            v.w = MathUtil.Lerp(v0.w, v1.w, a);
+            return v;
+        }
+
+        /// <summary>
+        /// BLerp between four vectors.
+        /// </summary>
+        public static Vector4f BLerp(Vector4f v00, Vector4f v10, Vector4f v01, Vector4f v11, float a0, float a1)
+        {
+            Vector4f v = new Vector4f();
+            v.x = MathUtil.BLerp(v00.x, v10.x, v01.x, v11.x, a0, a1);
+            v.y = MathUtil.BLerp(v00.y, v10.y, v01.y, v11.y, a0, a1);
+            v.z = MathUtil.BLerp(v00.z, v10.z, v01.z, v11.z, a0, a1);
+            v.w = MathUtil.BLerp(v00.w, v10.w, v01.w, v11.w, a0, a1);
+
             return v;
         }
 
@@ -710,7 +699,6 @@ namespace Common.Core.Numerics
         /// Round vector.
         /// </summary>
         /// <param name="digits">number of digits to round to.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector4f Rounded(int digits)
         {
             REAL x = MathUtil.Round(this.x, digits);
@@ -724,7 +712,6 @@ namespace Common.Core.Numerics
         /// Round the vector.
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round(int digits)
         {
             x = MathUtil.Round(x, digits);

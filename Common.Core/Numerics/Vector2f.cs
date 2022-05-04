@@ -16,7 +16,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The unit x vector.
         /// </summary>
-        public readonly static Vector2f UnitX = new Vector2f(1, 0);
+	    public readonly static Vector2f UnitX = new Vector2f(1, 0);
 
         /// <summary>
         /// The unit y vector.
@@ -95,7 +95,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// A vector from the variables.
+        /// A vector from the varibles.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2f(REAL x, REAL y)
@@ -401,7 +401,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Cast from Vector2d to Vector2f.
+        /// Cast from Vector2f to Vector2f.
         /// </summary>
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -411,7 +411,7 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Cast from Point2d to Vector2f.
+        /// Cast from Point2f to Vector2f.
         /// </summary>
         /// <param name="v"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -435,34 +435,32 @@ namespace Common.Core.Numerics
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Vector2f v1, Vector2f v2)
-		{
-			return (v1.x == v2.x && v1.y == v2.y);
-		}
+        {
+            return (v1.x == v2.x && v1.y == v2.y);
+        }
 
         /// <summary>
         /// Are these vectors not equal.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Vector2f v1, Vector2f v2)
-		{
-			return (v1.x != v2.x || v1.y != v2.y);
-		}
+        {
+            return (v1.x != v2.x || v1.y != v2.y);
+        }
 
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals (object obj)
-		{
-			if(!(obj is Vector2f)) return false;
-			Vector2f v = (Vector2f)obj;
-			return this == v;
-		}
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Vector2f)) return false;
+            Vector2f v = (Vector2f)obj;
+            return this == v;
+        }
 
         /// <summary>
         /// Are these vectors equal given the error.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AlmostEqual(Vector2f v0, Vector2f v1, REAL eps = MathUtil.EPS_32)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
@@ -473,7 +471,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these vectors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Vector2f v)
         {
             return this == v;
@@ -482,7 +479,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -497,7 +493,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Compare two vectors by axis.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int CompareTo(Vector2f other)
         {
             if (x != other.x)
@@ -510,7 +505,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return string.Format("{0},{1}", x, y);
@@ -519,7 +513,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
             return string.Format("{0},{1}", x.ToString(f), y.ToString(f));
@@ -528,16 +521,14 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Vector2f v0, Vector2f v1)
-		{
-			return v0.x * v1.x + v0.y * v1.y;
-		}
+        {
+            return (v0.x * v1.x + v0.y * v1.y);
+        }
 
         /// <summary>
         /// The dot product of vector and point.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Vector2f v0, Point2f v1)
         {
             return (v0.x * v1.x + v0.y * v1.y);
@@ -546,7 +537,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The dot product of two pointss.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Dot(Point2f v0, Point2f v1)
         {
             return (v0.x * v1.x + v0.y * v1.y);
@@ -555,7 +545,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The abs dot product of two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL AbsDot(Vector2f v0, Vector2f v1)
         {
             return Math.Abs(v0.x * v1.x + v0.y * v1.y);
@@ -564,7 +553,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Normalize the vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
         {
             REAL invLength = MathUtil.SafeInvSqrt(1.0f, x * x + y * y);
@@ -575,7 +563,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Cross two vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Cross(Vector2f v0, Vector2f v1)
         {
             return v0.x * v1.y - v0.y * v1.x;
@@ -584,7 +571,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Project vector v onto u.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Project(Vector2f u, Vector2f v)
         {
             return Dot(u, v) / u.SqrMagnitude * u;
@@ -593,7 +579,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Given an incident vector i and a normal vector n.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Reflect(Vector2f i, Vector2f n)
         {
             return i - 2 * n * Dot(i, n);
@@ -603,19 +588,18 @@ namespace Common.Core.Numerics
         /// Returns the refraction vector given the incident vector i, 
         /// the normal vector n and the refraction index eta.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2f Refract(Vector2f i, Vector2f n, REAL eta)
+        public static Vector2f Refract(Vector2f i, Vector2f n, float eta)
         {
             REAL ni = Dot(n, i);
             REAL k = 1.0f - eta * eta * (1.0f - ni * ni);
 
             return (k >= 0) ? eta * i - (eta * ni + MathUtil.SafeSqrt(k)) * n : Zero;
         }
+
         /// <summary>
         /// Angle between two vectors in degrees from 0 to 180.
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Degree Angle180(Vector2f a, Vector2f b)
         {
             REAL dp = Dot(a, b);
@@ -629,12 +613,11 @@ namespace Common.Core.Numerics
         /// Angle represents moving ccw from a to b.
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Degree Angle360(Vector2f a, Vector2f b)
         {
             REAL angle = MathUtil.Atan2(a.y, a.x) - MathUtil.Atan2(b.y, b.x);
 
-            if (angle <= 0.0f)
+            if (angle <= 0.0)
                 angle = MathUtil.PI_32 * 2.0f + angle;
 
             angle = 360.0f - MathUtil.ToDegrees(angle);
@@ -644,7 +627,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Min(Vector2f v, REAL s)
         {
             v.x = Math.Min(v.x, s);
@@ -655,7 +637,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between each component in vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Min(Vector2f v0, Vector2f v1)
         {
             v0.x = Math.Min(v0.x, v1.x);
@@ -666,7 +647,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Max(Vector2f v, REAL s)
         {
             v.x = Math.Max(v.x, s);
@@ -677,7 +657,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between each component in vectors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Max(Vector2f v0, Vector2f v1)
         {
             v0.x = Math.Max(v0.x, v1.x);
@@ -688,7 +667,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Clamp(Vector2f v, REAL min, REAL max)
         {
             v.x = Math.Max(Math.Min(v.x, max), min);
@@ -699,7 +677,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Clamp(Vector2f v, Vector2f min, Vector2f max)
         {
             v.x = Math.Max(Math.Min(v.x, max.x), min.x);
@@ -710,19 +687,24 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector2f Lerp(Vector2f from, Vector2f to, REAL t)
+        public static Vector2f Lerp(Vector2f v0, Vector2f v1, float a)
         {
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
+            Vector2f v = new Vector2f();
+            v.x = MathUtil.Lerp(v0.x, v1.x, a);
+            v.y = MathUtil.Lerp(v0.y, v1.y, a);
+            return v;
+        }
 
-            if (t == 0.0f) return from;
-            if (t == 1.0f) return to;
+        /// <summary>
+        /// BLerp between four vectors.
+        /// </summary>
+        public static Vector2f BLerp(Vector2f v00, Vector2f v10, Vector2f v01, Vector2f v11, float a0, float a1)
+        {
+            Vector2f v = new Vector2f();
+            v.x = MathUtil.BLerp(v00.x, v10.x, v01.x, v11.x, a0, a1);
+            v.y = MathUtil.BLerp(v00.y, v10.y, v01.y, v11.y, a0, a1);
 
-            REAL t1 = 1.0f - t;
-			Vector2f v = new Vector2f();
-            v.x = from.x * t1 + to.x * t;
-            v.y = from.y * t1 + to.y * t;
-			return v;
+            return v;
         }
 
         /// <summary>
@@ -730,23 +712,23 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector2f Slerp(Vector2f from, Vector2f to, REAL t)
         {
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
+            if (t < 0.0) t = 0.0f;
+            if (t > 1.0) t = 1.0f;
 
-            if (t == 0.0f) return from;
-            if (t == 1.0f) return to;
+            if (t == 0.0) return from;
+            if (t == 1.0) return to;
             if (to.x == from.x && to.y == from.y) return to;
 
             REAL m = from.Magnitude * to.Magnitude;
             if (MathUtil.IsZero(m)) return Vector2f.Zero;
 
-            double theta = Math.Acos(Dot(from, to) / m);
+            REAL theta = MathUtil.Acos(Dot(from, to) / m);
 
             if (theta == 0.0) return to;
 
-            double sinTheta = Math.Sin(theta);
-            REAL st1 = (REAL)(Math.Sin((1.0 - t) * theta) / sinTheta);
-            REAL st = (REAL)(Math.Sin(t * theta) / sinTheta);
+            REAL sinTheta = MathUtil.Sin(theta);
+            REAL st1 = MathUtil.Sin((1.0f - t) * theta) / sinTheta;
+            REAL st = MathUtil.Sin(t * theta) / sinTheta;
 
             Vector2f v = new Vector2f();
             v.x = from.x * st1 + to.x * st;
@@ -759,7 +741,6 @@ namespace Common.Core.Numerics
         /// Round vector.
         /// </summary>
         /// <param name="digits">number of digits to round to.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2f Rounded(int digits)
         {
             REAL x = MathUtil.Round(this.x, digits);
@@ -771,7 +752,6 @@ namespace Common.Core.Numerics
         /// Round the vector.
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round(int digits)
         {
             x = MathUtil.Round(x, digits);
@@ -795,7 +775,6 @@ namespace Common.Core.Numerics
             x = MathUtil.Ceilling(x);
             y = MathUtil.Ceilling(y);
         }
-
     }
 
 }

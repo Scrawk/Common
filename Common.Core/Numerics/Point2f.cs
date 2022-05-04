@@ -438,7 +438,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these points equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
             if (!(obj is Point2f)) return false;
@@ -449,7 +448,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these points equal given the error.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AlmostEqual(Point2f v0, Point2f v1, REAL eps = MathUtil.EPS_32)
         {
             if (Math.Abs(v0.x - v1.x) > eps) return false;
@@ -460,7 +458,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these points equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Point2f v)
         {
             return this == v;
@@ -469,7 +466,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -484,7 +480,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return string.Format("{0},{1}", x, y);
@@ -493,7 +488,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
             return string.Format("{0},{1}", x.ToString(f), y.ToString(f));
@@ -502,7 +496,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Distance between two points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL Distance(Point2f v0, Point2f v1)
         {
             return MathUtil.Sqrt(SqrDistance(v0, v1));
@@ -511,7 +504,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Square distance between two points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static REAL SqrDistance(Point2f v0, Point2f v1)
         {
             REAL x = v0.x - v1.x;
@@ -526,7 +518,6 @@ namespace Common.Core.Numerics
         /// <param name="v1">The second point.</param>
         /// <param name="normalize">Should the vector be normalized.</param>
         /// <returns>The vector from v0 to v1.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2f Direction(Point2f v0, Point2f v1, bool normalize = true)
         {
             Vector2f v = v1 - v0;
@@ -541,7 +532,6 @@ namespace Common.Core.Numerics
         /// Angle between two vectors in degrees from 0 to 180.
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Degree Angle180(Point2f a, Point2f b, Point2f c)
         {
             VECTOR2 u = Direction(b, a);
@@ -559,7 +549,6 @@ namespace Common.Core.Numerics
         /// Angle represents moving ccw from a to b.
         /// A and b origin treated as 0,0 and do not need to be normalized.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Degree Angle360(Point2f a, Point2f b, Point2f c)
         {
             VECTOR2 u = Direction(b, a);
@@ -578,7 +567,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between s and each component in point.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point2f Min(Point2f v, REAL s)
         {
             v.x = MathUtil.Min(v.x, s);
@@ -589,7 +577,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between each component in points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point2f Min(Point2f v0, Point2f v1)
         {
             v0.x = MathUtil.Min(v0.x, v1.x);
@@ -600,7 +587,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between s and each component in point.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point2f Max(Point2f v, REAL s)
         {
             v.x = MathUtil.Max(v.x, s);
@@ -611,7 +597,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between each component in points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point2f Max(Point2f v0, Point2f v1)
         {
             v0.x = MathUtil.Max(v0.x, v1.x);
@@ -622,7 +607,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point2f Clamp(Point2f v, REAL min, REAL max)
         {
             v.x = MathUtil.Max(MathUtil.Min(v.x, max), min);
@@ -633,7 +617,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point2f Clamp(Point2f v, Point2f min, Point2f max)
         {
             v.x = MathUtil.Max(MathUtil.Min(v.x, max.x), min.x);
@@ -664,7 +647,6 @@ namespace Common.Core.Numerics
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
         /// <returns>The rounded point</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Point2f Rounded(int digits)
         {
             REAL x = MathUtil.Round(this.x, digits);
@@ -676,7 +658,6 @@ namespace Common.Core.Numerics
         /// Round the point.
         /// </summary>
         /// <param name="digits">The number of digits to round to.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Round(int digits)
         {
             x = MathUtil.Round(x, digits);

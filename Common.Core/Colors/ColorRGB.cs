@@ -36,7 +36,6 @@ namespace Common.Core.Colors
         
         public float r, g, b;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(float r, float g, float b)
         {
             this.r = r;
@@ -44,21 +43,18 @@ namespace Common.Core.Colors
             this.b = b;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(float v) 
             : this(v,v,v)
         {
 
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(double r, double g, double b) 
             : this((float)r, (float)g, (float)b)
         {
 
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ColorRGB(double v) 
             : this(v, v, v)
         {
@@ -251,7 +247,6 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
             if (!(obj is ColorRGB)) return false;
@@ -264,7 +259,6 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal given the error.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool AlmostEqual(ColorRGB c0, ColorRGB c1, float eps = MathUtil.EPS_32)
         {
             if (Math.Abs(c0.r - c1.r) > eps) return false;
@@ -276,7 +270,6 @@ namespace Common.Core.Colors
         /// <summary>
         /// Are these colors equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(ColorRGB v)
         {
             return this == v;
@@ -285,7 +278,6 @@ namespace Common.Core.Colors
         /// <summary>
         /// colors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -394,7 +386,6 @@ namespace Common.Core.Colors
         /// <summary>
         /// The minimum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB Min(ColorRGB col, float s)
         {
             col.r = Math.Min(col.r, s);
@@ -406,7 +397,6 @@ namespace Common.Core.Colors
         /// <summary>
         /// The maximum value between s and each component in vector.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB Max(ColorRGB col, float s)
         {
             col.r = Math.Max(col.r, s);
@@ -418,7 +408,6 @@ namespace Common.Core.Colors
         /// <summary>
         /// Clamp the each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ColorRGB Clamp(ColorRGB col, float min, float max)
         {
             col.r = Math.Max(Math.Min(col.r, max), min);
@@ -428,17 +417,28 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
-        /// Lerp between two vectors.
+        /// Lerp between two colors.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static ColorRGB Lerp(ColorRGB v1, ColorRGB v2, float a)
+        public static ColorRGB Lerp(ColorRGB c1, ColorRGB c2, float a)
         {
-            float a1 = 1.0f - a;
-            ColorRGB v = new ColorRGB();
-            v.r = v1.r * a1 + v2.r * a;
-            v.g = v1.g * a1 + v2.g * a;
-            v.b = v1.b * a1 + v2.b * a;
-            return v;
+            ColorRGB col = new ColorRGB();
+            col.r = MathUtil.Lerp(c1.r, c2.r, a);
+            col.g = MathUtil.Lerp(c1.g, c2.g, a);
+            col.b = MathUtil.Lerp(c1.b, c2.b, a);
+            return col;
+        }
+
+        /// <summary>
+        /// BLerp between four colors.
+        /// </summary>
+        public static ColorRGB BLerp(ColorRGB c00, ColorRGB c10, ColorRGB c01, ColorRGB c11, float a0, float a1)
+        {
+            ColorRGB col = new ColorRGB();
+            col.r = MathUtil.BLerp(c00.r, c10.r, c01.r, c11.r, a0, a1);
+            col.g = MathUtil.BLerp(c00.g, c10.g, c01.g, c11.g, a0, a1);
+            col.b = MathUtil.BLerp(c00.b, c10.b, c01.b, c11.b, a0, a1);
+
+            return col;
         }
 
         /// <summary>

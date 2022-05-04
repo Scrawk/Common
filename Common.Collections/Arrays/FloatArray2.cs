@@ -63,7 +63,7 @@ namespace Common.Collections.Arrays
             var v01 = base.GetClamped(xi, yi + 1);
             var v11 = base.GetClamped(xi + 1, yi + 1);
 
-            return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
+            return MathUtil.BLerp(v00, v10, v01, v11, x - xi, y - yi);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Common.Collections.Arrays
             var v01 = base.GetWrapped(xi, yi + 1);
             var v11 = base.GetWrapped(xi + 1, yi + 1);
 
-            return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
+            return MathUtil.BLerp(v00, v10, v01, v11, x - xi, y - yi);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Common.Collections.Arrays
             var v01 = base.GetMirrored(xi, yi + 1);
             var v11 = base.GetMirrored(xi + 1, yi + 1);
 
-            return MathUtil.Blerp(v00, v10, v01, v11, x - xi, y - yi);
+            return MathUtil.BLerp(v00, v10, v01, v11, x - xi, y - yi);
         }
 
         /// <summary>

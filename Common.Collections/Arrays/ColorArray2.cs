@@ -66,9 +66,9 @@ namespace Common.Collections.Arrays
             var v11 = base.GetClamped(xi + 1, yi + 1);
 
             var col = new ColorRGB();
-            col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
-            col.g = MathUtil.Blerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
-            col.b = MathUtil.Blerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
+            col.r = MathUtil.BLerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
+            col.g = MathUtil.BLerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
+            col.b = MathUtil.BLerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
             return col;
         }
 
@@ -89,9 +89,9 @@ namespace Common.Collections.Arrays
             var v11 = base.GetWrapped(xi + 1, yi + 1);
 
             var col = new ColorRGB();
-            col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
-            col.g = MathUtil.Blerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
-            col.b = MathUtil.Blerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
+            col.r = MathUtil.BLerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
+            col.g = MathUtil.BLerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
+            col.b = MathUtil.BLerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
             return col;
         }
 
@@ -112,9 +112,9 @@ namespace Common.Collections.Arrays
             var v11 = base.GetMirrored(xi + 1, yi + 1);
 
             var col = new ColorRGB();
-            col.r = MathUtil.Blerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
-            col.g = MathUtil.Blerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
-            col.b = MathUtil.Blerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
+            col.r = MathUtil.BLerp(v00.r, v10.r, v01.r, v11.r, x - xi, y - yi);
+            col.g = MathUtil.BLerp(v00.g, v10.g, v01.g, v11.g, x - xi, y - yi);
+            col.b = MathUtil.BLerp(v00.b, v10.b, v01.b, v11.b, x - xi, y - yi);
             return col;
         }
 

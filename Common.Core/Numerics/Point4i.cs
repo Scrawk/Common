@@ -361,7 +361,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these points equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override bool Equals(object obj)
         {
             if (!(obj is Point4i)) return false;
@@ -372,7 +371,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Are these points equal.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Equals(Point4i v)
         {
             return this == v;
@@ -381,7 +379,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vectors hash code. 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
         {
             unchecked
@@ -398,7 +395,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
         {
             return string.Format("{0},{1},{2},{3}", x, y, z, w);
@@ -407,7 +403,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Vector as a string.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string ToString(string f)
         {
             return string.Format("{0},{1},{2},{3}", x.ToString(f), y.ToString(f), z.ToString(f), w.ToString(f));
@@ -416,7 +411,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between s and each component in point.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point4i Min(Point4i v, REAL s)
         {
             v.x = MathUtil.Min(v.x, s);
@@ -429,7 +423,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The minimum value between each component in points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point4i Min(Point4i v0, Point4i v1)
         {
             v0.x = MathUtil.Min(v0.x, v1.x);
@@ -442,7 +435,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between s and each component in point.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point4i Max(Point4i v, REAL s)
         {
             v.x = MathUtil.Max(v.x, s);
@@ -455,7 +447,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// The maximum value between each component in points.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point4i Max(Point4i v0, Point4i v1)
         {
             v0.x = MathUtil.Max(v0.x, v1.x);
@@ -468,7 +459,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point4i Clamp(Point4i v, REAL min, REAL max)
         {
             v.x = MathUtil.Max(MathUtil.Min(v.x, max), min);
@@ -481,7 +471,6 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Clamp each component to specified min and max.
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Point4i Clamp(Point4i v, Point4i min, Point4i max)
         {
             v.x = MathUtil.Max(MathUtil.Min(v.x, max.x), min.x);

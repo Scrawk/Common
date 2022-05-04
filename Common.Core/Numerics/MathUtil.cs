@@ -576,13 +576,13 @@ namespace Common.Core.Numerics
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Blerp(float v00, float v10, float v01, float v11, float tx, float ty)
+        public static float BLerp(float v00, float v10, float v01, float v11, float tx, float ty)
         {
             return Lerp(Lerp(v00, v10, tx), Lerp(v01, v11, tx), ty);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static double Blerp(double v00, double v10, double v01, double v11, double tx, double ty)
+        public static double BLerp(double v00, double v10, double v01, double v11, double tx, double ty)
         {
             return Lerp(Lerp(v00, v10, tx), Lerp(v01, v11, tx), ty);
         }
