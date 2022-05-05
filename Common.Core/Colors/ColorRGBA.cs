@@ -348,6 +348,7 @@ namespace Common.Core.Colors
         public static ColorRGBA AlphaBlend(ColorRGBA c0, ColorRGBA c1)
         {
             float a = c0.a + (1.0f - c1.a);
+            a = MathUtil.Clamp01(a);
 
             if (a <= 0) 
                 return ColorRGBA.Clear;
@@ -484,6 +485,7 @@ namespace Common.Core.Colors
         /// </summary>
         public static ColorRGBA Lerp(ColorRGBA c1, ColorRGBA c2, float a)
         {
+            a = MathUtil.Clamp01(a);
             ColorRGBA col = new ColorRGBA();
             col.r = MathUtil.Lerp(c1.r, c2.r, a);
             col.g = MathUtil.Lerp(c1.g, c2.g, a);
@@ -497,6 +499,8 @@ namespace Common.Core.Colors
         /// </summary>
         public static ColorRGBA BLerp(ColorRGBA c00, ColorRGBA c10, ColorRGBA c01, ColorRGBA c11, float a0, float a1)
         {
+            a0 = MathUtil.Clamp01(a0);
+            a1 = MathUtil.Clamp01(a1);
             ColorRGBA col = new ColorRGBA();
             col.r = MathUtil.BLerp(c00.r, c10.r, c01.r, c11.r, a0, a1);
             col.g = MathUtil.BLerp(c00.g, c10.g, c01.g, c11.g, a0, a1);

@@ -689,6 +689,7 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector2f Lerp(Vector2f v0, Vector2f v1, float a)
         {
+            a = MathUtil.Clamp01(a);
             Vector2f v = new Vector2f();
             v.x = MathUtil.Lerp(v0.x, v1.x, a);
             v.y = MathUtil.Lerp(v0.y, v1.y, a);
@@ -700,6 +701,8 @@ namespace Common.Core.Numerics
         /// </summary>
         public static Vector2f BLerp(Vector2f v00, Vector2f v10, Vector2f v01, Vector2f v11, float a0, float a1)
         {
+            a0 = MathUtil.Clamp01(a0);
+            a1 = MathUtil.Clamp01(a1);
             Vector2f v = new Vector2f();
             v.x = MathUtil.BLerp(v00.x, v10.x, v01.x, v11.x, a0, a1);
             v.y = MathUtil.BLerp(v00.y, v10.y, v01.y, v11.y, a0, a1);
