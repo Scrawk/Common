@@ -41,16 +41,67 @@ namespace Common.GraphTheory.GridGraphs
     public class GridFlowGraph
     {
 
+        /// <summary>
+        /// Create a new graph.
+        /// </summary>
+        /// <param name="width">The graphs size on the x axis.</param>
+        /// <param name="height">The graphs size on the y axis.</param>
+        /// <param name="isOrthogonal">Is the graph orthogonal.</param>
+        public GridFlowGraph(int width, int height, bool isOrthogonal = true)
+        {
+            Width = width;
+            Height = height;
+
+            Capacity = new float[width, height, 8];
+            Flow = new float[width, height, 8];
+            Label = new byte[width, height];
+
+            Directions = new List<int>(8);
+            SetIsOrthogonal(isOrthogonal);
+        }
+
+        /// <summary>
+        /// Create a new graph and set the vertices edge 
+        /// capacities with the values in the araay.
+        /// The graph will have the same dimensions as the array. 
+        /// </summary>
+        /// <param name="capacities">The array of capacities.</param>
+        /// <param name="isOrthogonal">Is the graph orthogonal.</param>
+        public GridFlowGraph(float[,] capacities, bool isOrthogonal = true)
+        {
+            Width = capacities.GetLength(0);
+            Height = capacities.GetLength(1);
+
+            Capacity = new float[Width, Height, 8];
+            Flow = new float[Width, Height, 8];
+            Label = new byte[Width, Height];
+
+            Directions = new List<int>(8);
+            SetIsOrthogonal(isOrthogonal);
+
+            FillCapacity(capacities);
+        }
+
+        /// <summary>
+        /// THe number of vertices in the graph 
+        /// which is the width times the height.
+        /// </summary>
         public int VertexCount => Width * Height;
 
+        /// <summary>
+        /// The width of the graph on the x axis.
+        /// </summary>
         public int Width { get; private set; }
 
+        /// <summary>
+        /// The height of the graph on the y axis.
+        /// </summary>
         public int Height { get; private set; }
 
         /// <summary>
         /// Does the graph use only orthogonal and not diagonal directions.
         /// </summary>
-        public bool IsOrthogonal { get; set; }
+        public bool IsOrthogonal { get; private set; }
 
         /// <summary>
         /// THe vertices edges capacity value.
@@ -60,7 +111,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// THe vertices edges flow value.
         /// </summary>
-        private float[,,] Flow { get;  set; }
+        private float[,,] Flow { get; set; }
 
         /// <summary>
         /// THe vertices label.
@@ -68,42 +119,33 @@ namespace Common.GraphTheory.GridGraphs
         private byte[,] Label { get; set; }
 
         /// <summary>
-        /// 
+        /// The neigbour directions each pixel is connect to.
+        /// If orthogonal there will be 4 neighbours (left, bottom, right and top).
+        /// If not orthogonal there will be 8 neighbours which includes the diagonals.
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        public GridFlowGraph(int width, int height)
-        {
-            Width = width;
-            Height = height;
-
-            Capacity = new float[width, height, 8];
-            Flow = new float[width, height, 8];
-            Label = new byte[width, height];
-        }
-
-        /// <summary>
-        /// Create a new graph and set the vertices edge 
-        /// capacities with the values in the araay.
-        /// The graph will have the same dimensions as the array.
-        /// </summary>
-        /// <param name="capacities">The edges capacities.</param>
-        public GridFlowGraph(float[,] capacities)
-        {
-            Width = capacities.GetLength(0);
-            Height = capacities.GetLength(1);
-
-            Capacity = new float[Width, Height, 8];
-            Flow = new float[Width, Height, 8];
-            Label = new byte[Width, Height];
-
-            FillCapacity(capacities);
-        }
+        private List<int> Directions { get; set; }
 
         public override string ToString()
         {
             return string.Format("[GridGraph: IsOrthogonal={0}, Width={1}, Height={2}]",
                 IsOrthogonal, Width, Height);
+        }
+
+        /// <summary>
+        /// The neigbour directions each pixel is connect to.
+        /// If orthogonal there will be 4 neighbours (left, bottom, right and top).
+        /// If not orthogonal there will be 8 neighbours which includes the diagonals.
+        /// </summary>
+        /// <param name="isOrthogonal">Is the grapgh orthogonal</param>
+        public void SetIsOrthogonal(bool isOrthogonal)
+        {
+            IsOrthogonal = isOrthogonal;
+            Directions.Clear();
+
+            if (isOrthogonal)
+                Directions.AddRange(D8.ORTHOGONAL);
+            else
+                Directions.AddRange(D8.ALL);
         }
 
         /// <summary>
@@ -167,15 +209,10 @@ namespace Common.GraphTheory.GridGraphs
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    if (IsOrthogonal)
+                    for(int j = 0; j < Directions.Count; j++)
                     {
-                        for (int i = 0; i < 4; i++)
-                            func(x, y, D8.ORTHOGONAL[i]);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 8; i++)
-                            func(x, y, i);
+                        int i = Directions[j];
+                        func(x, y, i);
                     }
                 }
             }
@@ -186,15 +223,10 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         public IEnumerable<int> EnumerateDirections()
         {
-            if(IsOrthogonal)
+            for (int j = 0; j < Directions.Count; j++)
             {
-                for (int i = 0; i < 4; i++)
-                    yield return D8.ORTHOGONAL[i];
-            }
-            else
-            {
-                for (int i = 0; i < 8; i++)
-                    yield return i;
+                int i = Directions[j];
+                yield return i;
             }
         }
 
@@ -203,35 +235,17 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         public IEnumerable<Point3i> EnumerateInBoundsDirections(int x, int y)
         {
-            if (IsOrthogonal)
+            for (int j = 0; j < Directions.Count; j++)
             {
-                for (int j = 0; j < 4; j++)
-                {
-                    int i = D8.ORTHOGONAL[j];
+                int i = Directions[j];
 
-                    int xi = x + D8.OFFSETS[i, 0];
-                    int yi = y + D8.OFFSETS[i, 1];
+                int xi = x + D8.OFFSETS[i, 0];
+                int yi = y + D8.OFFSETS[i, 1];
 
-                    if (xi < 0 || xi > Width - 1) continue;
-                    if (yi < 0 || yi > Height - 1) continue;
+                if (xi < 0 || xi > Width - 1) continue;
+                if (yi < 0 || yi > Height - 1) continue;
 
-                    yield return new Point3i(xi, yi, i);
-                }
-                    
-            }
-            else
-            {
-                for (int i = 0; i < 8; i++)
-                {
-                    int xi = x + D8.OFFSETS[i, 0];
-                    int yi = y + D8.OFFSETS[i, 1];
-
-                    if (xi < 0 || xi > Width - 1) continue;
-                    if (yi < 0 || yi > Height - 1) continue;
-
-                    yield return new Point3i(xi, yi, i);
-                }
-                    
+                yield return new Point3i(xi, yi, i);
             }
         }
 
@@ -490,39 +504,37 @@ namespace Common.GraphTheory.GridGraphs
         /// Calculate the max flow / min cut of the graph.
         /// </summary>
         /// <param name="search">The helper search data structure.</param>
+        /// <param name="seed">The random generators seed.</param>
         /// <returns>The max flow.</returns>
-        public float Calculate(GridFlowSearch search)
+        public float Calculate(GridFlowSearch search, int seed = 0)
         {
-            FordFulkersonMaxFlow(search);
+            FordFulkersonMaxFlow(search, seed);
             CalculateMinCut(search);
 
             return search.MaxFlow;
         }
 
         /// <summary>
-        /// Calculate the max flow of the graph using the FordFulkerson algorithm.
+        /// 
         /// </summary>
-        /// <returns></returns>
+        /// <param name="search"></param>
+        /// <param name="seed"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        private void FordFulkersonMaxFlow(GridFlowSearch search)
+        private void FordFulkersonMaxFlow(GridFlowSearch search, int seed)
         {
 
             float maxFlow = 0;
             int step = 1;
-            var directions = new List<int>(8);
-
-            if (IsOrthogonal)
-                directions.AddRange(D8.ORTHOGONAL);
-            else
-                directions.AddRange(D8.ALL);
-
-            directions.Shuffle(0);
+            var rnd = new Random(seed);
+            var directions = new List<int>(Directions);
+            directions.Shuffle(rnd);
 
             Point3i sink, v;
             while (BreadthFirstSearch(search, step, directions, out sink))
             {
                 step++;
                 float flow = float.PositiveInfinity;
+                directions.Shuffle(rnd);
 
                 v = sink;
                 while (true)
@@ -571,15 +583,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="search"></param>
         private void CalculateMinCut(GridFlowSearch search)
         {
-
             search.ClearQueue();
-
-            var directions = new List<int>(8);
-
-            if (IsOrthogonal)
-                directions.AddRange(D8.ORTHOGONAL);
-            else
-                directions.AddRange(D8.ALL);
 
             for (int y = 0; y < Height; y++)
             {
@@ -594,9 +598,9 @@ namespace Common.GraphTheory.GridGraphs
             {
                 Point2i u = search.Dequeue();
 
-                for (int j = 0; j < directions.Count; j++)
+                for (int j = 0; j < Directions.Count; j++)
                 {
-                    int i = directions[j];
+                    int i = Directions[j];
 
                     float residual = Capacity[u.x, u.y, i] - Flow[u.x, u.y, i];
                     if (residual <= 0) continue;
@@ -622,9 +626,9 @@ namespace Common.GraphTheory.GridGraphs
                     if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE)
                         Label[x, y] = (byte)FLOW_GRAPH_LABEL.SINK;
 
-                    for (int j = 0; j < directions.Count; j++)
+                    for (int j = 0; j < Directions.Count; j++)
                     {
-                        int i = directions[j];
+                        int i = Directions[j];
 
                         if (Flow[x, y, i] < 0) Flow[x, y, i] = 0;
                     }

@@ -307,6 +307,32 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// Alpha blend the two pixels.
+        /// </summary>
+        /// <param name="c0">The first pixel.</param>
+        /// <param name="c1">The second pixel.</param>
+        /// <param name="a0">The first pixels alpha.</param>
+        /// <param name="a1">The second pixels alpha.</param>
+        /// <returns>The alpha blened pixel.</returns>
+        public static ColorRGB AlphaBlend(ColorRGB c0, ColorRGB c1, float a0, float a1)
+        {
+            float a = a0 + (1.0f - a1);
+
+            if (a <= 0)
+                return ColorRGB.Black;
+
+            float inv_a = 1.0f / a;
+            float one_min_a = 1.0f - a0;
+
+            var c = new ColorRGB();
+            c.r = ((c0.r * a0) + (c1.r * a1) * one_min_a) * inv_a;
+            c.g = ((c0.g * a0) + (c1.g * a1) * one_min_a) * inv_a;
+            c.b = ((c0.b * a0) + (c1.b * a1) * one_min_a) * inv_a;
+
+            return c;
+        }
+
+        /// <summary>
         /// color from bytes.
         /// The values will be converted from a 0-255 range to a 0-1 range.
         /// </summary>
