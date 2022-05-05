@@ -47,7 +47,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="width">The graphs size on the x axis.</param>
         /// <param name="height">The graphs size on the y axis.</param>
         /// <param name="isOrthogonal">Is the graph orthogonal.</param>
-        public GridFlowGraph(int width, int height, bool isOrthogonal = true)
+        public GridFlowGraph(int width, int height, bool isOrthogonal = false)
         {
             Width = width;
             Height = height;
@@ -67,7 +67,7 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         /// <param name="capacities">The array of capacities.</param>
         /// <param name="isOrthogonal">Is the graph orthogonal.</param>
-        public GridFlowGraph(float[,] capacities, bool isOrthogonal = true)
+        public GridFlowGraph(float[,] capacities, bool isOrthogonal = false)
         {
             Width = capacities.GetLength(0);
             Height = capacities.GetLength(1);
