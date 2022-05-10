@@ -11,7 +11,16 @@ namespace Common.Core.RandomNum
     /// </summary>
     public abstract class RandomGenerator
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private const double INV_MAX = 1.0 / int.MaxValue;
+
+        /// <summary>
+        /// Used by NextGaussian.
+        /// </summary>
+        private bool m_useLast;
+        private double m_y2;
 
         /// <summary>
         /// Create a random number with a randow seed.
@@ -67,6 +76,8 @@ namespace Common.Core.RandomNum
         /// <summary>
         /// A random int greater than or equal to 0 and less than max.
         /// </summary>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public int Next(int max)
         {
             return Next() % max;
@@ -75,6 +86,9 @@ namespace Common.Core.RandomNum
         /// <summary>
         /// A random int greater than or equal to min and less than max.
         /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public int Next(int min, int max)
         {
             return min + Next() % (max - min);
@@ -83,6 +97,9 @@ namespace Common.Core.RandomNum
         /// <summary>
         /// A random double greater than or equal to min and less than max.
         /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public double NextDouble(double min, double max)
         {
             return min + Value * (max - min);
@@ -96,21 +113,41 @@ namespace Common.Core.RandomNum
             return Value;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public float NextFloat(float min, float max)
         {
             return min + (float)NextDouble() * (max - min);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public float NextFloat()
         {
             return (float)NextDouble();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool NextBool()
         {
             return NextDouble() > 0.5;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Vector2f NextVector2f(float min, float max)
         {
             float x = NextFloat(min, max);
@@ -118,6 +155,12 @@ namespace Common.Core.RandomNum
             return new Vector2f(x, y);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Vector2d NextVector2d(double min, double max)
         {
             double x = NextDouble(min, max);
@@ -125,6 +168,12 @@ namespace Common.Core.RandomNum
             return new Vector2d(x, y);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Vector3f NextVector3f(float min, float max)
         {
             float x = NextFloat(min, max);
@@ -133,6 +182,12 @@ namespace Common.Core.RandomNum
             return new Vector3f(x, y, z);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Vector3d NextVector3d(double min, double max)
         {
             double x = NextDouble(min, max);
@@ -141,6 +196,12 @@ namespace Common.Core.RandomNum
             return new Vector3d(x, y, z);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Point2f NextPoint2f(float min, float max)
         {
             float x = NextFloat(min, max);
@@ -148,6 +209,12 @@ namespace Common.Core.RandomNum
             return new Point2f(x, y);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Point2f NextPoint2f(IShape2f shape)
         {
             var p = new Point2f();
@@ -168,6 +235,12 @@ namespace Common.Core.RandomNum
             return p;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Point2d NextPoint2d(double min, double max)
         {
             double x = NextDouble(min, max);
@@ -175,6 +248,12 @@ namespace Common.Core.RandomNum
             return new Point2d(x, y);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Point2d NextPoint2d(IShape2d shape)
         {
             var p = new Point2d();
@@ -195,6 +274,12 @@ namespace Common.Core.RandomNum
             return p;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Point3f NextPoint3f(float min, float max)
         {
             float x = NextFloat(min, max);
@@ -203,6 +288,12 @@ namespace Common.Core.RandomNum
             return new Point3f(x, y, z);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Point3f NextPoint3f(IShape3f shape)
         {
             var p = new Point3f();
@@ -224,6 +315,12 @@ namespace Common.Core.RandomNum
             return p;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public Point3d NextPoint3d(double min, double max)
         {
             double x = NextDouble(min, max);
@@ -232,6 +329,12 @@ namespace Common.Core.RandomNum
             return new Point3d(x, y, z);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shape"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Point3d NextPoint3d(IShape3d shape)
         {
             var p = new Point3d();
@@ -253,6 +356,10 @@ namespace Common.Core.RandomNum
             return p;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ColorRGB NextColorRGB()
         {
             float r = NextFloat();
@@ -262,6 +369,10 @@ namespace Common.Core.RandomNum
             return new ColorRGB(r, g, b);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ColorRGBA NextColorRGBA()
         {
             float r = NextFloat();
@@ -271,6 +382,10 @@ namespace Common.Core.RandomNum
             return new ColorRGBA(r, g, b, 1);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ColorHSV NextColorHSV()
         {
             float h = NextFloat();
@@ -278,6 +393,59 @@ namespace Common.Core.RandomNum
             float v = NextFloat();
 
             return new ColorHSV(h, s, v);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mean"></param>
+        /// <param name="sigma"></param>
+        /// <returns></returns>
+        public double NextGaussian(double mean = 0, double sigma = 1)
+        {
+            double x1, x2, w, y1;
+
+            if (m_useLast)
+            {
+                y1 = m_y2;
+                m_useLast = false;
+            }
+            else
+            {
+                do
+                {
+                    x1 = 2.0 * NextDouble() - 1.0;
+                    x2 = 2.0 * NextDouble() - 1.0;
+                    w = x1 * x1 + x2 * x2;
+                }
+                while (w >= 1.0);
+
+                w = Math.Sqrt(-2.0 * Math.Log(w) / w);
+                y1 = x1 * w;
+                m_y2 = x2 * w;
+                m_useLast = true;
+            }
+
+            return mean + y1 * sigma;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lambda"></param>
+        /// <returns></returns>
+        public int NextPoisson(double lambda = 0)
+        {
+            double p = 1.0, L = Math.Exp(-lambda);
+            int k = 0;
+            do
+            {
+                k++;
+                p *= NextDouble();
+            }
+            while (p > L);
+
+            return k - 1;
         }
 
     }

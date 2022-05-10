@@ -159,16 +159,31 @@ namespace Common.Core.Shapes
         /// <summary>
         /// Enumerate each point in the box.
         /// </summary>
+        /// <param name="inclusive">Should the max values be included.</param>
         /// <returns></returns>
-        public IEnumerable<POINT2> EnumerateBounds()
+        public IEnumerable<POINT2> EnumerateBounds(bool inclusive = true)
         {
-            for (int y = Min.y; y <= Max.y; y++)
+            if(inclusive)
             {
-                for (int x = Min.x; x <= Max.x; x++)
+                for (int y = Min.y; y <= Max.y; y++)
                 {
-                    yield return new POINT2(x, y);
+                    for (int x = Min.x; x <= Max.x; x++)
+                    {
+                        yield return new POINT2(x, y);
+                    }
                 }
             }
+            else
+            {
+                for (int y = Min.y; y < Max.y; y++)
+                {
+                    for (int x = Min.x; x < Max.x; x++)
+                    {
+                        yield return new POINT2(x, y);
+                    }
+                }
+            }
+ 
         }
 
         public static Box2i operator +(Box2i box, REAL s)
