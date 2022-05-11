@@ -307,6 +307,17 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// Create a rgba color form this colors rgb 
+        /// values and the provided alpha value.
+        /// </summary>
+        /// <param name="a">The alpha value.</param>
+        /// <returns>THe RGBA color.</returns>
+        public ColorRGBA RGBA(float a)
+        {
+            return new ColorRGBA(r, g, b, a);
+        }
+
+        /// <summary>
         /// Alpha blend the two pixels.
         /// </summary>
         /// <param name="c0">The first pixel.</param>
