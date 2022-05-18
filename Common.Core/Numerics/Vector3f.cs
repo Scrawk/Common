@@ -754,7 +754,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector3f Lerp(Vector3f v0, Vector3f v1, float a)
+        public static Vector3f Lerp(Vector3f v0, Vector3f v1, REAL a)
         {
             a = MathUtil.Clamp01(a);
             Vector3f v = new Vector3f();
@@ -767,7 +767,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// BLerp between four vectors.
         /// </summary>
-        public static Vector3f BLerp(Vector3f v00, Vector3f v10, Vector3f v01, Vector3f v11, float a0, float a1)
+        public static Vector3f BLerp(Vector3f v00, Vector3f v10, Vector3f v01, Vector3f v11, REAL a0, REAL a1)
         {
             a0 = MathUtil.Clamp01(a0);
             a1 = MathUtil.Clamp01(a1);

@@ -588,7 +588,7 @@ namespace Common.Core.Numerics
         /// Returns the refraction vector given the incident vector i, 
         /// the normal vector n and the refraction index eta.
         /// </summary>
-        public static Vector2f Refract(Vector2f i, Vector2f n, float eta)
+        public static Vector2f Refract(Vector2f i, Vector2f n, REAL eta)
         {
             REAL ni = Dot(n, i);
             REAL k = 1.0f - eta * eta * (1.0f - ni * ni);
@@ -687,7 +687,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector2f Lerp(Vector2f v0, Vector2f v1, float a)
+        public static Vector2f Lerp(Vector2f v0, Vector2f v1, REAL a)
         {
             a = MathUtil.Clamp01(a);
             Vector2f v = new Vector2f();
@@ -699,7 +699,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// BLerp between four vectors.
         /// </summary>
-        public static Vector2f BLerp(Vector2f v00, Vector2f v10, Vector2f v01, Vector2f v11, float a0, float a1)
+        public static Vector2f BLerp(Vector2f v00, Vector2f v10, Vector2f v01, Vector2f v11, REAL a0, REAL a1)
         {
             a0 = MathUtil.Clamp01(a0);
             a1 = MathUtil.Clamp01(a1);

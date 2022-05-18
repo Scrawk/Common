@@ -126,10 +126,10 @@ namespace Common.Core.Numerics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector4f(double x, double y, double z, double w)
         {
-            this.x = (float)x;
-            this.y = (float)y;
-            this.z = (float)z;
-            this.w = (float)w;
+            this.x = (REAL)x;
+            this.y = (REAL)y;
+            this.z = (REAL)z;
+            this.w = (REAL)w;
         }
 
         /// <summary>
@@ -671,7 +671,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector4f Lerp(Vector4f v0, Vector4f v1, float a)
+        public static Vector4f Lerp(Vector4f v0, Vector4f v1, REAL a)
         {
             a = MathUtil.Clamp01(a);
             Vector4f v = new Vector4f();
@@ -685,7 +685,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// BLerp between four vectors.
         /// </summary>
-        public static Vector4f BLerp(Vector4f v00, Vector4f v10, Vector4f v01, Vector4f v11, float a0, float a1)
+        public static Vector4f BLerp(Vector4f v00, Vector4f v10, Vector4f v01, Vector4f v11, REAL a0, REAL a1)
         {
             a0 = MathUtil.Clamp01(a0);
             a1 = MathUtil.Clamp01(a1);

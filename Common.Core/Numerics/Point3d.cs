@@ -619,20 +619,30 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two points.
         /// </summary>
-        public static Point3d Lerp(Point3d from, Point3d to, REAL t)
+        public static Point3d Lerp(Point3d p0, Point3d p1, REAL a)
         {
-            if (t < 0.0) t = 0.0;
-            if (t > 1.0) t = 1.0;
+            a = MathUtil.Clamp01(a);
+            Point3d p = new Point3d();
+            p.x = MathUtil.Lerp(p0.x, p1.x, a);
+            p.y = MathUtil.Lerp(p0.y, p1.y, a);
+            p.z = MathUtil.Lerp(p0.z, p1.z, a);
 
-            if (t == 0.0) return from;
-            if (t == 1.0) return to;
+            return p;
+        }
 
-            REAL t1 = 1.0f - t;
-            var v = new Point3d();
-            v.x = from.x * t1 + to.x * t;
-            v.y = from.y * t1 + to.y * t;
-            v.z = from.z * t1 + to.z * t;
-            return v;
+        /// <summary>
+        /// BLerp between four points.
+        /// </summary>
+        public static Point3d BLerp(Point3d p00, Point3d p10, Point3d p01, Point3d p11, REAL a0, REAL a1)
+        {
+            a0 = MathUtil.Clamp01(a0);
+            a1 = MathUtil.Clamp01(a1);
+            Point3d p = new Point3d();
+            p.x = MathUtil.BLerp(p00.x, p10.x, p01.x, p11.x, a0, a1);
+            p.y = MathUtil.BLerp(p00.y, p10.y, p01.y, p11.y, a0, a1);
+            p.z = MathUtil.BLerp(p00.z, p10.z, p01.z, p11.z, a0, a1);
+  
+            return p;
         }
 
         /// <summary>

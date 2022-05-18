@@ -659,7 +659,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector4d Lerp(Vector4d v0, Vector4d v1, float a)
+        public static Vector4d Lerp(Vector4d v0, Vector4d v1, REAL a)
         {
             a = MathUtil.Clamp01(a);
             Vector4d v = new Vector4d();
@@ -673,7 +673,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// BLerp between four vectors.
         /// </summary>
-        public static Vector4d BLerp(Vector4d v00, Vector4d v10, Vector4d v01, Vector4d v11, float a0, float a1)
+        public static Vector4d BLerp(Vector4d v00, Vector4d v10, Vector4d v01, Vector4d v11, REAL a0, REAL a1)
         {
             a0 = MathUtil.Clamp01(a0);
             a1 = MathUtil.Clamp01(a1);

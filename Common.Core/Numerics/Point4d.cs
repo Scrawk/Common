@@ -606,21 +606,31 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two points.
         /// </summary>
-        public static Point4d Lerp(Point4d from, Point4d to, REAL t)
+        public static Point4d Lerp(Point4d p0, Point4d p1, REAL a)
         {
-            if (t < 0.0) t = 0.0;
-            if (t > 1.0) t = 1.0;
+            a = MathUtil.Clamp01(a);
+            Point4d p = new Point4d();
+            p.x = MathUtil.Lerp(p0.x, p1.x, a);
+            p.y = MathUtil.Lerp(p0.y, p1.y, a);
+            p.z = MathUtil.Lerp(p0.z, p1.z, a);
+            p.w = MathUtil.Lerp(p0.w, p1.w, a);
+            return p;
+        }
 
-            if (t == 0.0) return from;
-            if (t == 1.0) return to;
+        /// <summary>
+        /// BLerp between four points.
+        /// </summary>
+        public static Point4d BLerp(Point4d p00, Point4d p10, Point4d p01, Point4d p11, REAL a0, REAL a1)
+        {
+            a0 = MathUtil.Clamp01(a0);
+            a1 = MathUtil.Clamp01(a1);
+            Point4d p = new Point4d();
+            p.x = MathUtil.BLerp(p00.x, p10.x, p01.x, p11.x, a0, a1);
+            p.y = MathUtil.BLerp(p00.y, p10.y, p01.y, p11.y, a0, a1);
+            p.z = MathUtil.BLerp(p00.z, p10.z, p01.z, p11.z, a0, a1);
+            p.w = MathUtil.BLerp(p00.w, p10.w, p01.w, p11.w, a0, a1);
 
-            REAL t1 = 1.0f - t;
-            var v = new Point4d();
-            v.x = from.x * t1 + to.x * t;
-            v.y = from.y * t1 + to.y * t;
-            v.z = from.z * t1 + to.z * t;
-            v.w = from.w * t1 + to.w * t;
-            return v;
+            return p;
         }
 
         /// <summary>

@@ -627,19 +627,28 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two points.
         /// </summary>
-        public static Point2f Lerp(Point2f from, Point2f to, REAL t)
+        public static Point2f Lerp(Point2f p0, Point2f p1, REAL a)
         {
-            if (t < 0.0f) t = 0.0f;
-            if (t > 1.0f) t = 1.0f;
+            a = MathUtil.Clamp01(a);
+            Point2f p = new Point2f();
+            p.x = MathUtil.Lerp(p0.x, p1.x, a);
+            p.y = MathUtil.Lerp(p0.y, p1.y, a);
 
-            if (t == 0.0) return from;
-            if (t == 1.0) return to;
+            return p;
+        }
 
-            REAL t1 = 1.0f - t;
-            var v = new Point2f();
-            v.x = from.x * t1 + to.x * t;
-            v.y = from.y * t1 + to.y * t;
-            return v;
+        /// <summary>
+        /// BLerp between four points.
+        /// </summary>
+        public static Point2f BLerp(Point2f p00, Point2f p10, Point2f p01, Point2f p11, REAL a0, REAL a1)
+        {
+            a0 = MathUtil.Clamp01(a0);
+            a1 = MathUtil.Clamp01(a1);
+            Point2f p = new Point2f();
+            p.x = MathUtil.BLerp(p00.x, p10.x, p01.x, p11.x, a0, a1);
+            p.y = MathUtil.BLerp(p00.y, p10.y, p01.y, p11.y, a0, a1);
+
+            return p;
         }
 
         /// <summary>

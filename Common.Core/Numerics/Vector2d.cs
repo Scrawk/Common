@@ -677,7 +677,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Lerp between two vectors.
         /// </summary>
-        public static Vector2d Lerp(Vector2d v0, Vector2d v1, float a)
+        public static Vector2d Lerp(Vector2d v0, Vector2d v1, REAL a)
         {
             a = MathUtil.Clamp01(a);
             Vector2d v = new Vector2d();
@@ -689,7 +689,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// BLerp between four vectors.
         /// </summary>
-        public static Vector2d BLerp(Vector2d v00, Vector2d v10, Vector2d v01, Vector2d v11, float a0, float a1)
+        public static Vector2d BLerp(Vector2d v00, Vector2d v10, Vector2d v01, Vector2d v11, REAL a0, REAL a1)
         {
             a0 = MathUtil.Clamp01(a0);
             a1 = MathUtil.Clamp01(a1);
