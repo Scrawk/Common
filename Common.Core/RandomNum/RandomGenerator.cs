@@ -396,12 +396,12 @@ namespace Common.Core.RandomNum
         }
 
         /// <summary>
-        /// 
+        /// Get a random number with a gaussian ditribution.
         /// </summary>
-        /// <param name="mean"></param>
-        /// <param name="sigma"></param>
+        /// <param name="mean">The mean value of the noise.</param>
+        /// <param name="sigma">The std of the noise.</param>
         /// <returns></returns>
-        public double NextGaussian(double mean = 0, double sigma = 1)
+        public double NextGaussian(double mean, double sigma)
         {
             double x1, x2, w, y1;
 
@@ -430,14 +430,16 @@ namespace Common.Core.RandomNum
         }
 
         /// <summary>
-        /// 
+        /// Get a random number with a possion ditribution.
         /// </summary>
-        /// <param name="lambda"></param>
+        /// <param name="mean">The mean value of the noise.</param>
         /// <returns></returns>
-        public int NextPoisson(double lambda = 0)
+        public double NextPoisson(double mean)
         {
-            double p = 1.0, L = Math.Exp(-lambda);
+            double p = 1.0;
+            double L = Math.Exp(-mean);
             int k = 0;
+
             do
             {
                 k++;

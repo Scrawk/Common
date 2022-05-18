@@ -27,10 +27,10 @@ namespace Common.GraphTheory.Test.GridGraphs
 
             var path = search.GetPath(target);
 
-            search.Print();
+            //search.Print();
 
-            foreach (var p in path)
-                Console.WriteLine(p);
+            //foreach (var p in path)
+            //    Console.WriteLine(p);
 
         }
 

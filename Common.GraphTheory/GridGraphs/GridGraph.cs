@@ -107,6 +107,26 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
+        /// Get the edge direction from the from and to indices.
+        /// </summary>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <returns>The edge direction of -1 if from and to indices are not valid.</returns>
+        public static int GetEdgeDirection(int fx, int fy, int tx, int ty)
+        {
+            int x = tx - fx;
+            int y = ty - fy;
+
+            if (x == 0 && y == 0) return -1;
+            if (x < -1 || x > 1) return -1;
+            if (y < -1 || y > 1) return -1;
+
+            return D8.DIRECTION[x + 1, y + 1];
+        }
+
+        /// <summary>
         /// Are the x and y indices within the bounds of the graph.
         /// </summary>
         /// <param name="x"></param>
@@ -255,14 +275,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="w">The edges weight.</param>
         public void SetWeight(int fx, int fy, int tx, int ty, float w)
         {
-            int x = tx - fx;
-            int y = ty - fy;
-
-            if (x == 0 && y == 0) return;
-            if (x < -1 || x > 1) return;
-            if (y < -1 || y > 1) return;
-
-            int i = D8.DIRECTION[x + 1, y + 1];
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return;
 
             Weights[fx, fy, i] = w;
         }
@@ -289,14 +303,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns></returns>
         public float GetWeight(int fx, int fy, int tx, int ty)
         {
-            int x = tx - fx;
-            int y = ty - fy;
-
-            if (x == 0 && y == 0) return 0;
-            if (x < -1 || x > 1) return 0;
-            if (y < -1 || y > 1) return 0;
-
-            int i = D8.DIRECTION[x + 1, y + 1];
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return 0;
 
             return Weights[fx, fy, i];
         }
@@ -329,14 +337,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns></returns>
         public bool HasDirectedEdge(int fx, int fy, int tx, int ty)
         {
-            int x = tx - fx;
-            int y = ty - fy;
-
-            if (x == 0 && y == 0) return false;
-            if (x < -1 || x > 1) return false;
-            if (y < -1 || y > 1) return false;
-
-            int i = D8.DIRECTION[x + 1, y + 1];
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return false;
 
             return Bit.IsSet(Edges[fx, fy], i);
         }
@@ -378,14 +380,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns></returns>
         public bool HasUndirectedEdge(int fx, int fy, int tx, int ty)
         {
-            int x = tx - fx;
-            int y = ty - fy;
-
-            if (x == 0 && y == 0) return false;
-            if (x < -1 || x > 1) return false;
-            if (y < -1 || y > 1) return false;
-
-            int i = D8.DIRECTION[x + 1, y + 1];
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return false;
 
             if (Bit.IsSet(Edges[fx, fy], i)) return true;
             if (Bit.IsSet(Edges[tx, ty], D8.OPPOSITES[i])) return true;
@@ -480,14 +476,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns></returns>
         public bool AddDirectedEdge(int fx, int fy, int tx, int ty)
         {
-            int x = tx - fx;
-            int y = ty - fy;
-
-            if (x == 0 && y == 0) return false;
-            if (x < -1 || x > 1) return false;
-            if (y < -1 || y > 1) return false;
-
-            int i = D8.DIRECTION[x + 1, y + 1];
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return false;
 
             Edges[fx, fy] = Bit.Set(Edges[fx, fy], i);
             EdgeCount++;
@@ -553,14 +543,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns></returns>
         public bool AddUndirectedEdge(int fx, int fy, int tx, int ty)
         {
-            int x = tx - fx;
-            int y = ty - fy;
-
-            if (x == 0 && y == 0) return false;
-            if (x < -1 || x > 1) return false;
-            if (y < -1 || y > 1) return false;
-
-            int i = D8.DIRECTION[x + 1, y + 1];
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return false;
 
             Edges[fx, fy] = Bit.Set(Edges[fx, fy], i);
             Edges[tx, ty] = Bit.Set(Edges[tx, ty], D8.OPPOSITES[i]);
@@ -649,14 +633,8 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns>The edge object or null if there is no edge between the vertices.</returns>
         public GridEdge GetEdge(int fx, int fy, int tx, int ty)
         {
-            int x = tx - fx;
-            int y = ty - fy;
-
-            if (x == 0 && y == 0) return null;
-            if (x < -1 || x > 1) return null;
-            if (y < -1 || y > 1) return null;
-
-            int i = D8.DIRECTION[x + 1, y + 1];
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return null;
 
             if (!Bit.IsSet(Edges[fx, fy], i)) return null;
 

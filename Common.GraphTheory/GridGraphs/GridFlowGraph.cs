@@ -38,7 +38,7 @@ namespace Common.GraphTheory.GridGraphs
     /// LEFT_BOTTOM = 7;
     /// 
     /// </summary>
-    public class GridFlowGraph
+    public partial class GridFlowGraph
     {
 
         /// <summary>
@@ -125,10 +125,52 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         private List<int> Directions { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("[GridGraph: IsOrthogonal={0}, Width={1}, Height={2}]",
                 IsOrthogonal, Width, Height);
+        }
+
+        /// <summary>
+        /// Get the edge direction from the from and to indices.
+        /// </summary>
+        /// <param name="from">The x,y index the edge is from.</param>
+        /// <param name="to">The x,y index the edge goes to.</param>
+        /// <returns>The edge direction of -1 if from and to indices are not valid.</returns>
+        public static int GetEdgeDirection(Point2i from, Point2i to)
+        {
+            int x = to.x - from.x;
+            int y = to.y - from.y;
+
+            if (x == 0 && y == 0) return -1;
+            if (x < -1 || x > 1) return -1;
+            if (y < -1 || y > 1) return -1;
+
+            return D8.DIRECTION[x + 1, y + 1];
+        }
+
+        /// <summary>
+        /// Get the edge direction from the from and to indices.
+        /// </summary>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <returns>The edge direction of -1 if from and to indices are not valid.</returns>
+        public static int GetEdgeDirection(int fx, int fy, int tx, int ty)
+        {
+            int x = tx - fx;
+            int y = ty - fy;
+
+            if (x == 0 && y == 0) return -1;
+            if (x < -1 || x > 1) return -1;
+            if (y < -1 || y > 1) return -1;
+
+            return D8.DIRECTION[x + 1, y + 1];
         }
 
         /// <summary>
@@ -284,6 +326,22 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
+        /// Get a edges capacity.
+        /// </summary>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <returns></returns>
+        public float GetCapacity(int fx, int fy, int tx, int ty)
+        {
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if(i == -1) return 0;
+
+            return Capacity[fx, fy, i];
+        }
+
+        /// <summary>
         /// Set the capacity of the vertex edge at x,y 
         /// going to the neighbour vertex at i.
         /// </summary>
@@ -312,6 +370,22 @@ namespace Common.GraphTheory.GridGraphs
         }
 
         /// <summary>
+        /// Set a edges capacity.
+        /// </summary>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <param name="capacity">The edges weight.</param>
+        public void SetCapacity(int fx, int fy, int tx, int ty, float capacity)
+        {
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return;
+
+            Capacity[fx, fy, i] = capacity;
+        }
+
+        /// <summary>
         /// Get the flow of the vertex edge at x,y 
         /// going to the neighbour vertex at i.
         /// </summary>
@@ -322,6 +396,22 @@ namespace Common.GraphTheory.GridGraphs
         public float GetFlow(int x, int y, int i)
         {
             return Flow[x, y, i];
+        }
+
+        /// <summary>
+        /// Get a edges flow.
+        /// </summary>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <returns></returns>
+        public float GetFlow(int fx, int fy, int tx, int ty)
+        {
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return 0;
+
+            return Flow[fx, fy, i];
         }
 
         /// <summary>
@@ -348,6 +438,22 @@ namespace Common.GraphTheory.GridGraphs
         {
             foreach (var i in EnumerateInBoundsDirections(x, y))
                 Flow[x, y, i.z] = flow;
+        }
+
+        /// <summary>
+        /// Set a edges flow.
+        /// </summary>
+        /// <param name="fx">The x index the edge is from.</param>
+        /// <param name="fy">The y index the edge is from.</param>
+        /// <param name="tx">The x index the edge goes to.</param>
+        /// <param name="ty">The y index the edge goes to.</param>
+        /// <param name="flow">The edges weight.</param>
+        public void SetFlow(int fx, int fy, int tx, int ty, float flow)
+        {
+            int i = GetEdgeDirection(fx, fy, tx, ty);
+            if (i == -1) return;
+
+            Flow[fx, fy, i] = flow;
         }
 
         /// <summary>
@@ -512,188 +618,6 @@ namespace Common.GraphTheory.GridGraphs
             CalculateMinCut(search);
 
             return search.MaxFlow;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="search"></param>
-        /// <param name="seed"></param>
-        /// <exception cref="InvalidOperationException"></exception>
-        private void FordFulkersonMaxFlow(GridFlowSearch search, int seed)
-        {
-
-            float maxFlow = 0;
-            int step = 1;
-            var rnd = new Random(seed);
-            var directions = new List<int>(Directions);
-            directions.Shuffle(rnd);
-
-            Point3i sink, v;
-            while (BreadthFirstSearch(search, step, directions, out sink))
-            {
-                step++;
-                float flow = float.PositiveInfinity;
-                directions.Shuffle(rnd);
-
-                v = sink;
-                while (true)
-                {
-                    Point3i u = search.GetParent(v.x, v.y);
-                    if (u.x == v.x && u.y == v.y)
-                        throw new InvalidOperationException("Did not stop at source.");
-
-                    float residual = Capacity[u.x, u.y, u.z] - Flow[u.x, u.y, u.z];
-                    flow = Math.Min(flow, residual);
-
-                    if (Label[u.x, u.y] == (byte)FLOW_GRAPH_LABEL.SOURCE)
-                        break;
-                    else
-                        v = u;
-                }
-
-                if (flow == float.PositiveInfinity)
-                    throw new InvalidOperationException("Could not find path flow.");
-
-                maxFlow += flow;
-
-                v = sink;
-                while (true)
-                {
-                    Point3i u = search.GetParent(v.x, v.y);
-
-                    Flow[u.x, u.y, u.z] += flow;
-                    Flow[v.x, v.y, D8.OPPOSITES[u.z]] -= flow;
-
-                    if (Label[u.x, u.y] == (byte)FLOW_GRAPH_LABEL.SOURCE)
-                        break;
-                    else
-                        v = u;
-                }
-
-            }
-
-           search.MaxFlow = maxFlow;
-
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="search"></param>
-        private void CalculateMinCut(GridFlowSearch search)
-        {
-            search.ClearQueue();
-
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    if (Label[x, y] == (byte)FLOW_GRAPH_LABEL.SOURCE)
-                        search.Enqueue(new Point2i(x, y));
-                }
-            }
-
-            while (search.QueueCount > 0)
-            {
-                Point2i u = search.Dequeue();
-
-                for (int j = 0; j < Directions.Count; j++)
-                {
-                    int i = Directions[j];
-
-                    float residual = Capacity[u.x, u.y, i] - Flow[u.x, u.y, i];
-                    if (residual <= 0) continue;
-
-                    int xi = u.x + D8.OFFSETS[i, 0];
-                    int yi = u.y + D8.OFFSETS[i, 1];
-
-                    if (xi < 0 || xi >= Width) continue;
-                    if (yi < 0 || yi >= Height) continue;
-                    if (Label[xi, yi] == (byte)FLOW_GRAPH_LABEL.SOURCE) continue;
-
-                    Label[xi, yi] = (byte)FLOW_GRAPH_LABEL.SOURCE;
-
-                    search.Enqueue(new Point2i(xi, yi));
-                }
-               
-            }
-
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE)
-                        Label[x, y] = (byte)FLOW_GRAPH_LABEL.SINK;
-
-                    for (int j = 0; j < Directions.Count; j++)
-                    {
-                        int i = Directions[j];
-
-                        if (Flow[x, y, i] < 0) Flow[x, y, i] = 0;
-                    }
-                        
-                }
-            }
-
-        }
-
-        /// <summary>
-        /// Find if there exists a path to the sink.
-        /// </summary>
-        /// <param name="search">The helper search data structure.</param>
-        /// <param name="step">Used to determine if vertex has been visited.</param>
-        /// <param name="sink">The index of the sink point.</param>
-        /// <returns></returns>
-        private bool BreadthFirstSearch(GridFlowSearch search, int step, IList<int> directions, out Point3i sink)
-        {
-            search.ClearQueue();
-
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    if (Label[x, y] != (byte)FLOW_GRAPH_LABEL.SOURCE) continue;
-
-                    search.Enqueue(new Point2i(x, y));
-                    search.SetParent(x, y, new Point3i(x, y, -1));
-                    search.SetIsVisited(x, y, step);
-                }
-            }
-
-            while (search.QueueCount != 0)
-            {
-                Point2i u = search.Dequeue();
-
-                for (int j = 0; j < directions.Count; j++)
-                {
-                    int i = directions[j];
-
-                    float residual = Capacity[u.x, u.y, i] - Flow[u.x, u.y, i];
-                    if (residual <= 0) continue;
-
-                    int xi = u.x + D8.OFFSETS[i, 0];
-                    int yi = u.y + D8.OFFSETS[i, 1];
-
-                    if (xi < 0 || xi >= Width) continue;
-                    if (yi < 0 || yi >= Height) continue;
-                    if (search.GetIsVisited(xi, yi) >= step) continue;
-
-                    search.Enqueue(new Point2i(xi, yi));
-                    search.SetParent(xi, yi, new Point3i(u.x, u.y, i));
-                    search.SetIsVisited(xi, yi, step);
-
-                    if (Label[xi, yi] == (byte)FLOW_GRAPH_LABEL.SINK)
-                    {
-                        sink = new Point3i(xi, yi, -1);
-                        return true;
-                    }
-                }
-               
-            }
-
-            sink = new Point3i(-1, -1, -1);
-            return false;
         }
 
     }
