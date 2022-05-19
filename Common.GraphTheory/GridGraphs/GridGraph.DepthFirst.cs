@@ -40,8 +40,9 @@ namespace Common.GraphTheory.GridGraphs
 
                 int edge = Edges[u.x, u.y];
 
-                for (int i = 0; i < 8; i++)
+                for (int j = 0; j < Directions.Count; j++)
                 {
+                    int i = Directions[j];
                     int xi = u.x + D8.OFFSETS[i, 0];
                     int yi = u.y + D8.OFFSETS[i, 1];
 

@@ -11,7 +11,7 @@ namespace Common.GraphTheory.GridGraphs
     /// but if they need to be instantied into objects
     /// this class is used.
     /// </summary>
-    public class GridEdge : IComparable<GridEdge>
+    public class WeighedGridEdge : IComparable<WeighedGridEdge>
     {
         /// <summary>
         /// The index of the vertex this edge starts at.
@@ -29,18 +29,18 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         public float Weight { get; set; }
 
-        public GridEdge()
+        public WeighedGridEdge()
         {
 
         }
 
-        public GridEdge(Point2i from, Point2i to)
+        public WeighedGridEdge(Point2i from, Point2i to)
         {
             From = from;
             To = to;
         }
 
-        public GridEdge(int fx, int fy, int tx, int ty)
+        public WeighedGridEdge(int fx, int fy, int tx, int ty)
         {
             From = new Point2i(fx, fy);
             To = new Point2i(tx, ty);
@@ -54,7 +54,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <summary>
         /// Used to sort edges by their weight.
         /// </summary>
-        public int CompareTo(GridEdge other)
+        public int CompareTo(WeighedGridEdge other)
         {
             return Weight.CompareTo(other.Weight);
         }

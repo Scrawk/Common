@@ -7,9 +7,9 @@ using Common.Core.Numerics;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public partial class GridGraph
+    public partial class WeightedGridGraph
     {
-        public Dictionary<Point2i, List<GridEdge>> KruskalsMinimumSpanningForest(Func<Point2i, Point2i, float> GetWeight)
+        public Dictionary<Point2i, List<WeighedGridEdge>> KruskalsMinimumSpanningForest(Func<Point2i, Point2i, float> GetWeight)
         {
             int width = Width;
             int height = Height;
@@ -24,12 +24,12 @@ namespace Common.GraphTheory.GridGraphs
                 }
             }
 
-            var sorted = new List<GridEdge>(width * height);
+            var sorted = new List<WeighedGridEdge>(width * height);
             GetAllEdges(sorted, GetWeight);
             sorted.Sort();
 
             int edgeCount = sorted.Count;
-            List<GridEdge> edges = new List<GridEdge>();
+            List<WeighedGridEdge> edges = new List<WeighedGridEdge>();
 
             for (int i = 0; i < edgeCount; i++)
             {
@@ -40,7 +40,7 @@ namespace Common.GraphTheory.GridGraphs
                     edges.Add(sorted[i]);
             }
 
-            Dictionary<Point2i, List<GridEdge>> forest = new Dictionary<Point2i, List<GridEdge>>();
+            Dictionary<Point2i, List<WeighedGridEdge>> forest = new Dictionary<Point2i, List<WeighedGridEdge>>();
 
             edgeCount = edges.Count;
             for (int i = 0; i < edgeCount; i++)
@@ -48,7 +48,7 @@ namespace Common.GraphTheory.GridGraphs
                 Point2i root = set.FindParent(edges[i].From.x, edges[i].From.y);
 
                 if (!forest.ContainsKey(root))
-                    forest.Add(root, new List<GridEdge>());
+                    forest.Add(root, new List<WeighedGridEdge>());
 
                 forest[root].Add(edges[i]);
             }

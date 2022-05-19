@@ -10,7 +10,7 @@ namespace Common.GraphTheory.GridGraphs
     /// A data structure to store the results 
     /// from a algorithm on a grid flow graph.
     /// </summary>
-    public class GridFlowSearch
+    public class FlowGridSearch
     {
 
         public float MaxFlow { get; set; }
@@ -27,7 +27,7 @@ namespace Common.GraphTheory.GridGraphs
 
         private Queue<Point2i> Queue { get; set; }
 
-        public GridFlowSearch(int width, int height)
+        public FlowGridSearch(int width, int height)
         {
             Width = width;
             Height = height;

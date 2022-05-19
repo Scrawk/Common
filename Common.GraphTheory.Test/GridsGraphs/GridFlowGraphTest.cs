@@ -15,7 +15,7 @@ namespace Common.GraphTheory.Test.GridsGraphs
         [TestMethod]
         public void PushRelabel()
         {
-            var graph = new GridFlowGraph(6, 6);
+            var graph = new FlowGridGraph(6, 6);
 
             //int maxFlow = graph.PushRelabel(0, 5);
             //Assert.AreEqual(4, maxFlow);

@@ -17,7 +17,7 @@ namespace Common.Console
 
         static void Main(string[] args)
         {
-            var graph = new GridFlowGraph(128, 128);
+            var graph = new FlowGridGraph(128, 128);
             graph.IsOrthogonal = true;
 
             var rnd = new Random(0);

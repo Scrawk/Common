@@ -34,9 +34,9 @@ namespace Common.GraphTheory.Test.GridGraphs
 
         }
 
-        private GridGraph RandomGraph(int seed)
+        private WeightedGridGraph RandomGraph(int seed)
         {
-            var graph = new GridGraph(4, 4);
+            var graph = new WeightedGridGraph(4, 4);
 
             var rnd = new Random(seed);
 
@@ -52,9 +52,9 @@ namespace Common.GraphTheory.Test.GridGraphs
             return graph;
         }
 
-        private GridGraph ConstGraph()
+        private WeightedGridGraph ConstGraph()
         {
-            var graph = new GridGraph(4, 4);
+            var graph = new WeightedGridGraph(4, 4);
 
             graph.Iterate((x, y, i) =>
             {

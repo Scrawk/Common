@@ -17,10 +17,9 @@ namespace Common.GraphTheory.GridGraphs
 
     /// <summary>
     /// A graph were the vertices make up a grid
-    /// like the pixels in a image. Each vertex
-    /// has a byte flag where the bits represent 
-    /// if a edge is present to a neighbouring
-    /// vertex.
+    /// like the pixels in a image. If a vertex has a 
+    /// capacity to a neighbouring vertex it is presumed 
+    /// they are connected via a edge.
     /// 
     /// Each edge has a capacity and a flow value
     /// and are used to perfrom the max flow / min cut algorithm.
@@ -38,7 +37,7 @@ namespace Common.GraphTheory.GridGraphs
     /// LEFT_BOTTOM = 7;
     /// 
     /// </summary>
-    public partial class GridFlowGraph
+    public partial class FlowGridGraph
     {
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="width">The graphs size on the x axis.</param>
         /// <param name="height">The graphs size on the y axis.</param>
         /// <param name="isOrthogonal">Is the graph orthogonal.</param>
-        public GridFlowGraph(int width, int height, bool isOrthogonal = false)
+        public FlowGridGraph(int width, int height, bool isOrthogonal = false)
         {
             Width = width;
             Height = height;
@@ -67,7 +66,7 @@ namespace Common.GraphTheory.GridGraphs
         /// </summary>
         /// <param name="capacities">The array of capacities.</param>
         /// <param name="isOrthogonal">Is the graph orthogonal.</param>
-        public GridFlowGraph(float[,] capacities, bool isOrthogonal = false)
+        public FlowGridGraph(float[,] capacities, bool isOrthogonal = false)
         {
             Width = capacities.GetLength(0);
             Height = capacities.GetLength(1);
@@ -131,7 +130,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[GridGraph: IsOrthogonal={0}, Width={1}, Height={2}]",
+            return string.Format("[GridFlowGraph: IsOrthogonal={0}, Width={1}, Height={2}]",
                 IsOrthogonal, Width, Height);
         }
 
@@ -181,6 +180,9 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="isOrthogonal">Is the grapgh orthogonal</param>
         public void SetIsOrthogonal(bool isOrthogonal)
         {
+            if (Directions == null)
+                Directions = new List<int>(8);
+
             IsOrthogonal = isOrthogonal;
             Directions.Clear();
 
@@ -204,9 +206,9 @@ namespace Common.GraphTheory.GridGraphs
         /// Creates a new helper search data structure.
         /// </summary>
         /// <returns></returns>
-        public GridFlowSearch CreateSearch()
+        public FlowGridSearch CreateSearch()
         {
-            var search = new GridFlowSearch(Width, Height);
+            var search = new FlowGridSearch(Width, Height);
             return search;
         }
 
@@ -602,7 +604,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <returns>The max flow.</returns>
         public float Calculate()
         {
-            var search = new GridFlowSearch(Width, Height);
+            var search = new FlowGridSearch(Width, Height);
             return Calculate(search);
         }
 
@@ -612,7 +614,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="search">The helper search data structure.</param>
         /// <param name="seed">The random generators seed.</param>
         /// <returns>The max flow.</returns>
-        public float Calculate(GridFlowSearch search, int seed = 0)
+        public float Calculate(FlowGridSearch search, int seed = 0)
         {
             FordFulkersonMaxFlow(search, seed);
             CalculateMinCut(search);

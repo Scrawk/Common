@@ -62,8 +62,9 @@ namespace Common.GraphTheory.GridGraphs
                 {
                     float cost = vertexGrid[u.x, u.y].Cost;
 
-                    for (int i = 0; i < 8; i++)
+                    for (int j = 0; j < Directions.Count; j++)
                     {
+                        int i = Directions[j];
                         int xi = u.x + D8.OFFSETS[i, 0];
                         int yi = u.y + D8.OFFSETS[i, 1];
 

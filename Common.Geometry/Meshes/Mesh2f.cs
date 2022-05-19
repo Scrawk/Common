@@ -11,28 +11,48 @@ namespace Common.Meshes
 {
     public class Mesh2f : IndexableMesh
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
         public Mesh2f()
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numPositions"></param>
         public Mesh2f(int numPositions)
         {
             Positions = new VECTOR2[numPositions];
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="positions"></param>
         public Mesh2f(IList<VECTOR2> positions)
         {
             SetPositions(positions);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="positions"></param>
+        /// <param name="indices"></param>
         public Mesh2f(IList<VECTOR2> positions, IList<int> indices)
         {
             SetPositions(positions);
             SetIndices(indices);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numPositions"></param>
+        /// <param name="numIndices"></param>
         public Mesh2f(int numPositions, int numIndices)
         {
             Positions = new VECTOR2[numPositions];

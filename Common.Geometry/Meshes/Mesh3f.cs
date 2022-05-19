@@ -12,28 +12,48 @@ namespace Common.Meshes
 {
     public class Mesh3f : IndexableMesh
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
         public Mesh3f()
         {
 
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numPositions"></param>
         public Mesh3f(int numPositions)
         {
             Positions = new VECTOR3[numPositions];
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="positions"></param>
         public Mesh3f(IList<VECTOR3> positions)
         {
             SetPositions(positions);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="positions"></param>
+        /// <param name="indices"></param>
         public Mesh3f(IList<VECTOR3> positions, IList<int> indices)
         {
             SetPositions(positions);
             SetIndices(indices);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numPositions"></param>
+        /// <param name="numIndices"></param>
         public Mesh3f(int numPositions, int numIndices)
         {
             Positions = new VECTOR3[numPositions];
@@ -75,7 +95,7 @@ namespace Common.Meshes
         /// </summary>
         public override string ToString()
         {
-            return string.Format("[Mesh2f: Vertices={0}, Indices={1}]", PositionCount, IndexCount);
+            return string.Format("[Mesh3f: Vertices={0}, Indices={1}]", PositionCount, IndexCount);
         }
 
         /// <summary>

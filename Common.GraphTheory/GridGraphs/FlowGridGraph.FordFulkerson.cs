@@ -7,7 +7,7 @@ using Common.Core.Extensions;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public partial class GridFlowGraph
+    public partial class FlowGridGraph
     {
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="search"></param>
         /// <param name="seed"></param>
         /// <exception cref="InvalidOperationException"></exception>
-        private void FordFulkersonMaxFlow(GridFlowSearch search, int seed)
+        private void FordFulkersonMaxFlow(FlowGridSearch search, int seed)
         {
 
             float maxFlow = 0;
@@ -77,7 +77,7 @@ namespace Common.GraphTheory.GridGraphs
         /// 
         /// </summary>
         /// <param name="search"></param>
-        private void CalculateMinCut(GridFlowSearch search)
+        private void CalculateMinCut(FlowGridSearch search)
         {
             search.ClearQueue();
 
@@ -141,7 +141,7 @@ namespace Common.GraphTheory.GridGraphs
         /// <param name="step">Used to determine if vertex has been visited.</param>
         /// <param name="sink">The index of the sink point.</param>
         /// <returns></returns>
-        private bool BreadthFirstSearch(GridFlowSearch search, int step, IList<int> directions, out Point3i sink)
+        private bool BreadthFirstSearch(FlowGridSearch search, int step, IList<int> directions, out Point3i sink)
         {
             search.ClearQueue();
 

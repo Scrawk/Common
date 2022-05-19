@@ -7,7 +7,7 @@ using Common.Core.Numerics;
 
 namespace Common.GraphTheory.GridGraphs
 {
-    public partial class GridGraph
+    public partial class WeightedGridGraph
     {
 
         public GridSearch PrimsMinimumSpanningTree(Point2i root)
@@ -33,14 +33,14 @@ namespace Common.GraphTheory.GridGraphs
             search.AddOrder(new Point2i(x, y));
             search.SetParent(x, y,  new Point2i(x, y));
 
-            var queue = new BinaryHeap<GridEdge>(8);
+            var queue = new BinaryHeap<WeighedGridEdge>(8);
 
-            List<GridEdge> edges = new List<GridEdge>(8);
+            List<WeighedGridEdge> edges = new List<WeighedGridEdge>(8);
             GetEdges(x, y, edges, GetWeight);
 
             if (edges.Count != 0)
             {
-                foreach (GridEdge edge in edges)
+                foreach (WeighedGridEdge edge in edges)
                     queue.Add(edge);
 
                 edges.Clear();
@@ -48,7 +48,7 @@ namespace Common.GraphTheory.GridGraphs
 
             while (queue.Count != 0)
             {
-                GridEdge edge = queue.Pop();
+                WeighedGridEdge edge = queue.Pop();
 
                 Point2i v = edge.To;
                 if (search.GetIsVisited(v)) continue;
@@ -61,7 +61,7 @@ namespace Common.GraphTheory.GridGraphs
 
                 GetEdges(v.x, v.y, edges, GetWeight);
 
-                foreach (GridEdge e in edges)
+                foreach (WeighedGridEdge e in edges)
                 {
                     if (search.GetIsVisited(e.To)) continue;
                     queue.Add(e);
