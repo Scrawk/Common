@@ -758,6 +758,55 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Swaps the two values.
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        public static void Swap(ref float v1, ref float v2)
+        {
+            var tmp = v1;  
+            v1 = v2;
+            v2 = tmp;
+        }
+
+        /// <summary>
+        /// Swaps the two values.
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        public static void Swap(ref double v1, ref double v2)
+        {
+            var tmp = v1;
+            v1 = v2;
+            v2 = tmp;
+        }
+
+        /// <summary>
+        /// Swaps the two values.
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        public static void Swap(ref int v1, ref int v2)
+        {
+            var tmp = v1;
+            v1 = v2;
+            v2 = tmp;
+        }
+
+        /// <summary>
+        /// Swaps the two values.
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        public static void Swap<T>(ref T v1, ref T v2)
+            where T : class
+        {
+            var tmp = v1;
+            v1 = v2;
+            v2 = tmp;
+        }
+
+        /// <summary>
         /// Is number a power of 2.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -823,6 +872,12 @@ namespace Common.Core.Numerics
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static ulong IntPow(uint a, uint b)
         {
             checked
@@ -961,6 +1016,78 @@ namespace Common.Core.Numerics
                 f = f * i;
                 m_factorialTable[i] = f;
             }
+        }
+
+        /// <summary>
+        /// Solve the quadratic equation.
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        /// <param name="t0">The first root.</param>
+        /// <param name="t1">The second root.</param>
+        /// <returns></returns>
+        public static bool SolveQuadratic(float A, float B, float C, out float t0, out float t1)
+        {
+            t0 = 0;
+            t1 = 0;
+
+            // Find quadratic discriminant
+            float discrim = B * B - 4 * A * C;
+
+            if (discrim < 0) return false;
+            float rootDiscrim = MathUtil.Sqrt(discrim);
+
+            // Compute quadratic t values
+            float q;
+            if (B < 0)
+                q = -0.5f * (B - rootDiscrim);
+            else
+                q = -0.5f * (B + rootDiscrim);
+
+            t0 = q / A;
+            t1 = C / q;
+
+            if (t0 > t1)
+                MathUtil.Swap(ref t0, ref t1);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Solve the quadratic equation.
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        /// <param name="t0">The first root.</param>
+        /// <param name="t1">The second root.</param>
+        /// <returns></returns>
+        public static bool SolveQuadratic(double A, double B, double C, out double t0, out double t1)
+        {
+            t0 = 0;
+            t1 = 0;
+
+            // Find quadratic discriminant
+            double discrim = B * B - 4 * A * C;
+
+            if (discrim < 0) return false;
+            double rootDiscrim = MathUtil.Sqrt(discrim);
+
+            // Compute quadratic t values
+            double q;
+            if (B < 0)
+                q = -0.5f * (B - rootDiscrim);
+            else
+                q = -0.5f * (B + rootDiscrim);
+
+            t0 = q / A;
+            t1 = C / q;
+
+            if (t0 > t1)
+                MathUtil.Swap(ref t0, ref t1);
+
+            return true;
         }
 
     }
