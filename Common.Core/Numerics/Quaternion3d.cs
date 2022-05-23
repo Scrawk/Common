@@ -475,46 +475,43 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Returns a 4x4 matrix that rotates around the x-axis by a given number of degrees.
         /// </summary>
-        /// <param name="angle">
+        /// <param name="radian">
         /// The clockwise rotation angle when looking along the x-axis towards the origin in degrees.
         /// </param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion3d RotateX(REAL angle)
+        public static Quaternion3f RotateX(Radian radian)
         {
-            REAL a = MathUtil.ToRadians(angle) * 0.5;
+            REAL a = (REAL)radian.angle * 0.5f;
             REAL sina = MathUtil.Sin(a);
             REAL cosa = MathUtil.Cos(a);
-            return new Quaternion3d(sina, 0.0, 0.0, cosa);
+            return new Quaternion3f(sina, 0.0f, 0.0f, cosa);
         }
 
         /// <summary>
         /// Returns a 4x4 matrix that rotates around the y-axis by a given number of degrees.
         /// </summary>
-        /// <param name="angle">
+        /// <param name="radian">
         /// The clockwise rotation angle when looking along the y-axis towards the origin in degrees.
         /// </param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion3d RotateY(REAL angle)
+        public static Quaternion3f RotateY(Radian radian)
         {
-            REAL a = MathUtil.ToRadians(angle) * 0.5;
+            REAL a = (REAL)radian.angle * 0.5f;
             REAL sina = MathUtil.Sin(a);
             REAL cosa = MathUtil.Cos(a);
-            return new Quaternion3d(0.0, sina, 0.0, cosa);
+            return new Quaternion3f(0.0f, sina, 0.0f, cosa);
         }
 
         /// <summary>
         /// Returns a 4x4 matrix that rotates around the z-axis by a given number of degrees.
         /// </summary>
-        /// <param name="angle">
+        /// <param name="radian">
         /// The clockwise rotation angle when looking along the z-axis towards the origin in degrees.
         /// </param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Quaternion3d RotateZ(REAL angle)
+        public static Quaternion3f RotateZ(Radian radian)
         {
-            REAL a = MathUtil.ToRadians(angle) * 0.5;
+            REAL a = (REAL)radian.angle * 0.5f;
             REAL sina = MathUtil.Sin(a);
             REAL cosa = MathUtil.Cos(a);
-            return new Quaternion3d(0.0, 0.0, sina, cosa);
+            return new Quaternion3f(0.0f, 0.0f, sina, cosa);
         }
 
     }
