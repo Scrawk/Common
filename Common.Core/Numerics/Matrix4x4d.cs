@@ -9,6 +9,7 @@ using VECTOR4 = Common.Core.Numerics.Vector4d;
 using POINT2 = Common.Core.Numerics.Point2d;
 using POINT3 = Common.Core.Numerics.Point3d;
 using POINT4 = Common.Core.Numerics.Point4d;
+using QUATERNION = Common.Core.Numerics.Quaternion3d;
 
 namespace Common.Core.Numerics
 {
@@ -708,7 +709,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation, rotation and scale.
         /// </summary>
-        static public Matrix4x4d TranslateRotateScale(POINT3 t, Quaternion3d r, POINT3 s)
+        static public Matrix4x4d TranslateRotateScale(POINT3 t, QUATERNION r, POINT3 s)
         {
             Matrix4x4d T = Translate(t);
             Matrix4x4d R = r.ToMatrix4x4d();
@@ -720,7 +721,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation and rotation.
         /// </summary>
-        static public Matrix4x4d TranslateRotate(POINT3 t, Quaternion3d r)
+        static public Matrix4x4d TranslateRotate(POINT3 t, QUATERNION r)
         {
             Matrix4x4d T = Translate(t);
             Matrix4x4d R = r.ToMatrix4x4d();
@@ -742,7 +743,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation and scale.
         /// </summary>
-        static public Matrix4x4d RotateScale(Quaternion3d r, POINT3 s)
+        static public Matrix4x4d RotateScale(QUATERNION r, POINT3 s)
         {
             Matrix4x4d R = r.ToMatrix4x4d();
             Matrix4x4d S = Scale(s);
@@ -762,6 +763,17 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Create a translation out of a vector.
+        /// </summary>
+        static public Matrix4x4d Translate(REAL x, REAL y, REAL z)
+        {
+            return new Matrix4x4d(1, 0, 0, x,
+                                    0, 1, 0, y,
+                                    0, 0, 1, z,
+                                    0, 0, 0, 1);
+        }
+
+        /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
         static public Matrix4x4d Scale(POINT3 v)
@@ -769,6 +781,17 @@ namespace Common.Core.Numerics
             return new Matrix4x4d(v.x, 0, 0, 0,
                                     0, v.y, 0, 0,
                                     0, 0, v.z, 0,
+                                    0, 0, 0, 1);
+        }
+
+        /// <summary>
+        /// Create a scale out of a vector.
+        /// </summary>
+        static public Matrix4x4d Scale(REAL x, REAL y, REAL z)
+        {
+            return new Matrix4x4d(x, 0, 0, 0,
+                                    0, y, 0, 0,
+                                    0, 0, z, 0,
                                     0, 0, 0, 1);
         }
 
@@ -833,7 +856,7 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4d Rotate(VECTOR3 euler)
         {
-            return Quaternion3d.FromEuler(euler).ToMatrix4x4d();
+            return QUATERNION.FromEuler(euler).ToMatrix4x4d();
         }
 
         /// <summary>

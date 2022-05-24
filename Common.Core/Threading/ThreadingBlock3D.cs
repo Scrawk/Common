@@ -137,9 +137,9 @@ namespace Common.Core.Threading
         /// <param name="blockSize">The block size is the number of iterarations in the loop each thread will be assigned.</param>
         /// <param name="action">The action to perform.</param>
         /// <param name="token">A optional helper token.</param>
-        public static void ParallelAction(Point3i size, int blockSize, Action<int, int, int> action, ThreadingToken token = null)
+        public static double ParallelAction(Point3i size, int blockSize, Action<int, int, int> action, ThreadingToken token = null)
         {
-            ParallelAction(size.x, size.y, size.z, blockSize, action, token);
+           return ParallelAction(size.x, size.y, size.z, blockSize, action, token);
         }
 
         /// <summary>

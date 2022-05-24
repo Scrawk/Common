@@ -9,6 +9,7 @@ using VECTOR4 = Common.Core.Numerics.Vector4f;
 using POINT2 = Common.Core.Numerics.Point2f;
 using POINT3 = Common.Core.Numerics.Point3f;
 using POINT4 = Common.Core.Numerics.Point4f;
+using QUATERNION = Common.Core.Numerics.Quaternion3f;
 
 namespace Common.Core.Numerics
 {
@@ -709,7 +710,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation, rotation and scale.
         /// </summary>
-        static public Matrix4x4f TranslateRotateScale(Point3f t, Quaternion3f r, Point3f s)
+        static public Matrix4x4f TranslateRotateScale(POINT3 t, QUATERNION r, POINT3 s)
         {
             Matrix4x4f T = Translate(t);
             Matrix4x4f R = r.ToMatrix4x4f();
@@ -721,7 +722,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation and rotation.
         /// </summary>
-        static public Matrix4x4f TranslateRotate(Point3f t, Quaternion3f r)
+        static public Matrix4x4f TranslateRotate(POINT3 t, QUATERNION r)
         {
             Matrix4x4f T = Translate(t);
             Matrix4x4f R = r.ToMatrix4x4f();
@@ -732,7 +733,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation and scale.
         /// </summary>
-        static public Matrix4x4f TranslateScale(Point3f t, Point3f s)
+        static public Matrix4x4f TranslateScale(POINT3 t, POINT3 s)
         {
             Matrix4x4f T = Translate(t);
             Matrix4x4f S = Scale(s);
@@ -743,7 +744,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a rotation and scale.
         /// </summary>
-        static public Matrix4x4f RotateScale(Quaternion3f r, Point3f s)
+        static public Matrix4x4f RotateScale(QUATERNION r, POINT3 s)
         {
             Matrix4x4f R = r.ToMatrix4x4f();
             Matrix4x4f S = Scale(s);
@@ -754,7 +755,7 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a translation out of a vector.
         /// </summary>
-        static public Matrix4x4f Translate(Point3f v)
+        static public Matrix4x4f Translate(POINT3 v)
         {
             return new Matrix4x4f(	1, 0, 0, v.x,
                                     0, 1, 0, v.y,
@@ -763,13 +764,35 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Create a translation out of a vector.
+        /// </summary>
+        static public Matrix4x4f Translate(REAL x, REAL y, REAL z)
+        {
+            return new Matrix4x4f(1, 0, 0, x,
+                                    0, 1, 0, y,
+                                    0, 0, 1, z,
+                                    0, 0, 0, 1);
+        }
+
+        /// <summary>
         /// Create a scale out of a vector.
         /// </summary>
-        static public Matrix4x4f Scale(Point3f v)
+        static public Matrix4x4f Scale(POINT3 v)
         {
-            return new Matrix4x4f(	v.x, 0, 0, 0,
+            return new Matrix4x4f(v.x, 0, 0, 0,
                                     0, v.y, 0, 0,
                                     0, 0, v.z, 0,
+                                    0, 0, 0, 1);
+        }
+
+        /// <summary>
+        /// Create a scale out of a vector.
+        /// </summary>
+        static public Matrix4x4f Scale(REAL x, REAL y, REAL z)
+        {
+            return new Matrix4x4f(x, 0, 0, 0,
+                                    0, y, 0, 0,
+                                    0, 0, z, 0,
                                     0, 0, 0, 1);
         }
 
@@ -834,7 +857,7 @@ namespace Common.Core.Numerics
         /// </summary>
         static public Matrix4x4f Rotate(VECTOR3 euler)
         {
-            return Quaternion3f.FromEuler(euler).ToMatrix4x4f();
+            return QUATERNION.FromEuler(euler).ToMatrix4x4f();
         }
 
         /// <summary>
@@ -900,10 +923,10 @@ namespace Common.Core.Numerics
 		/// <summary>
 		/// Creates the matrix need to look at target from position.
 		/// </summary>
-		static public Matrix4x4f LookAt(Point3f position, Point3f target, VECTOR3 Up)
+		static public Matrix4x4f LookAt(POINT3 position, POINT3 target, VECTOR3 Up)
 		{
 			
-			VECTOR3 zaxis = Point3f.Direction(target, position);
+			VECTOR3 zaxis = POINT3.Direction(target, position);
 			VECTOR3 xaxis = VECTOR3.Cross(Up, zaxis).Normalized;
 			VECTOR3 yaxis = VECTOR3.Cross(zaxis, xaxis);
 			
