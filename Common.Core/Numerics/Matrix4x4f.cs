@@ -630,6 +630,17 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// A matrix as a string.
+        /// </summary>
+        public string ToString(string f)
+        {
+            return this[0, 0].ToString(f) + "," + this[0, 1].ToString(f) + "," + this[0, 2].ToString(f) + "," + this[0, 3].ToString(f) + "\n" +
+                    this[1, 0].ToString(f) + "," + this[1, 1].ToString(f) + "," + this[1, 2].ToString(f) + "," + this[1, 3].ToString(f) + "\n" +
+                    this[2, 0].ToString(f) + "," + this[2, 1].ToString(f) + "," + this[2, 2].ToString(f) + "," + this[2, 3].ToString(f) + "\n" +
+                    this[3, 0].ToString(f) + "," + this[3, 1].ToString(f) + "," + this[3, 2].ToString(f) + "," + this[3, 3].ToString(f);
+        }
+
+        /// <summary>
         /// The minor of a matrix. 
         /// </summary>
         private REAL Minor(int r0, int r1, int r2, int c0, int c1, int c2)
@@ -896,9 +907,9 @@ namespace Common.Core.Numerics
         /// <summary>
         /// Create a perspective matrix.
         /// </summary>
-        static public Matrix4x4f Perspective(REAL fovy, REAL aspect, REAL zNear, REAL zFar)
+        static public Matrix4x4f Perspective(Radian fovy, REAL aspect, REAL zNear, REAL zFar)
         {
-			REAL f = 1.0f / (REAL)Math.Tan((fovy * Math.PI / 180.0) / 2.0);
+			REAL f = 1.0f / (REAL)Math.Tan(fovy.angle / 2.0);
             return new Matrix4x4f(	f / aspect, 0, 0, 0,
                                     0, f, 0, 0,
                                     0, 0, (zFar + zNear) / (zNear - zFar), (2.0f * zFar * zNear) / (zNear - zFar),
@@ -920,10 +931,19 @@ namespace Common.Core.Numerics
                                     0, 0, 0, 1);
         }
 
-		/// <summary>
-		/// Creates the matrix need to look at target from position.
-		/// </summary>
-		static public Matrix4x4f LookAt(POINT3 position, POINT3 target, VECTOR3 Up)
+
+        /// <summary>
+        /// Create a ortho matrix.
+        /// </summary>
+        static public Matrix4x4f Ortho(REAL zNear, REAL zFar)
+        {
+            return Scale(1, 1, 1 / (zFar - zNear)) * Translate(0, 0, -zNear);
+        }
+
+        /// <summary>
+        /// Creates the matrix need to look at target from position.
+        /// </summary>
+        static public Matrix4x4f LookAt(POINT3 position, POINT3 target, VECTOR3 Up)
 		{
 			
 			VECTOR3 zaxis = POINT3.Direction(target, position);
