@@ -129,6 +129,32 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Reurun the fractional part of each component.
+        /// </summary>
+        public Point2f Frac
+        {
+            get
+            {
+                REAL x = MathUtil.FloorFrac(this.x);
+                REAL y = MathUtil.FloorFrac(this.y);
+                return new Point2f(x, y);
+            }
+        }
+
+        /// <summary>
+        /// Reurun the fractional truncated part of each component.
+        /// </summary>
+        public Point2f Trunc
+        {
+            get
+            {
+                REAL x = MathUtil.TruncateFrac(this.x);
+                REAL y = MathUtil.TruncateFrac(this.y);
+                return new Point2f(x, y);
+            }
+        }
+
+        /// <summary>
         /// Are all the components of point finite.
         /// </summary>
         public bool IsFinite

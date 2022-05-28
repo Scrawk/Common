@@ -175,6 +175,36 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
+        /// Reurun the fractional part of each component.
+        /// </summary>
+        public Vector4f Frac
+        {
+            get
+            {
+                REAL x = MathUtil.FloorFrac(this.x);
+                REAL y = MathUtil.FloorFrac(this.y);
+                REAL z = MathUtil.FloorFrac(this.z);
+                REAL w = MathUtil.FloorFrac(this.w);
+                return new Vector4f(x, y, z, w);
+            }
+        }
+
+        /// <summary>
+        /// Reurun the fractional truncated part of each component.
+        /// </summary>
+        public Vector4f Trunc
+        {
+            get
+            {
+                REAL x = MathUtil.TruncateFrac(this.x);
+                REAL y = MathUtil.TruncateFrac(this.y);
+                REAL z = MathUtil.TruncateFrac(this.z);
+                REAL w = MathUtil.TruncateFrac(this.w);
+                return new Vector4f(x, y, z, w);
+            }
+        }
+
+        /// <summary>
         /// Are all the components of vector finite.
         /// </summary>
         public bool IsFinite

@@ -143,7 +143,35 @@ namespace Common.Core.Numerics
         }
 
         /// <summary>
-        /// Are all the components ofpoint finite.
+        /// Reurun the fractional part of each component.
+        /// </summary>
+        public Point3f Frac
+        {
+            get
+            {
+                REAL x = MathUtil.FloorFrac(this.x);
+                REAL y = MathUtil.FloorFrac(this.y);
+                REAL z = MathUtil.FloorFrac(this.z);
+                return new Point3f(x, y, z);
+            }
+        }
+
+        /// <summary>
+        /// Reurun the fractional truncated part of each component.
+        /// </summary>
+        public Point3f Trunc
+        {
+            get
+            {
+                REAL x = MathUtil.TruncateFrac(this.x);
+                REAL y = MathUtil.TruncateFrac(this.y);
+                REAL z = MathUtil.TruncateFrac(this.z);
+                return new Point3f(x, y, z);
+            }
+        }
+
+        /// <summary>
+        /// Are all the components of point finite.
         /// </summary>
         public bool IsFinite
         {
