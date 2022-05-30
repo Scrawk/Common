@@ -17,6 +17,11 @@ namespace Common.Core.Numerics
         public REAL x, y, z;
 
         /// <summary>
+        /// The dimension is the number components in the point.
+        /// </summary>
+        public const int Dimension = 3;
+
+        /// <summary>
         /// The unit x point.
         /// </summary>
 	    public readonly static Point3f UnitX = new Point3f(1, 0, 0);
@@ -738,6 +743,88 @@ namespace Common.Core.Numerics
             }
 
             return points;
+        }
+
+        /// <summary>
+        /// The index of the min component. 
+        /// </summary>
+        /// <param name="abs">Should the components abs value be used.</param>
+        /// <returns>The index of the min component.</returns>
+        public int MinDimension(bool abs = false)
+        {
+            int index = 0;
+            REAL min = REAL.PositiveInfinity;
+
+            for (int i = 0; i < Dimension; i++)
+            {
+                REAL v = this[i];
+                if (abs) v = Math.Abs(v);
+
+                if (v < min)
+                {
+                    min = v;
+                    index = i;
+                }
+            }
+
+            return index;
+        }
+
+        /// <summary>
+        /// The index of the max component. 
+        /// </summary>
+        /// <param name="abs">Should the components abs value be used.</param>
+        /// <returns>The index of the max component.</returns>
+        public int MaxDimension(bool abs = false)
+        {
+            int index = 0;
+            REAL max = REAL.NegativeInfinity;
+
+            for (int i = 0; i < Dimension; i++)
+            {
+                REAL v = this[i];
+                if (abs) v = Math.Abs(v);
+
+                if (v > max)
+                {
+                    max = v;
+                    index = i;
+                }
+            }
+
+            return index;
+        }
+
+        /// <summary>
+        /// The min component in the point. 
+        /// </summary>
+        /// <param name="abs">Should the components abs value be used.</param>
+        /// <returns>The min components value.</returns>
+        public REAL MinComponent(bool abs = false)
+        {
+            return this[MinDimension(abs)];
+        }
+
+        /// <summary>
+        /// The max component in the point. 
+        /// </summary>
+        /// <param name="abs">Should the components abs value be used.</param>
+        /// <returns>The max components value.</returns>
+        public REAL MaxComponent(bool abs = false)
+        {
+            return this[MaxDimension(abs)];
+        }
+
+        /// <summary>
+        /// Create a new point by reordering the componets.
+        /// </summary>
+        /// <param name="i">The index to take x value from.></param>
+        /// <param name="j">The index to take y value from.</param>
+        /// <param name="k">The index to take z value from.</param>
+        /// <returns>The new vector</returns>
+        public Point3f Permutate(int i, int j, int k)
+        {
+            return new Point3f(this[i], this[j], this[k]);
         }
 
     }
