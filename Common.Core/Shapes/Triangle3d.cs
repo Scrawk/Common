@@ -94,7 +94,7 @@ namespace Common.Core.Shapes
                 var zmin = MathUtil.Min(A.z, B.z, C.z);
                 var zmax = MathUtil.Max(A.z, B.z, C.z);
 
-                return new BOX3(new POINT3(xmin, ymin, zmin), new POINT3(xmax, ymax, zmin));
+                return new BOX3(new POINT3(xmin, ymin, zmin), new POINT3(xmax, ymax, zmax));
             }
         }
 
