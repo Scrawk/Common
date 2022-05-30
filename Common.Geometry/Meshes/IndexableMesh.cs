@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Common.Core.Numerics;
 using Common.Core.Colors;
 
-namespace Common.Meshes
+namespace Common.Geometry.Meshes
 {
 
     public abstract class IndexableMesh

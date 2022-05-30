@@ -99,6 +99,11 @@ namespace Common.Core.Shapes
         }
 
         /// <summary>
+        /// The triangels surface area.
+        /// </summary>
+        public REAL Area => VECTOR3.Cross(B - A, C - A).Magnitude * 0.5f;
+
+        /// <summary>
         /// Array acess to the triangles points.
         /// </summary>
         /// <param name="i">The index of the point to access (0-2)</param>

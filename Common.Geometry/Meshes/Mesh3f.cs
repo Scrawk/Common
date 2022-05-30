@@ -8,7 +8,7 @@ using VECTOR2 = Common.Core.Numerics.Vector2f;
 using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4f;
 
-namespace Common.Meshes
+namespace Common.Geometry.Meshes
 {
     public class Mesh3f : IndexableMesh
     {
