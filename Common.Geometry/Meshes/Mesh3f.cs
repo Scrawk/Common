@@ -5,6 +5,7 @@ using Common.Core.Numerics;
 
 using VECTOR3 = Common.Core.Numerics.Vector3f;
 using VECTOR2 = Common.Core.Numerics.Vector2f;
+using POINT3 = Common.Core.Numerics.Point3f;
 using MATRIX3 = Common.Core.Numerics.Matrix3x3f;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4f;
 
@@ -26,14 +27,14 @@ namespace Common.Geometry.Meshes
         /// <param name="numPositions"></param>
         public Mesh3f(int numPositions)
         {
-            Positions = new VECTOR3[numPositions];
+            Positions = new POINT3[numPositions];
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="positions"></param>
-        public Mesh3f(IList<VECTOR3> positions)
+        public Mesh3f(IList<POINT3> positions)
         {
             SetPositions(positions);
         }
@@ -43,7 +44,7 @@ namespace Common.Geometry.Meshes
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="indices"></param>
-        public Mesh3f(IList<VECTOR3> positions, IList<int> indices)
+        public Mesh3f(IList<POINT3> positions, IList<int> indices)
         {
             SetPositions(positions);
             SetIndices(indices);
@@ -56,7 +57,7 @@ namespace Common.Geometry.Meshes
         /// <param name="numIndices"></param>
         public Mesh3f(int numPositions, int numIndices)
         {
-            Positions = new VECTOR3[numPositions];
+            Positions = new POINT3[numPositions];
             CreateIndices(numIndices);
         }
 
@@ -68,7 +69,7 @@ namespace Common.Geometry.Meshes
         /// <summary>
         /// The vertex positions.
         /// </summary>
-        public VECTOR3[] Positions { get; private set; }
+        public POINT3[] Positions { get; private set; }
 
         /// <summary>
         /// Does the mesh have normals.
@@ -105,13 +106,13 @@ namespace Common.Geometry.Meshes
         public void CreatePositions(int size)
         {
             if (Positions == null || Positions.Length != size)
-                Positions = new VECTOR3[size];
+                Positions = new POINT3[size];
         }
 
         /// <summary>
         /// Create the position array.
         /// </summary>
-        public void SetPositions(IList<VECTOR3> positions)
+        public void SetPositions(IList<POINT3> positions)
         {
             CreatePositions(positions.Count);
             positions.CopyTo(Positions, 0);
@@ -164,7 +165,7 @@ namespace Common.Geometry.Meshes
         /// <summary>
         /// Translate the positions.
         /// </summary>
-        public void Translate(VECTOR3 translate)
+        public void Translate(POINT3 translate)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
@@ -185,7 +186,7 @@ namespace Common.Geometry.Meshes
         /// <summary>
         /// Scale the positions.
         /// </summary>
-        public void Scale(VECTOR3 scale)
+        public void Scale(POINT3 scale)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)

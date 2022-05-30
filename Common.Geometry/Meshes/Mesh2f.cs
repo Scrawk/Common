@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Common.Core.Numerics;
 
 using VECTOR2 = Common.Core.Numerics.Vector2f;
+using POINT2 = Common.Core.Numerics.Point2f;
 using MATRIX2 = Common.Core.Numerics.Matrix2x2f;
 using MATRIX4 = Common.Core.Numerics.Matrix4x4f;
 
@@ -25,14 +26,14 @@ namespace Common.Geometry.Meshes
         /// <param name="numPositions"></param>
         public Mesh2f(int numPositions)
         {
-            Positions = new VECTOR2[numPositions];
+            Positions = new POINT2[numPositions];
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="positions"></param>
-        public Mesh2f(IList<VECTOR2> positions)
+        public Mesh2f(IList<POINT2> positions)
         {
             SetPositions(positions);
         }
@@ -42,7 +43,7 @@ namespace Common.Geometry.Meshes
         /// </summary>
         /// <param name="positions"></param>
         /// <param name="indices"></param>
-        public Mesh2f(IList<VECTOR2> positions, IList<int> indices)
+        public Mesh2f(IList<POINT2> positions, IList<int> indices)
         {
             SetPositions(positions);
             SetIndices(indices);
@@ -55,7 +56,7 @@ namespace Common.Geometry.Meshes
         /// <param name="numIndices"></param>
         public Mesh2f(int numPositions, int numIndices)
         {
-            Positions = new VECTOR2[numPositions];
+            Positions = new POINT2[numPositions];
             CreateIndices(numIndices);
         }
 
@@ -67,7 +68,7 @@ namespace Common.Geometry.Meshes
         /// <summary>
         /// The vertex positions.
         /// </summary>
-        public VECTOR2[] Positions { get; private set; }
+        public POINT2[] Positions { get; private set; }
 
         /// <summary>
         /// Does the mesh have normals.
@@ -104,14 +105,14 @@ namespace Common.Geometry.Meshes
         public void CreatePositions(int size)
         {
             if (Positions == null || Positions.Length != size)
-                Positions = new VECTOR2[size];
+                Positions = new POINT2[size];
         }
 
         /// <summary>
         /// Create the position array.
         /// </summary>
         /// <param name="positions">Array to copy from.</param>
-        public void SetPositions(IList<VECTOR2> positions)
+        public void SetPositions(IList<POINT2> positions)
         {
             CreatePositions(positions.Count);
             positions.CopyTo(Positions, 0);
@@ -166,7 +167,7 @@ namespace Common.Geometry.Meshes
         /// <summary>
         /// Translate the positions.
         /// </summary>
-        public void Translate(VECTOR2 translate)
+        public void Translate(POINT2 translate)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
@@ -176,7 +177,7 @@ namespace Common.Geometry.Meshes
         /// <summary>
         /// Scale the positions.
         /// </summary>
-        public void Scale(VECTOR2 scale)
+        public void Scale(POINT2 scale)
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
