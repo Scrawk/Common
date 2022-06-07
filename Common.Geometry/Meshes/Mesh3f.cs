@@ -82,6 +82,16 @@ namespace Common.Geometry.Meshes
         public VECTOR3[] Normals { get; private set; }
 
         /// <summary>
+        /// Does the mesh have tangents.
+        /// </summary>
+        public bool HasTangents => Tangents != null;
+
+        /// <summary>
+        /// The vertex normals.
+        /// </summary>
+        public VECTOR3[] Tangents { get; private set; }
+
+        /// <summary>
         /// Does the mesh have tex coords.
         /// </summary>
         public bool HasTexCoords => TexCoords != null;
@@ -141,6 +151,28 @@ namespace Common.Geometry.Meshes
         }
 
         /// <summary>
+        /// Creates the tangents array.
+        /// </summary>
+        public void CreateTangents()
+        {
+            int size = PositionCount;
+            if (Tangents == null || Tangents.Length != size)
+                Tangents = new VECTOR3[size];
+        }
+
+        /// <summary>
+        /// Create the tangent array.
+        /// </summary>
+        public void SetTangents(IList<VECTOR3> tangents)
+        {
+            if (tangents.Count != PositionCount)
+                throw new Exception("Tangents array must match positions count");
+
+            CreateTangents();
+            tangents.CopyTo(Tangents, 0);
+        }
+
+        /// <summary>
         /// Creates the uv array.
         /// </summary>
         public void CreateTexCoords()
@@ -180,7 +212,15 @@ namespace Common.Geometry.Meshes
             var q = Quaternion3f.FromEuler(rotate);
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
-                Positions[i] *= q;
+            {
+                Positions[i] = q * Positions[i];
+
+                if (HasNormals)
+                    Normals[i] = q * Normals[i];
+
+                if (HasTangents)
+                    Tangents[i] = q * Tangents[i];
+            }
         }
 
         /// <summary>
@@ -200,7 +240,15 @@ namespace Common.Geometry.Meshes
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
-                Positions[i] = (m * Positions[i].xyz1).xyz;
+            {
+                Positions[i] = m * Positions[i];
+
+                if (HasNormals)
+                    Normals[i] = m * Normals[i];
+
+                if (HasTangents)
+                    Tangents[i] = m * Tangents[i];
+            }
         }
 
         /// <summary>
@@ -210,7 +258,16 @@ namespace Common.Geometry.Meshes
         {
             int numVerts = Positions.Length;
             for (int i = 0; i < numVerts; i++)
+            {
                 Positions[i] = m * Positions[i];
+
+                if(HasNormals)
+                    Normals[i] = m * Normals[i];
+
+                if (HasTangents)
+                    Tangents[i] = m * Tangents[i];
+            }
+                
         }
 
         /// <summary>
@@ -239,6 +296,38 @@ namespace Common.Geometry.Meshes
 
             for (int i = 0; i < Normals.Length; i++)
                 Normals[i] = Normals[i].Normalized;
+        }
+
+        /// <summary>
+        /// Flip triangle orientation.
+        /// </summary>
+        public void FlipTriangles()
+        {
+            if (IndexCount == 0) return;
+
+            for (int i = 0; i < IndexCount / 3; i++)
+            {
+                var i0 = Indices[i * 3 + 0];
+                var i1 = Indices[i * 3 + 1];
+                var i2 = Indices[i * 3 + 2];
+
+                Indices[i * 3 + 0] = i2;
+                Indices[i * 3 + 1] = i1;
+                Indices[i * 3 + 2] = i0;
+            }
+
+            if(HasNormals)
+            {
+                for (int i = 0; i < Normals.Length; i++)
+                    Normals[i] = Normals[i] *= -1;
+            }
+
+            if (HasTangents)
+            {
+                for (int i = 0; i < Tangents.Length; i++)
+                    Tangents[i] = Tangents[i] *= -1;
+            }
+
         }
 
     }

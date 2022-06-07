@@ -11,6 +11,7 @@ namespace Common.Core.Colors
     [StructLayout(LayoutKind.Sequential)]
     public struct ColorRGBA : IEquatable<ColorRGBA>
     {
+        public const int Channels = 4;
 
         public readonly static ColorRGBA Red = new ColorRGBA(1, 0, 0, 1);
         public readonly static ColorRGBA Orange = new ColorRGBA(1, 0.5, 0, 1);
@@ -96,14 +97,14 @@ namespace Common.Core.Colors
         {
             get
             {
-                if ((uint)i >= 4)
+                if ((uint)i >= Channels)
                     throw new IndexOutOfRangeException("ColorRGBA index out of range.");
 
                 fixed (ColorRGBA* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                if ((uint)i >= 4)
+                if ((uint)i >= Channels)
                     throw new IndexOutOfRangeException("ColorRGBA index out of range.");
 
                 fixed (float* array = &r) { array[i] = value; }
@@ -379,6 +380,17 @@ namespace Common.Core.Colors
             return new ColorRGBA(R, G, B, A) / 255.0f;
         }
 
+        /// <summary>
+        /// Scale and clamp each channel to 0-255 range 
+        /// and copy into byte array.
+        /// </summary>
+        /// <param name="bytes">The bytes.</param>
+        /// <param name="offset">Optional offset into byte array.</param>
+        public void ToBytes(byte[] bytes, int offset = 0)
+        {
+            for(int i = 0; i < Channels; i++)
+                bytes[offset + i] = (byte)MathUtil.Clamp(this[i] * 255, 0, 255);
+        }
 
         /// <summary>
         /// Create a color from a integer where each byte in the 

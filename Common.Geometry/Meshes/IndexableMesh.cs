@@ -83,5 +83,19 @@ namespace Common.Geometry.Meshes
             indices.CopyTo(Indices, 0);
         }
 
+        /// <summary>
+        /// Add a triangle to the index array.
+        /// </summary>
+        /// <param name="i">The index in the indices array to add triangle.</param>
+        /// <param name="a">The index in the position array for the first point.</param>
+        /// <param name="b">The index in the position array for the second point.</param>
+        /// <param name="c">The index in the position array for the third point.</param>
+        public void AddTriangle(int i, int a, int b, int c)
+        {
+            Indices[i * 3 + 0] = a;
+            Indices[i * 3 + 1] = b;
+            Indices[i * 3 + 2] = c;
+        }
+
     }
 }

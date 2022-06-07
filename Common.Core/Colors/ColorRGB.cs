@@ -12,6 +12,8 @@ namespace Common.Core.Colors
     public struct ColorRGB : IEquatable<ColorRGB>
     {
 
+        public const int Channels = 3;
+
         public readonly static ColorRGB Red = new ColorRGB(1, 0, 0);
         public readonly static ColorRGB Orange = new ColorRGB(1, 0.5, 0);
         public readonly static ColorRGB Olive = new ColorRGB(0.5, 0.5, 0);
@@ -113,14 +115,14 @@ namespace Common.Core.Colors
         {
             get
             {
-                if ((uint)i >= 3)
+                if ((uint)i >= Channels)
                     throw new IndexOutOfRangeException("ColorRGB index out of range.");
 
                 fixed (ColorRGB* array = &this) { return ((float*)array)[i]; }
             }
             set
             {
-                if ((uint)i >= 3)
+                if ((uint)i >= Channels)
                     throw new IndexOutOfRangeException("ColorRGB index out of range.");
 
                 fixed (float* array = &r) { array[i] = value; }
@@ -357,6 +359,17 @@ namespace Common.Core.Colors
             return new ColorRGB(R, G, B) / 255.0f;
         }
 
+        /// <summary>
+        /// Scale and clamp each channel to 0-255 range 
+        /// and copy into byte array.
+        /// </summary>
+        /// <param name="bytes">The bytes.</param>
+        /// <param name="offset">Optional offset into byte array.</param>
+        public void ToBytes(byte[] bytes, int offset = 0)
+        {
+            for (int i = 0; i < Channels; i++)
+                bytes[offset + i] = (byte)MathUtil.Clamp(this[i] * 255, 0, 255);
+        }
 
         /// <summary>
         /// Create a color from a integer where each byte in the 

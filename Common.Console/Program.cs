@@ -17,9 +17,8 @@ namespace Common.Console
 
         static void Main(string[] args)
         {
-            var graph = new FlowGridGraph(128, 128);
-            graph.IsOrthogonal = true;
-
+            var graph = new FlowGridGraph(128, 128, true);
+       
             var rnd = new Random(0);
 
             graph.Iterate((x, y) =>
