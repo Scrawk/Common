@@ -496,6 +496,18 @@ namespace Common.Core.Colors
         }
 
         /// <summary>
+        /// Create a new color by reordering the componets.
+        /// </summary>
+        /// <param name="i">The index to take x value from.></param>
+        /// <param name="j">The index to take y value from.</param>
+        /// <param name="k">The index to take z value from.</param>
+        /// <returns>The new color.</returns>
+        public ColorRGB Permutate(int i, int j, int k)
+        {
+            return new ColorRGB(this[i], this[j], this[k]);
+        }
+
+        /// <summary>
         /// Convert to HSV color space.
         /// </summary>
         public static ColorHSV ToHSV(float r, float g, float b)
