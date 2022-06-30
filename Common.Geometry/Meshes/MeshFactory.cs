@@ -8,6 +8,24 @@ using Common.Core.Extensions;
 
 namespace Common.Geometry.Meshes
 {
+
+	public struct CubeParams
+	{
+		public bool splitFaces;
+		public double scale;
+
+		public static CubeParams Default
+		{
+			get
+			{
+				var param = new CubeParams();
+				param.splitFaces = true;
+				param.scale = 1;
+				return param;
+			}
+		}
+	}
+
 	public struct UVSphereParams
     {
 		public int meridians;
@@ -176,15 +194,13 @@ namespace Common.Geometry.Meshes
 
 		public static Mesh3f CreateTriangle(float scale = 1)
 		{
-			Mesh3f mesh = new Mesh3f(4, 6);
+			Mesh3f mesh = new Mesh3f(3, 63);
 
 			mesh.Positions[0] = new Point3f(0, 0, 0) * scale;
 			mesh.Positions[1] = new Point3f(1, 0, 0) * scale;
 			mesh.Positions[2] = new Point3f(0, 1, 0) * scale;
-			mesh.Positions[3] = new Point3f(1, 1, 0) * scale;
 
 			mesh.AddTriangle(0, 0, 1, 2);
-			mesh.AddTriangle(1, 3, 2, 1);
 
 			mesh.CreateNormals();
 			mesh.CreateTexCoords();
@@ -192,41 +208,189 @@ namespace Common.Geometry.Meshes
 			mesh.Normals[0] = new Vector3f(0, 0, 1);
 			mesh.Normals[1] = new Vector3f(0, 0, 1);
 			mesh.Normals[2] = new Vector3f(0, 0, 1);
-			mesh.Normals[3] = new Vector3f(0, 0, 1);
 
 			mesh.TexCoords[0] = new Point2f(0, 0);
 			mesh.TexCoords[1] = new Point2f(1, 0);
 			mesh.TexCoords[2] = new Point2f(0, 1);
-			mesh.TexCoords[3] = new Point2f(1, 1);
 
 			return mesh;
 		}
 
-		public static Mesh3f CreateCube(float scale = 1)
+		public static Mesh3f CreateCube(CubeParams param)
         {
-			Mesh3f mesh = new Mesh3f(8, 12 * 3);
+			float scale = (float)param.scale;
+			Mesh3f mesh = null;
 
-            mesh.Positions[0] = new Point3f(-0.5f, -0.5f, -0.5f) * scale; //0
-			mesh.Positions[1] = new Point3f(0.5f, -0.5f, -0.5f) * scale;  //1
-			mesh.Positions[2] = new Point3f(0.5f, 0.5f, -0.5f) * scale;   //2
-			mesh.Positions[3] = new Point3f(-0.5f, 0.5f, -0.5f) * scale;  //3
-			mesh.Positions[4] = new Point3f(-0.5f, 0.5f, 0.5f) * scale;   //4
-			mesh.Positions[5] = new Point3f(0.5f, 0.5f, 0.5f) * scale;    //5
-			mesh.Positions[6] = new Point3f(0.5f, -0.5f, 0.5f) * scale;   //6
-			mesh.Positions[7] = new Point3f(-0.5f, -0.5f, 0.5f) * scale;  //7
+			if(param.splitFaces)
+            {
+				mesh = new Mesh3f(6 * 4, 6 * 4 * 3);
+				mesh.CreateNormals();
+				mesh.CreateTexCoords();
 
-			mesh.AddTriangle(0, 0, 3, 1); //face front
-			mesh.AddTriangle(1, 1, 3, 2);
-			mesh.AddTriangle(2, 2, 3, 4); //face top
-			mesh.AddTriangle(3, 2, 4, 5);
-			mesh.AddTriangle(4, 1, 2, 6); //face right
-			mesh.AddTriangle(5, 2, 5, 6);
-			mesh.AddTriangle(6, 0, 7, 4); //face left
-			mesh.AddTriangle(7, 0, 4, 3);
-			mesh.AddTriangle(8, 5, 4, 7); //face back
-			mesh.AddTriangle(9, 5, 7, 6);
-			mesh.AddTriangle(10, 0, 6, 7); //face bottom
-			mesh.AddTriangle(11, 0, 1, 6);
+				var p0 = new Point3f(-0.5f, -0.5f, -0.5f) * scale;
+				var p1 = new Point3f(0.5f, -0.5f, -0.5f) * scale;
+				var p2 = new Point3f(0.5f, 0.5f, -0.5f) * scale; 
+				var p3 = new Point3f(-0.5f, 0.5f, -0.5f) * scale;
+				var p4 = new Point3f(-0.5f, 0.5f, 0.5f) * scale; 
+				var p5 = new Point3f(0.5f, 0.5f, 0.5f) * scale; 
+				var p6 = new Point3f(0.5f, -0.5f, 0.5f) * scale;
+				var p7 = new Point3f(-0.5f, -0.5f, 0.5f) * scale;
+
+				var up = new Vector3f(0, 1, 0);
+				var down = new Vector3f(0, -1, 0);
+				var right = new Vector3f(1, 0, 0);
+				var left = new Vector3f(-1, 0, 0);
+				var forward = new Vector3f(0, 0, 1);
+				var back = new Vector3f(0, 0, -1);
+
+				var uv00 = new Vector2f(0, 0);
+				var uv10 = new Vector2f(1, 0);
+				var uv01 = new Vector2f(0, 1);
+				var uv11 = new Vector2f(1, 1);
+
+				// back -z face
+				mesh.Positions[0] = p0;
+				mesh.Positions[1] = p1; 
+				mesh.Positions[2] = p2; 
+				mesh.Positions[3] = p3; 
+
+				mesh.Normals[0] = back;
+				mesh.Normals[1] = back;
+				mesh.Normals[2] = back;
+				mesh.Normals[3] = back;
+
+				mesh.TexCoords[0] = uv00;
+				mesh.TexCoords[1] = uv10;
+				mesh.TexCoords[2] = uv11;
+				mesh.TexCoords[3] = uv01;
+
+				mesh.AddTriangle(0, 0, 3, 1);
+				mesh.AddTriangle(1, 1, 3, 2);
+
+				// forward +z face
+				mesh.Positions[4] = p4;
+				mesh.Positions[5] = p5;
+				mesh.Positions[6] = p6;
+				mesh.Positions[7] = p7;
+
+				mesh.Normals[4] = forward;
+				mesh.Normals[5] = forward;
+				mesh.Normals[6] = forward;
+				mesh.Normals[7] = forward;
+
+				mesh.TexCoords[4] = uv11;
+				mesh.TexCoords[5] = uv01;
+				mesh.TexCoords[6] = uv00;
+				mesh.TexCoords[7] = uv10;
+
+				mesh.AddTriangle(2, 4, 7, 5);
+				mesh.AddTriangle(3, 5, 7, 6);
+
+				// right +x face
+				mesh.Positions[8] = p1;
+				mesh.Positions[9] = p2;
+				mesh.Positions[10] = p5;
+				mesh.Positions[11] = p6;
+
+				mesh.Normals[8] = right;
+				mesh.Normals[9] = right;
+				mesh.Normals[10] = right;
+				mesh.Normals[11] = right;
+
+				mesh.TexCoords[8] = uv00;
+				mesh.TexCoords[9] = uv01;
+				mesh.TexCoords[10] = uv11;
+				mesh.TexCoords[11] = uv10;
+
+				mesh.AddTriangle(4, 8, 9, 11);
+				mesh.AddTriangle(5, 10, 11, 9);
+
+				//left -x face
+				mesh.Positions[12] = p0;
+				mesh.Positions[13] = p7;
+				mesh.Positions[14] = p4;
+				mesh.Positions[15] = p3;
+
+				mesh.Normals[12] = left;
+				mesh.Normals[13] = left;
+				mesh.Normals[14] = left;
+				mesh.Normals[15] = left;
+
+				mesh.TexCoords[12] = uv10;
+				mesh.TexCoords[13] = uv00;
+				mesh.TexCoords[14] = uv01;
+				mesh.TexCoords[15] = uv11;
+
+				mesh.AddTriangle(6, 12, 13, 15);
+				mesh.AddTriangle(7, 14, 15, 13);
+
+				//up +y face
+				mesh.Positions[16] = p3;
+				mesh.Positions[17] = p4;
+				mesh.Positions[18] = p5;
+				mesh.Positions[19] = p2;
+
+				mesh.Normals[16] = up;
+				mesh.Normals[17] = up;
+				mesh.Normals[18] = up;
+				mesh.Normals[19] = up;
+
+				mesh.TexCoords[16] = uv00;
+				mesh.TexCoords[17] = uv01;
+				mesh.TexCoords[18] = uv11;
+				mesh.TexCoords[19] = uv10;
+
+				mesh.AddTriangle(8, 16, 17, 19);
+				mesh.AddTriangle(9, 18, 19, 17);
+
+				//down -y face
+				mesh.Positions[20] = p0;
+				mesh.Positions[21] = p7;
+				mesh.Positions[22] = p6;
+				mesh.Positions[23] = p1;
+
+				mesh.Normals[20] = down;
+				mesh.Normals[21] = down;
+				mesh.Normals[22] = down;
+				mesh.Normals[23] = down;
+
+				mesh.TexCoords[20] = uv00;
+				mesh.TexCoords[21] = uv10;
+				mesh.TexCoords[22] = uv11;
+				mesh.TexCoords[23] = uv01;
+
+				mesh.AddTriangle(10, 23, 21, 20);
+				mesh.AddTriangle(11, 21, 23, 22);
+			}
+            else
+            {
+				mesh = new Mesh3f(8, 12 * 3);
+
+				mesh.Positions[0] = new Point3f(-0.5f, -0.5f, -0.5f) * scale; //0
+				mesh.Positions[1] = new Point3f(0.5f, -0.5f, -0.5f) * scale;  //1
+				mesh.Positions[2] = new Point3f(0.5f, 0.5f, -0.5f) * scale;   //2
+				mesh.Positions[3] = new Point3f(-0.5f, 0.5f, -0.5f) * scale;  //3
+				mesh.Positions[4] = new Point3f(-0.5f, 0.5f, 0.5f) * scale;   //4
+				mesh.Positions[5] = new Point3f(0.5f, 0.5f, 0.5f) * scale;    //5
+				mesh.Positions[6] = new Point3f(0.5f, -0.5f, 0.5f) * scale;   //6
+				mesh.Positions[7] = new Point3f(-0.5f, -0.5f, 0.5f) * scale;  //7
+
+				mesh.AddTriangle(0, 0, 3, 1); //face front
+				mesh.AddTriangle(1, 1, 3, 2);
+				mesh.AddTriangle(2, 2, 3, 4); //face top
+				mesh.AddTriangle(3, 2, 4, 5);
+				mesh.AddTriangle(4, 1, 2, 6); //face right
+				mesh.AddTriangle(5, 2, 5, 6);
+				mesh.AddTriangle(6, 0, 7, 4); //face left
+				mesh.AddTriangle(7, 0, 4, 3);
+				mesh.AddTriangle(8, 5, 4, 7); //face back
+				mesh.AddTriangle(9, 5, 7, 6);
+				mesh.AddTriangle(10, 0, 6, 7); //face bottom
+				mesh.AddTriangle(11, 0, 1, 6);
+
+				mesh.CreateTriangleNormals();	
+			}
+
 
 			return mesh;
         }
